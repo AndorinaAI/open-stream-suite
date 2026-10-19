@@ -781,39 +781,57 @@ function renderDonationsModalContent() {
               </div>
 
               <!-- DESPLEGABLE GUÍA PASO A PASO DOMINIO PROPIO -->
-              <div id="custom-domain-tutorial" style="display: none; background: #07090B; border: 1px solid #38BDF8; border-radius: 6px; padding: 12px; margin-top: 10px;">
+              <div id="custom-domain-tutorial" style="display: none; background: #07090B; border: 1px solid #38BDF8; border-radius: 6px; padding: 14px; margin-top: 10px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                  <strong style="color: #38BDF8; font-size: 12px;">🛠️ Guía Rápida: Conectar tu Dominio Permanente a localhost:8080</strong>
-                  <button type="button" style="background: none; border: none; color: var(--color-text-dim); cursor: pointer; font-size: 13px;" onclick="toggleCustomDomainHelp()">✕</button>
+                  <strong style="color: #38BDF8; font-size: 13px;">⚡ Auto-Configuradores: Sin tocar tu Router</strong>
+                  <button type="button" style="background: none; border: none; color: var(--color-text-dim); cursor: pointer; font-size: 14px;" onclick="toggleCustomDomainHelp()">✕</button>
                 </div>
                 
-                <div style="font-size: 11px; color: #D1D5DB; line-height: 1.5; margin-bottom: 8px;">
-                  <strong>¿Por qué se necesita HTTPS?</strong> Las pasarelas de pago (PayPal, Ko-fi) rechazan URLs sin cifrar (<code>http://</code>). Necesitas un certificado SSL válido.
+                <p style="font-size: 11px; color: var(--color-text-dim); margin: 0 0 10px 0; line-height: 1.4;">
+                  Elige cómo quieres conectar tu dominio permanente. Ambos métodos incluyen scripts automáticos en la carpeta <code>scripts/</code> que hacen todo el trabajo por ti:
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                  
+                  <!-- OPCION 1: CLOUDFLARE -->
+                  <div style="background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.3); border-radius: 6px; padding: 10px;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                      <span style="font-size: 13px;">🚀</span>
+                      <strong style="color: #10B981; font-size: 11px;">OPCIÓN 1: Cloudflare Tunnel Automático</strong>
+                    </div>
+                    <div style="font-size: 10px; color: var(--color-text-dim); margin-bottom: 8px; line-height: 1.4;">
+                      • Solo necesitas tener tu dominio en Cloudflare (gratis).<br>
+                      • El script descarga el conector, crea el túnel, enruta el DNS de tu subdominio y lo deja funcionando.
+                    </div>
+                    <div style="font-size: 10px; color: #57D6C4; margin-bottom: 4px; font-weight: 700;">Ejecuta en tu terminal:</div>
+                    <div style="display: flex; gap: 6px; align-items: center;">
+                      <input type="text" id="cmd-auto-cloudflare" readonly class="form-input" style="flex: 1; font-family: monospace; font-size: 10px; background: #000; color: #57D6C4; padding: 4px 6px;" value="./scripts/setup_cloudflare.sh ${st.tunnelUrl ? st.tunnelUrl.replace(/^https?:\/\//, '') : 'stream.tudominio.com'}">
+                      <button type="button" class="btn-stage-preset" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;" onclick="copyText(document.getElementById('cmd-auto-cloudflare').value)">📋 Copiar</button>
+                    </div>
+                  </div>
+
+                  <!-- OPCION 2: VPS SSH REVERSE -->
+                  <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.3); border-radius: 6px; padding: 10px;">
+                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                      <span style="font-size: 13px;">🖥️</span>
+                      <strong style="color: #38BDF8; font-size: 11px;">OPCIÓN 2: VPS + Nginx / Traefik Inverso</strong>
+                    </div>
+                    <div style="font-size: 10px; color: var(--color-text-dim); margin-bottom: 8px; line-height: 1.4;">
+                      • Si tienes un servidor VPS (Hetzner, OVH, etc.).<br>
+                      • El script genera el bloque Nginx para tu VPS y crea un servicio systemd en tu PC para auto-reconectar siempre.
+                    </div>
+                    <div style="font-size: 10px; color: #38BDF8; margin-bottom: 4px; font-weight: 700;">Ejecuta en tu terminal:</div>
+                    <div style="display: flex; gap: 6px; align-items: center;">
+                      <input type="text" id="cmd-auto-vps" readonly class="form-input" style="flex: 1; font-family: monospace; font-size: 10px; background: #000; color: #38BDF8; padding: 4px 6px;" value="./scripts/setup_vps_tunnel.sh root@tu-vps.com ${st.tunnelUrl ? st.tunnelUrl.replace(/^https?:\/\//, '') : 'stream.tudominio.com'}">
+                      <button type="button" class="btn-stage-preset" style="font-size: 10px; padding: 4px 8px; white-space: nowrap;" onclick="copyText(document.getElementById('cmd-auto-vps').value)">📋 Copiar</button>
+                    </div>
+                  </div>
+
                 </div>
 
-                <div style="background: rgba(255,255,255,0.03); border-radius: 4px; padding: 8px; margin-bottom: 8px; font-size: 10.5px;">
-                  <span style="color: #10B981; font-weight: 700;">MÉTODO RECOMENDADO: Cloudflare Tunnel (Cero Puertos + SSL Gratis de por vida)</span><br>
-                  1. Ten tu dominio en Cloudflare (cuenta gratis).<br>
-                  2. Ejecuta estos 4 comandos en tu terminal:<br>
-                  <pre style="margin: 4px 0; background: #000; padding: 6px; border-radius: 3px; color: #57D6C4; font-size: 10px; overflow-x: auto;">cloudflared tunnel login
-cloudflared tunnel create taller-stream
-cloudflared tunnel route dns taller-stream stream.tudominio.com
-cloudflared tunnel run --url http://localhost:8080 taller-stream</pre>
-                  3. <em>(Opcional)</em> Para que arranque solo con el PC: <code style="color: #FFDD00;">sudo cloudflared service install</code>
-                </div>
-
-                <div style="background: rgba(255,255,255,0.03); border-radius: 4px; padding: 8px; font-size: 10.5px;">
-                  <span style="color: #38BDF8; font-weight: 700;">MÉTODO CLÁSICO: DNS A + Router + Caddy (SSL automático)</span><br>
-                  1. Registro DNS tipo <strong>A</strong> (ej: <code>stream</code>) apuntando a tu IP pública (<code style="color: #FF783F;">curl ifconfig.me</code>).<br>
-                  2. En tu router, reenvía los puertos 80 y 443 a la IP local de tu PC.<br>
-                  3. En Caddy (<code>/etc/caddy/Caddyfile</code>):<br>
-                  <pre style="margin: 4px 0; background: #000; padding: 4px; border-radius: 3px; color: #38BDF8; font-size: 10px;">stream.tudominio.com {
-    reverse_proxy localhost:8080
-}</pre>
-                </div>
-
-                <div style="margin-top: 8px; font-size: 10px; color: var(--color-text-dim);">
-                  👉 Documentación completa con capturas y resolución de dudas: <strong style="color: #fff;">docs/DOMINIO_PROPIO_Y_WEBHOOKS.md</strong>
+                <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: var(--color-text-dim); border-top: 1px solid var(--color-border-dim); padding-top: 8px;">
+                  <span>📖 Guía detallada con explicaciones paso a paso en <strong style="color: #fff;">docs/DOMINIO_PROPIO_Y_WEBHOOKS.md</strong></span>
+                  <button type="button" class="btn-stage-preset" style="font-size: 9px; padding: 2px 8px;" onclick="toggleCustomDomainHelp()">Ocultar Asistente</button>
                 </div>
               </div>
             </div>
@@ -931,6 +949,12 @@ function updateDonationTunnelUrlFromInput(val) {
     if (elKofi) elKofi.value = `${base}/api/webhooks/kofi`;
     if (elPaypal) elPaypal.value = `${base}/api/webhooks/paypal`;
     if (elBmc) elBmc.value = `${base}/api/webhooks/buymeacoffee`;
+
+    const cleanDomain = (val || '').replace(/^https?:\/\//, '').replace(/\/+$/, '') || 'stream.tudominio.com';
+    const elCmdCf = document.getElementById('cmd-auto-cloudflare');
+    const elCmdVps = document.getElementById('cmd-auto-vps');
+    if (elCmdCf) elCmdCf.value = `./scripts/setup_cloudflare.sh ${cleanDomain}`;
+    if (elCmdVps) elCmdVps.value = `./scripts/setup_vps_tunnel.sh root@tu-vps.com ${cleanDomain}`;
   }
 }
 
