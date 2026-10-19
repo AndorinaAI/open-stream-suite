@@ -761,20 +761,59 @@ function renderDonationsModalContent() {
 
               <!-- GUÍA CLARA: DOMINIO PROPIO VS TÚNEL -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
-                <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.25); border-radius: 6px; padding: 8px;">
-                  <div style="font-size: 11px; font-weight: 700; color: #38BDF8; margin-bottom: 4px;">🏷️ Si tienes un Dominio Propio:</div>
+                <div style="background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.25); border-radius: 6px; padding: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #38BDF8;">🏷️ Si tienes un Dominio Propio:</div>
+                    <button type="button" class="btn-stage-preset" style="font-size: 9px; padding: 2px 6px;" onclick="toggleCustomDomainHelp()">📘 Ver Pasos</button>
+                  </div>
                   <div style="font-size: 10px; color: var(--color-text-dim); line-height: 1.4;">
-                    • Pon tu subdominio (ej: <code style="color: #57D6C4;">https://stream.tudominio.com</code>).<br>
-                    • Conéctalo a tu PC con <strong>Cloudflare Zero Trust</strong> (túnel permanente con tu propio dominio) o redirige tu puerto 8080 con Nginx/Caddy y SSL.
+                    Usa tu subdominio (ej: <code style="color: #57D6C4;">https://stream.tudominio.com</code>). Debe tener <strong>HTTPS</strong> activo para que PayPal y Ko-fi lo acepten.
                   </div>
                 </div>
-                <div style="background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.25); border-radius: 6px; padding: 8px;">
+                <div style="background: rgba(167,139,250,0.06); border: 1px solid rgba(167,139,250,0.25); border-radius: 6px; padding: 10px;">
                   <div style="font-size: 11px; font-weight: 700; color: #A78BFA; margin-bottom: 4px;">⚡ Si NO tienes dominio (Túnel Gratis):</div>
                   <div style="font-size: 10px; color: var(--color-text-dim); line-height: 1.4;">
                     Abre un túnel temporal gratuito en 1 segundo ejecutando en tu terminal:<br>
                     <code style="color: #57D6C4;">npx localtunnel --port 8080</code><br>
                     o <code style="color: #38BDF8;">cloudflared tunnel --url ${st.localBaseUrl}</code>
                   </div>
+                </div>
+              </div>
+
+              <!-- DESPLEGABLE GUÍA PASO A PASO DOMINIO PROPIO -->
+              <div id="custom-domain-tutorial" style="display: none; background: #07090B; border: 1px solid #38BDF8; border-radius: 6px; padding: 12px; margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <strong style="color: #38BDF8; font-size: 12px;">🛠️ Guía Rápida: Conectar tu Dominio Permanente a localhost:8080</strong>
+                  <button type="button" style="background: none; border: none; color: var(--color-text-dim); cursor: pointer; font-size: 13px;" onclick="toggleCustomDomainHelp()">✕</button>
+                </div>
+                
+                <div style="font-size: 11px; color: #D1D5DB; line-height: 1.5; margin-bottom: 8px;">
+                  <strong>¿Por qué se necesita HTTPS?</strong> Las pasarelas de pago (PayPal, Ko-fi) rechazan URLs sin cifrar (<code>http://</code>). Necesitas un certificado SSL válido.
+                </div>
+
+                <div style="background: rgba(255,255,255,0.03); border-radius: 4px; padding: 8px; margin-bottom: 8px; font-size: 10.5px;">
+                  <span style="color: #10B981; font-weight: 700;">MÉTODO RECOMENDADO: Cloudflare Tunnel (Cero Puertos + SSL Gratis de por vida)</span><br>
+                  1. Ten tu dominio en Cloudflare (cuenta gratis).<br>
+                  2. Ejecuta estos 4 comandos en tu terminal:<br>
+                  <pre style="margin: 4px 0; background: #000; padding: 6px; border-radius: 3px; color: #57D6C4; font-size: 10px; overflow-x: auto;">cloudflared tunnel login
+cloudflared tunnel create taller-stream
+cloudflared tunnel route dns taller-stream stream.tudominio.com
+cloudflared tunnel run --url http://localhost:8080 taller-stream</pre>
+                  3. <em>(Opcional)</em> Para que arranque solo con el PC: <code style="color: #FFDD00;">sudo cloudflared service install</code>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.03); border-radius: 4px; padding: 8px; font-size: 10.5px;">
+                  <span style="color: #38BDF8; font-weight: 700;">MÉTODO CLÁSICO: DNS A + Router + Caddy (SSL automático)</span><br>
+                  1. Registro DNS tipo <strong>A</strong> (ej: <code>stream</code>) apuntando a tu IP pública (<code style="color: #FF783F;">curl ifconfig.me</code>).<br>
+                  2. En tu router, reenvía los puertos 80 y 443 a la IP local de tu PC.<br>
+                  3. En Caddy (<code>/etc/caddy/Caddyfile</code>):<br>
+                  <pre style="margin: 4px 0; background: #000; padding: 4px; border-radius: 3px; color: #38BDF8; font-size: 10px;">stream.tudominio.com {
+    reverse_proxy localhost:8080
+}</pre>
+                </div>
+
+                <div style="margin-top: 8px; font-size: 10px; color: var(--color-text-dim);">
+                  👉 Documentación completa con capturas y resolución de dudas: <strong style="color: #fff;">docs/DOMINIO_PROPIO_Y_WEBHOOKS.md</strong>
                 </div>
               </div>
             </div>
@@ -983,11 +1022,19 @@ async function simulateTipTest(platform) {
   }
 }
 
+function toggleCustomDomainHelp() {
+  const el = document.getElementById('custom-domain-tutorial');
+  if (el) {
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
 window.openDonationsModal = openDonationsModal;
 window.simulateTipTest = simulateTipTest;
 window.switchDonationModalTab = switchDonationModalTab;
 window.updateDonationTunnelUrlFromInput = updateDonationTunnelUrlFromInput;
 window.saveStreamlabsToken = saveStreamlabsToken;
 window.saveTunnelUrl = saveTunnelUrl;
+window.toggleCustomDomainHelp = toggleCustomDomainHelp;
 window.togglePasswordVisibility = togglePasswordVisibility;
 
