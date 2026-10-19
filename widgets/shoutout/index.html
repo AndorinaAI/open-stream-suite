@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Taller Live — Promoción y Banners (Shoutout & Promo Widget)</title>
+  <link rel="stylesheet" href="../../common/fonts.css">
+  <link rel="stylesheet" href="../../common/styles.css">
+  <link rel="stylesheet" href="../../common/themes.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="so-card" class="shoutout-card anim-slide_up shape-rounded">
+    <div class="corner-tech" id="so-corner"></div>
+
+    <div class="shoutout-card-body">
+      <!-- 1. Avatar Streamer (Shoutout) -->
+      <div id="so-avatar-box" class="avatar-wrapper">
+        <div class="avatar-ring" id="so-ring"></div>
+        <img id="so-avatar" class="avatar-img" src="https://static-cdn.jtvnw.net/jtv_user_pictures/e33e6764-4631-48b0-9f1d-4cc6e5afc6fd-profile_image-300x300.png" alt="Avatar">
+      </div>
+
+      <!-- 2. Imagen/GIF de Promo Personalizada (Maker/Redes/Merch) -->
+      <div id="so-media-box" class="promo-media-box">
+        <img id="so-media-img" class="promo-media-img" src="" alt="Promo Media">
+      </div>
+
+      <!-- 3. Información Central -->
+      <div class="shoutout-info">
+        <div class="shoutout-eyebrow">
+          <span id="so-eyebrow-text">📢 CANAL RECOMENDADO</span>
+          <span id="so-price" class="price-pill">3.50€</span>
+        </div>
+        <div id="so-name" class="shoutout-username">StreamerAmigo</div>
+        <div id="so-game" class="shoutout-game">🎮 Cacharreo & DIY Electronics</div>
+        <div id="so-msg" class="shoutout-msg">"¡Pasaos a saludar a este crack!"</div>
+        <div id="so-url" class="shoutout-link">twitch.tv/streameramigo</div>
+      </div>
+
+      <!-- 4. Código QR Dinámico -->
+      <div id="so-qr-box" class="qr-wrapper">
+        <img id="so-qr-img" class="qr-img" src="" alt="QR">
+        <div id="so-qr-center-badge" class="qr-center-badge">
+          <img id="so-qr-center-img" src="" alt="Logo">
+        </div>
+        <span class="qr-label" id="so-qr-label">📱 ESCANEAR</span>
+      </div>
+    </div>
+
+    <!-- 5. Reproductor de Clip embebido si se solicita -->
+    <div id="so-clip-box" class="clip-wrapper">
+      <div class="clip-header">
+        <span>🎬 CLIP DESTACADO DEL CANAL</span>
+        <span id="so-clip-channel">TWITCH</span>
+      </div>
+      <iframe id="so-clip-frame" class="clip-frame" src="" allowfullscreen="true" scrolling="no"></iframe>
+    </div>
+  </div>
+
+  <style id="so-custom-injected-css"></style>
+
+  <script src="../../config.js"></script>
+  <script src="widget.js"></script>
+</body>
+</html>

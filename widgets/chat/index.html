@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Taller Live — Chat en Pantalla, Badges & Spotlight</title>
+  <link rel="stylesheet" href="../../common/styles.css">
+  <link rel="stylesheet" href="../../common/themes.css">
+  <link rel="stylesheet" href="../../common/fonts.css">
+  <link rel="stylesheet" href="style.css">
+  <style id="custom-user-css"></style>
+</head>
+<body>
+
+  <!-- Canvas para física de partículas de emoticonos -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- 📌 Tarjeta de Mensaje Destacado (Spotlight) -->
+  <div id="chat-spotlight-box">
+    <div class="spotlight-card">
+      <div class="spotlight-badge">
+        <span>📌</span>
+        <span>MENSAJE DESTACADO DEL DIRECTO</span>
+      </div>
+      <div id="spotlight-author" class="spotlight-user" style="color: #57D6C4;">Usuario</div>
+      <div id="spotlight-content" class="spotlight-text">Texto destacado...</div>
+    </div>
+  </div>
+
+  <!-- Contenedor del chat -->
+  <div id="chat-box" class="chat-container"></div>
+
+  <script src="../../config.js"></script>
+  <script src="widget.js"></script>
+</body>
+</html>

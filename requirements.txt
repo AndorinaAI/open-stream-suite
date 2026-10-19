@@ -1,0 +1,4 @@
+# Dependencias de Taller Live
+aiohttp>=3.10.0
+websockets>=13.0
+requests>=2.31.0

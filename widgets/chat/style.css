@@ -1,0 +1,321 @@
+html, body {
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      margin: 0;
+      padding: 0;
+      background: transparent !important;
+      overflow: hidden;
+      font-family: var(--font-primary, sans-serif);
+    }
+
+    /* Contenedor del chat (posicionado para OBS) */
+    .chat-container {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      width: 440px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 10px;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* Mensaje individual */
+    .chat-msg {
+      background: rgba(25, 29, 33, 0.88);
+      border: 1px solid var(--color-border-dim, rgba(87, 214, 196, 0.2));
+      border-left: 3px solid var(--chat-accent, #57D6C4);
+      border-radius: 4px;
+      padding: 10px 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      animation: msg-slide-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .chat-msg.fading {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    @keyframes msg-slide-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-badges {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-chip {
+      font-size: 11px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    :root {
+      --color-broadcaster: #EF4444;
+      --color-moderator: #22C55E;
+      --color-vip: #EC4899;
+      --color-subscriber: #F59E0B;
+      --color-artist: #8B5CF6;
+      --color-follower: #38BDF8;
+      --color-viewer: #94A3B8;
+    }
+
+    .badge-chip.broadcaster { background: rgba(239, 68, 68, 0.25); border-color: var(--color-broadcaster); }
+    .badge-chip.moderator   { background: rgba(34, 197, 94, 0.25); border-color: var(--color-moderator); }
+    .badge-chip.vip         { background: rgba(236, 72, 153, 0.25); border-color: var(--color-vip); }
+    .badge-chip.subscriber  { background: rgba(245, 158, 11, 0.25); border-color: var(--color-subscriber); }
+    .badge-chip.artist      { background: rgba(139, 92, 246, 0.25); border-color: var(--color-artist); }
+    .badge-chip.follower    { background: rgba(56, 189, 248, 0.25); border-color: var(--color-follower); }
+    .badge-chip.viewer      { background: rgba(148, 163, 184, 0.2); border-color: var(--color-viewer); }
+
+    /* Bordes y estilos reactivos a los roles de Twitch */
+    .chat-msg.role-broadcaster { border-left-color: var(--color-broadcaster) !important; }
+    .chat-msg.role-moderator   { border-left-color: var(--color-moderator) !important; }
+    .chat-msg.role-vip         { border-left-color: var(--color-vip) !important; }
+    .chat-msg.role-subscriber  { border-left-color: var(--color-subscriber) !important; }
+    .chat-msg.role-artist      { border-left-color: var(--color-artist) !important; }
+    .chat-msg.role-follower    { border-left-color: var(--color-follower) !important; }
+    .chat-msg.role-viewer      { border-left-color: var(--color-viewer) !important; }
+
+    .username-text {
+      font-family: var(--font-tech, monospace);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .msg-body {
+      font-size: 14px;
+      color: var(--color-text-light, #F1F5F9);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .msg-body img.twitch-emote {
+      vertical-align: middle;
+      height: 28px;
+      margin: 0 2px;
+    }
+
+    /* ============================================================== */
+    /* TEMAS / PRESETS DE DISEÑO                                      */
+    /* ============================================================== */
+    /* 1. Cyberpunk CRT */
+    body.theme-cyberpunk .chat-msg {
+      background: rgba(10, 10, 15, 0.95);
+      border: 1px solid #FFE600;
+      border-left: 4px solid #FF0055;
+      border-radius: 0;
+      box-shadow: 0 0 14px rgba(255, 230, 0, 0.25);
+      font-family: 'Courier New', Courier, monospace;
+    }
+    body.theme-cyberpunk .msg-body::before {
+      content: '> ';
+      color: #FFE600;
+      font-weight: 800;
+    }
+
+    /* 2. Burbuja Pop */
+    body.theme-bubble .chat-msg {
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-left: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 36, 44, 0.92);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      padding: 12px 18px;
+    }
+
+    /* 3. Ghost Minimal (Sin fondo para emisión directa en pantalla sobre cámara o juego) */
+    body.theme-ghost .chat-msg {
+      background: transparent !important;
+      border: none !important;
+      backdrop-filter: none !important;
+      box-shadow: none !important;
+      padding: 4px 0 !important;
+    }
+    body.theme-ghost .msg-body {
+      text-shadow: 0 1px 3px #000, 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 14px #000 !important;
+      font-weight: 600;
+    }
+    body.theme-ghost .username-text {
+      text-shadow: 0 1px 4px #000, 0 0 8px rgba(0,0,0,0.95) !important;
+    }
+
+    /* 4. Retro Arcade 8-Bit */
+    body.theme-retro .chat-msg {
+      background: rgba(14, 18, 24, 0.96) !important;
+      border: 2px solid var(--chat-accent, #57D6C4) !important;
+      border-radius: 0 !important;
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.9) !important;
+      backdrop-filter: none !important;
+    }
+    body.theme-retro .username-text {
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Modos de posicionamiento en pantalla OBS */
+    body.pos-bottom-right .chat-container {
+      left: auto !important;
+      right: 24px !important;
+    }
+    body.pos-top-left .chat-container {
+      bottom: auto !important;
+      top: 24px !important;
+      justify-content: flex-start !important;
+    }
+    body.pos-top-right .chat-container {
+      bottom: auto !important;
+      top: 24px !important;
+      left: auto !important;
+      right: 24px !important;
+      justify-content: flex-start !important;
+    }
+
+    /* Modo Enmarcado (Box en Overlay existente) */
+    body.layout-box .chat-container {
+      position: relative !important;
+      top: auto !important;
+      bottom: auto !important;
+      left: auto !important;
+      right: auto !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      padding: 12px !important;
+      box-sizing: border-box !important;
+      justify-content: flex-end !important;
+    }
+    body.layout-box #chat-spotlight-box {
+      position: absolute !important;
+      top: 8px !important;
+      left: 8px !important;
+      width: calc(100% - 16px) !important;
+      box-sizing: border-box !important;
+    }
+
+    /* ============================================================== */
+    /* 📌 MENSAJE DESTACADO (SPOTLIGHT / PIN)                          */
+    /* ============================================================== */
+    #chat-spotlight-box {
+      position: absolute;
+      top: 32px;
+      left: 24px;
+      width: 480px;
+      display: none;
+      z-index: 100;
+      animation: spotlight-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes spotlight-in {
+      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .spotlight-card {
+      background: rgba(18, 22, 28, 0.96);
+      border: 2px solid var(--chat-accent, #57D6C4);
+      border-radius: 8px;
+      padding: 16px 20px;
+      box-shadow: 0 0 30px rgba(87, 214, 196, 0.3), 0 12px 32px rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      position: relative;
+    }
+
+    .spotlight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-tech, monospace);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--chat-accent, #57D6C4);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .spotlight-user {
+      font-family: var(--font-tech, monospace);
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .spotlight-text {
+      font-size: 17px;
+      color: #FFFFFF;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    /* Canvas para explosión de emojis / lluvia de emotes */
+    #particle-canvas {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      pointer-events: none !important;
+      z-index: 100 !important;
+    }
+
+    /* Modo previsualización PiP */
+    body.is-preview {
+      width: 100% !important;
+      height: 100% !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-end !important;
+      padding: 10px !important;
+      box-sizing: border-box !important;
+      background: #0E1012 !important;
+      overflow: hidden !important;
+    }
+    body.is-preview #chat-box.chat-container {
+      position: relative !important;
+      bottom: auto !important;
+      left: auto !important;
+      width: 100% !important;
+      max-height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-end !important;
+      gap: 8px !important;
+      z-index: 50 !important;
+      pointer-events: auto !important;
+    }
+    body.is-preview #chat-spotlight-box {
+      position: absolute !important;
+      top: 8px !important;
+      left: 8px !important;
+      width: calc(100% - 16px) !important;
+      z-index: 150 !important;
+    }

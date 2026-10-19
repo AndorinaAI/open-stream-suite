@@ -1,0 +1,12 @@
+# Credenciales secretas de Twitch y tokens locales
+.env
+token.json
+.local_token
+
+# Entorno virtual de Python
+venv/
+__pycache__/
+*.pyc
+
+# Logs temporales
+*.log

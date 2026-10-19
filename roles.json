@@ -1,0 +1,66 @@
+{
+  "roles": [
+    {
+      "id": "role_artista",
+      "name": "Artista",
+      "color": "#EC4899",
+      "badge": "🎨",
+      "description": "Creadores de arte, emotes y overlays del canal (insignia oficial de Twitch)",
+      "members": []
+    },
+    {
+      "id": "role_moderador",
+      "name": "Moderador",
+      "color": "#3B82F6",
+      "badge": "🛡️",
+      "description": "Modera el chat y gestiona mensajes en directo",
+      "members": [
+        "nit_brandell",
+        "atoripedro",
+        "kim22_4",
+        "wilian_gamer508",
+        "palankusenn_098"
+      ]
+    },
+    {
+      "id": "role_vip",
+      "name": "VIP",
+      "color": "#8B5CF6",
+      "badge": "💎",
+      "description": "Espectadores destacados con insignia de diamante",
+      "members": [
+        "noelandserah89",
+        "torrifloyd",
+        "ziickoxx",
+        "bubusor02",
+        "nolotengotanclaro",
+        "jesusgam3s_",
+        "pandortale"
+      ]
+    },
+    {
+      "id": "role_editor",
+      "name": "Editor",
+      "color": "#10B981",
+      "badge": "🎬",
+      "description": "Edita emisiones, títulos, etiquetas y categorías",
+      "members": []
+    },
+    {
+      "id": "role_moderador_principal",
+      "name": "Moderador principal",
+      "color": "#06B6D4",
+      "badge": "⚔️",
+      "description": "Líder del equipo de moderación del canal",
+      "members": []
+    },
+    {
+      "id": "role_director_comercial",
+      "name": "Director comercial",
+      "color": "#F59E0B",
+      "badge": "💼",
+      "description": "Gestiona acuerdos comerciales y patrocinios",
+      "members": []
+    }
+  ]
+}

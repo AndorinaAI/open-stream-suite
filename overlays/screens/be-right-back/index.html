@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Taller Live — BE RIGHT BACK</title>
+  <link rel="stylesheet" href="../../../common/styles.css">
+  <link rel="stylesheet" href="../../../common/themes.css">
+  <link rel="stylesheet" href="../../../common/components.css">
+  <style>
+    /* Estilos de descanso (Be Right Back) */
+    .brb-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 80px;
+      z-index: 20;
+    }
+
+    .brb-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brb-center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: auto;
+    }
+
+    /* Indicador de escaneo ambiental suave */
+    .scanner-line-wrapper {
+      width: 480px;
+      height: 4px;
+      background: rgba(46, 54, 59, 0.8);
+      border-radius: 2px;
+      margin-top: 36px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scanner-beam {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 120px;
+      background: linear-gradient(90deg, transparent, var(--color-accent-cyan), transparent);
+      animation: scanner-pulse 3.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes scanner-pulse {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(360px); }
+    }
+
+    .brb-status-box {
+      margin-top: 32px;
+      background: var(--color-panel-bg-trans);
+      border: 1px solid var(--color-border-dim);
+      padding: 12px 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brb-status-phrase {
+      font-family: var(--font-tech);
+      font-size: 14px;
+      letter-spacing: 2px;
+      color: var(--color-accent-cyan);
+      text-transform: uppercase;
+      transition: opacity 0.3s ease;
+    }
+
+    .brb-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--color-border-dim);
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body class="fullscreen-scene">
+  <div class="overlay-canvas">
+    <div class="tech-grid-overlay"></div>
+
+    <div class="brb-container">
+      
+      <!-- Barra superior -->
+      <div class="brb-top-bar">
+        <div class="brand-badge">
+          <div class="brand-icon-svg" data-icon="logo"></div>
+          <div class="brand-info">
+            <span class="brand-name">ANDORINA</span>
+            <span class="brand-tagline">JUGAR · CREAR · TRASTEAR</span>
+          </div>
+        </div>
+        <div class="live-indicator" style="background: rgba(87, 214, 196, 0.1); border-color: rgba(87, 214, 196, 0.3); color: var(--color-accent-cyan);">
+          <span class="live-dot" style="background-color: var(--color-accent-cyan); box-shadow: 0 0 8px var(--color-accent-cyan);"></span>
+          <span>PAUSA TÉCNICA</span>
+        </div>
+      </div>
+
+      <!-- Centro de la escena -->
+      <div class="brb-center-content">
+        <h1 class="main-stream-title" style="font-size: 84px;">
+          AHORA VUELVO
+        </h1>
+        <p class="stream-subtitle" style="font-size: 20px; color: var(--color-text-light);">
+          UN MOMENTO...
+        </p>
+
+        <!-- Escáner técnico sutil -->
+        <div class="scanner-line-wrapper">
+          <div class="scanner-beam"></div>
+        </div>
+
+        <!-- Frase dinámica rotativa del taller -->
+        <div class="brb-status-box">
+          <span style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim);">ESTADO:</span>
+          <span class="brb-status-phrase">TOMANDO UN CAFÉ...</span>
+        </div>
+      </div>
+
+      <!-- Barra inferior -->
+      <div class="brb-footer">
+        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);">
+          EL DIRECTO CONTINÚA EN BREVES INSTANTES
+        </div>
+        <div class="social-links" style="display: none;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../../../config.js"></script>
+  <script src="../../../common/overlay.js"></script>
+</body>
+</html>

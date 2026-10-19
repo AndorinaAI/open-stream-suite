@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taller Live — Temporizador</title>
+  
+  <!-- Tipografías Oficiales de Streaming (100% Offline) -->
+  <link rel="stylesheet" href="../../common/fonts.css">
+  
+  <link rel="stylesheet" href="../../common/styles.css">
+  <link rel="stylesheet" href="../../common/themes.css">
+  
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Inyección dinámica de CSS del Usuario -->
+  <style id="custom-user-css"></style>
+</head>
+<body>
+
+  <!-- Tarjeta Principal del Temporizador -->
+  <div id="timer-card" class="timer-card">
+    
+    <!-- Banner de Alertas Periódicas o Hitos -->
+    <div id="timer-alert-banner">
+      <span id="alert-banner-icon">🔔</span>
+      <span id="alert-banner-text">¡Recordatorio del Taller!</span>
+    </div>
+
+    <!-- Zona Dinámica Renderizada según Formato de Bloques -->
+    <div id="timer-dynamic-container">
+      <!-- Se genera dinámicamente con renderTimerLayout() -->
+    </div>
+
+    <!-- Barra de Progreso Inferior -->
+    <div id="timer-bar-track" class="timer-bar-track">
+      <div id="timer-progress" class="timer-bar-fill"></div>
+    </div>
+  </div>
+
+  <script src="../../config.js"></script>
+  <script src="widget.js"></script>
+</body>
+</html>

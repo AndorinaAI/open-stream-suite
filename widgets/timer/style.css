@@ -1,0 +1,246 @@
+:root {
+      --timer-accent: #57D6C4;
+      --timer-bg-primary: #191D21;
+      --timer-bg-secondary: #0B0D0F;
+      --timer-border-color: #57D6C4;
+      --timer-digits-color: #F2EEE5;
+      --timer-unit-color: #57D6C4;
+      --timer-prefix-color: #57D6C4;
+      --timer-sub-color: #8B969C;
+      --timer-glow-color: rgba(87, 214, 196, 0.4);
+      --font-digits: 'Outfit', sans-serif;
+      --font-ui: 'JetBrains Mono', monospace;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: transparent !important;
+      overflow: hidden;
+      font-family: var(--font-digits);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    /* Tarjeta del Temporizador */
+    .timer-card {
+      width: 390px;
+      max-width: calc(100vw - 20px);
+      box-sizing: border-box;
+      background: rgba(25, 29, 33, 0.94);
+      border: 1px solid rgba(87, 214, 196, 0.3);
+      border-left: 3px solid var(--timer-accent);
+      border-radius: 6px;
+      padding: 14px 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px var(--timer-glow-color);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Siluetas / Formas */
+    .timer-card.shape-rounded   { border-radius: 12px; }
+    .timer-card.shape-box       { border-radius: 0; }
+    .timer-card.shape-bubble    { border-radius: 20px 20px 20px 4px; }
+    .timer-card.shape-scifi     { border-radius: 0; clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px)); }
+    .timer-card.shape-pill      { border-radius: 9999px; padding: 12px 26px; }
+    .timer-card.shape-arcade    { border-radius: 0; box-shadow: 4px 4px 0 #000; }
+    .timer-card.shape-tag       { border-radius: 0; clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px); }
+    .timer-card.shape-slant     { border-radius: 0; clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%); }
+    .timer-card.shape-soft_card { border-radius: 22px; }
+
+    /* Cabecera del Timer */
+    .timer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timer-badge {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--timer-prefix-color);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .timer-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      background: var(--timer-accent);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--timer-accent);
+      flex-shrink: 0;
+    }
+
+    .timer-status-chip {
+      font-family: var(--font-ui);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(87, 214, 196, 0.15);
+      color: var(--timer-accent);
+      border: 1px solid rgba(87, 214, 196, 0.35);
+      text-transform: uppercase;
+      flex-shrink: 0;
+      transition: all 0.25s ease;
+    }
+
+    .timer-status-chip.running {
+      background: rgba(34, 197, 94, 0.15);
+      color: #22C55E;
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+
+    .timer-status-chip.paused {
+      background: rgba(245, 158, 11, 0.15);
+      color: #F59E0B;
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .timer-status-chip.warning {
+      background: rgba(239, 68, 68, 0.2);
+      color: #EF4444;
+      border-color: rgba(239, 68, 68, 0.5);
+      animation: chip-pulse-red 0.8s infinite alternate;
+    }
+
+    .timer-status-chip.finished {
+      background: rgba(239, 68, 68, 0.25);
+      color: #FF5555;
+      border-color: #EF4444;
+      animation: chip-pulse-red 0.5s infinite alternate;
+    }
+
+    @keyframes chip-pulse-red {
+      from { transform: scale(0.96); box-shadow: 0 0 4px rgba(239,68,68,0.2); }
+      to   { transform: scale(1.04); box-shadow: 0 0 12px rgba(239,68,68,0.7); }
+    }
+
+    /* Fila Principal de Dígitos */
+    .timer-content-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timer-digits-wrap {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .timer-digits {
+      font-family: var(--font-digits);
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--timer-digits-color);
+      line-height: 1;
+      text-shadow: 0 0 16px var(--timer-glow-color);
+      transition: color 0.2s ease;
+    }
+
+    .timer-unit-pill {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--timer-unit-color);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .timer-label {
+      font-family: var(--font-ui);
+      font-size: 11px;
+      color: var(--timer-sub-color);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: right;
+    }
+
+    /* Barra de Progreso */
+    .timer-bar-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(46, 54, 59, 0.6);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: var(--timer-accent);
+      box-shadow: 0 0 10px var(--timer-accent);
+      transition: width 0.3s linear, background-color 0.3s ease;
+    }
+
+    .timer-bar-fill.warning {
+      background: #EF4444 !important;
+      box-shadow: 0 0 14px #EF4444 !important;
+    }
+
+    /* Banner de Alerta Periódica / Hito */
+    #timer-alert-banner {
+      position: absolute;
+      top: -46px;
+      left: 10px;
+      right: 10px;
+      background: rgba(14, 18, 24, 0.96);
+      border: 1.5px solid var(--timer-accent);
+      border-radius: 8px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+      box-shadow: 0 0 20px var(--timer-glow-color), 0 8px 24px rgba(0,0,0,0.8);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 50;
+    }
+
+    #timer-alert-banner.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Flash Neón cuando se completa */
+    .timer-card.flash-complete {
+      animation: card-flash 0.6s 3 alternate ease-in-out;
+    }
+
+    @keyframes card-flash {
+      from { border-color: #EF4444; box-shadow: 0 0 35px rgba(239, 68, 68, 0.9); }
+      to   { border-color: #FFE600; box-shadow: 0 0 45px rgba(255, 230, 0, 0.9); }
+    }

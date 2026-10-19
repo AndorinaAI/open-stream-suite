@@ -1,0 +1,351 @@
+:root {
+      --promo-font: 'Outfit', sans-serif;
+      --promo-accent: #57D6C4;
+      --promo-bg: rgba(25, 29, 33, 0.94);
+      --promo-glow: 40px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: transparent !important;
+      overflow: hidden;
+      font-family: var(--promo-font);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Contenedor Principal de la Promoción */
+    .shoutout-card {
+      width: 680px;
+      max-width: 94vw;
+      background: var(--promo-bg);
+      border: 1px solid rgba(87, 214, 196, 0.3);
+      border-left: 4px solid var(--promo-accent);
+      border-radius: 12px;
+      padding: 18px 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .shoutout-card-body {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+    }
+
+    /* Animaciones de Entrada */
+    .shoutout-card.anim-slide_up {
+      transform: translateY(40px) scale(0.95);
+    }
+    .shoutout-card.anim-slide_up.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .shoutout-card.anim-pop_scale {
+      transform: scale(0.7);
+    }
+    .shoutout-card.anim-pop_scale.visible {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .shoutout-card.anim-neon_flash {
+      transform: scale(0.95);
+    }
+    .shoutout-card.anim-neon_flash.visible {
+      opacity: 1;
+      transform: scale(1);
+      animation: neonPulse 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes neonPulse {
+      0% { filter: drop-shadow(0 0 8px var(--promo-accent)); }
+      100% { filter: drop-shadow(0 0 24px var(--promo-accent)); }
+    }
+
+    .shoutout-card.anim-flip_in {
+      transform: perspective(800px) rotateX(40deg);
+      transform-origin: top;
+    }
+    .shoutout-card.anim-flip_in.visible {
+      opacity: 1;
+      transform: perspective(800px) rotateX(0deg);
+    }
+
+    /* Siluetas / Formas */
+    .shape-rounded {
+      border-radius: 14px;
+    }
+    .shape-scifi {
+      border-radius: 0;
+      clip-path: polygon(16px 0%, 100% 0%, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0% 100%, 0% 16px);
+    }
+    .shape-arcade {
+      border-radius: 0;
+      border: 3px solid #FFFFFF !important;
+      box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.85) !important;
+    }
+    .shape-pill {
+      border-radius: 9999px;
+      padding: 16px 28px;
+    }
+    .shape-slant {
+      border-radius: 8px;
+      transform: skewX(-4deg);
+    }
+    .shape-slant > * {
+      transform: skewX(4deg);
+    }
+    .shape-soft_card {
+      border-radius: 22px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Avatar con halo neón y giro cibernético */
+    .avatar-wrapper {
+      position: relative;
+      width: 78px;
+      height: 78px;
+      flex-shrink: 0;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--promo-accent);
+      box-shadow: 0 0 16px rgba(87, 214, 196, 0.4);
+      background: #191D21;
+      display: block;
+    }
+
+    .avatar-ring {
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border: 1.5px dashed var(--promo-accent);
+      border-radius: 50%;
+      animation: spinRing 12s linear infinite;
+    }
+
+    @keyframes spinRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Caja de media para imagen o GIF animado en promos personalizadas */
+    .promo-media-box {
+      width: 86px;
+      height: 86px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid var(--promo-accent);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.4);
+      position: relative;
+      display: none;
+    }
+
+    .promo-media-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Información central */
+    .shoutout-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex-grow: 1;
+      min-width: 0;
+    }
+
+    .shoutout-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      color: var(--promo-accent);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .price-pill {
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid #F59E0B;
+      color: #FBBF24;
+      padding: 1px 8px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .shoutout-username {
+      font-size: 24px;
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.2;
+      letter-spacing: 0.4px;
+      word-break: break-word;
+    }
+
+    .shoutout-game {
+      font-size: 13px;
+      color: #FF783F;
+      font-weight: 600;
+      word-break: break-word;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .shoutout-msg {
+      font-size: 12px;
+      color: #E2E8F0;
+      font-style: italic;
+      background: rgba(255,255,255,0.06);
+      border-left: 2px solid var(--promo-accent);
+      padding: 4px 10px;
+      border-radius: 0 4px 4px 0;
+      margin-top: 3px;
+      display: none;
+    }
+
+    .shoutout-link {
+      font-size: 11px;
+      color: #94A3B8;
+      margin-top: 2px;
+      word-break: break-all;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Caja de Código QR Dinámico */
+    .qr-wrapper {
+      width: 82px;
+      height: 82px;
+      flex-shrink: 0;
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: 4px;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .qr-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .qr-center-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 22px;
+      height: 22px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 4px rgba(0,0,0,0.45);
+      border: 2px solid #FFFFFF;
+      overflow: hidden;
+      z-index: 3;
+    }
+
+    .qr-center-badge img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .qr-label {
+      position: absolute;
+      bottom: -17px;
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--promo-accent);
+      letter-spacing: 0.6px;
+      white-space: nowrap;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+
+    /* Reproductor de Clip de Twitch Integrado */
+    .clip-wrapper {
+      width: 100%;
+      margin-top: 4px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--promo-accent);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      display: none;
+      flex-direction: column;
+      background: #000000;
+    }
+
+    .clip-header {
+      padding: 4px 10px;
+      background: rgba(25, 29, 33, 0.9);
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--promo-accent);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      letter-spacing: 1px;
+    }
+
+    .clip-frame {
+      width: 100%;
+      height: 220px;
+      border: none;
+      display: block;
+    }
+
+    /* Esquina técnica Cyber */
+    .corner-tech {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 12px;
+      height: 12px;
+      border-top: 2px solid var(--promo-accent);
+      border-right: 2px solid var(--promo-accent);
+    }
