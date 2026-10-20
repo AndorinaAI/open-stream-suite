@@ -1,0 +1,19 @@
+{
+  "id": "vapor_sunset",
+  "packId": "pack_retro_arcade",
+  "name": "Vapor Sunset Glitch",
+  "badge": "02 // VAPOR",
+  "accentCyan": "#A855F7",
+  "accentOrange": "#EC4899",
+  "bgDark": "#0D0B18",
+  "textLight": "#FAF5FF",
+  "panelBg": "#1E1833",
+  "textDim": "#9333EA",
+  "fontPrimary": "var(--font-primary)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 75,
+  "borderStyle": "rounded",
+  "desc": "Degradados magenta y violeta atardecer con resplandor neón difuso.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

@@ -1,0 +1,143 @@
+{
+  "profile_name": "Open Stream Suite Suite — Andorina",
+  "device_model": "Ajazz AKP153 / AKP03 / AKP846",
+  "total_keys": 15,
+  "layout_grid": "5x3",
+  "keys": [
+    {
+      "key_index": 1,
+      "label": "GAMEPLAY",
+      "action_type": "obs_scene",
+      "target_scene": "Gameplay",
+      "icon": "../assets/icon_scene_game.svg",
+      "description": "Cambiar a escena Gameplay en OBS Studio"
+    },
+    {
+      "key_index": 2,
+      "label": "MAKER MESA",
+      "action_type": "obs_scene",
+      "target_scene": "Maker Mesa",
+      "icon": "../assets/icon_scene_maker.svg",
+      "description": "Cambiar a cámara cenital de banco de trabajo"
+    },
+    {
+      "key_index": 3,
+      "label": "MAKER PC",
+      "action_type": "obs_scene",
+      "target_scene": "Maker PC",
+      "icon": "../assets/icon_scene_maker.svg",
+      "description": "Cambiar a monitor de programación y terminal"
+    },
+    {
+      "key_index": 4,
+      "label": "CHARLA CHILL",
+      "action_type": "obs_scene",
+      "target_scene": "Charla",
+      "icon": "../assets/icon_scene_chill.svg",
+      "description": "Cambiar a escena Just Chatting y lectura del chat"
+    },
+    {
+      "key_index": 5,
+      "label": "PAUSA BRB",
+      "action_type": "obs_scene",
+      "target_scene": "Be Right Back",
+      "icon": "../assets/icon_scene_brb.svg",
+      "description": "Cambiar a pantalla de pausa con escáner animado"
+    },
+    {
+      "key_index": 6,
+      "label": "TEMA MAKER",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/theme?id=maker_electronico",
+      "icon": "../assets/icon_theme_neon.svg",
+      "color_accent": "#57D6C4",
+      "description": "Aplicar paleta Turquesa Neón en todos los overlays de OBS"
+    },
+    {
+      "key_index": 7,
+      "label": "TEMA PRINT",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/theme?id=print_taller",
+      "icon": "../assets/icon_theme_neon.svg",
+      "color_accent": "#FF9E3B",
+      "description": "Aplicar paleta Naranja Plotter en OBS"
+    },
+    {
+      "key_index": 8,
+      "label": "TEMA CYBER",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/theme?id=cyberpunk_neon",
+      "icon": "../assets/icon_theme_neon.svg",
+      "color_accent": "#FFE600",
+      "description": "Aplicar paleta Cyberpunk Neón (Amarillo + Fucsia) en OBS"
+    },
+    {
+      "key_index": 9,
+      "label": "TEMA GOLD",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/theme?id=golden_maker",
+      "icon": "../assets/icon_theme_neon.svg",
+      "color_accent": "#FFD700",
+      "description": "Aplicar paleta Golden Maker (Oro + Negro Grafito) en OBS"
+    },
+    {
+      "key_index": 10,
+      "label": "TEMA CHILL",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/theme?id=chill_lavender",
+      "icon": "../assets/icon_theme_neon.svg",
+      "color_accent": "#C084FC",
+      "description": "Aplicar paleta Chill Lavender (Azul Noche) en OBS"
+    },
+    {
+      "key_index": 11,
+      "label": "TIMER 5 MIN",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/timer?action=start&seconds=300&title=DESCANSO+5+MIN",
+      "icon": "../assets/icon_timer.svg",
+      "description": "Iniciar cuenta atrás de 5 minutos en el overlay"
+    },
+    {
+      "key_index": 12,
+      "label": "PAUSAR TIMER",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/timer?action=pause",
+      "icon": "../assets/icon_timer.svg",
+      "description": "Pausar o reanudar el cronómetro del directo"
+    },
+    {
+      "key_index": 13,
+      "label": "CONFETI FX",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/explode?emoji=🎉&count=40",
+      "icon": "../assets/icon_fx_confetti.svg",
+      "description": "Lluvia de confeti de celebración en OBS"
+    },
+    {
+      "key_index": 14,
+      "label": "CORAZONES FX",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/explode?emoji=❤️&count=40",
+      "icon": "../assets/icon_fx_confetti.svg",
+      "description": "Lluvia de corazones para agradecimientos"
+    },
+    {
+      "key_index": 15,
+      "label": "DISPARAR SUSTO",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/trigger?id=susto",
+      "icon": "../assets/icon_fx_confetti.svg",
+      "description": "Lanza el vídeo/meme de susto o victoria configurado"
+    }
+  ]
+}

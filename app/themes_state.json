@@ -1,0 +1,17 @@
+{
+  "activePack": "pack_cozy_lofi",
+  "activeTheme": "nordic_forest",
+  "overlayThemes": {
+    "game": "arcade_8bit",
+    "maker": "maker",
+    "maker-desk": "maker",
+    "maker-pc": "terminal",
+    "print": "print",
+    "print-machine": "print",
+    "print-design": "print",
+    "chill": "chill",
+    "startingSoon": "synthwave",
+    "beRightBack": "vapor_sunset",
+    "ending": "synthwave"
+  }
+}

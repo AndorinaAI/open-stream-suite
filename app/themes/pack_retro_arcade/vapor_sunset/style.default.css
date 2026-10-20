@@ -1,0 +1,11 @@
+body[data-theme="vapor_sunset"] {
+  --color-bg-dark: #0D0B18;
+  --color-text-light: #FAF5FF;
+  --color-accent-cyan: #A855F7;
+  --color-accent-orange: #EC4899;
+  --color-panel-bg: #1E1833;
+  --color-text-dim: #9333EA;
+  --color-border-cyan: rgba(168, 85, 247, 0.45);
+  --color-border-cyan-bright: #A855F7;
+  --theme-glow: 0 0 18px rgba(236, 72, 153, 0.6);
+}

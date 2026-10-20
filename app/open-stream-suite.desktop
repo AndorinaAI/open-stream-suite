@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Open Stream Suite Launcher
+Comment=Open Stream Suite — Suite de control para OBS Studio
+Exec=bash -c 'DIR="$(dirname "$1")"; cd "$DIR" && ./iniciar_stream.sh' _ %k
+Icon=video-display
+Terminal=false
+Categories=AudioVideo;Video;Network;
+StartupNotify=true
+

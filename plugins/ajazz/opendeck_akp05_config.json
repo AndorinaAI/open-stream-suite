@@ -1,0 +1,146 @@
+{
+  "name": "Open Stream Suite — Ajazz AKP05 OpenDeck Profile",
+  "author": "Andorina",
+  "version": "2.0.0",
+  "device": {
+    "type": "ajazz-akp05",
+    "name": "Ajazz AKP05 / AKP05E (10 Keys + Touch Strip + 4 Knobs)"
+  },
+  "settings": {
+    "server_url": "http://localhost:8080",
+    "ws_url": "ws://localhost:8080/ws"
+  },
+  "keys": [
+    {
+      "index": 0,
+      "title": "GAMEPLAY",
+      "action": "obs_scene",
+      "scene_name": "Gameplay",
+      "icon": "icon_scene_game.svg"
+    },
+    {
+      "index": 1,
+      "title": "MAKER\\nMESA",
+      "action": "obs_scene",
+      "scene_name": "Maker Mesa",
+      "icon": "icon_scene_maker.svg"
+    },
+    {
+      "index": 2,
+      "title": "MAKER\\nPC",
+      "action": "obs_scene",
+      "scene_name": "Maker PC",
+      "icon": "icon_scene_maker.svg"
+    },
+    {
+      "index": 3,
+      "title": "CHARLA\\nCHILL",
+      "action": "obs_scene",
+      "scene_name": "Charla",
+      "icon": "icon_scene_chill.svg"
+    },
+    {
+      "index": 4,
+      "title": "PAUSA\\nBRB",
+      "action": "obs_scene",
+      "scene_name": "Be Right Back",
+      "icon": "icon_scene_brb.svg"
+    },
+    {
+      "index": 5,
+      "title": "TEMA\\nMAKER",
+      "action": "http_get",
+      "url": "http://localhost:8080/api/deck/theme?id=maker_electronico",
+      "color": "#57D6C4",
+      "icon": "icon_theme_neon.svg"
+    },
+    {
+      "index": 6,
+      "title": "TEMA\\nCYBER",
+      "action": "http_get",
+      "url": "http://localhost:8080/api/deck/theme?id=cyberpunk_neon",
+      "color": "#FFE600",
+      "icon": "icon_theme_neon.svg"
+    },
+    {
+      "index": 7,
+      "title": "MEME\\nSUSTO",
+      "action": "http_get",
+      "url": "http://localhost:8080/api/deck/trigger?id=susto",
+      "color": "#FF783F",
+      "icon": "icon_fx_confetti.svg"
+    },
+    {
+      "index": 8,
+      "title": "CONFETI\\n🎉",
+      "action": "http_get",
+      "url": "http://localhost:8080/api/deck/explode?emoji=🎉&count=40",
+      "color": "#38BDF8",
+      "icon": "icon_fx_confetti.svg"
+    },
+    {
+      "index": 9,
+      "title": "STREAM\\nPROMO",
+      "action": "http_get",
+      "url": "http://localhost:8080/api/deck/widget?widget=promo&action=trigger",
+      "color": "#C084FC",
+      "icon": "icon_scene_chill.svg"
+    }
+  ],
+  "touch_strip": [
+    {
+      "slot": 0,
+      "label": "TIMER OSD",
+      "on_tap": "http://localhost:8080/api/deck/knob?knob=timer&action=touch",
+      "feedback_ws": "timer_control"
+    },
+    {
+      "slot": 1,
+      "label": "TEMA ACTIVO",
+      "on_tap": "http://localhost:8080/api/deck/knob?knob=theme&action=press",
+      "feedback_ws": "theme_change"
+    },
+    {
+      "slot": 2,
+      "label": "META TWITCH",
+      "on_tap": "http://localhost:8080/api/deck/knob?knob=goal&action=touch",
+      "feedback_ws": "goal_update"
+    },
+    {
+      "slot": 3,
+      "label": "AUDIO / FX",
+      "on_tap": "http://localhost:8080/api/deck/knob?knob=fx&action=press",
+      "feedback_ws": "explode_emotes"
+    }
+  ],
+  "encoders": [
+    {
+      "index": 0,
+      "name": "Knob 1 - Cronómetro",
+      "on_rotate_left": "http://localhost:8080/api/deck/knob?knob=timer&ticks=-1",
+      "on_rotate_right": "http://localhost:8080/api/deck/knob?knob=timer&ticks=1",
+      "on_press": "http://localhost:8080/api/deck/knob?knob=timer&action=press"
+    },
+    {
+      "index": 1,
+      "name": "Knob 2 - Selector de Temas Neón",
+      "on_rotate_left": "http://localhost:8080/api/deck/knob?knob=theme&action=prev",
+      "on_rotate_right": "http://localhost:8080/api/deck/knob?knob=theme&action=next",
+      "on_press": "http://localhost:8080/api/deck/theme?id=maker_electronico"
+    },
+    {
+      "index": 2,
+      "name": "Knob 3 - Contador de Metas (Goals)",
+      "on_rotate_left": "http://localhost:8080/api/deck/knob?knob=goal&ticks=-1",
+      "on_rotate_right": "http://localhost:8080/api/deck/knob?knob=goal&ticks=1",
+      "on_press": "http://localhost:8080/api/deck/knob?knob=goal&action=press"
+    },
+    {
+      "index": 3,
+      "name": "Knob 4 - Efectos FX y Chime",
+      "on_rotate_left": "http://localhost:8080/api/deck/knob?knob=fx&ticks=-1",
+      "on_rotate_right": "http://localhost:8080/api/deck/knob?knob=fx&ticks=1",
+      "on_press": "http://localhost:8080/api/deck/knob?knob=fx&action=press"
+    }
+  ]
+}

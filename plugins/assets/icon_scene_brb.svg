@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144" width="144" height="144">
+  <rect width="144" height="144" rx="28" fill="#12161A"/>
+  <rect x="2" y="2" width="140" height="140" rx="26" fill="none" stroke="#EF4444" stroke-width="3" stroke-opacity="0.5"/>
+  <g transform="translate(24, 26) scale(4)" stroke="#EF4444" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+    <line x1="6" y1="1" x2="6" y2="4"/>
+    <line x1="10" y1="1" x2="10" y2="4"/>
+    <line x1="14" y1="1" x2="14" y2="4"/>
+  </g>
+  <text x="72" y="126" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#EF4444">PAUSA BRB</text>
+</svg>

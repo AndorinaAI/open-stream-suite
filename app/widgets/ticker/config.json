@@ -1,0 +1,390 @@
+{
+  "activePreset": "cyber_stream",
+  "layoutMode": "two_tier",
+  "contentSource": "both",
+  "speed": 45,
+  "rotationInterval": 6,
+  "rotatorAnimation": "slide",
+  "topicSeparator": "///",
+  "eventSeparator": "│",
+  "pauseOnHover": true,
+  "phrases": [
+    {
+      "id": "p1",
+      "badge": "OPEN STREAM SUITE",
+      "icon": "🛠️",
+      "text": "JUGAR · CREAR · COMPARTIR · ¡Bienvenidos al stream!"
+    },
+    {
+      "id": "p2",
+      "badge": "COMUNIDAD",
+      "icon": "💬",
+      "text": "Únete a nuestro servidor de Discord con el comando !discord en el chat"
+    },
+    {
+      "id": "p3",
+      "badge": "PROYECTO",
+      "icon": "⚡",
+      "text": "Montaje de PCB en vivo y pruebas de firmware con ESP32"
+    }
+  ],
+  "rss": {
+    "enabled": true,
+    "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
+    "maxItems": 6,
+    "prefix": "NOTICIAS MUNDO",
+    "icon": "📰",
+    "refreshMinutes": 10
+  },
+  "eventChips": {
+    "showFollows": true,
+    "showSubs": true,
+    "showResubs": true,
+    "showLastBits": true,
+    "showTopBits": true,
+    "showRaids": true,
+    "showTips": true,
+    "showKofi": true,
+    "showPaypal": true,
+    "showBmc": true,
+    "showGoal": true,
+    "showViewers": true,
+    "showLastChat": false
+  },
+  "styles": {
+    "shape": "rounded",
+    "bgType": "glass",
+    "bgColor": "#191D21",
+    "bgGradient": "#0B0D0F",
+    "bgOpacity": 92,
+    "borderColor": "#57D6C4",
+    "borderStyle": "left_neon",
+    "borderWidth": 2,
+    "glowIntensity": 35,
+    "fontFamily": "rajdhani",
+    "fontSize": 13,
+    "accentColor": "#57D6C4",
+    "topTierShape": "capsule",
+    "topTierChipStyle": "badge_filled",
+    "topTierBgColor": "#121518",
+    "topTierBgOpacity": 88,
+    "topTierBorderColor": "rgba(255, 255, 255, 0.14)",
+    "topTierBorderStyle": "all",
+    "topTierGlow": 15,
+    "topTierFontSize": 12,
+    "topTierSpacing": 8,
+    "topTierAlign": "center",
+    "followColor": "#F43F5E",
+    "subColor": "#A78BFA",
+    "resubColor": "#818CF8",
+    "bitsColor": "#FBBF24",
+    "topBitsColor": "#F59E0B",
+    "raidColor": "#38BDF8",
+    "tipColor": "#10B981",
+    "kofiColor": "#29ABE2",
+    "paypalColor": "#0079C1",
+    "bmcColor": "#FFDD00",
+    "goalColor": "#57D6C4",
+    "customCSS": ""
+  },
+  "presets": [
+    {
+      "id": "cyber_stream",
+      "name": "⚡ Cyber Stream Dual (Métricas Arriba + Prompter)",
+      "isBuiltin": true,
+      "layoutMode": "two_tier",
+      "contentSource": "both",
+      "speed": 45,
+      "topicSeparator": "///",
+      "eventSeparator": "│",
+      "styles": {
+        "shape": "rounded",
+        "bgType": "glass",
+        "bgColor": "#191D21",
+        "bgGradient": "#0B0D0F",
+        "bgOpacity": 92,
+        "borderColor": "#57D6C4",
+        "borderStyle": "left_neon",
+        "borderWidth": 2,
+        "glowIntensity": 35,
+        "fontFamily": "rajdhani",
+        "fontSize": 13,
+        "accentColor": "#57D6C4",
+        "followColor": "#F43F5E",
+        "subColor": "#A78BFA",
+        "bitsColor": "#FBBF24",
+        "raidColor": "#38BDF8",
+        "customCSS": ""
+      }
+    },
+    {
+      "id": "twitch_streamer",
+      "name": "🟣 Twitch Streamer (Púrpura Oficial)",
+      "isBuiltin": true,
+      "layoutMode": "two_tier",
+      "contentSource": "phrases",
+      "speed": 40,
+      "topicSeparator": "◆",
+      "eventSeparator": "•",
+      "styles": {
+        "shape": "tech",
+        "bgType": "gradient",
+        "bgColor": "#18141D",
+        "bgGradient": "#0E0714",
+        "bgOpacity": 95,
+        "borderColor": "#9146FF",
+        "borderStyle": "all_neon",
+        "borderWidth": 2,
+        "glowIntensity": 45,
+        "fontFamily": "outfit",
+        "fontSize": 13,
+        "accentColor": "#9146FF",
+        "followColor": "#C084FC",
+        "subColor": "#9146FF",
+        "bitsColor": "#F59E0B",
+        "raidColor": "#06B6D4",
+        "customCSS": ""
+      }
+    },
+    {
+      "id": "arcade_retro",
+      "name": "👾 Arcade 8-Bit (Barra Compacta Única)",
+      "isBuiltin": true,
+      "layoutMode": "single_bar",
+      "contentSource": "both",
+      "speed": 50,
+      "topicSeparator": "◆",
+      "eventSeparator": "◆",
+      "styles": {
+        "shape": "tech_corners",
+        "bgType": "solid",
+        "bgColor": "#000000",
+        "bgGradient": "#111111",
+        "bgOpacity": 96,
+        "borderColor": "#10B981",
+        "borderStyle": "all_neon",
+        "borderWidth": 3,
+        "glowIntensity": 25,
+        "fontFamily": "press_start",
+        "fontSize": 10,
+        "accentColor": "#10B981",
+        "followColor": "#EF4444",
+        "subColor": "#8B5CF6",
+        "bitsColor": "#FBBF24",
+        "raidColor": "#3B82F6",
+        "customCSS": ""
+      }
+    },
+    {
+      "id": "clean_minimal",
+      "name": "🤍 Clean Studio (Minimalista)",
+      "isBuiltin": true,
+      "layoutMode": "two_tier",
+      "contentSource": "phrases",
+      "speed": 60,
+      "topicSeparator": "|",
+      "eventSeparator": "|",
+      "styles": {
+        "shape": "minimal",
+        "bgType": "glass",
+        "bgColor": "#111827",
+        "bgGradient": "#030712",
+        "bgOpacity": 80,
+        "borderColor": "rgba(255,255,255,0.18)",
+        "borderStyle": "none",
+        "borderWidth": 1,
+        "glowIntensity": 0,
+        "fontFamily": "inter",
+        "fontSize": 12,
+        "accentColor": "#F3F4F6",
+        "followColor": "#FB7185",
+        "subColor": "#C084FC",
+        "bitsColor": "#FDE047",
+        "raidColor": "#67E8F9",
+        "customCSS": ""
+      }
+    },
+    {
+      "id": "synthwave_80s",
+      "name": "🌴 Synthwave Laser (Retro 80s)",
+      "isBuiltin": true,
+      "layoutMode": "two_tier",
+      "contentSource": "both",
+      "speed": 42,
+      "topicSeparator": "⚡",
+      "eventSeparator": "⚡",
+      "styles": {
+        "shape": "rounded",
+        "bgType": "gradient",
+        "bgColor": "#2B0938",
+        "bgGradient": "#0C021E",
+        "bgOpacity": 94,
+        "borderColor": "#FF2A85",
+        "borderStyle": "top_bottom",
+        "borderWidth": 2,
+        "glowIntensity": 55,
+        "fontFamily": "orbitron",
+        "fontSize": 12,
+        "accentColor": "#FF2A85",
+        "followColor": "#00F9FF",
+        "subColor": "#FF2A85",
+        "bitsColor": "#FFE600",
+        "raidColor": "#00F9FF",
+        "customCSS": ""
+      }
+    },
+    {
+      "id": "breaking_news",
+      "name": "🚨 Informativo TV (Rotador de Titulares)",
+      "isBuiltin": true,
+      "layoutMode": "rotator",
+      "contentSource": "rss",
+      "rotationInterval": 5,
+      "rotatorAnimation": "flip",
+      "topicSeparator": "▸",
+      "eventSeparator": "▸",
+      "styles": {
+        "shape": "tech",
+        "bgType": "solid",
+        "bgColor": "#1C1917",
+        "bgGradient": "#0C0A09",
+        "bgOpacity": 98,
+        "borderColor": "#EF4444",
+        "borderStyle": "left_neon",
+        "borderWidth": 4,
+        "glowIntensity": 40,
+        "fontFamily": "montserrat",
+        "fontSize": 13,
+        "accentColor": "#EF4444",
+        "followColor": "#F87171",
+        "subColor": "#A78BFA",
+        "bitsColor": "#FBBF24",
+        "raidColor": "#38BDF8",
+        "customCSS": ""
+      }
+    }
+  ],
+  "shortcuts": [
+    {
+      "id": "sc_ticker_announce",
+      "label": "📢 Anuncio Stream",
+      "action": "message",
+      "params": {
+        "message": "🔥 ¡Directo en marcha! Deja tus preguntas en el chat."
+      },
+      "color": "#57D6C4",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_thanks",
+      "label": "⭐ Gracias Comunidad",
+      "action": "message",
+      "params": {
+        "message": "🎉 ¡Muchísimas gracias a todos los que apoyáis el canal hoy con subs y follows!"
+      },
+      "color": "#A78BFA",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_flash",
+      "label": "🚨 Flash Última Hora",
+      "action": "flash_news",
+      "params": {
+        "message": "🚨 ¡ALERTA: ¡El stream ha superado el objetivo! ¡Gracias a todos!",
+        "duration": 15
+      },
+      "color": "#EF4444",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_sim_follow",
+      "label": "❤️ Simular Follow",
+      "action": "simulate",
+      "params": {
+        "event": "follow",
+        "user": "MakerFriend"
+      },
+      "color": "#F43F5E",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_sim_sub",
+      "label": "⭐ Simular Sub T3",
+      "action": "simulate",
+      "params": {
+        "event": "sub",
+        "user": "PatronVIP",
+        "tier": "Tier 3",
+        "months": 12
+      },
+      "color": "#A78BFA",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_sim_bits",
+      "label": "💎 Simular 500 Bits",
+      "action": "simulate",
+      "params": {
+        "event": "bits",
+        "user": "TechSupporter",
+        "amount": 500
+      },
+      "color": "#FBBF24",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_sim_raid",
+      "label": "🚀 Simular Raid",
+      "action": "simulate",
+      "params": {
+        "event": "raid",
+        "user": "StreamerColega",
+        "amount": 42
+      },
+      "color": "#38BDF8",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_sim_kofi",
+      "label": "☕ Simular Ko-fi (€5)",
+      "action": "simulate",
+      "params": {
+        "event": "tip",
+        "platform": "kofi",
+        "user": "KofiMaker",
+        "amount": "5.00 €",
+        "message": "¡Sigue así! ¡Gran stream!"
+      },
+      "color": "#29ABE2",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_sim_paypal",
+      "label": "🅿️ Simular PayPal (€10)",
+      "action": "simulate",
+      "params": {
+        "event": "tip",
+        "platform": "paypal",
+        "user": "PayPalFan",
+        "amount": "10.00 EUR",
+        "message": "Para los componentes y el estaño."
+      },
+      "color": "#0079C1",
+      "pinned": true
+    },
+    {
+      "id": "sc_ticker_sim_bmc",
+      "label": "🟡 Simular BMC (3 Cafés)",
+      "action": "simulate",
+      "params": {
+        "event": "tip",
+        "platform": "buymeacoffee",
+        "user": "CafeSupporter",
+        "amount": "9.00 €",
+        "message": "¡3 cafés para mantener la energía a tope!"
+      },
+      "color": "#FFDD00",
+      "pinned": true
+    }
+  ]
+}

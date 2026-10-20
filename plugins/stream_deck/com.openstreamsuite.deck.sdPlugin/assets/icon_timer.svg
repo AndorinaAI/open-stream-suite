@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144" width="144" height="144">
+  <rect width="144" height="144" rx="28" fill="#12161A"/>
+  <rect x="2" y="2" width="140" height="140" rx="26" fill="none" stroke="#38BDF8" stroke-width="3" stroke-opacity="0.5"/>
+  <g transform="translate(24, 26) scale(4)" stroke="#38BDF8" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="13" r="8"/>
+    <path d="M12 9v4l3 3"/>
+    <path d="M12 5V2"/>
+    <path d="M10 2h4"/>
+  </g>
+  <text x="72" y="126" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#38BDF8">TIMER 5 MIN</text>
+</svg>

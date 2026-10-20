@@ -1,0 +1,11 @@
+body[data-theme="nordic_forest"] {
+  --color-bg-dark: #131C16;
+  --color-text-light: #EDF4EE;
+  --color-accent-cyan: #73A985;
+  --color-accent-orange: #C89F65;
+  --color-panel-bg: #1E2B22;
+  --color-text-dim: #8BA090;
+  --color-border-cyan: rgba(115, 169, 133, 0.45);
+  --color-border-cyan-bright: #73A985;
+  --theme-glow: 0 0 14px rgba(115, 169, 133, 0.4);
+}

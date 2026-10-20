@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144" width="144" height="144">
+  <rect width="144" height="144" rx="28" fill="#12161A"/>
+  <rect x="2" y="2" width="140" height="140" rx="26" fill="none" stroke="#FF9E3B" stroke-width="3" stroke-opacity="0.5"/>
+  <g transform="translate(24, 26) scale(4)" stroke="#FF9E3B" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="5" y="5" width="14" height="14" rx="2"/>
+    <circle cx="9" cy="9" r="1" fill="#FF9E3B"/>
+    <path d="M9 1V5M15 1V5M9 19V23M15 19V23M1 9H5M1 15H5M19 9H23M19 15H23"/>
+  </g>
+  <text x="72" y="126" text-anchor="middle" font-family="monospace" font-size="13" font-weight="bold" fill="#FF9E3B">MAKER MESA</text>
+</svg>

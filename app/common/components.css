@@ -1,0 +1,554 @@
+/* ====================================================================
+   OPEN STREAM SUITE — COMPONENTES VISUALES REUTILIZABLES
+   ==================================================================== */
+
+/* --- 1. CABECERA Y MARCA --- */
+.scene-header {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  width: 1856px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--color-panel-bg-trans);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border-dim);
+  border-left: 3px solid var(--color-accent-cyan);
+  border-radius: var(--radius-sm);
+  z-index: 100;
+}
+
+.scene-header.theme-orange {
+  border-left-color: var(--color-accent-orange);
+}
+
+.scene-header.theme-chill {
+  border-left-color: #89B4FA;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(87, 214, 196, 0.12);
+  color: var(--color-accent-cyan);
+  border: 1px solid var(--color-border-cyan);
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: var(--font-tech);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.mode-badge.badge-orange {
+  background: rgba(255, 120, 63, 0.14);
+  color: var(--color-accent-orange);
+  border-color: var(--color-border-orange);
+}
+
+.mode-badge.badge-chill {
+  background: rgba(137, 180, 250, 0.14);
+  color: #89B4FA;
+  border-color: rgba(137, 180, 250, 0.35);
+}
+
+.mode-badge svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.header-subtitle {
+  font-family: var(--font-tech);
+  font-size: 12px;
+  color: var(--color-text-dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Indicador de directo */
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(235, 64, 52, 0.12);
+  border: 1px solid rgba(235, 64, 52, 0.3);
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #F87171;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  background-color: #EF4444;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #EF4444;
+  animation: pulse-live 2s infinite ease-in-out;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Marca del canal */
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon-svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-accent-cyan);
+}
+
+.theme-orange .brand-icon-svg {
+  color: var(--color-accent-orange);
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-family: var(--font-primary);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  color: var(--color-text-light);
+  line-height: 1.1;
+}
+
+.brand-tagline {
+  font-family: var(--font-tech);
+  font-size: 9px;
+  color: var(--color-text-dim);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* --- 2. MARCOS DE CÁMARA (TRANSPARENTES) --- */
+.camera-frame {
+  position: absolute;
+  background: transparent;
+  pointer-events: none;
+  border: 1px solid var(--color-border-cyan);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 12px rgba(87, 214, 196, 0.04);
+}
+
+.camera-frame.theme-orange {
+  border-color: var(--color-border-orange);
+  box-shadow: inset 0 0 12px rgba(255, 120, 63, 0.04);
+}
+
+/* Esquinas técnicas decorativas */
+.camera-frame::before,
+.camera-frame::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+
+.camera-frame::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--color-border-cyan-bright);
+  border-left: 2px solid var(--color-border-cyan-bright);
+}
+
+.camera-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--color-border-cyan-bright);
+  border-right: 2px solid var(--color-border-cyan-bright);
+}
+
+.camera-frame.theme-orange::before {
+  border-top-color: var(--color-border-orange-bright);
+  border-left-color: var(--color-border-orange-bright);
+}
+
+.camera-frame.theme-orange::after {
+  border-bottom-color: var(--color-border-orange-bright);
+  border-right-color: var(--color-border-orange-bright);
+}
+
+/* Marcas técnicas opuestas (superior derecha e inferior izquierda) */
+.frame-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid var(--color-border-cyan-bright);
+  border-right: 2px solid var(--color-border-cyan-bright);
+}
+
+.frame-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  border-bottom: 2px solid var(--color-border-cyan-bright);
+  border-left: 2px solid var(--color-border-cyan-bright);
+}
+
+.theme-orange .frame-corner-tr {
+  border-top-color: var(--color-border-orange-bright);
+  border-right-color: var(--color-border-orange-bright);
+}
+
+.theme-orange .frame-corner-bl {
+  border-bottom-color: var(--color-border-orange-bright);
+  border-left-color: var(--color-border-orange-bright);
+}
+
+/* Etiqueta superior de la ventana */
+.frame-label {
+  position: absolute;
+  top: -14px;
+  left: 14px;
+  background: var(--color-panel-bg);
+  border: 1px solid var(--color-border-cyan);
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--color-accent-cyan);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.camera-frame.theme-orange .frame-label {
+  border-color: var(--color-border-orange);
+  color: var(--color-accent-orange);
+}
+
+/* Cruz de registro técnico en centro o esquinas */
+.reg-mark {
+  position: absolute;
+  font-family: var(--font-tech);
+  font-size: 11px;
+  color: var(--color-border-cyan);
+  opacity: 0.6;
+}
+
+.theme-orange .reg-mark {
+  color: var(--color-border-orange);
+}
+
+/* --- 3. BANDA DE PROYECTO INFERIOR --- */
+.bottom-project-bar {
+  position: absolute;
+  top: 906px;
+  left: 32px;
+  width: 1376px;
+  height: 54px;
+  background: var(--color-panel-bg-trans);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border-dim);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 90;
+}
+
+.bottom-project-bar.theme-orange {
+  border-bottom: 2px solid var(--color-accent-orange);
+}
+
+.project-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.project-prefix {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--color-text-dim);
+}
+
+.project-name-value {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--color-accent-cyan);
+}
+
+.bottom-project-bar.theme-orange .project-name-value {
+  color: var(--color-accent-orange);
+}
+
+.project-phases {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phase-item {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--color-text-dim);
+  padding: 4px 10px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
+}
+
+.phase-item.active {
+  background: rgba(87, 214, 196, 0.15);
+  border-color: var(--color-border-cyan-bright);
+  color: var(--color-text-light);
+  font-weight: 700;
+}
+
+.bottom-project-bar.theme-orange .phase-item.active {
+  background: rgba(255, 120, 63, 0.2);
+  border-color: var(--color-border-orange-bright);
+}
+
+.phase-divider {
+  color: rgba(139, 150, 156, 0.4);
+  font-size: 9px;
+}
+
+/* --- 4. PANEL LATERAL INFORMATIVO (DERECHA) --- */
+.side-info-panel {
+  position: absolute;
+  top: 666px;
+  left: 1432px;
+  width: 456px;
+  height: 220px;
+  background: var(--color-panel-bg-trans);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border-dim);
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 90;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border-dim);
+  padding-bottom: 8px;
+}
+
+.panel-title {
+  font-family: var(--font-tech);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+}
+
+.panel-body {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-label {
+  font-family: var(--font-tech);
+  font-size: 10px;
+  color: var(--color-text-dim);
+  letter-spacing: 1px;
+}
+
+.info-value {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.info-value.highlight-cyan {
+  color: var(--color-accent-cyan);
+}
+
+.info-value.highlight-orange {
+  color: var(--color-accent-orange);
+}
+
+/* --- 5. REDES SOCIALES --- */
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.social-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-tech);
+  font-size: 11px;
+  color: var(--color-text-dim);
+}
+
+.social-item svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* --- 6. PANTALLAS COMPLETAS (Starting, BRB, Ending) --- */
+.fullscreen-center-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 20;
+}
+
+.main-stream-title {
+  font-family: var(--font-primary);
+  font-size: 72px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--color-text-light);
+  line-height: 1.05;
+  text-transform: uppercase;
+  margin-top: 16px;
+}
+
+.title-cyan-accent {
+  color: var(--color-accent-cyan);
+  display: block;
+}
+
+.title-orange-accent {
+  color: var(--color-accent-orange);
+  display: block;
+}
+
+.stream-subtitle {
+  font-family: var(--font-tech);
+  font-size: 16px;
+  letter-spacing: 3px;
+  color: var(--color-text-dim);
+  margin-top: 16px;
+  text-transform: uppercase;
+}
+
+/* Barra de progreso técnica */
+.tech-progress-bar {
+  margin-top: 36px;
+  width: 520px;
+  height: 10px;
+  background: rgba(46, 54, 59, 0.8);
+  border: 1px solid var(--color-border-dim);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tech-progress-fill {
+  height: 100%;
+  width: 60%;
+  background: linear-gradient(90deg, var(--color-accent-cyan), #38bdf8);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(87, 214, 196, 0.5);
+  transition: width 0.3s ease;
+}
+
+.tech-progress-bar.theme-orange .tech-progress-fill {
+  background: linear-gradient(90deg, var(--color-accent-orange), #fbbf24);
+  box-shadow: 0 0 12px rgba(255, 120, 63, 0.5);
+}
+
+/* Modos del canal chips */
+.stream-modes-grid {
+  display: flex;
+  gap: 16px;
+  margin-top: 44px;
+}
+
+.stream-mode-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-panel-bg-trans);
+  border: 1px solid var(--color-border-dim);
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--color-text-light);
+}
+
+.stream-mode-card.active-cyan {
+  border-color: var(--color-border-cyan);
+  color: var(--color-accent-cyan);
+}
+
+.stream-mode-card.active-orange {
+  border-color: var(--color-border-orange);
+  color: var(--color-accent-orange);
+}
+
+.stream-mode-card svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}

@@ -1,0 +1,19 @@
+{
+  "id": "neon_matrix",
+  "packId": "pack_sci_fi_blueprint",
+  "name": "Neon Matrix (Holo Cyber Tech)",
+  "badge": "02 // MATRIX",
+  "accentCyan": "#00FF7F",
+  "accentOrange": "#FFB800",
+  "bgDark": "#050B07",
+  "textLight": "#E8FFE8",
+  "panelBg": "#0C1810",
+  "textDim": "#387548",
+  "fontPrimary": "'JetBrains Mono', monospace",
+  "fontTech": "'JetBrains Mono', monospace",
+  "glowIntensity": 75,
+  "borderStyle": "chamfer",
+  "desc": "Verde fósforo cibernético de alta densidad, bordes biselados con esquinas cortadas 45º y escaneo holográfico.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

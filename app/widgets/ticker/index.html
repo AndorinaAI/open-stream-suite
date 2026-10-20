@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Open Stream Suite — Tira de Noticias & Prompter (Event Ticker)</title>
+  <!-- Fuentes Tipográficas Oficiales (100% Offline) -->
+  <link rel="stylesheet" href="../../common/fonts.css">
+  <link rel="stylesheet" href="../../common/styles.css">
+  <link rel="stylesheet" href="../../common/themes.css">
+  <link rel="stylesheet" href="style.css">
+  <style id="ticker-custom-injected-css"></style>
+</head>
+<body>
+
+  <div class="ticker-main-wrapper" id="ticker-wrapper">
+    <!-- 1. Fila Superior: Métricas de Stream en Tiempo Real (Top Tier) -->
+    <div class="ticker-top-tier" id="ticker-top-tier">
+      <!-- Chips renderizados dinámicamente desde widget.js -->
+    </div>
+
+    <!-- 2. Fila Inferior: Prompter de Frases Rotativas y Noticias RSS -->
+    <div class="ticker-bottom-tier shape-rounded bg-glass border-left_neon" id="ticker-bottom-tier">
+      <div class="prompter-viewport" id="prompter-viewport">
+        <div class="prompter-track" id="prompter-track">
+          <!-- Renderizado dinámico de temas, frases y noticias RSS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../config.js"></script>
+  <script src="widget.js"></script>
+</body>
+</html>

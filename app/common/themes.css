@@ -1,0 +1,493 @@
+/* ====================================================================
+   OPEN STREAM SUITE — CSS UNIFICADO DE TEMAS Y PACKS MODULARES
+   Generado automáticamente a partir de themes/<pack>/<theme>/style.css
+   ==================================================================== */
+
+/* Pack: pack_cozy_lofi | Tema: cozy_terracotta */
+body[data-theme="cozy_terracotta"] {
+  --color-bg-dark: #1F1A17;
+  --color-text-light: #F5EBE1;
+  --color-accent-cyan: #D97443;
+  --color-accent-orange: #E5A93C;
+  --color-panel-bg: #2C2420;
+  --color-text-dim: #A89A90;
+  --color-border-cyan: rgba(217, 116, 67, 0.55);
+  --color-border-cyan-bright: #D97443;
+  --theme-glow: 0 0 14px rgba(229, 169, 60, 0.4);
+}
+
+/* Bordes artesanos de terracota y madera suave */
+body[data-theme="cozy_terracotta"] .camera-frame,
+body[data-theme="cozy_terracotta"] .camera-aux-frame,
+body[data-theme="cozy_terracotta"] .side-info-panel,
+body[data-theme="cozy_terracotta"] .bottom-project-bar,
+body[data-theme="cozy_terracotta"] .brb-card,
+body[data-theme="cozy_terracotta"] .farewell-card {
+  border: 2px solid #D97443 !important;
+  outline: 1px solid rgba(229, 169, 60, 0.35) !important;
+  outline-offset: 3px;
+  border-radius: 10px !important;
+  background: #2C2420 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 15px rgba(217, 116, 67, 0.25) !important;
+}
+
+body[data-theme="cozy_terracotta"] .brand-badge,
+body[data-theme="cozy_terracotta"] .camera-label,
+body[data-theme="cozy_terracotta"] .hero-tag {
+  background: rgba(217, 116, 67, 0.2) !important;
+  border: 1px solid #D97443 !important;
+  color: #E5A93C !important;
+  border-radius: 6px !important;
+  letter-spacing: 0.5px;
+}
+
+body[data-theme="cozy_terracotta"] .phase-item.active {
+  background: #D97443 !important;
+  color: #F5EBE1 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 10px rgba(229, 169, 60, 0.5) !important;
+}
+
+/* Pack: pack_cozy_lofi | Tema: nordic_forest */
+body[data-theme="nordic_forest"] {
+  --color-bg-dark: #131C16;
+  --color-text-light: #F0F5F1;
+  --color-accent-cyan: #73A985;
+  --color-accent-orange: #C89F65;
+  --color-panel-bg: #1B2920;
+  --color-text-dim: #8FA697;
+  --color-border-cyan: rgba(115, 169, 133, 0.55);
+  --color-border-cyan-bright: #73A985;
+  --theme-glow: 0 0 16px rgba(115, 169, 133, 0.4);
+}
+
+/* Bordes y paneles de madera nórdica y musgo */
+body[data-theme="nordic_forest"] .camera-frame,
+body[data-theme="nordic_forest"] .camera-aux-frame,
+body[data-theme="nordic_forest"] .side-info-panel,
+body[data-theme="nordic_forest"] .bottom-project-bar,
+body[data-theme="nordic_forest"] .brb-card,
+body[data-theme="nordic_forest"] .farewell-card {
+  border: 2px solid #73A985 !important;
+  border-radius: 8px !important;
+  background: #1B2920 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 14px rgba(115, 169, 133, 0.3) !important;
+}
+
+body[data-theme="nordic_forest"] .brand-badge,
+body[data-theme="nordic_forest"] .camera-label,
+body[data-theme="nordic_forest"] .hero-tag {
+  background: rgba(115, 169, 133, 0.2) !important;
+  border: 1px solid #73A985 !important;
+  color: #C89F65 !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+}
+
+body[data-theme="nordic_forest"] .phase-item.active {
+  background: #73A985 !important;
+  color: #131C16 !important;
+  font-weight: 800 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 0 12px rgba(200, 159, 101, 0.5) !important;
+}
+
+/* Pack: pack_manga_ink | Tema: manga_dark_ink */
+body[data-theme="manga_dark_ink"] {
+  --color-bg-dark: #0D0D11;
+  --color-text-light: #FFFFFF;
+  --color-accent-cyan: #FFFFFF;
+  --color-accent-orange: #FF3344;
+  --color-panel-bg: #15151B;
+  --color-text-dim: #7E7E91;
+  --color-border-cyan: #FFFFFF;
+  --color-border-cyan-bright: #FFFFFF;
+  --theme-glow: 0 0 10px rgba(255, 255, 255, 0.3);
+  --font-primary: 'Bangers', sans-serif;
+  --font-tech: 'Courier New', monospace;
+}
+
+/* Bordes Seinen noir con sombra dura blanca */
+body[data-theme="manga_dark_ink"] .camera-frame,
+body[data-theme="manga_dark_ink"] .camera-aux-frame,
+body[data-theme="manga_dark_ink"] .side-info-panel,
+body[data-theme="manga_dark_ink"] .bottom-project-bar,
+body[data-theme="manga_dark_ink"] .brb-card,
+body[data-theme="manga_dark_ink"] .farewell-card {
+  border: 2px solid #FFFFFF !important;
+  box-shadow: 4px 4px 0 #FF3344 !important;
+  border-radius: 0px !important;
+  background: #15151B !important;
+}
+
+body[data-theme="manga_dark_ink"] .brand-badge,
+body[data-theme="manga_dark_ink"] .camera-label,
+body[data-theme="manga_dark_ink"] .hero-tag {
+  border: 1.5px solid #FF3344 !important;
+  color: #FFFFFF !important;
+  background: #FF3344 !important;
+  font-weight: 800 !important;
+  transform: skewX(-6deg);
+}
+
+body[data-theme="manga_dark_ink"] .phase-item.active {
+  background: #FF3344 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #FFFFFF !important;
+  box-shadow: 2px 2px 0 #FFFFFF !important;
+}
+
+/* Pack: pack_manga_ink | Tema: manga_shonen */
+body[data-theme="manga_shonen"] {
+  --color-bg-dark: #F4EFEA;
+  --color-text-light: #111116;
+  --color-accent-cyan: #111116;
+  --color-accent-orange: #E6282B;
+  --color-panel-bg: rgba(255, 255, 255, 0.95);
+  --color-text-dim: #555562;
+  --color-border-cyan: rgba(17, 17, 22, 0.95);
+  --color-border-cyan-bright: #111116;
+  --theme-glow: 0 0 0 rgba(0, 0, 0, 0);
+  --font-primary: 'Bangers', 'Impact', sans-serif;
+  --font-tech: 'Courier New', monospace;
+}
+
+/* Bordes y paneles estilo cómic / manga japonés shōnen */
+body[data-theme="manga_shonen"] .camera-frame,
+body[data-theme="manga_shonen"] .camera-aux-frame,
+body[data-theme="manga_shonen"] .side-info-panel,
+body[data-theme="manga_shonen"] .bottom-project-bar,
+body[data-theme="manga_shonen"] .brb-card,
+body[data-theme="manga_shonen"] .farewell-card {
+  border: 3px solid #111116 !important;
+  box-shadow: 5px 5px 0 #111116 !important;
+  border-radius: 2px !important;
+  background: #FFFFFF !important;
+}
+
+/* Sello Hanko rojo tradicional japonés para insignias */
+body[data-theme="manga_shonen"] .brand-badge,
+body[data-theme="manga_shonen"] .live-indicator,
+body[data-theme="manga_shonen"] .camera-label,
+body[data-theme="manga_shonen"] .hero-tag {
+  border: 2px solid #E6282B !important;
+  color: #E6282B !important;
+  background: rgba(230, 40, 43, 0.08) !important;
+  font-weight: 900 !important;
+  transform: rotate(-1.5deg);
+  box-shadow: 2px 2px 0 rgba(230, 40, 43, 0.3) !important;
+}
+
+/* Títulos y textos destacados estilo entintado */
+body[data-theme="manga_shonen"] .brand-name,
+body[data-theme="manga_shonen"] .project-name-value,
+body[data-theme="manga_shonen"] .hero-title,
+body[data-theme="manga_shonen"] .panel-project-name {
+  color: #111116 !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase;
+}
+
+body[data-theme="manga_shonen"] .phase-item.active {
+  background: #111116 !important;
+  color: #F4EFEA !important;
+  border: 2px solid #111116 !important;
+  box-shadow: 2px 2px 0 #E6282B !important;
+}
+
+/* Pack: pack_open_stream_suite | Tema: chill */
+body[data-theme="chill"] {
+  --color-bg-dark: #181825;
+  --color-text-light: #CDD6F4;
+  --color-accent-cyan: #89B4FA;
+  --color-accent-orange: #CBA6F7;
+  --color-panel-bg: #313244;
+  --color-text-dim: #A6ADC8;
+  --color-border-cyan: rgba(137, 180, 250, 0.4);
+  --color-border-cyan-bright: #89B4FA;
+  --theme-glow: 0 0 14px rgba(137, 180, 250, 0.4);
+}
+
+/* Pack: pack_open_stream_suite | Tema: cyberpunk */
+body[data-theme="cyberpunk"] {
+  --color-bg-dark: #0F0F14;
+  --color-text-light: #F8F9FA;
+  --color-accent-cyan: #FFE600;
+  --color-accent-orange: #FF0055;
+  --color-panel-bg: #1B1A24;
+  --color-text-dim: #928DA3;
+  --color-border-cyan: rgba(255, 230, 0, 0.45);
+  --color-border-cyan-bright: #FFE600;
+  --theme-glow: 0 0 20px rgba(255, 230, 0, 0.7);
+}
+
+/* Pack: pack_open_stream_suite | Tema: maker */
+:root,
+body[data-theme="maker"] {
+  --color-bg-dark: #191D21;
+  --color-text-light: #F2EEE5;
+  --color-accent-cyan: #57D6C4;
+  --color-accent-orange: #FF783F;
+  --color-panel-bg: #2E363B;
+  --color-text-dim: #8B969C;
+  --color-border-cyan: rgba(87, 214, 196, 0.35);
+  --color-border-cyan-bright: #57D6C4;
+  --theme-glow: 0 0 16px rgba(87, 214, 196, 0.5);
+}
+
+/* Pack: pack_open_stream_suite | Tema: print */
+body[data-theme="print"] {
+  --color-bg-dark: #1E1B18;
+  --color-text-light: #F7EFE6;
+  --color-accent-cyan: #FF783F;
+  --color-accent-orange: #FF9B42;
+  --color-panel-bg: #332B25;
+  --color-text-dim: #9E9289;
+  --color-border-cyan: rgba(255, 120, 63, 0.4);
+  --color-border-cyan-bright: #FF783F;
+  --theme-glow: 0 0 16px rgba(255, 120, 63, 0.5);
+}
+
+/* Pack: pack_open_stream_suite | Tema: synthwave */
+body[data-theme="synthwave"] {
+  --color-bg-dark: #1A1028;
+  --color-text-light: #FCE7F3;
+  --color-accent-cyan: #00F9FF;
+  --color-accent-orange: #FF2A85;
+  --color-panel-bg: #2B1A42;
+  --color-text-dim: #C084FC;
+  --color-border-cyan: rgba(0, 249, 255, 0.45);
+  --color-border-cyan-bright: #00F9FF;
+  --theme-glow: 0 0 18px rgba(255, 42, 133, 0.6);
+}
+
+/* Pack: pack_open_stream_suite | Tema: terminal */
+body[data-theme="terminal"] {
+  --color-bg-dark: #0A0C0E;
+  --color-text-light: #4ADE80;
+  --color-accent-cyan: #22C55E;
+  --color-accent-orange: #EAB308;
+  --color-panel-bg: #141A16;
+  --color-text-dim: #166534;
+  --color-border-cyan: rgba(34, 197, 94, 0.4);
+  --color-border-cyan-bright: #22C55E;
+  --font-primary: var(--font-tech);
+  --theme-glow: 0 0 18px rgba(34, 197, 94, 0.6);
+}
+
+/* Pack: pack_personalizado | Tema: chill */
+body[data-theme="chill"] {
+  --color-bg-dark: #181825;
+  --color-text-light: #CDD6F4;
+  --color-accent-cyan: #89B4FA;
+  --color-accent-orange: #CBA6F7;
+  --color-panel-bg: #313244;
+  --color-text-dim: #A6ADC8;
+  --color-border-cyan: rgba(137, 180, 250, 0.4);
+  --color-border-cyan-bright: #89B4FA;
+  --theme-glow: 0 0 14px rgba(137, 180, 250, 0.4);
+}
+
+/* Pack: pack_personalizado | Tema: cyberpunk */
+body[data-theme="cyberpunk"] {
+  --color-bg-dark: #0F0F14;
+  --color-text-light: #F8F9FA;
+  --color-accent-cyan: #FFE600;
+  --color-accent-orange: #FF0055;
+  --color-panel-bg: #1B1A24;
+  --color-text-dim: #928DA3;
+  --color-border-cyan: rgba(255, 230, 0, 0.45);
+  --color-border-cyan-bright: #FFE600;
+  --theme-glow: 0 0 20px rgba(255, 230, 0, 0.7);
+}
+
+/* Pack: pack_personalizado | Tema: maker */
+:root,
+body[data-theme="maker"] {
+  --color-bg-dark: #191D21;
+  --color-text-light: #F2EEE5;
+  --color-accent-cyan: #57D6C4;
+  --color-accent-orange: #FF783F;
+  --color-panel-bg: #2E363B;
+  --color-text-dim: #8B969C;
+  --color-border-cyan: rgba(87, 214, 196, 0.35);
+  --color-border-cyan-bright: #57D6C4;
+  --theme-glow: 0 0 16px rgba(87, 214, 196, 0.5);
+}
+
+/* Pack: pack_personalizado | Tema: print */
+body[data-theme="print"] {
+  --color-bg-dark: #1E1B18;
+  --color-text-light: #F7EFE6;
+  --color-accent-cyan: #FF783F;
+  --color-accent-orange: #FF9B42;
+  --color-panel-bg: #332B25;
+  --color-text-dim: #9E9289;
+  --color-border-cyan: rgba(255, 120, 63, 0.4);
+  --color-border-cyan-bright: #FF783F;
+  --theme-glow: 0 0 16px rgba(255, 120, 63, 0.5);
+}
+
+/* Pack: pack_personalizado | Tema: synthwave */
+body[data-theme="synthwave"] {
+  --color-bg-dark: #1A1028;
+  --color-text-light: #FCE7F3;
+  --color-accent-cyan: #00F9FF;
+  --color-accent-orange: #FF2A85;
+  --color-panel-bg: #2B1A42;
+  --color-text-dim: #C084FC;
+  --color-border-cyan: rgba(0, 249, 255, 0.45);
+  --color-border-cyan-bright: #00F9FF;
+  --theme-glow: 0 0 18px rgba(255, 42, 133, 0.6);
+}
+
+/* Pack: pack_personalizado | Tema: terminal */
+body[data-theme="terminal"] {
+  --color-bg-dark: #0A0C0E;
+  --color-text-light: #4ADE80;
+  --color-accent-cyan: #22C55E;
+  --color-accent-orange: #EAB308;
+  --color-panel-bg: #141A16;
+  --color-text-dim: #166534;
+  --color-border-cyan: rgba(34, 197, 94, 0.4);
+  --color-border-cyan-bright: #22C55E;
+  --font-primary: var(--font-tech);
+  --theme-glow: 0 0 18px rgba(34, 197, 94, 0.6);
+}
+
+/* Pack: pack_retro_arcade | Tema: arcade_8bit */
+body[data-theme="arcade_8bit"] {
+  --color-bg-dark: #0B0E14;
+  --color-text-light: #FFFFFF;
+  --color-accent-cyan: #38BDF8;
+  --color-accent-orange: #F43F5E;
+  --color-panel-bg: #161B22;
+  --color-text-dim: #64748B;
+  --color-border-cyan: rgba(56, 189, 248, 0.4);
+  --color-border-cyan-bright: #38BDF8;
+  --theme-glow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+/* Pack: pack_retro_arcade | Tema: vapor_sunset */
+body[data-theme="vapor_sunset"] {
+  --color-bg-dark: #0D0B18;
+  --color-text-light: #FAF5FF;
+  --color-accent-cyan: #A855F7;
+  --color-accent-orange: #EC4899;
+  --color-panel-bg: #1E1833;
+  --color-text-dim: #9333EA;
+  --color-border-cyan: rgba(168, 85, 247, 0.45);
+  --color-border-cyan-bright: #A855F7;
+  --theme-glow: 0 0 18px rgba(236, 72, 153, 0.6);
+}
+
+/* Pack: pack_sci_fi_blueprint | Tema: blueprint_cad */
+body[data-theme="blueprint_cad"] {
+  --color-bg-dark: #0B1B2B;
+  --color-text-light: #E0F4FF;
+  --color-accent-cyan: #00D2FF;
+  --color-accent-orange: #FFB800;
+  --color-panel-bg: #102A45;
+  --color-text-dim: #6B93B8;
+  --color-border-cyan: rgba(0, 210, 255, 0.5);
+  --color-border-cyan-bright: #00D2FF;
+  --theme-glow: 0 0 14px rgba(0, 210, 255, 0.4);
+  --font-tech: 'Courier New', monospace;
+}
+
+/* Fondo con trama de cianotipia y cuadrícula de dibujo técnico */
+body[data-theme="blueprint_cad"] .overlay-canvas {
+  background-image: 
+    linear-gradient(rgba(0, 210, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 210, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(0, 210, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 210, 255, 0.03) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+}
+
+/* Bordes estilo plano CAD de ingeniería */
+body[data-theme="blueprint_cad"] .camera-frame,
+body[data-theme="blueprint_cad"] .camera-aux-frame,
+body[data-theme="blueprint_cad"] .webcam-game-frame,
+body[data-theme="blueprint_cad"] .side-info-panel,
+body[data-theme="blueprint_cad"] .bottom-project-bar,
+body[data-theme="blueprint_cad"] .chat-panel-frame,
+body[data-theme="blueprint_cad"] .brb-card,
+body[data-theme="blueprint_cad"] .farewell-card {
+  border: 1.5px solid #00D2FF !important;
+  box-shadow: inset 0 0 12px rgba(0, 210, 255, 0.12), 0 0 16px rgba(0, 210, 255, 0.25) !important;
+  background: rgba(11, 27, 43, 0.88) !important;
+  border-radius: 0px !important;
+}
+
+/* Insignias y etiquetas técnicas */
+body[data-theme="blueprint_cad"] .brand-badge,
+body[data-theme="blueprint_cad"] .camera-label,
+body[data-theme="blueprint_cad"] .live-indicator,
+body[data-theme="blueprint_cad"] .mode-badge,
+body[data-theme="blueprint_cad"] .hero-tag {
+  border: 1px solid #00D2FF !important;
+  background: rgba(0, 210, 255, 0.15) !important;
+  color: #00D2FF !important;
+  font-family: 'Courier New', monospace !important;
+  border-radius: 0px !important;
+  letter-spacing: 1px;
+}
+
+body[data-theme="blueprint_cad"] .phase-item.active {
+  background: #00D2FF !important;
+  color: #0B1B2B !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.6) !important;
+}
+
+/* Pack: pack_sci_fi_blueprint | Tema: neon_matrix */
+body[data-theme="neon_matrix"] {
+  --color-bg-dark: #050B07;
+  --color-text-light: #E8FFE8;
+  --color-accent-cyan: #00FF7F;
+  --color-accent-orange: #FFB800;
+  --color-panel-bg: #0C1810;
+  --color-text-dim: #387548;
+  --color-border-cyan: rgba(0, 255, 127, 0.55);
+  --color-border-cyan-bright: #00FF7F;
+  --theme-glow: 0 0 18px rgba(0, 255, 127, 0.6);
+  --font-tech: 'JetBrains Mono', monospace;
+}
+
+/* Efecto de marco biselado sci-fi con verde fósforo */
+body[data-theme="neon_matrix"] .camera-frame,
+body[data-theme="neon_matrix"] .camera-aux-frame,
+body[data-theme="neon_matrix"] .webcam-game-frame,
+body[data-theme="neon_matrix"] .side-info-panel,
+body[data-theme="neon_matrix"] .bottom-project-bar,
+body[data-theme="neon_matrix"] .chat-panel-frame,
+body[data-theme="neon_matrix"] .brb-card,
+body[data-theme="neon_matrix"] .farewell-card {
+  border: 2px solid #00FF7F !important;
+  box-shadow: 0 0 16px rgba(0, 255, 127, 0.4), inset 0 0 12px rgba(0, 255, 127, 0.15) !important;
+  background: rgba(12, 24, 16, 0.9) !important;
+  border-radius: 4px !important;
+}
+
+/* Insignias estilo terminal Matrix */
+body[data-theme="neon_matrix"] .brand-badge,
+body[data-theme="neon_matrix"] .camera-label,
+body[data-theme="neon_matrix"] .live-indicator,
+body[data-theme="neon_matrix"] .hero-tag {
+  border: 1px solid #00FF7F !important;
+  background: rgba(0, 255, 127, 0.15) !important;
+  color: #00FF7F !important;
+  text-shadow: 0 0 8px rgba(0, 255, 127, 0.7);
+  font-family: 'JetBrains Mono', monospace !important;
+  border-radius: 2px !important;
+}
+
+body[data-theme="neon_matrix"] .phase-item.active {
+  background: #00FF7F !important;
+  color: #050B07 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 12px rgba(0, 255, 127, 0.8) !important;
+}

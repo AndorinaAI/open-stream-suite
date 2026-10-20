@@ -1,0 +1,232 @@
+{
+  "profile_name": "Open Stream Suite — Ajazz AKP05 Pro (10 Teclas + Pantalla Táctil + 4 Diales)",
+  "device_model": "Ajazz AKP05 / AKP05E / OpenDeck AKP05 Driver",
+  "description": "Configuración completa para controladoras con 10 teclas cuadradas LCD, tira de pantalla táctil panorámica y 4 knobs giratorios con pulsación.",
+  "layout": {
+    "keys_count": 10,
+    "keys_grid": "5x2",
+    "touch_screen": {
+      "type": "panoramic_strip",
+      "slots": 4
+    },
+    "knobs_count": 4
+  },
+  "keys": [
+    {
+      "key_index": 1,
+      "label": "GAMEPLAY",
+      "action_type": "obs_scene",
+      "target_scene": "Gameplay",
+      "icon": "../assets/icon_scene_game.svg",
+      "description": "Cambiar a escena de Juego en OBS Studio"
+    },
+    {
+      "key_index": 2,
+      "label": "MAKER MESA",
+      "action_type": "obs_scene",
+      "target_scene": "Maker Mesa",
+      "icon": "../assets/icon_scene_maker.svg",
+      "description": "Cambiar a cámara cenital de electrónica / taller"
+    },
+    {
+      "key_index": 3,
+      "label": "MAKER PC",
+      "action_type": "obs_scene",
+      "target_scene": "Maker PC",
+      "icon": "../assets/icon_scene_maker.svg",
+      "description": "Cambiar a pantalla de programación y terminal"
+    },
+    {
+      "key_index": 4,
+      "label": "CHARLA CHILL",
+      "action_type": "obs_scene",
+      "target_scene": "Charla",
+      "icon": "../assets/icon_scene_chill.svg",
+      "description": "Cambiar a Just Chatting con chat interactivo"
+    },
+    {
+      "key_index": 5,
+      "label": "PAUSA BRB",
+      "action_type": "obs_scene",
+      "target_scene": "Be Right Back",
+      "icon": "../assets/icon_scene_brb.svg",
+      "description": "Cambiar a pantalla de pausa técnica animada"
+    },
+    {
+      "key_index": 6,
+      "label": "TEMA MAKER",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/theme?id=maker_electronico",
+      "icon": "../assets/icon_theme_neon.svg",
+      "color_accent": "#57D6C4",
+      "description": "Aplicar paleta Turquesa Maker en todos los overlays"
+    },
+    {
+      "key_index": 7,
+      "label": "TEMA CYBER",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/theme?id=cyberpunk_neon",
+      "icon": "../assets/icon_theme_neon.svg",
+      "color_accent": "#FFE600",
+      "description": "Aplicar paleta Cyberpunk Neón (Amarillo + Magenta)"
+    },
+    {
+      "key_index": 8,
+      "label": "MEME SUSTO",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/trigger?id=susto",
+      "icon": "../assets/icon_fx_confetti.svg",
+      "color_accent": "#FF783F",
+      "description": "Dispara el meme o trigger de susto en OBS"
+    },
+    {
+      "key_index": 9,
+      "label": "CONFETI FX",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/explode?emoji=🎉&count=40",
+      "icon": "../assets/icon_fx_confetti.svg",
+      "color_accent": "#38BDF8",
+      "description": "Lanza explosión de confeti de celebración en directo"
+    },
+    {
+      "key_index": 10,
+      "label": "SHOUTOUT",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/widget?widget=promo&action=trigger",
+      "icon": "../assets/icon_scene_chill.svg",
+      "color_accent": "#C084FC",
+      "description": "Lanza tarjeta animada de promoción o streamer amigo"
+    }
+  ],
+  "touch_strip_slots": [
+    {
+      "slot_index": 1,
+      "aligned_with_knob": 1,
+      "title": "TIMER OSD",
+      "subtext": "Toca para Iniciar 5m",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/knob?knob=timer&action=touch",
+      "websocket_feedback": {
+        "event": "timer_control",
+        "display_format": "{mm}:{ss}"
+      }
+    },
+    {
+      "slot_index": 2,
+      "aligned_with_knob": 2,
+      "title": "TEMA ACTIVO",
+      "subtext": "Toca para Predeterminado",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/knob?knob=theme&action=press",
+      "websocket_feedback": {
+        "event": "theme_change",
+        "display_format": "PALETA: {theme}"
+      }
+    },
+    {
+      "slot_index": 3,
+      "aligned_with_knob": 3,
+      "title": "META STREAM",
+      "subtext": "Toca para Celebración",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/knob?knob=goal&action=touch",
+      "websocket_feedback": {
+        "event": "goal_update",
+        "display_format": "{current}/{target}"
+      }
+    },
+    {
+      "slot_index": 4,
+      "aligned_with_knob": 4,
+      "title": "AUDIO / FX",
+      "subtext": "Toca para Chime Ding",
+      "action_type": "http_request",
+      "method": "GET",
+      "url": "http://localhost:8080/api/deck/knob?knob=fx&action=press",
+      "websocket_feedback": {
+        "event": "explode_emotes",
+        "display_format": "FX ACTIVO"
+      }
+    }
+  ],
+  "knobs": [
+    {
+      "knob_index": 1,
+      "name": "KNOB 1: CRONÓMETRO / TIMER",
+      "description": "Gira para añadir o quitar minutos; pulsa para pausar o reanudar",
+      "rotate_left": {
+        "action": "step_timer",
+        "url": "http://localhost:8080/api/deck/knob?knob=timer&ticks=-1",
+        "step": "-60s"
+      },
+      "rotate_right": {
+        "action": "step_timer",
+        "url": "http://localhost:8080/api/deck/knob?knob=timer&ticks=1",
+        "step": "+60s"
+      },
+      "press": {
+        "action": "toggle_pause",
+        "url": "http://localhost:8080/api/deck/knob?knob=timer&action=press"
+      }
+    },
+    {
+      "knob_index": 2,
+      "name": "KNOB 2: SELECTOR DE TEMAS NEÓN",
+      "description": "Gira para navegar entre todos los trajes visuales en tiempo real",
+      "rotate_left": {
+        "action": "prev_theme",
+        "url": "http://localhost:8080/api/deck/knob?knob=theme&action=prev"
+      },
+      "rotate_right": {
+        "action": "next_theme",
+        "url": "http://localhost:8080/api/deck/knob?knob=theme&action=next"
+      },
+      "press": {
+        "action": "reset_theme",
+        "url": "http://localhost:8080/api/deck/theme?id=maker_electronico"
+      }
+    },
+    {
+      "knob_index": 3,
+      "name": "KNOB 3: CONTADOR DE METAS (GOALS)",
+      "description": "Gira para sumar o restar puntos/unidades a la meta; pulsa para celebrar",
+      "rotate_left": {
+        "action": "decrement_goal",
+        "url": "http://localhost:8080/api/deck/knob?knob=goal&ticks=-1"
+      },
+      "rotate_right": {
+        "action": "increment_goal",
+        "url": "http://localhost:8080/api/deck/knob?knob=goal&ticks=1"
+      },
+      "press": {
+        "action": "celebrate_goal",
+        "url": "http://localhost:8080/api/deck/knob?knob=goal&action=press"
+      }
+    },
+    {
+      "knob_index": 4,
+      "name": "KNOB 4: EFECTOS VISUALES & SONIDO",
+      "description": "Gira a derecha para confeti, izquierda para corazones, pulsa para sonido ding",
+      "rotate_left": {
+        "action": "hearts_fx",
+        "url": "http://localhost:8080/api/deck/knob?knob=fx&ticks=-1"
+      },
+      "rotate_right": {
+        "action": "confetti_fx",
+        "url": "http://localhost:8080/api/deck/knob?knob=fx&ticks=1"
+      },
+      "press": {
+        "action": "play_chime",
+        "url": "http://localhost:8080/api/deck/knob?knob=fx&action=press"
+      }
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "version": 3,
+  "type": "page",
+  "page_name": "Open Stream Suite Control",
+  "grid": "8x4",
+  "description": "Página preconfigurada para Bitfocus Companion y OpenDeck con 32 bancos de control",
+  "instances": {
+    "taller_http": {
+      "label": "OpenStreamSuite_HTTP",
+      "module": "generic-http",
+      "config": {
+        "prefix": "http://localhost:8080"
+      }
+    }
+  },
+  "banks": {
+    "1_1": {
+      "style": "png",
+      "text": "GAME\\nMODE",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 16777215,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/theme?id=game_neon"
+        }
+      ]
+    },
+    "1_2": {
+      "style": "png",
+      "text": "MAKER\\nMESA",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 16752187,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/theme?id=maker_electronico"
+        }
+      ]
+    },
+    "1_3": {
+      "style": "png",
+      "text": "MAKER\\nPC",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 5756612,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/theme?id=maker_electronico"
+        }
+      ]
+    },
+    "1_4": {
+      "style": "png",
+      "text": "CHARLA\\nCHILL",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 12616956,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/theme?id=chill_lavender"
+        }
+      ]
+    },
+    "1_5": {
+      "style": "png",
+      "text": "PAUSA\\nBRB",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 15682884,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/timer?action=start&seconds=300"
+        }
+      ]
+    },
+    "2_1": {
+      "style": "png",
+      "text": "COLOR\\nCYBER",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 16770560,
+      "bgcolor": 2100523,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/theme?id=cyberpunk_neon"
+        }
+      ]
+    },
+    "2_2": {
+      "style": "png",
+      "text": "COLOR\\nGOLD",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 16766720,
+      "bgcolor": 2100523,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/theme?id=golden_maker"
+        }
+      ]
+    },
+    "3_1": {
+      "style": "png",
+      "text": "TIMER\\n5 MIN",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 3718648,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/timer?action=start&seconds=300"
+        }
+      ]
+    },
+    "3_2": {
+      "style": "png",
+      "text": "PAUSAR\\nTIMER",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 16777215,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/timer?action=pause"
+        }
+      ]
+    },
+    "3_3": {
+      "style": "png",
+      "text": "CONFETI\\n🎉",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 16007006,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/explode?emoji=🎉&count=40"
+        }
+      ]
+    },
+    "3_4": {
+      "style": "png",
+      "text": "MEME\\nSUSTO",
+      "size": "14",
+      "alignment": "center:center",
+      "color": 16498468,
+      "bgcolor": 1185562,
+      "actions": [
+        {
+          "type": "http_get",
+          "url": "http://localhost:8080/api/deck/trigger?id=susto"
+        }
+      ]
+    }
+  }
+}

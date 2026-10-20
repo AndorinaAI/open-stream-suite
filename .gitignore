@@ -10,3 +10,9 @@ __pycache__/
 
 # Logs temporales
 *.log
+
+# Bloqueos, PID y temporales del launcher
+.server.pid
+.launcher.lock
+.env.tmp
+backup_*.tar.gz

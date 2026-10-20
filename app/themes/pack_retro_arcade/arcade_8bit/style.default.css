@@ -1,0 +1,11 @@
+body[data-theme="arcade_8bit"] {
+  --color-bg-dark: #0B0E14;
+  --color-text-light: #FFFFFF;
+  --color-accent-cyan: #38BDF8;
+  --color-accent-orange: #F43F5E;
+  --color-panel-bg: #161B22;
+  --color-text-dim: #64748B;
+  --color-border-cyan: rgba(56, 189, 248, 0.4);
+  --color-border-cyan-bright: #38BDF8;
+  --theme-glow: 0 0 10px rgba(56, 189, 248, 0.5);
+}

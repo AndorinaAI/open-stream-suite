@@ -1,0 +1,553 @@
+"""
+Open Stream Suite — Interfaz Gráfica de Escritorio (Tkinter)
+Dashboard de control del servidor, estado de Twitch, logs y configuración.
+"""
+
+import sys
+import threading
+import webbrowser
+import tkinter as tk
+from tkinter import ttk, messagebox, scrolledtext
+from pathlib import Path
+
+from launcher.updater import UpdateManager
+from version import VERSION
+
+APP_DIR = Path(__file__).resolve().parent.parent
+OVERLAYS_DIR = APP_DIR / "overlays"
+ICON_PATH = APP_DIR / "assets" / "favicon.png"
+
+# Paleta de colores Obsidian
+C_BG = "#0B0E14"
+C_PANEL = "#161B22"
+C_BORDER = "#30363D"
+C_CYAN = "#57D6C4"
+C_CORAL = "#FF783F"
+C_GREEN = "#3FB950"
+C_RED = "#F85149"
+C_TEXT = "#F0F6FC"
+C_MUTED = "#8B949E"
+C_INPUT = "#0D1117"
+
+
+class LauncherGUI:
+    def __init__(self, root, server_ctl, twitch_ctl, tray_ctl=None):
+        self.root = root
+        self.server_ctl = server_ctl
+        self.twitch_ctl = twitch_ctl
+        self.tray_ctl = tray_ctl
+
+        self.root.title("Open Stream Suite — Control")
+        self.root.geometry("680x560")
+        self.root.minsize(620, 500)
+        self.root.configure(bg=C_BG)
+
+        # Opciones
+        self.var_open_browser = tk.BooleanVar(value=True)
+        self.var_minimize_tray = tk.BooleanVar(value=True)
+        self.var_show_secret = tk.BooleanVar(value=False)
+        self.var_update_branch = tk.StringVar(value="main")
+
+        # Gestor de actualizaciones
+        self.updater = UpdateManager()
+        self._last_update_info = None
+
+        # Estado en memoria
+        self._last_server_status = False
+
+        self._setup_icon()
+        self._setup_styles()
+        self._build_ui()
+        self._load_initial_data()
+
+        # Ciclo de polling no bloqueante
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close_window)
+        self.root.after(800, self._poll_status)
+
+    def _setup_icon(self):
+        if ICON_PATH.exists():
+            try:
+                img = tk.PhotoImage(file=str(ICON_PATH))
+                self.root.iconphoto(True, img)
+            except Exception:
+                pass
+
+    def _setup_styles(self):
+        style = ttk.Style(self.root)
+        style.theme_use("clam")
+
+        # Configurar pestañas Notebook
+        style.configure("TNotebook", background=C_BG, borderwidth=0)
+        style.configure("TNotebook.Tab", background=C_PANEL, foreground=C_MUTED, padding=[16, 8], font=("Helvetica", 10, "bold"), borderwidth=0)
+        style.map("TNotebook.Tab",
+                  background=[("selected", C_BG), ("active", "#1F242C")],
+                  foreground=[("selected", C_CYAN), ("active", C_TEXT)])
+
+    def _build_ui(self):
+        # Header superior
+        header = tk.Frame(self.root, bg=C_BG, pady=12, padx=20)
+        header.pack(fill="x")
+
+        title_frame = tk.Frame(header, bg=C_BG)
+        title_frame.pack(side="left")
+
+        lbl_title = tk.Label(title_frame, text="OPEN STREAM SUITE", font=("Helvetica", 15, "bold"), fg=C_TEXT, bg=C_BG)
+        lbl_title.pack(side="left")
+
+        lbl_sub = tk.Label(title_frame, text="v1.0.0-α", font=("Courier", 10, "bold"), fg=C_CORAL, bg=C_BG, padx=8)
+        lbl_sub.pack(side="left")
+
+        # Pestañas principales
+        self.notebook = ttk.Notebook(self.root)
+        self.notebook.pack(fill="both", expand=True, padx=16, pady=(0, 16))
+
+        self.tab_server = tk.Frame(self.notebook, bg=C_BG, padx=16, pady=16)
+        self.tab_twitch = tk.Frame(self.notebook, bg=C_BG, padx=16, pady=16)
+        self.tab_guide = tk.Frame(self.notebook, bg=C_BG, padx=16, pady=16)
+        self.tab_logs = tk.Frame(self.notebook, bg=C_BG, padx=16, pady=16)
+
+        self.notebook.add(self.tab_server, text="🚀 Servidor")
+        self.notebook.add(self.tab_twitch, text="🟣 Twitch")
+        self.notebook.add(self.tab_guide, text="📖 Guía")
+        self.notebook.add(self.tab_logs, text="📜 Registro")
+
+        self._build_tab_server()
+        self._build_tab_twitch()
+        self._build_tab_guide()
+        self._build_tab_logs()
+
+    # --- PESTAÑA SERVIDOR ---
+    def _build_tab_server(self):
+        # Tarjeta de estado
+        card = tk.Frame(self.tab_server, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=14)
+        card.pack(fill="x", pady=(0, 16))
+
+        top_row = tk.Frame(card, bg=C_PANEL)
+        top_row.pack(fill="x")
+
+        tk.Label(top_row, text="ESTADO DEL SERVIDOR", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(side="left")
+
+        self.lbl_server_badge = tk.Label(
+            top_row, text="DETENIDO", font=("Helvetica", 10, "bold"),
+            fg=C_RED, bg="#2A1616", padx=8, pady=2, bd=1, relief="solid"
+        )
+        self.lbl_server_badge.pack(side="right")
+
+        self.lbl_server_info = tk.Label(
+            card, text="http://127.0.0.1:8080 · WebSocket listo para OBS",
+            font=("Helvetica", 11), fg=C_TEXT, bg=C_PANEL, anchor="w"
+        )
+        self.lbl_server_info.pack(fill="x", pady=(10, 4))
+
+        self.lbl_clients_info = tk.Label(
+            card, text="Clientes OBS: 0 · Tema neón activo: --",
+            font=("Helvetica", 10), fg=C_MUTED, bg=C_PANEL, anchor="w"
+        )
+        self.lbl_clients_info.pack(fill="x")
+
+        # Botones de acción principales
+        btn_frame = tk.Frame(self.tab_server, bg=C_BG)
+        btn_frame.pack(fill="x", pady=(0, 16))
+
+        self.btn_toggle_server = tk.Button(
+            btn_frame, text="⚡ Iniciar Servidor", font=("Helvetica", 11, "bold"),
+            bg=C_CYAN, fg="#000000", activebackground="#45B6A6", activeforeground="#000000",
+            relief="flat", padx=16, pady=8, cursor="hand2", command=self.on_toggle_server
+        )
+        self.btn_toggle_server.pack(side="left", padx=(0, 10))
+
+        self.btn_open_panel = tk.Button(
+            btn_frame, text="🎛️ Abrir Panel de Control", font=("Helvetica", 11, "bold"),
+            bg="#21262D", fg=C_CYAN, activebackground="#30363D", activeforeground=C_TEXT,
+            relief="flat", padx=16, pady=8, cursor="hand2", command=self.on_open_panel
+        )
+        self.btn_open_panel.pack(side="left", padx=(0, 10))
+
+        btn_folder = tk.Button(
+            btn_frame, text="📂 Overlays", font=("Helvetica", 10),
+            bg="#21262D", fg=C_TEXT, activebackground="#30363D", activeforeground=C_TEXT,
+            relief="flat", padx=12, pady=8, cursor="hand2", command=self.on_open_folder
+        )
+        btn_folder.pack(side="left")
+
+        # Opciones de comportamiento
+        opts_frame = tk.Frame(self.tab_server, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=12)
+        opts_frame.pack(fill="x")
+
+        tk.Label(opts_frame, text="OPCIONES DE ARRANQUE", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(anchor="w", pady=(0, 8))
+
+        cb_browser = tk.Checkbutton(
+            opts_frame, text="Abrir el panel en el navegador automáticamente al iniciar",
+            variable=self.var_open_browser, fg=C_TEXT, bg=C_PANEL, selectcolor=C_INPUT,
+            activebackground=C_PANEL, activeforeground=C_TEXT, font=("Helvetica", 10)
+        )
+        cb_browser.pack(anchor="w", pady=2)
+
+        cb_tray = tk.Checkbutton(
+            opts_frame, text="Minimizar a la bandeja del sistema al pulsar la X de cerrar",
+            variable=self.var_minimize_tray, fg=C_TEXT, bg=C_PANEL, selectcolor=C_INPUT,
+            activebackground=C_PANEL, activeforeground=C_TEXT, font=("Helvetica", 10)
+        )
+        cb_tray.pack(anchor="w", pady=2)
+
+        # Tarjeta de actualizaciones
+        upd_card = tk.Frame(self.tab_server, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=10)
+        upd_card.pack(fill="x", pady=(12, 0))
+
+        u_row = tk.Frame(upd_card, bg=C_PANEL)
+        u_row.pack(fill="x")
+        tk.Label(u_row, text="ACTUALIZACIONES", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(side="left")
+
+        tk.Label(u_row, text="Rama:", font=("Helvetica", 9), fg=C_TEXT, bg=C_PANEL).pack(side="left", padx=(14, 4))
+        self.branch_combo = ttk.Combobox(
+            u_row, textvariable=self.var_update_branch, values=["main", "dev"],
+            state="readonly", width=7, font=("Helvetica", 9)
+        )
+        self.branch_combo.pack(side="left", padx=(0, 8))
+
+        self.btn_check_updates = tk.Button(
+            u_row, text="🔄 Comprobar", font=("Helvetica", 9),
+            bg="#21262D", fg=C_CYAN, activebackground="#30363D", activeforeground=C_TEXT,
+            relief="flat", padx=8, pady=1, cursor="hand2", command=self.on_check_updates
+        )
+        self.btn_check_updates.pack(side="left")
+
+        # Banner interactivo si hay actualización disponible (oculto por defecto)
+        self.upd_banner = tk.Frame(upd_card, bg="#13232A", bd=1, relief="solid", highlightbackground=C_CYAN, padx=8, pady=6)
+
+        self.lbl_upd_banner = tk.Label(self.upd_banner, text="", font=("Helvetica", 9), fg=C_CYAN, bg="#13232A")
+        self.lbl_upd_banner.pack(side="left")
+
+        self.btn_apply_upd = tk.Button(
+            self.upd_banner, text="📥 Actualizar ahora", font=("Helvetica", 9, "bold"),
+            bg=C_CYAN, fg="#000000", activebackground="#45B6A6", activeforeground="#000000",
+            relief="flat", padx=8, pady=2, cursor="hand2", command=self.on_apply_update
+        )
+        self.btn_apply_upd.pack(side="right", padx=(8, 0))
+
+        self.btn_view_release = tk.Button(
+            self.upd_banner, text="🌐 GitHub", font=("Helvetica", 9),
+            bg="#21262D", fg=C_TEXT, activebackground="#30363D", activeforeground=C_TEXT,
+            relief="flat", padx=8, pady=2, cursor="hand2", command=self.on_open_release_url
+        )
+        self.btn_view_release.pack(side="right")
+
+        self.lbl_update_status = tk.Label(
+            upd_card, text=f"Versión instalada: v{VERSION} · Lista para comprobar",
+            font=("Helvetica", 9), fg=C_MUTED, bg=C_PANEL, anchor="w"
+        )
+        self.lbl_update_status.pack(fill="x", pady=(6, 0))
+
+    # --- PESTAÑA TWITCH ---
+    def _build_tab_twitch(self):
+        # Tarjeta de usuario
+        user_card = tk.Frame(self.tab_twitch, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=12)
+        user_card.pack(fill="x", pady=(0, 16))
+
+        top_row = tk.Frame(user_card, bg=C_PANEL)
+        top_row.pack(fill="x")
+        tk.Label(top_row, text="CUENTA DE TWITCH", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(side="left")
+
+        self.lbl_twitch_badge = tk.Label(
+            top_row, text="NO CONECTADO", font=("Helvetica", 9, "bold"),
+            fg=C_MUTED, bg="#21262D", padx=8, pady=2
+        )
+        self.lbl_twitch_badge.pack(side="right")
+
+        self.lbl_twitch_user = tk.Label(
+            user_card, text="Inicia sesión para recibir alertas de followers, subs y chat en directo",
+            font=("Helvetica", 10), fg=C_TEXT, bg=C_PANEL, anchor="w"
+        )
+        self.lbl_twitch_user.pack(fill="x", pady=(8, 0))
+
+        # Formulario de credenciales
+        form = tk.Frame(self.tab_twitch, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=14)
+        form.pack(fill="x", pady=(0, 16))
+
+        tk.Label(form, text="CREDENCIALES DE LA APLICACIÓN (dev.twitch.tv)", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(anchor="w", pady=(0, 10))
+
+        # Client ID
+        tk.Label(form, text="Client ID:", font=("Helvetica", 10), fg=C_TEXT, bg=C_PANEL).pack(anchor="w")
+        self.entry_client_id = tk.Entry(form, font=("Courier", 10), bg=C_INPUT, fg=C_TEXT, insertbackground=C_TEXT, relief="flat", bd=4)
+        self.entry_client_id.pack(fill="x", pady=(2, 8))
+
+        # Client Secret
+        secret_row = tk.Frame(form, bg=C_PANEL)
+        secret_row.pack(fill="x")
+        tk.Label(secret_row, text="Client Secret:", font=("Helvetica", 10), fg=C_TEXT, bg=C_PANEL).pack(side="left")
+        btn_eye = tk.Button(secret_row, text="👁️ Ver / Ocultar", font=("Helvetica", 8), bg=C_PANEL, fg=C_MUTED, relief="flat", cursor="hand2", command=self.on_toggle_secret)
+        btn_eye.pack(side="right")
+
+        self.entry_client_secret = tk.Entry(form, font=("Courier", 10), bg=C_INPUT, fg=C_TEXT, insertbackground=C_TEXT, relief="flat", bd=4, show="*")
+        self.entry_client_secret.pack(fill="x", pady=(2, 12))
+
+        # Botones de acción Twitch
+        tw_btn_frame = tk.Frame(self.tab_twitch, bg=C_BG)
+        tw_btn_frame.pack(fill="x")
+
+        btn_save = tk.Button(
+            tw_btn_frame, text="💾 Guardar Credenciales", font=("Helvetica", 10, "bold"),
+            bg="#21262D", fg=C_TEXT, activebackground="#30363D", activeforeground=C_TEXT,
+            relief="flat", padx=14, pady=7, cursor="hand2", command=self.on_save_credentials
+        )
+        btn_save.pack(side="left", padx=(0, 8))
+
+        self.btn_twitch_auth = tk.Button(
+            tw_btn_frame, text="🟣 Conectar con Twitch", font=("Helvetica", 10, "bold"),
+            bg="#9146FF", fg="#FFFFFF", activebackground="#772CE8", activeforeground="#FFFFFF",
+            relief="flat", padx=14, pady=7, cursor="hand2", command=self.on_twitch_auth
+        )
+        self.btn_twitch_auth.pack(side="left", padx=(0, 8))
+
+        btn_logout = tk.Button(
+            tw_btn_frame, text="Cerrar Sesión", font=("Helvetica", 10),
+            bg="#21262D", fg=C_RED, activebackground="#30363D", activeforeground=C_RED,
+            relief="flat", padx=10, pady=7, cursor="hand2", command=self.on_twitch_logout
+        )
+        btn_logout.pack(side="left")
+
+    # --- PESTAÑA GUÍA ---
+    def _build_tab_guide(self):
+        container = tk.Frame(self.tab_guide, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=14)
+        container.pack(fill="both", expand=True)
+
+        guide_text = (
+            "🚀 CÓMO EMPEZAR CON OPEN STREAM SUITE\n"
+            "----------------------------------------------------------\n\n"
+            "1. INICIAR EL SERVIDOR:\n"
+            "   Pulsa 'Iniciar Servidor' en la primera pestaña. El servidor se\n"
+            "   ejecutará en http://localhost:8080.\n\n"
+            "2. AGREGAR OVERLAYS EN OBS STUDIO:\n"
+            "   Añade una Fuente de Navegador (Browser Source) con resolución\n"
+            "   1920x1080 apuntando a los archivos en la carpeta 'overlays/':\n"
+            "   - Gameplay:       http://localhost:8080/overlays/game/index.html\n"
+            "   - Charla / Chat:  http://localhost:8080/overlays/chill/index.html\n"
+            "   - Alertas/Memes:  http://localhost:8080/alerts/index.html\n\n"
+            "3. CONTROL HARDWARE (DECKS Y MACROS):\n"
+            "   La suite incluye perfiles listos para Ajazz AKP05, Elgato Stream\n"
+            "   Deck y OpenDeck en la carpeta 'plugins/' de la raíz.\n"
+            "   Todas las acciones se pueden disparar mediante URLs de 1-Clic:\n"
+            "   http://localhost:8080/api/deck/trigger?id=susto\n"
+            "   http://localhost:8080/api/deck/timer?action=start&seconds=300\n\n"
+            "4. ¿ES OBLIGATORIO CONECTAR TWITCH?\n"
+            "   No. Todo funciona en local sin conexión a Internet (los memes,\n"
+            "   los temas, el temporizador y los widgets de pantalla).\n"
+            "   Solo necesitas Twitch si quieres leer el chat real y eventos.\n"
+        )
+
+        txt = scrolledtext.ScrolledText(
+            container, wrap="word", font=("Courier", 10),
+            bg=C_INPUT, fg=C_TEXT, insertbackground=C_TEXT, bd=0, padx=10, pady=10
+        )
+        txt.insert("1.0", guide_text)
+        txt.configure(state="disabled")
+        txt.pack(fill="both", expand=True)
+
+    # --- PESTAÑA REGISTRO ---
+    def _build_tab_logs(self):
+        container = tk.Frame(self.tab_logs, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=10, pady=10)
+        container.pack(fill="both", expand=True)
+
+        self.txt_logs = scrolledtext.ScrolledText(
+            container, wrap="none", font=("Courier", 9),
+            bg="#05070A", fg=C_CYAN, insertbackground=C_TEXT, bd=0, padx=8, pady=8
+        )
+        self.txt_logs.pack(fill="both", expand=True, pady=(0, 8))
+
+        btn_clear = tk.Button(
+            container, text="Limpiar Registro", font=("Helvetica", 9),
+            bg="#21262D", fg=C_MUTED, activebackground="#30363D", activeforeground=C_TEXT,
+            relief="flat", padx=10, pady=4, cursor="hand2", command=self.on_clear_logs
+        )
+        btn_clear.pack(anchor="e")
+
+    # --- MÉTODOS Y ACCIONES ---
+    def add_log_line(self, line):
+        try:
+            self.txt_logs.insert("end", line + "\n")
+            self.txt_logs.see("end")
+        except Exception:
+            pass
+
+    def on_clear_logs(self):
+        self.txt_logs.delete("1.0", "end")
+
+    def _load_initial_data(self):
+        creds = self.twitch_ctl.load_env_credentials()
+        self.entry_client_id.insert(0, creds.get("client_id", ""))
+        self.entry_client_secret.insert(0, creds.get("client_secret", ""))
+
+    def on_toggle_secret(self):
+        show = self.var_show_secret.get()
+        self.var_show_secret.set(not show)
+        self.entry_client_secret.configure(show="" if not show else "*")
+
+    def on_save_credentials(self):
+        cid = self.entry_client_id.get().strip()
+        sec = self.entry_client_secret.get().strip()
+        if not cid or not sec:
+            messagebox.showwarning("Credenciales incompletas", "Por favor introduce tanto el Client ID como el Client Secret.")
+            return
+
+        self.twitch_ctl.save_env_credentials(cid, sec)
+        messagebox.showinfo("Guardado", "Credenciales guardadas con éxito en el archivo .env.")
+
+    def on_toggle_server(self):
+        alive, _ = self.server_ctl.is_running()
+        if alive:
+            self.server_ctl.stop()
+            self._update_server_ui(False, {})
+        else:
+            ok, msg = self.server_ctl.start()
+            if not ok:
+                messagebox.showerror("Error al iniciar", msg)
+            else:
+                self.root.after(1200, self._check_after_start)
+
+    def _check_after_start(self):
+        alive, data = self.server_ctl.is_running()
+        if alive and self.var_open_browser.get():
+            self.on_open_panel()
+
+    def on_open_panel(self):
+        url = f"{self.server_ctl.base_url}/alerts/panel.html"
+        webbrowser.open(url)
+
+    def on_open_folder(self):
+        if OVERLAYS_DIR.exists():
+            if sys.platform == "win32":
+                os.startfile(str(OVERLAYS_DIR))
+            elif sys.platform == "darwin":
+                import subprocess
+                subprocess.Popen(["open", str(OVERLAYS_DIR)])
+            else:
+                import subprocess
+                subprocess.Popen(["xdg-open", str(OVERLAYS_DIR)])
+
+    def on_twitch_auth(self):
+        alive, _ = self.server_ctl.is_running()
+        if not alive:
+            messagebox.showinfo("Servidor no iniciado", "Iniciando el servidor primero para poder recibir la autorización de Twitch...")
+            self.server_ctl.start()
+
+        self.root.after(1000, self.twitch_ctl.open_twitch_login)
+
+    def on_twitch_logout(self):
+        ok, msg = self.twitch_ctl.logout_twitch()
+        if ok:
+            messagebox.showinfo("Sesión cerrada", msg)
+            self._update_twitch_ui({"connected": False})
+        else:
+            messagebox.showwarning("Aviso", msg)
+
+    def on_close_window(self):
+        """Gestiona el cierre de ventana con soporte de bandeja"""
+        if self.var_minimize_tray.get() and self.tray_ctl and self.tray_ctl.is_available():
+            self.root.withdraw()
+        else:
+            if messagebox.askokcancel("Salir de Open Stream Suite", "¿Deseas cerrar la aplicación y detener el servidor?"):
+                self.server_ctl.stop()
+                if self.tray_ctl:
+                    self.tray_ctl.stop()
+                self.root.destroy()
+                sys.exit(0)
+
+    def show_window(self):
+        self.root.deiconify()
+        self.root.lift()
+        self.root.focus_force()
+
+    # --- POLLING Y ACTUALIZACIÓN ---
+    def _poll_status(self):
+        try:
+            alive, s_data = self.server_ctl.is_running()
+            self._update_server_ui(alive, s_data)
+
+            if alive:
+                t_data = self.twitch_ctl.get_connection_status()
+                self._update_twitch_ui(t_data)
+        except Exception:
+            pass
+
+        self.root.after(1800, self._poll_status)
+
+    def _update_server_ui(self, is_alive, data):
+        if is_alive != self._last_server_status:
+            self._last_server_status = is_alive
+            if self.tray_ctl:
+                self.tray_ctl.update_state(is_alive)
+
+        if is_alive:
+            self.lbl_server_badge.configure(text="ACTIVO", fg=C_GREEN, bg="#0E2818")
+            self.btn_toggle_server.configure(text="⏹️ Detener Servidor", bg="#2D1A1A", fg=C_RED)
+            clients = data.get("connected_clients", 0)
+            theme = data.get("active_theme", "maker")
+            self.lbl_clients_info.configure(text=f"Clientes OBS conectados: {clients} · Tema neón activo: {theme}")
+        else:
+            self.lbl_server_badge.configure(text="DETENIDO", fg=C_RED, bg="#2A1616")
+            self.btn_toggle_server.configure(text="⚡ Iniciar Servidor", bg=C_CYAN, fg="#000000")
+            self.lbl_clients_info.configure(text="Clientes OBS: 0 · Tema neón activo: --")
+
+    def _update_twitch_ui(self, data):
+        if data.get("connected"):
+            user = data.get("username", "Conectado")
+            self.lbl_twitch_badge.configure(text="CONECTADO", fg=C_GREEN, bg="#0E2818")
+            self.lbl_twitch_user.configure(text=f"Sesión iniciada como: {user}")
+        else:
+            self.lbl_twitch_badge.configure(text="NO CONECTADO", fg=C_MUTED, bg="#21262D")
+            self.lbl_twitch_user.configure(text="Inicia sesión para recibir alertas y chat en directo")
+
+    # --- MÉTODOS DE ACTUALIZACIÓN ---
+    def on_check_updates(self):
+        branch = self.var_update_branch.get().strip() or "main"
+        self.btn_check_updates.configure(state="disabled", text="⏳ Buscando...")
+        self.lbl_update_status.configure(text=f"Consultando rama '{branch}'...")
+
+        def _worker():
+            info = self.updater.check_updates(branch=branch)
+            self.root.after(0, lambda: self._on_check_updates_done(info))
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def _on_check_updates_done(self, info):
+        self._last_update_info = info
+        self.btn_check_updates.configure(state="normal", text="🔄 Comprobar")
+
+        branch = info.get("branch", "main")
+        if info.get("update_available"):
+            msg = info.get("message", "Nueva versión disponible")
+            self.lbl_upd_banner.configure(text=f"🚀 {msg}")
+            self.upd_banner.pack(fill="x", pady=(8, 4))
+            self.lbl_update_status.configure(text=f"Versión remota: v{info.get('remote_version')} · Rama: {branch}")
+        else:
+            self.upd_banner.pack_forget()
+            self.lbl_update_status.configure(text=f"Versión v{VERSION} · Al día con la rama '{branch}'")
+
+    def on_open_release_url(self):
+        url = self._last_update_info.get("release_url") if self._last_update_info else f"https://github.com/{self.updater.get_repo_name()}/releases"
+        webbrowser.open(url)
+
+    def on_apply_update(self):
+        branch = self.var_update_branch.get().strip() or "main"
+        if not messagebox.askyesno(
+            "Confirmar actualización",
+            f"¿Deseas descargar e instalar la última versión de la rama '{branch}'?\n\n"
+            "Se ejecutará 'git pull' y se actualizarán las dependencias."
+        ):
+            return
+
+        self.btn_apply_upd.configure(state="disabled", text="⏳ Actualizando...")
+
+        def _worker():
+            res = self.updater.apply_update(branch=branch)
+            self.root.after(0, lambda: self._on_apply_update_done(res))
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def _on_apply_update_done(self, res):
+        self.btn_apply_upd.configure(state="normal", text="📥 Actualizar ahora")
+        if res.get("status") == "ok":
+            messagebox.showinfo("Actualización completada", res.get("message", "Actualizado con éxito"))
+            self.on_check_updates()
+        else:
+            messagebox.showerror("Error al actualizar", res.get("message", "Error al aplicar la actualización"))

@@ -1,0 +1,11 @@
+body[data-theme="cozy_terracotta"] {
+  --color-bg-dark: #1F1A17;
+  --color-text-light: #F5EBE1;
+  --color-accent-cyan: #D97443;
+  --color-accent-orange: #E5A93C;
+  --color-panel-bg: #2C2420;
+  --color-text-dim: #A89A90;
+  --color-border-cyan: rgba(217, 116, 67, 0.4);
+  --color-border-cyan-bright: #D97443;
+  --theme-glow: 0 0 12px rgba(229, 169, 60, 0.4);
+}

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open Stream Suite — Catálogo de Overlays para OBS & Twitch</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="common/styles.css">
+  <style>
+    /* Estilos del catálogo de previsualización */
+    html {
+      width: 100% !important;
+      height: auto !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+    }
+
+    body.catalog-body {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 100vh !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      background-color: var(--color-bg-dark);
+      color: var(--color-text-light);
+      padding: 0;
+      margin: 0;
+      font-family: var(--font-primary);
+    }
+
+    .catalog-header {
+      background: rgba(25, 29, 33, 0.95);
+      border-bottom: 1px solid var(--color-border-dim);
+      padding: 32px 48px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(12px);
+    }
+
+    .catalog-header-content {
+      max-width: 1600px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .catalog-title-group h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .catalog-tagline {
+      font-family: var(--font-tech);
+      font-size: 13px;
+      color: var(--color-accent-cyan);
+      margin-top: 4px;
+      letter-spacing: 2px;
+    }
+
+    .catalog-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .catalog-btn {
+      background: var(--color-panel-bg);
+      border: 1px solid var(--color-border-dim);
+      color: var(--color-text-light);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-tech);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .catalog-btn:hover {
+      border-color: var(--color-accent-cyan);
+      color: var(--color-accent-cyan);
+    }
+
+    .catalog-btn.active {
+      background: rgba(87, 214, 196, 0.15);
+      border-color: var(--color-accent-cyan);
+      color: var(--color-accent-cyan);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(46, 54, 59, 0.6);
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid var(--color-border-dim);
+    }
+
+    .filter-tab {
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: none;
+      background: transparent;
+      color: var(--color-text-dim);
+      font-family: var(--font-tech);
+      font-size: 11px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .filter-tab.active {
+      background: var(--color-panel-bg);
+      color: var(--color-text-light);
+      font-weight: 700;
+    }
+
+    /* Contenedor del catálogo */
+    .catalog-container {
+      max-width: 1600px;
+      margin: 40px auto;
+      padding: 0 48px 80px 48px;
+    }
+
+    .info-banner {
+      background: rgba(87, 214, 196, 0.08);
+      border: 1px solid var(--color-border-cyan);
+      border-radius: var(--radius-sm);
+      padding: 16px 24px;
+      margin-bottom: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .info-banner p {
+      font-size: 14px;
+      color: var(--color-text-light);
+      line-height: 1.5;
+    }
+
+    /* Grid de tarjetas de escenas */
+    .scenes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+      gap: 32px;
+    }
+
+    .scene-card {
+      background: var(--color-panel-bg-trans);
+      border: 1px solid var(--color-border-dim);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .scene-card:hover {
+      border-color: var(--color-border-cyan);
+      transform: translateY(-2px);
+    }
+
+    .scene-card.theme-card-orange:hover {
+      border-color: var(--color-border-orange);
+    }
+
+    .scene-card-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-border-dim);
+      background: rgba(25, 29, 33, 0.6);
+    }
+
+    .scene-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .scene-badge-pill {
+      font-family: var(--font-tech);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 3px;
+      letter-spacing: 1px;
+    }
+
+    .badge-trans {
+      background: rgba(87, 214, 196, 0.15);
+      color: var(--color-accent-cyan);
+      border: 1px solid var(--color-border-cyan);
+    }
+
+    .badge-solid {
+      background: rgba(255, 120, 63, 0.15);
+      color: var(--color-accent-orange);
+      border: 1px solid var(--color-border-orange);
+    }
+
+    /* Marco de previsualización 16:9 con iframe escalado */
+    .preview-viewport-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #101214;
+      overflow: hidden;
+      border-bottom: 1px solid var(--color-border-dim);
+    }
+
+    .preview-frame-holder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: 0 0;
+      pointer-events: none;
+    }
+
+    .preview-iframe {
+      width: 1920px;
+      height: 1080px;
+      border: none;
+      background: transparent;
+      pointer-events: none;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Fondo simulado de prueba para escenas transparentes */
+    .simulated-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.85;
+      display: block;
+    }
+
+    .simulated-bg.hidden {
+      display: none;
+    }
+
+    /* Diseños de fondos de muestra en SVG/CSS puro sin dependencias */
+    .bg-sample-game {
+      background: radial-gradient(circle at 65% 45%, #2a3542 0%, #151a21 60%, #0d0f12 100%);
+      background-image: 
+        radial-gradient(ellipse at 70% 30%, rgba(87, 214, 196, 0.15), transparent 50%),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0, rgba(255,255,255,0.015) 2px, transparent 2px, transparent 8px);
+    }
+
+    .bg-sample-maker-desk {
+      background: #1d2328;
+      background-image: 
+        radial-gradient(circle at 40% 50%, rgba(87, 214, 196, 0.18) 0%, transparent 45%),
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+    }
+
+    .bg-sample-maker-pc {
+      background: #13171a;
+      background-image: 
+        linear-gradient(to right, rgba(87, 214, 196, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(87, 214, 196, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .bg-sample-print {
+      background: #24201d;
+      background-image: 
+        radial-gradient(circle at 45% 45%, rgba(255, 120, 63, 0.15) 0%, transparent 60%),
+        repeating-linear-gradient(0deg, rgba(255,120,63,0.03) 0, rgba(255,120,63,0.03) 1px, transparent 1px, transparent 20px);
+    }
+
+    .bg-sample-chill {
+      background: #191c24;
+      background-image: radial-gradient(ellipse at 35% 50%, rgba(137, 180, 250, 0.18) 0%, #15171d 65%);
+    }
+
+    .scene-card-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .scene-desc {
+      font-size: 13px;
+      color: var(--color-text-dim);
+      line-height: 1.5;
+    }
+
+    .scene-specs-box {
+      background: rgba(25, 29, 33, 0.7);
+      border: 1px solid var(--color-border-dim);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-family: var(--font-tech);
+      font-size: 11px;
+      color: var(--color-text-dim);
+    }
+
+    .scene-specs-box span {
+      color: var(--color-text-light);
+    }
+
+    .scene-card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 8px 12px;
+      text-align: center;
+      background: var(--color-panel-bg);
+      border: 1px solid var(--color-border-dim);
+      border-radius: var(--radius-sm);
+      color: var(--color-text-light);
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .action-btn:hover {
+      background: rgba(87, 214, 196, 0.15);
+      border-color: var(--color-accent-cyan);
+      color: var(--color-accent-cyan);
+    }
+
+    .action-btn.btn-orange:hover {
+      background: rgba(255, 120, 63, 0.15);
+      border-color: var(--color-accent-orange);
+      color: var(--color-accent-orange);
+    }
+  </style>
+</head>
+<body class="catalog-body">
+
+  <!-- Cabecera del Catálogo -->
+  <header class="catalog-header">
+    <div class="catalog-header-content">
+      
+      <div class="catalog-title-group">
+        <h1>
+          <img src="assets/logo_transparent.svg" alt="Open Stream Suite" width="30" height="30" style="vertical-align: middle; flex-shrink: 0;">
+          <span>OPEN STREAM SUITE — CATÁLOGO DE OVERLAYS</span>
+        </h1>
+        <div class="catalog-tagline">
+          ANDORINA · JUGAR · CREAR · COMPARTIR — SISTEMA MODULAR OBS STUDIO
+        </div>
+      </div>
+
+      <div class="catalog-controls">
+        <!-- Pestañas de filtrado -->
+        <div class="filter-tabs">
+          <button class="filter-tab active" onclick="filterScenes('all')">Todas (9)</button>
+          <button class="filter-tab" onclick="filterScenes('trans')">En Directo (6)</button>
+          <button class="filter-tab" onclick="filterScenes('solid')">Completas (3)</button>
+        </div>
+
+        <!-- Interruptor de fondo de prueba simulado -->
+        <button id="toggle-bg-btn" class="catalog-btn active" onclick="toggleSimulatedBgs()">
+          <span>🖼️ Fondo de Prueba: ON</span>
+        </button>
+
+        <a href="alerts/panel.html" class="catalog-btn" style="border-color: var(--color-accent-cyan); color: var(--color-accent-cyan);">
+          <span>🎛️ Panel de Alertas & Triggers</span>
+        </a>
+
+        <a href="docs/GUIA_DESARROLLO_Y_TEMAS.md" class="catalog-btn" target="_blank">
+          <span>🛠️ Guía de Desarrollo</span>
+        </a>
+
+        <a href="docs/OBS_SETUP.md" class="catalog-btn" target="_blank">
+          <span>📖 Guía OBS</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Contenedor Principal -->
+  <main class="catalog-container">
+    
+    <div class="info-banner">
+      <div>
+        <strong>Centro de control visual:</strong> Revisa el diseño, los marcos y la composición de cada una de las 9 escenas y widgets modulares.
+        <p style="margin-top: 4px; color: var(--color-text-dim);">
+          Las 6 escenas de directo y todos los widgets tienen <strong>fondo verdaderamente transparente</strong> en OBS. Puedes gestionarlo todo en tiempo real desde el <a href="alerts/panel.html" style="color:var(--color-accent-cyan);font-weight:700;">Panel de Control Local</a>.
+        </p>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <span style="font-family: var(--font-tech); font-size: 11px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--color-border-cyan);">
+          1920 × 1080 · 16:9 Nativo
+        </span>
+        <span style="font-family: var(--font-tech); font-size: 11px; background: rgba(255, 120, 63, 0.15); color: var(--color-accent-orange); padding: 4px 10px; border-radius: 4px; border: 1px solid var(--color-border-orange);">
+          EventSub + TriggerFyre Local
+        </span>
+      </div>
+    </div>
+
+    <!-- Cuadrícula de Escenas -->
+    <div class="scenes-grid">
+
+      <!-- 1. ESCENA GAME -->
+      <div class="scene-card" data-category="trans">
+        <div class="scene-card-header">
+          <span class="scene-card-title">01 // GAME (Videojuegos)</span>
+          <span class="scene-badge-pill badge-trans">TRANSPARENTE</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="simulated-bg bg-sample-game"></div>
+          <div class="preview-frame-holder" id="holder-1">
+            <iframe class="preview-iframe" src="overlays/game/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Diseño minimalista que deja todo el juego visible. Marco de cámara 16:9 en esquina inferior izquierda e insignia GAME MODE con mando retro.
+          </p>
+          <div class="scene-specs-box">
+            OBS Cámara: <span>x = 48, y = 767 | 360 × 203 px (16:9)</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn" href="overlays/game/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn" onclick="copyPath('overlays/game/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. ESCENA MAKER MESA -->
+      <div class="scene-card" data-category="trans">
+        <div class="scene-card-header">
+          <span class="scene-card-title">02 // MAKER — MESA</span>
+          <span class="scene-badge-pill badge-trans">TRANSPARENTE</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="simulated-bg bg-sample-maker-desk"></div>
+          <div class="preview-frame-holder" id="holder-2">
+            <iframe class="preview-iframe" src="overlays/maker/desk/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Protagonismo a la mesa de trabajo (Raspberry Pi, electrónica, soldadura, pruebas físicas), cámara de rostro, ordenador auxiliar y fases del proyecto.
+          </p>
+          <div class="scene-specs-box">
+            Mesa: <span>1376×774</span> | Rostro: <span>456×257</span> | PC: <span>456×257</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn" href="overlays/maker/desk/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn" onclick="copyPath('overlays/maker/desk/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ESCENA MAKER PC -->
+      <div class="scene-card" data-category="trans">
+        <div class="scene-card-header">
+          <span class="scene-card-title">03 // MAKER — PC</span>
+          <span class="scene-badge-pill badge-trans">TRANSPARENTE</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="simulated-bg bg-sample-maker-pc"></div>
+          <div class="preview-frame-holder" id="holder-3">
+            <iframe class="preview-iframe" src="overlays/maker/pc/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Optimizado para terminal, VS Code, Linux y desarrollo de IA/Hermes. Pantalla completa del PC como protagonista, rostro y cámara de hardware auxiliar.
+          </p>
+          <div class="scene-specs-box">
+            PC: <span>1376×774</span> | Rostro: <span>456×257</span> | Mesa: <span>456×257</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn" href="overlays/maker/pc/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn" onclick="copyPath('overlays/maker/pc/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ESCENA PRINT MÁQUINAS -->
+      <div class="scene-card theme-card-orange" data-category="trans">
+        <div class="scene-card-header">
+          <span class="scene-card-title" style="color: var(--color-accent-orange);">04 // PRINT — MÁQUINAS</span>
+          <span class="scene-badge-pill" style="background: rgba(255, 120, 63, 0.15); color: var(--color-accent-orange); border: 1px solid var(--color-border-orange);">TRANSPARENTE</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="simulated-bg bg-sample-print"></div>
+          <div class="preview-frame-holder" id="holder-4">
+            <iframe class="preview-iframe" src="overlays/print/machine/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Acento Naranja Taller. Cámara para plotter de corte, prensa de sublimación o impresora 3D, rostro, macro de detalle y panel de materiales de vinilo.
+          </p>
+          <div class="scene-specs-box">
+            Máquina: <span>1376×774</span> | Rostro: <span>456×257</span> | Macro: <span>456×257</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn btn-orange" href="overlays/print/machine/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn btn-orange" onclick="copyPath('overlays/print/machine/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. ESCENA PRINT DISEÑO -->
+      <div class="scene-card theme-card-orange" data-category="trans">
+        <div class="scene-card-header">
+          <span class="scene-card-title" style="color: var(--color-accent-orange);">05 // PRINT — DISEÑO</span>
+          <span class="scene-badge-pill" style="background: rgba(255, 120, 63, 0.15); color: var(--color-accent-orange); border: 1px solid var(--color-border-orange);">TRANSPARENTE</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="simulated-bg bg-sample-print"></div>
+          <div class="preview-frame-holder" id="holder-5">
+            <iframe class="preview-iframe" src="overlays/print/design/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Diseño vectorial en Inkscape, trazados de corte, marcas de registro y preparación de archivos de impresión o sublimación.
+          </p>
+          <div class="scene-specs-box">
+            PC Diseño: <span>1376×774</span> | Rostro: <span>456×257</span> | Plotter: <span>456×257</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn btn-orange" href="overlays/print/design/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn btn-orange" onclick="copyPath('overlays/print/design/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. ESCENA CHILL CHARLA -->
+      <div class="scene-card" data-category="trans">
+        <div class="scene-card-header">
+          <span class="scene-card-title" style="color: #89B4FA;">06 // CHILL — CHARLA</span>
+          <span class="scene-badge-pill badge-trans">TRANSPARENTE</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="simulated-bg bg-sample-chill"></div>
+          <div class="preview-frame-holder" id="holder-6">
+            <iframe class="preview-iframe" src="overlays/chill/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Cámara principal amplia de 1280×720 para Just Chatting con panel lateral preparado para albergar la fuente de chat de Twitch de OBS.
+          </p>
+          <div class="scene-specs-box">
+            Cámara: <span>1280×720</span> | Panel Chat: <span>544×848 px</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn" href="overlays/chill/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn" onclick="copyPath('overlays/chill/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. ESCENA STARTING SOON -->
+      <div class="scene-card" data-category="solid">
+        <div class="scene-card-header">
+          <span class="scene-card-title">07 // STARTING SOON</span>
+          <span class="scene-badge-pill badge-solid">PANTALLA COMPLETA</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="preview-frame-holder" id="holder-7">
+            <iframe class="preview-iframe" src="overlays/screens/starting-soon/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Pantalla opaca de inicio con fondo técnico, cuadrícula sutil, barra de cuenta atrás animada y visualizador de los cuatro modos de emisión.
+          </p>
+          <div class="scene-specs-box">
+            Tipo: <span>Fondo Completo (Opaco #191D21) | Cuenta atrás 5 min</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn" href="overlays/screens/starting-soon/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn" onclick="copyPath('overlays/screens/starting-soon/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. ESCENA BE RIGHT BACK -->
+      <div class="scene-card" data-category="solid">
+        <div class="scene-card-header">
+          <span class="scene-card-title">08 // BE RIGHT BACK (Pausa)</span>
+          <span class="scene-badge-pill badge-solid">PANTALLA COMPLETA</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="preview-frame-holder" id="holder-8">
+            <iframe class="preview-iframe" src="overlays/screens/be-right-back/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Pausa técnica limpia y ambiental con escáner suave y rotación automática de frases de taller (Tomando un café, Ordenando el taller, etc.).
+          </p>
+          <div class="scene-specs-box">
+            Tipo: <span>Fondo Completo (Opaco #191D21) | Rotación de estados</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn" href="overlays/screens/be-right-back/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn" onclick="copyPath('overlays/screens/be-right-back/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. ESCENA ENDING -->
+      <div class="scene-card" data-category="solid">
+        <div class="scene-card-header">
+          <span class="scene-card-title">09 // ENDING (Despedida)</span>
+          <span class="scene-badge-pill badge-solid">PANTALLA COMPLETA</span>
+        </div>
+        <div class="preview-viewport-wrapper">
+          <div class="preview-frame-holder" id="holder-9">
+            <iframe class="preview-iframe" src="overlays/screens/ending/index.html"></iframe>
+          </div>
+        </div>
+        <div class="scene-card-body">
+          <p class="scene-desc">
+            Despedida cálida y agradecimiento a la comunidad por acompañar el stream. Muestra las redes sociales cuando se configuran en config.js.
+          </p>
+          <div class="scene-specs-box">
+            Tipo: <span>Fondo Completo (Opaco #191D21) | Cierre de emisión</span>
+          </div>
+          <div class="scene-card-actions">
+            <a class="action-btn" href="overlays/screens/ending/index.html" target="_blank">Abrir Escena</a>
+            <button class="action-btn" onclick="copyPath('overlays/screens/ending/index.html')">Copiar Ruta</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    // Ajuste responsivo automático con ResizeObserver de 1920x1080
+    function resizePreviews() {
+      const holders = document.querySelectorAll('.preview-frame-holder');
+      holders.forEach(holder => {
+        const wrapper = holder.parentElement;
+        if (!wrapper) return;
+        const parentWidth = wrapper.clientWidth;
+        if (parentWidth > 0) {
+          const scale = parentWidth / 1920;
+          holder.style.transform = `scale(${scale})`;
+        }
+      });
+    }
+
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(() => resizePreviews());
+      document.querySelectorAll('.preview-viewport-wrapper').forEach(w => ro.observe(w));
+    }
+
+    window.addEventListener('resize', resizePreviews);
+    window.addEventListener('DOMContentLoaded', () => {
+      resizePreviews();
+      setTimeout(resizePreviews, 200);
+      setTimeout(resizePreviews, 800);
+    });
+
+    // Alternar fondos simulados de prueba
+    let bgsVisible = true;
+    function toggleSimulatedBgs() {
+      bgsVisible = !bgsVisible;
+      const bgs = document.querySelectorAll('.simulated-bg');
+      bgs.forEach(bg => {
+        if (bgsVisible) {
+          bg.classList.remove('hidden');
+        } else {
+          bg.classList.add('hidden');
+        }
+      });
+      const btn = document.getElementById('toggle-bg-btn');
+      if (bgsVisible) {
+        btn.classList.add('active');
+        btn.innerHTML = '<span>🖼️ Fondo de Prueba: ON</span>';
+      } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '<span>🔳 Transparencia Real: ON</span>';
+      }
+    }
+
+    // Filtrar escenas
+    function filterScenes(cat) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const cards = document.querySelectorAll('.scene-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.category === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Copiar ruta local
+    function copyPath(relPath) {
+      const fullUrl = window.location.href.replace('index.html', '') + relPath;
+      navigator.clipboard.writeText(fullUrl).then(() => {
+        alert('Ruta copiada al portapapeles:\n' + fullUrl + '\n\nPégala en OBS Studio como URL de fuente de navegador.');
+      }).catch(() => {
+        prompt('Copia esta ruta para OBS Studio:', fullUrl);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+body[data-theme="blueprint_cad"] {
+  --color-bg-dark: #0B1B2B;
+  --color-text-light: #E0F4FF;
+  --color-accent-cyan: #00D2FF;
+  --color-accent-orange: #FFB800;
+  --color-panel-bg: #102A45;
+  --color-text-dim: #6B93B8;
+  --color-border-cyan: rgba(0, 210, 255, 0.5);
+  --color-border-cyan-bright: #00D2FF;
+  --theme-glow: 0 0 14px rgba(0, 210, 255, 0.4);
+  --font-tech: 'Courier New', monospace;
+}
+
+/* Fondo con trama de cianotipia y cuadrícula de dibujo técnico */
+body[data-theme="blueprint_cad"] .overlay-canvas {
+  background-image: 
+    linear-gradient(rgba(0, 210, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 210, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(0, 210, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 210, 255, 0.03) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+}
+
+/* Bordes estilo plano CAD de ingeniería */
+body[data-theme="blueprint_cad"] .camera-frame,
+body[data-theme="blueprint_cad"] .camera-aux-frame,
+body[data-theme="blueprint_cad"] .webcam-game-frame,
+body[data-theme="blueprint_cad"] .side-info-panel,
+body[data-theme="blueprint_cad"] .bottom-project-bar,
+body[data-theme="blueprint_cad"] .chat-panel-frame,
+body[data-theme="blueprint_cad"] .brb-card,
+body[data-theme="blueprint_cad"] .farewell-card {
+  border: 1.5px solid #00D2FF !important;
+  box-shadow: inset 0 0 12px rgba(0, 210, 255, 0.12), 0 0 16px rgba(0, 210, 255, 0.25) !important;
+  background: rgba(11, 27, 43, 0.88) !important;
+  border-radius: 0px !important;
+}
+
+/* Insignias y etiquetas técnicas */
+body[data-theme="blueprint_cad"] .brand-badge,
+body[data-theme="blueprint_cad"] .camera-label,
+body[data-theme="blueprint_cad"] .live-indicator,
+body[data-theme="blueprint_cad"] .mode-badge,
+body[data-theme="blueprint_cad"] .hero-tag {
+  border: 1px solid #00D2FF !important;
+  background: rgba(0, 210, 255, 0.15) !important;
+  color: #00D2FF !important;
+  font-family: 'Courier New', monospace !important;
+  border-radius: 0px !important;
+  letter-spacing: 1px;
+}
+
+body[data-theme="blueprint_cad"] .phase-item.active {
+  background: #00D2FF !important;
+  color: #0B1B2B !important;
+  font-weight: 900 !important;
+  border-radius: 0px !important;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.6) !important;
+}

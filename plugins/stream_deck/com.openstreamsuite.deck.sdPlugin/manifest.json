@@ -1,0 +1,153 @@
+{
+  "Actions": [
+    {
+      "Icon": "assets/icon_fx_confetti",
+      "Name": "Disparar Meme / Trigger",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "assets/icon_fx_confetti",
+          "TitleAlignment": "bottom",
+          "FontSize": 10
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Lanza un meme o trigger audiovisual en OBS",
+      "UUID": "com.openstreamsuite.deck.trigger"
+    },
+    {
+      "Icon": "assets/icon_theme_neon",
+      "Name": "Aplicar Paleta de Tema",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "assets/icon_theme_neon",
+          "TitleAlignment": "bottom",
+          "FontSize": 10
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Cambia el color y estilo neón de todos los overlays en OBS",
+      "UUID": "com.openstreamsuite.deck.theme"
+    },
+    {
+      "Icon": "assets/icon_timer",
+      "Name": "Temporizador Open Stream Suite",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "assets/icon_timer",
+          "TitleAlignment": "middle",
+          "FontSize": 12
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Inicia o pausa el cronómetro con cuenta atrás visible en la tecla",
+      "UUID": "com.openstreamsuite.deck.timer"
+    },
+    {
+      "Icon": "assets/icon_scene_game",
+      "Name": "Lluvia de Emotes / Confeti",
+      "Controllers": ["Keypad"],
+      "States": [
+        {
+          "Image": "assets/icon_fx_confetti",
+          "TitleAlignment": "bottom",
+          "FontSize": 10
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Lanza una explosión de confeti o emoticonos en pantalla",
+      "UUID": "com.openstreamsuite.deck.explode"
+    },
+    {
+      "Icon": "assets/icon_timer",
+      "Name": "Dial / Knob Temporizador",
+      "Controllers": ["Encoder"],
+      "Encoder": {
+        "layout": "$B1",
+        "StackColor": "#57D6C4",
+        "TriggerDescription": {
+          "Rotate": "Gira para añadir o restar minutos",
+          "Push": "Pulsa para pausar o reanudar",
+          "Touch": "Toca para iniciar 5 minutos"
+        }
+      },
+      "Tooltip": "Control de temporizador con dial rotatorio para Ajazz AKP05 y Stream Deck +",
+      "UUID": "com.openstreamsuite.deck.dial.timer"
+    },
+    {
+      "Icon": "assets/icon_theme_neon",
+      "Name": "Dial / Knob Selector de Temas",
+      "Controllers": ["Encoder"],
+      "Encoder": {
+        "layout": "$B1",
+        "StackColor": "#FF783F",
+        "TriggerDescription": {
+          "Rotate": "Gira para cambiar el tema en directo",
+          "Push": "Pulsa para volver al tema predeterminado",
+          "Touch": "Toca para aplicar"
+        }
+      },
+      "Tooltip": "Navega entre todas las paletas de color en tiempo real desde el dial",
+      "UUID": "com.openstreamsuite.deck.dial.theme"
+    },
+    {
+      "Icon": "assets/icon_scene_maker",
+      "Name": "Dial / Knob Metas de Twitch",
+      "Controllers": ["Encoder"],
+      "Encoder": {
+        "layout": "$B1",
+        "StackColor": "#38BDF8",
+        "TriggerDescription": {
+          "Rotate": "Gira para sumar o restar a la meta",
+          "Push": "Pulsa para lanzar confeti de celebración",
+          "Touch": "Toca para ver progreso"
+        }
+      },
+      "Tooltip": "Control físico y contador de metas del directo",
+      "UUID": "com.openstreamsuite.deck.dial.goal"
+    },
+    {
+      "Icon": "assets/icon_fx_confetti",
+      "Name": "Dial / Knob Efectos FX",
+      "Controllers": ["Encoder"],
+      "Encoder": {
+        "layout": "$B1",
+        "StackColor": "#C084FC",
+        "TriggerDescription": {
+          "Rotate": "Gira para confeti o corazones",
+          "Push": "Pulsa para sonido chime ding",
+          "Touch": "Toca para confeti"
+        }
+      },
+      "Tooltip": "Disparador de efectos audiovisuales en vivo",
+      "UUID": "com.openstreamsuite.deck.dial.fx"
+    }
+  ],
+  "Author": "Andorina",
+  "Category": "Open Stream Suite",
+  "CategoryIcon": "assets/icon_scene_maker",
+  "CodePath": "index.html",
+  "Description": "Control bidireccional hardware para la suite de streaming Open Stream Suite: teclas LCD, pantalla táctil y diales/knobs para Ajazz AKP05 y OpenDeck.",
+  "Icon": "assets/icon_scene_maker",
+  "Name": "Open Stream Suite Controller",
+  "Version": "2.0.0",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    },
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.14"
+    },
+    {
+      "Platform": "linux",
+      "MinimumVersion": "1.0"
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "5.0"
+  }
+}

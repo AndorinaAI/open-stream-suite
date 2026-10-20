@@ -1,0 +1,19 @@
+{
+  "id": "blueprint_cad",
+  "packId": "pack_sci_fi_blueprint",
+  "name": "Blueprint CAD (Plano de Ingeniería)",
+  "badge": "01 // BLUEPRINT",
+  "accentCyan": "#00D2FF",
+  "accentOrange": "#FFB800",
+  "bgDark": "#0B1B2B",
+  "textLight": "#E0F4FF",
+  "panelBg": "#102A45",
+  "textDim": "#6B93B8",
+  "fontPrimary": "'Courier New', monospace",
+  "fontTech": "'Courier New', monospace",
+  "glowIntensity": 45,
+  "borderStyle": "blueprint",
+  "desc": "Cianotipia técnica azul cian sobre fondo de plano de taller. Cuadrícula de cotas milimétricas y esquinas de mira técnica.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

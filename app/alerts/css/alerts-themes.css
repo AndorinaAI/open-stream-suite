@@ -1,0 +1,439 @@
+/* ====================================================================
+   OPEN STREAM SUITE — SISTEMA Y MOTOR DE TEMAS PARA ALERTAS (OBS Y PANEL)
+   Compatibilidad total con el lienzo de OBS y la previsualización del panel
+   ==================================================================== */
+
+.banner-alert-root {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-25px) scale(0.95);
+  min-width: 580px;
+  max-width: 820px;
+  padding: 20px 32px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1500;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.banner-alert-root.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Modo previsualización en panel */
+.preview-stage .banner-alert-root,
+#preview-stage .banner-alert-root {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  display: flex !important;
+  width: 100% !important;
+  max-width: 520px !important;
+  min-width: unset !important;
+  padding: 16px 22px !important;
+  margin: auto !important;
+  transform: none;
+}
+
+
+/* --------------------------------------------------------------------
+   CATÁLOGO DE TEMAS DE ALERTAS
+   -------------------------------------------------------------------- */
+
+/* 1. CYBERPUNK HUD */
+.banner-theme-cyberpunk {
+  background: linear-gradient(135deg, rgba(14, 18, 24, 0.96) 0%, rgba(20, 10, 30, 0.96) 100%);
+  border: 2px solid var(--banner-border, #57D6C4);
+  box-shadow: 0 0 30px rgba(87, 214, 196, 0.35), inset 0 0 20px rgba(87, 214, 196, 0.1);
+  clip-path: polygon(0 14px, 14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px));
+}
+.banner-theme-cyberpunk::before {
+  content: "SYS // LIVE_ALERT";
+  position: absolute;
+  top: 4px;
+  right: 18px;
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--banner-accent, #57D6C4);
+  opacity: 0.75;
+}
+
+/* 2. GLASSMORPHISM FROSTED */
+.banner-theme-glassmorphism {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+/* 3. NEON GLOW PULSAR */
+.banner-theme-neon {
+  background: rgba(10, 10, 15, 0.95);
+  border: 2px solid var(--banner-border, #FF007F);
+  border-radius: 14px;
+  box-shadow: 0 0 25px var(--banner-border, #FF007F), 0 0 50px rgba(255, 0, 127, 0.4), inset 0 0 15px rgba(255, 0, 127, 0.2);
+}
+.banner-theme-neon .banner-user-display {
+  text-shadow: 0 0 12px var(--banner-border, #FF007F), 0 0 24px var(--banner-border, #FF007F);
+}
+
+/* 4. STREAM INDUSTRIAL */
+.banner-theme-taller {
+  background: #14181C;
+  border: 2px solid var(--banner-border, #F59E0B);
+  border-top: 5px solid var(--banner-border, #F59E0B);
+  border-bottom: 5px solid var(--banner-border, #F59E0B);
+  border-radius: 8px;
+  background-image: repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.04), rgba(245, 158, 11, 0.04) 10px, transparent 10px, transparent 20px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(245, 158, 11, 0.05);
+}
+
+/* 5. RETRO ARCADE 8-BIT */
+.banner-theme-retro {
+  background: #0B0E14;
+  border: 4px solid var(--banner-border, #38BDF8);
+  border-radius: 0;
+  box-shadow: 6px 6px 0px #000, 10px 10px 0px var(--banner-border, #38BDF8);
+  font-family: monospace;
+}
+.banner-theme-retro .banner-icon-box {
+  border-radius: 0 !important;
+  border-width: 2px !important;
+}
+
+/* 6. MINIMAL CLEAN */
+.banner-theme-minimal {
+  background: rgba(18, 20, 24, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 6px solid var(--banner-accent, #57D6C4);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* 7. SYNTHWAVE 80S RETRO */
+.banner-theme-synthwave {
+  background: linear-gradient(135deg, rgba(26, 16, 40, 0.96) 0%, rgba(45, 15, 60, 0.96) 100%);
+  border: 2px solid #00F9FF;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 249, 255, 0.4), 0 0 50px rgba(255, 42, 133, 0.3), inset 0 0 15px rgba(255, 42, 133, 0.2);
+}
+.banner-theme-synthwave .banner-primary-title {
+  color: #FF2A85 !important;
+}
+
+/* 8. MATRIX TERMINAL CRT */
+.banner-theme-matrix {
+  background: rgba(5, 12, 8, 0.96);
+  border: 2px solid #00FF66;
+  border-radius: 6px;
+  box-shadow: 0 0 25px rgba(0, 255, 102, 0.4), inset 0 0 20px rgba(0, 255, 102, 0.15);
+  font-family: monospace;
+}
+.banner-theme-matrix::before {
+  content: "TERMINAL://NOTIFICATION_OK";
+  position: absolute;
+  top: 4px;
+  right: 14px;
+  font-size: 9px;
+  color: #00FF66;
+  opacity: 0.8;
+}
+
+/* 9. GOLD CROWN LUXURY */
+.banner-theme-luxury {
+  background: linear-gradient(135deg, #14120C 0%, #241D12 100%);
+  border: 2px solid #EAB308;
+  border-radius: 12px;
+  box-shadow: 0 0 30px rgba(234, 179, 8, 0.35), inset 0 0 15px rgba(234, 179, 8, 0.15);
+}
+.banner-theme-luxury .banner-primary-title,
+.banner-theme-luxury .banner-badge-tag {
+  color: #FACC15 !important;
+}
+
+/* --------------------------------------------------------------------
+   COMPONENTES INTERNOS DEL BANNER
+   -------------------------------------------------------------------- */
+.banner-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--banner-accent, #57D6C4);
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+.banner-icon-box svg {
+  width: 32px;
+  height: 32px;
+}
+
+.banner-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.banner-badge-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  font-family: var(--font-tech, monospace);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--banner-accent, #57D6C4);
+  margin-bottom: 2px;
+}
+
+.banner-primary-title {
+  font-family: var(--font-tech, monospace);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--banner-accent, #57D6C4);
+}
+
+.banner-user-display {
+  font-family: var(--font-primary, sans-serif);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--banner-text, #FFFFFF);
+  line-height: 1.15;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  word-break: break-word;
+}
+
+.banner-subtitle-msg {
+  font-family: var(--font-tech, monospace);
+  font-size: 12px;
+  color: var(--color-text-dim, #94A3B8);
+  margin-top: 2px;
+  font-style: italic;
+  word-break: break-word;
+}
+
+/* --------------------------------------------------------------------
+   ANIMACIONES DE ENTRADA Y SALIDA (OBS CANVAS - Centrado absoluto)
+   -------------------------------------------------------------------- */
+@keyframes bannerPop {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.6); }
+  65% { transform: translateX(-50%) scale(1.08); }
+  85% { transform: translateX(-50%) scale(0.97); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bannerSlideDown {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-60px) scale(0.92); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+@keyframes bannerSlideUp {
+  0% { opacity: 0; transform: translateX(-50%) translateY(60px) scale(0.92); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+@keyframes bannerSlideLeft {
+  0% { opacity: 0; transform: translateX(calc(-50% - 100px)) scale(0.95); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bannerSlideRight {
+  0% { opacity: 0; transform: translateX(calc(-50% + 100px)) scale(0.95); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bannerBounce {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.2); }
+  45% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+  65% { transform: translateX(-50%) scale(0.92); }
+  82% { transform: translateX(-50%) scale(1.04); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bannerGlitch {
+  0% { opacity: 0; transform: translateX(-52%) skewX(-8deg); filter: hue-rotate(90deg) contrast(1.5); }
+  20% { opacity: 1; transform: translateX(-48%) skewX(6deg); filter: hue-rotate(-90deg); }
+  40% { transform: translateX(-51%) skewX(-3deg); filter: invert(0.2); }
+  65% { transform: translateX(-49%) skewX(2deg); filter: none; }
+  100% { opacity: 1; transform: translateX(-50%) skewX(0deg); }
+}
+
+@keyframes bannerRubberBand {
+  0% { opacity: 0; transform: translateX(-50%) scale3d(1, 1, 1); }
+  30% { opacity: 1; transform: translateX(-50%) scale3d(1.25, 0.75, 1); }
+  40% { transform: translateX(-50%) scale3d(0.75, 1.25, 1); }
+  50% { transform: translateX(-50%) scale3d(1.15, 0.85, 1); }
+  65% { transform: translateX(-50%) scale3d(0.95, 1.05, 1); }
+  75% { transform: translateX(-50%) scale3d(1.05, 0.95, 1); }
+  100% { opacity: 1; transform: translateX(-50%) scale3d(1, 1, 1); }
+}
+
+@keyframes bannerNeonFlicker {
+  0% { opacity: 0; filter: brightness(0.2); transform: translateX(-50%) scale(0.95); }
+  15% { opacity: 0.8; filter: brightness(1.6); }
+  25% { opacity: 0.3; filter: brightness(0.4); }
+  40% { opacity: 1; filter: brightness(1.8); }
+  55% { opacity: 0.6; filter: brightness(0.8); }
+  70% { opacity: 1; filter: brightness(1.4); }
+  100% { opacity: 1; filter: brightness(1); transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bannerZoomIn {
+  0% { opacity: 0; transform: translateX(-50%) scale(0); }
+  70% { transform: translateX(-50%) scale(1.1); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bannerFade {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.98); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+/* Clases de animación en OBS */
+.banner-alert-root.anim-pop.visible { animation: bannerPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.banner-alert-root.anim-slide_down.visible { animation: bannerSlideDown 0.4s ease-out forwards; }
+.banner-alert-root.anim-slide_up.visible { animation: bannerSlideUp 0.4s ease-out forwards; }
+.banner-alert-root.anim-slide_left.visible { animation: bannerSlideLeft 0.4s ease-out forwards; }
+.banner-alert-root.anim-slide_right.visible { animation: bannerSlideRight 0.4s ease-out forwards; }
+.banner-alert-root.anim-bounce.visible { animation: bannerBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.banner-alert-root.anim-glitch.visible { animation: bannerGlitch 0.45s steps(2, start) forwards; }
+.banner-alert-root.anim-rubber_band.visible { animation: bannerRubberBand 0.65s ease forwards; }
+.banner-alert-root.anim-neon_flicker.visible { animation: bannerNeonFlicker 0.55s ease forwards; }
+.banner-alert-root.anim-zoom_in.visible { animation: bannerZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.banner-alert-root.anim-fade.visible { animation: bannerFade 0.4s ease-out forwards; }
+
+/* --------------------------------------------------------------------
+   ANIMACIONES EXCLUSIVAS PARA LA PREVISUALIZACIÓN EN VIVO (PANEL)
+   Sin transform: translateX(-50%) para centrado flex perfecto
+   -------------------------------------------------------------------- */
+@keyframes previewAnimPop {
+  0% { opacity: 0; transform: scale(0.5); }
+  65% { opacity: 1; transform: scale(1.08); }
+  85% { transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes previewAnimSlideDown {
+  0% { opacity: 0; transform: translateY(-50px) scale(0.92); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes previewAnimSlideUp {
+  0% { opacity: 0; transform: translateY(50px) scale(0.92); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes previewAnimSlideLeft {
+  0% { opacity: 0; transform: translateX(-80px) scale(0.95); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes previewAnimSlideRight {
+  0% { opacity: 0; transform: translateX(80px) scale(0.95); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes previewAnimBounce {
+  0% { opacity: 0; transform: scale(0.2); }
+  45% { opacity: 1; transform: scale(1.15); }
+  65% { transform: scale(0.92); }
+  82% { transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes previewAnimGlitch {
+  0% { opacity: 0; transform: skewX(-8deg); filter: hue-rotate(90deg) contrast(1.4); }
+  20% { opacity: 1; transform: skewX(6deg); filter: hue-rotate(-90deg); }
+  40% { transform: skewX(-3deg); filter: invert(0.2); }
+  65% { transform: skewX(2deg); filter: none; }
+  100% { opacity: 1; transform: skewX(0deg); }
+}
+
+@keyframes previewAnimRubberBand {
+  0% { opacity: 0; transform: scale3d(1, 1, 1); }
+  30% { opacity: 1; transform: scale3d(1.22, 0.78, 1); }
+  40% { transform: scale3d(0.78, 1.22, 1); }
+  50% { transform: scale3d(1.14, 0.86, 1); }
+  65% { transform: scale3d(0.96, 1.04, 1); }
+  75% { transform: scale3d(1.04, 0.96, 1); }
+  100% { opacity: 1; transform: scale3d(1, 1, 1); }
+}
+
+@keyframes previewAnimNeonFlicker {
+  0% { opacity: 0; filter: brightness(0.2); transform: scale(0.95); }
+  15% { opacity: 0.8; filter: brightness(1.6); }
+  25% { opacity: 0.3; filter: brightness(0.4); }
+  40% { opacity: 1; filter: brightness(1.8); }
+  55% { opacity: 0.6; filter: brightness(0.8); }
+  70% { opacity: 1; filter: brightness(1.4); }
+  100% { opacity: 1; filter: brightness(1); transform: scale(1); }
+}
+
+@keyframes previewAnimZoomIn {
+  0% { opacity: 0; transform: scale(0.1); }
+  70% { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes previewAnimFade {
+  0% { opacity: 0; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Clases aplicables al disparar previsualización */
+.preview-stage .banner-alert-root.preview-play-anim.anim-pop { animation: previewAnimPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-slide_down { animation: previewAnimSlideDown 0.4s ease-out forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-slide_up { animation: previewAnimSlideUp 0.4s ease-out forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-slide_left { animation: previewAnimSlideLeft 0.4s ease-out forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-slide_right { animation: previewAnimSlideRight 0.4s ease-out forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-bounce { animation: previewAnimBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-glitch { animation: previewAnimGlitch 0.45s steps(2, start) forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-rubber_band { animation: previewAnimRubberBand 0.65s ease forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-neon_flicker { animation: previewAnimNeonFlicker 0.55s ease forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-zoom_in { animation: previewAnimZoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.preview-stage .banner-alert-root.preview-play-anim.anim-fade { animation: previewAnimFade 0.4s ease-out forwards; }
+
+/* Animaciones de Multimedia en Preview */
+.preview-stage .preview-media-container.preview-play-anim {
+  animation: previewAnimPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Efectos ambientales continuos */
+@keyframes ambientPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(87, 214, 196, 0.25); }
+  50% { box-shadow: 0 0 35px rgba(87, 214, 196, 0.55); }
+}
+@keyframes ambientFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.banner-alert-root.ambient-pulse { animation: ambientPulse 2.5s infinite ease-in-out; }
+.banner-alert-root.ambient-float { animation: ambientFloat 3s infinite ease-in-out; }
+

@@ -1,0 +1,19 @@
+{
+  "id": "arcade_8bit",
+  "packId": "pack_retro_arcade",
+  "name": "8-Bit Arcade Cabinet",
+  "badge": "01 // ARCADE",
+  "accentCyan": "#38BDF8",
+  "accentOrange": "#F43F5E",
+  "bgDark": "#0B0E14",
+  "textLight": "#FFFFFF",
+  "panelBg": "#161B22",
+  "textDim": "#64748B",
+  "fontPrimary": "monospace",
+  "fontTech": "monospace",
+  "glowIntensity": 35,
+  "borderStyle": "square",
+  "desc": "Bordes gruesos pixelados y paleta de recreativa clásica de monedas.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}
