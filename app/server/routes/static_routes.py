@@ -52,6 +52,7 @@ def register_static_routes(app):
     else:
         app.router.add_static("/overlays/", path=str(BASE_DIR / "streamthemes" / "Open_stream_Pack" / "overlays"), name="overlays", follow_symlinks=True)
     app.router.add_static("/themes/", path=str(BASE_DIR / "streamthemes"), name="themes", follow_symlinks=True)
+    app.router.add_static("/streamthemes/", path=str(BASE_DIR / "streamthemes"), name="streamthemes", follow_symlinks=True)
     app.router.add_static("/alerts/", path=str(BASE_DIR / "alerts"), name="alerts")
     app.router.add_static("/widgets/", path=str(BASE_DIR / "widgets"), name="widgets")
     app.router.add_static("/common/", path=str(BASE_DIR / "common"), name="common")

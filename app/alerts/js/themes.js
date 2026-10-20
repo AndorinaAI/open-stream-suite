@@ -9,6 +9,7 @@ let currentEditingPackId = null;
 let currentActiveThemeId = 'maker';
 let currentActivePackId = 'Maker_Theme_Pack';
 const DEFAULT_OVERLAY_THEMES = {
+  // Maker_Theme_Pack
   'game': 'cyberpunk',
   'maker': 'maker',
   'maker-desk': 'maker',
@@ -19,7 +20,31 @@ const DEFAULT_OVERLAY_THEMES = {
   'chill': 'chill',
   'startingSoon': 'synthwave',
   'beRightBack': 'synthwave',
-  'ending': 'synthwave'
+  'ending': 'synthwave',
+
+  // Open_stream_Pack
+  'oss_chatting': 'neon_streamer',
+  'oss_desktop': 'clean_minimal',
+  'oss_podcast': 'sunset_glow',
+  'oss_starting': 'crimson_pulse',
+  'oss_brb': 'emerald_matrix',
+  'oss_ending': 'neon_streamer',
+
+  // Gamer_Pro_Pack
+  'gamer_gameplay': 'cyber_glitch',
+  'gamer_speedrun': 'toxic_rad',
+  'gamer_victory': 'golden_glory',
+  'gamer_starting': 'crimson_esport',
+  'gamer_brb': 'stealth_mono',
+  'gamer_ending': 'golden_glory',
+
+  // Cozy_LoFi_Pack
+  'cozy_pomodoro': 'latte_caramel',
+  'cozy_art': 'sakura_sunset',
+  'cozy_cafe': 'matcha_bamboo',
+  'cozy_starting': 'lavender_dream',
+  'cozy_brb': 'latte_caramel',
+  'cozy_ending': 'nordic_twilight'
 };
 let cachedOverlayThemes = Object.assign({}, DEFAULT_OVERLAY_THEMES);
 
@@ -831,86 +856,317 @@ function switchThemesMainTab(tab) {
 }
 
 const OSS_SCENES = [
-  {
-    key: 'game',
-    name: 'Overlay: Gameplay (Juego + Cámara)',
-    icon: '🎮',
-    path: '/overlays/game/index.html',
-    badge: 'GAMEPLAY + WEBCAM',
-    desc: 'Capa limpia para videojuegos. Marco de webcam en esquina con insignia técnica y soporte de alertas.',
-    obsSource: 'http://localhost:8080/overlays/game/index.html'
-  },
+  // ==========================================
+  // PACK 1: MAKER & TALLER (Maker_Theme_Pack)
+  // ==========================================
   {
     key: 'maker-desk',
+    packId: 'Maker_Theme_Pack',
+    category: 'maker',
     name: 'Overlay: Escena Principal (Cámara + Webcam)',
     icon: '🛠️',
-    path: '/overlays/maker/desk/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html',
     badge: 'ESCENA PRINCIPAL · CÁMARA',
     desc: 'Escena principal con cámara frontal o aérea, barra inferior con fases del proyecto y ventana auxiliar.',
-    obsSource: 'http://localhost:8080/overlays/maker/desk/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html'
   },
   {
     key: 'maker-pc',
+    packId: 'Maker_Theme_Pack',
+    category: 'maker',
     name: 'Overlay: Pantalla Compartida (PC + Webcam)',
     icon: '💻',
-    path: '/overlays/maker/pc/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/maker/pc/index.html',
     badge: 'PANTALLA COMPARTIDA · PC',
     desc: 'Escena de pantalla compartida con barra inferior de fases activas y ventana para webcam/cámara.',
-    obsSource: 'http://localhost:8080/overlays/maker/pc/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/maker/pc/index.html'
   },
   {
     key: 'print-machine',
+    packId: 'Maker_Theme_Pack',
+    category: 'print',
     name: 'Overlay: Cámara Secundaria (Proceso / Acción)',
     icon: '🖨️',
-    path: '/overlays/print/machine/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/print/machine/index.html',
     badge: 'CÁMARA SECUNDARIA · PROCESO',
     desc: 'Cámara directa sobre el proceso o acción en curso, con indicador de estado y fases.',
-    obsSource: 'http://localhost:8080/overlays/print/machine/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/print/machine/index.html'
   },
   {
     key: 'print-design',
+    packId: 'Maker_Theme_Pack',
+    category: 'print',
     name: 'Overlay: Pantalla Diseño / CAD (Full Screen)',
     icon: '📐',
-    path: '/overlays/print/design/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/print/design/index.html',
     badge: 'PANTALLA COMPLETA · DISEÑO',
     desc: 'Pantalla completa para diseño, programación o cualquier app a pantalla completa con cámara secundaria.',
-    obsSource: 'http://localhost:8080/overlays/print/design/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/print/design/index.html'
+  },
+  {
+    key: 'game',
+    packId: 'Maker_Theme_Pack',
+    category: 'stream',
+    name: 'Overlay: Gameplay (Juego + Cámara)',
+    icon: '🎮',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/game/index.html',
+    badge: 'GAMEPLAY + WEBCAM',
+    desc: 'Capa limpia para videojuegos. Marco de webcam en esquina con insignia técnica y soporte de alertas.',
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/game/index.html'
   },
   {
     key: 'chill',
+    packId: 'Maker_Theme_Pack',
+    category: 'stream',
     name: 'Overlay: Charla y Chat (Just Chatting)',
     icon: '💬',
-    path: '/overlays/chill/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/chill/index.html',
     badge: 'JUST CHATTING',
     desc: 'Cámara amplia con marco para el chat de Twitch en OBS y cinta inferior con el tema de conversación.',
-    obsSource: 'http://localhost:8080/overlays/chill/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/chill/index.html'
   },
   {
     key: 'startingSoon',
+    packId: 'Maker_Theme_Pack',
+    category: 'screens',
     name: 'Pantalla: Inicio de Stream (Starting Soon)',
     icon: '⏳',
-    path: '/overlays/screens/starting-soon/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/screens/starting-soon/index.html',
     badge: 'INICIO DE EMISIÓN',
     desc: 'Pantalla completa de bienvenida con cuenta atrás regresiva, titular con acento neón y redes.',
-    obsSource: 'http://localhost:8080/overlays/screens/starting-soon/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/screens/starting-soon/index.html'
   },
   {
     key: 'beRightBack',
+    packId: 'Maker_Theme_Pack',
+    category: 'screens',
     name: 'Pantalla: Pausa Técnica (Be Right Back)',
     icon: '☕',
-    path: '/overlays/screens/be-right-back/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/screens/be-right-back/index.html',
     badge: 'PAUSA TÉCNICA',
     desc: 'Pausa con escáner técnico animado y rotación automática de frases personalizables.',
-    obsSource: 'http://localhost:8080/overlays/screens/be-right-back/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/screens/be-right-back/index.html'
   },
   {
     key: 'ending',
+    packId: 'Maker_Theme_Pack',
+    category: 'screens',
     name: 'Pantalla: Despedida (Ending)',
     icon: '🎬',
-    path: '/overlays/screens/ending/index.html',
+    path: '/streamthemes/Maker_Theme_Pack/overlays/screens/ending/index.html',
     badge: 'FIN DE TRANSMISIÓN',
     desc: 'Cierre de directo con tarjeta de agradecimiento a suscriptores, etiqueta de despedida y redes.',
-    obsSource: 'http://localhost:8080/overlays/screens/ending/index.html'
+    obsSource: 'http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/screens/ending/index.html'
+  },
+
+  // ==========================================
+  // PACK 2: OPEN STREAM SUITE (Open_stream_Pack)
+  // ==========================================
+  {
+    key: 'oss_chatting',
+    packId: 'Open_stream_Pack',
+    category: 'chat',
+    name: 'Overlay: Just Chatting & Talk',
+    icon: '💬',
+    path: '/streamthemes/Open_stream_Pack/overlays/just_chatting/index.html',
+    badge: 'JUST CHATTING PRO',
+    desc: 'Cámara amplia optimizada para interacción con el chat de Twitch, cinta informativa y widgets.',
+    obsSource: 'http://localhost:8080/streamthemes/Open_stream_Pack/overlays/just_chatting/index.html'
+  },
+  {
+    key: 'oss_desktop',
+    packId: 'Open_stream_Pack',
+    category: 'screen',
+    name: 'Overlay: Pantalla Compartida (Escritorio + PiP)',
+    icon: '🖥️',
+    path: '/streamthemes/Open_stream_Pack/overlays/desktop_share/index.html',
+    badge: 'ESCRITORIO + WEBCAM',
+    desc: 'Captura de monitor ultra nítida con webcam en ventana Picture-in-Picture personalizable.',
+    obsSource: 'http://localhost:8080/streamthemes/Open_stream_Pack/overlays/desktop_share/index.html'
+  },
+  {
+    key: 'oss_podcast',
+    packId: 'Open_stream_Pack',
+    category: 'chat',
+    name: 'Overlay: Podcast & Entrevista (Dual Cam)',
+    icon: '🎙️',
+    path: '/streamthemes/Open_stream_Pack/overlays/podcast_talk/index.html',
+    badge: 'PODCAST & ENTREVISTA',
+    desc: 'Dos marcos equilibrados de cámara para entrevistas, co-hosts o debate con rótulos.',
+    obsSource: 'http://localhost:8080/streamthemes/Open_stream_Pack/overlays/podcast_talk/index.html'
+  },
+  {
+    key: 'oss_starting',
+    packId: 'Open_stream_Pack',
+    category: 'screens',
+    name: 'Pantalla: Inicio de Stream (Starting Soon)',
+    icon: '⏳',
+    path: '/streamthemes/Open_stream_Pack/overlays/screens/starting-soon/index.html',
+    badge: 'INICIO DE EMISIÓN',
+    desc: 'Pantalla regresiva de espera previa con bienvenida neón y aviso de directo próximo.',
+    obsSource: 'http://localhost:8080/streamthemes/Open_stream_Pack/overlays/screens/starting-soon/index.html'
+  },
+  {
+    key: 'oss_brb',
+    packId: 'Open_stream_Pack',
+    category: 'screens',
+    name: 'Pantalla: Pausa Técnica (Be Right Back)',
+    icon: '⏸️',
+    path: '/streamthemes/Open_stream_Pack/overlays/screens/be-right-back/index.html',
+    badge: 'PAUSA TÉCNICA',
+    desc: 'Pausa intermedia con radar animado y mensajes dinámicos de regreso en breves minutos.',
+    obsSource: 'http://localhost:8080/streamthemes/Open_stream_Pack/overlays/screens/be-right-back/index.html'
+  },
+  {
+    key: 'oss_ending',
+    packId: 'Open_stream_Pack',
+    category: 'screens',
+    name: 'Pantalla: Despedida y Créditos (Ending)',
+    icon: '🎬',
+    path: '/streamthemes/Open_stream_Pack/overlays/screens/ending/index.html',
+    badge: 'FIN DE TRANSMISIÓN',
+    desc: 'Pantalla de cierre de emisión con agradecimientos y lista de próximas citas.',
+    obsSource: 'http://localhost:8080/streamthemes/Open_stream_Pack/overlays/screens/ending/index.html'
+  },
+
+  // ==========================================
+  // PACK 3: GAMER PRO & ESPORTS (Gamer_Pro_Pack)
+  // ==========================================
+  {
+    key: 'gamer_gameplay',
+    packId: 'Gamer_Pro_Pack',
+    category: 'game',
+    name: 'Overlay: Gameplay HUD Táctico',
+    icon: '🎯',
+    path: '/streamthemes/Gamer_Pro_Pack/overlays/gameplay_hud/index.html',
+    badge: 'GAMEPLAY HUD ESPORTS',
+    desc: 'Marco biselado para webcam con HUD angular militar, indicadores de alertas y estado en vivo.',
+    obsSource: 'http://localhost:8080/streamthemes/Gamer_Pro_Pack/overlays/gameplay_hud/index.html'
+  },
+  {
+    key: 'gamer_speedrun',
+    packId: 'Gamer_Pro_Pack',
+    category: 'game',
+    name: 'Overlay: Speedrun & Splits HUD',
+    icon: '⏱️',
+    path: '/streamthemes/Gamer_Pro_Pack/overlays/speedrun_split/index.html',
+    badge: 'SPEEDRUN & SPLITS',
+    desc: 'Panel lateral con cronómetro de segmentos, comparación de marcas (PB/WR) y webcam.',
+    obsSource: 'http://localhost:8080/streamthemes/Gamer_Pro_Pack/overlays/speedrun_split/index.html'
+  },
+  {
+    key: 'gamer_victory',
+    packId: 'Gamer_Pro_Pack',
+    category: 'event',
+    name: 'Overlay: Victoria & Clutch Showcase',
+    icon: '🏆',
+    path: '/streamthemes/Gamer_Pro_Pack/overlays/victory_clutch/index.html',
+    badge: 'VICTORIA & CLUTCH',
+    desc: 'Escena central para celebrar victorias épicas con animaciones doradas y laureles.',
+    obsSource: 'http://localhost:8080/streamthemes/Gamer_Pro_Pack/overlays/victory_clutch/index.html'
+  },
+  {
+    key: 'gamer_starting',
+    packId: 'Gamer_Pro_Pack',
+    category: 'screens',
+    name: 'Pantalla: Calentamiento & Start (Esports)',
+    icon: '🚀',
+    path: '/streamthemes/Gamer_Pro_Pack/overlays/screens/starting-soon/index.html',
+    badge: 'CALENTAMIENTO · START',
+    desc: 'Cuenta atrás táctica militar con radar y aviso de partida inminente.',
+    obsSource: 'http://localhost:8080/streamthemes/Gamer_Pro_Pack/overlays/screens/starting-soon/index.html'
+  },
+  {
+    key: 'gamer_brb',
+    packId: 'Gamer_Pro_Pack',
+    category: 'screens',
+    name: 'Pantalla: Intermisión Táctica (Be Right Back)',
+    icon: '🛑',
+    path: '/streamthemes/Gamer_Pro_Pack/overlays/screens/be-right-back/index.html',
+    badge: 'INTERMISIÓN TÁCTICA',
+    desc: 'Pausa táctica entre partidas o mapas con radar de combate y estado de sesión.',
+    obsSource: 'http://localhost:8080/streamthemes/Gamer_Pro_Pack/overlays/screens/be-right-back/index.html'
+  },
+  {
+    key: 'gamer_ending',
+    packId: 'Gamer_Pro_Pack',
+    category: 'screens',
+    name: 'Pantalla: GG & Fin de Partida (Ending)',
+    icon: '👾',
+    path: '/streamthemes/Gamer_Pro_Pack/overlays/screens/ending/index.html',
+    badge: 'GG · FIN DE PARTIDA',
+    desc: 'Despedida gamer con estadísticas finales del día, GG y agradecimientos.',
+    obsSource: 'http://localhost:8080/streamthemes/Gamer_Pro_Pack/overlays/screens/ending/index.html'
+  },
+
+  // ==========================================
+  // PACK 4: COZY LO-FI & ARTE (Cozy_LoFi_Pack)
+  // ==========================================
+  {
+    key: 'cozy_pomodoro',
+    packId: 'Cozy_LoFi_Pack',
+    category: 'study',
+    name: 'Overlay: Study & Pomodoro (25:00)',
+    icon: '📖',
+    path: '/streamthemes/Cozy_LoFi_Pack/overlays/study_pomodoro/index.html',
+    badge: 'POMODORO & ESTUDIO',
+    desc: 'Temporizador Pomodoro integrado con ciclo activo de concentración y descanso con música lo-fi.',
+    obsSource: 'http://localhost:8080/streamthemes/Cozy_LoFi_Pack/overlays/study_pomodoro/index.html'
+  },
+  {
+    key: 'cozy_art',
+    packId: 'Cozy_LoFi_Pack',
+    category: 'creative',
+    name: 'Overlay: Arte & Lienzo Dual Cam',
+    icon: '🎨',
+    path: '/streamthemes/Cozy_LoFi_Pack/overlays/art_dual_cam/index.html',
+    badge: 'ARTE & LIENZO DUAL',
+    desc: 'Cámara cenital principal para ilustrar, pintar o escribir con webcam auxiliar en tonos pastel.',
+    obsSource: 'http://localhost:8080/streamthemes/Cozy_LoFi_Pack/overlays/art_dual_cam/index.html'
+  },
+  {
+    key: 'cozy_cafe',
+    packId: 'Cozy_LoFi_Pack',
+    category: 'creative',
+    name: 'Overlay: Café & Charla Chill',
+    icon: '☕',
+    path: '/streamthemes/Cozy_LoFi_Pack/overlays/cafe_chat/index.html',
+    badge: 'CAFÉ & CHARLA CHILL',
+    desc: 'Escena cálida y relajada para conversar con chat integrado y ambientación tranquila.',
+    obsSource: 'http://localhost:8080/streamthemes/Cozy_LoFi_Pack/overlays/cafe_chat/index.html'
+  },
+  {
+    key: 'cozy_starting',
+    packId: 'Cozy_LoFi_Pack',
+    category: 'screens',
+    name: 'Pantalla: Bienvenida Acogedora (Starting Soon)',
+    icon: '🌅',
+    path: '/streamthemes/Cozy_LoFi_Pack/overlays/screens/starting-soon/index.html',
+    badge: 'BIENVENIDA ACOGEDORA',
+    desc: 'Pantalla de inicio suave con cuenta atrás calmada y animación de vapor de café.',
+    obsSource: 'http://localhost:8080/streamthemes/Cozy_LoFi_Pack/overlays/screens/starting-soon/index.html'
+  },
+  {
+    key: 'cozy_brb',
+    packId: 'Cozy_LoFi_Pack',
+    category: 'screens',
+    name: 'Pantalla: Pausa de Café (Coffee Break)',
+    icon: '🫖',
+    path: '/streamthemes/Cozy_LoFi_Pack/overlays/screens/coffee-break/index.html',
+    badge: 'PAUSA DE CAFÉ',
+    desc: 'Pausa acogedora para recargar la taza de café o té y estirar las piernas.',
+    obsSource: 'http://localhost:8080/streamthemes/Cozy_LoFi_Pack/overlays/screens/coffee-break/index.html'
+  },
+  {
+    key: 'cozy_ending',
+    packId: 'Cozy_LoFi_Pack',
+    category: 'screens',
+    name: 'Pantalla: Hasta Pronto & Buenas Noches (Ending)',
+    icon: '🌙',
+    path: '/streamthemes/Cozy_LoFi_Pack/overlays/screens/ending/index.html',
+    badge: 'HASTA PRONTO · RELAX',
+    desc: 'Despedida calmada con luces tenues, música tranquila y mensaje de buenas noches.',
+    obsSource: 'http://localhost:8080/streamthemes/Cozy_LoFi_Pack/overlays/screens/ending/index.html'
   }
 ];
 
@@ -1074,12 +1330,20 @@ async function applyThemeToAllScenesFromBar() {
 
 const OVERLAY_FOLDERS = [
   {
-    id: 'taller',
-    name: 'Mis Overlays (Open Stream Suite)',
+    id: 'maker_theme_pack',
+    packId: 'Maker_Theme_Pack',
+    name: 'Pack Maker & Taller',
     icon: '🛠️',
-    badge: '9 OVERLAYS · SUITE COMPLETA',
-    path: 'overlays/*',
-    desc: 'Carpeta principal con todos los overlays listos para OBS: Escenas de cámara, pantalla, gameplay, charla y pantallas de emisión.',
+    badge: '9 OVERLAYS · TALLER & MAKER',
+    path: 'streamthemes/Maker_Theme_Pack/overlays/*',
+    desc: 'Carpeta insignia para creadores, talleres, electrónica, programación CAD e impresión 3D con 9 pantallas listas.',
+    subfilters: [
+      { id: 'all', label: '📁 Todos los Overlays (9)', cat: 'all' },
+      { id: 'maker', label: '🛠️ Mesa & PC (2)', cat: 'maker' },
+      { id: 'print', label: '📷 Cámara Secundaria (2)', cat: 'print' },
+      { id: 'stream', label: '🎮 Directo & Charla (2)', cat: 'stream' },
+      { id: 'screens', label: '📺 Pantallas de Emisión (3)', cat: 'screens' }
+    ],
     activities: [
       { name: 'Escena Principal (Cámara)', icon: '🎥', desc: 'Cámara principal con barra de fases y ventana auxiliar' },
       { name: 'PC & Código (Terminal)', icon: '💻', desc: 'Pantalla completa de programación o CAD y cámara de apoyo' },
@@ -1090,10 +1354,82 @@ const OVERLAY_FOLDERS = [
       { name: 'Pantallas de Emisión (3)', icon: '📺', desc: 'Starting Soon regresivo, Pausa BRB y Despedida Ending' }
     ],
     keys: ['maker-desk', 'maker-pc', 'print-machine', 'print-design', 'game', 'chill', 'startingSoon', 'beRightBack', 'ending']
+  },
+  {
+    id: 'open_stream_pack',
+    packId: 'Open_stream_Pack',
+    name: 'Pack Open Stream (General)',
+    icon: '⚡',
+    badge: '6 OVERLAYS · STREAMING PRO',
+    path: 'streamthemes/Open_stream_Pack/overlays/*',
+    desc: 'Pack moderno todo-en-uno para streamers generales, variedad, podcasts, charlas y pantallas de emisión completas.',
+    subfilters: [
+      { id: 'all', label: '📁 Todos los Overlays (6)', cat: 'all' },
+      { id: 'chat', label: '💬 Charla & Podcast (2)', cat: 'chat' },
+      { id: 'screen', label: '🖥️ Pantalla Compartida (1)', cat: 'screen' },
+      { id: 'screens', label: '📺 Pantallas de Emisión (3)', cat: 'screens' }
+    ],
+    activities: [
+      { name: 'Just Chatting & Talk', icon: '💬', desc: 'Cámara amplia con caja de chat interactivo Twitch y widgets' },
+      { name: 'Pantalla Compartida', icon: '🖥️', desc: 'Captura de monitor con PiP de webcam en marco flotante' },
+      { name: 'Podcast & Entrevista', icon: '🎙️', desc: 'Dos cámaras equilibradas para entrevistas y co-hosts con rótulos' },
+      { name: 'Inicio de Emisión', icon: '⏳', desc: 'Cuenta atrás regresiva de bienvenida con acento neón' },
+      { name: 'Pausa Técnica', icon: '⏸️', desc: 'Pausa intermedia con radar animado y mensajes dinámicos' },
+      { name: 'Fin de Stream', icon: '🎬', desc: 'Pantalla de cierre de directo con agradecimientos y redes' }
+    ],
+    keys: ['oss_chatting', 'oss_desktop', 'oss_podcast', 'oss_starting', 'oss_brb', 'oss_ending']
+  },
+  {
+    id: 'gamer_pro_pack',
+    packId: 'Gamer_Pro_Pack',
+    name: 'Pack Gamer Pro & Esports',
+    icon: '🎮',
+    badge: '6 OVERLAYS · ESPORTS & HUD',
+    path: 'streamthemes/Gamer_Pro_Pack/overlays/*',
+    desc: 'Estética HUD táctica militar, bordes angulares biselados y alta adrenalina para gaming competitivo y speedruns.',
+    subfilters: [
+      { id: 'all', label: '📁 Todos los Overlays (6)', cat: 'all' },
+      { id: 'game', label: '🎯 Gameplay & HUD (2)', cat: 'game' },
+      { id: 'event', label: '🏆 Victoria & Clutch (1)', cat: 'event' },
+      { id: 'screens', label: '📺 Pantallas de Emisión (3)', cat: 'screens' }
+    ],
+    activities: [
+      { name: 'Gameplay HUD Táctico', icon: '🎯', desc: 'Marco biselado para webcam con HUD angular militar y alertas' },
+      { name: 'Speedrun & Splits', icon: '⏱️', desc: 'Panel lateral de splits, cronómetro de segmentos y webcam' },
+      { name: 'Victoria & Clutch', icon: '🏆', desc: 'Cámara central épica con laureles de victoria y animaciones' },
+      { name: 'Calentamiento & Start', icon: '🚀', desc: 'Cuenta regresiva táctica de preparación de partida' },
+      { name: 'Intermisión Táctica', icon: '🛑', desc: 'Pausa de torneo/partida con radar y estado del equipo' },
+      { name: 'GG & Fin de Partida', icon: '👾', desc: 'Despedida con resumen de estadísticas y créditos' }
+    ],
+    keys: ['gamer_gameplay', 'gamer_speedrun', 'gamer_victory', 'gamer_starting', 'gamer_brb', 'gamer_ending']
+  },
+  {
+    id: 'cozy_lofi_pack',
+    packId: 'Cozy_LoFi_Pack',
+    name: 'Pack Cozy Lo-Fi & Arte',
+    icon: '☕',
+    badge: '6 OVERLAYS · CHILL & RELAX',
+    path: 'streamthemes/Cozy_LoFi_Pack/overlays/*',
+    desc: 'Bordes redondeados, tonos pastel y atmósfera relajante para estudio, dibujo digital, café y música lo-fi.',
+    subfilters: [
+      { id: 'all', label: '📁 Todos los Overlays (6)', cat: 'all' },
+      { id: 'study', label: '📖 Pomodoro & Estudio (1)', cat: 'study' },
+      { id: 'creative', label: '🎨 Arte & Charla (2)', cat: 'creative' },
+      { id: 'screens', label: '📺 Pantallas de Emisión (3)', cat: 'screens' }
+    ],
+    activities: [
+      { name: 'Study & Pomodoro (25:00)', icon: '📖', desc: 'Temporizador Pomodoro integrado con ciclo de concentración y descanso' },
+      { name: 'Arte & Lienzo Dual Cam', icon: '🎨', desc: 'Cámara cenital sobre el lienzo/tableta y webcam de apoyo' },
+      { name: 'Café & Charla Chill', icon: '☕', desc: 'Escena acogedora para conversar con música de fondo suave' },
+      { name: 'Bienvenida Acogedora', icon: '🌅', desc: 'Pantalla de inicio con cuenta atrás suave y vapor de café' },
+      { name: 'Pausa de Café', icon: '🫖', desc: 'Pausa para estirar y recargar la taza de té o café' },
+      { name: 'Hasta Pronto & Buenas Noches', icon: '🌙', desc: 'Despedida con luces tenues y música relajante' }
+    ],
+    keys: ['cozy_pomodoro', 'cozy_art', 'cozy_cafe', 'cozy_starting', 'cozy_brb', 'cozy_ending']
   }
 ];
 
-let currentOpenOverlayFolderId = 'taller';
+let currentOpenOverlayFolderId = null;
 let currentFolderSubFilter = 'all';
 
 function showOverlayFoldersView() {
@@ -1102,12 +1438,14 @@ function showOverlayFoldersView() {
 }
 
 function openOverlayFolder(folderId) {
-  currentOpenOverlayFolderId = folderId || 'taller';
+  currentOpenOverlayFolderId = folderId || 'maker_theme_pack';
+  currentFolderSubFilter = 'all';
   renderOverlayFolders();
 }
 
 function filterFolderSubCategory(cat) {
   currentFolderSubFilter = cat || 'all';
+  const folder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId) || OVERLAY_FOLDERS[0];
   document.querySelectorAll('.folder-subfilter-pill').forEach(btn => {
     const isTarget = btn.id === `subfilter-pill-${cat}`;
     btn.classList.toggle('active', isTarget);
@@ -1124,7 +1462,7 @@ function filterFolderSubCategory(cat) {
   renderOverlayFolders();
 }
 
-async function applyThemeToAllOverlaysFromFolderCard(folderId = 'taller') {
+async function applyThemeToAllOverlaysFromFolderCard(folderId = 'maker_theme_pack') {
   const sel = document.getElementById(`folder-theme-select-${folderId}`) || document.getElementById('select-global-theme-all');
   if (!sel || !sel.value) return;
   const chosenTheme = sel.value;
@@ -1144,6 +1482,44 @@ async function applyThemeToAllOverlaysFromFolderCard(folderId = 'taller') {
   }
 }
 
+async function restoreFolderThemes(folderId) {
+  const folder = OVERLAY_FOLDERS.find(f => f.id === folderId);
+  if (!folder) return;
+  if (!confirm(`¿Restaurar todos los overlays de la carpeta "${folder.name}" a sus estilos originales de fábrica?`)) return;
+  for (const k of folder.keys) {
+    const def = DEFAULT_OVERLAY_THEMES[k] || 'maker';
+    cachedOverlayThemes[k] = def;
+    try {
+      await API.setOverlayTheme(k, def);
+    } catch (e) {}
+  }
+  renderOverlayFolders();
+  if (window.OverlayTexts && OverlayTexts.showToast) {
+    OverlayTexts.showToast(`↺ Overlays de "${folder.name}" restauradas a sus estilos originales`, 'success');
+  }
+}
+
+async function restoreFolderTexts(folderId) {
+  const folder = OVERLAY_FOLDERS.find(f => f.id === folderId);
+  if (!folder) return;
+  if (!confirm(`¿Restaurar todos los textos de la carpeta "${folder.name}" a los valores originales de fábrica?`)) return;
+  if (window.OverlayTexts) {
+    for (const k of folder.keys) {
+      try {
+        await OverlayTexts.reset(k);
+      } catch (e) {}
+    }
+    if (OverlayTexts.showToast) {
+      OverlayTexts.showToast(`↺ Textos de "${folder.name}" restaurados a sus valores de fábrica`, 'success');
+    }
+  }
+}
+
+async function restoreCurrentFolderThemes() {
+  if (!currentOpenOverlayFolderId) return;
+  await restoreFolderThemes(currentOpenOverlayFolderId);
+}
+
 function renderOverlayFolders() {
   populateGlobalThemeSelect();
 
@@ -1153,6 +1529,7 @@ function renderOverlayFolders() {
   const btnBack = document.getElementById('overlays-btn-back-folders');
   const foldersGrid = document.getElementById('overlays-folders-grid');
   const scenesGrid = document.getElementById('overlays-scenes-in-folder-grid');
+  const subfilterContainer = document.getElementById('folder-subfilter-container');
 
   if (currentOpenOverlayFolderId) {
     const folder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId) || OVERLAY_FOLDERS[0];
@@ -1180,15 +1557,26 @@ function renderOverlayFolders() {
     if (folderDescEl) folderDescEl.textContent = folder.desc;
     if (insideThemeSelect) insideThemeSelect.innerHTML = buildThemeOptionsHtml(currentActiveThemeId);
 
+    // Subfiltros dinámicos según el pack abierto
+    if (subfilterContainer && folder.subfilters) {
+      subfilterContainer.innerHTML = `
+        <span style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan); font-weight: 700;">
+          🔍 FILTRAR ACTIVIDAD:
+        </span>
+        ${folder.subfilters.map(sf => {
+          const isActive = (currentFolderSubFilter === sf.cat);
+          return `
+            <button type="button" class="btn-action-test folder-subfilter-pill ${isActive ? 'active' : ''}" id="subfilter-pill-${sf.cat}" onclick="filterFolderSubCategory('${sf.cat}')" style="font-size: 11px; padding: 5px 12px; border-radius: 20px; font-weight: 700; ${isActive ? 'border-color: var(--color-accent-cyan); color: var(--color-accent-cyan); background: rgba(87, 214, 196, 0.15);' : ''}">
+              ${sf.label}
+            </button>
+          `;
+        }).join('')}
+      `;
+    }
+
     let scenesInFolder = OSS_SCENES.filter(sc => folder.keys.includes(sc.key));
-    if (currentFolderSubFilter === 'maker') {
-      scenesInFolder = scenesInFolder.filter(sc => sc.key.startsWith('maker'));
-    } else if (currentFolderSubFilter === 'print') {
-      scenesInFolder = scenesInFolder.filter(sc => sc.key.startsWith('print'));
-    } else if (currentFolderSubFilter === 'stream') {
-      scenesInFolder = scenesInFolder.filter(sc => sc.key === 'game' || sc.key === 'chill');
-    } else if (currentFolderSubFilter === 'screens') {
-      scenesInFolder = scenesInFolder.filter(sc => sc.key === 'startingSoon' || sc.key === 'beRightBack' || sc.key === 'ending');
+    if (currentFolderSubFilter && currentFolderSubFilter !== 'all') {
+      scenesInFolder = scenesInFolder.filter(sc => sc.category === currentFolderSubFilter || sc.key.startsWith(currentFolderSubFilter));
     }
 
     if (countBadge) {
@@ -1235,10 +1623,10 @@ function renderOverlayFolders() {
                   <span>🎨</span> Aplicar Estilo Visual a todos los Overlays de la carpeta:
                 </span>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                  <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15); cursor: pointer;" onclick="restoreAllOverlaysToDefaultThemes()" title="Restablecer todas las overlays a sus temas visuales de fábrica">
+                  <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15); cursor: pointer;" onclick="restoreFolderThemes('${f.id}')" title="Restablecer todas las escenas de este pack a sus temas originales">
                     🔄 Restaurar Estilos Originales
                   </button>
-                  <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.6); font-weight: 800; background: rgba(255, 120, 63, 0.12); cursor: pointer;" onclick="restoreAllOverlaysTexts()" title="Restablecer todos los textos de fábrica">
+                  <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.6); font-weight: 800; background: rgba(255, 120, 63, 0.12); cursor: pointer;" onclick="restoreFolderTexts('${f.id}')" title="Restablecer textos del pack a los de fábrica">
                     📝 Restaurar Textos
                   </button>
                 </div>
@@ -1266,7 +1654,7 @@ function renderOverlayFolders() {
             </div>
 
             <button type="button" class="btn-action-primary" style="width: 100%; font-size: 13px; font-weight: 800; padding: 11px; display: inline-flex; justify-content: center; align-items: center; gap: 8px;" onclick="openOverlayFolder('${f.id}')">
-              📂 Entrar a la Carpeta de Overlays y Editar (9 Escenas) →
+              📂 Entrar a la Carpeta de Overlays y Editar (${f.keys.length} Escenas) →
             </button>
           </div>
         `;

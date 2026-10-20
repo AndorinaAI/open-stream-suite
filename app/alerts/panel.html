@@ -1747,7 +1747,7 @@
       <div class="media-toolbar" style="margin-bottom: 20px; border-radius: var(--radius-sm); padding: 8px 14px; background: rgba(18, 22, 28, 0.7); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
         <div class="media-toolbar-group" style="gap: 8px; flex-wrap: wrap;">
           <button id="tab-btn-overlays" class="media-btn-tool active" onclick="switchThemesMainTab('overlays')" style="font-size: 12px; font-weight: 700; padding: 8px 16px;" data-i18n="themes.tab_overlays">
-            🎬 Tus 9 Escenas en OBS (Textos y Estilos)
+            🎬 Tus 4 Packs y Escenas en OBS (Textos y Estilos)
           </button>
           <button id="tab-btn-themes" class="media-btn-tool" onclick="switchThemesMainTab('themes')" style="font-size: 12px; font-weight: 700; padding: 8px 16px;" data-i18n="themes.tab_themes">
             📁 Biblioteca de Packs y Editor CSS
@@ -1830,10 +1830,10 @@
         <div id="overlays-folders-view">
           <div class="card-header-bar">
             <span class="card-header-title" data-i18n="themes.folders_title">CARPETAS DE ACTIVIDADES DEL STREAM Y OVERLAYS</span>
-            <span id="overlays-total-folders-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">MIS OVERLAYS</span>
+            <span id="overlays-total-folders-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">4 PACKS EN CARPETAS</span>
           </div>
           <div style="font-size: 12px; color: var(--color-text-dim); margin-top: 4px; margin-bottom: 14px;">
-            Haz clic en el cuadro para <b>entrar en la carpeta</b> y editar individualmente todos los textos y actividades de tu stream. Desde fuera puedes <b>aplicar un estilo a todos los overlays</b> o restaurar los estilos originales de fábrica.
+            Haz clic en el cuadro para <b>entrar en la carpeta</b> y editar individualmente todos los textos y actividades de tu stream. Desde fuera puedes <b>aplicar un estilo a todos los overlays del pack</b> o restaurar los estilos originales de fábrica.
           </div>
 
           <div id="overlays-folders-grid" class="themes-packs-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 18px;">
@@ -1869,36 +1869,19 @@
                     ✨ Aplicar
                   </button>
                 </div>
-                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="restoreAllOverlaysToDefaultThemes()" title="Restablecer todas las escenas a sus temas visuales de fábrica" data-i18n="themes.btn_restore_themes">
+                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="restoreCurrentFolderThemes()" title="Restablecer todas las escenas de esta carpeta a sus temas visuales de fábrica" data-i18n="themes.btn_restore_themes">
                   🔄 Restaurar Estilos Originales
                 </button>
-                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.5); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreAllOverlaysTexts()" title="Restablecer todos los textos de fábrica">
+                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.5); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreCurrentFolderTexts()" title="Restablecer todos los textos de fábrica">
                   📝 Restaurar Textos de Fábrica
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Filtro rápido de sub-actividades dentro de la carpeta -->
-          <div class="folder-subfilter-bar" style="display: flex; gap: 8px; margin: 14px 0 16px 0; flex-wrap: wrap; align-items: center;">
-            <span style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan); font-weight: 700;">
-              🔍 FILTRAR ACTIVIDAD:
-            </span>
-            <button type="button" class="btn-action-test folder-subfilter-pill active" id="subfilter-pill-all" onclick="filterFolderSubCategory('all')" style="font-size: 11px; padding: 5px 12px; border-radius: 20px; font-weight: 700; border-color: var(--color-accent-cyan); color: var(--color-accent-cyan); background: rgba(87, 214, 196, 0.15);" data-i18n="themes.filter_all">
-              📁 Todos los Overlays (9)
-            </button>
-            <button type="button" class="btn-action-test folder-subfilter-pill" id="subfilter-pill-maker" onclick="filterFolderSubCategory('maker')" style="font-size: 11px; padding: 5px 12px; border-radius: 20px;" data-i18n="themes.filter_maker">
-              🛠️ Mesa & PC (2)
-            </button>
-            <button type="button" class="btn-action-test folder-subfilter-pill" id="subfilter-pill-print" onclick="filterFolderSubCategory('print')" style="font-size: 11px; padding: 5px 12px; border-radius: 20px;" data-i18n="themes.filter_print">
-              📷 Cámara Secundaria (2)
-            </button>
-            <button type="button" class="btn-action-test folder-subfilter-pill" id="subfilter-pill-stream" onclick="filterFolderSubCategory('stream')" style="font-size: 11px; padding: 5px 12px; border-radius: 20px;" data-i18n="themes.filter_stream">
-              🎮 Directo & Charla (2)
-            </button>
-            <button type="button" class="btn-action-test folder-subfilter-pill" id="subfilter-pill-screens" onclick="filterFolderSubCategory('screens')" style="font-size: 11px; padding: 5px 12px; border-radius: 20px;" data-i18n="themes.filter_screens">
-              📺 Pantallas de Emisión (3)
-            </button>
+          <!-- Filtro rápido de sub-actividades dentro de la carpeta (Dinámico) -->
+          <div class="folder-subfilter-bar" id="folder-subfilter-container" style="display: flex; gap: 8px; margin: 14px 0 16px 0; flex-wrap: wrap; align-items: center;">
+            <!-- Renderizado dinámicamente según la carpeta abierta -->
           </div>
 
           <div class="card-header-bar">
@@ -2961,7 +2944,7 @@
   <script src="/widgets/goal/panel.js?v=6"></script>
   <script src="/widgets/ticker/panel.js?v=6"></script>
   <script src="js/widgets.js?v=41"></script>
-  <script src="js/themes.js?v=43"></script>
+  <script src="js/themes.js?v=45"></script>
   <script src="js/overlay-texts.js?v=41"></script>
   <script src="js/main.js?v=43"></script>
 </body>
