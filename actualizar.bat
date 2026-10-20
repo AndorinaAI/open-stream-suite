@@ -15,7 +15,7 @@ echo.
 
 if not exist ".git" (
     echo [AVISO] Esta carpeta no fue clonada con Git.
-    echo Descarga la ultima version desde: https://github.com/andorina/open-stream-suite/releases
+    echo Descarga la ultima version desde: https://github.com/AndorinaAI/open-stream-suite/releases
     pause
     exit /b 1
 )

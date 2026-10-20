@@ -17,7 +17,7 @@ echo
 
 if [ ! -d ".git" ]; then
     echo "⚠️ Esta carpeta no fue clonada con Git."
-    echo "Descarga la última versión desde: https://github.com/andorina/open-stream-suite/releases"
+    echo "Descarga la última versión desde: https://github.com/AndorinaAI/open-stream-suite/releases"
     exit 1
 fi
 
