@@ -60,6 +60,23 @@
       font-weight: 800;
       color: var(--color-accent-cyan);
     }
+    .tech-progress-bar {
+      width: 85%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 10px;
+      border: 1px solid var(--color-border-dim, rgba(255,255,255,0.15));
+    }
+    .tech-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--color-accent-cyan, #57D6C4), var(--color-accent-orange, #FF783F));
+      border-radius: 4px;
+      transition: width 1s linear;
+      box-shadow: 0 0 10px var(--color-accent-cyan, #57D6C4);
+    }
   </style>
 </head>
 <body data-theme="latte_caramel">
@@ -71,10 +88,14 @@
     <div class="cam-frame"></div>
     <div class="pomodoro-card">
       <div style="font-size:14px; font-weight:700; color:var(--color-text-light);">POMODORO ACTIVO</div>
-      <div class="pomo-time">25:00</div>
+      <div class="pomo-time pomodoro-countdown">25:00</div>
       <div style="font-size:12px; color:var(--color-text-dim);">Fase de Concentración</div>
+      <div class="tech-progress-bar">
+        <div class="tech-progress-fill"></div>
+      </div>
     </div>
   </div>
   <script src="/config.js"></script>
+  <script src="/common/overlay.js"></script>
 </body>
 </html>

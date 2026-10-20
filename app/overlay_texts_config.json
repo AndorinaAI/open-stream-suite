@@ -21,9 +21,9 @@
   "maker": {
     "projectName": "SUPER ESTACION MAKER 2026",
     "currentPhase": "02 MONTAJE",
+    "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "panelTitle": "ESTADO DEL PROYECTO",
     "projectPrefix": "PROYECTO:",
-    "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "frames": {
       "main": "CÁMARA CENITAL · BANCO DE TRABAJO",
       "face": "STREAMER",
@@ -61,23 +61,26 @@
     "showChatPanel": true,
     "chatTitle": "CHAT EN DIRECTO",
     "topic": "Preguntas, proyectos de la semana y comunidad",
-    "chatPrompt": "¡Escribe en el chat para participar!"
+    "chatPrompt": "¡Escribe en el chat para participar!",
+    "frames": {
+      "face": "STREAMER"
+    }
   },
   "startingSoon": {
     "heroTag": "// STREAM EN DIRECTO",
     "title": "ENSEGUIDA",
     "highlight": "ESTAMOS EN DIRECTO :)",
     "subtitle": "PREPARANDO EL DIRECTO...",
-    "countdownMinutes": 40,
+    "countdownMinutes": 3,
     "footerNote": "ANDORINA · OPEN STREAM SUITE",
     "liveStatusText": "TRANSMISIÓN INICIANDO",
+    "showModesOverview": true,
     "modeLabels": [
       "01 // GAME",
       "02 // MAKER",
       "03 // PRINT",
       "04 // CHILL"
-    ],
-    "showModesOverview": true
+    ]
   },
   "beRightBack": {
     "title": "AHORA VUELVO",

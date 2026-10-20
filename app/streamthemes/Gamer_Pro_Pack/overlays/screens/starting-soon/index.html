@@ -24,15 +24,47 @@
       clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
       box-shadow: var(--theme-glow);
       text-align: center;
+      min-width: 650px;
     }
     h1 { font-size: 54px; color: var(--color-accent-cyan); margin: 0 0 12px 0; }
+    .starting-countdown {
+      font-size: 64px;
+      font-weight: 900;
+      color: var(--color-accent-orange);
+      letter-spacing: 4px;
+      margin: 16px 0 8px 0;
+      text-shadow: 0 0 20px rgba(255, 120, 63, 0.4);
+    }
+    .tech-progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 18px;
+      border: 1px solid var(--color-border-dim, rgba(255,255,255,0.15));
+    }
+    .tech-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--color-accent-cyan, #57D6C4), var(--color-accent-orange, #FF783F));
+      border-radius: 4px;
+      transition: width 1s linear;
+      box-shadow: 0 0 10px var(--color-accent-cyan, #57D6C4);
+    }
   </style>
 </head>
 <body data-theme="crimson_esport">
   <div class="box">
-    <h1>MATCH INCOMING</h1>
-    <p style="color:var(--color-text-dim); font-size:18px;">CONECTANDO CON EL SERVIDOR DE PARTIDA...</p>
+    <div style="font-size: 13px; color: var(--color-accent-orange); font-weight: 800; letter-spacing: 2px; margin-bottom: 6px;">// ESPORTS MATCH INCOMING</div>
+    <h1 class="main-stream-title">MATCH INCOMING</h1>
+    <p class="stream-subtitle" style="color:var(--color-text-dim); font-size:18px;">CONECTANDO CON EL SERVIDOR DE PARTIDA...</p>
+    <div class="starting-countdown">05:00</div>
+    <div class="tech-progress-bar">
+      <div class="tech-progress-fill"></div>
+    </div>
   </div>
   <script src="/config.js"></script>
+  <script src="/common/overlay.js"></script>
 </body>
 </html>

@@ -6,7 +6,7 @@
  * Modifica desde el panel web o directamente en este archivo.
  */
 
-window.TALLER_CONFIG = {
+window.OSS_CONFIG = {
   "channel": {
     "name": "ANDORINA",
     "tagline": "JUGAR · CREAR · COMPARTIR",
@@ -29,9 +29,9 @@ window.TALLER_CONFIG = {
   "maker": {
     "projectName": "SUPER ESTACION MAKER 2026",
     "currentPhase": "02 MONTAJE",
+    "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "panelTitle": "ESTADO DEL PROYECTO",
     "projectPrefix": "PROYECTO:",
-    "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "frames": {
       "main": "CÁMARA CENITAL · BANCO DE TRABAJO",
       "face": "STREAMER",
@@ -69,23 +69,26 @@ window.TALLER_CONFIG = {
     "showChatPanel": true,
     "chatTitle": "CHAT EN DIRECTO",
     "topic": "Preguntas, proyectos de la semana y comunidad",
-    "chatPrompt": "¡Escribe en el chat para participar!"
+    "chatPrompt": "¡Escribe en el chat para participar!",
+    "frames": {
+      "face": "STREAMER"
+    }
   },
   "startingSoon": {
     "heroTag": "// STREAM EN DIRECTO",
     "title": "ENSEGUIDA",
     "highlight": "ESTAMOS EN DIRECTO :)",
     "subtitle": "PREPARANDO EL DIRECTO...",
-    "countdownMinutes": 40,
+    "countdownMinutes": 3,
     "footerNote": "ANDORINA · OPEN STREAM SUITE",
     "liveStatusText": "TRANSMISIÓN INICIANDO",
+    "showModesOverview": true,
     "modeLabels": [
       "01 // GAME",
       "02 // MAKER",
       "03 // PRINT",
       "04 // CHILL"
-    ],
-    "showModesOverview": true
+    ]
   },
   "beRightBack": {
     "title": "AHORA VUELVO",
@@ -112,3 +115,4 @@ window.TALLER_CONFIG = {
     "enableAnimations": true
   }
 };
+window.TALLER_CONFIG = window.OSS_CONFIG;  // alias de compatibilidad hacia atrás

@@ -82,9 +82,16 @@
     });
 
     // 3. Indicador de directo y textos de estado
-    const isStartingSoon = document.querySelector('.starting-container') !== null;
-    const isBRB = document.querySelector('.brb-container') !== null;
-    const isEnding = document.querySelector('.ending-container') !== null;
+    const isStartingSoon = document.querySelector('.starting-container') !== null
+      || document.querySelector('.starting-countdown') !== null
+      || window.location.pathname.includes('/starting-soon/');
+    const isBRB = document.querySelector('.brb-container') !== null
+      || window.location.pathname.includes('/be-right-back/')
+      || window.location.pathname.includes('/coffee-break/');
+    const isEnding = document.querySelector('.ending-container') !== null
+      || window.location.pathname.includes('/ending/');
+    const isPomodoro = window.location.pathname.includes('/study_pomodoro/')
+      || document.querySelector('.pomodoro-card') !== null;
 
     document.querySelectorAll('.live-indicator').forEach(el => {
       if (config.channel?.showLiveIndicator === false && !isStartingSoon && !isBRB && !isEnding) {
@@ -245,7 +252,10 @@
       const heroTag = document.querySelector('.starting-hero-text > div:first-child');
       if (heroTag && s.heroTag) heroTag.textContent = s.heroTag;
 
-      const mainTitle = document.querySelector('.starting-hero-text .main-stream-title');
+      const mainTitle = document.querySelector('.starting-hero-text .main-stream-title')
+        || document.querySelector('.main-stream-title')
+        || document.querySelector('.card h1')
+        || document.querySelector('.box h1');
       if (mainTitle) {
         if (s.highlight) {
           mainTitle.innerHTML = `${s.title || 'ENSEGUIDA'}<br><span class="title-cyan-accent">${s.highlight}</span>`;
@@ -254,7 +264,10 @@
         }
       }
 
-      const subtitle = document.querySelector('.starting-hero-text .stream-subtitle');
+      const subtitle = document.querySelector('.starting-hero-text .stream-subtitle')
+        || document.querySelector('.stream-subtitle')
+        || document.querySelector('.card p')
+        || document.querySelector('.box p');
       if (subtitle && s.subtitle) subtitle.textContent = s.subtitle;
 
       const footerNote = document.querySelector('.starting-footer > div:first-child');
@@ -271,7 +284,7 @@
         });
       }
 
-      // Cuenta atrás o barra de carga
+      // Cuenta atrás y barra de carga sincronizadas
       const countdownEl = document.querySelector('.starting-countdown');
       if (countdownInterval) clearInterval(countdownInterval);
       if (countdownEl && s.countdownMinutes > 0) {
@@ -298,13 +311,47 @@
       }
     }
 
+    // 8.1 Pantalla POMODORO / STUDY
+    if (isPomodoro) {
+      const pomoEl = document.querySelector('.pomo-time, .pomodoro-countdown');
+      const progressFill = document.querySelector('.tech-progress-fill');
+      const pomoMins = config.startingSoon?.countdownMinutes || 25;
+      if (countdownInterval) clearInterval(countdownInterval);
+      if (pomoEl && pomoMins > 0) {
+        let totalSeconds = pomoMins * 60;
+        const initialTotal = totalSeconds;
+        function updatePomoClock() {
+          const mins = Math.floor(totalSeconds / 60);
+          const secs = totalSeconds % 60;
+          pomoEl.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+          if (progressFill) {
+            const pct = Math.min(100, Math.max(0, ((initialTotal - totalSeconds) / initialTotal) * 100));
+            progressFill.style.width = `${pct}%`;
+          }
+          if (totalSeconds > 0) {
+            totalSeconds--;
+          } else {
+            pomoEl.textContent = "00:00 - ¡DESCANSO!";
+          }
+        }
+        updatePomoClock();
+        countdownInterval = setInterval(updatePomoClock, 1000);
+      }
+    }
+
     // 9. Pantalla BE RIGHT BACK — Rotación de frases y textos
     if (isBRB && config.beRightBack) {
       const b = config.beRightBack;
-      const titleEl = document.querySelector('.brb-center-content .main-stream-title');
+      const titleEl = document.querySelector('.brb-center-content .main-stream-title')
+        || document.querySelector('.main-stream-title')
+        || document.querySelector('.card h1')
+        || document.querySelector('.box h1');
       if (titleEl && b.title) titleEl.textContent = b.title;
 
-      const subEl = document.querySelector('.brb-center-content .stream-subtitle');
+      const subEl = document.querySelector('.brb-center-content .stream-subtitle')
+        || document.querySelector('.stream-subtitle')
+        || document.querySelector('.card p')
+        || document.querySelector('.box p');
       if (subEl && b.subtitle) subEl.textContent = b.subtitle;
 
       const footerNote = document.querySelector('.brb-footer > div:first-child');
@@ -333,10 +380,16 @@
     // 10. Pantalla ENDING — Textos y tarjeta de despedida
     if (isEnding && config.ending) {
       const e = config.ending;
-      const titleEl = document.querySelector('.ending-center-content .main-stream-title');
+      const titleEl = document.querySelector('.ending-center-content .main-stream-title')
+        || document.querySelector('.main-stream-title')
+        || document.querySelector('.card h1')
+        || document.querySelector('.box h1');
       if (titleEl && e.title) titleEl.textContent = e.title;
 
-      const subEl = document.querySelector('.ending-center-content .stream-subtitle');
+      const subEl = document.querySelector('.ending-center-content .stream-subtitle')
+        || document.querySelector('.stream-subtitle')
+        || document.querySelector('.card p')
+        || document.querySelector('.box p');
       if (subEl && e.subtitle) subEl.textContent = e.subtitle;
 
       const cardMsg = document.querySelector('.ending-farewell-card p');
@@ -376,6 +429,30 @@
     // 1.1 Detección de clave de escena para estilos independientes
     function detectCurrentSceneKey() {
       const p = window.location.pathname;
+      if (p.includes('/Open_stream_Pack/')) {
+        if (p.includes('/just_chatting/')) return 'oss_chatting';
+        if (p.includes('/desktop_share/')) return 'oss_desktop';
+        if (p.includes('/podcast_talk/')) return 'oss_podcast';
+        if (p.includes('/starting-soon/')) return 'oss_starting';
+        if (p.includes('/be-right-back/')) return 'oss_brb';
+        if (p.includes('/ending/')) return 'oss_ending';
+      }
+      if (p.includes('/Gamer_Pro_Pack/')) {
+        if (p.includes('/gameplay_hud/')) return 'gamer_gameplay';
+        if (p.includes('/speedrun_split/')) return 'gamer_speedrun';
+        if (p.includes('/victory_clutch/')) return 'gamer_victory';
+        if (p.includes('/starting-soon/')) return 'gamer_starting';
+        if (p.includes('/be-right-back/')) return 'gamer_brb';
+        if (p.includes('/ending/')) return 'gamer_ending';
+      }
+      if (p.includes('/Cozy_LoFi_Pack/')) {
+        if (p.includes('/study_pomodoro/')) return 'cozy_pomodoro';
+        if (p.includes('/art_dual_cam/')) return 'cozy_art';
+        if (p.includes('/cafe_chat/')) return 'cozy_cafe';
+        if (p.includes('/starting-soon/')) return 'cozy_starting';
+        if (p.includes('/coffee-break/')) return 'cozy_brb';
+        if (p.includes('/ending/')) return 'cozy_ending';
+      }
       if (p.includes('/game/')) return 'game';
       if (p.includes('/maker/desk/') || p.includes('/maker-desk/')) return 'maker-desk';
       if (p.includes('/maker/pc/') || p.includes('/maker-pc/')) return 'maker-pc';
@@ -676,8 +753,15 @@
     `;
     document.body.appendChild(hud);
 
-    // --- Control especial: minutos de cuenta atrás (solo Starting Soon) ---
-    if (sceneKey === 'startingSoon') {
+    // --- Control especial: minutos de cuenta atrás y temporizadores (Starting Soon y Pomodoro) ---
+    const isCountdownScene = ['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting', 'cozy_pomodoro'].includes(sceneKey)
+      || window.location.pathname.includes('/starting-soon/')
+      || window.location.pathname.includes('/study_pomodoro/')
+      || document.querySelector('.starting-countdown') !== null
+      || document.querySelector('.pomo-time') !== null;
+
+    if (isCountdownScene) {
+      const isPomo = sceneKey === 'cozy_pomodoro' || window.location.pathname.includes('/study_pomodoro/') || document.querySelector('.pomo-time') !== null;
       const countdownControl = document.createElement('div');
       countdownControl.id = 'oss-countdown-control';
       countdownControl.style.cssText = `
@@ -690,12 +774,12 @@
       `;
       countdownControl.innerHTML = `
         <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; margin-bottom:3px;">
-          ⏱️ CUENTA ATRÁS
+          ${isPomo ? '🍅 TEMPORIZADOR POMODORO' : '⏱️ CUENTA ATRÁS'}
         </div>
         <label style="display:flex; flex-direction:column; gap:4px;">
-          <span style="color:#8B949E; font-size:10px;">MINUTOS PARA EMPEZAR</span>
+          <span style="color:#8B949E; font-size:10px;">${isPomo ? 'DURACIÓN DE ENFOQUE' : 'MINUTOS PARA EMPEZAR'}</span>
           <div style="display:flex; align-items:center; gap:6px;">
-            <input id="oss-cd-minutes" type="number" min="1" max="60" step="1" value="5"
+            <input id="oss-cd-minutes" type="number" min="1" max="120" step="1" value="${isPomo ? '25' : '5'}"
               style="width:60px; background:#161B22; color:#F0F6FC; border:1px solid rgba(87,214,196,0.4);
                      border-radius:4px; padding:5px 8px; font-size:14px; font-family:inherit;
                      font-weight:700; outline:none; text-align:center;"
@@ -708,14 +792,14 @@
           padding:6px 10px; font-size:11px; font-family:inherit; font-weight:700;
           cursor:pointer; transition:background 0.2s;
         ">&#9654; Aplicar y Reiniciar</button>
-        <div id="oss-cd-preview" style="color:#57D6C4; font-size:12px; font-weight:600; text-align:center;">5:00</div>
+        <div id="oss-cd-preview" style="color:#57D6C4; font-size:12px; font-weight:600; text-align:center;">${isPomo ? '25:00' : '05:00'}</div>
       `;
       document.body.appendChild(countdownControl);
 
       // Sincronizar valor inicial desde el config cargado
       const syncCdInput = () => {
         const cfg = window.OSS_CONFIG || window.TALLER_CONFIG;
-        const mins = cfg?.startingSoon?.countdownMinutes;
+        const mins = isPomo ? (cfg?.pomodoroMinutes || 25) : cfg?.startingSoon?.countdownMinutes;
         if (mins && mins > 0) {
           const inp = document.getElementById('oss-cd-minutes');
           if (inp) inp.value = mins;
@@ -725,19 +809,24 @@
       };
       setTimeout(syncCdInput, 800); // esperar a que overlay.js cargue la config
 
-      // Preview en tiempo real mientras escribe
+      // Preview y adaptación en vivo mientras escribe
       document.getElementById('oss-cd-minutes')?.addEventListener('input', (e) => {
         const m = parseInt(e.target.value) || 0;
         const prev = document.getElementById('oss-cd-preview');
-        if (prev) prev.textContent = m > 0 ? `${String(m).padStart(2,'0')}:00` : '--:--';
+        const formatted = m > 0 ? `${String(m).padStart(2,'0')}:00` : '--:--';
+        if (prev) prev.textContent = formatted;
+        const countdownEl = document.querySelector('.starting-countdown, .pomo-time, .pomodoro-countdown');
+        if (countdownEl && m > 0) countdownEl.textContent = formatted;
+        const progressFill = document.querySelector('.tech-progress-fill');
+        if (progressFill) progressFill.style.width = '0%';
       });
 
-      // Aplicar: actualizar OSS_CONFIG, reiniciar cuenta atrás y barra
+      // Aplicar: actualizar OSS_CONFIG, reiniciar cuenta atrás y adaptar la barra de progreso
       document.getElementById('oss-cd-apply')?.addEventListener('click', async () => {
         const inp = document.getElementById('oss-cd-minutes');
         const newMins = parseInt(inp?.value) || 5;
-        if (newMins < 1 || newMins > 60) {
-          showHudToast('⚠️ El valor debe ser entre 1 y 60 minutos');
+        if (newMins < 1 || newMins > 120) {
+          showHudToast('⚠️ El valor debe ser entre 1 y 120 minutos');
           return;
         }
 
@@ -745,10 +834,11 @@
         if (!window.OSS_CONFIG) window.OSS_CONFIG = {};
         if (!window.OSS_CONFIG.startingSoon) window.OSS_CONFIG.startingSoon = {};
         window.OSS_CONFIG.startingSoon.countdownMinutes = newMins;
+        if (isPomo) window.OSS_CONFIG.pomodoroMinutes = newMins;
 
-        // 2. Reiniciar cuenta atrás visual
+        // 2. Reiniciar cuenta atrás visual y adaptar barra
         if (countdownInterval) clearInterval(countdownInterval);
-        const countdownEl = document.querySelector('.starting-countdown');
+        const countdownEl = document.querySelector('.starting-countdown, .pomo-time, .pomodoro-countdown');
         const progressFill = document.querySelector('.tech-progress-fill');
         let totalSeconds = newMins * 60;
         const initialTotal = totalSeconds;
@@ -764,7 +854,7 @@
           if (totalSeconds > 0) {
             totalSeconds--;
           } else {
-            if (countdownEl) countdownEl.textContent = '00:00 - ¡EMPEZANDO!';
+            if (countdownEl) countdownEl.textContent = isPomo ? '00:00 - ¡DESCANSO!' : '00:00 - ¡EMPEZANDO!';
             clearInterval(countdownInterval);
           }
         }
@@ -778,6 +868,7 @@
           const texts = serverData.texts || {};
           if (!texts.startingSoon) texts.startingSoon = {};
           texts.startingSoon.countdownMinutes = newMins;
+          if (isPomo) texts.pomodoroMinutes = newMins;
 
           let localToken = window.__LOCAL_AUTH_TOKEN__ || localStorage?.getItem('local_auth_token') || '';
           if (!localToken) {
@@ -791,7 +882,7 @@
             headers: { 'Content-Type': 'application/json', ...(localToken ? {'X-Local-Token': localToken} : {}) },
             body: JSON.stringify({ texts })
           });
-          showHudToast(`⏱️ Cuenta atrás actualizada: ${newMins} min — reiniciando...`);
+          showHudToast(`⏱️ Tiempo actualizado: ${newMins} min — barra sincronizada`);
         } catch(e) {
           showHudToast('⚠️ Timer actualizado localmente (error al guardar en servidor)');
         }
@@ -875,9 +966,14 @@
       '.brand-name',
       '.brand-tagline',
       '.live-indicator span:last-child',
-      // Game
+      // Game / Esports / Stats
       '.game-mode-badge-under span:last-child',
-      // Maker / Print
+      '.hud-header',
+      '.stat-val',
+      '.stat-item',
+      '.victory-banner h1',
+      '.timer-big',
+      // Maker / Print / Art
       '.project-prefix',
       '.project-name-value',
       '.panel-project-name',
@@ -889,27 +985,52 @@
       '.frame-label span:last-child',
       '.camera-label',
       '.phase-item',
-      // Chill
+      '.palette-box div',
+      // Chill / Chatting / Podcast / Cafe
       '.header-subtitle',
       '.chat-title',
       '.chat-topic',
-      // Starting Soon (selectores reales del HTML)
-      '.starting-hero-text > div:first-child',       // heroTag
-      '.starting-hero-text .main-stream-title',       // título + highlight
-      '.starting-hero-text .stream-subtitle',         // subtítulo
-      '.starting-footer > div:first-child',           // footerNote starting
-      '.ss-mode-label',                               // etiquetas de modos de emisión
-      // BRB (selectores reales del HTML)
-      '.brb-center-content .main-stream-title',       // título BRB
-      '.brb-center-content .stream-subtitle',         // subtítulo BRB
-      '.brb-status-phrase',                           // frase rotante actual
-      '.brb-footer > div:first-child',                // footerNote BRB
-      // Ending (selectores reales del HTML)
-      '.ending-center-content .main-stream-title',    // título ending
-      '.ending-center-content .stream-subtitle',      // subtítulo ending
-      '.ending-farewell-card p',                      // mensaje de despedida
-      '.ending-farewell-card div',                    // tag de despedida
-      '.ending-footer > div:first-child',             // footerNote ending
+      '.stream-tag',
+      '.stream-tag span',
+      '.topic-pill',
+      '#lbl-topic',
+      '.cam-label',
+      '.chat-header',
+      '.social-tag',
+      '.top-banner',
+      '.podcast-title',
+      '.guest-nameplate',
+      // Pomodoro / Estudio
+      '.pomodoro-card div',
+      '.pomo-time',
+      // Starting Soon (todos los packs)
+      '.starting-hero-text > div:first-child',
+      '.starting-hero-text .main-stream-title',
+      '.starting-hero-text .stream-subtitle',
+      '.starting-footer > div:first-child',
+      '.ss-mode-label',
+      '.box h1',
+      '.box p',
+      '.card h1',
+      '.card p',
+      '.main-stream-title',
+      '.stream-subtitle',
+      // BRB (todos los packs)
+      '.brb-center-content .main-stream-title',
+      '.brb-center-content .stream-subtitle',
+      '.brb-status-phrase',
+      '.brb-footer > div:first-child',
+      // Ending (todos los packs)
+      '.ending-center-content .main-stream-title',
+      '.ending-center-content .stream-subtitle',
+      '.ending-farewell-card p',
+      '.ending-farewell-card div',
+      '.ending-footer > div:first-child',
+      // Encabezados y textos generales
+      'h1',
+      'h2',
+      'h3',
+      '.bottom-bar div'
     ];
 
     function populateQuickJump() {
@@ -1037,13 +1158,29 @@
           if (liveText) texts.channel.liveText = liveText;
         }
 
-        if (sceneKey === 'game' && texts.game) {
-          const badgeText = document.querySelector('.game-mode-badge-under span:last-child')?.textContent?.trim();
+        const isStartingScene = ['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting'].includes(sceneKey)
+          || window.location.pathname.includes('/starting-soon/');
+        const isBRBScene = ['beRightBack', 'oss_brb', 'gamer_brb', 'cozy_brb'].includes(sceneKey)
+          || window.location.pathname.includes('/be-right-back/')
+          || window.location.pathname.includes('/coffee-break/');
+        const isEndingScene = ['ending', 'oss_ending', 'gamer_ending', 'cozy_ending'].includes(sceneKey)
+          || window.location.pathname.includes('/ending/');
+        const isGameScene = ['game', 'gamer_gameplay', 'gamer_speedrun', 'gamer_victory'].includes(sceneKey);
+        const isChillScene = ['chill', 'oss_chatting', 'oss_podcast', 'cozy_cafe'].includes(sceneKey);
+        const isMakerScene = ['maker-desk', 'maker-pc', 'maker', 'oss_desktop', 'cozy_pomodoro'].includes(sceneKey);
+        const isPrintScene = ['print-machine', 'print-design', 'print', 'cozy_art'].includes(sceneKey);
+
+        if (isGameScene && texts.game) {
+          const badgeText = document.querySelector('.game-mode-badge-under span:last-child')?.textContent?.trim()
+            || document.querySelector('.hud-header')?.textContent?.trim()
+            || document.querySelector('.victory-banner h1')?.textContent?.trim();
           if (badgeText) texts.game.badgeText = badgeText;
         }
 
-        if ((sceneKey === 'maker-desk' || sceneKey === 'maker-pc' || sceneKey === 'maker') && texts.maker) {
-          const projName = document.querySelector('.project-name-value')?.textContent?.trim() || document.querySelector('.panel-project-name')?.textContent?.trim();
+        if (isMakerScene && texts.maker) {
+          const projName = document.querySelector('.project-name-value')?.textContent?.trim()
+            || document.querySelector('.panel-project-name')?.textContent?.trim()
+            || document.querySelector('.top-banner')?.textContent?.trim();
           const projTitle = document.querySelector('.panel-project-title')?.textContent?.trim();
           const projPhase = document.querySelector('.panel-project-phase')?.textContent?.trim();
           const projDetail = document.querySelector('.panel-project-detail')?.textContent?.trim();
@@ -1077,8 +1214,10 @@
           if (pfx) texts.maker.projectPrefix = pfx;
         }
 
-        if ((sceneKey === 'print-machine' || sceneKey === 'print-design' || sceneKey === 'print') && texts.print) {
-          const projName = document.querySelector('.project-name-value')?.textContent?.trim() || document.querySelector('.panel-project-name')?.textContent?.trim();
+        if (isPrintScene && texts.print) {
+          const projName = document.querySelector('.project-name-value')?.textContent?.trim()
+            || document.querySelector('.panel-project-name')?.textContent?.trim()
+            || document.querySelector('.palette-box div:first-child')?.textContent?.trim();
           const projPhase = document.querySelector('.panel-project-phase')?.textContent?.trim();
           const projMat = document.querySelector('.panel-project-detail')?.textContent?.trim();
           if (projName) {
@@ -1110,24 +1249,32 @@
           if (pfx) texts.print.projectPrefix = pfx;
         }
 
-        if (sceneKey === 'chill' && texts.chill) {
-          const sub = document.querySelector('.header-subtitle')?.textContent?.trim();
+        if (isChillScene && texts.chill) {
+          const sub = document.querySelector('.header-subtitle')?.textContent?.trim()
+            || document.querySelector('.topic-pill')?.textContent?.trim()
+            || document.querySelector('#lbl-topic')?.textContent?.trim();
           if (sub) texts.chill.subtitle = sub;
-          const chatTitle = document.querySelector('.chat-title span:last-child')?.textContent?.trim();
+          const chatTitle = document.querySelector('.chat-title span:last-child')?.textContent?.trim()
+            || document.querySelector('.chat-header')?.textContent?.trim();
           if (chatTitle) texts.chill.chatTitle = chatTitle;
+          const topVal = document.querySelector('#lbl-topic')?.textContent?.trim()
+            || document.querySelector('.topic-pill')?.textContent?.trim();
+          if (topVal) texts.chill.topic = topVal;
         }
 
-        if (sceneKey === 'startingSoon' && texts.startingSoon) {
+        if (isStartingScene && texts.startingSoon) {
           // HeroTag (// STREAM EN DIRECTO)
           const heroTag = document.querySelector('.starting-hero-text > div:first-child')?.textContent?.trim();
           if (heroTag) texts.startingSoon.heroTag = heroTag;
 
           // Título principal (puede tener 2 líneas: title + highlight)
-          const mainTitle = document.querySelector('.starting-hero-text .main-stream-title');
+          const mainTitle = document.querySelector('.starting-hero-text .main-stream-title')
+            || document.querySelector('.main-stream-title')
+            || document.querySelector('.card h1')
+            || document.querySelector('.box h1');
           if (mainTitle) {
             const accentSpan = mainTitle.querySelector('.title-cyan-accent');
             if (accentSpan) {
-              // Extraer la primera línea (title) y el span (highlight) por separado
               const clone = mainTitle.cloneNode(true);
               clone.querySelector('.title-cyan-accent')?.remove();
               const firstLine = clone.textContent.replace(/<br>/g,'').trim();
@@ -1140,7 +1287,10 @@
           }
 
           // Subtítulo
-          const sub = document.querySelector('.starting-hero-text .stream-subtitle')?.textContent?.trim();
+          const sub = document.querySelector('.starting-hero-text .stream-subtitle')?.textContent?.trim()
+            || document.querySelector('.stream-subtitle')?.textContent?.trim()
+            || document.querySelector('.card p')?.textContent?.trim()
+            || document.querySelector('.box p')?.textContent?.trim();
           if (sub) texts.startingSoon.subtitle = sub;
 
           // Nota de pie
@@ -1158,16 +1308,22 @@
           }
         }
 
-        if (sceneKey === 'beRightBack' && texts.beRightBack) {
+        if (isBRBScene && texts.beRightBack) {
           // Título principal
-          const title = document.querySelector('.brb-center-content .main-stream-title')?.textContent?.trim();
+          const title = document.querySelector('.brb-center-content .main-stream-title')?.textContent?.trim()
+            || document.querySelector('.main-stream-title')?.textContent?.trim()
+            || document.querySelector('.card h1')?.textContent?.trim()
+            || document.querySelector('.box h1')?.textContent?.trim();
           if (title) texts.beRightBack.title = title;
 
           // Subtítulo
-          const subEl = document.querySelector('.brb-center-content .stream-subtitle')?.textContent?.trim();
+          const subEl = document.querySelector('.brb-center-content .stream-subtitle')?.textContent?.trim()
+            || document.querySelector('.stream-subtitle')?.textContent?.trim()
+            || document.querySelector('.card p')?.textContent?.trim()
+            || document.querySelector('.box p')?.textContent?.trim();
           if (subEl) texts.beRightBack.subtitle = subEl;
 
-          // Frase de estado actual (sólo la visible ahora)
+          // Frase de estado actual
           const currentPhrase = document.querySelector('.brb-status-phrase')?.textContent?.trim();
           if (currentPhrase && texts.beRightBack.statusPhrases?.length) {
             texts.beRightBack.statusPhrases[0] = currentPhrase;
@@ -1182,11 +1338,17 @@
           if (liveLabel) texts.beRightBack.liveStatusText = liveLabel;
         }
 
-        if (sceneKey === 'ending' && texts.ending) {
-          const titleEl = document.querySelector('.ending-center-content .main-stream-title')?.textContent?.trim();
+        if (isEndingScene && texts.ending) {
+          const titleEl = document.querySelector('.ending-center-content .main-stream-title')?.textContent?.trim()
+            || document.querySelector('.main-stream-title')?.textContent?.trim()
+            || document.querySelector('.card h1')?.textContent?.trim()
+            || document.querySelector('.box h1')?.textContent?.trim();
           if (titleEl) texts.ending.title = titleEl;
 
-          const subEl = document.querySelector('.ending-center-content .stream-subtitle')?.textContent?.trim();
+          const subEl = document.querySelector('.ending-center-content .stream-subtitle')?.textContent?.trim()
+            || document.querySelector('.stream-subtitle')?.textContent?.trim()
+            || document.querySelector('.card p')?.textContent?.trim()
+            || document.querySelector('.box p')?.textContent?.trim();
           if (subEl) texts.ending.subtitle = subEl;
 
           const fareMsg = document.querySelector('.ending-farewell-card p')?.textContent?.trim();

@@ -1985,29 +1985,29 @@ function updateModalMiniPreview(themeId) {
   let subtitleVal = currentEditingScene.badge;
 
   const key = currentEditingScene.key;
-  if (key === 'maker' || key === 'maker-desk' || key === 'maker-pc') {
-    titleVal = document.getElementById('txt-maker-project')?.value?.trim() || 'NAS CON RASPBERRY PI';
-    const phaseVal = document.getElementById('txt-maker-phase')?.value?.trim() || '02 MONTAJE';
-    const detVal = document.getElementById('txt-maker-detail')?.value?.trim() || 'Armbian OS · PCB v1.2';
-    subtitleVal = `Fase: ${phaseVal} · ${detVal}`;
-  } else if (key === 'game') {
+  if (key === 'maker' || key === 'maker-desk' || key === 'maker-pc' || key === 'oss_desktop') {
+    titleVal = document.getElementById('txt-maker-project')?.value?.trim() || 'PROYECTO';
+    const phaseVal = document.getElementById('txt-maker-phase')?.value?.trim() || 'FASE ACTIVA';
+    const detVal = document.getElementById('txt-maker-detail')?.value?.trim() || '';
+    subtitleVal = `Fase: ${phaseVal}${detVal ? ' · ' + detVal : ''}`;
+  } else if (key === 'game' || key === 'gamer_gameplay' || key === 'gamer_speedrun' || key === 'gamer_victory') {
     titleVal = document.getElementById('txt-game-badge')?.value?.trim() || 'GAME MODE';
     subtitleVal = document.getElementById('txt-game-tagline')?.value?.trim() || 'MODO JUEGO / GAMEPLAY';
-  } else if (key === 'print' || key === 'print-machine' || key === 'print-design') {
-    titleVal = document.getElementById('txt-print-project')?.value?.trim() || 'PEGATINAS PERSONALIZADAS';
-    const matVal = document.getElementById('txt-print-material')?.value?.trim() || 'Vinilo Holográfico';
-    const phaseVal = document.getElementById('txt-print-phase')?.value?.trim() || 'CORTE DE VINILO';
-    subtitleVal = `Material: ${matVal} · Fase: ${phaseVal}`;
-  } else if (key === 'chill') {
+  } else if (key === 'print' || key === 'print-machine' || key === 'print-design' || key === 'cozy_art') {
+    titleVal = document.getElementById('txt-print-project')?.value?.trim() || 'TRABAJO CREATIVO';
+    const matVal = document.getElementById('txt-print-material')?.value?.trim() || 'Material';
+    const phaseVal = document.getElementById('txt-print-phase')?.value?.trim() || 'PROCESO';
+    subtitleVal = `${matVal} · Fase: ${phaseVal}`;
+  } else if (key === 'chill' || key === 'oss_chatting' || key === 'oss_podcast' || key === 'cozy_cafe') {
     titleVal = document.getElementById('txt-chill-chat-title')?.value?.trim() || 'CHAT EN DIRECTO';
-    subtitleVal = document.getElementById('txt-chill-topic')?.value?.trim() || 'Tema del día, proyectos y preguntas';
-  } else if (key === 'startingSoon') {
+    subtitleVal = document.getElementById('txt-chill-topic')?.value?.trim() || 'Charla con la comunidad';
+  } else if (key === 'startingSoon' || key === 'oss_starting' || key === 'gamer_starting' || key === 'cozy_starting' || key === 'cozy_pomodoro') {
     titleVal = document.getElementById('txt-ss-title')?.value?.trim() || 'ENSEGUIDA';
     subtitleVal = document.getElementById('txt-ss-subtitle')?.value?.trim() || 'PREPARANDO EL DIRECTO...';
-  } else if (key === 'beRightBack') {
+  } else if (key === 'beRightBack' || key === 'oss_brb' || key === 'gamer_brb' || key === 'cozy_brb') {
     titleVal = document.getElementById('txt-brb-title')?.value?.trim() || 'AHORA VUELVO';
     subtitleVal = document.getElementById('txt-brb-subtitle')?.value?.trim() || 'PAUSA TÉCNICA';
-  } else if (key === 'ending') {
+  } else if (key === 'ending' || key === 'oss_ending' || key === 'gamer_ending' || key === 'cozy_ending') {
     titleVal = document.getElementById('txt-end-title')?.value?.trim() || 'GRACIAS POR PASARTE';
     subtitleVal = document.getElementById('txt-end-subtitle')?.value?.trim() || 'NOS VEMOS EN EL PRÓXIMO DIRECTO';
   }
@@ -2080,6 +2080,7 @@ async function openSceneEditor(sceneKey) {
 
   // 4. Mostrar únicamente el panel de textos correspondiente a esta escena
   const paneMapping = {
+    // Maker_Theme_Pack
     'game': 'text-pane-game',
     'maker': 'text-pane-maker',
     'maker-desk': 'text-pane-maker',
@@ -2090,10 +2091,44 @@ async function openSceneEditor(sceneKey) {
     'chill': 'text-pane-chill',
     'startingSoon': 'text-pane-starting',
     'beRightBack': 'text-pane-brb',
-    'ending': 'text-pane-ending'
+    'ending': 'text-pane-ending',
+
+    // Open_stream_Pack
+    'oss_chatting': 'text-pane-chill',
+    'oss_desktop': 'text-pane-maker',
+    'oss_podcast': 'text-pane-chill',
+    'oss_starting': 'text-pane-starting',
+    'oss_brb': 'text-pane-brb',
+    'oss_ending': 'text-pane-ending',
+
+    // Gamer_Pro_Pack
+    'gamer_gameplay': 'text-pane-game',
+    'gamer_speedrun': 'text-pane-game',
+    'gamer_victory': 'text-pane-game',
+    'gamer_starting': 'text-pane-starting',
+    'gamer_brb': 'text-pane-brb',
+    'gamer_ending': 'text-pane-ending',
+
+    // Cozy_LoFi_Pack
+    'cozy_pomodoro': 'text-pane-starting',
+    'cozy_art': 'text-pane-print',
+    'cozy_cafe': 'text-pane-chill',
+    'cozy_starting': 'text-pane-starting',
+    'cozy_brb': 'text-pane-brb',
+    'cozy_ending': 'text-pane-ending'
   };
 
-  const targetPaneId = paneMapping[sceneKey];
+  let targetPaneId = paneMapping[sceneKey];
+  if (!targetPaneId) {
+    if (sceneKey.includes('starting') || sceneKey.includes('soon')) targetPaneId = 'text-pane-starting';
+    else if (sceneKey.includes('brb') || sceneKey.includes('coffee') || sceneKey.includes('pause')) targetPaneId = 'text-pane-brb';
+    else if (sceneKey.includes('end') || sceneKey.includes('farewell')) targetPaneId = 'text-pane-ending';
+    else if (sceneKey.includes('chat') || sceneKey.includes('podcast') || sceneKey.includes('talk') || sceneKey.includes('cafe')) targetPaneId = 'text-pane-chill';
+    else if (sceneKey.includes('game') || sceneKey.includes('play') || sceneKey.includes('victory') || sceneKey.includes('speedrun')) targetPaneId = 'text-pane-game';
+    else if (sceneKey.includes('print') || sceneKey.includes('art')) targetPaneId = 'text-pane-print';
+    else targetPaneId = 'text-pane-maker';
+  }
+
   document.querySelectorAll('#scene-view-texts-pane .text-tab-pane').forEach(p => {
     p.classList.remove('active');
     p.style.display = 'none';
