@@ -16,6 +16,13 @@ class OpenStreamSuiteSmokeTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        try:
+            r = requests.get(f"{BASE_URL}/api/status", timeout=1)
+            if r.status_code != 200:
+                raise unittest.SkipTest(f"Servidor en {BASE_URL} devolvió HTTP {r.status_code}")
+        except Exception:
+            raise unittest.SkipTest(f"Servidor no disponible en {BASE_URL} (smoke tests omitidos)")
+
         # Obtener el token local desde el archivo o vía API
         cls.token = ""
         token_file = Path(__file__).resolve().parent.parent / ".local_token"

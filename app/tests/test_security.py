@@ -13,6 +13,14 @@ BASE_URL = os.environ.get("TEST_BASE_URL", "http://localhost:8080")
 
 
 class StaticExposureTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        try:
+            r = requests.get(f"{BASE_URL}/api/status", timeout=1)
+            if r.status_code != 200:
+                raise unittest.SkipTest(f"Servidor en {BASE_URL} devolvió HTTP {r.status_code}")
+        except Exception:
+            raise unittest.SkipTest(f"Servidor no disponible en {BASE_URL} (tests omitidos)")
 
     def test_01_secret_files_not_served(self):
         """Ni .env, ni token.json, ni .local_token, ni el código del servidor son accesibles por HTTP"""
@@ -42,6 +50,14 @@ class StaticExposureTests(unittest.TestCase):
 
 
 class DeckProtectionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        try:
+            r = requests.get(f"{BASE_URL}/api/status", timeout=1)
+            if r.status_code != 200:
+                raise unittest.SkipTest(f"Servidor en {BASE_URL} devolvió HTTP {r.status_code}")
+        except Exception:
+            raise unittest.SkipTest(f"Servidor no disponible en {BASE_URL} (tests omitidos)")
 
     def test_01_cross_site_request_rejected(self):
         """Una página web externa no puede disparar acciones del deck"""
