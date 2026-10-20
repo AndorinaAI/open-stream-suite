@@ -40,7 +40,7 @@ function showSection(secId) {
   }
   if (secId === 'sec-themes') {
     if (typeof switchThemesMainTab === 'function') switchThemesMainTab('overlays');
-    if (typeof openOverlayFolder === 'function') openOverlayFolder('taller');
+    if (typeof showOverlayFoldersView === 'function') showOverlayFoldersView();
     loadThemePacks();
   }
   if (secId === 'sec-widgets') {

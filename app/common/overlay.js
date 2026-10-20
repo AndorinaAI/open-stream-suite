@@ -755,7 +755,7 @@
     `;
     document.body.appendChild(hud);
 
-    // --- Control especial: minutos de cuenta atrás y temporizadores (Starting Soon y Pomodoro) ---
+    // --- Control especial 1: Minutos de cuenta atrás y temporizadores (Starting Soon y Pomodoro) ---
     const isCountdownScene = ['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting', 'cozy_pomodoro'].includes(sceneKey)
       || window.location.pathname.includes('/starting-soon/')
       || window.location.pathname.includes('/study_pomodoro/')
@@ -772,98 +772,146 @@
         border: 1px solid rgba(87,214,196,0.45); border-radius: 8px;
         padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
         font-size: 11px; color: #F0F6FC; box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(87,214,196,0.15);
-        display: flex; flex-direction: column; gap: 10px; min-width: 190px;
+        display: flex; flex-direction: column; gap: 10px; width: 230px;
       `;
+
+      const presets = isPomo
+        ? [ { label: '🍅 25m', val: 25 }, { label: '🍅 50m', val: 50 }, { label: '☕ 5m', val: 5 }, { label: '☕ 10m', val: 10 } ]
+        : [ { label: '3 min', val: 3 }, { label: '5 min', val: 5 }, { label: '10 min', val: 10 }, { label: '15 min', val: 15 } ];
+
       countdownControl.innerHTML = `
-        <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; margin-bottom:3px;">
-          ${isPomo ? '🍅 TEMPORIZADOR POMODORO' : '⏱️ CUENTA ATRÁS'}
+        <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center;">
+          <span>${isPomo ? '🍅 POMODORO FOCUS' : '⏱️ CUENTA ATRÁS'}</span>
+          <span id="oss-cd-status" style="font-size:10px; color:#3FB950;">EN MARCHA</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <span style="color:#8B949E; font-size:10px;">AJUSTES RÁPIDOS:</span>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
+            ${presets.map(p => `<button type="button" class="hud-btn oss-cd-preset" data-mins="${p.val}" style="padding:4px 6px; font-size:10px; justify-content:center;">${p.label}</button>`).join('')}
+          </div>
         </div>
         <label style="display:flex; flex-direction:column; gap:4px;">
-          <span style="color:#8B949E; font-size:10px;">${isPomo ? 'DURACIÓN DE ENFOQUE' : 'MINUTOS PARA EMPEZAR'}</span>
+          <span style="color:#8B949E; font-size:10px;">MINUTOS TOTALES:</span>
           <div style="display:flex; align-items:center; gap:6px;">
-            <input id="oss-cd-minutes" type="number" min="1" max="120" step="1" value="${isPomo ? '25' : '5'}"
-              style="width:60px; background:#161B22; color:#F0F6FC; border:1px solid rgba(87,214,196,0.4);
-                     border-radius:4px; padding:5px 8px; font-size:14px; font-family:inherit;
+            <input id="oss-cd-minutes" type="number" min="1" max="180" step="1" value="${isPomo ? '25' : '5'}"
+              style="width:65px; background:#161B22; color:#F0F6FC; border:1px solid rgba(87,214,196,0.4);
+                     border-radius:4px; padding:4px 8px; font-size:13px; font-family:inherit;
                      font-weight:700; outline:none; text-align:center;"
             >
             <span style="color:#8B949E;">min</span>
+            <span id="oss-cd-preview" style="color:#57D6C4; font-size:13px; font-weight:700; margin-left:auto;">${isPomo ? '25:00' : '05:00'}</span>
           </div>
         </label>
-        <button id="oss-cd-apply" type="button" style="
-          background:#57D6C4; color:#0D1117; border:none; border-radius:4px;
-          padding:6px 10px; font-size:11px; font-family:inherit; font-weight:700;
-          cursor:pointer; transition:background 0.2s;
-        ">&#9654; Aplicar y Reiniciar</button>
-        <div id="oss-cd-preview" style="color:#57D6C4; font-size:12px; font-weight:600; text-align:center;">${isPomo ? '25:00' : '05:00'}</div>
+        <div style="display:flex; gap:6px;">
+          <button id="oss-cd-toggle" type="button" class="hud-btn" style="flex:1; justify-content:center;">⏸ Pausar</button>
+          <button id="oss-cd-reset" type="button" class="hud-btn" style="flex:1; justify-content:center;">🔄 Reiniciar</button>
+        </div>
+        <button id="oss-cd-apply" type="button" class="hud-btn btn-save" style="width:100%; justify-content:center; padding:6px;">💾 Guardar y Aplicar</button>
       `;
       document.body.appendChild(countdownControl);
 
-      // Sincronizar valor inicial desde el config cargado
+      let timerRunning = true;
+      let totalMins = isPomo ? 25 : 5;
+      let currentSecondsRemaining = totalMins * 60;
+      let totalSecondsInitial = totalMins * 60;
+
+      const countdownEl = document.querySelector('.starting-countdown, .pomo-time, .pomodoro-countdown');
+      const progressFill = document.querySelector('.tech-progress-fill');
+      const statusSpan = document.getElementById('oss-cd-status');
+      const toggleBtn = document.getElementById('oss-cd-toggle');
+
+      function updateClockDisplay() {
+        const mins = Math.floor(currentSecondsRemaining / 60);
+        const secs = currentSecondsRemaining % 60;
+        const formatted = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        if (countdownEl) countdownEl.textContent = formatted;
+        const prev = document.getElementById('oss-cd-preview');
+        if (prev) prev.textContent = formatted;
+
+        if (progressFill && totalSecondsInitial > 0) {
+          const pct = Math.min(100, Math.max(0, ((totalSecondsInitial - currentSecondsRemaining) / totalSecondsInitial) * 100));
+          progressFill.style.width = `${pct}%`;
+        }
+      }
+
+      function startTimerEngine(mins) {
+        if (countdownInterval) clearInterval(countdownInterval);
+        totalMins = mins;
+        totalSecondsInitial = totalMins * 60;
+        currentSecondsRemaining = totalSecondsInitial;
+        timerRunning = true;
+        if (statusSpan) { statusSpan.textContent = 'EN MARCHA'; statusSpan.style.color = '#3FB950'; }
+        if (toggleBtn) toggleBtn.textContent = '⏸ Pausar';
+
+        updateClockDisplay();
+        countdownInterval = setInterval(() => {
+          if (!timerRunning) return;
+          if (currentSecondsRemaining > 0) {
+            currentSecondsRemaining--;
+            updateClockDisplay();
+          } else {
+            if (countdownEl) countdownEl.textContent = isPomo ? '00:00 - ¡DESCANSO!' : '00:00 - ¡EMPEZANDO!';
+            if (statusSpan) { statusSpan.textContent = 'FINALIZADO'; statusSpan.style.color = '#FF783F'; }
+            if (toggleBtn) toggleBtn.textContent = '▶ Reanudar';
+            timerRunning = false;
+            clearInterval(countdownInterval);
+          }
+        }, 1000);
+      }
+
+      // Sincronizar valor inicial de config
       const syncCdInput = () => {
         const cfg = window.OSS_CONFIG || window.TALLER_CONFIG;
         const mins = isPomo ? (cfg?.pomodoroMinutes || 25) : cfg?.startingSoon?.countdownMinutes;
         if (mins && mins > 0) {
           const inp = document.getElementById('oss-cd-minutes');
           if (inp) inp.value = mins;
-          const prev = document.getElementById('oss-cd-preview');
-          if (prev) prev.textContent = `${String(mins).padStart(2,'0')}:00`;
+          startTimerEngine(mins);
         }
       };
-      setTimeout(syncCdInput, 800); // esperar a que overlay.js cargue la config
+      setTimeout(syncCdInput, 800);
 
-      // Preview y adaptación en vivo mientras escribe
-      document.getElementById('oss-cd-minutes')?.addEventListener('input', (e) => {
-        const m = parseInt(e.target.value) || 0;
-        const prev = document.getElementById('oss-cd-preview');
-        const formatted = m > 0 ? `${String(m).padStart(2,'0')}:00` : '--:--';
-        if (prev) prev.textContent = formatted;
-        const countdownEl = document.querySelector('.starting-countdown, .pomo-time, .pomodoro-countdown');
-        if (countdownEl && m > 0) countdownEl.textContent = formatted;
-        const progressFill = document.querySelector('.tech-progress-fill');
-        if (progressFill) progressFill.style.width = '0%';
+      // Botón Pausar / Reanudar
+      toggleBtn?.addEventListener('click', () => {
+        timerRunning = !timerRunning;
+        toggleBtn.textContent = timerRunning ? '⏸ Pausar' : '▶ Reanudar';
+        if (statusSpan) {
+          statusSpan.textContent = timerRunning ? 'EN MARCHA' : 'PAUSADO';
+          statusSpan.style.color = timerRunning ? '#3FB950' : '#FF783F';
+        }
+        showHudToast(timerRunning ? '▶ Temporizador reanudado' : '⏸ Temporizador pausado');
       });
 
-      // Aplicar: actualizar OSS_CONFIG, reiniciar cuenta atrás y adaptar la barra de progreso
+      // Botón Reiniciar
+      document.getElementById('oss-cd-reset')?.addEventListener('click', () => {
+        const inp = document.getElementById('oss-cd-minutes');
+        const m = parseInt(inp?.value) || totalMins;
+        startTimerEngine(m);
+        showHudToast(`🔄 Temporizador reiniciado a ${m} min`);
+      });
+
+      // Botones de presets
+      countdownControl.querySelectorAll('.oss-cd-preset').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const m = parseInt(btn.dataset.mins) || 5;
+          const inp = document.getElementById('oss-cd-minutes');
+          if (inp) inp.value = m;
+          startTimerEngine(m);
+          showHudToast(`⏱️ Preset seleccionado: ${m} min`);
+        });
+      });
+
+      // Guardar y Aplicar en el servidor
       document.getElementById('oss-cd-apply')?.addEventListener('click', async () => {
         const inp = document.getElementById('oss-cd-minutes');
         const newMins = parseInt(inp?.value) || 5;
-        if (newMins < 1 || newMins > 120) {
-          showHudToast('⚠️ El valor debe ser entre 1 y 120 minutos');
+        if (newMins < 1 || newMins > 180) {
+          showHudToast('⚠️ El valor debe ser entre 1 y 180 minutos');
           return;
         }
 
-        // 1. Actualizar config en memoria y reiniciar el timer
-        if (!window.OSS_CONFIG) window.OSS_CONFIG = {};
-        if (!window.OSS_CONFIG.startingSoon) window.OSS_CONFIG.startingSoon = {};
-        window.OSS_CONFIG.startingSoon.countdownMinutes = newMins;
-        if (isPomo) window.OSS_CONFIG.pomodoroMinutes = newMins;
+        startTimerEngine(newMins);
 
-        // 2. Reiniciar cuenta atrás visual y adaptar barra
-        if (countdownInterval) clearInterval(countdownInterval);
-        const countdownEl = document.querySelector('.starting-countdown, .pomo-time, .pomodoro-countdown');
-        const progressFill = document.querySelector('.tech-progress-fill');
-        let totalSeconds = newMins * 60;
-        const initialTotal = totalSeconds;
-
-        function updateClock() {
-          const mins = Math.floor(totalSeconds / 60);
-          const secs = totalSeconds % 60;
-          if (countdownEl) countdownEl.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-          if (progressFill) {
-            const pct = Math.min(100, Math.max(0, ((initialTotal - totalSeconds) / initialTotal) * 100));
-            progressFill.style.width = `${pct}%`;
-          }
-          if (totalSeconds > 0) {
-            totalSeconds--;
-          } else {
-            if (countdownEl) countdownEl.textContent = isPomo ? '00:00 - ¡DESCANSO!' : '00:00 - ¡EMPEZANDO!';
-            clearInterval(countdownInterval);
-          }
-        }
-        updateClock();
-        countdownInterval = setInterval(updateClock, 1000);
-
-        // 3. Persistir en el servidor
         try {
           const res = await fetch('/api/overlays/texts');
           const serverData = await res.json();
@@ -884,14 +932,113 @@
             headers: { 'Content-Type': 'application/json', ...(localToken ? {'X-Local-Token': localToken} : {}) },
             body: JSON.stringify({ texts })
           });
-          showHudToast(`⏱️ Tiempo actualizado: ${newMins} min — barra sincronizada`);
+          showHudToast(`💾 Tiempo guardado: ${newMins} min sincronizado con OBS Studio`);
         } catch(e) {
-          showHudToast('⚠️ Timer actualizado localmente (error al guardar en servidor)');
+          showHudToast('⚠️ Tiempo actualizado localmente (error al persistir)');
         }
       });
     }
 
-    // --- Control especial: frases en rotación (Pantallas Be Right Back y Coffee Break) ---
+    // --- Control especial 2: Speedrun & Splits (Gamer Pro Pack) ---
+    const isSpeedrunScene = ['gamer_speedrun'].includes(sceneKey)
+      || window.location.pathname.includes('/speedrun_split/')
+      || document.querySelector('.sidebar-splits') !== null;
+
+    if (isSpeedrunScene) {
+      const speedControl = document.createElement('div');
+      speedControl.id = 'oss-speedrun-control';
+      speedControl.style.cssText = `
+        position: fixed; top: 50%; right: 18px; transform: translateY(-50%);
+        z-index: 999998; background: rgba(14,18,24,0.96); backdrop-filter: blur(14px);
+        border: 1px solid rgba(87,214,196,0.45); border-radius: 8px;
+        padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
+        font-size: 11px; color: #F0F6FC; box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(87,214,196,0.15);
+        display: flex; flex-direction: column; gap: 10px; width: 230px;
+      `;
+      speedControl.innerHTML = `
+        <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center;">
+          <span>⚡ SPEEDRUN LIVE</span>
+          <span id="oss-sr-state" style="font-size:10px; color:#8B949E;">LISTO</span>
+        </div>
+        <div style="font-size:26px; font-weight:900; color:#FF783F; text-align:center; padding:6px; background:#161B22; border-radius:4px; border:1px solid rgba(255,120,63,0.3);" id="oss-sr-readout">
+          00:09:15
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button id="oss-sr-toggle" type="button" class="hud-btn" style="flex:1; justify-content:center;">▶ Iniciar</button>
+          <button id="oss-sr-split" type="button" class="hud-btn" style="flex:1; justify-content:center; background:rgba(87,214,196,0.15); color:#57D6C4; border-color:rgba(87,214,196,0.4);">⚡ Split</button>
+        </div>
+        <button id="oss-sr-reset" type="button" class="hud-btn" style="width:100%; justify-content:center;">🔄 Reset a 00:00:00</button>
+      `;
+      document.body.appendChild(speedControl);
+
+      let srInterval = null;
+      let srSeconds = 555; // 09:15 inicial
+      let srRunning = false;
+      const srTimerEl = document.getElementById('speedrun-timer') || document.querySelector('.timer-big');
+      const srReadout = document.getElementById('oss-sr-readout');
+      const srToggleBtn = document.getElementById('oss-sr-toggle');
+      const srStateSpan = document.getElementById('oss-sr-state');
+
+      function formatSrTime(s) {
+        const hrs = Math.floor(s / 3600);
+        const mins = Math.floor((s % 3600) / 60);
+        const secs = s % 60;
+        return `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      }
+
+      function updateSrDisplay() {
+        const formatted = formatSrTime(srSeconds);
+        if (srReadout) srReadout.textContent = formatted;
+        if (srTimerEl) srTimerEl.textContent = formatted;
+      }
+      updateSrDisplay();
+
+      srToggleBtn?.addEventListener('click', () => {
+        srRunning = !srRunning;
+        srToggleBtn.textContent = srRunning ? '⏸ Pausar' : '▶ Reanudar';
+        if (srStateSpan) {
+          srStateSpan.textContent = srRunning ? 'CORRIENDO' : 'PAUSA';
+          srStateSpan.style.color = srRunning ? '#3FB950' : '#FF783F';
+        }
+        if (srRunning) {
+          srInterval = setInterval(() => {
+            srSeconds++;
+            updateSrDisplay();
+          }, 1000);
+        } else {
+          if (srInterval) clearInterval(srInterval);
+        }
+      });
+
+      // Split siguiente
+      document.getElementById('oss-sr-split')?.addEventListener('click', () => {
+        const rows = document.querySelectorAll('.split-row');
+        if (rows.length > 0) {
+          let curIdx = -1;
+          rows.forEach((r, idx) => { if (r.classList.contains('active')) curIdx = idx; });
+          if (curIdx >= 0) rows[curIdx].classList.remove('active');
+          const nextIdx = (curIdx + 1) % rows.length;
+          rows[nextIdx].classList.add('active');
+          rows[nextIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          showHudToast(`⚡ Split completado: Avanzado a "${rows[nextIdx].querySelector('.split-name')?.textContent?.trim() || 'Siguiente'}"`);
+        } else {
+          showHudToast('⚡ Split registrado');
+        }
+      });
+
+      // Reset
+      document.getElementById('oss-sr-reset')?.addEventListener('click', () => {
+        srRunning = false;
+        if (srInterval) clearInterval(srInterval);
+        srSeconds = 0;
+        updateSrDisplay();
+        if (srToggleBtn) srToggleBtn.textContent = '▶ Iniciar';
+        if (srStateSpan) { srStateSpan.textContent = 'LISTO'; srStateSpan.style.color = '#8B949E'; }
+        showHudToast('🔄 Cronómetro reseteado a 00:00:00');
+      });
+    }
+
+    // --- Control especial 3: Frases en rotación (Pantallas Be Right Back y Coffee Break) ---
     const isBrbScene = ['beRightBack', 'oss_brb', 'gamer_brb', 'cozy_brb'].includes(sceneKey)
       || window.location.pathname.includes('/be-right-back/')
       || window.location.pathname.includes('/coffee-break/')
@@ -935,8 +1082,9 @@
           </div>
         </div>
         <div style="display:flex; gap:6px;">
-          <button id="oss-brb-add-phrase" type="button" class="hud-btn" style="flex:1; justify-content:center;">➕ Añadir Frase</button>
-          <button id="oss-brb-save-phrases" type="button" class="hud-btn btn-save" style="flex:1; justify-content:center;">💾 Guardar</button>
+          <button id="oss-brb-add-phrase" type="button" class="hud-btn" style="flex:1; justify-content:center;">➕ Añadir</button>
+          <button id="oss-brb-delete-phrase" type="button" class="hud-btn" style="flex:1; justify-content:center; color:#F85149;">🗑️ Borrar</button>
+          <button id="oss-brb-save-phrases" type="button" class="hud-btn btn-save" style="flex:1.2; justify-content:center;">💾 Guardar</button>
         </div>
       `;
       document.body.appendChild(phrasesControl);
@@ -1001,6 +1149,18 @@
         activeIndex = currentPhrases.length - 1;
         renderCurrentPhrase();
         showHudToast('➕ Nueva frase añadida a la lista');
+      });
+
+      document.getElementById('oss-brb-delete-phrase')?.addEventListener('click', () => {
+        if (currentPhrases.length <= 1) {
+          showHudToast('⚠️ Debe haber al menos una frase');
+          return;
+        }
+        window.__OSS_IS_EDITING__ = true;
+        currentPhrases.splice(activeIndex, 1);
+        if (activeIndex >= currentPhrases.length) activeIndex = currentPhrases.length - 1;
+        renderCurrentPhrase();
+        showHudToast('🗑️ Frase eliminada');
       });
 
       document.getElementById('oss-brb-save-phrases')?.addEventListener('click', async () => {
@@ -1122,13 +1282,23 @@
       '.live-status',
       '[data-i18n="themes.placeholder_ss_status"]',
       '[data-i18n="themes.live_indicator"]',
-      // Game / Esports / Stats
+      // Game / Esports / Stats / Speedrun
       '.game-mode-badge-under span:last-child',
       '.hud-header',
       '.stat-val',
       '.stat-item',
       '.victory-banner h1',
       '.timer-big',
+      '.run-title',
+      '.run-category',
+      '.split-name',
+      '.split-time',
+      '.split-delta',
+      '.pb-bar span',
+      '.pb-bar',
+      '.game-tag',
+      '.cam-split .cam-label',
+      '.floating-cam .cam-label',
       // Maker / Print / Art
       '.project-prefix',
       '.project-name-value',
@@ -1145,6 +1315,7 @@
       '.phase-item',
       '.palette-box div',
       '.mode-badge span:last-child',
+      '.canvas-cam div',
       // Chill / Chatting / Podcast / Cafe
       '.header-subtitle',
       '.chat-title',
@@ -1162,6 +1333,9 @@
       '.guest-nameplate',
       '.chill-footer-topic span',
       '.chill-footer-topic div',
+      '.chat-card div',
+      '.cam-polaroid',
+      '.header-bar div',
       // Pomodoro / Estudio
       '.pomodoro-card div',
       '.pomo-time',
@@ -1215,12 +1389,16 @@
         }
 
         let tag = 'Texto';
-        if (el.matches('.live-indicator span, .live-status span, [data-text-key="status"], .live-status, .live-indicator')) tag = 'Estado Live';
-        else if (el.matches('.tag-line, .starting-hero-text > div:first-child, [data-i18n="themes.placeholder_ss_tag"]')) tag = 'Etiqueta';
+        if (el.matches('.run-title, .run-category')) tag = 'Juego Speedrun';
+        else if (el.matches('.split-name')) tag = 'Segmento';
+        else if (el.matches('.split-time, .split-delta, .timer-big, .pomo-time, .starting-countdown')) tag = 'Tiempo';
+        else if (el.matches('.pb-bar span, .pb-bar, .stat-item, .stat-val')) tag = 'Récord/Stat';
+        else if (el.matches('.live-indicator span, .live-status span, [data-text-key="status"], .live-status, .live-indicator')) tag = 'Estado Live';
+        else if (el.matches('.tag-line, .starting-hero-text > div:first-child, [data-i18n="themes.placeholder_ss_tag"], .game-tag')) tag = 'Etiqueta';
         else if (el.matches('.project-name-value, .panel-project-name')) tag = 'Proyecto';
         else if (el.matches('.panel-project-phase')) tag = 'Fase Activa';
         else if (el.matches('.phase-item')) tag = 'Fase';
-        else if (el.matches('.frame-label span:last-child, .frame-label, .camera-label')) tag = 'Marco/Cámara';
+        else if (el.matches('.frame-label span:last-child, .frame-label, .camera-label, .cam-label')) tag = 'Marco/Cámara';
         else if (el.matches('.panel-title')) tag = 'Título Panel';
         else if (el.matches('.project-prefix')) tag = 'Prefijo';
         else if (el.matches('.panel-project-detail')) tag = 'Notas';
@@ -1368,6 +1546,11 @@
             || document.querySelector('.hud-header')?.textContent?.trim()
             || document.querySelector('.victory-banner h1')?.textContent?.trim();
           if (badgeText) texts.game.badgeText = badgeText;
+
+          const runTitle = document.querySelector('.run-title')?.textContent?.trim();
+          const runCategory = document.querySelector('.run-category')?.textContent?.trim();
+          if (runTitle) texts.game.runTitle = runTitle;
+          if (runCategory) texts.game.runCategory = runCategory;
         }
 
         if (isMakerScene && texts.maker) {

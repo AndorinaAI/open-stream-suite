@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Overlay — Speedrun & Splits</title>
+  <title>Overlay — Speedrun & Splits Pro</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
   <style>
@@ -10,52 +10,198 @@
       width: 1920px;
       height: 1080px;
       margin: 0;
-      padding: 24px;
+      padding: 24px 32px;
       box-sizing: border-box;
       background: transparent;
       display: flex;
-      gap: 24px;
+      gap: 28px;
       overflow: hidden;
       font-family: var(--font-tech);
+      color: var(--color-text-light);
     }
     .game-area {
       flex: 3;
       border: 2px solid var(--color-accent-cyan);
-      border-radius: 4px;
+      border-radius: 6px;
       background: rgba(0,0,0,0.25);
       position: relative;
+      box-shadow: var(--theme-glow);
+    }
+    .game-tag {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid var(--color-border-cyan);
+      color: var(--color-accent-cyan);
+      padding: 4px 12px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
     }
     .sidebar-splits {
-      flex: 1;
+      width: 440px;
       background: var(--color-panel-bg-trans);
       border: 1px solid var(--color-border-cyan);
-      border-radius: 4px;
-      padding: 16px;
+      border-radius: 6px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
     }
     .cam-split {
-      height: 200px;
-      border: 1px solid var(--color-accent-cyan);
+      height: 220px;
+      border: 2px solid var(--color-accent-cyan);
+      border-radius: 4px;
       background: rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .cam-label {
+      position: absolute;
+      bottom: 8px;
+      right: 10px;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--color-accent-cyan);
+      background: rgba(0,0,0,0.7);
+      padding: 2px 8px;
+      border-radius: 3px;
+      border: 1px solid var(--color-border-cyan);
+    }
+    .run-header {
+      border-bottom: 1px solid var(--color-border-dim);
+      padding-bottom: 10px;
+    }
+    .run-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--color-accent-cyan);
+      letter-spacing: 1px;
+    }
+    .run-category {
+      font-size: 11px;
+      color: var(--color-text-dim);
+      margin-top: 3px;
+    }
+    .splits-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      overflow-y: auto;
+    }
+    .split-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: rgba(0,0,0,0.35);
+      border-radius: 3px;
+      border-left: 3px solid transparent;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .split-row.active {
+      border-left-color: var(--color-accent-cyan);
+      background: rgba(87,214,196,0.12);
+    }
+    .split-name {
+      font-weight: 700;
+    }
+    .split-times {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .split-delta {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 5px;
+      border-radius: 2px;
+    }
+    .split-delta.negative {
+      color: #3FB950;
+      background: rgba(63,185,80,0.15);
+    }
+    .split-delta.positive {
+      color: #F85149;
+      background: rgba(248,81,73,0.15);
+    }
+    .split-time {
+      font-weight: 800;
+      color: var(--color-text-light);
     }
     .timer-big {
-      font-size: 38px;
+      font-size: 44px;
       font-weight: 900;
       color: var(--color-accent-orange);
       text-align: center;
       padding: 12px;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.6);
       border: 1px solid var(--color-border-cyan);
+      border-radius: 4px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 16px rgba(255,120,63,0.4);
+    }
+    .pb-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--color-text-dim);
+      padding: 4px 6px;
     }
   </style>
 </head>
-<body data-theme="crimson_esport">
-  <div class="game-area"></div>
+<body data-theme="crimson_esport" data-scene="gamer_speedrun">
+  <div class="game-area">
+    <div class="game-tag">GAMEPLAY // LIVE CAPTURE</div>
+  </div>
   <div class="sidebar-splits">
-    <div class="cam-split"></div>
-    <div class="timer-big">00:42:18</div>
+    <div class="cam-split">
+      <div class="cam-label">STREAMER // CAM</div>
+    </div>
+    <div class="run-header">
+      <div class="run-title">SUPER MARIO 64</div>
+      <div class="run-category">16 STARS · N64 ORIGINAL</div>
+    </div>
+    <div class="splits-list">
+      <div class="split-row">
+        <span class="split-name">01 BOB-OMB</span>
+        <div class="split-times">
+          <span class="split-delta negative">-00:14</span>
+          <span class="split-time">02:18</span>
+        </div>
+      </div>
+      <div class="split-row">
+        <span class="split-name">02 WHOMP'S FORT</span>
+        <div class="split-times">
+          <span class="split-delta negative">-00:42</span>
+          <span class="split-time">05:30</span>
+        </div>
+      </div>
+      <div class="split-row active">
+        <span class="split-name">03 CCM MOUNTAIN</span>
+        <div class="split-times">
+          <span class="split-delta positive">+00:08</span>
+          <span class="split-time">09:15</span>
+        </div>
+      </div>
+      <div class="split-row">
+        <span class="split-name">04 BOWSER IN DARK</span>
+        <div class="split-times">
+          <span class="split-delta negative">-00:25</span>
+          <span class="split-time">15:40</span>
+        </div>
+      </div>
+    </div>
+    <div class="timer-big" id="speedrun-timer">00:09:15</div>
+    <div class="pb-bar">
+      <span>PERSONAL BEST</span>
+      <span style="color:var(--color-accent-cyan); font-weight:800;">16:15.00</span>
+    </div>
   </div>
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
