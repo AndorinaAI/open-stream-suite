@@ -1,0 +1,15 @@
+name: 📚 Documentación / Documentation
+description: Docs incorrectas, incompletas o poco claras / Wrong, missing or unclear docs
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: input
+    id: file
+    attributes:
+      label: Archivo o página / File or page
+  - type: textarea
+    id: problem
+    attributes:
+      label: ¿Qué hay que mejorar? / What should be improved?
+    validations:
+      required: true

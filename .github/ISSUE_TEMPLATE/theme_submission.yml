@@ -1,0 +1,24 @@
+name: 🎨 Propuesta de tema o escena / Theme or scene submission
+description: Comparte un tema, pack o escena / Share a theme, pack or scene
+title: "[Theme]: "
+labels: ["theme", "community"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Nombre / Name
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción y capturas / Description & screenshots
+    validations:
+      required: true
+  - type: checkboxes
+    id: license
+    attributes:
+      label: Licencia / License
+      options:
+        - label: Todo el contenido es mío o tiene licencia compatible / All content is mine or compatibly licensed
+          required: true

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Preguntas y ayuda / Questions & help
+    url: https://github.com/AndorinaAI/open-stream-suite/discussions/categories/q-a
+    about: Para dudas de uso usa Discussions / For usage questions use Discussions
+  - name: 💡 Ideas
+    url: https://github.com/AndorinaAI/open-stream-suite/discussions/categories/ideas
+    about: Comparte ideas antes de abrir una feature request / Share ideas first
+  - name: 🔒 Vulnerabilidad de seguridad / Security vulnerability
+    url: https://github.com/AndorinaAI/open-stream-suite/security/advisories/new
+    about: Reporta de forma privada, NO como issue público / Report privately

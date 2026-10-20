@@ -1,0 +1,76 @@
+name: 🐛 Bug / Error
+description: Algo no funciona como debería / Something is not working
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por reportar. Rellena lo que puedas. / Thanks for reporting.
+        ⚠️ **No pegues tokens, `.env` ni `client_secret`.** / Never paste tokens or secrets.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción / Description
+      description: ¿Qué ocurre? ¿Qué esperabas? / What happens? What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir / Steps to reproduce
+      placeholder: |
+        1. Abrir el panel...
+        2. Pulsar...
+        3. Ver el error
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Área / Area
+      options:
+        - Panel
+        - Alertas / Alerts
+        - Widgets
+        - Temas y escenas / Themes & scenes
+        - Launcher / Bandeja / Tray
+        - Instaladores / Installers
+        - Plugins (Stream Deck, Ajazz, OpenDeck)
+        - Traducciones / i18n
+        - Documentación / Docs
+        - Otro / Other
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Sistema operativo / OS
+      options: [Windows, macOS, Linux, Otro / Other]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versión / Version
+      placeholder: "1.0.0-alpha"
+    validations:
+      required: true
+  - type: input
+    id: obs
+    attributes:
+      label: Versión de OBS / OBS version
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / capturas / Logs & screenshots
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Comprobaciones / Checklist
+      options:
+        - label: He buscado issues duplicados / I searched for duplicates
+          required: true
+        - label: He eliminado datos sensibles de los logs / I removed sensitive data
+          required: true
