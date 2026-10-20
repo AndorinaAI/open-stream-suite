@@ -274,8 +274,8 @@ function openThemePack(packId) {
                 return '<span style="font-size: 10px; color: var(--color-text-dim); font-style: italic;">Sin overlays asignadas (se puede asignar en la pestaña Overlays)</span>';
               }
               return linked.map(sc => `
-                <button type="button" class="badge-pill" style="cursor: pointer; border: 1px solid rgba(255, 120, 63, 0.4); background: rgba(255, 120, 63, 0.15); color: #FF783F; font-size: 9px; padding: 2px 6px;" onclick="openSceneEditor('${sc.key}')" title="Clic para editar los textos de ${sc.name}">
-                  ${sc.icon} ${sc.name.split(':')[0]} ✏️
+                <button type="button" class="badge-pill" style="cursor: pointer; border: 1px solid rgba(255, 120, 63, 0.4); background: rgba(255, 120, 63, 0.15); color: #FF783F; font-size: 9px; padding: 2px 6px;" onclick="openOverlayFullscreen('${sc.key}', '${sc.path}')" title="Clic para ver en pantalla completa y editar textos de ${sc.name}">
+                  ${sc.icon} ${sc.name.split(':')[0]} 🖥️✏️
                 </button>
               `).join('');
             })()}
@@ -1832,20 +1832,18 @@ function buildSceneCardHtml(s) {
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
-        <button class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 7px 12px; display: inline-flex; justify-content: center; align-items: center; gap: 6px;" onclick="openSceneEditor('${s.key}')">
-          ✏️ Editar Textos y Ver Vista Rápida
+        <button class="btn-action-primary" style="width: 100%; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 2px; line-height: 1.25;" onclick="openOverlayFullscreen('${s.key}', '${s.path}')" title="Ver a resolución completa 1080p y editar todos los textos directamente en pantalla">
+          <span style="font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px;">🖥️ Ver Pantalla Completa</span>
+          <span style="font-size: 10px; font-weight: 700; color: #0D1117; opacity: 0.95;">✏️ Editar Textos</span>
         </button>
         <div style="display: flex; gap: 6px;">
-          <button class="btn-action-test" style="flex: 1; font-size: 11px; padding: 6px 8px; display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="openOverlayFullscreen('${s.key}', '${s.path}')" title="Ver a resolución nativa 1080p con el estilo ${assignedThemeObj.name}">
-            🖥️ Pantalla Completa ↗
-          </button>
-          <button class="btn-action-test" style="flex: 1; font-size: 11px; padding: 6px 8px; display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="copyOverlaySceneUrl('${s.key}', '${s.path}')" title="Copiar URL con el tema ${assignedThemeObj.name} para OBS Studio">
+          <button class="btn-action-test" style="flex: 1; font-size: 11px; padding: 6px 8px; display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="copyOverlaySceneUrl('${s.key}', '${s.path}')" title="Copiar URL para pegar como Fuente Navegador en OBS Studio">
             📋 Copiar URL OBS
           </button>
+          <button class="btn-action-test" style="font-size: 10px; padding: 6px 8px; color: #FF783F; border-color: rgba(255,120,63,0.3); display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="restoreSceneTexts('${s.key}')" title="Restaurar textos de fábrica para esta escena">
+            🔄 Restaurar Textos
+          </button>
         </div>
-        <button class="btn-action-test" style="font-size: 10px; padding: 4px 8px; color: #FF783F; border-color: rgba(255,120,63,0.3); display: inline-flex; justify-content: center; align-items: center; gap: 4px; margin-top: 2px;" onclick="restoreSceneTexts('${s.key}')" title="Restaurar textos de fábrica para esta escena">
-          🔄 Restaurar Textos de Fábrica
-        </button>
       </div>
     </div>
   `;

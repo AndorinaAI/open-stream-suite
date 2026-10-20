@@ -93,13 +93,13 @@
     const isPomodoro = window.location.pathname.includes('/study_pomodoro/')
       || document.querySelector('.pomodoro-card') !== null;
 
-    document.querySelectorAll('.live-indicator').forEach(el => {
+    document.querySelectorAll('.live-indicator, .live-status').forEach(el => {
       if (config.channel?.showLiveIndicator === false && !isStartingSoon && !isBRB && !isEnding) {
         el.style.display = 'none';
       } else {
         el.style.display = '';
       }
-      const label = el.querySelector('span:last-child');
+      const label = el.querySelector('[data-text-key="status"]') || el.querySelector('span:last-child') || el;
       if (label) {
         if (isStartingSoon && config.startingSoon?.liveStatusText) {
           label.textContent = config.startingSoon.liveStatusText;
@@ -249,7 +249,7 @@
     // 8. Pantalla STARTING SOON
     if (isStartingSoon && config.startingSoon) {
       const s = config.startingSoon;
-      const heroTag = document.querySelector('.starting-hero-text > div:first-child');
+      const heroTag = document.querySelector('.starting-hero-text > div:first-child, .tag-line, [data-i18n="themes.placeholder_ss_tag"]');
       if (heroTag && s.heroTag) heroTag.textContent = s.heroTag;
 
       const mainTitle = document.querySelector('.starting-hero-text .main-stream-title')
@@ -270,7 +270,7 @@
         || document.querySelector('.box p');
       if (subtitle && s.subtitle) subtitle.textContent = s.subtitle;
 
-      const footerNote = document.querySelector('.starting-footer > div:first-child');
+      const footerNote = document.querySelector('.starting-footer > div:first-child, .bottom-bar .footer-note, .bottom-bar > div:first-child');
       if (footerNote && (s.footerNote || s.footer)) {
         footerNote.textContent = s.footerNote || s.footer;
       }
@@ -354,7 +354,7 @@
         || document.querySelector('.box p');
       if (subEl && b.subtitle) subEl.textContent = b.subtitle;
 
-      const footerNote = document.querySelector('.brb-footer > div:first-child');
+      const footerNote = document.querySelector('.brb-footer > div:first-child, .bottom-bar .footer-note, .bottom-bar > div:first-child');
       if (footerNote && (b.footerNote || b.footer)) {
         footerNote.textContent = b.footerNote || b.footer;
       }
@@ -367,9 +367,11 @@
         brbPhraseEl.textContent = phrases[0];
         const intervalSec = (b.phraseIntervalSeconds || 6) * 1000;
         brbInterval = setInterval(() => {
+          if (window.__OSS_IS_EDITING__) return; // PAUSAR rotación mientras el usuario edita o escribe
           pIdx = (pIdx + 1) % phrases.length;
           brbPhraseEl.style.opacity = '0';
           setTimeout(() => {
+            if (window.__OSS_IS_EDITING__) return;
             brbPhraseEl.textContent = phrases[pIdx];
             brbPhraseEl.style.opacity = '1';
           }, 300);
@@ -402,7 +404,7 @@
         cardTag.textContent = e.farewellTag;
       }
 
-      const footerNote = document.querySelector('.ending-footer > div:first-child');
+      const footerNote = document.querySelector('.ending-footer > div:first-child, .bottom-bar .footer-note, .bottom-bar > div:first-child');
       if (footerNote && (e.footerNote || e.footer)) {
         footerNote.textContent = e.footerNote || e.footer;
       }
@@ -889,6 +891,152 @@
       });
     }
 
+    // --- Control especial: frases en rotación (Pantallas Be Right Back y Coffee Break) ---
+    const isBrbScene = ['beRightBack', 'oss_brb', 'gamer_brb', 'cozy_brb'].includes(sceneKey)
+      || window.location.pathname.includes('/be-right-back/')
+      || window.location.pathname.includes('/coffee-break/')
+      || document.querySelector('.brb-status-phrase') !== null;
+
+    if (isBrbScene) {
+      const phrasesControl = document.createElement('div');
+      phrasesControl.id = 'oss-brb-phrases-control';
+      phrasesControl.style.cssText = `
+        position: fixed; top: 50%; right: 18px; transform: translateY(-50%);
+        z-index: 999998; background: rgba(14,18,24,0.96); backdrop-filter: blur(14px);
+        border: 1px solid rgba(87,214,196,0.45); border-radius: 8px;
+        padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
+        font-size: 11px; color: #F0F6FC; box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(87,214,196,0.15);
+        display: flex; flex-direction: column; gap: 10px; width: 260px;
+      `;
+      phrasesControl.innerHTML = `
+        <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center;">
+          <span>🔄 FRASES EN ROTACIÓN</span>
+          <span id="oss-brb-phrase-counter" style="font-size:10px; color:#8B949E;">1 / 1</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+          <button id="oss-brb-prev-phrase" type="button" class="hud-btn" style="flex:1; justify-content:center; padding:3px 6px;">◀ Anterior</button>
+          <button id="oss-brb-next-phrase" type="button" class="hud-btn" style="flex:1; justify-content:center; padding:3px 6px;">Siguiente ▶</button>
+        </div>
+        <label style="display:flex; flex-direction:column; gap:4px;">
+          <span style="color:#8B949E; font-size:10px;">EDITAR FRASE SELECCIONADA:</span>
+          <textarea id="oss-brb-active-text" rows="2"
+            style="width:100%; box-sizing:border-box; background:#161B22; color:#F0F6FC; border:1px solid rgba(87,214,196,0.4);
+                   border-radius:4px; padding:6px 8px; font-size:12px; font-family:inherit; outline:none; resize:none;"
+          ></textarea>
+        </label>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+          <span style="color:#8B949E; font-size:10px;">CAMBIAR CADA:</span>
+          <div style="display:flex; align-items:center; gap:4px;">
+            <input id="oss-brb-interval" type="number" min="2" max="60" value="6"
+              style="width:45px; background:#161B22; color:#F0F6FC; border:1px solid rgba(87,214,196,0.4);
+                     border-radius:4px; padding:3px 6px; font-size:11px; font-family:inherit; text-align:center;"
+            >
+            <span style="color:#8B949E; font-size:10px;">seg</span>
+          </div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button id="oss-brb-add-phrase" type="button" class="hud-btn" style="flex:1; justify-content:center;">➕ Añadir Frase</button>
+          <button id="oss-brb-save-phrases" type="button" class="hud-btn btn-save" style="flex:1; justify-content:center;">💾 Guardar</button>
+        </div>
+      `;
+      document.body.appendChild(phrasesControl);
+
+      let currentPhrases = [
+        'TOMANDO UN CAFÉ...',
+        'PREPARANDO TODO...',
+        'PROBANDO COSAS...',
+        'VOLVEMOS ENSEGUIDA'
+      ];
+      let activeIndex = 0;
+
+      const syncPhrasesUI = () => {
+        const cfg = window.OSS_CONFIG || window.TALLER_CONFIG;
+        if (cfg?.beRightBack?.statusPhrases?.length) {
+          currentPhrases = [...cfg.beRightBack.statusPhrases];
+        }
+        if (cfg?.beRightBack?.phraseIntervalSeconds) {
+          const inpInt = document.getElementById('oss-brb-interval');
+          if (inpInt) inpInt.value = cfg.beRightBack.phraseIntervalSeconds;
+        }
+        renderCurrentPhrase();
+      };
+
+      const renderCurrentPhrase = () => {
+        if (activeIndex >= currentPhrases.length) activeIndex = 0;
+        if (activeIndex < 0) activeIndex = Math.max(0, currentPhrases.length - 1);
+        const counter = document.getElementById('oss-brb-phrase-counter');
+        const txtArea = document.getElementById('oss-brb-active-text');
+        if (counter) counter.textContent = `${activeIndex + 1} / ${currentPhrases.length}`;
+        if (txtArea) txtArea.value = currentPhrases[activeIndex] || '';
+        const brbEl = document.querySelector('.brb-status-phrase');
+        if (brbEl && currentPhrases[activeIndex]) {
+          brbEl.textContent = currentPhrases[activeIndex];
+        }
+      };
+
+      setTimeout(syncPhrasesUI, 800);
+
+      document.getElementById('oss-brb-prev-phrase')?.addEventListener('click', () => {
+        window.__OSS_IS_EDITING__ = true;
+        activeIndex = (activeIndex - 1 + currentPhrases.length) % currentPhrases.length;
+        renderCurrentPhrase();
+      });
+
+      document.getElementById('oss-brb-next-phrase')?.addEventListener('click', () => {
+        window.__OSS_IS_EDITING__ = true;
+        activeIndex = (activeIndex + 1) % currentPhrases.length;
+        renderCurrentPhrase();
+      });
+
+      document.getElementById('oss-brb-active-text')?.addEventListener('input', (e) => {
+        window.__OSS_IS_EDITING__ = true;
+        currentPhrases[activeIndex] = e.target.value;
+        const brbEl = document.querySelector('.brb-status-phrase');
+        if (brbEl) brbEl.textContent = e.target.value;
+      });
+
+      document.getElementById('oss-brb-add-phrase')?.addEventListener('click', () => {
+        window.__OSS_IS_EDITING__ = true;
+        currentPhrases.push('NUEVA FRASE EN ROTACIÓN...');
+        activeIndex = currentPhrases.length - 1;
+        renderCurrentPhrase();
+        showHudToast('➕ Nueva frase añadida a la lista');
+      });
+
+      document.getElementById('oss-brb-save-phrases')?.addEventListener('click', async () => {
+        try {
+          const sec = parseInt(document.getElementById('oss-brb-interval')?.value) || 6;
+          if (!window.OSS_CONFIG) window.OSS_CONFIG = {};
+          if (!window.OSS_CONFIG.beRightBack) window.OSS_CONFIG.beRightBack = {};
+          window.OSS_CONFIG.beRightBack.statusPhrases = currentPhrases.filter(Boolean);
+          window.OSS_CONFIG.beRightBack.phraseIntervalSeconds = sec;
+
+          const res = await fetch('/api/overlays/texts');
+          const serverData = await res.json();
+          const texts = serverData.texts || {};
+          if (!texts.beRightBack) texts.beRightBack = {};
+          texts.beRightBack.statusPhrases = currentPhrases.filter(Boolean);
+          texts.beRightBack.phraseIntervalSeconds = sec;
+
+          let localToken = window.__LOCAL_AUTH_TOKEN__ || localStorage?.getItem('local_auth_token') || '';
+          if (!localToken) {
+            try {
+              const tokRes = await fetch('/api/local-token');
+              if (tokRes.ok) { const td = await tokRes.json(); localToken = td.token || ''; }
+            } catch(e){}
+          }
+          await fetch('/api/overlays/texts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...(localToken ? {'X-Local-Token': localToken} : {}) },
+            body: JSON.stringify({ texts })
+          });
+          showHudToast('💾 Frases en rotación guardadas con éxito');
+        } catch(e) {
+          showHudToast('⚠️ Error al guardar frases en el servidor');
+        }
+      });
+    }
+
     // Auto-escalado inteligente para que 1920x1080 quepa 100% en la ventana del navegador sin scrollbars
     let autoFitEnabled = true;
     function applyAutoFit() {
@@ -962,10 +1110,18 @@
     const quickJumpSelect = hud.querySelector('#hud-quick-jump-select');
 
     const editableSelectors = [
-      // Marca del canal (todas las escenas)
+      // Marca del canal y estados de directo (todas las escenas y packs)
       '.brand-name',
       '.brand-tagline',
+      '.brand-box span',
+      '.brand-info span',
       '.live-indicator span:last-child',
+      '.live-indicator span:not(.live-dot)',
+      '.live-status span:last-child',
+      '[data-text-key="status"]',
+      '.live-status',
+      '[data-i18n="themes.placeholder_ss_status"]',
+      '[data-i18n="themes.live_indicator"]',
       // Game / Esports / Stats
       '.game-mode-badge-under span:last-child',
       '.hud-header',
@@ -982,13 +1138,17 @@
       '.panel-project-detail',
       '.panel-title',
       '.info-label',
+      '.info-value',
       '.frame-label span:last-child',
+      '.frame-label',
       '.camera-label',
       '.phase-item',
       '.palette-box div',
+      '.mode-badge span:last-child',
       // Chill / Chatting / Podcast / Cafe
       '.header-subtitle',
       '.chat-title',
+      '.chat-title span:last-child',
       '.chat-topic',
       '.stream-tag',
       '.stream-tag span',
@@ -1000,19 +1160,25 @@
       '.top-banner',
       '.podcast-title',
       '.guest-nameplate',
+      '.chill-footer-topic span',
+      '.chill-footer-topic div',
       // Pomodoro / Estudio
       '.pomodoro-card div',
       '.pomo-time',
       // Starting Soon (todos los packs)
       '.starting-hero-text > div:first-child',
+      '.tag-line',
+      '[data-i18n="themes.placeholder_ss_tag"]',
       '.starting-hero-text .main-stream-title',
       '.starting-hero-text .stream-subtitle',
       '.starting-footer > div:first-child',
       '.ss-mode-label',
       '.box h1',
       '.box p',
+      '.box > div',
       '.card h1',
       '.card p',
+      '.card > div',
       '.main-stream-title',
       '.stream-subtitle',
       // BRB (todos los packs)
@@ -1030,7 +1196,10 @@
       'h1',
       'h2',
       'h3',
-      '.bottom-bar div'
+      '.footer-note',
+      '.bottom-bar div',
+      '.bottom-bar b',
+      '.bottom-bar span'
     ];
 
     function populateQuickJump() {
@@ -1046,7 +1215,9 @@
         }
 
         let tag = 'Texto';
-        if (el.matches('.project-name-value, .panel-project-name')) tag = 'Proyecto';
+        if (el.matches('.live-indicator span, .live-status span, [data-text-key="status"], .live-status, .live-indicator')) tag = 'Estado Live';
+        else if (el.matches('.tag-line, .starting-hero-text > div:first-child, [data-i18n="themes.placeholder_ss_tag"]')) tag = 'Etiqueta';
+        else if (el.matches('.project-name-value, .panel-project-name')) tag = 'Proyecto';
         else if (el.matches('.panel-project-phase')) tag = 'Fase Activa';
         else if (el.matches('.phase-item')) tag = 'Fase';
         else if (el.matches('.frame-label span:last-child, .frame-label, .camera-label')) tag = 'Marco/Cámara';
@@ -1055,8 +1226,10 @@
         else if (el.matches('.panel-project-detail')) tag = 'Notas';
         else if (el.matches('.brand-name')) tag = 'Streamer';
         else if (el.matches('.brand-tagline')) tag = 'Lema';
-        else if (el.matches('.hero-title')) tag = 'Título';
-        else if (el.matches('.header-subtitle, .hero-subtitle')) tag = 'Subtítulo';
+        else if (el.matches('.hero-title, .main-stream-title')) tag = 'Título';
+        else if (el.matches('.header-subtitle, .hero-subtitle, .stream-subtitle')) tag = 'Subtítulo';
+        else if (el.matches('.brb-status-phrase')) tag = 'Frase Rotativa';
+        else if (el.matches('.footer-note, .bottom-bar div, .starting-footer div')) tag = 'Pie de página';
 
         const opt = document.createElement('option');
         opt.value = el.dataset.quickEditId;
@@ -1091,8 +1264,23 @@
       });
     }
 
+    // Captura universal de clics: cualquier texto del canvas es editable
+    document.addEventListener('click', (e) => {
+      if (!isEditing) return;
+      if (e.target.closest('#oss-hud-editor') || e.target.closest('#oss-brb-phrases-control') || e.target.closest('.hud-toast')) return;
+      const target = e.target;
+      if (!target.isContentEditable && target.textContent && target.textContent.trim().length > 0 && target.children.length === 0) {
+        target.setAttribute('contenteditable', 'true');
+        target.setAttribute('spellcheck', 'false');
+        target.classList.add('editable-screen-element', 'editing-active');
+        window.__OSS_IS_EDITING__ = true;
+        target.focus();
+      }
+    }, true);
+
     btnToggleEdit.addEventListener('click', () => {
       isEditing = !isEditing;
+      window.__OSS_IS_EDITING__ = isEditing;
       btnToggleEdit.classList.toggle('active-editing', isEditing);
       lblEditState.textContent = isEditing ? 'ON (ACTIVO)' : 'OFF';
       lblEditState.style.color = isEditing ? '#57D6C4' : '#FF783F';
@@ -1117,6 +1305,7 @@
           };
           el.onfocus = () => {
             if (!isEditing) return;
+            window.__OSS_IS_EDITING__ = true;
             try {
               const range = document.createRange();
               range.selectNodeContents(el);
@@ -1125,11 +1314,15 @@
               sel.addRange(range);
             } catch (err) {}
           };
+          el.oninput = () => {
+            window.__OSS_IS_EDITING__ = true;
+          };
         } else {
           el.removeAttribute('contenteditable');
           el.removeAttribute('title');
           el.onclick = null;
           el.onfocus = null;
+          el.oninput = null;
         }
       });
 
@@ -1150,7 +1343,7 @@
         // Recolectar valores editados en vivo
         const brandName = document.querySelector('.brand-name')?.textContent?.trim();
         const brandTagline = document.querySelector('.brand-tagline')?.textContent?.trim();
-        const liveText = document.querySelector('.live-indicator span:last-child')?.textContent?.trim();
+        const liveText = document.querySelector('.live-indicator span:last-child, .live-status span:last-child, [data-text-key="status"], .live-status')?.textContent?.trim();
 
         if (texts.channel) {
           if (brandName) texts.channel.name = brandName;
@@ -1294,11 +1487,11 @@
           if (sub) texts.startingSoon.subtitle = sub;
 
           // Nota de pie
-          const footerNote = document.querySelector('.starting-footer > div:first-child')?.textContent?.trim();
+          const footerNote = document.querySelector('.starting-footer > div:first-child, .bottom-bar .footer-note, .bottom-bar > div:first-child')?.textContent?.trim();
           if (footerNote) texts.startingSoon.footerNote = footerNote;
 
           // Estado del indicador de directo
-          const liveLabel = document.querySelector('.live-indicator span:last-child')?.textContent?.trim();
+          const liveLabel = document.querySelector('.live-indicator span:last-child, .live-status span:last-child, [data-text-key="status"], .live-status')?.textContent?.trim();
           if (liveLabel) texts.startingSoon.liveStatusText = liveLabel;
 
           // Etiquetas de modos de emisión (panel derecho)
@@ -1330,11 +1523,11 @@
           }
 
           // Nota de pie
-          const footerNote = document.querySelector('.brb-footer > div:first-child')?.textContent?.trim();
+          const footerNote = document.querySelector('.brb-footer > div:first-child, .bottom-bar .footer-note, .bottom-bar > div:first-child')?.textContent?.trim();
           if (footerNote) texts.beRightBack.footerNote = footerNote;
 
           // Estado del indicador
-          const liveLabel = document.querySelector('.live-indicator span:last-child')?.textContent?.trim();
+          const liveLabel = document.querySelector('.live-indicator span:last-child, .live-status span:last-child, [data-text-key="status"], .live-status')?.textContent?.trim();
           if (liveLabel) texts.beRightBack.liveStatusText = liveLabel;
         }
 
@@ -1357,10 +1550,10 @@
           const fareTag = document.querySelector('.ending-farewell-card div')?.textContent?.trim();
           if (fareTag) texts.ending.farewellTag = fareTag;
 
-          const footerNote = document.querySelector('.ending-footer > div:first-child')?.textContent?.trim();
+          const footerNote = document.querySelector('.ending-footer > div:first-child, .bottom-bar .footer-note, .bottom-bar > div:first-child')?.textContent?.trim();
           if (footerNote) texts.ending.footerNote = footerNote;
 
-          const liveLabel = document.querySelector('.live-indicator span:last-child')?.textContent?.trim();
+          const liveLabel = document.querySelector('.live-indicator span:last-child, .live-status span:last-child, [data-text-key="status"], .live-status')?.textContent?.trim();
           if (liveLabel) texts.ending.liveStatusText = liveLabel;
         }
 
