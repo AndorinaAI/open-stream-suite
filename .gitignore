@@ -1,0 +1,29 @@
+# Secretos / Secrets
+.env
+token.json
+.local_token
+*.pem
+*.key
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Logs y temporales
+*.log
+.server.pid
+.launcher.lock
+.env.tmp
+backup_*.tar.gz
+
+# Datos personales locales
+roles.private.bak.json
+
+# Editores / SO
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

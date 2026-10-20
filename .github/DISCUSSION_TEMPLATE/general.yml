@@ -1,0 +1,8 @@
+title: ""
+body:
+  - type: textarea
+    id: content
+    attributes:
+      label: What's on your mind? / ¿Qué tienes en mente?
+    validations:
+      required: true

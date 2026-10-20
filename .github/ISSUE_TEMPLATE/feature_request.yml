@@ -1,0 +1,27 @@
+name: ✨ Feature request / Nueva funcionalidad
+description: Suggest an improvement / Propón una mejora
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or need / Problema o necesidad
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution / Solución propuesta
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives / Alternativas
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution / Contribución
+      options:
+        - label: I'd like to implement it myself / Me gustaría implementarlo yo

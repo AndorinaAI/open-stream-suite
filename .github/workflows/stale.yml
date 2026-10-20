@@ -1,0 +1,24 @@
+name: Stale
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-stale: 60
+          days-before-close: 14
+          stale-issue-label: stale
+          stale-pr-label: stale
+          exempt-issue-labels: "security,help wanted,good first issue"
+          stale-issue-message: "Inactive for 60 days; it will be closed in 14 days unless there is an update. / Inactivo 60 días; se cerrará en 14 si no hay novedades."
+          stale-pr-message: "This PR has been inactive for 60 days; it will be closed in 14 days unless there is an update. / PR inactivo 60 días; se cerrará en 14 si no hay novedades."

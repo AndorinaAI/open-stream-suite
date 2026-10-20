@@ -1,0 +1,9 @@
+title: "[Show] "
+body:
+  - type: textarea
+    id: show
+    attributes:
+      label: Tell and show us / Cuéntanos y enséñanos
+      description: Screenshots, videos, channel link / Capturas, vídeos, enlace a tu canal
+    validations:
+      required: true

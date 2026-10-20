@@ -1,0 +1,21 @@
+changelog:
+  exclude:
+    labels: [ignore-for-release, duplicate, wontfix]
+    authors: [dependabot]
+  categories:
+    - title: ✨ Features / Novedades
+      labels: [enhancement]
+    - title: 🐛 Fixes / Correcciones
+      labels: [bug]
+    - title: 🎨 Themes & scenes / Temas y escenas
+      labels: [theme]
+    - title: 🌍 Translations / Traducciones
+      labels: [i18n]
+    - title: 📚 Documentation / Documentación
+      labels: [documentation]
+    - title: 🔒 Security / Seguridad
+      labels: [security]
+    - title: 🧰 Maintenance / Mantenimiento
+      labels: [ci, dependencies]
+    - title: Other changes / Otros cambios
+      labels: ["*"]

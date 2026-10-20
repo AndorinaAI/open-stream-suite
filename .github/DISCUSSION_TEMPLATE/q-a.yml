@@ -1,0 +1,19 @@
+title: "[Q&A] "
+body:
+  - type: markdown
+    attributes:
+      value: "⚠️ Never paste tokens or secrets. / No pegues tokens ni secretos."
+  - type: textarea
+    id: question
+    attributes:
+      label: Question / Pregunta
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you tried / Qué has probado
+  - type: input
+    id: env
+    attributes:
+      label: OS and version / Sistema y versión

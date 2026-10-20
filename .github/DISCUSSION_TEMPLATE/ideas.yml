@@ -1,0 +1,12 @@
+title: "[Idea] "
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it useful? / ¿Por qué es útil?
