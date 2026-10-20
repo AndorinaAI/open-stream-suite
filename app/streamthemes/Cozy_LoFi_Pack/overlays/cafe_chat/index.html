@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay — Café & Charla Chill</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 30px;
+      box-sizing: border-box;
+      background: transparent;
+      display: flex;
+      gap: 24px;
+      font-family: var(--font-primary);
+      overflow: hidden;
+    }
+    .cam-polaroid {
+      flex: 3;
+      border: 2px solid var(--color-border-cyan-bright);
+      border-radius: var(--radius-lg);
+      background: rgba(0,0,0,0.25);
+      box-shadow: var(--theme-glow);
+    }
+    .chat-card {
+      flex: 1;
+      background: var(--color-panel-bg-trans);
+      border: 1px solid var(--color-border-cyan);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body data-theme="latte_caramel">
+  <div class="cam-polaroid"></div>
+  <div class="chat-card">
+    <div style="font-size:14px; font-weight:800; color:var(--color-accent-cyan); padding-bottom:12px; border-bottom:1px solid var(--color-border-dim);">☕ CHARLA RELAJADA</div>
+    <div style="flex:1;"></div>
+  </div>
+  <script src="/config.js"></script>
+</body>
+</html>

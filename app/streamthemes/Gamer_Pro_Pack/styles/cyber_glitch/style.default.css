@@ -1,0 +1,12 @@
+body[data-theme="cyber_glitch"],
+[data-theme="cyber_glitch"] {
+  --color-bg-dark: #060A14;
+  --color-text-light: #F0FDF4;
+  --color-accent-cyan: #06B6D4;
+  --color-accent-orange: #EC4899;
+  --color-panel-bg: #0E182A;
+  --color-text-dim: #8295AD;
+  --color-border-cyan: rgba(6, 182, 212, 0.45);
+  --color-border-cyan-bright: #06B6D4;
+  --theme-glow: 0 0 18px rgba(6, 182, 212, 0.65);
+}

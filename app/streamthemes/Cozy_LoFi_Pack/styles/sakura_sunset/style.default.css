@@ -1,0 +1,12 @@
+body[data-theme="sakura_sunset"],
+[data-theme="sakura_sunset"] {
+  --color-bg-dark: #181216;
+  --color-text-light: #FFF1F2;
+  --color-accent-cyan: #FB7185;
+  --color-accent-orange: #FBBF24;
+  --color-panel-bg: #2A1C25;
+  --color-text-dim: #A8949E;
+  --color-border-cyan: rgba(251, 113, 133, 0.35);
+  --color-border-cyan-bright: #FB7185;
+  --theme-glow: 0 0 14px rgba(251, 113, 133, 0.4);
+}

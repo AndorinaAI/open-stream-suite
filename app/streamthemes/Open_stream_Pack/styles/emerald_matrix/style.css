@@ -1,0 +1,12 @@
+body[data-theme="emerald_matrix"],
+[data-theme="emerald_matrix"] {
+  --color-bg-dark: #091410;
+  --color-text-light: #ECFDF5;
+  --color-accent-cyan: #10B981;
+  --color-accent-orange: #A3E635;
+  --color-panel-bg: #13241D;
+  --color-text-dim: #8EAA9E;
+  --color-border-cyan: rgba(16, 185, 129, 0.4);
+  --color-border-cyan-bright: #10B981;
+  --theme-glow: 0 0 16px rgba(16, 185, 129, 0.5);
+}

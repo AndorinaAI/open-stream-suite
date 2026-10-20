@@ -13,11 +13,11 @@ THEMES_STATE_FILE = BASE_DIR / "themes_state.json"
 RESERVED_PACK_DIRS = {"overlays", "common", "config.js", "__pycache__"}
 
 DEFAULT_PACK_TALLER = {
-    "id": "Open_stream_Pack",
-    "name": "Pack Open Stream Suite",
+    "id": "Maker_Theme_Pack",
+    "name": "Pack Maker & Taller",
     "icon": "🛠️",
-    "badge": "PACK OFICIAL (6 TEMAS)",
-    "description": "El pack oficial modular de Open Stream Suite con los 6 estilos base: Maker, Print, Terminal, Chill, Cyberpunk y Synthwave.",
+    "badge": "PACK MAKER (6 TEMAS)",
+    "description": "El pack insignia para creadores, talleres, electrónica, programación CAD e impresión 3D con 6 estilos visuales.",
     "version": "1.0.0",
     "author": "Open Stream Suite"
 }
@@ -25,7 +25,7 @@ DEFAULT_PACK_TALLER = {
 DEFAULT_THEMES_DATA = [
     {
         "id": "maker",
-        "packId": "Open_stream_Pack",
+        "packId": "Maker_Theme_Pack",
         "name": "Maker Electrónico",
         "badge": "01 // MAKER",
         "accentCyan": "#57D6C4",
@@ -55,7 +55,7 @@ DEFAULT_THEMES_DATA = [
     },
     {
         "id": "print",
-        "packId": "Open_stream_Pack",
+        "packId": "Maker_Theme_Pack",
         "name": "Print & Vinilo",
         "badge": "02 // PRINT",
         "accentCyan": "#FF783F",
@@ -85,7 +85,7 @@ DEFAULT_THEMES_DATA = [
     },
     {
         "id": "terminal",
-        "packId": "Open_stream_Pack",
+        "packId": "Maker_Theme_Pack",
         "name": "Retro Terminal",
         "badge": "03 // TERMINAL",
         "accentCyan": "#22C55E",
@@ -116,7 +116,7 @@ DEFAULT_THEMES_DATA = [
     },
     {
         "id": "chill",
-        "packId": "Open_stream_Pack",
+        "packId": "Maker_Theme_Pack",
         "name": "Chill Lavender",
         "badge": "04 // CHILL",
         "accentCyan": "#89B4FA",
@@ -146,7 +146,7 @@ DEFAULT_THEMES_DATA = [
     },
     {
         "id": "cyberpunk",
-        "packId": "Open_stream_Pack",
+        "packId": "Maker_Theme_Pack",
         "name": "Cyberpunk Industrial",
         "badge": "05 // CYBERPUNK",
         "accentCyan": "#FFE600",
@@ -176,7 +176,7 @@ DEFAULT_THEMES_DATA = [
     },
     {
         "id": "synthwave",
-        "packId": "Open_stream_Pack",
+        "packId": "Maker_Theme_Pack",
         "name": "Synthwave Retro",
         "badge": "06 // SYNTHWAVE",
         "accentCyan": "#00F9FF",
@@ -222,7 +222,7 @@ DEFAULT_OVERLAY_THEMES = {
 
 def load_theme_state():
     state = {
-        "activePack": "Open_stream_Pack",
+        "activePack": "Maker_Theme_Pack",
         "activeTheme": "maker",
         "overlayThemes": dict(DEFAULT_OVERLAY_THEMES)
     }
@@ -291,8 +291,8 @@ def init_themes_directory():
     """Inicializa la estructura modular de streamthemes/Open_stream_pack/ si no existe"""
     STREAMTHEMES_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Pack Open Stream Suite oficial
-    pack_taller_dir = find_pack_dir("Open_stream_Pack")
+    # Pack Maker & Taller oficial
+    pack_taller_dir = find_pack_dir("Maker_Theme_Pack")
     pack_taller_dir.mkdir(parents=True, exist_ok=True)
     styles_dir = pack_taller_dir / "styles"
     overlays_dir = pack_taller_dir / "overlays"

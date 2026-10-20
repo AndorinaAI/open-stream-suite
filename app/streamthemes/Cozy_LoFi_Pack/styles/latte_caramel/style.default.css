@@ -1,0 +1,12 @@
+body[data-theme="latte_caramel"],
+[data-theme="latte_caramel"] {
+  --color-bg-dark: #181411;
+  --color-text-light: #FFFBEB;
+  --color-accent-cyan: #F59E0B;
+  --color-accent-orange: #B45309;
+  --color-panel-bg: #2A211B;
+  --color-text-dim: #A8988C;
+  --color-border-cyan: rgba(245, 158, 11, 0.35);
+  --color-border-cyan-bright: #F59E0B;
+  --theme-glow: 0 0 14px rgba(245, 158, 11, 0.4);
+}

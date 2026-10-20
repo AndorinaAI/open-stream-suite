@@ -1,0 +1,19 @@
+{
+  "id": "nordic_twilight",
+  "packId": "Cozy_LoFi_Pack",
+  "name": "Nordic Twilight",
+  "badge": "05 // NORDIC",
+  "accentCyan": "#38BDF8",
+  "accentOrange": "#94A3B8",
+  "bgDark": "#0F141C",
+  "textLight": "#F8FAFC",
+  "panelBg": "#1C2433",
+  "textDim": "#8290A3",
+  "fontPrimary": "var(--font-primary)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 40,
+  "borderStyle": "rounded",
+  "desc": "Atardecer invernal escandinavo, sereno, minimalista y limpio.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

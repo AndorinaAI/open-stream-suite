@@ -1,0 +1,12 @@
+body[data-theme="sunset_glow"],
+[data-theme="sunset_glow"] {
+  --color-bg-dark: #181216;
+  --color-text-light: #FFF1F2;
+  --color-accent-cyan: #FF5E62;
+  --color-accent-orange: #FFD97D;
+  --color-panel-bg: #261922;
+  --color-text-dim: #A89BA2;
+  --color-border-cyan: rgba(255, 94, 98, 0.4);
+  --color-border-cyan-bright: #FF5E62;
+  --theme-glow: 0 0 16px rgba(255, 94, 98, 0.5);
+}

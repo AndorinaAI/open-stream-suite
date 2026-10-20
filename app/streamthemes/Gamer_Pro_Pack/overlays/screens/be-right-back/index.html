@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantalla — Intermisión</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      background: var(--color-bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-tech);
+    }
+    .box {
+      border: 2px solid var(--color-accent-cyan);
+      padding: 36px 70px;
+      background: var(--color-panel-bg);
+      clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+      box-shadow: var(--theme-glow);
+      text-align: center;
+    }
+    h1 { font-size: 46px; color: var(--color-accent-cyan); margin: 0; }
+  </style>
+</head>
+<body data-theme="crimson_esport">
+  <div class="box">
+    <h1>INTERMISSION // LOBBY BREAK</h1>
+  </div>
+  <script src="/config.js"></script>
+</body>
+</html>

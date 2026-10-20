@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay — Speedrun & Splits</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 24px;
+      box-sizing: border-box;
+      background: transparent;
+      display: flex;
+      gap: 24px;
+      overflow: hidden;
+      font-family: var(--font-tech);
+    }
+    .game-area {
+      flex: 3;
+      border: 2px solid var(--color-accent-cyan);
+      border-radius: 4px;
+      background: rgba(0,0,0,0.25);
+      position: relative;
+    }
+    .sidebar-splits {
+      flex: 1;
+      background: var(--color-panel-bg-trans);
+      border: 1px solid var(--color-border-cyan);
+      border-radius: 4px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .cam-split {
+      height: 200px;
+      border: 1px solid var(--color-accent-cyan);
+      background: rgba(0,0,0,0.4);
+    }
+    .timer-big {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--color-accent-orange);
+      text-align: center;
+      padding: 12px;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid var(--color-border-cyan);
+    }
+  </style>
+</head>
+<body data-theme="crimson_esport">
+  <div class="game-area"></div>
+  <div class="sidebar-splits">
+    <div class="cam-split"></div>
+    <div class="timer-big">00:42:18</div>
+  </div>
+  <script src="/config.js"></script>
+</body>
+</html>

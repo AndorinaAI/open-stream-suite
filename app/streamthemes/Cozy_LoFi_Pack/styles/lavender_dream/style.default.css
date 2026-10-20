@@ -1,0 +1,12 @@
+body[data-theme="lavender_dream"],
+[data-theme="lavender_dream"] {
+  --color-bg-dark: #15111F;
+  --color-text-light: #FAF5FF;
+  --color-accent-cyan: #C084FC;
+  --color-accent-orange: #F472B6;
+  --color-panel-bg: #241B33;
+  --color-text-dim: #9E8FA8;
+  --color-border-cyan: rgba(192, 132, 252, 0.35);
+  --color-border-cyan-bright: #C084FC;
+  --theme-glow: 0 0 14px rgba(192, 132, 252, 0.4);
+}

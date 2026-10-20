@@ -1,0 +1,12 @@
+body[data-theme="nordic_twilight"],
+[data-theme="nordic_twilight"] {
+  --color-bg-dark: #0F141C;
+  --color-text-light: #F8FAFC;
+  --color-accent-cyan: #38BDF8;
+  --color-accent-orange: #94A3B8;
+  --color-panel-bg: #1C2433;
+  --color-text-dim: #8290A3;
+  --color-border-cyan: rgba(56, 189, 248, 0.3);
+  --color-border-cyan-bright: #38BDF8;
+  --theme-glow: 0 0 12px rgba(56, 189, 248, 0.35);
+}

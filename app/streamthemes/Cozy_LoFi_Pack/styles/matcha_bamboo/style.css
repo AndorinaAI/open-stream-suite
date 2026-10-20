@@ -1,0 +1,12 @@
+body[data-theme="matcha_bamboo"],
+[data-theme="matcha_bamboo"] {
+  --color-bg-dark: #111811;
+  --color-text-light: #F7FEE7;
+  --color-accent-cyan: #84CC16;
+  --color-accent-orange: #2DD4BF;
+  --color-panel-bg: #1D2B1E;
+  --color-text-dim: #95A695;
+  --color-border-cyan: rgba(132, 204, 22, 0.35);
+  --color-border-cyan-bright: #84CC16;
+  --theme-glow: 0 0 12px rgba(132, 204, 22, 0.4);
+}

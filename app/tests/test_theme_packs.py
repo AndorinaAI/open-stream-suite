@@ -29,9 +29,9 @@ class ThemePacksTestCase(AioHTTPTestCase):
         self.assertIn("packs", data)
 
         pack_ids = [p["id"] for p in data["packs"]]
-        self.assertTrue(any(pid.lower() in ("open_stream_pack", "pack_open_stream_suite") or pid in ("Open_stream_Pack", "Open_stream_pack", "pack_open_stream_suite") for pid in pack_ids))
+        self.assertTrue(any(pid.lower() in ("maker_theme_pack", "open_stream_pack", "pack_open_stream_suite") for pid in pack_ids))
 
-        taller_pack = data["packs"][0]
+        taller_pack = next(p for p in data["packs"] if p["id"] == "Maker_Theme_Pack")
         theme_ids = [t["id"] for t in taller_pack["themes"]]
         for expected in ("maker", "print", "terminal", "chill", "cyberpunk", "synthwave"):
             self.assertIn(expected, theme_ids)
@@ -106,8 +106,8 @@ class ThemePacksTestCase(AioHTTPTestCase):
     @unittest_run_loop
     async def test_03_restore_theme_to_original(self):
         """Verifica que un tema modificado pueda restaurarse a sus valores originales de fábrica"""
-        # Modificar el tema 'maker' en Open_stream_Pack
-        pack_id = "Open_stream_Pack"
+        # Modificar el tema 'maker' en Maker_Theme_Pack
+        pack_id = "Maker_Theme_Pack"
         from server.routes.themes_routes import find_pack_dir
         theme_dir = find_pack_dir(pack_id) / "styles" / "maker"
         self.assertTrue(theme_dir.exists())

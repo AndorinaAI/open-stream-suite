@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantalla — Empezamos en breve (Cozy)</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      background: var(--color-bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-primary);
+    }
+    .card {
+      text-align: center;
+      background: var(--color-panel-bg-trans);
+      border: 1px solid var(--color-border-cyan);
+      border-radius: 20px;
+      padding: 48px 80px;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--theme-glow);
+    }
+    h1 { font-size: 50px; font-weight: 800; color: var(--color-accent-cyan); margin: 0 0 10px 0; }
+  </style>
+</head>
+<body data-theme="latte_caramel">
+  <div class="card">
+    <div style="font-size:38px; margin-bottom:10px;">☕ ✨</div>
+    <h1>EL DIRECTO COMIENZA EN BREVE</h1>
+    <p style="color:var(--color-text-dim); font-size:18px;">Ponte cómodo/a, prepárate un té o café.</p>
+  </div>
+  <script src="/config.js"></script>
+</body>
+</html>

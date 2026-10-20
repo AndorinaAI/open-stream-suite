@@ -7,7 +7,7 @@ let currentOpenPackId = null;
 let currentEditingTheme = null;
 let currentEditingPackId = null;
 let currentActiveThemeId = 'maker';
-let currentActivePackId = 'Open_stream_Pack';
+let currentActivePackId = 'Maker_Theme_Pack';
 const DEFAULT_OVERLAY_THEMES = {
   'game': 'cyberpunk',
   'maker': 'maker',

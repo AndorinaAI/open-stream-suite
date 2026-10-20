@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay — Victoria & Clutch</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-tech);
+      overflow: hidden;
+    }
+    .victory-banner {
+      background: var(--color-panel-bg);
+      border: 3px solid var(--color-accent-cyan);
+      padding: 30px 60px;
+      clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+      box-shadow: var(--theme-glow);
+      text-align: center;
+    }
+    h1 {
+      font-size: 64px;
+      font-weight: 900;
+      color: var(--color-accent-cyan);
+      margin: 0;
+      letter-spacing: 4px;
+    }
+  </style>
+</head>
+<body data-theme="crimson_esport">
+  <div class="victory-banner">
+    <h1>VICTORY // CLUTCH</h1>
+  </div>
+  <script src="/config.js"></script>
+</body>
+</html>

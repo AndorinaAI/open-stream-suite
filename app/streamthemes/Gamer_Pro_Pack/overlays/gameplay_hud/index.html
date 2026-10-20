@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay — Gameplay HUD Pro</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+      font-family: var(--font-tech);
+    }
+    .hud-cam-box {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      width: 420px;
+      height: 240px;
+      border: 2px solid var(--color-accent-cyan);
+      background: rgba(0,0,0,0.35);
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+      box-shadow: var(--theme-glow);
+    }
+    .hud-header {
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: var(--color-bg-dark);
+      border: 1px solid var(--color-border-cyan);
+      color: var(--color-accent-cyan);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 10px;
+      letter-spacing: 1px;
+    }
+    .hud-stats-bar {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      display: flex;
+      gap: 16px;
+      background: var(--color-panel-bg-trans);
+      border: 1px solid var(--color-border-cyan);
+      padding: 8px 18px;
+      clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+    }
+    .stat-item {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-text-light);
+    }
+    .stat-val {
+      color: var(--color-accent-cyan);
+    }
+  </style>
+</head>
+<body data-theme="crimson_esport">
+  <div class="hud-cam-box">
+    <div class="hud-header">SYS // CAM 01 [ONLINE]</div>
+  </div>
+  <div class="hud-stats-bar">
+    <div class="stat-item">MATCH: <span class="stat-val">COMPETITIVE</span></div>
+    <div class="stat-item">FPS: <span class="stat-val">240</span></div>
+  </div>
+  <script src="/config.js"></script>
+</body>
+</html>

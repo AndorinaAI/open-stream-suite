@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay — Arte & Proceso Creativo</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 30px;
+      box-sizing: border-box;
+      background: transparent;
+      display: flex;
+      gap: 24px;
+      font-family: var(--font-primary);
+      overflow: hidden;
+    }
+    .canvas-cam {
+      flex: 3;
+      border: 2px solid var(--color-border-cyan);
+      border-radius: var(--radius-lg);
+      background: rgba(0,0,0,0.25);
+      position: relative;
+    }
+    .side-stack {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .face-cam {
+      height: 260px;
+      border: 2px solid var(--color-border-cyan);
+      border-radius: var(--radius-lg);
+      background: rgba(0,0,0,0.25);
+    }
+    .palette-box {
+      flex: 1;
+      background: var(--color-panel-bg-trans);
+      border: 1px solid var(--color-border-cyan);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      backdrop-filter: blur(8px);
+    }
+  </style>
+</head>
+<body data-theme="latte_caramel">
+  <div class="canvas-cam">
+    <div style="position:absolute; top:16px; left:16px; background:var(--color-bg-dark); color:var(--color-accent-cyan); font-size:12px; font-weight:700; padding:4px 12px; border-radius:6px; border:1px solid var(--color-border-cyan);">🎨 LIENZO // TRABAJO EN CURSO</div>
+  </div>
+  <div class="side-stack">
+    <div class="face-cam"></div>
+    <div class="palette-box">
+      <div style="font-weight:700; font-size:13px; color:var(--color-accent-cyan); margin-bottom:10px;">NOTAS & PROYECTO</div>
+      <div style="font-size:12px; color:var(--color-text-dim);">Ilustración digital & acuarelas</div>
+    </div>
+  </div>
+  <script src="/config.js"></script>
+</body>
+</html>

@@ -2,183 +2,67 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Open Stream Suite — STARTING SOON</title>
-  <link rel="stylesheet" href="../../../common/styles.css">
-  <link rel="stylesheet" href="../../../common/themes.css">
-  <link rel="stylesheet" href="../../../common/components.css">
+  <title>Pantalla — Empezamos Pronto</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
   <style>
-    /* Estilos específicos de pantalla de inicio */
-    .starting-container {
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      background: var(--color-bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-light);
+      font-family: var(--font-primary);
+      position: relative;
+      overflow: hidden;
+    }
+    .pulse-glow {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 60px 80px;
-      z-index: 20;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--color-accent-cyan) 0%, transparent 70%);
+      opacity: 0.15;
+      animation: pulse 4s infinite alternate;
     }
-
-    .starting-top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.1; }
+      100% { transform: scale(1.1); opacity: 0.22; }
     }
-
-    .starting-center-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: auto 0;
-    }
-
-    .starting-hero-text {
-      max-width: 900px;
-    }
-
-    .starting-side-modes {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    .title-box {
+      position: relative;
+      z-index: 2;
+      text-align: center;
       background: var(--color-panel-bg-trans);
-      border: 1px solid var(--color-border-dim);
-      padding: 24px;
-      border-radius: var(--radius-md);
-      backdrop-filter: blur(8px);
+      border: 1px solid var(--color-border-cyan);
+      border-radius: var(--radius-lg);
+      padding: 48px 72px;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--theme-glow);
     }
-
-    .starting-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid var(--color-border-dim);
-      padding-top: 20px;
-    }
-
-    .countdown-display {
-      font-family: var(--font-tech);
-      font-size: 20px;
-      font-weight: 700;
+    h1 {
+      font-size: 54px;
+      font-weight: 900;
+      margin: 0 0 12px 0;
       color: var(--color-accent-cyan);
       letter-spacing: 2px;
-      margin-top: 16px;
     }
-
-    /* Pequeños detalles de vector y esquinas técnicas de pantalla completa */
-    .screen-corner-tl {
-      position: absolute;
-      top: 30px;
-      left: 30px;
-      width: 30px;
-      height: 30px;
-      border-top: 2px solid var(--color-accent-cyan);
-      border-left: 2px solid var(--color-accent-cyan);
-      opacity: 0.6;
-    }
-    .screen-corner-br {
-      position: absolute;
-      bottom: 30px;
-      right: 30px;
-      width: 30px;
-      height: 30px;
-      border-bottom: 2px solid var(--color-accent-cyan);
-      border-right: 2px solid var(--color-accent-cyan);
-      opacity: 0.6;
+    p {
+      font-size: 20px;
+      color: var(--color-text-dim);
+      margin: 0;
     }
   </style>
 </head>
-<body class="fullscreen-scene">
-  <div class="overlay-canvas">
-    <!-- Trama técnica de cuadrícula -->
-    <div class="tech-grid-overlay"></div>
-    <div class="screen-corner-tl"></div>
-    <div class="screen-corner-br"></div>
-
-    <div class="starting-container">
-      
-      <!-- Barra superior: Marca e indicador de estado del sistema -->
-      <div class="starting-top-bar">
-        <div class="brand-badge" style="transform: scale(1.15); transform-origin: left center;">
-          <div class="brand-icon-svg" data-icon="logo" style="width: 32px; height: 32px;"></div>
-          <div class="brand-info">
-            <span class="brand-name" style="font-size: 20px;">ANDORINA</span>
-            <span class="brand-tagline" style="font-size: 11px;">JUGAR · CREAR · TRASTEAR</span>
-          </div>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <div class="live-indicator">
-            <span class="live-dot"></span>
-            <span data-i18n="themes.placeholder_ss_status">TRANSMISIÓN INICIANDO</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Zona central: Gran titular y cuadrícula de modos -->
-      <div class="starting-center-content">
-        
-        <div class="starting-hero-text">
-          <div style="font-family: var(--font-tech); font-size: 14px; letter-spacing: 3px; color: var(--color-accent-cyan); text-transform: uppercase;" data-i18n="themes.placeholder_ss_tag">
-            // STREAM EN DIRECTO
-          </div>
-          <h1 class="main-stream-title" style="text-align: left; font-size: 80px;">
-            ENSEGUIDA<br>
-            <span class="title-cyan-accent" data-i18n="themes.placeholder_ss_highlight">ESTAMOS EN DIRECTO</span>
-          </h1>
-          <p class="stream-subtitle" style="text-align: left; font-size: 18px; margin-top: 14px;" data-i18n="themes.placeholder_ss_sub">
-            PREPARANDO EL DIRECTO...
-          </p>
-
-          <!-- Barra de progreso técnica -->
-          <div class="tech-progress-bar" style="width: 650px; margin-top: 32px;">
-            <div class="tech-progress-fill" style="width: 45%;"></div>
-          </div>
-          <div class="countdown-display starting-countdown">05:00</div>
-        </div>
-
-        <!-- Tarjetas de Modos del Canal a la derecha -->
-        <div class="starting-side-modes">
-          <div style="font-family: var(--font-tech); font-size: 11px; letter-spacing: 2px; color: var(--color-text-dim); margin-bottom: 4px; text-transform: uppercase;">
-            MODOS DE EMISIÓN:
-          </div>
-
-          <div class="stream-mode-card active-cyan">
-            <span data-icon="gamepad"></span>
-            <span class="ss-mode-label" data-mode-index="0" data-i18n="themes.placeholder_ss_mode_1">01 // GAME</span>
-          </div>
-
-          <div class="stream-mode-card active-cyan">
-            <span data-icon="chip"></span>
-            <span class="ss-mode-label" data-mode-index="1" data-i18n="themes.placeholder_ss_mode_2">02 // MAKER</span>
-          </div>
-
-          <div class="stream-mode-card active-orange">
-            <span data-icon="cutter"></span>
-            <span class="ss-mode-label" data-mode-index="2" data-i18n="themes.placeholder_ss_mode_3">03 // PRINT</span>
-          </div>
-
-          <div class="stream-mode-card">
-            <span data-icon="chat"></span>
-            <span class="ss-mode-label" data-mode-index="3" data-i18n="themes.placeholder_ss_mode_4">04 // CHILL</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Pie inferior -->
-      <div class="starting-footer">
-        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);">
-          ANDORINA · OPEN STREAM SUITE
-        </div>
-        <div class="social-links" style="display: none;"></div>
-      </div>
-
-    </div>
+<body data-theme="neon_streamer">
+  <div class="pulse-glow"></div>
+  <div class="title-box">
+    <h1>EMPEZAMOS EN BREVE</h1>
+    <p>Ajustando audio, cámara y preparándolo todo...</p>
   </div>
-
-  <script src="../../../config.js"></script>
-  <script src="../../../common/overlay.js"></script>
+  <script src="/config.js"></script>
 </body>
 </html>

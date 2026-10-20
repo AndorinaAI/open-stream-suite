@@ -46,8 +46,11 @@ def register_static_routes(app):
     app.router.add_get("/scenes/{scene}/", handle_legacy_scene_redirect)
     app.router.add_get("/scenes/{scene}/index.html", handle_legacy_scene_redirect)
 
-    app.router.add_static("/streamthemes/", path=str(BASE_DIR / "streamthemes"), name="streamthemes", follow_symlinks=True)
-    app.router.add_static("/overlays/", path=str(BASE_DIR / "streamthemes" / "Open_stream_Pack" / "overlays"), name="overlays", follow_symlinks=True)
+    maker_overlays = BASE_DIR / "streamthemes" / "Maker_Theme_Pack" / "overlays"
+    if maker_overlays.is_dir():
+        app.router.add_static("/overlays/", path=str(maker_overlays), name="overlays", follow_symlinks=True)
+    else:
+        app.router.add_static("/overlays/", path=str(BASE_DIR / "streamthemes" / "Open_stream_Pack" / "overlays"), name="overlays", follow_symlinks=True)
     app.router.add_static("/themes/", path=str(BASE_DIR / "streamthemes"), name="themes", follow_symlinks=True)
     app.router.add_static("/alerts/", path=str(BASE_DIR / "alerts"), name="alerts")
     app.router.add_static("/widgets/", path=str(BASE_DIR / "widgets"), name="widgets")
