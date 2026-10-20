@@ -1,6 +1,10 @@
 # 🎬 GUÍA COMPLETA: CÓMO CREAR TEMAS, ESCENAS Y OVERLAYS DESDE CERO
 ### Open Stream Suite — Sistema Modular de Streaming para OBS Studio
 
+<p align="center">
+  <b>Español</b> | <a href="GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.en.md">English</a>
+</p>
+
 Esta guía responde de forma clara y definitiva a todas las dudas de arquitectura: **cómo funciona el flujo de trabajo**, **cómo se meten los overlays en OBS Studio**, **por qué existen temas y escenas**, y **cómo crear nuevos temas y escenas personalizadas desde cero**.
 
 ---

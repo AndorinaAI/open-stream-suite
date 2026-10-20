@@ -11,6 +11,7 @@ from tkinter import ttk, messagebox, scrolledtext
 from pathlib import Path
 
 from launcher.updater import UpdateManager
+from launcher.i18n import _, get_current_language, set_current_language
 from version import VERSION
 
 APP_DIR = Path(__file__).resolve().parent.parent
@@ -97,6 +98,18 @@ class LauncherGUI:
         lbl_sub = tk.Label(title_frame, text="v1.0.0-α", font=("Courier", 10, "bold"), fg=C_CORAL, bg=C_BG, padx=8)
         lbl_sub.pack(side="left")
 
+        # Selector de idioma en el header
+        lang_frame = tk.Frame(header, bg=C_BG)
+        lang_frame.pack(side="right")
+        tk.Label(lang_frame, text="🌐", font=("Helvetica", 11), bg=C_BG, fg=C_MUTED).pack(side="left", padx=(0, 4))
+        self.var_gui_lang = tk.StringVar(value=get_current_language())
+        self.combo_gui_lang = ttk.Combobox(
+            lang_frame, textvariable=self.var_gui_lang,
+            values=["es", "en"], state="readonly", width=4, font=("Helvetica", 9)
+        )
+        self.combo_gui_lang.pack(side="left")
+        self.combo_gui_lang.bind("<<ComboboxSelected>>", self.on_change_gui_lang)
+
         # Pestañas principales
         self.notebook = ttk.Notebook(self.root)
         self.notebook.pack(fill="both", expand=True, padx=16, pady=(0, 16))
@@ -106,10 +119,10 @@ class LauncherGUI:
         self.tab_guide = tk.Frame(self.notebook, bg=C_BG, padx=16, pady=16)
         self.tab_logs = tk.Frame(self.notebook, bg=C_BG, padx=16, pady=16)
 
-        self.notebook.add(self.tab_server, text="🚀 Servidor")
-        self.notebook.add(self.tab_twitch, text="🟣 Twitch")
-        self.notebook.add(self.tab_guide, text="📖 Guía")
-        self.notebook.add(self.tab_logs, text="📜 Registro")
+        self.notebook.add(self.tab_server, text=_("tabs.server", "🚀 Servidor"))
+        self.notebook.add(self.tab_twitch, text=_("tabs.twitch", "🟣 Twitch"))
+        self.notebook.add(self.tab_guide, text=_("tabs.guide", "📖 Guía"))
+        self.notebook.add(self.tab_logs, text=_("tabs.logs", "📜 Registro"))
 
         self._build_tab_server()
         self._build_tab_twitch()
@@ -140,7 +153,7 @@ class LauncherGUI:
         self.lbl_server_info.pack(fill="x", pady=(10, 4))
 
         self.lbl_clients_info = tk.Label(
-            card, text="Clientes OBS: 0 · Tema neón activo: --",
+            card, text=_("launcher.clients_line_empty"),
             font=("Helvetica", 10), fg=C_MUTED, bg=C_PANEL, anchor="w"
         )
         self.lbl_clients_info.pack(fill="x")
@@ -233,7 +246,7 @@ class LauncherGUI:
         self.btn_view_release.pack(side="right")
 
         self.lbl_update_status = tk.Label(
-            upd_card, text=f"Versión instalada: v{VERSION} · Lista para comprobar",
+            upd_card, text=_("launcher.installed_version", version=VERSION),
             font=("Helvetica", 9), fg=C_MUTED, bg=C_PANEL, anchor="w"
         )
         self.lbl_update_status.pack(fill="x", pady=(6, 0))
@@ -255,7 +268,7 @@ class LauncherGUI:
         self.lbl_twitch_badge.pack(side="right")
 
         self.lbl_twitch_user = tk.Label(
-            user_card, text="Inicia sesión para recibir alertas de followers, subs y chat en directo",
+            user_card, text=_("twitch.user_disconnected", "Inicia sesión para recibir alertas de followers, subs y chat en directo"),
             font=("Helvetica", 10), fg=C_TEXT, bg=C_PANEL, anchor="w"
         )
         self.lbl_twitch_user.pack(fill="x", pady=(8, 0))
@@ -311,29 +324,7 @@ class LauncherGUI:
         container = tk.Frame(self.tab_guide, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=14)
         container.pack(fill="both", expand=True)
 
-        guide_text = (
-            "🚀 CÓMO EMPEZAR CON OPEN STREAM SUITE\n"
-            "----------------------------------------------------------\n\n"
-            "1. INICIAR EL SERVIDOR:\n"
-            "   Pulsa 'Iniciar Servidor' en la primera pestaña. El servidor se\n"
-            "   ejecutará en http://localhost:8080.\n\n"
-            "2. AGREGAR OVERLAYS EN OBS STUDIO:\n"
-            "   Añade una Fuente de Navegador (Browser Source) con resolución\n"
-            "   1920x1080 apuntando a los archivos en la carpeta 'overlays/':\n"
-            "   - Gameplay:       http://localhost:8080/overlays/game/index.html\n"
-            "   - Charla / Chat:  http://localhost:8080/overlays/chill/index.html\n"
-            "   - Alertas/Memes:  http://localhost:8080/alerts/index.html\n\n"
-            "3. CONTROL HARDWARE (DECKS Y MACROS):\n"
-            "   La suite incluye perfiles listos para Ajazz AKP05, Elgato Stream\n"
-            "   Deck y OpenDeck en la carpeta 'plugins/' de la raíz.\n"
-            "   Todas las acciones se pueden disparar mediante URLs de 1-Clic:\n"
-            "   http://localhost:8080/api/deck/trigger?id=susto\n"
-            "   http://localhost:8080/api/deck/timer?action=start&seconds=300\n\n"
-            "4. ¿ES OBLIGATORIO CONECTAR TWITCH?\n"
-            "   No. Todo funciona en local sin conexión a Internet (los memes,\n"
-            "   los temas, el temporizador y los widgets de pantalla).\n"
-            "   Solo necesitas Twitch si quieres leer el chat real y eventos.\n"
-        )
+        guide_text = _("launcher.guide_text")
 
         txt = scrolledtext.ScrolledText(
             container, wrap="word", font=("Courier", 10),
@@ -341,6 +332,7 @@ class LauncherGUI:
         )
         txt.insert("1.0", guide_text)
         txt.configure(state="disabled")
+        self.guide_txt = txt
         txt.pack(fill="both", expand=True)
 
     # --- PESTAÑA REGISTRO ---
@@ -427,7 +419,7 @@ class LauncherGUI:
     def on_twitch_auth(self):
         alive, _ = self.server_ctl.is_running()
         if not alive:
-            messagebox.showinfo("Servidor no iniciado", "Iniciando el servidor primero para poder recibir la autorización de Twitch...")
+            messagebox.showinfo(_("launcher.server_not_started_title"), _("launcher.twitch_not_started"))
             self.server_ctl.start()
 
         self.root.after(1000, self.twitch_ctl.open_twitch_login)
@@ -435,26 +427,32 @@ class LauncherGUI:
     def on_twitch_logout(self):
         ok, msg = self.twitch_ctl.logout_twitch()
         if ok:
-            messagebox.showinfo("Sesión cerrada", msg)
+            messagebox.showinfo(_("launcher.logged_out_title"), msg)
             self._update_twitch_ui({"connected": False})
         else:
             messagebox.showwarning("Aviso", msg)
 
     def on_close_window(self):
-        """Gestiona el cierre de ventana con soporte de bandeja"""
-        if self.var_minimize_tray.get() and self.tray_ctl and self.tray_ctl.is_available():
+        """Gestiona el cierre de ventana: minimiza a la bandeja del sistema en lugar de cerrar"""
+        if self.tray_ctl and self.tray_ctl.is_available():
             self.root.withdraw()
-        else:
-            if messagebox.askokcancel("Salir de Open Stream Suite", "¿Deseas cerrar la aplicación y detener el servidor?"):
-                self.server_ctl.stop()
-                if self.tray_ctl:
-                    self.tray_ctl.stop()
-                self.root.destroy()
-                sys.exit(0)
+            return
+
+        if messagebox.askokcancel(_("app.title", "Open Stream Suite"), _("launcher.confirm_exit")):
+            self.server_ctl.stop()
+            if self.tray_ctl:
+                self.tray_ctl.stop()
+            self.root.destroy()
+            sys.exit(0)
 
     def show_window(self):
         self.root.deiconify()
         self.root.lift()
+        try:
+            self.root.attributes("-topmost", True)
+            self.root.after_idle(self.root.attributes, "-topmost", False)
+        except Exception:
+            pass
         self.root.focus_force()
 
     # --- POLLING Y ACTUALIZACIÓN ---
@@ -482,11 +480,11 @@ class LauncherGUI:
             self.btn_toggle_server.configure(text="⏹️ Detener Servidor", bg="#2D1A1A", fg=C_RED)
             clients = data.get("connected_clients", 0)
             theme = data.get("active_theme", "maker")
-            self.lbl_clients_info.configure(text=f"Clientes OBS conectados: {clients} · Tema neón activo: {theme}")
+            self.lbl_clients_info.configure(text=_("launcher.clients_line", clients=clients, theme=theme))
         else:
             self.lbl_server_badge.configure(text="DETENIDO", fg=C_RED, bg="#2A1616")
             self.btn_toggle_server.configure(text="⚡ Iniciar Servidor", bg=C_CYAN, fg="#000000")
-            self.lbl_clients_info.configure(text="Clientes OBS: 0 · Tema neón activo: --")
+            self.lbl_clients_info.configure(text=_("launcher.clients_line_empty"))
 
     def _update_twitch_ui(self, data):
         if data.get("connected"):
@@ -494,8 +492,8 @@ class LauncherGUI:
             self.lbl_twitch_badge.configure(text="CONECTADO", fg=C_GREEN, bg="#0E2818")
             self.lbl_twitch_user.configure(text=f"Sesión iniciada como: {user}")
         else:
-            self.lbl_twitch_badge.configure(text="NO CONECTADO", fg=C_MUTED, bg="#21262D")
-            self.lbl_twitch_user.configure(text="Inicia sesión para recibir alertas y chat en directo")
+            self.lbl_twitch_badge.configure(text=_("twitch.badge_disconnected", "NO CONECTADO"), fg=C_MUTED, bg="#21262D")
+            self.lbl_twitch_user.configure(text=_("launcher.twitch_hint"))
 
     # --- MÉTODOS DE ACTUALIZACIÓN ---
     def on_check_updates(self):
@@ -518,7 +516,7 @@ class LauncherGUI:
             msg = info.get("message", "Nueva versión disponible")
             self.lbl_upd_banner.configure(text=f"🚀 {msg}")
             self.upd_banner.pack(fill="x", pady=(8, 4))
-            self.lbl_update_status.configure(text=f"Versión remota: v{info.get('remote_version')} · Rama: {branch}")
+            self.lbl_update_status.configure(text=_("launcher.remote_version", version=info.get('remote_version'), branch=branch))
         else:
             self.upd_banner.pack_forget()
             self.lbl_update_status.configure(text=f"Versión v{VERSION} · Al día con la rama '{branch}'")
@@ -530,9 +528,8 @@ class LauncherGUI:
     def on_apply_update(self):
         branch = self.var_update_branch.get().strip() or "main"
         if not messagebox.askyesno(
-            "Confirmar actualización",
-            f"¿Deseas descargar e instalar la última versión de la rama '{branch}'?\n\n"
-            "Se ejecutará 'git pull' y se actualizarán las dependencias."
+            _("updates.confirm_title", "Confirmar actualización"),
+            _("updates.confirm_body", branch=branch)
         ):
             return
 
@@ -547,7 +544,47 @@ class LauncherGUI:
     def _on_apply_update_done(self, res):
         self.btn_apply_upd.configure(state="normal", text="📥 Actualizar ahora")
         if res.get("status") == "ok":
-            messagebox.showinfo("Actualización completada", res.get("message", "Actualizado con éxito"))
+            messagebox.showinfo(_("updates.success_title", "Actualización completada"), res.get("message", ""))
             self.on_check_updates()
         else:
-            messagebox.showerror("Error al actualizar", res.get("message", "Error al aplicar la actualización"))
+            messagebox.showerror(_("updates.error_title", "Error al actualizar"), res.get("message", _("launcher.update_apply_error")))
+
+    def on_change_gui_lang(self, event=None):
+        import os
+        new_lang = self.var_gui_lang.get()
+        set_current_language(new_lang)
+        os.environ["APP_LANG"] = new_lang
+
+        # Actualizar títulos de pestañas
+        self.notebook.tab(self.tab_server, text=_("tabs.server", "🚀 Servidor"))
+        self.notebook.tab(self.tab_twitch, text=_("tabs.twitch", "🟣 Twitch"))
+        self.notebook.tab(self.tab_guide, text=_("tabs.guide", "📖 Guía"))
+        self.notebook.tab(self.tab_logs, text=_("tabs.logs", "📜 Registro"))
+
+        # Guía de inicio y estado de actualización
+        if getattr(self, "guide_txt", None):
+            self.guide_txt.configure(state="normal")
+            self.guide_txt.delete("1.0", "end")
+            self.guide_txt.insert("1.0", _("launcher.guide_text"))
+            self.guide_txt.configure(state="disabled")
+        if hasattr(self, "lbl_update_status"):
+            self.lbl_update_status.configure(text=_("launcher.installed_version", version=VERSION))
+
+        # Estado del servidor y botón toggle
+        try:
+            alive, _ = self.server_ctl.is_running()
+        except Exception:
+            alive = False
+        self.lbl_server_badge.configure(
+            text=_("server.badge_active", "ACTIVO") if alive else _("server.badge_stopped", "DETENIDO"))
+        self.btn_toggle_server.configure(
+            text=_("server.btn_stop", "⏹️ Detener Servidor") if alive else _("server.btn_start", "⚡ Iniciar Servidor"))
+
+        # Actualizar botones clave
+        self.btn_open_panel.configure(text=_("server.btn_open_panel", "🎛️ Abrir Panel de Control"))
+        self.btn_check_updates.configure(text=_("updates.btn_check", "🔄 Comprobar"))
+        self.btn_apply_upd.configure(text=_("updates.btn_update_now", "📥 Actualizar ahora"))
+        self.btn_save_creds.configure(text=_("twitch.btn_save_creds", "💾 Guardar Credenciales"))
+        self.btn_connect_twitch.configure(text=_("twitch.btn_connect", "🟣 Conectar con Twitch"))
+        self.btn_logout_twitch.configure(text=_("twitch.btn_logout", "Cerrar Sesión"))
+

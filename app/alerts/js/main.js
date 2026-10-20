@@ -48,6 +48,10 @@ function showSection(secId) {
       if (typeof renderWidgetsGrid === 'function') renderWidgetsGrid();
     }
   }
+
+  if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+    setTimeout(() => window.i18n.applyTranslations(sec || document), 60);
+  }
 }
 
 // Estado del streamer y conexión Twitch

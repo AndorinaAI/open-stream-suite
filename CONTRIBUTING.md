@@ -1,5 +1,9 @@
 # Contribuir a Open Stream Suite
 
+<p align="center">
+  <b>Español</b> | <a href="CONTRIBUTING.en.md">English</a>
+</p>
+
 ¡Gracias por querer mejorar el proyecto! Las contribuciones son muy bienvenidas.
 
 ## Licencia
@@ -14,7 +18,7 @@ Al enviar una contribución aceptas que se distribuya bajo esta misma licencia.
 
 1. Abre un *issue* describiendo el error o la mejora antes de empezar un cambio grande.
 2. Haz un fork y crea una rama (`feature/mi-mejora` o `fix/mi-arreglo`).
-3. Sigue las convenciones de [`app/CONVENTIONS.md`](app/CONVENTIONS.md).
+3. Sigue las convenciones de [`app/CONVENTIONS.md`](app/CONVENTIONS.md) ([English](app/CONVENTIONS.en.md)).
 4. Ejecuta los tests desde `app/` con el servidor en marcha:
    ```bash
    ./venv/bin/python3 -m unittest discover tests -v
@@ -29,4 +33,4 @@ Al enviar una contribución aceptas que se distribuya bajo esta misma licencia.
 
 ## Documentación
 
-Si cambias una funcionalidad, actualiza también las guías de `app/docs/` y, si afecta a los decks, [`plugins/README.md`](plugins/README.md).
+Si cambias una funcionalidad, actualiza también las guías de `app/docs/` y, si afecta a los decks, [`plugins/README.md`](plugins/README.md) ([English](plugins/README.en.md)).

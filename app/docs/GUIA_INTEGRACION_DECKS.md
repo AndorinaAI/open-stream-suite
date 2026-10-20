@@ -1,6 +1,10 @@
 # 🎮 GUÍA DE INTEGRACIÓN: ELGATO STREAM DECK, AJAZZ AKP Y OPENDECK (COMPANION)
 ### Open Stream Suite — Control Físico de Escenas, Memes, Temas, Widgets y Temporizadores
 
+<p align="center">
+  <b>Español</b> | <a href="GUIA_INTEGRACION_DECKS.en.md">English</a>
+</p>
+
 Esta guía te explica de forma clara y directa **cómo conectar tu dispositivo físico (Elgato Stream Deck, teclados Ajazz AKP, OpenDeck o Bitfocus Companion)** con tu directo de streaming y con la suite de Open Stream Suite.
 
 ---
@@ -35,7 +39,7 @@ Esta guía te explica de forma clara y directa **cómo conectar tu dispositivo f
 > SERVER_HOST=0.0.0.0
 > DECK_TOKEN=una_clave_larga_y_aleatoria
 > ```
-> y envía esa clave en cada petición, con la cabecera `X-Deck-Token` o con `?deck_token=...`. Las peticiones que llegan desde una página web externa (otros orígenes del navegador) se rechazan siempre. Guía de instalación de los plugins: [`plugins/README.md`](../../plugins/README.md).
+> y envía esa clave en cada petición, con la cabecera `X-Deck-Token` o con `?deck_token=...`. Las peticiones que llegan desde una página web externa (otros orígenes del navegador) se rechazan siempre. Guía de instalación de los plugins: [`plugins/README.md`](../../plugins/README.md) ([English](../../plugins/README.en.md)).
 
 ---
 

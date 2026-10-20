@@ -1,0 +1,106 @@
+{
+  "channel": {
+    "name": "STREAMER",
+    "tagline": "PLAY · CREATE · SHARE",
+    "visible": true,
+    "showLiveIndicator": true,
+    "liveText": "STREAM STARTING SOON",
+    "socials": {
+      "visible": false,
+      "twitch": "channel",
+      "youtube": "channel",
+      "twitter": "channel",
+      "instagram": "channel",
+      "github": "channel"
+    }
+  },
+  "game": {
+    "badgeText": "GAME MODE",
+    "tagline": "GAMEPLAY / GAMING STREAM"
+  },
+  "maker": {
+    "projectName": "MAKER WORKBENCH 2026",
+    "currentPhase": "02 ASSEMBLY",
+    "panelTitle": "PROJECT STATUS",
+    "projectPrefix": "PROJECT:",
+    "detail": "Hardware build · Custom enclosure · Live coding",
+    "frames": {
+      "main": "OVERHEAD CAM · WORKBENCH",
+      "face": "STREAMER CAM",
+      "aux": "PC / TERMINAL"
+    },
+    "phases": [
+      "01 PLAN",
+      "02 ASSEMBLY",
+      "03 CODE",
+      "04 TESTING"
+    ],
+    "showAuxView": true
+  },
+  "print": {
+    "projectName": "CUSTOM 3D & VINYL PRINTS",
+    "material": "Holographic Adhesive Vinyl",
+    "currentPhase": "CUTTING & PRINTING",
+    "panelTitle": "PRODUCTION STATUS",
+    "projectPrefix": "JOB:",
+    "frames": {
+      "main": "MACHINE / BED CAM",
+      "face": "STREAMER CAM",
+      "aux": "CAD / DESIGN VIEW"
+    },
+    "phases": [
+      "01 DESIGN",
+      "02 CUT/PRINT",
+      "03 WEEDING",
+      "04 APPLICATION"
+    ],
+    "showAuxView": true
+  },
+  "chill": {
+    "subtitle": "JUST CHATTING / Q&A / IDEAS / COMMUNITY",
+    "showChatPanel": true,
+    "chatTitle": "LIVE CHAT",
+    "topic": "Questions, weekly projects, and community hangouts",
+    "chatPrompt": "Say hello in the chat!"
+  },
+  "startingSoon": {
+    "heroTag": "// LIVE BROADCAST",
+    "title": "STARTING",
+    "highlight": "GOING LIVE IN A MOMENT :)",
+    "subtitle": "WARMING UP AND SETTING UP GEAR...",
+    "countdownMinutes": 10,
+    "footerNote": "OPEN STREAM SUITE · BROADCAST READY",
+    "liveStatusText": "STARTING SOON",
+    "modeLabels": [
+      "01 // GAME",
+      "02 // MAKER",
+      "03 // PRINT",
+      "04 // CHILL"
+    ],
+    "showModesOverview": true
+  },
+  "beRightBack": {
+    "title": "BE RIGHT BACK",
+    "subtitle": "SHORT BREAK...",
+    "statusPhrases": [
+      "GRABBING A COFFEE...",
+      "SETTING UP THE NEXT SCENE...",
+      "TESTING HARDWARE...",
+      "BACK IN A MINUTE"
+    ],
+    "phraseIntervalSeconds": 6,
+    "footerNote": "THE STREAM WILL RESUME SHORTLY",
+    "liveStatusText": "SHORT BREAK"
+  },
+  "ending": {
+    "title": "THANKS FOR WATCHING",
+    "subtitle": "SEE YOU IN THE NEXT STREAM",
+    "farewellMessage": "Thank you for hanging out today! Don't forget to follow the channel to catch the next stream.",
+    "farewellTag": "// UNTIL NEXT TIME",
+    "footerNote": "OPEN STREAM SUITE · STREAM CONCLUDED",
+    "liveStatusText": "STREAM ENDED"
+  },
+  "performance": {
+    "enableAnimations": true
+  }
+}

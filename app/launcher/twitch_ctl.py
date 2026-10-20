@@ -10,6 +10,8 @@ import urllib.request
 import webbrowser
 from pathlib import Path
 
+from launcher.i18n import _
+
 APP_DIR = Path(__file__).resolve().parent.parent
 ENV_FILE = APP_DIR / ".env"
 LOCAL_TOKEN_FILE = APP_DIR / ".local_token"
@@ -173,8 +175,8 @@ class TwitchController:
             )
             with urllib.request.urlopen(req, timeout=2.0) as resp:
                 if resp.status == 200:
-                    return True, "Sesión de Twitch cerrada con éxito"
+                    return True, _("launcher.session_closed")
         except Exception as e:
-            return False, f"Error al cerrar sesión: {e}"
+            return False, _("launcher.session_close_error", e=e)
 
-        return False, "No se pudo contactar con el servidor"
+        return False, _("launcher.server_contact_error")

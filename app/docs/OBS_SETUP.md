@@ -1,5 +1,9 @@
 # GUÍA DE CONFIGURACIÓN PASO A PASO EN OBS STUDIO
 
+<p align="center">
+  <b>Español</b> | <a href="OBS_SETUP.en.md">English</a>
+</p>
+
 Esta guía detalla las coordenadas, tamaños y el orden de capas exacto para configurar cada una de las 9 escenas en **OBS Studio**.
 
 ---
@@ -11,7 +15,7 @@ Esta guía detalla las coordenadas, tamaños y el orden de capas exacto para con
 2. **Cómo añadir el overlay**:
    - En la lista de **Fuentes**, pulsa **`+`** → **Navegador** (*Browser Source*).
    - Marca la casilla **«Archivo local»** (*Local file*).
-   - Pulsa *Examinar* y selecciona el `index.html` de la escena correspondiente.
+   - Pulsa *Examinar* y selecciona el `index.html` de la escena correspondiente en `overlays/`.
    - Ancho: **1920**
    - Alto: **1080**
    - Asegúrate de marcar **«Apagar la fuente cuando no sea visible»** y **«Actualizar el navegador cuando la escena se active»**.
@@ -25,7 +29,7 @@ Esta guía detalla las coordenadas, tamaños y el orden de capas exacto para con
 
 ### 1. ESCENA GAME
 * **Uso**: Videojuegos a pantalla completa.
-* **Archivo**: `scenes/game/index.html`
+* **Archivo**: `overlays/game/index.html` (o `http://localhost:8080/overlays/game/index.html`)
 * **Capas (de arriba a abajo)**:
   1. `Overlay GAME` (Navegador: 1920×1080, x:0, y:0)
   2. `Cámara Rostro` (Dispositivo de captura de vídeo: 360×203, **x: 48, y: 767**)

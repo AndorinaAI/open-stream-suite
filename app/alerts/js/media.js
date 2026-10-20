@@ -735,7 +735,12 @@ function openCreateFolderModal() {
   const input = document.getElementById('mkdir-folder-name');
   if (lblParent) lblParent.textContent = currentFolder ? `/${currentFolder}/` : 'raíz de la biblioteca';
   if (input) input.value = '';
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.style.display = 'flex';
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(modal);
+    }
+  }
   setTimeout(() => input && input.focus(), 50);
 }
 
@@ -766,7 +771,12 @@ function openRenameModal(path, currentName) {
   const inputName = document.getElementById('rename-new-name');
   if (inputPath) inputPath.value = path;
   if (inputName) inputName.value = currentName;
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.style.display = 'flex';
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(modal);
+    }
+  }
   setTimeout(() => inputName && inputName.focus(), 50);
 }
 
@@ -836,7 +846,12 @@ function openMediaPreview(relPath) {
     }
   }
 
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.style.display = 'flex';
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(modal);
+    }
+  }
 }
 
 function closeMediaPreview() {

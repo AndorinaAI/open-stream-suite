@@ -11,5 +11,10 @@ else
     PYTHON_EXEC="python3"
 fi
 
-echo "🚀 Iniciando Open Stream Suite Launcher..."
-$PYTHON_EXEC launcher.py
+# Si se ejecuta desde terminal interactiva o doble clic, arrancar desacoplado y cerrar la consola
+if [ -t 0 ] && [ "$1" != "--foreground" ]; then
+    nohup $PYTHON_EXEC launcher.py "$@" >/dev/null 2>&1 &
+    exit 0
+else
+    exec $PYTHON_EXEC launcher.py "$@"
+fi

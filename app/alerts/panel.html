@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../common/themes.css">
   <link rel="stylesheet" href="css/panel.css">
   <link rel="stylesheet" href="css/alerts-themes.css?v=2">
+  <script src="/common/i18n.js"></script>
 </head>
 <body class="panel-page">
 
@@ -18,9 +19,16 @@
   <aside class="sidebar">
     <div>
       <div class="sidebar-header">
-        <div class="brand-title">
-          <img src="/assets/logo_transparent.svg" alt="Open Stream Suite" width="26" height="26" style="flex-shrink: 0; vertical-align: middle;">
-          <span>OPEN STREAM SUITE</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div class="brand-title" style="margin-bottom: 0;">
+            <img src="/assets/logo_transparent.svg" alt="Open Stream Suite" width="24" height="24" style="flex-shrink: 0; vertical-align: middle;">
+            <span>OPEN STREAM SUITE</span>
+          </div>
+          <!-- Selector de idioma -->
+          <select id="oss-lang-selector" onchange="i18n.setLanguage(this.value)" style="background: #0B0E14; color: var(--color-accent-cyan); border: 1px solid var(--color-border-dim); border-radius: 4px; padding: 2px 4px; font-size: 11px; cursor: pointer; outline: none;">
+            <option value="es">🇪🇸 ES</option>
+            <option value="en">🇬🇧 EN</option>
+          </select>
         </div>
 
         <!-- Usuario de Twitch conectado -->
@@ -28,7 +36,7 @@
           <img id="user-avatar" class="user-avatar-img" src="https://static-cdn.jtvnw.net/user-default-pictures-uv/41780b5a-def8-11e9-94d9-784f43822e80-profile_image-300x300.png" alt="Avatar">
           <div class="user-details">
             <span id="user-name" class="user-name-text">vayaperson</span>
-            <span id="user-status" class="user-role-text">🟢 Afiliado Twitch</span>
+            <span id="user-status" class="user-role-text" data-i18n="sidebar.connected_as">🟢 Afiliado Twitch</span>
           </div>
         </div>
       </div>
@@ -37,27 +45,27 @@
       <nav class="sidebar-nav">
         <button id="nav-btn-triggers" class="nav-item active" onclick="showSection('sec-triggers')">
           <span class="nav-icon">⚡</span>
-          <span>Triggers & Memes</span>
+          <span data-i18n="nav.triggers">Triggers & Memes</span>
         </button>
 
         <button id="nav-btn-widgets" class="nav-item" onclick="showSection('sec-widgets')">
           <span class="nav-icon">🧩</span>
-          <span>Widgets de Pantalla</span>
+          <span data-i18n="nav.widgets">Widgets de Pantalla</span>
         </button>
 
         <button id="nav-btn-alerts" class="nav-item" onclick="showSection('sec-alerts')">
           <span class="nav-icon">🚨</span>
-          <span>Alertas de Directo</span>
+          <span data-i18n="nav.alerts">Estudio de Alertas</span>
         </button>
 
         <button id="nav-btn-media" class="nav-item" onclick="showSection('sec-media')">
           <span class="nav-icon">📁</span>
-          <span>Gestor de Medios</span>
+          <span data-i18n="nav.media">Explorador Multimedia</span>
         </button>
 
         <button id="nav-btn-themes" class="nav-item" onclick="showSection('sec-themes')">
           <span class="nav-icon">🎨</span>
-          <span>Temas y Escenas</span>
+          <span data-i18n="nav.themes">Temas y Escenas</span>
         </button>
       </nav>
     </div>
@@ -66,19 +74,19 @@
     <div class="sidebar-footer">
       <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-accent-cyan); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
         <span style="display:inline-block; width: 7px; height: 7px; border-radius: 50%; background: #3FB950;"></span>
-        <span>OBS STUDIO · 9 ESCENAS ACTIVAS</span>
+        <span data-i18n="sidebar.obs_active">OBS STUDIO · 9 ESCENAS ACTIVAS</span>
       </div>
 
-      <a href="../docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md" target="_blank" class="btn-action-primary" style="justify-content: center; font-size: 11px; margin-top: 6px; text-decoration: none; padding: 7px 10px;">
+      <a id="link-doc-themes" href="../docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md" target="_blank" class="btn-action-primary" style="justify-content: center; font-size: 11px; margin-top: 6px; text-decoration: none; padding: 7px 10px;" data-i18n="nav.guide_themes">
         📖 Guía: Crear Temas y Escenas
       </a>
-      <a href="../docs/GUIA_DESARROLLO_Y_TEMAS.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none;">
+      <a id="link-doc-arch" href="../docs/GUIA_DESARROLLO_Y_TEMAS.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none;" data-i18n="nav.guide_arch">
         ⚙️ Docs de Arquitectura
       </a>
-      <a href="../docs/GUIA_INTEGRACION_DECKS.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(87, 214, 196, 0.4); color: var(--color-accent-cyan);">
+      <a id="link-doc-decks" href="../docs/GUIA_INTEGRACION_DECKS.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(87, 214, 196, 0.4); color: var(--color-accent-cyan);" data-i18n="nav.guide_decks">
         🎮 Guía Stream Deck, Ajazz & OpenDeck
       </a>
-      <a href="/plugins/README.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(255, 158, 59, 0.4); color: var(--color-accent-orange);">
+      <a id="link-doc-plugins" href="/plugins/README.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(255, 158, 59, 0.4); color: var(--color-accent-orange);" data-i18n="nav.guide_plugins">
         🔌 Plugins de Decks & Macros (Ajazz / Elgato)
       </a>
 
@@ -1404,7 +1412,7 @@
               PROBAR CON TEXTO Y NOMBRE PERSONALIZADO:
             </div>
             <div style="display: flex; gap: 8px;">
-              <input type="text" id="sim-user-input" class="form-input" placeholder="Nombre" value="AndorinaViewer">
+              <input type="text" id="sim-user-input" class="form-input" placeholder="Nombre" value="AndorinaDev">
               <input type="text" id="sim-msg-input" class="form-input" placeholder="Mensaje" value="¡Un saludo!">
               <button class="btn-action-primary" onclick="sendCustomAlertTest()">Disparar</button>
             </div>

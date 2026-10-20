@@ -2,11 +2,15 @@
   <img src="imagencorp/banner_github_header.png" alt="Open Stream Suite" width="100%">
 </p>
 
+<p align="center">
+  <b>Español</b> | <a href="README.en.md">English</a>
+</p>
+
 # OPEN STREAM SUITE — SISTEMA COMPLETO DE OVERLAYS PARA TWITCH Y OBS STUDIO
 
 > **JUGAR · CREAR · COMPARTIR**  
 > Identidad visual contemporánea, modular y ligera para streaming de videojuegos, programación, creación de contenido, just chatting y cualquier tipo de directo.  
-> 🚀 **[Guía Paso a Paso de Instalación e Inicio](INSTALACION_E_INICIO.md)**
+> 🚀 **[Guía Paso a Paso de Instalación e Inicio](INSTALACION_E_INICIO.md)** · [English](INSTALLATION_AND_STARTUP.md)
 
 ---
 
@@ -21,7 +25,7 @@
 - **Configuración centralizada**: Modifica el nombre del canal, los títulos de los proyectos, las fases activas y las redes sociales desde [`app/config.js`](app/config.js).
 - **Temas Modulares y Restauración de Fábrica**: Paletas y trajes visuales en `themes/<pack>/<tema>/` con respaldo `.default.json` / `.default.css` para restaurar con 1 solo clic si modificas algo por error.
 - **Estilos Visuales Independientes por Overlay**: Cada overlay de OBS Studio puede vestir su propio estilo visual (Arcade para Gameplay, Chill para charla, Cyberpunk para tech, etc.).
-- **Plugins para Macro Decks**: Integraciones nativas en [`plugins/`](plugins/README.md) para Elgato Stream Deck, Ajazz AKP05/AKP153 y OpenDeck (Bitfocus Companion), con guía de instalación.
+- **Plugins para Macro Decks**: Integraciones nativas en [`plugins/`](plugins/README.md) ([English](plugins/README.en.md)) para Elgato Stream Deck, Ajazz AKP05/AKP153 y OpenDeck (Bitfocus Companion), con guía de instalación.
 - **Seguridad Robusta**: Control de subida de archivos con lista blanca y protección anti path-traversal, CORS restringido a localhost/dominio propio y autenticación con token local criptográfico en llamadas POST.
 
 ---
@@ -123,7 +127,7 @@ Añade tus dispositivos de captura de vídeo o capturas de pantalla **debajo de 
   2. `Cámaras secundarias` *(rostro, auxiliar)*.
   3. `Cámara o captura principal` *(mesa, monitor, juego)*.
 
-Para alinear tus cámaras exactamente con los marcos, consulta las medidas de [app/docs/OBS_SETUP.md](app/docs/OBS_SETUP.md).
+Para alinear tus cámaras exactamente con los marcos, consulta las medidas de [app/docs/OBS_SETUP.md](app/docs/OBS_SETUP.md) ([English](app/docs/OBS_SETUP.en.md)).
 
 ---
 
@@ -148,7 +152,7 @@ Haz doble clic en el script correspondiente en la raíz del proyecto:
 Desde la ventana del lanzador podrás **iniciar/detener el servidor**, configurar tus credenciales de Twitch con un clic, ver cuántos clientes OBS están conectados y abrir el **Panel de Control** directamente en tu navegador.
 
 > [!NOTE]
-> **Seguridad:** Por defecto el servidor escucha exclusivamente en tu propio equipo (`127.0.0.1`). Para usar un deck o tableta desde otro dispositivo en tu red local, define `SERVER_HOST=0.0.0.0` y `DECK_TOKEN` en `app/.env` (ver [`plugins/README.md`](plugins/README.md)).
+> **Seguridad:** Por defecto el servidor escucha exclusivamente en tu propio equipo (`127.0.0.1`). Para usar un deck o tableta desde otro dispositivo en tu red local, define `SERVER_HOST=0.0.0.0` y `DECK_TOKEN` en `app/.env` (ver [`plugins/README.md`](plugins/README.md) / [English](plugins/README.en.md)).
 
 ### URLs del Sistema en Vivo:
 - **🎛️ Panel de Control del Streamer**: [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html)
@@ -174,12 +178,12 @@ Puedes añadir estos widgets independientes como fuentes de Navegador en cualqui
 
 ## 6. Documentación Adicional y Tests
 
-- **Instalación de plugins para decks**: [plugins/README.md](plugins/README.md)
-- **Integración de decks (API y perfiles)**: [app/docs/GUIA_INTEGRACION_DECKS.md](app/docs/GUIA_INTEGRACION_DECKS.md)
-- **Crear temas y escenas desde cero**: [app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md](app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md)
-- **Arquitectura y Convenciones**: [app/CONVENTIONS.md](app/CONVENTIONS.md)
-- **Guía Técnica de Desarrollo y Temas**: [app/docs/GUIA_DESARROLLO_Y_TEMAS.md](app/docs/GUIA_DESARROLLO_Y_TEMAS.md)
-- **Medidas de Escenas para OBS**: [app/docs/OBS_SETUP.md](app/docs/OBS_SETUP.md)
+- **Instalación de plugins para decks**: [plugins/README.md](plugins/README.md) ([English](plugins/README.en.md))
+- **Integración de decks (API y perfiles)**: [app/docs/GUIA_INTEGRACION_DECKS.md](app/docs/GUIA_INTEGRACION_DECKS.md) ([English](app/docs/GUIA_INTEGRACION_DECKS.en.md))
+- **Crear temas y escenas desde cero**: [app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md](app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md) ([English](app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.en.md))
+- **Arquitectura y Convenciones**: [app/CONVENTIONS.md](app/CONVENTIONS.md) ([English](app/CONVENTIONS.en.md))
+- **Guía Técnica de Desarrollo y Temas**: [app/docs/GUIA_DESARROLLO_Y_TEMAS.md](app/docs/GUIA_DESARROLLO_Y_TEMAS.md) ([English](app/docs/GUIA_DESARROLLO_Y_TEMAS.en.md))
+- **Medidas de Escenas para OBS**: [app/docs/OBS_SETUP.md](app/docs/OBS_SETUP.md) ([English](app/docs/OBS_SETUP.en.md))
 - **Ejecutar los tests** (con el servidor en marcha, desde `app/`):
   ```bash
   ./venv/bin/python3 -m unittest discover tests -v
@@ -192,7 +196,7 @@ Puedes añadir estos widgets independientes como fuentes de Navegador en cualqui
 Open Stream Suite se distribuye bajo la licencia **[PolyForm Noncommercial 1.0.0](LICENSE)**: puedes usarlo, estudiarlo, modificarlo y compartirlo libremente para **fines no comerciales**, incluido su uso personal para hacer streaming. **No está permitido venderlo ni usarlo para obtener beneficio comercial** sin permiso del autor.
 
 > [!NOTE]
-> Es una licencia de código disponible (*source-available*), no una licencia "open source" en el sentido estricto de la OSI, porque restringe el uso comercial. La licencia no puede obligar a que los forks envíen sus cambios al proyecto original, pero las contribuciones son muy bienvenidas: consulta [CONTRIBUTING.md](CONTRIBUTING.md).
+> Es una licencia de código disponible (*source-available*), no una licencia "open source" en el sentido estricto de la OSI, porque restringe el uso comercial. La licencia no puede obligar a que los forks envíen sus cambios al proyecto original, pero las contribuciones son muy bienvenidas: consulta [CONTRIBUTING.md](CONTRIBUTING.md) ([English](CONTRIBUTING.en.md)).
 
 Las dependencias de terceros mantienen sus propias licencias.
 

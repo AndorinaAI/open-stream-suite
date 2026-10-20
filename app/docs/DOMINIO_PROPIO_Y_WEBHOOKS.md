@@ -1,6 +1,10 @@
 # 🌐 GUÍA COMPLETA: CONECTAR TU DOMINIO PROPIO A OPEN STREAM SUITE
 ## Cómo recibir Webhooks de Ko-fi, PayPal y Buy Me a Coffee en tu PC local con HTTPS permanente
 
+<p align="center">
+  <b>Español</b> | <a href="DOMINIO_PROPIO_Y_WEBHOOKS.en.md">English</a>
+</p>
+
 Esta guía explica detalladamente y paso a paso cómo hacer que un **dominio propio** (por ejemplo `stream.tudominio.com` o `alertas.miweb.es`) apunte directamente a tu servidor local de **Open Stream Suite** (puerto `8080`), de manera **permanente**, **gratuita** y **con HTTPS válido**.
 
 ---

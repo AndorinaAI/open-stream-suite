@@ -1,6 +1,10 @@
 # 🎮 ELGATO STREAM DECK — PLUGIN OFICIAL OPEN STREAM SUITE
 ### Control Hardware con Feedback Bidireccional en Pantallas LCD
 
+<p align="center">
+  <b>Español</b> | <a href="README.en.md">English</a>
+</p>
+
 Este plugin permite controlar toda la suite de Open Stream Suite desde cualquier consola Elgato Stream Deck (Mini, Standard de 15 teclas, XL de 32 teclas, Stream Deck + o Stream Deck Mobile).
 
 ---

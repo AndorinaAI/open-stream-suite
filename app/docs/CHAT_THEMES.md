@@ -1,5 +1,9 @@
 # 🎨 Guía de Desarrollo de Temas para el Chat en Pantalla
 
+<p align="center">
+  <b>Español</b> | <a href="CHAT_THEMES.en.md">English</a>
+</p>
+
 Esta guía documenta la arquitectura técnica, la jerarquía DOM y las clases CSS del widget de chat de **Open Stream Suite**, permitiendo a diseñadores y desarrolladores crear temas personalizados tanto para **cajas de overlay** como para **emisión flotante directa en pantalla**.
 
 ---

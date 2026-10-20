@@ -12,6 +12,7 @@ import subprocess
 from pathlib import Path
 
 from version import VERSION, DEFAULT_GITHUB_REPO
+from launcher.i18n import _
 
 APP_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = APP_DIR.parent
@@ -79,7 +80,7 @@ class UpdateManager:
             "is_git": self.is_git_repo(),
             "repo": repo,
             "release_url": f"https://github.com/{repo}/releases",
-            "message": "Tienes la versión más reciente"
+            "message": _("launcher.update_latest")
         }
 
         # 1. Comprobar vía Git si el repo está disponible y tiene remote origin
@@ -111,7 +112,7 @@ class UpdateManager:
                     result["commits_behind"] = commits_behind
                     if commits_behind > 0:
                         result["update_available"] = True
-                        result["message"] = f"Hay {commits_behind} nuevo(s) cambio(s) disponible(s) en la rama '{branch}'"
+                        result["message"] = _("launcher.update_behind", commits_behind=commits_behind, branch=branch)
             except Exception:
                 pass
 
@@ -131,7 +132,7 @@ class UpdateManager:
                         result["remote_version"] = remote_ver
                         if remote_ver != current_version:
                             result["update_available"] = True
-                            result["message"] = f"Nueva versión disponible: v{remote_ver} (rama {branch})"
+                            result["message"] = _("launcher.update_new_version", remote_ver=remote_ver, branch=branch)
         except Exception:
             pass
 
@@ -144,7 +145,7 @@ class UpdateManager:
         if not self.is_git_repo():
             return {
                 "status": "error",
-                "message": "Esta instalación no es un repositorio Git. Descarga la nueva versión desde GitHub Releases."
+                "message": _("launcher.update_not_git")
             }
 
         try:
@@ -186,17 +187,17 @@ class UpdateManager:
 
             return {
                 "status": "ok",
-                "message": f"Actualizado con éxito a la última versión de la rama '{branch}'. Reinicia la aplicación para aplicar todos los cambios.",
+                "message": _("launcher.update_success_msg", branch=branch),
                 "details": pull_res.stdout
             }
         except subprocess.CalledProcessError as e:
             err = e.stderr or str(e)
             return {
                 "status": "error",
-                "message": f"Error al actualizar con Git: {err}"
+                "message": _("launcher.update_git_error", err=err)
             }
         except Exception as e:
             return {
                 "status": "error",
-                "message": f"Error inesperado al aplicar la actualización: {e}"
+                "message": _("launcher.update_unexpected_error", e=e)
             }

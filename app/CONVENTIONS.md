@@ -1,6 +1,10 @@
 # CONVENCIONES DE CÓDIGO, ARQUITECTURA Y ESTRUCTURA
 ## Open Stream Suite — Suite Modular de Overlays, Widgets y Triggers
 
+<p align="center">
+  <b>Español</b> | <a href="CONVENTIONS.en.md">English</a>
+</p>
+
 Este documento define la arquitectura oficial, convenciones de estructura de directorios y estándares de código del proyecto para permitir **Vibe Coding Autónomo con Inteligencia Artificial** de forma fluida, modular y sin regresiones.
 
 ---

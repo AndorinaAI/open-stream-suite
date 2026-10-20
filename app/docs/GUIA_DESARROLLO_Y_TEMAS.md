@@ -1,6 +1,10 @@
 # 🛠️ GUÍA DE DESARROLLO, TEMAS Y WIDGETS
 ### Open Stream Suite — Overlays, Alertas y Triggers Modulares con Código
 
+<p align="center">
+  <b>Español</b> | <a href="GUIA_DESARROLLO_Y_TEMAS.en.md">English</a>
+</p>
+
 Bienvenido a la guía técnica oficial del sistema de overlays para **Andorina**. Aquí aprenderás **cómo funciona la arquitectura**, **cómo se crean los overlays con código web frente a Photoshop**, **cómo crear tus propios widgets**, y **cómo diseñar e instalar nuevos temas visuales** en cuestión de minutos.
 
 ---

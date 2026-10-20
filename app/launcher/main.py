@@ -13,6 +13,7 @@ from pathlib import Path
 from launcher.server_ctl import ServerController
 from launcher.twitch_ctl import TwitchController
 from launcher.tray import TrayController
+from launcher.i18n import _
 from launcher.gui import LauncherGUI
 
 APP_DIR = Path(__file__).resolve().parent.parent
@@ -52,7 +53,7 @@ def main():
 
     lock = acquire_instance_lock()
     if lock is None:
-        print("⚠️ Ya hay una instancia de Open Stream Suite abierta.")
+        print(_("launcher.already_open"))
         return 0
 
     root = tk.Tk()

@@ -1,6 +1,10 @@
 # 🎨 IMAGENCORP — Identidad Visual y Recursos de Marca
 ### Open Stream Suite · Manual de Identidad y Recursos Gráficos
 
+<p align="center">
+  <b>Español</b> | <a href="README.en.md">English</a>
+</p>
+
 Esta carpeta contiene todos los recursos gráficos oficiales, logotipos vectoriales minimalistas, banners para GitHub y capturas de pantalla de **Open Stream Suite**.
 
 ---

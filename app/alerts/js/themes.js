@@ -402,7 +402,12 @@ function openThemeEditor(packId, themeId) {
   const iframe = document.getElementById('theme-preview-iframe');
   if (iframe) iframe.removeAttribute('data-loaded-path');
 
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.style.display = 'flex';
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(modal);
+    }
+  }
 }
 
 function closeThemeEditor() {
@@ -724,7 +729,12 @@ function openNewPackModal() {
   const modal = document.getElementById('theme-new-pack-modal');
   const nameInput = document.getElementById('new-pack-name');
   if (nameInput) nameInput.value = '';
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.style.display = 'flex';
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(modal);
+    }
+  }
   setTimeout(() => nameInput && nameInput.focus(), 50);
 }
 
@@ -756,7 +766,12 @@ function openNewThemeModal() {
   const modal = document.getElementById('theme-new-theme-modal');
   const nameInput = document.getElementById('new-theme-name');
   if (nameInput) nameInput.value = '';
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.style.display = 'flex';
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(modal);
+    }
+  }
   setTimeout(() => nameInput && nameInput.focus(), 50);
 }
 
@@ -1639,7 +1654,12 @@ async function openSceneEditor(sceneKey) {
 
   // 1. Mostrar de inmediato el modal para respuesta táctil instantánea
   const modal = document.getElementById('scene-editor-modal');
-  if (modal) modal.style.display = 'flex';
+  if (modal) {
+    modal.style.display = 'flex';
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(modal);
+    }
+  }
 
   // 2. Actualizar textos en la cabecera del modal
   const mIcon = document.getElementById('scene-modal-icon');

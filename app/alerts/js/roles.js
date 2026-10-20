@@ -28,6 +28,9 @@ function toggleRolesDrawer(forceOpen = null) {
     if (twDrawer) twDrawer.style.display = 'none';
     drawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     loadRoles();
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(drawer);
+    }
     document.getElementById('role-edit-name')?.focus();
   }
 }
@@ -40,6 +43,9 @@ function toggleRoleForm(forceOpen = null) {
   panel.style.display = shouldOpen ? 'block' : 'none';
   if (shouldOpen) {
     panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(panel);
+    }
     document.getElementById('role-edit-name')?.focus();
   }
 }
@@ -127,6 +133,10 @@ function renderRoles() {
 
     container.appendChild(item);
   });
+
+  if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+    window.i18n.applyTranslations(container);
+  }
 }
 
 async function quickAddMember(roleId) {

@@ -394,6 +394,9 @@ const OverlayTexts = {
   },
 
   showToast(msg, type = 'info') {
+    if (window.i18n && typeof window.i18n.tr === 'function') {
+      msg = window.i18n.tr(msg);
+    }
     let toast = document.getElementById('overlay-texts-toast');
     if (!toast) {
       toast = document.createElement('div');

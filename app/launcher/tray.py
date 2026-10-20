@@ -10,6 +10,8 @@ from pathlib import Path
 APP_DIR = Path(__file__).resolve().parent.parent
 ICON_PATH = APP_DIR / "assets" / "favicon.png"
 
+from launcher.i18n import _
+
 try:
     import pystray
     from PIL import Image
@@ -41,14 +43,18 @@ class TrayController:
                 pass
 
     def _build_menu(self):
-        server_label = "⏹️ Detener Servidor" if self.server_running else "⚡ Iniciar Servidor"
+        lbl_show = _("launcher.tray_show")
+        lbl_panel = _("server.btn_open_panel", "🎛️ Abrir Panel de Control")
+        lbl_server = _("server.btn_stop", "⏹️ Detener Servidor") if self.server_running else _("server.btn_start", "⚡ Iniciar Servidor")
+        lbl_quit = _("launcher.tray_quit", "❌ Salir")
+
         return pystray.Menu(
-            pystray.MenuItem("🎛️ Abrir Panel de Control", lambda: self._safe_call(self.on_open_panel), default=True),
-            pystray.MenuItem("👁️ Mostrar Ventana", lambda: self._safe_call(self.on_show_window)),
+            pystray.MenuItem(lbl_show, lambda: self._safe_call(self.on_show_window), default=True),
+            pystray.MenuItem(lbl_panel, lambda: self._safe_call(self.on_open_panel)),
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem(server_label, lambda: self._safe_call(self.on_toggle_server)),
+            pystray.MenuItem(lbl_server, lambda: self._safe_call(self.on_toggle_server)),
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem("❌ Salir", lambda: self._safe_call(self.on_quit))
+            pystray.MenuItem(lbl_quit, lambda: self._safe_call(self.on_quit))
         )
 
     def _safe_call(self, callback):

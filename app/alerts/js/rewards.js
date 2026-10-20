@@ -236,7 +236,9 @@ function useTwitchRewardInTrigger(title, color) {
   // Toast feedback
   const toast = document.createElement('div');
   toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #10B981; color: #000; font-family: var(--font-tech); font-weight: 800; font-size: 12px; padding: 10px 18px; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); z-index: 9999;';
-  toast.textContent = `✓ Seleccionada recompensa "${title}"`;
+  toast.textContent = (window.i18n && typeof window.i18n.tr === 'function'
+    ? window.i18n.tr('✓ Seleccionada recompensa')
+    : '✓ Seleccionada recompensa') + ': "' + title + '"';
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2500);
 }

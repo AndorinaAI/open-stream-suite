@@ -53,8 +53,21 @@ def register_static_routes(app):
     app.router.add_static("/scenes/", path=str(BASE_DIR / "scenes"), name="scenes")
     app.router.add_static("/media/", path=str(MEDIA_DIR), name="media")
 
-    # Documentación e iconos de la app, enlazados desde el panel
-    for folder in ("docs", "assets"):
+    # Idiomas (servir tanto desde app/languages como desde la raíz languages/)
+    async def handle_language(request):
+        lang = request.match_info.get("lang", "es").replace(".json", "")
+        for base in (BASE_DIR / "languages", BASE_DIR.parent / "languages"):
+            file_p = base / f"{lang}.json"
+            if file_p.is_file():
+                return web.FileResponse(file_p, headers={"Access-Control-Allow-Origin": "*"})
+        raise web.HTTPNotFound()
+
+    app.router.add_get("/languages/{lang}.json", handle_language)
+    app.router.add_get("/languages/{lang}", handle_language)
+    app.router.add_get("/api/languages/{lang}", handle_language)
+
+    # Documentación, iconos y archivos de idioma de la app
+    for folder in ("docs", "assets", "languages"):
         if (BASE_DIR / folder).is_dir():
             app.router.add_static(f"/{folder}/", path=str(BASE_DIR / folder), name=folder)
 

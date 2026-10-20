@@ -1,6 +1,22 @@
 # Historial de cambios
 
+<p align="center">
+  <b>Español</b> | <a href="CHANGELOG.en.md">English</a>
+</p>
+
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
+
+## [Sin versión] — 2026-10-20
+
+### Añadido — Internacionalización (i18n) completa
+- Traducción completa al inglés de todo el panel de control: encabezados, pestañas, botones, etiquetas, modales, desplegables, paneles emergentes (mini-apps de widgets), toasts y diálogos `alert()` / `confirm()`.
+- Traducción dinámica en vivo: el DOM insertado por JavaScript (modales, listas renderizadas, opciones de select) se vuelve a traducir automáticamente al cambiar de idioma.
+- Toasts y mensajes de error traducidos incluso cuando contienen variables (`${user}`, `{branch}`), mediante segmentación por marcadores.
+- Los enlaces a las guías `.md` del panel apuntan automáticamente a su versión `.en.md` cuando el idioma activo es inglés (pares con nombres distintos incluidos: `INSTALACION_E_INICIO.md` ↔ `INSTALLATION_AND_STARTUP.md`).
+- Documentación bilingüe: cada enlace a otro `.md` incluye su versión en inglés (`[English](….en.md)`) y cada `.en.md` su versión española.
+- Lanzador de escritorio: guía de inicio, diálogos y mensajes de estado conectados al diccionario (`languages/es.json` / `languages/en.json`), con refresco al cambiar de idioma en caliente.
+- Diccionario de traducción del panel ampliado de 378 a más de 1.650 pares español→inglés, verificado contra el DOM real (panel, mini-apps, modales, desplegables, toasts y diálogos).
+- Los textos propios del usuario (títulos de triggers, descripciones de temas guardadas, presets) se respetan sin traducir: solo se traduce la interfaz.
 
 ## [1.0.0-alpha] — 2026-10-20
 

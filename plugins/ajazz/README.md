@@ -1,6 +1,10 @@
 # ⌨️ TECLADOS Y DIALES AJAZZ AKP — PERFIL COMPLETO Y OPENDECK
 ### Soporte Nativo para: Ajazz AKP05 / AKP05E (10 Teclas + Pantalla Táctil + 4 Knobs) y AKP153 (15 Teclas)
 
+<p align="center">
+  <b>Español</b> | <a href="README.en.md">English</a>
+</p>
+
 Esta carpeta contiene la configuración integral y los perfiles oficiales para usar tu controladora de macros Ajazz con **Open Stream Suite** tanto en **Linux (OpenDeck)** como en Windows/macOS (AKP Studio).
 
 ---

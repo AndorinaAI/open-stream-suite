@@ -35,7 +35,7 @@ const AlertsStudio = {
   ],
 
   VARIABLES_INFO: [
-    { token: '{user}', name: 'Usuario', desc: 'Nombre del seguidor, suscriptor, raider o donante.', sample: 'AndorinaMaker' },
+    { token: '{user}', name: 'Usuario', desc: 'Nombre del seguidor, suscriptor, raider o donante.', sample: 'AndorinaDev' },
     { token: '{amount}', name: 'Cantidad / Importe', desc: 'Importe con divisa (ej. 5.00 EUR), bits enviados o número de subs regaladas.', sample: '10.00 EUR' },
     { token: '{currency}', name: 'Moneda / Divisa', desc: 'Símbolo o código de divisa en donaciones (EUR, USD, etc.).', sample: 'EUR' },
     { token: '{months}', name: 'Meses Acumulados', desc: 'Número total de meses de suscripción en resubs recurrentes.', sample: '6' },
@@ -84,6 +84,9 @@ const AlertsStudio = {
 
     this.renderStudio();
     this.selectType(this.currentType);
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(document.getElementById('sec-alerts') || document);
+    }
   },
 
   authHeaders(extra = {}) {
@@ -674,7 +677,7 @@ const AlertsStudio = {
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
               <div class="form-group" style="margin-bottom: 0;">
                 <label style="font-size: 10px;">Nombre de Usuario / Donante:</label>
-                <input type="text" id="sim-user" class="form-input" value="AndorinaMaker" oninput="AlertsStudio.updatePreview(true)">
+                <input type="text" id="sim-user" class="form-input" value="AndorinaDev" oninput="AlertsStudio.updatePreview(true)">
               </div>
 
               <div class="form-group" style="margin-bottom: 0;">
@@ -709,6 +712,10 @@ const AlertsStudio = {
     `;
 
     this.renderThemesGallery();
+
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(container);
+    }
   },
 
   renderThemesGallery() {
@@ -732,6 +739,10 @@ const AlertsStudio = {
         </div>
       `;
     }).join('');
+
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(gallery);
+    }
 
     // Actualizar nombre en cabecera del editor
     const activeTheme = this.themesConfig.themes[currentThemeId] || this.themesConfig.themes.cyberpunk;
@@ -1403,7 +1414,7 @@ const AlertsStudio = {
     const c = this.config ? this.config.alerts[this.currentType] : null;
     if (!c) return;
 
-    const user = (document.getElementById('sim-user') || {}).value || 'AndorinaMaker';
+    const user = (document.getElementById('sim-user') || {}).value || 'AndorinaDev';
     const extraVal = (document.getElementById('sim-extra-val') || {}).value || '10.00 EUR';
     const msg = (document.getElementById('sim-msg') || {}).value || '¡Gran directo!';
     const chosenPlat = (document.getElementById('sim-plat-choice') || {}).value || this.currentDonationPlatform || 'kofi';
@@ -1589,7 +1600,7 @@ const AlertsStudio = {
   },
 
   async triggerCurrentTest() {
-    const user = (document.getElementById('sim-user') || {}).value || 'AndorinaMaker';
+    const user = (document.getElementById('sim-user') || {}).value || 'AndorinaDev';
     const extraVal = (document.getElementById('sim-extra-val') || {}).value || '10.00 EUR';
     const msg = (document.getElementById('sim-msg') || {}).value || '¡Saludos!';
     const chosenPlat = (document.getElementById('sim-plat-choice') || {}).value || 'kofi';
@@ -1623,6 +1634,9 @@ const AlertsStudio = {
   },
 
   showToast(msg) {
+    if (window.i18n && typeof window.i18n.tr === 'function') {
+      msg = window.i18n.tr(msg);
+    }
     let toast = document.getElementById('alerts-studio-toast');
     if (!toast) {
       toast = document.createElement('div');

@@ -1,6 +1,10 @@
 # 🌐 BITFOCUS COMPANION & OPENDECK — PÁGINA PRECONFIGURADA
 ### El estándar profesional de broadcast y control táctil/hardware
 
+<p align="center">
+  <b>Español</b> | <a href="README.en.md">English</a>
+</p>
+
 **Bitfocus Companion** y el hardware **OpenDeck** son la solución preferida por productores profesionales, emisores independientes y streamers de eventos.
 
 ---

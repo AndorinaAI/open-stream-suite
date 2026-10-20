@@ -1,5 +1,9 @@
 # 📦 Instaladores de Open Stream Suite
 
+<p align="center">
+  <b>Español</b> | <a href="README.en.md">English</a>
+</p>
+
 Instrucciones para instalar dependencias y crear accesos directos en cada sistema operativo:
 
 ### 🐧 Linux (Ubuntu, Debian, Fedora, Arch)
@@ -29,5 +33,5 @@ o ejecútalo en la Terminal. Requiere Python 3 (`brew install python python-tk`)
 
 ---
 
-👉 Para ver la guía completa con capturas y pasos detallados, consulta: **[INSTALACION_E_INICIO.md](../INSTALACION_E_INICIO.md)**.
+👉 Para ver la guía completa con capturas y pasos detallados, consulta: **[INSTALACION_E_INICIO.md](../INSTALACION_E_INICIO.md)** ([English](../INSTALLATION_AND_STARTUP.md)).
 

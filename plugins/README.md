@@ -1,6 +1,10 @@
 # 🎮 OPEN STREAM SUITE — PLUGINS Y PERFILES PARA STREAM DECKS
 ### Control físico para Ajazz AKP, Elgato Stream Deck y OpenDeck / Bitfocus Companion
 
+<p align="center">
+  <b>Español</b> | <a href="README.en.md">English</a>
+</p>
+
 Esta carpeta contiene los plugins y perfiles preconfigurados para controlar **Open Stream Suite** desde una consola de macros o un teclado LCD. Está **fuera de la carpeta `app/`** a propósito, para que sea fácil de encontrar.
 
 ---
@@ -36,7 +40,7 @@ Cada carpeta tiene su propio `README.md` con los pasos detallados.
 1. Instala **OpenDeck** (Linux, Windows o macOS) y conecta tu AKP05.
 2. Importa [`ajazz/opendeck_akp05_config.json`](./ajazz/opendeck_akp05_config.json).
 3. Pulsa una tecla para probarla: debe reaccionar el overlay en OBS.
-4. Detalles de teclas, pantalla táctil y diales: [`ajazz/README.md`](./ajazz/README.md).
+4. Detalles de teclas, pantalla táctil y diales: [`ajazz/README.md`](./ajazz/README.md) ([English](./ajazz/README.en.md)).
 
 ### Elgato Stream Deck (Windows y macOS)
 1. Cierra la aplicación **Stream Deck**.
@@ -88,5 +92,5 @@ Solo si tu deck está conectado a **otro ordenador** de la misma red:
 ---
 
 ## 📚 Más documentación
-- Guía completa de integración de decks: [`app/docs/GUIA_INTEGRACION_DECKS.md`](../app/docs/GUIA_INTEGRACION_DECKS.md)
-- Guía para desarrolladores y temas: [`app/docs/GUIA_DESARROLLO_Y_TEMAS.md`](../app/docs/GUIA_DESARROLLO_Y_TEMAS.md)
+- Guía completa de integración de decks: [`app/docs/GUIA_INTEGRACION_DECKS.md`](../app/docs/GUIA_INTEGRACION_DECKS.md) ([English](../app/docs/GUIA_INTEGRACION_DECKS.en.md))
+- Guía para desarrolladores y temas: [`app/docs/GUIA_DESARROLLO_Y_TEMAS.md`](../app/docs/GUIA_DESARROLLO_Y_TEMAS.md) ([English](../app/docs/GUIA_DESARROLLO_Y_TEMAS.en.md))

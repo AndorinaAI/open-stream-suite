@@ -37,6 +37,10 @@ function renderWidgetsGrid() {
 
   // 4. Barra de Objetivo
   if (typeof renderGoalShortcuts === 'function') renderGoalShortcuts();
+
+  if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+    window.i18n.applyTranslations(document.getElementById('sec-widgets') || document);
+  }
 }
 
 // ====================================================================
@@ -126,6 +130,11 @@ function switchMiniAppTab(tabName) {
     if (typeof renderMiniAppShortcutsManager === 'function') renderMiniAppShortcutsManager();
   }
   if (tabName === 'code') renderMiniAppCodeEditor();
+
+  if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+    const drawer = document.getElementById('widget-miniapp-drawer');
+    if (drawer) setTimeout(() => window.i18n.applyTranslations(drawer), 40);
+  }
 }
 
 // 1. Pestaña de Controles Sencillos (Delegación al módulo del widget activo)
@@ -380,14 +389,23 @@ function openWidgetDevGuideModal(widgetId) {
           <!-- SECCIÓN 2: CONTROL DESDE STREAM DECK / OPENDECK (REST API) -->
           <div style="margin-bottom: 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-dim); border-radius: 6px; padding: 12px;">
             <h4 style="margin: 0 0 8px 0; color: var(--color-accent-cyan); font-family: var(--font-tech); font-size: 12px;">
-              🕹️ 2. Control desde Stream Deck, OpenDeck o Macros (Endpoint Universal)
+              🕹️ 2. Control desde Stream Deck, Ajazz AKP05, OpenDeck o Macros (REST API)
             </h4>
             <div style="font-size: 11px; color: var(--color-text-dim); margin-bottom: 8px;">
-              Cualquier tecla de Stream Deck puede enviar una petición <strong>HTTP POST</strong> al servidor local:
+              Cualquier tecla o macro puede enviar una petición <strong>HTTP POST</strong> o usar el endpoint rápido <strong>HTTP GET (1 Clic)</strong>:
             </div>
-            <div style="background: #0B0D0F; border: 1px solid rgba(87,214,196,0.3); border-radius: 4px; padding: 8px; font-family: monospace; font-size: 11px; color: #A78BFA; margin-bottom: 10px;">
-              POST http://localhost:8080/api/widgets/action<br>
-              Content-Type: application/json
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+              <div style="background: #0B0D0F; border: 1px solid rgba(87,214,196,0.3); border-radius: 4px; padding: 8px; font-family: monospace; font-size: 10px; color: #A78BFA;">
+                <b style="color: #57D6C4;">POST (Payload JSON completo):</b><br>
+                POST http://localhost:8080/api/widgets/action<br>
+                Content-Type: application/json
+              </div>
+              <div style="background: #0B0D0F; border: 1px solid rgba(87,214,196,0.3); border-radius: 4px; padding: 8px; font-family: monospace; font-size: 10px; color: #38BDF8;">
+                <b style="color: #57D6C4;">GET (1 Clic para Decks / Teclas):</b><br>
+                GET http://localhost:8080/api/deck/widget?widget=${wKey}&action=...<br>
+                <b style="color: #F59E0B;">Knobs / Perillas (Ajazz AKP05):</b><br>
+                GET http://localhost:8080/api/deck/knob?knob=1&direction=up
+              </div>
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -398,6 +416,9 @@ function openWidgetDevGuideModal(widgetId) {
                     <span style="font-size: 10px; color: var(--color-text-dim);">${act.desc}</span>
                   </div>
                   <pre style="margin: 0; background: #070809; padding: 6px; border-radius: 4px; font-size: 10px; color: #CBD5E1; overflow-x: auto;">${JSON.stringify(act.payload, null, 2)}</pre>
+                  <div style="margin-top: 4px; font-size: 9px; font-family: monospace; color: #94A3B8;">
+                    URL 1-clic: <span style="color: #38BDF8;">http://localhost:8080/api/deck/widget?widget=${wKey}&action=${act.action}</span>
+                  </div>
                 </div>
               `).join('')}
             </div>
@@ -417,6 +438,9 @@ function openWidgetDevGuideModal(widgetId) {
       </div>
     </div>
   `;
+  if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+    window.i18n.applyTranslations(modalContainer);
+  }
 }
 
 function openWidgetCssGuideModal(widgetId) {
@@ -585,6 +609,9 @@ function openWidgetCssGuideModal(widgetId) {
       </div>
     </div>
   `;
+  if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+    window.i18n.applyTranslations(modalContainer);
+  }
 }
 
 // Exponer en window para retrocompatibilidad total
@@ -941,6 +968,9 @@ function renderDonationsModalContent() {
       </div>
     </div>
   `;
+  if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+    window.i18n.applyTranslations(modalContainer);
+  }
 }
 
 function updateDonationTunnelUrlFromInput(val) {
@@ -1042,7 +1072,12 @@ async function simulateTipTest(platform) {
       body: JSON.stringify(body)
     });
     if (resp.ok) {
-      if (window.showToast) window.showToast(`✓ Donación simulada de ${body.user} (${body.amount}€)`);
+      const simToast = `✓ Donación simulada de ${body.user} (${body.amount}€)`;
+      if (window.OverlayTexts && typeof OverlayTexts.showToast === 'function') {
+        OverlayTexts.showToast(simToast);
+      } else if (window.showToast) {
+        window.showToast(simToast);
+      }
       else alert(`✓ Donación simulada de ${body.user} (${body.amount}€)`);
     }
   } catch (e) {

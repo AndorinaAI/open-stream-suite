@@ -1,6 +1,10 @@
 # 🚀 Guía de Instalación y Primer Inicio
 ### Open Stream Suite · Para Linux, Windows y macOS
 
+<p align="center">
+  <b>Español</b> | <a href="INSTALLATION_AND_STARTUP.md">English</a>
+</p>
+
 Esta guía explica paso a paso cómo instalar dependencias, arrancar la aplicación de control de escritorio y añadir tus primeras escenas a OBS Studio.
 
 ---

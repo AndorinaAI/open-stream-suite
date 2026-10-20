@@ -14,6 +14,8 @@ import urllib.request
 import json
 from pathlib import Path
 
+from launcher.i18n import _
+
 APP_DIR = Path(__file__).resolve().parent.parent
 PID_FILE = APP_DIR / ".server.pid"
 
@@ -54,7 +56,7 @@ class ServerController:
     def start(self):
         """Inicia server.py como subproceso independiente"""
         if self.process and self.process.poll() is None:
-            return True, "El servidor ya está en ejecución"
+            return True, _("launcher.server_running")
 
         alive, _ = self.is_running()
         if alive and not self.process:
@@ -90,9 +92,9 @@ class ServerController:
             self._reader_thread = threading.Thread(target=self._read_output, daemon=True)
             self._reader_thread.start()
 
-            return True, f"Servidor iniciado (PID {self.process.pid})"
+            return True, _("server.started_pid", pid=self.process.pid)
         except Exception as e:
-            return False, f"Error al iniciar el servidor: {e}"
+            return False, _("launcher.server_start_error", e=e)
 
     def _read_output(self):
         """Lee la salida estándar del servidor y la pasa al callback de logging"""
