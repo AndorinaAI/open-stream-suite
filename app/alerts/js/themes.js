@@ -104,7 +104,7 @@ function renderThemePacks() {
             <span style="font-size: 24px;">${pack.icon || '📁'}</span>
             <div>
               <div>${pack.name}</div>
-              <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim);">themes/${pack.id}/</div>
+              <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim);">streamthemes/${pack.id}/</div>
             </div>
           </div>
           <span class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan);">
@@ -174,7 +174,7 @@ function openThemePack(packId) {
   if (dName) dName.textContent = pack.name;
   if (dBadge) dBadge.textContent = pack.badge || 'PACK';
   if (dDesc) dDesc.textContent = pack.description || '';
-  if (dPath) dPath.textContent = `themes/${pack.id}/`;
+  if (dPath) dPath.textContent = `streamthemes/${pack.id}/`;
   if (dCount) dCount.textContent = `${(pack.themes || []).length} TEMAS`;
 
   // Renderizar tarjetas de temas
@@ -354,7 +354,7 @@ function openThemeEditor(packId, themeId) {
 
   if (mTitle) mTitle.textContent = `Tema: ${theme.name}`;
   if (mPackBadge) mPackBadge.textContent = pack.name.toUpperCase();
-  if (mPath) mPath.textContent = `themes/${packId}/${themeId}/style.css & theme.json`;
+  if (mPath) mPath.textContent = `streamthemes/${packId}/styles/${themeId}/style.css & theme.json`;
 
   // 1. Cargar Ajustes Visuales
   document.getElementById('edit-theme-name').value = theme.name || '';
@@ -670,7 +670,7 @@ async function saveCurrentThemeChanges() {
 
   try {
     await API.saveTheme(payload);
-    alert(`✓ ¡Tema "${payload.name}" guardado en themes/${currentEditingPackId}/${payload.id}/ y common/themes.css sincronizado!`);
+    alert(`✓ ¡Tema "${payload.name}" guardado en streamthemes/${currentEditingPackId}/styles/${payload.id}/ y common/themes.css sincronizado!`);
     closeThemeEditor();
     await loadThemePacks();
   } catch (e) {

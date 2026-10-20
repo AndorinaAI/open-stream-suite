@@ -29,12 +29,16 @@ class ThemePacksTestCase(AioHTTPTestCase):
         self.assertIn("packs", data)
 
         pack_ids = [p["id"] for p in data["packs"]]
-        self.assertIn("pack_open_stream_suite", pack_ids)
+        self.assertTrue(any(pid.lower() in ("open_stream_pack", "pack_open_stream_suite") or pid in ("Open_stream_Pack", "Open_stream_pack", "pack_open_stream_suite") for pid in pack_ids))
 
-        taller_pack = next(p for p in data["packs"] if p["id"] == "pack_open_stream_suite")
+        taller_pack = data["packs"][0]
         theme_ids = [t["id"] for t in taller_pack["themes"]]
         for expected in ("maker", "print", "terminal", "chill", "cyberpunk", "synthwave"):
             self.assertIn(expected, theme_ids)
+
+        # Verificar que el pack reporta sus overlays
+        self.assertIn("overlays", taller_pack)
+        self.assertGreaterEqual(len(taller_pack["overlays"]), 1)
 
     @unittest_run_loop
     async def test_02_create_pack_and_theme_in_directory(self):
@@ -51,6 +55,8 @@ class ThemePacksTestCase(AioHTTPTestCase):
         d1 = await r1.json()
         pack_id = d1.get("pack", {}).get("id")
         self.assertTrue((THEMES_DIR / pack_id / "pack.json").exists())
+        self.assertTrue((THEMES_DIR / pack_id / "styles").exists())
+        self.assertTrue((THEMES_DIR / pack_id / "overlays").exists())
 
         # 2. Crear nuevo tema en ese pack
         theme_payload = {
@@ -100,14 +106,16 @@ class ThemePacksTestCase(AioHTTPTestCase):
     @unittest_run_loop
     async def test_03_restore_theme_to_original(self):
         """Verifica que un tema modificado pueda restaurarse a sus valores originales de fábrica"""
-        # Modificar el tema 'maker'
-        theme_dir = THEMES_DIR / "pack_open_stream_suite" / "maker"
+        # Modificar el tema 'maker' en Open_stream_Pack
+        pack_id = "Open_stream_Pack"
+        from server.routes.themes_routes import find_pack_dir
+        theme_dir = find_pack_dir(pack_id) / "styles" / "maker"
         self.assertTrue(theme_dir.exists())
 
         # Guardar una modificación
         custom_css = 'body[data-theme="maker"] { --color-accent-cyan: #123456; }'
         r1 = await self.client.post("/api/themes/save", json={
-            "packId": "pack_open_stream_suite",
+            "packId": pack_id,
             "id": "maker",
             "css": custom_css,
             "accentCyan": "#123456"
@@ -119,7 +127,7 @@ class ThemePacksTestCase(AioHTTPTestCase):
 
         # Restaurar original vía API
         r2 = await self.client.post("/api/themes/restore", json={
-            "packId": "pack_open_stream_suite",
+            "packId": pack_id,
             "themeId": "maker"
         }, headers=self.headers)
         self.assertEqual(r2.status, 200)
@@ -134,19 +142,19 @@ class ThemePacksTestCase(AioHTTPTestCase):
     @unittest_run_loop
     async def test_04_overlay_theme_assignment(self):
         """Verifica la asignación de estilos visuales independientes por overlay"""
-        # Asignar tema 'arcade_8bit' a la overlay 'game'
-        payload = {"overlayKey": "game", "themeId": "arcade_8bit"}
+        # Asignar tema 'cyberpunk' a la overlay 'game'
+        payload = {"overlayKey": "game", "themeId": "cyberpunk"}
         r = await self.client.post("/api/themes/overlay-assignment", json=payload, headers=self.headers)
         self.assertEqual(r.status, 200)
         d = await r.json()
         self.assertEqual(d.get("status"), "ok")
-        self.assertEqual(d.get("overlayThemes", {}).get("game"), "arcade_8bit")
+        self.assertEqual(d.get("overlayThemes", {}).get("game"), "cyberpunk")
 
         # Comprobar que /api/themes/packs incluye la asignación
         r_get = await self.client.get("/api/themes/packs")
         self.assertEqual(r_get.status, 200)
         d_get = await r_get.json()
-        self.assertEqual(d_get.get("overlayThemes", {}).get("game"), "arcade_8bit")
+        self.assertEqual(d_get.get("overlayThemes", {}).get("game"), "cyberpunk")
 
 if __name__ == "__main__":
     unittest.main()

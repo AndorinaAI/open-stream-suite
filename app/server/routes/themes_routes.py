@@ -5,14 +5,16 @@ from aiohttp import web
 from server.config import BASE_DIR, logger
 from server.state import system
 
-THEMES_DIR = BASE_DIR / "themes"
+STREAMTHEMES_DIR = BASE_DIR / "streamthemes"
+THEMES_DIR = STREAMTHEMES_DIR  # Compatibilidad con imports existentes
 COMMON_THEMES_CSS = BASE_DIR / "common" / "themes.css"
 CHAT_CONFIG_FILE = BASE_DIR / "widgets" / "chat" / "config.json"
 THEMES_STATE_FILE = BASE_DIR / "themes_state.json"
+RESERVED_PACK_DIRS = {"overlays", "common", "config.js", "__pycache__"}
 
 DEFAULT_PACK_TALLER = {
-    "id": "pack_open_stream_suite",
-    "name": "Pack Open Stream Suite & Streamer",
+    "id": "Open_stream_Pack",
+    "name": "Pack Open Stream Suite",
     "icon": "🛠️",
     "badge": "PACK OFICIAL (6 TEMAS)",
     "description": "El pack oficial modular de Open Stream Suite con los 6 estilos base: Maker, Print, Terminal, Chill, Cyberpunk y Synthwave.",
@@ -23,7 +25,7 @@ DEFAULT_PACK_TALLER = {
 DEFAULT_THEMES_DATA = [
     {
         "id": "maker",
-        "packId": "pack_open_stream_suite",
+        "packId": "Open_stream_Pack",
         "name": "Maker Electrónico",
         "badge": "01 // MAKER",
         "accentCyan": "#57D6C4",
@@ -54,7 +56,7 @@ body[data-theme="maker"] {
     },
     {
         "id": "print",
-        "packId": "pack_open_stream_suite",
+        "packId": "Open_stream_Pack",
         "name": "Print & Vinilo",
         "badge": "02 // PRINT",
         "accentCyan": "#FF783F",
@@ -84,7 +86,7 @@ body[data-theme="maker"] {
     },
     {
         "id": "terminal",
-        "packId": "pack_open_stream_suite",
+        "packId": "Open_stream_Pack",
         "name": "Retro Terminal",
         "badge": "03 // TERMINAL",
         "accentCyan": "#22C55E",
@@ -115,7 +117,7 @@ body[data-theme="maker"] {
     },
     {
         "id": "chill",
-        "packId": "pack_open_stream_suite",
+        "packId": "Open_stream_Pack",
         "name": "Chill Lavender",
         "badge": "04 // CHILL",
         "accentCyan": "#89B4FA",
@@ -145,7 +147,7 @@ body[data-theme="maker"] {
     },
     {
         "id": "cyberpunk",
-        "packId": "pack_open_stream_suite",
+        "packId": "Open_stream_Pack",
         "name": "Cyberpunk Industrial",
         "badge": "05 // CYBERPUNK",
         "accentCyan": "#FFE600",
@@ -175,7 +177,7 @@ body[data-theme="maker"] {
     },
     {
         "id": "synthwave",
-        "packId": "pack_open_stream_suite",
+        "packId": "Open_stream_Pack",
         "name": "Synthwave Retro",
         "badge": "06 // SYNTHWAVE",
         "accentCyan": "#00F9FF",
@@ -205,300 +207,8 @@ body[data-theme="maker"] {
     }
 ]
 
-DEFAULT_PACK_ARCADE = {
-    "id": "pack_retro_arcade",
-    "name": "Pack Retro Arcade & Neon Vibe",
-    "icon": "🕹️",
-    "badge": "PACK COMUNIDAD",
-    "description": "Pack con estética de salones recreativos clásicos, scanlines CRT y luces de neón nocturnas.",
-    "version": "1.0.0",
-    "author": "Open Stream Suite"
-}
-
-DEFAULT_ARCADE_THEMES = [
-    {
-        "id": "arcade_8bit",
-        "packId": "pack_retro_arcade",
-        "name": "8-Bit Arcade Cabinet",
-        "badge": "01 // ARCADE",
-        "accentCyan": "#38BDF8",
-        "accentOrange": "#F43F5E",
-        "bgDark": "#0B0E14",
-        "textLight": "#FFFFFF",
-        "panelBg": "#161B22",
-        "textDim": "#64748B",
-        "fontPrimary": "monospace",
-        "fontTech": "monospace",
-        "glowIntensity": 35,
-        "borderStyle": "square",
-        "desc": "Bordes gruesos pixelados y paleta de recreativa clásica de monedas.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="arcade_8bit"] {
-  --color-bg-dark: #0B0E14;
-  --color-text-light: #FFFFFF;
-  --color-accent-cyan: #38BDF8;
-  --color-accent-orange: #F43F5E;
-  --color-panel-bg: #161B22;
-  --color-text-dim: #64748B;
-  --color-border-cyan: rgba(56, 189, 248, 0.4);
-  --color-border-cyan-bright: #38BDF8;
-  --theme-glow: 0 0 10px rgba(56, 189, 248, 0.5);
-}"""
-    },
-    {
-        "id": "vapor_sunset",
-        "packId": "pack_retro_arcade",
-        "name": "Vapor Sunset Glitch",
-        "badge": "02 // VAPOR",
-        "accentCyan": "#A855F7",
-        "accentOrange": "#EC4899",
-        "bgDark": "#0D0B18",
-        "textLight": "#FAF5FF",
-        "panelBg": "#1E1833",
-        "textDim": "#9333EA",
-        "fontPrimary": "var(--font-primary)",
-        "fontTech": "var(--font-tech)",
-        "glowIntensity": 75,
-        "borderStyle": "rounded",
-        "desc": "Degradados magenta y violeta atardecer con resplandor neón difuso.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="vapor_sunset"] {
-  --color-bg-dark: #0D0B18;
-  --color-text-light: #FAF5FF;
-  --color-accent-cyan: #A855F7;
-  --color-accent-orange: #EC4899;
-  --color-panel-bg: #1E1833;
-  --color-text-dim: #9333EA;
-  --color-border-cyan: rgba(168, 85, 247, 0.45);
-  --color-border-cyan-bright: #A855F7;
-  --theme-glow: 0 0 18px rgba(236, 72, 153, 0.6);
-}"""
-    }
-]
-
-DEFAULT_PACK_MANGA = {
-    "id": "pack_manga_ink",
-    "name": "Pack Manga & Tinta Japonesa",
-    "icon": "🖋️",
-    "badge": "PACK MANGA & CÓMIC",
-    "description": "Estilo cómic shōnen y novela gráfica: alto contraste blanco/negro, tinta china, viñetas y acento carmesí de sello hanko.",
-    "version": "1.0.0",
-    "author": "Open Stream Suite"
-}
-
-DEFAULT_MANGA_THEMES = [
-    {
-        "id": "manga_shonen",
-        "packId": "pack_manga_ink",
-        "name": "Manga Shōnen (Tinta & Papel)",
-        "badge": "01 // SHONEN",
-        "accentCyan": "#111116",
-        "accentOrange": "#E6282B",
-        "bgDark": "#F4EFEA",
-        "textLight": "#111116",
-        "panelBg": "rgba(255, 255, 255, 0.95)",
-        "textDim": "#555562",
-        "fontPrimary": "'Impact', 'Inter', sans-serif",
-        "fontTech": "'Courier New', monospace",
-        "glowIntensity": 15,
-        "borderStyle": "square",
-        "desc": "Estilo viñeta de manga impreso: papel marfil, trazos de tinta china pura y sello hanko rojo cinético.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="manga_shonen"] {
-  --color-bg-dark: #F4EFEA;
-  --color-text-light: #111116;
-  --color-accent-cyan: #111116;
-  --color-accent-orange: #E6282B;
-  --color-panel-bg: rgba(255, 255, 255, 0.95);
-  --color-text-dim: #555562;
-  --color-border-cyan: rgba(17, 17, 22, 0.85);
-  --color-border-cyan-bright: #111116;
-  --theme-glow: 0 0 0 rgba(0, 0, 0, 0);
-}"""
-    },
-    {
-        "id": "manga_dark_ink",
-        "packId": "pack_manga_ink",
-        "name": "Manga Dark Ink (Seinen Noir)",
-        "badge": "02 // NOIR",
-        "accentCyan": "#FFFFFF",
-        "accentOrange": "#FF3344",
-        "bgDark": "#0D0D11",
-        "textLight": "#F5F5FA",
-        "panelBg": "#181820",
-        "textDim": "#8E8EA0",
-        "fontPrimary": "'Impact', 'Inter', sans-serif",
-        "fontTech": "'Courier New', monospace",
-        "glowIntensity": 25,
-        "borderStyle": "square",
-        "desc": "Novela gráfica y seinen oscuro: fondo tinta profunda, marcos blancos de alto contraste y carmesí.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="manga_dark_ink"] {
-  --color-bg-dark: #0D0D11;
-  --color-text-light: #F5F5FA;
-  --color-accent-cyan: #FFFFFF;
-  --color-accent-orange: #FF3344;
-  --color-panel-bg: #181820;
-  --color-text-dim: #8E8EA0;
-  --color-border-cyan: rgba(255, 255, 255, 0.7);
-  --color-border-cyan-bright: #FFFFFF;
-  --theme-glow: 0 0 10px rgba(255, 255, 255, 0.3);
-}"""
-    }
-]
-
-DEFAULT_PACK_COZY = {
-    "id": "pack_cozy_lofi",
-    "name": "Pack Bosque Nórdico & Cozy Lo-Fi",
-    "icon": "☕",
-    "badge": "PACK COZY & NATURE",
-    "description": "Estilo cálido, relajado y artesanal: terracota, madera, café moca, verde salvia y beige suave para directos de creación y charla.",
-    "version": "1.0.0",
-    "author": "Open Stream Suite"
-}
-
-DEFAULT_COZY_THEMES = [
-    {
-        "id": "cozy_terracotta",
-        "packId": "pack_cozy_lofi",
-        "name": "Cozy Terracotta (Café & Barro)",
-        "badge": "01 // COZY",
-        "accentCyan": "#D97443",
-        "accentOrange": "#E5A93C",
-        "bgDark": "#1F1A17",
-        "textLight": "#F5EBE1",
-        "panelBg": "#2C2420",
-        "textDim": "#A89A90",
-        "fontPrimary": "'Inter', sans-serif",
-        "fontTech": "'JetBrains Mono', monospace",
-        "glowIntensity": 30,
-        "borderStyle": "rounded",
-        "desc": "Terracota cálido, ámbar miel y café moca. Acogedor, artesanal y perfecto para directos chill y manualidades.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="cozy_terracotta"] {
-  --color-bg-dark: #1F1A17;
-  --color-text-light: #F5EBE1;
-  --color-accent-cyan: #D97443;
-  --color-accent-orange: #E5A93C;
-  --color-panel-bg: #2C2420;
-  --color-text-dim: #A89A90;
-  --color-border-cyan: rgba(217, 116, 67, 0.4);
-  --color-border-cyan-bright: #D97443;
-  --theme-glow: 0 0 12px rgba(229, 169, 60, 0.4);
-}"""
-    },
-    {
-        "id": "nordic_forest",
-        "packId": "pack_cozy_lofi",
-        "name": "Nordic Forest (Musgo & Salvia)",
-        "badge": "02 // FOREST",
-        "accentCyan": "#73A985",
-        "accentOrange": "#C89F65",
-        "bgDark": "#131C16",
-        "textLight": "#EDF4EE",
-        "panelBg": "#1E2B22",
-        "textDim": "#8BA090",
-        "fontPrimary": "'Inter', sans-serif",
-        "fontTech": "'JetBrains Mono', monospace",
-        "glowIntensity": 25,
-        "borderStyle": "rounded",
-        "desc": "Verde musgo, pino escandinavo y madera clara de abedul. Natural, sobrio y relajante para stream.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="nordic_forest"] {
-  --color-bg-dark: #131C16;
-  --color-text-light: #EDF4EE;
-  --color-accent-cyan: #73A985;
-  --color-accent-orange: #C89F65;
-  --color-panel-bg: #1E2B22;
-  --color-text-dim: #8BA090;
-  --color-border-cyan: rgba(115, 169, 133, 0.45);
-  --color-border-cyan-bright: #73A985;
-  --theme-glow: 0 0 14px rgba(115, 169, 133, 0.4);
-}"""
-    }
-]
-
-DEFAULT_PACK_SCIFI = {
-    "id": "pack_sci_fi_blueprint",
-    "name": "Pack Sci-Fi & Blueprint CAD",
-    "icon": "📐",
-    "badge": "PACK TÉCNICO & CAD",
-    "description": "Estética técnica de cianotipia de ingeniería, esquemas milimétricos, cuadrícula blueprint y holopantallas Matrix para creadores técnicos.",
-    "version": "1.0.0",
-    "author": "Open Stream Suite"
-}
-
-DEFAULT_SCIFI_THEMES = [
-    {
-        "id": "blueprint_cad",
-        "packId": "pack_sci_fi_blueprint",
-        "name": "Blueprint CAD (Plano de Ingeniería)",
-        "badge": "01 // BLUEPRINT",
-        "accentCyan": "#00D2FF",
-        "accentOrange": "#FFB800",
-        "bgDark": "#0B1B2B",
-        "textLight": "#E0F4FF",
-        "panelBg": "#102A45",
-        "textDim": "#6B93B8",
-        "fontPrimary": "'Courier New', monospace",
-        "fontTech": "'Courier New', monospace",
-        "glowIntensity": 45,
-        "borderStyle": "blueprint",
-        "desc": "Cianotipia técnica azul cian sobre fondo de plano de taller. Cuadrícula de cotas milimétricas y esquinas de mira técnica.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="blueprint_cad"] {
-  --color-bg-dark: #0B1B2B;
-  --color-text-light: #E0F4FF;
-  --color-accent-cyan: #00D2FF;
-  --color-accent-orange: #FFB800;
-  --color-panel-bg: #102A45;
-  --color-text-dim: #6B93B8;
-  --color-border-cyan: rgba(0, 210, 255, 0.5);
-  --color-border-cyan-bright: #00D2FF;
-  --theme-glow: 0 0 14px rgba(0, 210, 255, 0.4);
-}"""
-    },
-    {
-        "id": "neon_matrix",
-        "packId": "pack_sci_fi_blueprint",
-        "name": "Neon Matrix (Holo Cyber Tech)",
-        "badge": "02 // MATRIX",
-        "accentCyan": "#00FF7F",
-        "accentOrange": "#FFB800",
-        "bgDark": "#050B07",
-        "textLight": "#E8FFE8",
-        "panelBg": "#0C1810",
-        "textDim": "#387548",
-        "fontPrimary": "'JetBrains Mono', monospace",
-        "fontTech": "'JetBrains Mono', monospace",
-        "glowIntensity": 75,
-        "borderStyle": "chamfer",
-        "desc": "Verde fósforo cibernético de alta densidad, bordes biselados con esquinas cortadas 45º y escaneo holográfico.",
-        "chatAnchored": True,
-        "chatDerivative": None,
-        "css": """body[data-theme="neon_matrix"] {
-  --color-bg-dark: #050B07;
-  --color-text-light: #E8FFE8;
-  --color-accent-cyan: #00FF7F;
-  --color-accent-orange: #FFB800;
-  --color-panel-bg: #0C1810;
-  --color-text-dim: #387548;
-  --color-border-cyan: rgba(0, 255, 127, 0.55);
-  --color-border-cyan-bright: #00FF7F;
-  --theme-glow: 0 0 18px rgba(0, 255, 127, 0.6);
-}"""
-    }
-]
-
 DEFAULT_OVERLAY_THEMES = {
-    "game": "arcade_8bit",
+    "game": "cyberpunk",
     "maker": "maker",
     "maker-desk": "maker",
     "maker-pc": "terminal",
@@ -507,7 +217,7 @@ DEFAULT_OVERLAY_THEMES = {
     "print-design": "print",
     "chill": "chill",
     "startingSoon": "synthwave",
-    "beRightBack": "vapor_sunset",
+    "beRightBack": "synthwave",
     "ending": "synthwave"
 }
 
@@ -539,136 +249,66 @@ def save_theme_state(state):
     except Exception as e:
         logger.warning(f"Error guardando themes_state.json: {e}")
 
-def init_themes_directory():
-    """Inicializa la estructura modular de temas en carpetas y subcarpetas si no existen"""
-    THEMES_DIR.mkdir(parents=True, exist_ok=True)
+def get_pack_styles_dir(pack_dir: Path) -> Path:
+    """Devuelve el directorio que contiene los estilos de un pack (styles/ o el propio pack_dir)"""
+    if (pack_dir / "styles").is_dir():
+        return pack_dir / "styles"
+    if (pack_dir / "themes").is_dir():
+        return pack_dir / "themes"
+    return pack_dir
 
-    # 1. Pack Open Stream Suite
-    pack_taller_dir = THEMES_DIR / "pack_open_stream_suite"
-    if not pack_taller_dir.exists():
-        pack_taller_dir.mkdir(parents=True, exist_ok=True)
+def get_pack_overlays_dir(pack_dir: Path) -> Path:
+    """Devuelve el directorio que contiene los overlays de un pack (overlays/)"""
+    return pack_dir / "overlays"
+
+def find_pack_dir(pack_id: str) -> Path:
+    """Busca la carpeta física del pack admitiendo mayúsculas/minúsculas y alias históricos"""
+    exact = STREAMTHEMES_DIR / pack_id
+    if exact.exists():
+        return exact
+    clean_id = pack_id.lower().replace("pack_", "").replace("_suite", "").replace("_pack", "")
+    for d in STREAMTHEMES_DIR.iterdir():
+        if not d.is_dir():
+            continue
+        d_clean = d.name.lower().replace("pack_", "").replace("_suite", "").replace("_pack", "")
+        if d.name.lower() == pack_id.lower() or d_clean == clean_id:
+            return d
+    return exact
+
+def get_theme_dir(pack_id: str, theme_id: str) -> Path:
+    """Resuelve la ruta física del tema dentro de un pack, buscando en styles/ o en la raíz del pack"""
+    pack_dir = find_pack_dir(pack_id)
+    if (pack_dir / "styles" / theme_id).exists():
+        return pack_dir / "styles" / theme_id
+    if (pack_dir / "themes" / theme_id).exists():
+        return pack_dir / "themes" / theme_id
+    if (pack_dir / theme_id).exists() and theme_id not in RESERVED_PACK_DIRS:
+        return pack_dir / theme_id
+    if (pack_dir / "styles").is_dir() or not pack_dir.exists():
+        return pack_dir / "styles" / theme_id
+    return pack_dir / theme_id
+
+def init_themes_directory():
+    """Inicializa la estructura modular de streamthemes/Open_stream_pack/ si no existe"""
+    STREAMTHEMES_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Pack Open Stream Suite oficial
+    pack_taller_dir = find_pack_dir("Open_stream_Pack")
+    pack_taller_dir.mkdir(parents=True, exist_ok=True)
+    styles_dir = pack_taller_dir / "styles"
+    overlays_dir = pack_taller_dir / "overlays"
+    styles_dir.mkdir(parents=True, exist_ok=True)
+    overlays_dir.mkdir(parents=True, exist_ok=True)
+
+    if not (pack_taller_dir / "pack.json").exists():
         with open(pack_taller_dir / "pack.json", "w", encoding="utf-8") as f:
             json.dump(DEFAULT_PACK_TALLER, f, indent=2, ensure_ascii=False)
 
     for t in DEFAULT_THEMES_DATA:
-        t_dir = pack_taller_dir / t["id"]
+        t_id = t["id"]
+        t_dir = styles_dir / t_id
         t_dir.mkdir(parents=True, exist_ok=True)
-        t_json = t_dir / "theme.json"
-        t_css = t_dir / "style.css"
-        def_json = t_dir / "theme.default.json"
-        def_css = t_dir / "style.default.css"
 
-        payload_meta = {k: v for k, v in t.items() if k != "css"}
-        if not t_json.exists():
-            with open(t_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not t_css.exists():
-            with open(t_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-        if not def_json.exists():
-            with open(def_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not def_css.exists():
-            with open(def_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-
-    # 2. Pack Retro Arcade
-    pack_arcade_dir = THEMES_DIR / "pack_retro_arcade"
-    if not pack_arcade_dir.exists():
-        pack_arcade_dir.mkdir(parents=True, exist_ok=True)
-        with open(pack_arcade_dir / "pack.json", "w", encoding="utf-8") as f:
-            json.dump(DEFAULT_PACK_ARCADE, f, indent=2, ensure_ascii=False)
-
-    for t in DEFAULT_ARCADE_THEMES:
-        t_dir = pack_arcade_dir / t["id"]
-        t_dir.mkdir(parents=True, exist_ok=True)
-        t_json = t_dir / "theme.json"
-        t_css = t_dir / "style.css"
-        def_json = t_dir / "theme.default.json"
-        def_css = t_dir / "style.default.css"
-
-        payload_meta = {k: v for k, v in t.items() if k != "css"}
-        if not t_json.exists():
-            with open(t_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not t_css.exists():
-            with open(t_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-        if not def_json.exists():
-            with open(def_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not def_css.exists():
-            with open(def_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-
-    # 3. Pack Manga & Tinta Japonesa
-    pack_manga_dir = THEMES_DIR / "pack_manga_ink"
-    if not pack_manga_dir.exists():
-        pack_manga_dir.mkdir(parents=True, exist_ok=True)
-        with open(pack_manga_dir / "pack.json", "w", encoding="utf-8") as f:
-            json.dump(DEFAULT_PACK_MANGA, f, indent=2, ensure_ascii=False)
-
-    for t in DEFAULT_MANGA_THEMES:
-        t_dir = pack_manga_dir / t["id"]
-        t_dir.mkdir(parents=True, exist_ok=True)
-        t_json = t_dir / "theme.json"
-        t_css = t_dir / "style.css"
-        def_json = t_dir / "theme.default.json"
-        def_css = t_dir / "style.default.css"
-
-        payload_meta = {k: v for k, v in t.items() if k != "css"}
-        if not t_json.exists():
-            with open(t_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not t_css.exists():
-            with open(t_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-        if not def_json.exists():
-            with open(def_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not def_css.exists():
-            with open(def_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-
-    # 4. Pack Bosque Nórdico & Cozy Lo-Fi
-    pack_cozy_dir = THEMES_DIR / "pack_cozy_lofi"
-    if not pack_cozy_dir.exists():
-        pack_cozy_dir.mkdir(parents=True, exist_ok=True)
-        with open(pack_cozy_dir / "pack.json", "w", encoding="utf-8") as f:
-            json.dump(DEFAULT_PACK_COZY, f, indent=2, ensure_ascii=False)
-
-    for t in DEFAULT_COZY_THEMES:
-        t_dir = pack_cozy_dir / t["id"]
-        t_dir.mkdir(parents=True, exist_ok=True)
-        t_json = t_dir / "theme.json"
-        t_css = t_dir / "style.css"
-        def_json = t_dir / "theme.default.json"
-        def_css = t_dir / "style.default.css"
-
-        payload_meta = {k: v for k, v in t.items() if k != "css"}
-        if not t_json.exists():
-            with open(t_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not t_css.exists():
-            with open(t_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-        if not def_json.exists():
-            with open(def_json, "w", encoding="utf-8") as f:
-                json.dump(payload_meta, f, indent=2, ensure_ascii=False)
-        if not def_css.exists():
-            with open(def_css, "w", encoding="utf-8") as f:
-                f.write(t["css"])
-
-    # 5. Pack Sci-Fi & Blueprint CAD
-    pack_scifi_dir = THEMES_DIR / "pack_sci_fi_blueprint"
-    if not pack_scifi_dir.exists():
-        pack_scifi_dir.mkdir(parents=True, exist_ok=True)
-        with open(pack_scifi_dir / "pack.json", "w", encoding="utf-8") as f:
-            json.dump(DEFAULT_PACK_SCIFI, f, indent=2, ensure_ascii=False)
-
-    for t in DEFAULT_SCIFI_THEMES:
-        t_dir = pack_scifi_dir / t["id"]
-        t_dir.mkdir(parents=True, exist_ok=True)
         t_json = t_dir / "theme.json"
         t_css = t_dir / "style.css"
         def_json = t_dir / "theme.default.json"
@@ -692,20 +332,23 @@ def init_themes_directory():
     sync_common_themes_css()
 
 def sync_common_themes_css():
-    """Compila y sincroniza todos los styles.css de todos los packs en common/themes.css"""
+    """Compila y sincroniza todos los style.css de todos los packs en common/themes.css"""
     try:
         css_blocks = [
             "/* ====================================================================",
             "   OPEN STREAM SUITE — CSS UNIFICADO DE TEMAS Y PACKS MODULARES",
-            "   Generado automáticamente a partir de themes/<pack>/<theme>/style.css",
+            "   Generado automáticamente a partir de streamthemes/<pack>/styles/<theme>/style.css",
             "   ==================================================================== */\n"
         ]
 
-        for pack_dir in sorted(THEMES_DIR.iterdir()):
+        for pack_dir in sorted(STREAMTHEMES_DIR.iterdir()):
             if not pack_dir.is_dir():
                 continue
-            for theme_dir in sorted(pack_dir.iterdir()):
-                if not theme_dir.is_dir():
+            styles_dir = get_pack_styles_dir(pack_dir)
+            if not styles_dir.is_dir():
+                continue
+            for theme_dir in sorted(styles_dir.iterdir()):
+                if not theme_dir.is_dir() or theme_dir.name in RESERVED_PACK_DIRS:
                     continue
                 css_file = theme_dir / "style.css"
                 if css_file.exists():
@@ -720,14 +363,14 @@ def sync_common_themes_css():
         logger.warning(f"Error sincronizando common/themes.css: {e}")
 
 def get_all_packs_and_themes():
-    """Escanea el directorio themes/ y devuelve los packs con sus temas y metadatos"""
+    """Escanea el directorio streamthemes/ y devuelve los packs con sus temas, overlays y metadatos"""
     init_themes_directory()
     packs = []
     state = load_theme_state()
     active_theme = state.get("activeTheme", "maker")
-    active_pack = state.get("activePack", "pack_open_stream_suite")
+    active_pack = state.get("activePack", "Open_stream_Pack")
 
-    for pack_dir in sorted(THEMES_DIR.iterdir()):
+    for pack_dir in sorted(STREAMTHEMES_DIR.iterdir()):
         if not pack_dir.is_dir():
             continue
 
@@ -741,27 +384,44 @@ def get_all_packs_and_themes():
         else:
             pack_meta = {"id": pack_dir.name, "name": pack_dir.name}
 
+        # 1. Escanear estilos/temas del pack
+        styles_dir = get_pack_styles_dir(pack_dir)
         themes = []
-        for theme_dir in sorted(pack_dir.iterdir()):
-            if not theme_dir.is_dir():
-                continue
-            t_json_file = theme_dir / "theme.json"
-            t_css_file = theme_dir / "style.css"
+        if styles_dir.is_dir():
+            for theme_dir in sorted(styles_dir.iterdir()):
+                if not theme_dir.is_dir() or theme_dir.name in RESERVED_PACK_DIRS:
+                    continue
+                t_json_file = theme_dir / "theme.json"
+                t_css_file = theme_dir / "style.css"
 
-            theme_data = {"id": theme_dir.name, "name": theme_dir.name, "packId": pack_dir.name}
-            if t_json_file.exists():
-                try:
-                    with open(t_json_file, "r", encoding="utf-8") as f:
-                        theme_data.update(json.load(f))
-                except Exception:
-                    pass
+                theme_data = {"id": theme_dir.name, "name": theme_dir.name, "packId": pack_dir.name}
+                if t_json_file.exists():
+                    try:
+                        with open(t_json_file, "r", encoding="utf-8") as f:
+                            theme_data.update(json.load(f))
+                    except Exception:
+                        pass
 
-            theme_data["css"] = t_css_file.read_text(encoding="utf-8") if t_css_file.exists() else ""
-            theme_data["isActive"] = (theme_data["id"] == active_theme)
-            themes.append(theme_data)
+                theme_data["css"] = t_css_file.read_text(encoding="utf-8") if t_css_file.exists() else ""
+                theme_data["isActive"] = (theme_data["id"] == active_theme)
+                themes.append(theme_data)
+
+        # 2. Escanear overlays del pack
+        overlays = []
+        overlays_dir = get_pack_overlays_dir(pack_dir)
+        if overlays_dir.is_dir():
+            for ov_entry in sorted(overlays_dir.rglob("index.html")):
+                rel_path = ov_entry.relative_to(overlays_dir)
+                overlays.append({
+                    "path": f"/streamthemes/{pack_dir.name}/overlays/{rel_path}",
+                    "relPath": str(rel_path),
+                    "name": rel_path.parent.name if rel_path.parent != Path(".") else rel_path.stem
+                })
 
         pack_meta["themes"] = themes
         pack_meta["themesCount"] = len(themes)
+        pack_meta["overlays"] = overlays
+        pack_meta["overlaysCount"] = len(overlays)
         pack_meta["isActivePack"] = (pack_meta.get("id") == active_pack)
         packs.append(pack_meta)
 
@@ -782,7 +442,7 @@ async def handle_get_theme_packs(request):
     return web.json_response({"status": "ok", **data})
 
 async def handle_create_pack(request):
-    """Crea una nueva carpeta de pack en themes/<pack_id>/"""
+    """Crea una nueva carpeta de pack en streamthemes/<pack_id>/ con sus subcarpetas styles/ y overlays/"""
     try:
         body = await request.json()
     except Exception:
@@ -797,11 +457,14 @@ async def handle_create_pack(request):
     if not pack_id.startswith("pack_"):
         pack_id = f"pack_{pack_id}"
 
-    pack_dir = THEMES_DIR / pack_id
+    pack_dir = STREAMTHEMES_DIR / pack_id
     if pack_dir.exists():
         return web.json_response({"error": "Ya existe un pack con ese identificador"}, status=409)
 
     pack_dir.mkdir(parents=True, exist_ok=True)
+    (pack_dir / "styles").mkdir(parents=True, exist_ok=True)
+    (pack_dir / "overlays").mkdir(parents=True, exist_ok=True)
+
     meta = {
         "id": pack_id,
         "name": name,
@@ -831,15 +494,23 @@ async def handle_create_theme(request):
         return web.json_response({"error": "Nombre del tema requerido"}, status=400)
 
     theme_id = re.sub(r'[^a-zA-Z0-9_-]', '_', theme_name.lower().replace(' ', '_'))
-    pack_dir = THEMES_DIR / pack_id
+    pack_dir = STREAMTHEMES_DIR / pack_id
     if not pack_dir.exists():
         return web.json_response({"error": "Pack de temas no encontrado"}, status=404)
 
-    theme_dir = pack_dir / theme_id
-    if theme_dir.exists():
+    styles_dir = get_pack_styles_dir(pack_dir)
+    styles_dir.mkdir(parents=True, exist_ok=True)
+    theme_dir = styles_dir / theme_id
+    if theme_dir.exists() or (pack_dir / theme_id).exists():
         return web.json_response({"error": "Ya existe un tema con ese nombre en este pack"}, status=409)
 
     theme_dir.mkdir(parents=True, exist_ok=True)
+    if styles_dir != pack_dir and not (pack_dir / theme_id).exists():
+        try:
+            (pack_dir / theme_id).symlink_to(Path("styles") / theme_id)
+        except Exception:
+            pass
+
     accent_cyan = body.get("accentCyan", "#57D6C4")
     accent_orange = body.get("accentOrange", "#FF783F")
     bg_dark = body.get("bgDark", "#191D21")
@@ -898,7 +569,7 @@ async def handle_save_theme(request):
     if not pack_id or not theme_id:
         return web.json_response({"error": "packId e id de tema requeridos"}, status=400)
 
-    theme_dir = THEMES_DIR / pack_id / theme_id
+    theme_dir = get_theme_dir(pack_id, theme_id)
     if not theme_dir.exists():
         return web.json_response({"error": "Directorio de tema no encontrado"}, status=404)
 
@@ -952,7 +623,7 @@ async def handle_apply_theme(request):
     save_theme_state({"activePack": pack_id, "activeTheme": theme_id})
 
     # Si el chat está anclado a este tema, sincronizar estilos de chat
-    theme_file = THEMES_DIR / pack_id / theme_id / "theme.json"
+    theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"
     if theme_file.exists():
         try:
             with open(theme_file, "r", encoding="utf-8") as f:
@@ -996,7 +667,7 @@ async def handle_chat_anchor_toggle(request):
     theme_id = str(body.get("themeId", "")).strip()
     anchored = bool(body.get("anchored", True))
 
-    theme_file = THEMES_DIR / pack_id / theme_id / "theme.json"
+    theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"
     if not theme_file.exists():
         return web.json_response({"error": "Tema no encontrado"}, status=404)
 
@@ -1044,7 +715,7 @@ async def handle_restore_theme(request):
     if not pack_id or not theme_id:
         return web.json_response({"error": "packId y themeId requeridos"}, status=400)
 
-    theme_dir = THEMES_DIR / pack_id / theme_id
+    theme_dir = get_theme_dir(pack_id, theme_id)
     if not theme_dir.exists():
         return web.json_response({"error": "Tema no encontrado"}, status=404)
 
