@@ -7,9 +7,9 @@ let currentOpenPackId = null;
 let currentEditingTheme = null;
 let currentEditingPackId = null;
 let currentActiveThemeId = 'maker';
-let currentActivePackId = 'pack_open_stream_suite';
+let currentActivePackId = 'Open_stream_Pack';
 const DEFAULT_OVERLAY_THEMES = {
-  'game': 'arcade_8bit',
+  'game': 'cyberpunk',
   'maker': 'maker',
   'maker-desk': 'maker',
   'maker-pc': 'terminal',
@@ -18,7 +18,7 @@ const DEFAULT_OVERLAY_THEMES = {
   'print-design': 'print',
   'chill': 'chill',
   'startingSoon': 'synthwave',
-  'beRightBack': 'vapor_sunset',
+  'beRightBack': 'synthwave',
   'ending': 'synthwave'
 };
 let cachedOverlayThemes = Object.assign({}, DEFAULT_OVERLAY_THEMES);

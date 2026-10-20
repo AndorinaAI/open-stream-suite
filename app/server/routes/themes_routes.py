@@ -41,8 +41,7 @@ DEFAULT_THEMES_DATA = [
         "desc": "Turquesa electrónico sobre grafito oscuro. El tono insignia del banco de pruebas y circuitos.",
         "chatAnchored": True,
         "chatDerivative": None,
-        "css": """:root,
-body[data-theme="maker"] {
+        "css": """body[data-theme="maker"] {
   --color-bg-dark: #191D21;
   --color-text-light: #F2EEE5;
   --color-accent-cyan: #57D6C4;
@@ -223,7 +222,7 @@ DEFAULT_OVERLAY_THEMES = {
 
 def load_theme_state():
     state = {
-        "activePack": "pack_open_stream_suite",
+        "activePack": "Open_stream_Pack",
         "activeTheme": "maker",
         "overlayThemes": dict(DEFAULT_OVERLAY_THEMES)
     }
@@ -352,8 +351,10 @@ def sync_common_themes_css():
                     continue
                 css_file = theme_dir / "style.css"
                 if css_file.exists():
+                    raw_css = css_file.read_text(encoding="utf-8").strip()
+                    clean_css = re.sub(r':root\s*,\s*', '', raw_css)
                     css_blocks.append(f"/* Pack: {pack_dir.name} | Tema: {theme_dir.name} */")
-                    css_blocks.append(css_file.read_text(encoding="utf-8").strip())
+                    css_blocks.append(clean_css)
                     css_blocks.append("")
 
         COMMON_THEMES_CSS.parent.mkdir(parents=True, exist_ok=True)

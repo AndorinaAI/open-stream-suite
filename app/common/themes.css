@@ -30,7 +30,6 @@ body[data-theme="cyberpunk"] {
 }
 
 /* Pack: Open_stream_Pack | Tema: maker */
-:root,
 body[data-theme="maker"] {
   --color-bg-dark: #191D21;
   --color-text-light: #F2EEE5;
