@@ -835,82 +835,82 @@ const OSS_SCENES = [
     key: 'game',
     name: 'Overlay: Gameplay (Juego + Cámara)',
     icon: '🎮',
-    path: '/scenes/game/index.html',
+    path: '/overlays/game/index.html',
     badge: 'GAMEPLAY + WEBCAM',
     desc: 'Capa limpia para videojuegos. Marco de webcam en esquina con insignia técnica y soporte de alertas.',
-    obsSource: 'http://localhost:8080/scenes/game/index.html'
+    obsSource: 'http://localhost:8080/overlays/game/index.html'
   },
   {
     key: 'maker-desk',
     name: 'Overlay: Escena Principal (Cámara + Webcam)',
     icon: '🛠️',
-    path: '/scenes/maker-desk/index.html',
+    path: '/overlays/maker/desk/index.html',
     badge: 'ESCENA PRINCIPAL · CÁMARA',
     desc: 'Escena principal con cámara frontal o aérea, barra inferior con fases del proyecto y ventana auxiliar.',
-    obsSource: 'http://localhost:8080/scenes/maker-desk/index.html'
+    obsSource: 'http://localhost:8080/overlays/maker/desk/index.html'
   },
   {
     key: 'maker-pc',
     name: 'Overlay: Pantalla Compartida (PC + Webcam)',
     icon: '💻',
-    path: '/scenes/maker-pc/index.html',
+    path: '/overlays/maker/pc/index.html',
     badge: 'PANTALLA COMPARTIDA · PC',
     desc: 'Escena de pantalla compartida con barra inferior de fases activas y ventana para webcam/cámara.',
-    obsSource: 'http://localhost:8080/scenes/maker-pc/index.html'
+    obsSource: 'http://localhost:8080/overlays/maker/pc/index.html'
   },
   {
     key: 'print-machine',
     name: 'Overlay: Cámara Secundaria (Proceso / Acción)',
     icon: '🖨️',
-    path: '/scenes/print-machine/index.html',
+    path: '/overlays/print/machine/index.html',
     badge: 'CÁMARA SECUNDARIA · PROCESO',
     desc: 'Cámara directa sobre el proceso o acción en curso, con indicador de estado y fases.',
-    obsSource: 'http://localhost:8080/scenes/print-machine/index.html'
+    obsSource: 'http://localhost:8080/overlays/print/machine/index.html'
   },
   {
     key: 'print-design',
     name: 'Overlay: Pantalla Diseño / CAD (Full Screen)',
     icon: '📐',
-    path: '/scenes/print-design/index.html',
+    path: '/overlays/print/design/index.html',
     badge: 'PANTALLA COMPLETA · DISEÑO',
     desc: 'Pantalla completa para diseño, programación o cualquier app a pantalla completa con cámara secundaria.',
-    obsSource: 'http://localhost:8080/scenes/print-design/index.html'
+    obsSource: 'http://localhost:8080/overlays/print/design/index.html'
   },
   {
     key: 'chill',
     name: 'Overlay: Charla y Chat (Just Chatting)',
     icon: '💬',
-    path: '/scenes/chill/index.html',
+    path: '/overlays/chill/index.html',
     badge: 'JUST CHATTING',
     desc: 'Cámara amplia con marco para el chat de Twitch en OBS y cinta inferior con el tema de conversación.',
-    obsSource: 'http://localhost:8080/scenes/chill/index.html'
+    obsSource: 'http://localhost:8080/overlays/chill/index.html'
   },
   {
     key: 'startingSoon',
     name: 'Pantalla: Inicio de Stream (Starting Soon)',
     icon: '⏳',
-    path: '/scenes/starting-soon/index.html',
+    path: '/overlays/screens/starting-soon/index.html',
     badge: 'INICIO DE EMISIÓN',
     desc: 'Pantalla completa de bienvenida con cuenta atrás regresiva, titular con acento neón y redes.',
-    obsSource: 'http://localhost:8080/scenes/starting-soon/index.html'
+    obsSource: 'http://localhost:8080/overlays/screens/starting-soon/index.html'
   },
   {
     key: 'beRightBack',
     name: 'Pantalla: Pausa Técnica (Be Right Back)',
     icon: '☕',
-    path: '/scenes/be-right-back/index.html',
+    path: '/overlays/screens/be-right-back/index.html',
     badge: 'PAUSA TÉCNICA',
     desc: 'Pausa con escáner técnico animado y rotación automática de frases personalizables.',
-    obsSource: 'http://localhost:8080/scenes/be-right-back/index.html'
+    obsSource: 'http://localhost:8080/overlays/screens/be-right-back/index.html'
   },
   {
     key: 'ending',
     name: 'Pantalla: Despedida (Ending)',
     icon: '🎬',
-    path: '/scenes/ending/index.html',
+    path: '/overlays/screens/ending/index.html',
     badge: 'FIN DE TRANSMISIÓN',
     desc: 'Cierre de directo con tarjeta de agradecimiento a suscriptores, etiqueta de despedida y redes.',
-    obsSource: 'http://localhost:8080/scenes/ending/index.html'
+    obsSource: 'http://localhost:8080/overlays/screens/ending/index.html'
   }
 ];
 
@@ -1093,7 +1093,7 @@ const OVERLAY_FOLDERS = [
   }
 ];
 
-let currentOpenOverlayFolderId = null;
+let currentOpenOverlayFolderId = 'taller';
 let currentFolderSubFilter = 'all';
 
 function showOverlayFoldersView() {

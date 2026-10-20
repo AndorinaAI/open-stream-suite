@@ -38,8 +38,11 @@ function showSection(secId) {
     loadTwitchRewards();
     loadRoles();
   }
-  if (secId === 'sec-media') loadMedia();
-  if (secId === 'sec-themes') loadThemePacks();
+  if (secId === 'sec-themes') {
+    if (typeof switchThemesMainTab === 'function') switchThemesMainTab('overlays');
+    if (typeof openOverlayFolder === 'function') openOverlayFolder('taller');
+    loadThemePacks();
+  }
   if (secId === 'sec-widgets') {
     // Cargar config la primera vez (o si falló antes)
     if (typeof cachedWidgetsConfig === 'undefined' || !cachedWidgetsConfig) {
