@@ -84,8 +84,12 @@ def main():
         tray_ctl = TrayController(
             on_open_panel=lambda: root.after(0, lambda: gui.on_open_panel() if gui else None),
             on_show_window=lambda: root.after(0, lambda: gui.show_window() if gui else None),
+            on_hide_window=lambda: root.after(0, lambda: root.withdraw()),
             on_toggle_server=lambda: root.after(0, lambda: gui.on_toggle_server() if gui else None),
-            on_quit=lambda: root.after(0, lambda: _safe_quit(root, server_ctl, tray_ctl))
+            on_open_url=lambda url: root.after(0, lambda: gui._open_url(url) if gui else None),
+            on_open_folder=lambda: root.after(0, lambda: gui.on_open_folder() if gui else None),
+            on_quit=lambda: root.after(0, lambda: _safe_quit(root, server_ctl, tray_ctl)),
+            base_url=f"http://localhost:{server_ctl.port}"
         )
         tray_ctl.start()
 

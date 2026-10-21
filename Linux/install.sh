@@ -21,10 +21,12 @@ fi
 
 echo "✓ Python detectado: $(python3 --version)"
 
-# 2. Crear entorno virtual si no existe
+# 2. Crear entorno virtual si no existe (con acceso a paquetes del sistema para AppIndicator/Tray)
 if [ ! -d "$APP_DIR/venv" ]; then
     echo "📦 Creando entorno virtual en app/venv..."
-    python3 -m venv "$APP_DIR/venv"
+    python3 -m venv --system-site-packages "$APP_DIR/venv"
+elif [ -f "$APP_DIR/venv/pyvenv.cfg" ]; then
+    sed -i 's/^include-system-site-packages = false/include-system-site-packages = true/' "$APP_DIR/venv/pyvenv.cfg" || true
 fi
 
 # 3. Instalar dependencias

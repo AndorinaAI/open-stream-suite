@@ -287,7 +287,7 @@ class LauncherGUI:
         if is_alive != self._last_server_status:
             self._last_server_status = is_alive
             if self.tray_ctl:
-                self.tray_ctl.update_state(is_alive)
+                self.tray_ctl.update_state(is_alive, base_url=self.server_ctl.base_url)
 
         if is_alive:
             self.lbl_server_badge.configure(text="ACTIVO", fg=C_GREEN, bg="#0E2818")
@@ -439,4 +439,7 @@ class LauncherGUI:
             self.lbl_update_status.configure(text=_("launcher.installed_version", version=VERSION))
         if hasattr(self, "btn_clear_logs"):
             self.btn_clear_logs.configure(text=_("logs.btn_clear", "Limpiar Registro"))
+
+        if self.tray_ctl:
+            self.tray_ctl.refresh_menu()
 
