@@ -132,9 +132,16 @@
     }
 
     // 5. Game mode
-    const gameBadgeUnder = document.querySelector('.game-mode-badge-under span:last-child');
-    if (gameBadgeUnder && config.game?.badgeText) {
-      gameBadgeUnder.textContent = config.game.badgeText;
+    if (config.game) {
+      if (config.game.badgeText) {
+        document.querySelectorAll('.game-mode-badge-under span:last-child, .victory-banner h1').forEach(el => el.textContent = config.game.badgeText);
+      }
+      if (config.game.runTitle) {
+        document.querySelectorAll('.run-title').forEach(el => el.textContent = config.game.runTitle);
+      }
+      if (config.game.runCategory) {
+        document.querySelectorAll('.run-category').forEach(el => el.textContent = config.game.runCategory);
+      }
     }
 
     // 6. Proyecto Maker / Print
@@ -223,16 +230,36 @@
       }
     }
 
-    // 7. Chill mode
-    if (document.body.dataset.mode === 'chill' && config.chill) {
-      const headerSub = document.querySelector('.scene-header.theme-chill .header-subtitle');
+    // 7. Chill mode / Chatting / Podcast / Cafe
+    if (config.chill) {
+      const headerSub = document.querySelector('.scene-header.theme-chill .header-subtitle')
+        || document.querySelector('.header-subtitle')
+        || document.querySelector('.topic-pill')
+        || document.querySelector('#lbl-topic');
       if (headerSub && config.chill.subtitle) {
         headerSub.textContent = config.chill.subtitle;
       }
 
-      const chatTitleEl = document.querySelector('.chat-title span:last-child');
+      const chatTitleEl = document.querySelector('.chat-title span:last-child')
+        || document.querySelector('.chat-header')
+        || document.querySelector('.chat-card div:first-child');
       if (chatTitleEl && config.chill.chatTitle) {
         chatTitleEl.textContent = config.chill.chatTitle;
+      }
+
+      const chatObsStatus = document.querySelector('.chat-panel-header span:last-child');
+      if (chatObsStatus && config.chill.chatStatus) {
+        chatObsStatus.textContent = config.chill.chatStatus;
+      }
+
+      if (config.chill.podcastTitle) {
+        document.querySelectorAll('.podcast-title').forEach(el => el.textContent = config.chill.podcastTitle);
+      }
+      if (Array.isArray(config.chill.guestNameplates)) {
+        const plates = document.querySelectorAll('.guest-nameplate');
+        plates.forEach((p, idx) => {
+          if (config.chill.guestNameplates[idx]) p.textContent = config.chill.guestNameplates[idx];
+        });
       }
 
       const footerTopic = document.querySelector('.chill-footer-topic');
@@ -1590,10 +1617,23 @@
           || window.location.pathname.includes('/coffee-break/');
         const isEndingScene = ['ending', 'oss_ending', 'gamer_ending', 'cozy_ending'].includes(sceneKey)
           || window.location.pathname.includes('/ending/');
-        const isGameScene = ['game', 'gamer_gameplay', 'gamer_speedrun', 'gamer_victory'].includes(sceneKey);
-        const isChillScene = ['chill', 'oss_chatting', 'oss_podcast', 'cozy_cafe'].includes(sceneKey);
-        const isMakerScene = ['maker-desk', 'maker-pc', 'maker', 'oss_desktop', 'cozy_pomodoro'].includes(sceneKey);
-        const isPrintScene = ['print-machine', 'print-design', 'print', 'cozy_art'].includes(sceneKey);
+        const isGameScene = ['game', 'gamer_gameplay', 'gamer_speedrun', 'gamer_victory'].includes(sceneKey)
+          || window.location.pathname.includes('/gameplay_hud/')
+          || window.location.pathname.includes('/speedrun_split/')
+          || window.location.pathname.includes('/victory_clutch/')
+          || window.location.pathname.includes('/game/');
+        const isChillScene = ['chill', 'oss_chatting', 'oss_podcast', 'cozy_cafe'].includes(sceneKey)
+          || window.location.pathname.includes('/just_chatting/')
+          || window.location.pathname.includes('/podcast_talk/')
+          || window.location.pathname.includes('/cafe_chat/')
+          || window.location.pathname.includes('/chill/');
+        const isMakerScene = ['maker-desk', 'maker-pc', 'maker', 'oss_desktop', 'cozy_pomodoro'].includes(sceneKey)
+          || window.location.pathname.includes('/maker/')
+          || window.location.pathname.includes('/desktop_share/')
+          || window.location.pathname.includes('/study_pomodoro/');
+        const isPrintScene = ['print-machine', 'print-design', 'print', 'cozy_art'].includes(sceneKey)
+          || window.location.pathname.includes('/print/')
+          || window.location.pathname.includes('/art_dual_cam/');
 
         if (isGameScene && texts.game) {
           const badgeText = document.querySelector('.game-mode-badge-under span:last-child')?.textContent?.trim()
@@ -1693,13 +1733,20 @@
             || document.querySelector('#lbl-topic')?.textContent?.trim();
           if (sub) texts.chill.subtitle = sub;
           const chatTitle = document.querySelector('.chat-title span:last-child')?.textContent?.trim()
-            || document.querySelector('.chat-header')?.textContent?.trim();
+            || document.querySelector('.chat-header')?.textContent?.trim()
+            || document.querySelector('.chat-card div:first-child')?.textContent?.trim();
           if (chatTitle) texts.chill.chatTitle = chatTitle;
           const chatObs = document.querySelector('.chat-panel-header span:last-child')?.textContent?.trim();
           if (chatObs) texts.chill.chatStatus = chatObs;
           const topVal = document.querySelector('#lbl-topic')?.textContent?.trim()
             || document.querySelector('.topic-pill')?.textContent?.trim();
           if (topVal) texts.chill.topic = topVal;
+          const podTitle = document.querySelector('.podcast-title')?.textContent?.trim();
+          if (podTitle) texts.chill.podcastTitle = podTitle;
+          const nameplates = Array.from(document.querySelectorAll('.guest-nameplate'))
+            .map(el => el.textContent.trim())
+            .filter(Boolean);
+          if (nameplates.length > 0) texts.chill.guestNameplates = nameplates;
         }
 
         if (isStartingScene && texts.startingSoon) {
@@ -2044,13 +2091,13 @@
     if (btnResetTexts) {
       btnResetTexts.addEventListener('click', async () => {
         let section = 'all';
-        if (sceneKey.startsWith('maker')) section = 'maker';
-        else if (sceneKey.startsWith('print')) section = 'print';
-        else if (sceneKey === 'game') section = 'game';
-        else if (sceneKey === 'chill') section = 'chill';
-        else if (sceneKey === 'startingSoon') section = 'startingSoon';
-        else if (sceneKey === 'beRightBack') section = 'beRightBack';
-        else if (sceneKey === 'ending') section = 'ending';
+        if (['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting'].includes(sceneKey) || window.location.pathname.includes('/starting-soon/')) section = 'startingSoon';
+        else if (['beRightBack', 'oss_brb', 'gamer_brb', 'cozy_brb'].includes(sceneKey) || window.location.pathname.includes('/be-right-back/') || window.location.pathname.includes('/coffee-break/')) section = 'beRightBack';
+        else if (['ending', 'oss_ending', 'gamer_ending', 'cozy_ending'].includes(sceneKey) || window.location.pathname.includes('/ending/')) section = 'ending';
+        else if (sceneKey?.startsWith('maker') || sceneKey === 'oss_desktop' || sceneKey === 'cozy_pomodoro') section = 'maker';
+        else if (sceneKey?.startsWith('print') || sceneKey === 'cozy_art') section = 'print';
+        else if (sceneKey === 'game' || ['gamer_gameplay', 'gamer_speedrun', 'gamer_victory'].includes(sceneKey)) section = 'game';
+        else if (sceneKey === 'chill' || ['oss_chatting', 'oss_podcast', 'cozy_cafe'].includes(sceneKey)) section = 'chill';
 
         if (!confirm(`¿Restaurar los textos de esta escena (${section.toUpperCase()}) a sus valores originales de fábrica?`)) {
           return;
