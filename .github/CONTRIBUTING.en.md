@@ -8,11 +8,14 @@ Thank you for helping improve Open Stream Suite! Community contributions and bug
 
 ## License
 
-This project is licensed under the [PolyForm Noncommercial 1.0.0 License](../LICENSE): free use, modification, study, and distribution **for non-commercial purposes**. Selling it or using it for commercial monetization is strictly prohibited without written consent from the author.
+This project is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](../LICENSE) with retroactive effect across all commits: free use, modification, study, and distribution **for non-commercial purposes**. Selling it or using it for commercial monetization is strictly prohibited without written consent from the author.
 
-If you fork the project and add useful features, **we kindly ask you to submit them back to the upstream project** via a *Pull Request* so the entire community can benefit. This is a community request: the license itself cannot legally force upstream contributions.
+Under the **ShareAlike reciprocity clause**, any fork, modification, or new feature you create and distribute **must be licensed under this exact same license (CC BY-NC-SA 4.0)**, ensuring that all improvements remain free, non-commercial, and can be legally integrated into the upstream project. We encourage you to submit your improvements via a *Pull Request*.
 
 By submitting a contribution, you agree that your code will be distributed under this same license.
+
+## Platforms & Testing
+Core development and testing take place **exclusively on Linux**. We do not use proprietary operating systems (Windows or macOS). If you run or develop on Windows or macOS, community feedback, bug reports, and *Pull Requests* are essential for those platforms to progress.
 
 ## How to Contribute
 

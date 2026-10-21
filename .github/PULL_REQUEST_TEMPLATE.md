@@ -11,6 +11,13 @@ Closes #
 - [ ] 📚 Documentación / Docs
 - [ ] ♻️ Refactor / CI / Chore
 
+## Sistema(s) operativo(s) donde se ha probado / Operating System(s) tested on
+<!-- Marca el sistema operativo en el que has verificado este cambio / Check the OS where you verified this change -->
+- [ ] 🐧 Linux (Distro y versión / Distro & version: ____________)
+- [ ] 🪟 Windows (Versión / Version: 10 / 11)
+- [ ] 🍎 macOS (Versión y arquitectura / Version & architecture: Intel / Apple Silicon)
+- [ ] 📄 N/A (Solo documentación o traducciones / Documentation or translations only)
+
 ## Checklist
 - [ ] Sigo [CONTRIBUTING.md](CONTRIBUTING.md) y [app/CONVENTIONS.md](../app/CONVENTIONS.md)
 - [ ] Los tests pasan (`cd app && python -m unittest discover tests`)

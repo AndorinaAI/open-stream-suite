@@ -19,6 +19,19 @@ body:
     id: alternatives
     attributes:
       label: Alternativas / Alternatives
+  - type: dropdown
+    id: os
+    attributes:
+      label: Target Operating System / Sistema operativo relevante
+      description: ¿A qué sistema(s) operativo(s) aplica esta propuesta? / Which OS does this feature target?
+      options:
+        - All platforms / Todas las plataformas (Multiplataforma)
+        - Linux
+        - Windows
+        - macOS
+        - Not applicable / No aplica
+    validations:
+      required: true
   - type: checkboxes
     id: contribute
     attributes:

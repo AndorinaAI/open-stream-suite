@@ -49,5 +49,5 @@ Initial public alpha release.
 - The local panel authentication token is strictly issued to local loopback clients (never to external proxies or tunnels).
 
 ### Known Limitations
-- Primary development and testing environment is Linux. Windows and macOS support are **experimental**.
-- The license (PolyForm Noncommercial 1.0.0) restricts commercial monetization; it is a source-available license rather than an OSI open source license.
+- Primary development and testing environment is Linux. Windows and macOS support are **experimental** (developed according to community feedback).
+- The license (CC BY-NC-SA 4.0) restricts commercial monetization and requires ShareAlike reciprocity; applied with retroactive effect across all commits.

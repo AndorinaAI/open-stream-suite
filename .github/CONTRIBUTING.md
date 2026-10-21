@@ -8,11 +8,14 @@
 
 ## Licencia
 
-El proyecto usa la licencia [PolyForm Noncommercial 1.0.0](../LICENSE): uso, modificación y distribución libres **para fines no comerciales**. No se permite venderlo ni lucrarse con él sin permiso del autor.
+El proyecto usa la licencia [Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)](../LICENSE) con efecto retroactivo a todos los commits: uso, modificación y distribución libres **para fines no comerciales**. No se permite venderlo ni lucrarse con él sin permiso del autor.
 
-Si haces un fork y añades funciones, **te pedimos que las propongas al proyecto original** mediante un *Pull Request* para que todos se beneficien. Es una petición de la comunidad: la licencia no puede obligar a ello.
+Por la cláusula **CompartirIgual (ShareAlike)**, cualquier fork, modificación o nueva función que desarrolles y publiques **debe estar bajo esta misma licencia exacta (CC BY-NC-SA 4.0)**, asegurando que todas las mejoras permanezcan libres y puedan ser incorporadas legalmente al proyecto original. Te invitamos y animamos a enviar tus mejoras mediante un *Pull Request*.
 
 Al enviar una contribución aceptas que se distribuya bajo esta misma licencia.
+
+## Plataformas y Testeo
+El desarrollo y pruebas se realizan **exclusivamente en Linux**. No utilizamos sistemas privativos (Windows ni macOS). Si desarrollas en Windows o macOS, agradecemos enormemente tu feedback, reporte de fallos y *Pull Requests* para que esos sistemas puedan avanzar.
 
 ## Cómo contribuir
 

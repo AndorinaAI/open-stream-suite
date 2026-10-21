@@ -12,6 +12,12 @@
 > Contemporary, modular, and lightweight visual identity for gaming, programming, maker streams, content creation, and just chatting.  
 > 🚀 **[Step-by-Step Installation & Startup Guide](app/docs/INSTALLATION_AND_STARTUP.md)** · [Español](app/docs/INSTALACION_E_INICIO.md)
 
+> [!WARNING]
+> **Active Development & Operating System Notice**  
+> Nothing in this suite is exhaustively or completely tested yet; we are in active early development and testing on Linux.  
+> We do **NOT** use proprietary operating systems like Windows or macOS, nor do we have any intention of using them.  
+> Support, compatibility, and bug fixes for Windows and macOS will evolve **solely based on community feedback, bug reports, and pull requests** submitted by users of those systems.
+
 ---
 
 ## 1. Overview
@@ -37,7 +43,7 @@
 OpenStreamSuite/
 ├── README.md               # English README (primary)
 ├── README.es.md            # Spanish README (Español)
-├── LICENSE                 # License (PolyForm Noncommercial 1.0.0)
+├── LICENSE                 # License (CC BY-NC-SA 4.0 - Attribution-NonCommercial-ShareAlike)
 │
 ├── Linux/                  # Installer, launcher, updater and instructions (ES/EN)
 ├── Mac/                    # same for macOS
@@ -188,10 +194,12 @@ Each widget can be loaded as an independent Browser Source in any scene:
 
 ## 7. License & Contributions
 
-Open Stream Suite is released under the **[PolyForm Noncommercial 1.0.0 License](LICENSE)**: you are free to use, modify, study, and share it for **non-commercial personal streaming purposes**. **Selling it or using it for commercial monetization is strictly prohibited** without prior written permission from the author.
+Open Stream Suite is released under the **[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](LICENSE)** with retroactive effect across all past and present commits:
+- **Non-Commercial**: You are free to use, modify, study, and share it for **personal, non-commercial streaming**. Selling it, paid redistribution, or commercial exploitation is strictly prohibited without prior written permission.
+- **ShareAlike (Reciprocity)**: If you remix, transform, or build new features upon this project, you **must distribute your contributions under the same CC BY-NC-SA 4.0 license**. Any new features must remain open and free, allowing them to be contributed back and incorporated into the original project.
 
 > [!NOTE]
-> This is a source-available license, not an OSI-approved open source license, because it restricts commercial use. Contributions and improvements are warmly welcome: see [CONTRIBUTING.en.md](.github/CONTRIBUTING.en.md).
+> Contributions, community fixes, and new features are warmly welcome: see [CONTRIBUTING.en.md](.github/CONTRIBUTING.en.md).
 
 Third-party dependencies and assets retain their respective licenses.
 

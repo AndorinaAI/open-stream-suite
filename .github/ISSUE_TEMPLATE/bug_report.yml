@@ -45,10 +45,26 @@ body:
   - type: dropdown
     id: os
     attributes:
-      label: Sistema operativo / OS
-      options: [Windows, macOS, Linux, Otro / Other]
+      label: Operating System / Sistema operativo
+      description: Selecciona el sistema operativo donde ocurre el fallo / Select the OS where this issue occurs
+      options:
+        - Linux (Ubuntu / Debian / Mint)
+        - Linux (Arch / Manjaro / EndeavourOS)
+        - Linux (Fedora / RHEL)
+        - Linux (Other / Otro)
+        - Windows 11
+        - Windows 10
+        - macOS (Apple Silicon M1/M2/M3/M4)
+        - macOS (Intel)
+        - Other / Otro
     validations:
       required: true
+  - type: input
+    id: os_version_details
+    attributes:
+      label: OS Version & Architecture / Versión exacta y arquitectura del SO
+      description: p.ej. Ubuntu 24.04 x86_64, Windows 11 Pro 23H2, macOS Sonoma 14.5
+      placeholder: "Ubuntu 24.04 LTS / Windows 11 23H2"
   - type: input
     id: version
     attributes:

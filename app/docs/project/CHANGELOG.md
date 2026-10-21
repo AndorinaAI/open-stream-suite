@@ -48,5 +48,5 @@ Primera versión alpha pública.
 - El token local del panel solo se entrega a peticiones desde el propio equipo (no a túneles ni a la red).
 
 ### Limitaciones conocidas
-- Probado en Linux. Windows y macOS son **experimentales**.
-- La licencia (PolyForm Noncommercial) restringe el uso comercial; no es una licencia de la OSI.
+- Probado en Linux. Windows y macOS son **experimentales** (desarrollo según feedback comunitario).
+- La licencia (CC BY-NC-SA 4.0) restringe el uso comercial y exige reciprocidad (ShareAlike); aplica con carácter retroactivo.

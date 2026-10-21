@@ -12,6 +12,12 @@
 > Identidad visual contemporánea, modular y ligera para streaming de videojuegos, programación, creación de contenido, just chatting y cualquier tipo de directo.  
 > 🚀 **[Guía Paso a Paso de Instalación e Inicio](app/docs/INSTALACION_E_INICIO.md)** · [English](app/docs/INSTALLATION_AND_STARTUP.md)
 
+> [!WARNING]
+> **Aviso de Estado Experimental y Sistemas Operativos**  
+> Nada en este paquete está testeado de forma completa ni exhaustiva todavía; nos encontramos en pleno proceso de desarrollo y pruebas en Linux.  
+> **NO usamos sistemas operativos privativos como Windows ni macOS, ni tenemos intención alguna de utilizarlos**.  
+> El soporte, compatibilidad y corrección de errores para Windows y macOS irá avanzando **única y exclusivamente en función del feedback, reportes de fallos y pull requests** que la comunidad de usuarios de dichos sistemas aporte.
+
 ---
 
 ## 1. Introducción
@@ -37,7 +43,7 @@
 OpenStreamSuite/
 ├── README.md               # README principal en inglés
 ├── README.es.md            # README en español (este documento)
-├── LICENSE                 # Licencia (PolyForm Noncommercial 1.0.0)
+├── LICENSE                 # Licencia (CC BY-NC-SA 4.0 - Atribución-NoComercial-CompartirIgual)
 │
 ├── Linux/                  # Instaladores, lanzador, actualizador e instrucciones (ES/EN)
 ├── Mac/                    # Idem para macOS
@@ -194,10 +200,12 @@ Puedes añadir estos widgets independientes como fuentes de Navegador en cualqui
 
 ## 7. Licencia y Contribuciones
 
-Open Stream Suite se distribuye bajo la licencia **[PolyForm Noncommercial 1.0.0](LICENSE)**: puedes usarlo, estudiarlo, modificarlo y compartirlo libremente para **fines no comerciales**, incluido su uso personal para hacer streaming. **No está permitido venderlo ni usarlo para obtener beneficio comercial** sin permiso del autor.
+Open Stream Suite se distribuye bajo la licencia **[Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)](LICENSE)** con pleno efecto retroactivo a todos los commits presentes y pasados:
+- **Uso No Comercial**: Puedes usarlo, estudiarlo, modificarlo y compartirlo libremente para **fines personales no comerciales**, incluido tu streaming en directo. Queda terminantemente prohibida su venta, redistribución de pago o explotación comercial sin permiso explícito por escrito del autor.
+- **CompartirIgual (ShareAlike / Reciprocidad)**: Si modificas el proyecto, transformas el código o creas nuevas funciones, **debes distribuir tus aportaciones bajo esta misma licencia exacta (CC BY-NC-SA 4.0)**. Cualquier función nueva debe ser libre, abierta y sin lucro, garantizando que pueda ser incorporada e integrada libremente en el proyecto original.
 
 > [!NOTE]
-> Es una licencia de código disponible (*source-available*), no una licencia "open source" en el sentido estricto de la OSI, porque restringe el uso comercial. La licencia no puede obligar a que los forks envíen sus cambios al proyecto original, pero las contribuciones son muy bienvenidas: consulta [CONTRIBUTING.md](.github/CONTRIBUTING.md) ([English](.github/CONTRIBUTING.en.md)).
+> Las contribuciones comunitarias, soluciones a errores y nuevas funciones son bienvenidas: consulta [CONTRIBUTING.md](.github/CONTRIBUTING.md) ([English](.github/CONTRIBUTING.en.md)).
 
 Las dependencias de terceros mantienen sus propias licencias.
 
