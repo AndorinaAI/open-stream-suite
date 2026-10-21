@@ -191,9 +191,25 @@
         const pt = document.querySelector('.side-info-panel .panel-title');
         if (pt) pt.textContent = projConfig.panelTitle;
       }
+      if (projConfig.panelStatus) {
+        const ps = document.querySelector('.side-info-panel .panel-header span:last-child');
+        if (ps) ps.textContent = projConfig.panelStatus;
+      }
       if (projConfig.projectPrefix) {
         const pfx = document.querySelector('.project-prefix');
         if (pfx) pfx.textContent = projConfig.projectPrefix;
+      }
+      if (projConfig.focusedRowIndex !== undefined && projConfig.focusedRowIndex >= 0) {
+        const rows = document.querySelectorAll('.side-info-panel .info-row');
+        rows.forEach((r, idx) => {
+          if (idx === projConfig.focusedRowIndex) {
+            r.classList.add('focused', 'active');
+            r.querySelector('.info-value')?.classList.add(isPrintMode ? 'highlight-orange' : 'highlight-cyan');
+          } else {
+            r.classList.remove('focused', 'active');
+            r.querySelector('.info-value')?.classList.remove('highlight-cyan', 'highlight-orange');
+          }
+        });
       }
 
       // Cámara auxiliar
@@ -747,6 +763,11 @@
         <button type="button" class="hud-btn" id="hud-btn-toggle-bg" title="Alternar fondo transparente u oscuro de prueba">
           👁️ Fondo OBS
         </button>
+
+        <div id="hud-phase-switcher" style="display:none; align-items:center; gap:4px; padding:0 6px; border-left:1px solid rgba(255,255,255,0.15);">
+          <span style="color:#57D6C4; font-size:10px; font-weight:700;">FASE:</span>
+          <div id="hud-phase-buttons" style="display:flex; gap:3px;"></div>
+        </div>
       </div>
 
       <button type="button" class="hud-btn" id="hud-btn-toggle-min" style="padding:4px 6px; font-size:10px;" title="Minimizar barra">
@@ -754,6 +775,10 @@
       </button>
     `;
     document.body.appendChild(hud);
+
+    let countdownControl = null;
+    let speedControl = null;
+    let phrasesControl = null;
 
     // --- Control especial 1: Minutos de cuenta atrás y temporizadores (Starting Soon y Pomodoro) ---
     const isCountdownScene = ['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting', 'cozy_pomodoro'].includes(sceneKey)
@@ -764,7 +789,7 @@
 
     if (isCountdownScene) {
       const isPomo = sceneKey === 'cozy_pomodoro' || window.location.pathname.includes('/study_pomodoro/') || document.querySelector('.pomo-time') !== null;
-      const countdownControl = document.createElement('div');
+      countdownControl = document.createElement('div');
       countdownControl.id = 'oss-countdown-control';
       countdownControl.style.cssText = `
         position: fixed; top: 50%; right: 18px; transform: translateY(-50%);
@@ -780,9 +805,12 @@
         : [ { label: '3 min', val: 3 }, { label: '5 min', val: 5 }, { label: '10 min', val: 10 }, { label: '15 min', val: 15 } ];
 
       countdownControl.innerHTML = `
-        <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center;">
+        <div class="hud-drag-handle" style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center; cursor:grab;" title="Arrastra desde aquí para mover este menú">
           <span>${isPomo ? '🍅 POMODORO FOCUS' : '⏱️ CUENTA ATRÁS'}</span>
-          <span id="oss-cd-status" style="font-size:10px; color:#3FB950;">EN MARCHA</span>
+          <span style="display:flex; align-items:center; gap:4px;">
+            <span id="oss-cd-status" style="font-size:10px; color:#3FB950;">EN MARCHA</span>
+            <span style="color:#6E7681; font-size:11px;">⋮⋮</span>
+          </span>
         </div>
         <div style="display:flex; flex-direction:column; gap:4px;">
           <span style="color:#8B949E; font-size:10px;">AJUSTES RÁPIDOS:</span>
@@ -945,7 +973,7 @@
       || document.querySelector('.sidebar-splits') !== null;
 
     if (isSpeedrunScene) {
-      const speedControl = document.createElement('div');
+      speedControl = document.createElement('div');
       speedControl.id = 'oss-speedrun-control';
       speedControl.style.cssText = `
         position: fixed; top: 50%; right: 18px; transform: translateY(-50%);
@@ -956,9 +984,12 @@
         display: flex; flex-direction: column; gap: 10px; width: 230px;
       `;
       speedControl.innerHTML = `
-        <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center;">
+        <div class="hud-drag-handle" style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center; cursor:grab;" title="Arrastra desde aquí para mover este menú">
           <span>⚡ SPEEDRUN LIVE</span>
-          <span id="oss-sr-state" style="font-size:10px; color:#8B949E;">LISTO</span>
+          <span style="display:flex; align-items:center; gap:4px;">
+            <span id="oss-sr-state" style="font-size:10px; color:#8B949E;">LISTO</span>
+            <span style="color:#6E7681; font-size:11px;">⋮⋮</span>
+          </span>
         </div>
         <div style="font-size:26px; font-weight:900; color:#FF783F; text-align:center; padding:6px; background:#161B22; border-radius:4px; border:1px solid rgba(255,120,63,0.3);" id="oss-sr-readout">
           00:09:15
@@ -1045,7 +1076,7 @@
       || document.querySelector('.brb-status-phrase') !== null;
 
     if (isBrbScene) {
-      const phrasesControl = document.createElement('div');
+      phrasesControl = document.createElement('div');
       phrasesControl.id = 'oss-brb-phrases-control';
       phrasesControl.style.cssText = `
         position: fixed; top: 50%; right: 18px; transform: translateY(-50%);
@@ -1056,9 +1087,12 @@
         display: flex; flex-direction: column; gap: 10px; width: 260px;
       `;
       phrasesControl.innerHTML = `
-        <div style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center;">
+        <div class="hud-drag-handle" style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center; cursor:grab;" title="Arrastra desde aquí para mover este menú">
           <span>🔄 FRASES EN ROTACIÓN</span>
-          <span id="oss-brb-phrase-counter" style="font-size:10px; color:#8B949E;">1 / 1</span>
+          <span style="display:flex; align-items:center; gap:4px;">
+            <span id="oss-brb-phrase-counter" style="font-size:10px; color:#8B949E;">1 / 1</span>
+            <span style="color:#6E7681; font-size:11px;">⋮⋮</span>
+          </span>
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
           <button id="oss-brb-prev-phrase" type="button" class="hud-btn" style="flex:1; justify-content:center; padding:3px 6px;">◀ Anterior</button>
@@ -1373,7 +1407,18 @@
       '.footer-note',
       '.bottom-bar div',
       '.bottom-bar b',
-      '.bottom-bar span'
+      '.bottom-bar span',
+      // Ventanas, cabeceras, estado técnico DEV: ACTIVE, info lateral y modos
+      '.panel-header span',
+      '.chat-panel-header span',
+      '.win-header',
+      '.win-header span',
+      '.window-title',
+      '.box-header span',
+      '.card-header span',
+      '.side-info-panel .info-row span',
+      '.starting-side-modes > div:first-child',
+      '.stream-mode-card span'
     ];
 
     function populateQuickJump() {
@@ -1389,7 +1434,12 @@
         }
 
         let tag = 'Texto';
-        if (el.matches('.run-title, .run-category')) tag = 'Juego Speedrun';
+        if (el.matches('.panel-header span:last-child, .chat-panel-header span:last-child')) tag = 'Estado DEV/SYS';
+        else if (el.matches('.panel-header span, .chat-panel-header span, .window-title, .win-header')) tag = 'Cabecera Ventana';
+        else if (el.matches('.info-label')) tag = 'Etiqueta Info';
+        else if (el.matches('.info-value')) tag = 'Valor Info';
+        else if (el.matches('.stream-mode-card span')) tag = 'Modo Emisión';
+        else if (el.matches('.run-title, .run-category')) tag = 'Juego Speedrun';
         else if (el.matches('.split-name')) tag = 'Segmento';
         else if (el.matches('.split-time, .split-delta, .timer-big, .pomo-time, .starting-countdown')) tag = 'Tiempo';
         else if (el.matches('.pb-bar span, .pb-bar, .stat-item, .stat-val')) tag = 'Récord/Stat';
@@ -1565,8 +1615,15 @@
             document.querySelectorAll('.project-name-value, .panel-project-name').forEach(el => el.textContent = projName);
           }
           if (projTitle) texts.maker.projectTitle = projTitle;
-          if (projPhase) texts.maker.currentPhase = projPhase;
+          const activePhase = document.querySelector('.project-phases .phase-item.active')?.textContent?.trim() || projPhase;
+          if (activePhase) texts.maker.currentPhase = activePhase;
           if (projDetail) texts.maker.detail = projDetail;
+
+          const panelStatus = document.querySelector('.side-info-panel .panel-header span:last-child')?.textContent?.trim();
+          if (panelStatus) texts.maker.panelStatus = panelStatus;
+
+          const focusedRowIdx = Array.from(document.querySelectorAll('.side-info-panel .info-row')).findIndex(r => r.classList.contains('focused') || r.classList.contains('active') || r.querySelector('.info-value.highlight-cyan, .info-value.highlight-orange'));
+          if (focusedRowIdx >= 0) texts.maker.focusedRowIndex = focusedRowIdx;
 
           const phases = Array.from(document.querySelectorAll('.project-phases .phase-item'))
             .map(el => el.textContent.trim())
@@ -1600,8 +1657,15 @@
             texts.print.projectName = projName;
             document.querySelectorAll('.project-name-value, .panel-project-name').forEach(el => el.textContent = projName);
           }
-          if (projPhase) texts.print.currentPhase = projPhase;
+          const printActivePhase = document.querySelector('.project-phases .phase-item.active')?.textContent?.trim() || projPhase;
+          if (printActivePhase) texts.print.currentPhase = printActivePhase;
           if (projMat) texts.print.material = projMat;
+
+          const printPanelStatus = document.querySelector('.side-info-panel .panel-header span:last-child')?.textContent?.trim();
+          if (printPanelStatus) texts.print.panelStatus = printPanelStatus;
+
+          const printFocusedRowIdx = Array.from(document.querySelectorAll('.side-info-panel .info-row')).findIndex(r => r.classList.contains('focused') || r.classList.contains('active') || r.querySelector('.info-value.highlight-cyan, .info-value.highlight-orange'));
+          if (printFocusedRowIdx >= 0) texts.print.focusedRowIndex = printFocusedRowIdx;
 
           const phases = Array.from(document.querySelectorAll('.project-phases .phase-item'))
             .map(el => el.textContent.trim())
@@ -1633,6 +1697,8 @@
           const chatTitle = document.querySelector('.chat-title span:last-child')?.textContent?.trim()
             || document.querySelector('.chat-header')?.textContent?.trim();
           if (chatTitle) texts.chill.chatTitle = chatTitle;
+          const chatObs = document.querySelector('.chat-panel-header span:last-child')?.textContent?.trim();
+          if (chatObs) texts.chill.chatStatus = chatObs;
           const topVal = document.querySelector('#lbl-topic')?.textContent?.trim()
             || document.querySelector('.topic-pill')?.textContent?.trim();
           if (topVal) texts.chill.topic = topVal;
@@ -1798,50 +1864,157 @@
       });
     }
 
-    // Arrastre libre de la barra desde el asa (hud-drag-handle)
-    const dragHandle = hud.querySelector('.hud-drag-handle');
-    if (dragHandle) {
+    // Sistema universal de arrastre para mover menús flotantes por la pantalla
+    function makeDraggable(el, handleSelector) {
+      if (!el) return;
+      const handle = handleSelector ? (el.querySelector(handleSelector) || el) : el;
+      handle.style.cursor = 'grab';
+
       let isDragging = false;
       let startX = 0;
       let startY = 0;
       let initLeft = 0;
       let initTop = 0;
 
-      dragHandle.addEventListener('mousedown', (e) => {
+      handle.addEventListener('pointerdown', (e) => {
         if (e.button !== 0) return;
+        if (['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'A'].includes(e.target.tagName)) return;
+        if (e.target.isContentEditable) return;
+
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
-        const rect = hud.getBoundingClientRect();
+        const rect = el.getBoundingClientRect();
         initLeft = rect.left;
         initTop = rect.top;
-        hud.style.bottom = 'auto';
-        hud.style.transform = 'none';
-        hud.style.left = initLeft + 'px';
-        hud.style.top = initTop + 'px';
-        dragHandle.style.cursor = 'grabbing';
+
+        el.style.bottom = 'auto';
+        el.style.right = 'auto';
+        el.style.transform = 'none';
+        el.style.left = initLeft + 'px';
+        el.style.top = initTop + 'px';
+        handle.style.cursor = 'grabbing';
         document.body.style.userSelect = 'none';
 
-        function onMouseMove(me) {
+        function onPointerMove(me) {
           if (!isDragging) return;
           const dx = me.clientX - startX;
           const dy = me.clientY - startY;
-          hud.style.left = Math.max(10, Math.min(window.innerWidth - hud.offsetWidth - 10, initLeft + dx)) + 'px';
-          hud.style.top = Math.max(10, Math.min(window.innerHeight - hud.offsetHeight - 10, initTop + dy)) + 'px';
+          const maxLeft = Math.max(10, window.innerWidth - el.offsetWidth - 10);
+          const maxTop = Math.max(10, window.innerHeight - el.offsetHeight - 10);
+          el.style.left = Math.max(10, Math.min(maxLeft, initLeft + dx)) + 'px';
+          el.style.top = Math.max(10, Math.min(maxTop, initTop + dy)) + 'px';
         }
 
-        function onMouseUp() {
+        function onPointerUp() {
+          if (!isDragging) return;
           isDragging = false;
-          dragHandle.style.cursor = 'grab';
+          handle.style.cursor = 'grab';
           document.body.style.userSelect = '';
-          window.removeEventListener('mousemove', onMouseMove);
-          window.removeEventListener('mouseup', onMouseUp);
+          window.removeEventListener('pointermove', onPointerMove);
+          window.removeEventListener('pointerup', onPointerUp);
         }
 
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', onMouseUp);
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
       });
     }
+
+    makeDraggable(hud, '.hud-drag-handle');
+    if (countdownControl) makeDraggable(countdownControl, '.hud-drag-handle');
+    if (speedControl) makeDraggable(speedControl, '.hud-drag-handle');
+    if (phrasesControl) makeDraggable(phrasesControl, '.hud-drag-handle');
+
+    // Gestión dinámica de Fases, Enfoque en paneles laterales y Modos de emisión
+    function setupPhaseAndSideControls() {
+      const phaseItems = document.querySelectorAll('.project-phases .phase-item');
+      const hudPhaseSwitcher = hud.querySelector('#hud-phase-switcher');
+      const hudPhaseButtons = hud.querySelector('#hud-phase-buttons');
+
+      function updatePhaseButtons() {
+        if (!hudPhaseButtons) return;
+        hudPhaseButtons.innerHTML = '';
+        phaseItems.forEach(pi => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'hud-btn';
+          const pText = pi.textContent.trim();
+          btn.textContent = pText;
+          const isActive = pi.classList.contains('active');
+          if (isActive) {
+            btn.style.borderColor = '#57D6C4';
+            btn.style.color = '#57D6C4';
+            btn.style.background = 'rgba(87,214,196,0.18)';
+            btn.style.fontWeight = '700';
+          }
+          btn.addEventListener('click', () => {
+            selectActivePhase(pi);
+          });
+          hudPhaseButtons.appendChild(btn);
+        });
+      }
+
+      function selectActivePhase(targetPi) {
+        phaseItems.forEach(p => p.classList.remove('active'));
+        targetPi.classList.add('active');
+        const phaseText = targetPi.textContent.trim();
+        document.querySelectorAll('.panel-project-phase').forEach(pp => {
+          pp.textContent = phaseText;
+        });
+        updatePhaseButtons();
+        showHudToast(`🏷️ Fase activa cambiada a: ${phaseText}`);
+      }
+
+      if (phaseItems.length > 0) {
+        if (hudPhaseSwitcher) hudPhaseSwitcher.style.display = 'flex';
+        updatePhaseButtons();
+
+        phaseItems.forEach(pi => {
+          pi.addEventListener('click', (e) => {
+            if (e.target.isContentEditable) return;
+            selectActivePhase(pi);
+          });
+        });
+      }
+
+      // Enfoque / Focus en filas del panel lateral (.side-info-panel .info-row)
+      const infoRows = document.querySelectorAll('.side-info-panel .info-row');
+      infoRows.forEach((row, rIdx) => {
+        row.addEventListener('click', (e) => {
+          if (e.target.isContentEditable) return;
+          const isPrint = document.body.dataset.mode === 'print';
+          const hlClass = isPrint ? 'highlight-orange' : 'highlight-cyan';
+          const wasFocused = row.classList.contains('focused') || row.classList.contains('active');
+
+          infoRows.forEach(r => {
+            r.classList.remove('focused', 'active');
+            r.querySelector('.info-value')?.classList.remove('highlight-cyan', 'highlight-orange');
+          });
+
+          if (!wasFocused) {
+            row.classList.add('focused', 'active');
+            row.querySelector('.info-value')?.classList.add(hlClass);
+            const lbl = row.querySelector('.info-label')?.textContent?.trim() || 'Fila';
+            showHudToast(`🎯 Foco asignado a: ${lbl}`);
+          }
+        });
+      });
+
+      // Alternar modos activos en Starting Soon (.starting-side-modes .stream-mode-card)
+      const modeCards = document.querySelectorAll('.starting-side-modes .stream-mode-card');
+      modeCards.forEach((card, cIdx) => {
+        card.addEventListener('click', (e) => {
+          if (e.target.isContentEditable) return;
+          const isOrange = card.classList.contains('active-orange') || cIdx === 2;
+          const activeClass = isOrange ? 'active-orange' : 'active-cyan';
+          card.classList.toggle(activeClass);
+          const lbl = card.querySelector('.ss-mode-label')?.textContent?.trim() || `Modo ${cIdx+1}`;
+          showHudToast(`🎯 Modo ${lbl} ${card.classList.contains(activeClass) ? 'activado' : 'desactivado'}`);
+        });
+      });
+    }
+
+    setupPhaseAndSideControls();
 
     // Botón de Restaurar textos a fábrica desde el HUD
     const btnResetTexts = hud.querySelector('#hud-btn-reset-texts');

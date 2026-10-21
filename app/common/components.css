@@ -334,6 +334,14 @@
   border-radius: 3px;
   border: 1px solid transparent;
   transition: var(--transition-smooth);
+  cursor: pointer;
+  user-select: none;
+}
+
+.phase-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-light);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .phase-item.active {
@@ -341,11 +349,13 @@
   border-color: var(--color-border-cyan-bright);
   color: var(--color-text-light);
   font-weight: 700;
+  box-shadow: 0 0 10px rgba(87, 214, 196, 0.2);
 }
 
 .bottom-project-bar.theme-orange .phase-item.active {
   background: rgba(255, 120, 63, 0.2);
   border-color: var(--color-border-orange-bright);
+  box-shadow: 0 0 10px rgba(255, 120, 63, 0.2);
 }
 
 .phase-divider {
@@ -399,6 +409,32 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.info-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.info-row.focused,
+.info-row.active {
+  background: rgba(0, 229, 255, 0.08);
+  border-left: 2px solid var(--color-accent-cyan);
+  box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.05);
+}
+
+.theme-orange .info-row.focused,
+.theme-orange .info-row.active,
+.side-info-panel[style*="orange"] .info-row.focused,
+.side-info-panel[style*="orange"] .info-row.active {
+  background: rgba(255, 126, 95, 0.08);
+  border-left: 2px solid var(--color-accent-orange);
+  box-shadow: inset 0 0 12px rgba(255, 126, 95, 0.05);
 }
 
 .info-label {
@@ -413,14 +449,17 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--color-text-light);
+  transition: color 0.2s ease;
 }
 
 .info-value.highlight-cyan {
   color: var(--color-accent-cyan);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
 }
 
 .info-value.highlight-orange {
   color: var(--color-accent-orange);
+  text-shadow: 0 0 8px rgba(255, 126, 95, 0.3);
 }
 
 /* --- 5. REDES SOCIALES --- */
