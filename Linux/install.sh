@@ -54,9 +54,9 @@ Type=Application
 Name=Open Stream Suite
 GenericName=Control de Streaming y OBS
 Comment=Suite modular de overlays, alertas y control para Twitch y OBS Studio
-Exec="$LAUNCHER_SCRIPT"
+Exec="$APP_DIR/venv/bin/python3" "$APP_DIR/launcher.py" --start-server
 Icon=$ICON_PATH
-Path=$DIR
+Path=$APP_DIR
 Terminal=false
 Categories=AudioVideo;Video;AudioVideoEditing;Network;
 Keywords=stream;twitch;obs;overlays;alerts;deck;
@@ -65,6 +65,16 @@ EOF
 
 chmod +x "$DESKTOP_FILE"
 chmod +x "$LAUNCHER_SCRIPT"
+
+# Crear acceso directo en el escritorio si existe carpeta Desktop/Escritorio
+for d in "$HOME/Desktop" "$HOME/Escritorio"; do
+    if [ -d "$d" ]; then
+        cp "$DESKTOP_FILE" "$d/Open Stream Suite.desktop"
+        chmod +x "$d/Open Stream Suite.desktop"
+        command -v gio >/dev/null 2>&1 && gio set "$d/Open Stream Suite.desktop" metadata::trusted true 2>/dev/null || true
+        echo "✓ Acceso directo copiado a: $d/Open Stream Suite.desktop"
+    fi
+done
 
 echo "✓ Acceso directo creado en: $DESKTOP_FILE"
 echo
