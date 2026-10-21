@@ -135,19 +135,19 @@ function renderTickerShortcuts() {
   const container = document.getElementById('ticker-shortcuts-container');
   if (!container || !cachedWidgetsConfig || !cachedWidgetsConfig.ticker) return;
 
-  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const tr = (k, fb) => (window.i18n && window.i18n.has && window.i18n.has(k) ? window.i18n.tr(k) : fb) || fb;
   const tk = cachedWidgetsConfig.ticker;
   const shortcuts = tk.shortcuts || [
-    { id: 'sc_tk_1', label: '📢 Anuncio Stream', action: 'message', params: { message: '🔥 ¡Directo en marcha!' }, color: '#57D6C4' },
-    { id: 'sc_tk_2', label: '⭐ Gracias', action: 'message', params: { message: '🎉 ¡Gracias a todos por apoyar el canal!' }, color: '#A78BFA' },
-    { id: 'sc_tk_3', label: '🚨 Flash', action: 'flash_news', params: { message: '🚨 ¡ALERTA EN DIRECTO: Proyecto completado con éxito!' }, color: '#EF4444' },
-    { id: 'sc_tk_4', label: '❤️ +Follow', action: 'simulate', params: { event: 'follow', user: 'Comunidad' }, color: '#F43F5E' }
+    { id: 'sc_ticker_announce', label: '📢 Anuncio Stream', action: 'message', params: { message: '🔥 ¡Directo en marcha!' }, color: '#57D6C4' },
+    { id: 'sc_ticker_thanks', label: '⭐ Gracias', action: 'message', params: { message: '🎉 ¡Gracias a todos por apoyar el canal!' }, color: '#A78BFA' },
+    { id: 'sc_ticker_flash', label: '🚨 Flash', action: 'flash_news', params: { message: '🚨 ¡ALERTA EN DIRECTO: Proyecto completado con éxito!' }, color: '#EF4444' },
+    { id: 'sc_ticker_sim_follow', label: '❤️ +Follow', action: 'simulate', params: { event: 'follow', user: 'Comunidad' }, color: '#F43F5E' }
   ];
 
   container.innerHTML = `
     <div style="display: flex; gap: 6px; flex-wrap: wrap;">
       ${shortcuts.map(sc => {
-        const label = tr('widgets.shortcuts.' + sc.id, sc.label);
+        const label = (window.i18n && window.i18n.has && window.i18n.has('widgets.shortcuts.' + sc.id) ? window.i18n.tr('widgets.shortcuts.' + sc.id) : null) || sc.label || sc.id;
         return `
         <button type="button" class="btn-action-test" style="border-color: ${sc.color || '#57D6C4'}80; color: ${sc.color || '#57D6C4'};" onclick="API.triggerWidgetAction('ticker', '${sc.action}', ${JSON.stringify(sc.params || {}).replace(/"/g, '&quot;')})">
           ${label}

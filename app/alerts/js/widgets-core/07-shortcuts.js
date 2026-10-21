@@ -26,11 +26,13 @@ function renderMiniAppShortcutsManager() {
     }
     else details = `⚡ Atajo ID: ${s.id}`;
 
+    const itemLabel = (window.i18n && window.i18n.has && window.i18n.has('widgets.shortcuts.' + s.id) ? window.i18n.tr('widgets.shortcuts.' + s.id) : null) || s.label || s.title || s.id;
+
     row.innerHTML = `
       <div style="display: flex; align-items: center; gap: 12px;">
         <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${color};box-shadow:0 0 10px ${color};"></span>
         <div>
-          <strong style="font-size: 13px; color: #fff;">${s.label}</strong>
+          <strong style="font-size: 13px; color: #fff;">${itemLabel}</strong>
           <div style="font-size: 11px; color: var(--color-text-dim); font-family: var(--font-tech);">${details}</div>
         </div>
       </div>

@@ -6,7 +6,7 @@ function renderTimerShortcuts() {
   const container = document.getElementById('timer-shortcuts-container');
   if (!container || !cachedWidgetsConfig || !cachedWidgetsConfig.timer) return;
 
-  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const tr = (k, fb) => (window.i18n && window.i18n.has && window.i18n.has(k) ? window.i18n.tr(k) : fb) || fb;
   const shortcuts = (cachedWidgetsConfig.timer.shortcuts || []).filter(s => s.pinned !== false);
   container.innerHTML = '';
 
@@ -17,8 +17,8 @@ function renderTimerShortcuts() {
     const color = s.color || '#57D6C4';
     btn.style.borderColor = `${color}60`;
     btn.style.boxShadow = `0 0 10px ${color}15`;
-    const label = tr('widgets.shortcuts.' + s.id, s.label);
-    const title = tr('widgets.shortcuts.' + s.id + '.title', s.title || s.label);
+    const label = (window.i18n && window.i18n.has && window.i18n.has('widgets.shortcuts.' + s.id) ? window.i18n.tr('widgets.shortcuts.' + s.id) : null) || s.label || s.title || s.id;
+    const title = (window.i18n && window.i18n.has && window.i18n.has('widgets.shortcuts.' + s.id + '.title') ? window.i18n.tr('widgets.shortcuts.' + s.id + '.title') : null) || s.title || s.label || s.id;
     btn.innerHTML = `
       <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${color};box-shadow:0 0 6px ${color};"></span>
       <span>${label}</span>

@@ -6,7 +6,7 @@ function renderGoalShortcuts() {
   const container = document.getElementById('goal-shortcuts-container');
   if (!container || !cachedWidgetsConfig || !cachedWidgetsConfig.goal) return;
 
-  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const tr = (k, fb) => (window.i18n && window.i18n.has && window.i18n.has(k) ? window.i18n.tr(k) : fb) || fb;
   const g = cachedWidgetsConfig.goal;
   const goals = g.goals || [];
   // Metas ancladas a la tarjeta
@@ -43,7 +43,7 @@ function renderGoalShortcuts() {
     const cardRow = document.createElement('div');
     cardRow.style.cssText = `background: rgba(0,0,0,0.3); border: 1px solid ${goalColor}40; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;`;
 
-    const locTitle = tr('widgets.goal_' + goal.id, goal.title || 'OBJETIVO');
+    const locTitle = (window.i18n && window.i18n.has && window.i18n.has('widgets.goal_' + goal.id) ? window.i18n.tr('widgets.goal_' + goal.id) : null) || goal.title || 'OBJETIVO';
 
     // Barra de progreso y datos
     cardRow.innerHTML = `
@@ -108,7 +108,7 @@ function renderGoalShortcuts() {
       btn.style.boxShadow = `0 0 8px ${col}20`;
       btn.innerHTML = `
         <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${col};box-shadow:0 0 5px ${col};"></span>
-        <span>${sc.label}</span>
+        <span>${(window.i18n && window.i18n.has && window.i18n.has('widgets.shortcuts.' + sc.id) ? window.i18n.tr('widgets.shortcuts.' + sc.id) : null) || sc.label || sc.id}</span>
       `;
       btn.onclick = () => triggerGoalCustomShortcut(sc.id);
       scDiv.appendChild(btn);

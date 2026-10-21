@@ -85,14 +85,49 @@ const i18n = (() => {
     loadCallbacks = [];
   }
 
-  // Traducir una clave (notación de punto, ej. "nav.triggers")
-  function tr(key, params = {}) {
+  // Comprobar si existe una clave en los diccionarios cargados
+  function has(key) {
+    if (!key) return false;
     const dict = dictionaries[currentLang] || {};
-    let text = dict[key] || key;
+    if (dict[key] !== undefined && dict[key] !== null) return true;
+    if (dictionaries['es'] && dictionaries['es'][key] !== undefined && dictionaries['es'][key] !== null) return true;
+    if (dictionaries['en'] && dictionaries['en'][key] !== undefined && dictionaries['en'][key] !== null) return true;
+    return false;
+  }
+
+  // Traducir una clave (notación de punto, ej. "nav.triggers")
+  function tr(key, paramsOrFallback = null, maybeFallback = null) {
+    if (!key) return (typeof paramsOrFallback === 'string' ? paramsOrFallback : maybeFallback) || '';
+
+    let params = {};
+    let fallback = null;
+
+    if (typeof paramsOrFallback === 'string') {
+      fallback = paramsOrFallback;
+    } else if (paramsOrFallback && typeof paramsOrFallback === 'object') {
+      params = paramsOrFallback;
+      if (typeof maybeFallback === 'string') {
+        fallback = maybeFallback;
+      }
+    }
+
+    const dict = dictionaries[currentLang] || {};
+    let text = dict[key];
+
+    if (text === undefined && dictionaries['es']) {
+      text = dictionaries['es'][key];
+    }
+    if (text === undefined && dictionaries['en']) {
+      text = dictionaries['en'][key];
+    }
+
+    if (text === undefined || text === null) {
+      return fallback;
+    }
 
     if (params && typeof params === 'object') {
       for (const [p, v] of Object.entries(params)) {
-        text = text.replace(new RegExp(`\\{${p}\\}`, 'g'), v);
+        text = String(text).replace(new RegExp(`\\{${p}\\}`, 'g'), v);
       }
     }
     return text;
@@ -359,6 +394,7 @@ const i18n = (() => {
       setLanguage,
       applyTranslations,
       tr,
+      has,
       getLanguage,
       debugDict,
       onLoad: (cb) => {

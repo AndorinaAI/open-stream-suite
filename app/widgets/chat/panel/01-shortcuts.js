@@ -6,7 +6,7 @@ function renderChatShortcuts() {
   const container = document.getElementById('chat-shortcuts-container');
   if (!container || !cachedWidgetsConfig || !cachedWidgetsConfig.chat) return;
 
-  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const tr = (k, fb) => (window.i18n && window.i18n.has && window.i18n.has(k) ? window.i18n.tr(k) : fb) || fb;
   const shortcuts = (cachedWidgetsConfig.chat.shortcuts || []).filter(s => s.pinned !== false);
   container.innerHTML = '';
 
@@ -17,7 +17,7 @@ function renderChatShortcuts() {
     const color = s.color || '#EC4899';
     btn.style.borderColor = `${color}60`;
     btn.style.boxShadow = `0 0 10px ${color}15`;
-    const label = tr('widgets.shortcuts.' + s.id, s.label);
+    const label = (window.i18n && window.i18n.has && window.i18n.has('widgets.shortcuts.' + s.id) ? window.i18n.tr('widgets.shortcuts.' + s.id) : null) || s.label || s.id;
     btn.innerHTML = `
       <span>${label}</span>
     `;
