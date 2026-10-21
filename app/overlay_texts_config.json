@@ -16,11 +16,23 @@
   },
   "game": {
     "badgeText": "GAME MODE",
-    "tagline": "MODO JUEGO / GAMEPLAY"
+    "tagline": "MODO JUEGO / GAMEPLAY",
+    "runTitle": "SUPER MARIO 64",
+    "runCategory": "16 STARS · N64 ORIGINAL",
+    "personalBest": "16:15.00",
+    "matchType": "COMPETITIVE",
+    "fps": "240",
+    "camLabel": "STREAMER // CAM",
+    "splits": [
+      { "name": "01 BOB-OMB", "delta": "-00:14", "time": "02:18", "type": "negative" },
+      { "name": "02 WHOMP'S FORT", "delta": "-00:42", "time": "05:30", "type": "negative" },
+      { "name": "03 CCM MOUNTAIN", "delta": "+00:08", "time": "09:15", "type": "positive", "active": true },
+      { "name": "04 BOWSER IN DARK", "delta": "-00:25", "time": "15:40", "type": "negative" }
+    ]
   },
   "maker": {
     "projectName": "SUPER ESTACION MAKER 2026",
-    "currentPhase": "02 MONTAJE",
+    "currentPhase": "03 SOFTWARE",
     "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "panelTitle": "ESTADO DEL PROYECTO",
     "projectPrefix": "PROYECTO:",
@@ -35,12 +47,13 @@
       "03 SOFTWARE",
       "04 PRUEBAS"
     ],
-    "showAuxView": true
+    "showAuxView": true,
+    "panelStatus": "DEV: ACTIVE"
   },
   "print": {
     "projectName": "PEGATINAS PERSONALIZADAS",
     "material": "Vinilo Holográfico Adhesivo",
-    "currentPhase": "CORTE DE VINILO",
+    "currentPhase": "03 PELADO",
     "panelTitle": "TRABAJO DE CORTE / IMPRESIÓN",
     "projectPrefix": "TRABAJO:",
     "frames": {

@@ -142,6 +142,40 @@
       if (config.game.runCategory) {
         document.querySelectorAll('.run-category').forEach(el => el.textContent = config.game.runCategory);
       }
+      if (config.game.personalBest) {
+        const pb = document.querySelector('.pb-bar span:last-child');
+        if (pb) pb.textContent = config.game.personalBest;
+      }
+      if (config.game.matchType) {
+        const mv = document.querySelector('.stat-item:first-child .stat-val');
+        if (mv) mv.textContent = config.game.matchType;
+      }
+      if (config.game.fps) {
+        const fv = document.querySelector('.stat-item:last-child .stat-val');
+        if (fv) fv.textContent = config.game.fps;
+      }
+      if (config.game.camLabel) {
+        document.querySelectorAll('.hud-header, .cam-split .cam-label').forEach(el => el.textContent = config.game.camLabel);
+      }
+      if (Array.isArray(config.game.splits) && config.game.splits.length > 0) {
+        const splitsContainer = document.querySelector('.splits-list');
+        if (splitsContainer) {
+          splitsContainer.innerHTML = '';
+          config.game.splits.forEach(sp => {
+            const row = document.createElement('div');
+            row.className = 'split-row' + (sp.active ? ' active' : '');
+            const deltaClass = sp.type === 'positive' ? 'positive' : 'negative';
+            row.innerHTML = `
+              <span class="split-name">${sp.name || 'Tramo'}</span>
+              <div class="split-times">
+                <span class="split-delta ${deltaClass}">${sp.delta || '±00:00'}</span>
+                <span class="split-time">${sp.time || '--:--'}</span>
+              </div>
+            `;
+            splitsContainer.appendChild(row);
+          });
+        }
+      }
     }
 
     // 6. Proyecto Maker / Print
@@ -798,6 +832,15 @@
         <div id="hud-phase-switcher" style="display:none; align-items:center; gap:4px; padding:0 6px; border-left:1px solid rgba(255,255,255,0.15);">
           <span style="color:#57D6C4; font-size:10px; font-weight:700;">FASE:</span>
           <div id="hud-phase-buttons" style="display:flex; gap:3px;"></div>
+          <button type="button" class="hud-btn" id="hud-btn-add-phase" style="padding:2px 6px; font-size:10px;" title="Añadir una nueva fase al proyecto">➕</button>
+          <button type="button" class="hud-btn" id="hud-btn-del-phase" style="padding:2px 6px; font-size:10px; color:#F85149;" title="Eliminar la fase activa">🗑️</button>
+        </div>
+
+        <div id="hud-podcast-switcher" style="display:none; align-items:center; gap:4px; padding:0 6px; border-left:1px solid rgba(255,255,255,0.15);">
+          <span style="color:#57D6C4; font-size:10px; font-weight:700;">👥 CÁMARAS:</span>
+          <button type="button" class="hud-btn hud-pod-cam-btn" data-cams="2" style="padding:2px 6px; font-size:10px;">2 Cams</button>
+          <button type="button" class="hud-btn hud-pod-cam-btn" data-cams="3" style="padding:2px 6px; font-size:10px;">3 Cams</button>
+          <button type="button" class="hud-btn hud-pod-cam-btn" data-cams="4" style="padding:2px 6px; font-size:10px;">4 Cams</button>
         </div>
       </div>
 
@@ -847,6 +890,10 @@
           <span style="color:#8B949E; font-size:10px;">AJUSTES RÁPIDOS:</span>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px;">
             ${presets.map(p => `<button type="button" class="hud-btn oss-cd-preset" data-mins="${p.val}" style="padding:4px 6px; font-size:10px; justify-content:center;">${p.label}</button>`).join('')}
+          </div>
+          <div style="display:flex; gap:4px; margin-top:2px;">
+            <button id="oss-cd-plus-1m" type="button" class="hud-btn" style="flex:1; justify-content:center; font-size:10px;">+1 Min</button>
+            <button id="oss-cd-minus-1m" type="button" class="hud-btn" style="flex:1; justify-content:center; font-size:10px;">-1 Min</button>
           </div>
         </div>
         <label style="display:flex; flex-direction:column; gap:4px;">
@@ -949,16 +996,32 @@
         showHudToast(`🔄 Temporizador reiniciado a ${m} min`);
       });
 
-      // Botones de presets
-      countdownControl.querySelectorAll('.oss-cd-preset').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const m = parseInt(btn.dataset.mins) || 5;
-          const inp = document.getElementById('oss-cd-minutes');
-          if (inp) inp.value = m;
-          startTimerEngine(m);
-          showHudToast(`⏱️ Preset seleccionado: ${m} min`);
-        });
+      // Botones +1 Min / -1 Min
+      document.getElementById('oss-cd-plus-1m')?.addEventListener('click', () => {
+        currentSecondsRemaining += 60;
+        totalSecondsInitial += 60;
+        updateClockDisplay();
+        showHudToast('⏱️ +1 Minuto añadido');
       });
+      document.getElementById('oss-cd-minus-1m')?.addEventListener('click', () => {
+        if (currentSecondsRemaining > 60) {
+          currentSecondsRemaining -= 60;
+          totalSecondsInitial = Math.max(60, totalSecondsInitial - 60);
+          updateClockDisplay();
+          showHudToast('⏱️ -1 Minuto restado');
+        }
+      });
+
+      // Clic directo en el reloj para Iniciar / Pausar
+      if (countdownEl) {
+        countdownEl.style.cursor = 'pointer';
+        countdownEl.title = 'Haz clic para Iniciar / Pausar el temporizador';
+        countdownEl.addEventListener('click', (e) => {
+          if (window.__OSS_IS_EDITING__) return;
+          e.stopPropagation();
+          toggleBtn?.click();
+        });
+      }
 
       // Guardar y Aplicar en el servidor
       document.getElementById('oss-cd-apply')?.addEventListener('click', async () => {
@@ -1012,7 +1075,7 @@
         border: 1px solid rgba(87,214,196,0.45); border-radius: 8px;
         padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
         font-size: 11px; color: #F0F6FC; box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(87,214,196,0.15);
-        display: flex; flex-direction: column; gap: 10px; width: 230px;
+        display: flex; flex-direction: column; gap: 8px; width: 250px;
       `;
       speedControl.innerHTML = `
         <div class="hud-drag-handle" style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center; cursor:grab;" title="Arrastra desde aquí para mover este menú">
@@ -1022,14 +1085,29 @@
             <span style="color:#6E7681; font-size:11px;">⋮⋮</span>
           </span>
         </div>
-        <div style="font-size:26px; font-weight:900; color:#FF783F; text-align:center; padding:6px; background:#161B22; border-radius:4px; border:1px solid rgba(255,120,63,0.3);" id="oss-sr-readout">
+        <div style="font-size:26px; font-weight:900; color:#FF783F; text-align:center; padding:6px; background:#161B22; border-radius:4px; border:1px solid rgba(255,120,63,0.3); cursor:pointer;" id="oss-sr-readout" title="Clic para Iniciar / Pausar">
           00:09:15
         </div>
         <div style="display:flex; gap:6px;">
           <button id="oss-sr-toggle" type="button" class="hud-btn" style="flex:1; justify-content:center;">▶ Iniciar</button>
           <button id="oss-sr-split" type="button" class="hud-btn" style="flex:1; justify-content:center; background:rgba(87,214,196,0.15); color:#57D6C4; border-color:rgba(87,214,196,0.4);">⚡ Split</button>
         </div>
-        <button id="oss-sr-reset" type="button" class="hud-btn" style="width:100%; justify-content:center;">🔄 Reset a 00:00:00</button>
+        <div style="display:flex; gap:6px;">
+          <button id="oss-sr-prev-split" type="button" class="hud-btn" style="flex:1; justify-content:center;" title="Retroceder al tramo anterior">⏮ Split Prev</button>
+          <button id="oss-sr-reset" type="button" class="hud-btn" style="flex:1; justify-content:center;">🔄 Reset 00:00</button>
+        </div>
+        <div style="display:flex; gap:6px; border-top:1px solid rgba(255,255,255,0.08); padding-top:6px;">
+          <button id="oss-sr-add-split" type="button" class="hud-btn" style="flex:1; justify-content:center; font-size:10px;">➕ Añadir Tramo</button>
+          <button id="oss-sr-del-split" type="button" class="hud-btn" style="flex:1; justify-content:center; font-size:10px; color:#F85149;" title="Eliminar el tramo activo">🗑️ Eliminar</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:4px; margin-top:2px;">
+          <span style="color:#8B949E; font-size:10px;">TIEMPO:</span>
+          <input id="oss-sr-custom-time" type="text" value="00:09:15" placeholder="hh:mm:ss"
+            style="flex:1; background:#161B22; color:#F0F6FC; border:1px solid rgba(87,214,196,0.4);
+                   border-radius:4px; padding:3px 6px; font-size:11px; font-family:inherit; text-align:center;">
+          <button id="oss-sr-set-time" type="button" class="hud-btn" style="padding:3px 6px; font-size:10px;">Fijar</button>
+        </div>
+        <button id="oss-sr-save" type="button" class="hud-btn btn-save" style="width:100%; justify-content:center; padding:6px; margin-top:2px;">💾 Guardar Tramos y Tiempos</button>
       `;
       document.body.appendChild(speedControl);
 
@@ -1052,8 +1130,26 @@
         const formatted = formatSrTime(srSeconds);
         if (srReadout) srReadout.textContent = formatted;
         if (srTimerEl) srTimerEl.textContent = formatted;
+        const customInput = document.getElementById('oss-sr-custom-time');
+        if (customInput && document.activeElement !== customInput) {
+          customInput.value = formatted;
+        }
       }
       updateSrDisplay();
+
+      // Clic directo en el reloj de la pantalla o en el visor del widget para Iniciar / Pausar
+      if (srTimerEl) {
+        srTimerEl.style.cursor = 'pointer';
+        srTimerEl.title = 'Haz clic para Iniciar / Pausar el cronómetro';
+        srTimerEl.addEventListener('click', (e) => {
+          if (window.__OSS_IS_EDITING__) return;
+          e.stopPropagation();
+          srToggleBtn?.click();
+        });
+      }
+      srReadout?.addEventListener('click', () => {
+        srToggleBtn?.click();
+      });
 
       srToggleBtn?.addEventListener('click', () => {
         srRunning = !srRunning;
@@ -1067,25 +1163,111 @@
             srSeconds++;
             updateSrDisplay();
           }, 1000);
+          showHudToast('▶ Cronómetro de Speedrun en marcha');
         } else {
           if (srInterval) clearInterval(srInterval);
+          showHudToast('⏸ Cronómetro pausado');
         }
       });
 
-      // Split siguiente
+      // Split siguiente con captura de tiempo
       document.getElementById('oss-sr-split')?.addEventListener('click', () => {
         const rows = document.querySelectorAll('.split-row');
         if (rows.length > 0) {
           let curIdx = -1;
           rows.forEach((r, idx) => { if (r.classList.contains('active')) curIdx = idx; });
-          if (curIdx >= 0) rows[curIdx].classList.remove('active');
-          const nextIdx = (curIdx + 1) % rows.length;
+          if (curIdx >= 0) {
+            const activeRow = rows[curIdx];
+            const timeEl = activeRow.querySelector('.split-time');
+            if (timeEl) timeEl.textContent = formatSrTime(srSeconds).substring(3); // mm:ss
+            activeRow.classList.remove('active');
+          }
+          const nextIdx = curIdx < rows.length - 1 ? curIdx + 1 : 0;
           rows[nextIdx].classList.add('active');
           rows[nextIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          showHudToast(`⚡ Split completado: Avanzado a "${rows[nextIdx].querySelector('.split-name')?.textContent?.trim() || 'Siguiente'}"`);
+          const nextName = rows[nextIdx].querySelector('.split-name')?.textContent?.trim() || `Tramo ${nextIdx+1}`;
+          showHudToast(`⚡ Split registrado (${formatSrTime(srSeconds)}) → Siguiente: "${nextName}"`);
         } else {
           showHudToast('⚡ Split registrado');
         }
+      });
+
+      // Split anterior
+      document.getElementById('oss-sr-prev-split')?.addEventListener('click', () => {
+        const rows = document.querySelectorAll('.split-row');
+        if (rows.length > 0) {
+          let curIdx = -1;
+          rows.forEach((r, idx) => { if (r.classList.contains('active')) curIdx = idx; });
+          if (curIdx >= 0) rows[curIdx].classList.remove('active');
+          const prevIdx = curIdx <= 0 ? rows.length - 1 : curIdx - 1;
+          rows[prevIdx].classList.add('active');
+          rows[prevIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          const prevName = rows[prevIdx].querySelector('.split-name')?.textContent?.trim() || `Tramo ${prevIdx+1}`;
+          showHudToast(`⏮ Retrocedido a: "${prevName}"`);
+        }
+      });
+
+      // Añadir nuevo tramo
+      document.getElementById('oss-sr-add-split')?.addEventListener('click', () => {
+        const container = document.querySelector('.splits-list');
+        if (!container) return;
+        const count = container.querySelectorAll('.split-row').length + 1;
+        const numStr = String(count).padStart(2, '0');
+        const newRow = document.createElement('div');
+        newRow.className = 'split-row';
+        newRow.innerHTML = `
+          <span class="split-name">${numStr} NUEVO TRAMO</span>
+          <div class="split-times">
+            <span class="split-delta negative">-00:10</span>
+            <span class="split-time">--:--</span>
+          </div>
+        `;
+        container.appendChild(newRow);
+        newRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        showHudToast(`➕ Añadido tramo ${numStr} a la lista`);
+      });
+
+      // Eliminar tramo activo
+      document.getElementById('oss-sr-del-split')?.addEventListener('click', () => {
+        const rows = document.querySelectorAll('.split-row');
+        if (rows.length <= 1) {
+          showHudToast('⚠️ Debe quedar al menos un tramo');
+          return;
+        }
+        const activeRow = document.querySelector('.split-row.active') || rows[rows.length - 1];
+        const nextActive = activeRow.previousElementSibling || activeRow.nextElementSibling;
+        activeRow.remove();
+        if (nextActive && nextActive.classList.contains('split-row')) {
+          nextActive.classList.add('active');
+        } else {
+          document.querySelector('.split-row')?.classList.add('active');
+        }
+        showHudToast('🗑️ Tramo eliminado');
+      });
+
+      // Fijar tiempo manualmente
+      document.getElementById('oss-sr-set-time')?.addEventListener('click', () => {
+        const inp = document.getElementById('oss-sr-custom-time');
+        if (!inp) return;
+        const parts = inp.value.trim().split(':').map(Number);
+        let s = 0;
+        if (parts.length === 3) s = (parts[0] * 3600) + (parts[1] * 60) + parts[2];
+        else if (parts.length === 2) s = (parts[0] * 60) + parts[1];
+        else if (parts.length === 1) s = parts[0];
+        if (!isNaN(s) && s >= 0) {
+          srSeconds = s;
+          updateSrDisplay();
+          showHudToast(`⏱️ Tiempo fijado a ${formatSrTime(srSeconds)}`);
+        }
+      });
+
+      // Guardar tramos y tiempos
+      document.getElementById('oss-sr-save')?.addEventListener('click', async () => {
+        const btn = document.getElementById('oss-sr-save');
+        btn.textContent = '⏳ Guardando...';
+        await saveTexts();
+        btn.textContent = '💾 Guardar Tramos y Tiempos';
+        showHudToast('💾 Tramos y tiempos guardados con éxito');
       });
 
       // Reset
@@ -1096,7 +1278,11 @@
         updateSrDisplay();
         if (srToggleBtn) srToggleBtn.textContent = '▶ Iniciar';
         if (srStateSpan) { srStateSpan.textContent = 'LISTO'; srStateSpan.style.color = '#8B949E'; }
-        showHudToast('🔄 Cronómetro reseteado a 00:00:00');
+        const rows = document.querySelectorAll('.split-row');
+        rows.forEach((r, idx) => {
+          r.classList.toggle('active', idx === 0);
+        });
+        showHudToast('🔄 Cronómetro reseteado a 00:00:00 y vuelto al tramo 1');
       });
     }
 
@@ -1645,6 +1831,29 @@
           const runCategory = document.querySelector('.run-category')?.textContent?.trim();
           if (runTitle) texts.game.runTitle = runTitle;
           if (runCategory) texts.game.runCategory = runCategory;
+
+          const pb = document.querySelector('.pb-bar span:last-child')?.textContent?.trim();
+          if (pb) texts.game.personalBest = pb;
+
+          const matchVal = document.querySelector('.stat-item:first-child .stat-val')?.textContent?.trim();
+          if (matchVal) texts.game.matchType = matchVal;
+
+          const fpsVal = document.querySelector('.stat-item:last-child .stat-val')?.textContent?.trim();
+          if (fpsVal) texts.game.fps = fpsVal;
+
+          const camHeader = document.querySelector('.hud-header')?.textContent?.trim();
+          if (camHeader) texts.game.camLabel = camHeader;
+
+          const splitRows = document.querySelectorAll('.split-row');
+          if (splitRows.length > 0) {
+            texts.game.splits = Array.from(splitRows).map(row => ({
+              name: row.querySelector('.split-name')?.textContent?.trim() || '',
+              delta: row.querySelector('.split-delta')?.textContent?.trim() || '',
+              type: row.querySelector('.split-delta')?.classList.contains('positive') ? 'positive' : 'negative',
+              time: row.querySelector('.split-time')?.textContent?.trim() || '',
+              active: row.classList.contains('active')
+            }));
+          }
         }
 
         if (isMakerScene && texts.maker) {
@@ -2070,6 +2279,21 @@
         return;
       }
 
+      // Alternar delta positivo / negativo en Speedrun (.split-delta)
+      const splitDelta = e.target.closest('.split-delta');
+      if (splitDelta) {
+        if (splitDelta.isContentEditable && document.activeElement === splitDelta) return;
+        const isPos = splitDelta.classList.contains('positive');
+        splitDelta.classList.toggle('positive', !isPos);
+        splitDelta.classList.toggle('negative', isPos);
+        let txt = splitDelta.textContent.trim();
+        if (txt.startsWith('+')) txt = '-' + txt.slice(1);
+        else if (txt.startsWith('-')) txt = '+' + txt.slice(1);
+        splitDelta.textContent = txt;
+        showHudToast(`Delta ajustado a: ${txt}`);
+        return;
+      }
+
       // Alternar modos activos en Starting Soon (.starting-side-modes .stream-mode-card)
       const modeCard = e.target.closest('.starting-side-modes .stream-mode-card');
       if (modeCard) {
@@ -2079,11 +2303,165 @@
         modeCard.classList.toggle(activeClass);
         const lbl = modeCard.querySelector('.ss-mode-label')?.textContent?.trim() || 'Modo';
         showHudToast(`🎯 Modo ${lbl} ${modeCard.classList.contains(activeClass) ? 'activado' : 'desactivado'}`);
+        return;
+      }
+
+      // Clic en banner de victoria (Gamer Pro Pack)
+      const victoryH1 = e.target.closest('.victory-banner h1');
+      if (victoryH1) {
+        if (victoryH1.isContentEditable && document.activeElement === victoryH1) return;
+        const banners = [
+          'VICTORY // CLUTCH',
+          'DEFEAT // GG',
+          'ACE // ROUND WON',
+          'MATCH POINT // FINAL',
+          'OVERTIME // SUDDEN DEATH'
+        ];
+        const cur = victoryH1.textContent.trim();
+        let idx = banners.indexOf(cur);
+        const next = banners[(idx + 1) % banners.length];
+        victoryH1.textContent = next;
+        showHudToast(`🏆 Banner cambiado a: ${next}`);
+        return;
+      }
+
+      // Clic en estadísticas de partida (Gamer Pro Pack HUD)
+      const statVal = e.target.closest('.hud-stats-bar .stat-item');
+      if (statVal) {
+        if (statVal.isContentEditable && document.activeElement === statVal) return;
+        const valSpan = statVal.querySelector('.stat-val');
+        if (!valSpan) return;
+        const isMatch = statVal.textContent.includes('MATCH');
+        if (isMatch) {
+          const matchTypes = ['COMPETITIVE', 'RANKED', 'TOURNAMENT', 'CASUAL', 'SCRIMS'];
+          let cur = valSpan.textContent.trim();
+          let idx = matchTypes.indexOf(cur);
+          valSpan.textContent = matchTypes[(idx + 1) % matchTypes.length];
+          showHudToast(`🎮 Modo de partida: ${valSpan.textContent}`);
+        } else {
+          const fpsTypes = ['240', '360', '144', '120', '60'];
+          let cur = valSpan.textContent.trim();
+          let idx = fpsTypes.indexOf(cur);
+          valSpan.textContent = fpsTypes[(idx + 1) % fpsTypes.length];
+          showHudToast(`⚡ FPS fijados a: ${valSpan.textContent}`);
+        }
+        return;
+      }
+
+      // Clic en webcam flotante para alternar esquinas (Open Stream Pack Desktop)
+      const floatingCam = e.target.closest('.floating-cam');
+      if (floatingCam) {
+        if (e.target.closest('.cam-label') && e.target.closest('.cam-label').isContentEditable) return;
+        const positions = ['bottom-right', 'bottom-left', 'top-left', 'top-right'];
+        const cur = floatingCam.dataset.position || 'bottom-right';
+        const next = positions[(positions.indexOf(cur) + 1) % positions.length];
+        floatingCam.dataset.position = next;
+        if (next === 'bottom-left') {
+          floatingCam.style.bottom = '40px'; floatingCam.style.left = '40px'; floatingCam.style.right = 'auto'; floatingCam.style.top = 'auto';
+        } else if (next === 'top-left') {
+          floatingCam.style.top = '40px'; floatingCam.style.left = '40px'; floatingCam.style.bottom = 'auto'; floatingCam.style.right = 'auto';
+        } else if (next === 'top-right') {
+          floatingCam.style.top = '40px'; floatingCam.style.right = '40px'; floatingCam.style.bottom = 'auto'; floatingCam.style.left = 'auto';
+        } else {
+          floatingCam.style.bottom = '40px'; floatingCam.style.right = '40px'; floatingCam.style.top = 'auto'; floatingCam.style.left = 'auto';
+        }
+        showHudToast(`📹 Webcam movida a: ${next.replace('-', ' ').toUpperCase()}`);
+        return;
       }
     });
 
     if (typeof window.__refreshHudPhases === 'function') {
       window.__refreshHudPhases();
+    }
+
+    // Botón Añadir Fase en HUD
+    const btnAddPhase = hud.querySelector('#hud-btn-add-phase');
+    if (btnAddPhase && !btnAddPhase.dataset.bound) {
+      btnAddPhase.dataset.bound = 'true';
+      btnAddPhase.addEventListener('click', async () => {
+        const container = document.querySelector('.project-phases');
+        if (!container) return;
+        const currentCount = container.querySelectorAll('.phase-item').length + 1;
+        const numStr = String(currentCount).padStart(2, '0');
+        const phaseName = prompt('Nombre de la nueva fase:', `${numStr} FASE ${numStr}`);
+        if (!phaseName || !phaseName.trim()) return;
+        const div = document.createElement('span');
+        div.className = 'phase-divider';
+        div.textContent = '·';
+        container.appendChild(div);
+        const item = document.createElement('div');
+        item.className = 'phase-item';
+        item.textContent = phaseName.trim();
+        container.appendChild(item);
+        activatePhase(item);
+        await saveTexts();
+        showHudToast(`➕ Nueva fase añadida: "${phaseName.trim()}"`);
+      });
+    }
+
+    // Botón Eliminar Fase en HUD
+    const btnDelPhase = hud.querySelector('#hud-btn-del-phase');
+    if (btnDelPhase && !btnDelPhase.dataset.bound) {
+      btnDelPhase.dataset.bound = 'true';
+      btnDelPhase.addEventListener('click', async () => {
+        const container = document.querySelector('.project-phases');
+        const phaseItems = container?.querySelectorAll('.phase-item');
+        if (!container || !phaseItems || phaseItems.length <= 1) {
+          showHudToast('⚠️ Debe quedar al menos una fase');
+          return;
+        }
+        const activeItem = container.querySelector('.phase-item.active') || phaseItems[phaseItems.length - 1];
+        const divider = activeItem.nextElementSibling?.classList.contains('phase-divider')
+          ? activeItem.nextElementSibling
+          : activeItem.previousElementSibling?.classList.contains('phase-divider')
+            ? activeItem.previousElementSibling
+            : null;
+        divider?.remove();
+        const nextActive = container.querySelector('.phase-item:not(.active)') || container.querySelector('.phase-item');
+        activeItem.remove();
+        if (nextActive) activatePhase(nextActive);
+        await saveTexts();
+        showHudToast('🗑️ Fase eliminada');
+      });
+    }
+
+    // Gestión de distribución de cámaras para Podcast (Open Stream Pack)
+    if (sceneKey === 'oss_podcast' || window.location.pathname.includes('/podcast_talk/')) {
+      const podSwitcher = hud.querySelector('#hud-podcast-switcher');
+      if (podSwitcher) podSwitcher.style.display = 'flex';
+      hud.querySelectorAll('.hud-pod-cam-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const cams = parseInt(btn.dataset.cams) || 2;
+          const camGrid = document.querySelector('.cam-grid');
+          if (!camGrid) return;
+          let currentCams = camGrid.querySelectorAll('.guest-cam');
+          if (cams === 2) {
+            camGrid.style.gridTemplateColumns = '1fr 1fr';
+            camGrid.style.gridTemplateRows = 'none';
+          } else if (cams === 3) {
+            camGrid.style.gridTemplateColumns = '1fr 1fr 1fr';
+            camGrid.style.gridTemplateRows = 'none';
+          } else if (cams === 4) {
+            camGrid.style.gridTemplateColumns = '1fr 1fr';
+            camGrid.style.gridTemplateRows = '1fr 1fr';
+          }
+          while (currentCams.length < cams) {
+            const idx = currentCams.length + 1;
+            const newCam = document.createElement('div');
+            newCam.className = 'guest-cam';
+            const colors = ['', 'var(--color-accent-orange)', '#A371F7', '#3FB950'];
+            newCam.innerHTML = `<div class="guest-nameplate" style="border-left-color: ${colors[idx-1] || 'var(--color-accent-cyan)'};">INVITADO ${idx - 1}</div>`;
+            camGrid.appendChild(newCam);
+            currentCams = camGrid.querySelectorAll('.guest-cam');
+          }
+          while (currentCams.length > cams) {
+            currentCams[currentCams.length - 1].remove();
+            currentCams = camGrid.querySelectorAll('.guest-cam');
+          }
+          await saveTexts();
+          showHudToast(`🎙️ Configuración cambiada a ${cams} cámaras`);
+        });
+      });
     }
 
     // Botón de Restaurar textos a fábrica desde el HUD
