@@ -185,20 +185,35 @@ class LauncherGUI:
             if not ok:
                 messagebox.showerror("Error al iniciar", msg)
             else:
-                self.root.after(1200, self._check_after_start)
+                self.root.after(300, lambda: self._check_after_start(0))
 
-    def _check_after_start(self):
+    def _check_after_start(self, attempts=0):
         alive, data = self.server_ctl.is_running()
-        if alive and self.var_open_browser.get():
-            self.on_open_catalog()
+        if alive:
+            self._update_server_ui(True, data)
+            if self.var_open_browser.get():
+                self.on_open_catalog()
+        elif attempts < 15:
+            self.root.after(250, lambda: self._check_after_start(attempts + 1))
+        else:
+            if self.var_open_browser.get():
+                self.on_open_catalog()
+
+    def _open_url(self, url):
+        try:
+            webbrowser.open(url)
+        except Exception:
+            if sys.platform != "win32":
+                import subprocess
+                subprocess.Popen(["xdg-open", url])
 
     def on_open_catalog(self):
         url = f"{self.server_ctl.base_url}/index.html"
-        webbrowser.open(url)
+        self._open_url(url)
 
     def on_open_panel(self):
         url = f"{self.server_ctl.base_url}/alerts/panel.html"
-        webbrowser.open(url)
+        self._open_url(url)
 
     def on_open_folder(self):
         if OVERLAYS_DIR.exists():

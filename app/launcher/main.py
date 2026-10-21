@@ -54,6 +54,13 @@ def main():
     lock = acquire_instance_lock()
     if lock is None:
         print(_("launcher.already_open"))
+        try:
+            import webbrowser
+            webbrowser.open("http://localhost:8080/index.html")
+        except Exception:
+            if sys.platform != "win32":
+                import subprocess
+                subprocess.Popen(["xdg-open", "http://localhost:8080/index.html"])
         return 0
 
     root = tk.Tk()

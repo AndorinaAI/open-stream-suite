@@ -43,7 +43,7 @@ class ServerController:
             with urllib.request.urlopen(req, timeout=1.0) as resp:
                 if resp.status == 200:
                     data = json.loads(resp.read().decode("utf-8"))
-                    return data.get("status") == "ok", data
+                    return True, data
         except Exception:
             pass
 

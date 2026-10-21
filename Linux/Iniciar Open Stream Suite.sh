@@ -16,5 +16,5 @@ if [ -t 0 ] && [ "$1" != "--foreground" ]; then
     nohup $PYTHON_EXEC launcher.py "$@" > launcher.log 2>&1 &
     exit 0
 else
-    exec $PYTHON_EXEC launcher.py "$@"
+    exec $PYTHON_EXEC launcher.py "$@" > launcher.log 2>&1
 fi

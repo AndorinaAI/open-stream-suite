@@ -7,6 +7,7 @@ from server.state import system
 async def handle_status(request):
     """Devuelve el estado de conexión del sistema en JSON"""
     return web.json_response({
+        "status": "ok",
         "twitch_connected": bool(system.user_info),
         "user": system.user_info,
         "connected_obs_clients": len(system.connected_clients)
