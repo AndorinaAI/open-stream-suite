@@ -82,7 +82,7 @@ class TwitchController:
                 for line in raw_lines:
                     sline = line.strip()
                     if sline and not sline.startswith("#") and "=" in sline:
-                        k, _ = sline.split("=", 1)
+                        k, _val = sline.split("=", 1)
                         k = k.strip()
                         if k == "TWITCH_CLIENT_ID":
                             lines.append(f"TWITCH_CLIENT_ID={client_id.strip()}")

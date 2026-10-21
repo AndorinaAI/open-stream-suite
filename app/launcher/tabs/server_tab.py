@@ -7,6 +7,7 @@ from tkinter import ttk
 import webbrowser
 from launcher.i18n import _
 from launcher.tabs.constants import *
+from version import VERSION
 
 def build_server_tab(gui):
     # Tarjeta de estado
@@ -47,10 +48,17 @@ def build_server_tab(gui):
     )
     gui.btn_toggle_server.pack(side="left", padx=(0, 10))
 
-    gui.btn_open_panel = tk.Button(
-        btn_frame, text="🎛️ Abrir Panel de Control", font=("Helvetica", 11, "bold"),
+    gui.btn_open_catalog = tk.Button(
+        btn_frame, text="🏠 Portada / Inicio", font=("Helvetica", 11, "bold"),
         bg="#21262D", fg=C_CYAN, activebackground="#30363D", activeforeground=C_TEXT,
-        relief="flat", padx=16, pady=8, cursor="hand2", command=gui.on_open_panel
+        relief="flat", padx=14, pady=8, cursor="hand2", command=gui.on_open_catalog
+    )
+    gui.btn_open_catalog.pack(side="left", padx=(0, 10))
+
+    gui.btn_open_panel = tk.Button(
+        btn_frame, text="🎛️ Panel de Alertas", font=("Helvetica", 10),
+        bg="#21262D", fg=C_TEXT, activebackground="#30363D", activeforeground=C_TEXT,
+        relief="flat", padx=12, pady=8, cursor="hand2", command=gui.on_open_panel
     )
     gui.btn_open_panel.pack(side="left", padx=(0, 10))
 

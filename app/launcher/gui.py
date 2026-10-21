@@ -12,6 +12,7 @@ from pathlib import Path
 
 from launcher.updater import UpdateManager
 from launcher.i18n import _, get_current_language, set_current_language
+from launcher.tabs import build_server_tab, build_twitch_tab, build_guide_tab, build_logs_tab
 from version import VERSION
 
 APP_DIR = Path(__file__).resolve().parent.parent
@@ -175,7 +176,7 @@ class LauncherGUI:
         messagebox.showinfo("Guardado", "Credenciales guardadas con éxito en el archivo .env.")
 
     def on_toggle_server(self):
-        alive, _ = self.server_ctl.is_running()
+        alive, _data = self.server_ctl.is_running()
         if alive:
             self.server_ctl.stop()
             self._update_server_ui(False, {})
@@ -189,7 +190,11 @@ class LauncherGUI:
     def _check_after_start(self):
         alive, data = self.server_ctl.is_running()
         if alive and self.var_open_browser.get():
-            self.on_open_panel()
+            self.on_open_catalog()
+
+    def on_open_catalog(self):
+        url = f"{self.server_ctl.base_url}/index.html"
+        webbrowser.open(url)
 
     def on_open_panel(self):
         url = f"{self.server_ctl.base_url}/alerts/panel.html"
@@ -207,7 +212,7 @@ class LauncherGUI:
                 subprocess.Popen(["xdg-open", str(OVERLAYS_DIR)])
 
     def on_twitch_auth(self):
-        alive, _ = self.server_ctl.is_running()
+        alive, _data = self.server_ctl.is_running()
         if not alive:
             messagebox.showinfo(_("launcher.server_not_started_title"), _("launcher.twitch_not_started"))
             self.server_ctl.start()
@@ -362,7 +367,7 @@ class LauncherGUI:
 
         # Estado del servidor y botón toggle
         try:
-            alive, _ = self.server_ctl.is_running()
+            alive, _alive_data = self.server_ctl.is_running()
         except Exception:
             alive = False
         self.lbl_server_badge.configure(
@@ -371,7 +376,9 @@ class LauncherGUI:
             text=_("server.btn_stop", "⏹️ Detener Servidor") if alive else _("server.btn_start", "⚡ Iniciar Servidor"))
 
         # Actualizar botones clave
-        self.btn_open_panel.configure(text=_("server.btn_open_panel", "🎛️ Abrir Panel de Control"))
+        if hasattr(self, "btn_open_catalog"):
+            self.btn_open_catalog.configure(text=_("server.btn_open_catalog", "🏠 Portada / Inicio"))
+        self.btn_open_panel.configure(text=_("server.btn_open_panel", "🎛️ Panel de Alertas"))
         self.btn_check_updates.configure(text=_("updates.btn_check", "🔄 Comprobar"))
         self.btn_apply_upd.configure(text=_("updates.btn_update_now", "📥 Actualizar ahora"))
         self.btn_save_creds.configure(text=_("twitch.btn_save_creds", "💾 Guardar Credenciales"))

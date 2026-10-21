@@ -3,6 +3,7 @@ launcher/tabs/logs_tab.py — Pestaña de visor de registros y actividad en tiem
 """
 
 import tkinter as tk
+from tkinter import scrolledtext
 from launcher.i18n import _
 from launcher.tabs.constants import *
 

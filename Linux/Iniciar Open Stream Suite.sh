@@ -13,7 +13,7 @@ fi
 
 # Si se ejecuta desde terminal interactiva o doble clic, arrancar desacoplado y cerrar la consola
 if [ -t 0 ] && [ "$1" != "--foreground" ]; then
-    nohup $PYTHON_EXEC launcher.py "$@" >/dev/null 2>&1 &
+    nohup $PYTHON_EXEC launcher.py "$@" > launcher.log 2>&1 &
     exit 0
 else
     exec $PYTHON_EXEC launcher.py "$@"

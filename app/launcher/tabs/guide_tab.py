@@ -3,6 +3,7 @@ launcher/tabs/guide_tab.py — Pestaña de documentación, guías de OBS y atajo
 """
 
 import tkinter as tk
+from tkinter import scrolledtext
 import webbrowser
 from launcher.i18n import _
 from launcher.tabs.constants import *

@@ -58,7 +58,7 @@ class ServerController:
         if self.process and self.process.poll() is None:
             return True, _("launcher.server_running")
 
-        alive, _ = self.is_running()
+        alive, _status = self.is_running()
         if alive and not self.process:
             return True, "El servidor ya estaba activo en segundo plano"
 
