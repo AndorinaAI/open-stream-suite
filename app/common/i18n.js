@@ -125,7 +125,7 @@ const i18n = (() => {
     const tag = parent.tagName;
     if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA' || tag === 'CODE' || tag === 'PRE' || tag === 'INPUT' || tag === 'SELECT') return;
     if (parent.closest && parent.closest('script, style, textarea, code, pre')) return;
-    if (parent.hasAttribute('data-i18n')) return;
+    if (parent.hasAttribute('data-i18n') || parent.hasAttribute('data-i18n-html')) return;
 
     const text = node.textContent;
     if (!text || !text.trim()) return;
@@ -159,14 +159,16 @@ const i18n = (() => {
   function applyTranslations(root = document) {
     if (!root) return;
 
-    // 1. Traducir nodos con atributo data-i18n (texto)
-    const nodes = root.querySelectorAll('[data-i18n]');
+    // 1. Traducir nodos con atributo data-i18n o data-i18n-html
+    const nodes = root.querySelectorAll('[data-i18n], [data-i18n-html]');
     for (const node of nodes) {
-      const key = node.getAttribute('data-i18n');
+      const key = node.getAttribute('data-i18n') || node.getAttribute('data-i18n-html');
       if (!key) continue;
       const translated = tr(key);
       if (translated && translated !== key) {
-        if (node.childNodes.length === 0 || Array.from(node.childNodes).every(n => n.nodeType === Node.TEXT_NODE)) {
+        if (node.hasAttribute('data-i18n-html') || /<[a-z][\s\S]*>/i.test(translated)) {
+          node.innerHTML = translated;
+        } else if (node.childNodes.length === 0 || Array.from(node.childNodes).every(n => n.nodeType === Node.TEXT_NODE)) {
           node.textContent = translated;
         } else {
           let textNode = null;
@@ -178,6 +180,8 @@ const i18n = (() => {
           }
           if (textNode) {
             textNode.textContent = translated;
+          } else {
+            node.textContent = translated;
           }
         }
       }
@@ -215,7 +219,46 @@ const i18n = (() => {
 
     // 5. Traducir por contenido de texto (para elementos inyectados por JS sin data-i18n)
     translateContentByText(root);
+
+    // 6. Actualizar enlaces a documentación según el idioma actual
+    updateMarkdownLinks(root);
   }
+
+  // Actualizar enlaces .md a .en.md o viceversa
+  function updateMarkdownLinks(root = document) {
+    if (!root || !root.querySelectorAll) return;
+    const isEn = (currentLang === 'en');
+    const docLinks = root.querySelectorAll('a[href*=".md"]');
+    for (const link of docLinks) {
+      const href = link.getAttribute('href');
+      if (!href) continue;
+      if (isEn) {
+        if (/\.md(\b|#|\?|$)/.test(href) && !/\.en\.md(\b|#|\?|$)/.test(href)) {
+          link.setAttribute('href', href.replace(/\.md(\b|#|\?|$)/, '.en.md$1'));
+        }
+      } else {
+        if (/\.en\.md(\b|#|\?|$)/.test(href)) {
+          link.setAttribute('href', href.replace(/\.en\.md(\b|#|\?|$)/, '.md$1'));
+        }
+      }
+    }
+  }
+
+  // Interceptor global de clics para enlaces de guías .md
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a[href*=".md"]');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    if (currentLang === 'en') {
+      if (/\.md(\b|#|\?|$)/.test(href) && !/\.en\.md(\b|#|\?|$)/.test(href)) {
+        a.setAttribute('href', href.replace(/\.md(\b|#|\?|$)/, '.en.md$1'));
+      }
+    } else {
+      if (/\.en\.md(\b|#|\?|$)/.test(href)) {
+        a.setAttribute('href', href.replace(/\.en\.md(\b|#|\?|$)/, '.md$1'));
+      }
+    }
+  }, true);
 
   // Obtener idioma actual
   function getLanguage() {

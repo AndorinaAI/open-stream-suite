@@ -70,7 +70,9 @@
     "confirm_body": "Do you want to download and install the latest version from branch '{branch}'?\\n\\n'git pull' will run and dependencies will be updated.",
     "success_title": "Update Completed",
     "success_body": "Updated successfully to the latest version. Please restart the application to apply all changes.",
-    "error_title": "Update Error"
+    "error_title": "Update Error",
+    "new_version": "🚀 NEW VERSION",
+    "view_changes": "View changes on GitHub"
   },
   "tabs": {
     "server": "🚀 Server",
@@ -91,10 +93,13 @@
     "ticker_desc": "Minimalist broadcast-style ticker ribbon showing latest follow, sub, and tip.",
     "alerts_title": "On-Screen Alerts & Memes",
     "alerts_desc": "CSS animated alerts and transparent reaction video clips in OBS.",
-    "btn_copy_url": "Copy OBS Browser URL",
+    "btn_copy_url": "📋 Copy URL",
     "btn_test": "Test Live",
     "btn_save": "Save Settings",
-    "copied_toast": "URL copied to clipboard! Paste it into OBS Studio as a Browser Source (1920x1080)."
+    "copied_toast": "URL copied to clipboard! Paste it into OBS Studio as a Browser Source (1920x1080).",
+    "title_banner": "🧩 MODULAR WIDGETS & MINI-APPS FOR OBS",
+    "guide_banner_desc": "In OBS Studio, in your <strong>Sources</strong> list, click the <strong>+</strong> button and select <strong>Browser Source</strong>. Click the green button on any widget below and paste it into the <em>URL</em> field of OBS. Set the recommended <strong>Width</strong> and <strong>Height</strong> shown on each card. And you are ready! Background is 100% transparent automatically.",
+    "btn_close_miniapp": "✕ Close Mini-App"
   },
   "scenes": {
     "starting_soon": "Starting Soon",
@@ -179,7 +184,7 @@
     "label_title": "Title visible on Twitch (what viewers read):",
     "placeholder_title": "e.g. !Cat Meme Scare!",
     "label_cost": "Channel Points Cost:",
-    "label_color": "Twitch Icon Color:",
+    "label_color": "Identification Color:",
     "label_prompt": "Description / Message for the viewer (optional):",
     "placeholder_prompt": "e.g. Make this scare pop on screen and frighten Andorina live!",
     "label_active": "Reward Active on Twitch (enabled)",
@@ -203,7 +208,6 @@
     "label_role_name": "Role / Function Name:",
     "placeholder_role_name": "e.g. Artist, Lead Moderator, etc.",
     "label_badge": "Badge / Emoji:",
-    "label_color": "Identification Color:",
     "label_members": "Assigned Viewers (Twitch usernames separated by commas):",
     "placeholder_members": "e.g. andorina, pepito, streamer_amigo",
     "btn_save_role": "💾 Save Role",
@@ -320,9 +324,7 @@
     "font_pixel": "👾 Retro Pixel 8-bit",
     "font_impact": "💥 Impact Bold (Meme)",
     "label_font_size": "Text Size:",
-    "size_small": "Small (14px)",
     "size_medium": "Medium (18px)",
-    "size_large": "Large (24px)",
     "size_xlarge": "Huge (32px)",
     "label_position": "Label Position:",
     "pos_below": "⬇️ Below",
@@ -368,11 +370,43 @@
     "label_timer_sec": "Seconds to add to Stream Timer on OBS:",
     "btn_preview": "▶️ Preview Here",
     "btn_save_trigger": "💾 Save Trigger",
-    "btn_cancel_edit": "✕ Cancel"
+    "btn_cancel_edit": "✕ Cancel",
+    "drag_hint": "Click or drag above on monitor",
+    "shortcuts_label": "Shortcuts:",
+    "active_triggers_title": "📋 YOUR ACTIVE TRIGGERS",
+    "badge_new": "NEW",
+    "step_tab_trigger": "🎯 1. Trigger",
+    "step_tab_media": "🎬 2. Media & Audio",
+    "step_tab_caption": "🏷️ 3. Text Banner",
+    "step_tab_extras": "⚡ 4. Position & Extras",
+    "subcard_activation": "🎯 NAME & ACTIVATION METHOD",
+    "step1_done": "Step 1 of 4 configured",
+    "btn_next_media": "Next: 🎬 Media & Audio ➡️",
+    "subcard_points": "💎 CHANNEL POINTS REDEMPTION (TWITCH)",
+    "subcard_chat": "💬 CHAT COMMAND, PERMISSIONS & ANTI-SPAM",
+    "points_only_msg": "🔒 <strong>Points Only Mode:</strong> Chat command is disabled to enforce channel points redemption.",
+    "subcard_screen_media": "🖼️ SCREEN IMAGE OR VIDEO",
+    "subcard_audio": "🎵 AUDIO & SOUND EFFECTS",
+    "subcard_duration": "⏱️ ON-SCREEN DURATION",
+    "btn_prev_trigger": "⬅️ Previous (Trigger)",
+    "btn_next_caption": "Next: 🏷️ Text Banner ➡️",
+    "subcard_caption": "🏷️ OBS TEXT BANNER / CAPTION",
+    "caption_vars_hint": "<code>{user}</code> = viewer • <code>{reward}</code> = reward • <code>{cost}</code> = points",
+    "btn_prev_media": "⬅️ Previous (Media)",
+    "btn_next_extras": "Next: ⚡ Position & Extras ➡️",
+    "subcard_position": "🎯 ON-SCREEN POSITION (OBS)",
+    "subcard_actions": "⚡ SPECIAL STREAM ACTIONS (INTERACTION)",
+    "btn_prev_caption": "⬅️ Previous (Banner)",
+    "ready_to_save": "All set to save!",
+    "reward_color_locked": "(Reward Color)",
+    "cmd_disabled_points_only": "Chat command is disabled to enforce channel point redemption.",
+    "var_user_help": "= viewer •",
+    "var_reward_help": "= reward •",
+    "var_cost_help": "= points"
   },
   "media": {
     "section_title": "LOCAL MEDIA EXPLORER & MANAGER",
-    "section_subtitle": "Full SO-style file explorer for your local alerts/media/ folder. Auto-classifies on upload, browse folder tree, drag & drop move, manage with cut, copy and paste.",
+    "section_subtitle": "Full OS-style file explorer for your local <code>/media</code> folder. Auto-classifies on upload, folder tree navigation, drag & drop, and cut, copy & paste management.",
     "btn_up": "⬆️ Up",
     "btn_new_folder": "📁+ New Folder",
     "btn_upload": "📤 Upload Files",
@@ -394,14 +428,14 @@
     "view_list": "☰",
     "tree_title": "FOLDER TREE",
     "storage": "Local Storage",
-    "dropzone_text": "Drag files here or click to upload to",
+    "dropzone_text": "the library",
     "dropzone_formats": "(WebM, MP4, MP3, WAV, GIF, PNG, WebP)",
     "items_count": "Showing {count} items",
     "selected_count": "({count} selected)",
     "btn_select_all": "Select All",
     "btn_deselect": "Deselect",
     "path_label": "📍 Path:",
-    "files_in_folder": "{count} files in this folder",
+    "files_in_folder": "{count} file(s) in {folder}",
     "modal_preview_title": "Media Preview",
     "modal_title": "File",
     "modal_close": "✕",
@@ -419,8 +453,8 @@
     "label_new_name": "New name:",
     "placeholder_name": "new_name.ext",
     "btn_save_rename": "Save Changes",
-    "error_create_folder": "Error creating folder. Make sure to use valid characters.",
-    "error_rename": "Error renaming. Verify the name does not contain invalid characters.",
+    "error_create_folder": "Error creating folder. Please make sure to use valid characters.",
+    "error_rename": "Error renaming. Check that the name does not contain invalid characters.",
     "success_operation": "✓ Operation completed successfully!",
     "root_folder": "root",
     "placeholder_reward_title": "e.g. !Cat Meme Scare!",
@@ -429,7 +463,31 @@
     "placeholder_banner_text": "e.g. !{user} HAS UNLEASHED THE SCARE! (or leave empty to use the title)",
     "placeholder_print_material": "e.g. Holographic Adhesive Vinyl",
     "placeholder_chat_prompt": "Write in chat to participate!",
-    "placeholder_end_farewell": "Thanks for watching the stream! See you next live."
+    "placeholder_end_farewell": "Thanks for watching the stream! See you next live.",
+    "th_name": "Name",
+    "th_folder": "Folder",
+    "th_type": "Type",
+    "th_size": "Size",
+    "th_modified": "Modified",
+    "th_actions": "Actions",
+    "desc_full": "Full OS-like file explorer for your local <code>alerts/media/</code> folder. Auto-classifies on upload, browse folder tree, drag & drop move, cut, copy and paste.",
+    "stat_total_label": "📦 Total:",
+    "stat_videos_label": "🎬 Videos:",
+    "stat_audios_label": "🎵 Audio:",
+    "stat_images_label": "🖼️ Images:",
+    "stat_storage_label": "💾 Disk space:",
+    "col_actions": "Actions",
+    "drop_prompt": "Drag files here or click to upload to",
+    "badge_total_files": "{count} FILES",
+    "showing_files": "Showing {count} file(s)",
+    "found_files": "Found {count} file(s) for \"{query}\"",
+    "empty_folder_title": "No files in this folder.",
+    "empty_folder_desc": "Drag files here or click \"Upload Files\" to add them.",
+    "cutting": "✂️ Cutting",
+    "copying": "📋 Copying",
+    "items_word": "{count} item(s)",
+    "confirm_delete_single": "Permanently delete \"{path}\"?",
+    "confirm_delete_batch": "Delete the {count} selected items from your local disk?"
   },
   "themes": {
     "section_title": "YOUR OBS STUDIO SCENES AND VISUAL STYLES",
@@ -468,7 +526,7 @@
     "btn_save_theme": "💾 Save Code and Settings",
     "btn_apply_live": "🎨 Apply Style to OBS Now",
     "label_theme_name": "Theme Name:",
-    "label_badge": "Label / Badge:",
+    "label_badge": "Webcam Badge Text",
     "label_cyan": "Primary Accent (Cyan/Accent 1):",
     "label_orange": "Secondary Accent (Orange/Accent 2):",
     "label_bg": "Dark Background:",
@@ -476,7 +534,7 @@
     "label_border_style": "Theme Borders:",
     "label_animation": "Animation / Effect:",
     "label_glow": "Glow / Neon Glow:",
-    "border_rounded": "Rounded Modern (6px)",
+    "border_rounded": "Rounded",
     "border_pill": "Organic Curved (14px)",
     "border_square": "Retro Solid Square (0px)",
     "border_chamfer": "45° Sci-Fi Chamfer",
@@ -492,7 +550,7 @@
     "chat_anchor": "💬 CHAT STYLE ANCHOR",
     "label_anchored": "🔗 Anchored to theme",
     "chat_anchored_info": "✓ Chat widget automatically inherits colors, typography and style from this theme on OBS.",
-    "chat_derivative": "✨ Chat Derivative Customization:",
+    "chat_derivative": "✨ Derivative Chat",
     "label_shape": "Bubble Shape:",
     "label_opacity": "Background Opacity (%):",
     "btn_reanchor": "🔗 Discard derivative and re-anchor to theme",
@@ -536,7 +594,6 @@
     "label_style": "🎨 Change Visual Style:",
     "btn_customize": "🎨 Customize Colors ↗",
     "tab_texts_title": "Game Scene Labels",
-    "label_badge": "Webcam Badge Text",
     "placeholder_badge": "GAME MODE",
     "label_tagline": "Subtitle / Mode",
     "placeholder_tagline": "GAMEPLAY MODE",
@@ -599,26 +656,26 @@
     "label_ss_mode_4": "Mode 4 (e.g. 04 // CHILL)",
     "placeholder_ss_mode_4": "04 // CHILL",
     "label_brb_title": "Main Title",
-    "placeholder_brb_title": "I'LL BE RIGHT BACK",
+    "placeholder_brb_title": "BE RIGHT BACK",
     "label_brb_subtitle": "Subtitle",
     "placeholder_brb_sub": "ONE MOMENT...",
     "label_brb_status": "Transmission Status (Header)",
-    "placeholder_brb_status": "TECHNICAL PAUSE",
+    "placeholder_brb_status": "TECHNICAL BREAK",
     "label_brb_footer": "Page Footer",
-    "placeholder_brb_footer": "STREAM RESUMES SHORTLY",
+    "placeholder_brb_footer": "THE STREAM WILL CONTINUE IN A MOMENT",
     "label_brb_interval": "Phrase Rotation Interval (Seconds)",
     "label_brb_phrases": "Dynamic Rotating Phrases",
     "btn_add_phrase": "➕ Add Phrase",
     "label_end_title": "Main Title",
     "placeholder_end_title": "THANKS FOR STOPPING BY",
     "label_end_subtitle": "Subtitle",
-    "placeholder_end_sub": "SEE YOU NEXT LIVE",
+    "placeholder_end_sub": "SEE YOU ON THE NEXT STREAM",
     "label_end_farewell": "Farewell Card Message",
     "placeholder_end_farewell": "Thanks for watching the stream! See you next live.",
     "label_end_tag": "Card Bottom Tag",
     "placeholder_end_tag": "// KEEP TINKERING AND CREATING",
     "label_end_status": "Transmission Status (Header)",
-    "placeholder_end_status": "END OF TRANSMISSION",
+    "placeholder_end_status": "STREAM ENDING",
     "label_end_footer": "Page Footer",
     "placeholder_end_footer": "ANDORINA · OPEN STREAM SUITE · TRANSMISSION ENDED",
     "label_channel_name": "Channel / Streamer Name",
@@ -647,10 +704,491 @@
     "obs_step4": "Check: «Shut down source when not visible» and «Refresh browser when scene becomes active».",
     "obs_step5": "Place this source at the top of the list (above your camera and game).",
     "btn_test_fullscreen": "🖥️ Test in New Tab (1920×1080)",
-    "btn_obs_guide": "📖 View Complete OBS and Themes Guide",
+    "btn_obs_guide": "📖 View Full OBS & Themes Guide",
     "hint_save": "Changes are saved and synchronized instantly on OBS without restarting.",
     "btn_restore_scene": "🔄 Restore Texts",
     "btn_save_apply": "💾 Save and Apply Live",
-    "btn_restore_texts_scene": "Restore this scene texts to original factory values"
+    "btn_restore_texts_scene": "Restore this scene texts to original factory values",
+    "card_assigned_style": "🎨 Assigned Visual Style:",
+    "card_edit_style": "🎨 Edit Style ↗",
+    "card_pending_change": "● Unsaved change — click 💾 Save to apply to OBS",
+    "card_customized": "⚠️ Customized (Original: <b>{name}</b>)",
+    "card_factory_original": "⭐ Factory default: <b>{name}</b>",
+    "card_restore_original": "🔄 Restore Default",
+    "card_view_fullscreen": "🖥️ View Full Screen",
+    "card_edit_texts": "✏️ Edit Texts",
+    "card_copy_obs": "📋 Copy OBS URL",
+    "card_restore_texts": "🔄 Restore Texts",
+    "folder_crumb_root": "📁 Overlay Folders",
+    "folder_crumb_title": "📁 Stream Activity Folders",
+    "folder_apply_all": "🎨 Apply Visual Style to all Overlays in folder:",
+    "folder_restore_styles": "🔄 Restore Original Styles",
+    "folder_restore_texts": "📝 Restore Texts",
+    "folder_btn_apply_all": "✨ Apply to All in OBS",
+    "folder_activities_title": "ACTIVITIES INCLUDED IN THIS FOLDER:",
+    "folder_open_scenes": "📂 Open Overlay Folder and Edit ({count} Scenes) →",
+    "folder_filter_activity": "🔍 FILTER ACTIVITY:",
+    "folder_scenes_available": "{count} SCENES AVAILABLE",
+    "btn_back_folders": "⬅️ Back to Folders",
+    "btn_back_packs": "⬅️ Back to Packs",
+    "badge_total_packs": "2 PACKS",
+    "badge_total_theme_packs": "2 PACKS",
+    "obs_step_1": "In OBS Studio, click <b>+</b> in the <b>Sources</b> dock and choose <b>Browser (Browser Source)</b>.",
+    "obs_step_2": "Paste this exact URL into the <b>URL</b> field:",
+    "obs_step_3": "Set <b>Width: 1920</b> and <b>Height: 1080</b>.",
+    "obs_step_4": "Check boxes: <b>«Shutdown source when not visible»</b> and <b>«Refresh browser when scene becomes active»</b>.",
+    "obs_step_5": "Place this source at the <b>top of the list</b> (above your webcam and gameplay).",
+    "border_arcade": "8-Bit Arcade",
+    "border_bubble": "Comic Bubble",
+    "border_scifi": "Cyberpunk 2077",
+    "border_tag": "Maker Tag",
+    "border_glass": "Floating Glass",
+    "placeholder_print_panel": "CUTTING / PRINTING JOB",
+    "placeholder_print_prefix": "JOB:",
+    "placeholder_print_cam_main": "SECONDARY CAM · PROCESS",
+    "placeholder_print_cam_face": "STREAMER",
+    "placeholder_print_cam_aux": "SOFTWARE & CUT",
+    "placeholder_channel_name": "e.g. ANDORINA",
+    "placeholder_channel_tagline": "e.g. PLAY · CREATE · SHARE",
+    "placeholder_live_text": "e.g. LIVE",
+    "placeholder_soc_user": "username",
+    "placeholder_soc_channel": "channel",
+    "placeholder_filter": "🔍 Filter...",
+    "placeholder_cost": "250",
+    "placeholder_role_name": "e.g. Artist, Lead Mod, etc.",
+    "placeholder_role_members": "e.g. andorina, friend_streamer, viewer",
+    "placeholder_reward_manual": "Or type exact reward name...",
+    "placeholder_command": "e.g. !scare",
+    "placeholder_sound_url": "Or paste direct link to MP3/WAV file...",
+    "placeholder_emotes": "e.g. 🎉,🔥,😂",
+    "placeholder_so_user": "Twitch Username (e.g. streamer)",
+    "placeholder_sim_user": "Name",
+    "placeholder_sim_msg": "Message",
+    "placeholder_search": "🔍 Search files...",
+    "placeholder_folder_name": "Folder name (e.g. sub_memes)",
+    "placeholder_rename": "new_name.ext",
+    "placeholder_css": "/* Theme CSS */",
+    "view_details": "ℹ️ View details",
+    "obs_intro_step1": "In OBS Studio you just add each scene as a <b>Browser Source</b>. No weird plugins needed.",
+    "obs_intro_step2": "When saving a text or changing a style here, our server sends it to OBS via <b>WebSocket</b> and <b>it updates live on your stream</b> without restarting the scene.",
+    "folder_style_all_label": "🎨 Style for all:",
+    "folder_help_text": "Click the card to <b>enter the folder</b> and individually edit all texts and stream activities. From outside you can <b>apply a style to all overlays in the pack</b> or restore original factory styles.",
+    "folder_overlays_title": "OVERLAYS & ACTIVITIES IN THIS FOLDER",
+    "btn_restore_factory_texts": "📝 Restore Factory Texts",
+    "pack_themes_title": "VISUAL STYLES / THEMES OF THIS PACK (PALETTES & CSS)",
+    "tab_colors_styles": "// 1. COLOR PALETTE & STYLES",
+    "badge_label": "Label / Badge:",
+    "tab_texts_game": "🎮 Gameplay Texts",
+    "tab_texts_main": "🎥 Main Scene Texts",
+    "tab_texts_pc": "💻 PC Screen Texts",
+    "tab_texts_aux": "📷 Secondary Cam Texts",
+    "tab_texts_chill": "💬 Chill Texts",
+    "tab_texts_starting": "⏳ Starting Texts",
+    "tab_texts_brb": "☕ BRB Texts",
+    "tab_texts_ending": "🎬 Ending Texts",
+    "css_compile_hint": "💡 Automatically compiles into <code>common/themes.css</code> so all OBS Studio scenes receive it.",
+    "btn_preview_fs": "🖥️ Full Screen 1080p ↗",
+    "btn_view_fullscreen_arrow": "🖥️ View Full Screen ↗",
+    "preview_frame_sync": "● LIVE PREVIEW ACTIVE",
+    "preview_frame_cam": "WEBCAM CAMERA",
+    "applied_style_badge": "APPLIED STYLE",
+    "synced_obs_badge": "1920×1080 · Synced with OBS Studio",
+    "change_style_label": "Change Visual Style:",
+    "card_maker_info": "Maker Project Information",
+    "card_print_info": "3D Print Project Information",
+    "cam_main_label": "Main Camera (Machine / Bed):",
+    "cam_aux_label": "Auxiliary Camera / CAD Software:",
+    "card_print_stages": "3D Print Project Stages",
+    "card_chill_texts": "Chill Scene Texts",
+    "card_headline_sub": "Main Headline & Subtitle",
+    "card_countdown_status": "Countdown & Status",
+    "card_broadcast_modes": "Broadcast Modes (Right Panel)",
+    "card_brb_texts": "Be Right Back Screen Texts",
+    "card_ending_texts": "Stream Ending Texts",
+    "card_brand_identity": "Channel Brand & Identity",
+    "card_live_indicator": "Live Broadcast Indicator",
+    "card_socials": "Social Networks (Overlays & Screens)",
+    "modal_obs_step1": "In OBS Studio, click <b>+</b> in the <b>Sources</b> panel and choose <b>Browser</b> (<i>Browser Source</i>).",
+    "modal_obs_step2": "Paste this exact URL into the <b>URL</b> field:",
+    "modal_obs_step3": "Set <b>Width: 1920</b> and <b>Height: 1080</b>.",
+    "modal_obs_step4": "Check the boxes: <b>\"Shutdown source when not visible\"</b> and <b>\"Refresh browser when scene becomes active\"</b>.",
+    "modal_obs_step5": "Place this source at the <b>top of the list</b> (above your camera and game).",
+    "crumb_packs": "📁 Theme Packs",
+    "pack_active_obs": "🟢 Active Pack in OBS",
+    "pack_local_col": "📦 Local Collection",
+    "btn_open_folder": "Open Folder ➜",
+    "themes_count_label": "{count} THEMES",
+    "no_packs": "No packs created. Click \"+ New Pack\" to create one.",
+    "live_badge": "● LIVE",
+    "chat_anchored": "🔗 Anchored Chat",
+    "overlays_using_style": "🎬 Overlays using this style:",
+    "linked_badge": "{count} LINKED",
+    "no_overlays_linked": "No overlays assigned (can be assigned in Overlays tab)",
+    "assign_to_scene": "🎯 Assign to a Scene...",
+    "btn_edit_theme": "🛠️ Edit",
+    "btn_apply_all_scenes_obs": "🎨 Apply to All Scenes in OBS",
+    "card_save": "💾 Save",
+    "obs_intro_step1_text": "In OBS Studio you simply add each scene as a <b>Browser Source</b>. No need to install third-party plugins.",
+    "obs_intro_step2_text": "When saving text or changing a style here, our server sends it to OBS via <b>WebSocket</b> and updates live on your stream without restarting the scene.",
+    "crumb_stream_folders": "📁 Stream Activity Folders",
+    "style_all_label": "🎨 Style for all:",
+    "badge_packs_folders": "4 PACKS IN FOLDERS",
+    "folders_hint": "Click on the card to <b>enter the folder</b> and edit all texts and activities of your stream individually. From the outside you can <b>apply a style to all overlays in the pack</b> or restore factory original styles.",
+    "badge_folder_suite": "9 OVERLAYS · FULL SUITE",
+    "folder_suite_desc": "Manage and edit each overlay and activity of your stream individually.",
+    "badge_scenes_available": "9 AVAILABLE SCENES",
+    "crumb_theme_packs": "📁 Theme Packs",
+    "badge_themes_in_pack": "6 THEMES",
+    "theme_compile_hint": "💡 Automatically compiles to <code>style.css</code> so that all OBS Studio scenes receive it.",
+    "obs_guide_step1": "In OBS Studio, click <b>+</b> in the <b>Sources</b> dock and choose <b>Browser</b> (<i>Browser Source</i>).",
+    "obs_guide_step2": "Paste this exact URL into the <b>URL</b> field:",
+    "obs_guide_step3": "Set <b>Width: 1920</b> and <b>Height: 1080</b>.",
+    "obs_guide_step4": "Check the boxes: <b>'Shutdown source when not visible'</b> and <b>'Refresh browser when scene becomes active'</b>.",
+    "obs_guide_step5": "Place this source on the <b>top layer</b> (above your camera and game capture).",
+    "confirm_apply_all": "Do you want to apply the \"{name}\" style to all 9 OBS Studio scenes?",
+    "toast_applied_all": "✓ Style \"{name}\" applied to all scenes in OBS",
+    "confirm_restore_theme": "Reset style \"{name}\" to its original factory colors and CSS code?",
+    "confirm_restore_folder_themes": "Restore all overlays in folder \"{name}\" to their factory original styles?",
+    "toast_folder_themes_restored": "↺ Overlays in \"{name}\" restored to their original styles",
+    "confirm_restore_folder_texts": "Restore all texts in folder \"{name}\" to original factory values?",
+    "toast_folder_texts_restored": "↺ Texts in \"{name}\" restored to factory values",
+    "confirm_restore_scene_texts": "Restore texts for scene \"{name}\" to original factory values?",
+    "confirm_restore_all_scenes_texts": "Restore ALL texts across all 9 scenes to their factory original values?",
+    "confirm_restore_all_scenes_themes": "Do you want to restore all 9 overlays to their factory original visual styles?",
+    "toast_all_themes_restored": "↺ All overlays have been restored to their factory original styles",
+    "toast_style_assigned": "✓ Style \"{name}\" assigned to scene",
+    "toast_url_copied": "📋 OBS URL copied: {url}",
+    "alert_url_copied": "URL copied to clipboard:\n{url}\n\nPaste it into OBS Studio as a Browser Source (1920×1080)."
+  },
+  "scene_catalog": {
+    "maker-desk": {
+      "name": "Overlay: Main Scene (Camera + Auxiliary)",
+      "badge": "MAIN SCENE · CAMERA",
+      "desc": "Main broadcast scene with frontal or overhead camera, lower stage roadmap bar, and auxiliary window."
+    },
+    "maker-pc": {
+      "name": "Overlay: Screen Share (PC + Webcam)",
+      "badge": "SCREEN SHARE · PC",
+      "desc": "Screen share scene with active project stages lower bar and webcam/camera window."
+    },
+    "print-machine": {
+      "name": "Overlay: Secondary Camera (Process / Action)",
+      "badge": "SECONDARY CAM · PROCESS",
+      "desc": "Direct camera shot over the ongoing process or action, with status badge and stages."
+    },
+    "print-design": {
+      "name": "Overlay: CAD Design / App (Full Screen)",
+      "badge": "FULL SCREEN · DESIGN",
+      "desc": "Full screen capture for design, 3D modeling, coding, or any app with secondary camera inset."
+    },
+    "game": {
+      "name": "Overlay: Gameplay (Game + Camera)",
+      "badge": "GAMEPLAY + WEBCAM",
+      "desc": "Clean overlay for video games. Corner webcam frame with tech badge and alert support."
+    },
+    "chill": {
+      "name": "Overlay: Talk & Chat (Just Chatting)",
+      "badge": "JUST CHATTING",
+      "desc": "Wide camera frame with Twitch OBS chat window and bottom topic ribbon."
+    },
+    "startingSoon": {
+      "name": "Screen: Starting Soon (Countdown)",
+      "badge": "STREAM STARTING",
+      "desc": "Full welcome screen with synchronized countdown timer, neon headline accent, and socials."
+    },
+    "beRightBack": {
+      "name": "Screen: Be Right Back (Intermission)",
+      "badge": "TECHNICAL BREAK",
+      "desc": "Break screen with animated technical radar scanner and customizable rotating phrases."
+    },
+    "ending": {
+      "name": "Screen: Stream Ending (Farewell)",
+      "badge": "STREAM ENDING",
+      "desc": "Stream farewell screen with subscriber thank-you card, closing badge, and socials."
+    },
+    "oss_chatting": {
+      "name": "Overlay: Just Chatting & Talk",
+      "badge": "JUST CHATTING",
+      "desc": "Wide frontal camera frame with integrated Twitch chat, brand badges, and real-time widgets."
+    },
+    "oss_desktop": {
+      "name": "Overlay: Desktop Share (Desktop)",
+      "badge": "DESKTOP SHARE",
+      "desc": "Monitor capture for tutorials and coding with repositionable floating webcam and badges."
+    },
+    "oss_podcast": {
+      "name": "Overlay: Podcast & Interview (Multi-Cam)",
+      "badge": "PODCAST & INTERVIEW",
+      "desc": "Balanced camera frames for interviews or co-op streaming with lower-third titles."
+    },
+    "oss_starting": {
+      "name": "Screen: Starting Soon (Neon Start)",
+      "badge": "STREAM START",
+      "desc": "High-tech countdown timer with progress bar, glowing neon title, and social media handles."
+    },
+    "oss_brb": {
+      "name": "Screen: Be Right Back (Radar Intermission)",
+      "badge": "TECHNICAL BREAK",
+      "desc": "Clean intermission screen with dynamic circular radar and rotating custom messages."
+    },
+    "oss_ending": {
+      "name": "Screen: Stream Ending (Wrap Up)",
+      "badge": "STREAM ENDING",
+      "desc": "Closing broadcast screen with community thank-you card, social links, and farewell text."
+    },
+    "gamer_gameplay": {
+      "name": "Overlay: Tactical Gameplay HUD",
+      "badge": "TACTICAL GAMEPLAY",
+      "desc": "Beveled webcam frame with live game stats, mode switchers, and esports styling."
+    },
+    "gamer_speedrun": {
+      "name": "Overlay: Speedrun & Splits Tracker",
+      "badge": "SPEEDRUN & SPLITS",
+      "desc": "Interactive speedrun splits panel with live stopwatch, lap deltas (+/-), and webcam."
+    },
+    "gamer_victory": {
+      "name": "Overlay: Victory & Clutch Moment",
+      "badge": "VICTORY & CLUTCH",
+      "desc": "Center celebration camera with cycleable triumphal banner (Victory/Defeat/Ace/Match Point)."
+    },
+    "gamer_starting": {
+      "name": "Screen: Warmup & Match Start",
+      "badge": "WARMUP / START",
+      "desc": "Military tactical countdown timer with combat HUD radar and matchmaking status."
+    },
+    "gamer_brb": {
+      "name": "Screen: Tactical Intermission (BRB)",
+      "badge": "TACTICAL INTERMISSION",
+      "desc": "Tactical pause between rounds or maps with combat radar and session status."
+    },
+    "gamer_ending": {
+      "name": "Screen: GG & Match Over (Ending)",
+      "badge": "GG · MATCH OVER",
+      "desc": "Gamer closing screen with end-of-session statistics, GG emblem, and credits."
+    },
+    "cozy_pomodoro": {
+      "name": "Overlay: Study & Pomodoro (25:00)",
+      "badge": "POMODORO & STUDY",
+      "desc": "Integrated Pomodoro timer with active concentration and break intervals for lo-fi study."
+    },
+    "cozy_art": {
+      "name": "Overlay: Art & Canvas Dual Cam",
+      "badge": "ART & CANVAS DUAL",
+      "desc": "Overhead drawing/crafting camera with auxiliary facecam in soft pastel tones."
+    },
+    "cozy_cafe": {
+      "name": "Overlay: Coffee & Chill Chat",
+      "badge": "COFFEE & CHILL CHAT",
+      "desc": "Warm and cozy scene for chatting with integrated twitch chat and relaxing ambiance."
+    },
+    "cozy_starting": {
+      "name": "Screen: Cozy Welcome (Starting Soon)",
+      "badge": "COZY WELCOME",
+      "desc": "Gentle starting screen with smooth countdown clock and steaming coffee animation."
+    },
+    "cozy_brb": {
+      "name": "Screen: Coffee Break (Be Right Back)",
+      "badge": "COFFEE BREAK",
+      "desc": "Relaxing intermission screen to stretch and refill coffee/tea with rotating thoughts."
+    },
+    "cozy_ending": {
+      "name": "Screen: Good Night & Farewell (Ending)",
+      "badge": "GOOD NIGHT · RELAX",
+      "desc": "Peaceful farewell screen with warm dimmed lighting and gentle goodnight wishes."
+    }
+  },
+  "folder_catalog": {
+    "maker_theme_pack": {
+      "name": "Maker & Workshop Pack",
+      "badge": "9 OVERLAYS · WORKSHOP & MAKER",
+      "desc": "Flagship pack for creators, workshops, electronics, CAD coding, and 3D printing with 9 ready scenes.",
+      "subfilters": {
+        "all": "📁 All Overlays (9)",
+        "maker": "🛠️ Desk & PC (2)",
+        "print": "📷 Secondary Camera (2)",
+        "stream": "🎮 Stream & Talk (2)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Main Scene (Camera)",
+          "desc": "Main camera with phase roadmap and auxiliary window"
+        },
+        "1": {
+          "name": "PC & Code (Terminal)",
+          "desc": "Full screen coding or CAD capture with auxiliary camera"
+        },
+        "2": {
+          "name": "Secondary Cam (Process)",
+          "desc": "Direct camera shot on active process with status indicator"
+        },
+        "3": {
+          "name": "CAD Design & Slicer",
+          "desc": "3D modeling (Fusion, FreeCAD) or slicer app with webcam"
+        },
+        "4": {
+          "name": "Gameplay & Camera",
+          "desc": "Clean gaming layer with technical webcam frame and alerts"
+        },
+        "5": {
+          "name": "Talk & Chat (Just Chatting)",
+          "desc": "Wide camera with integrated Twitch chat box and topic ribbon"
+        },
+        "6": {
+          "name": "Broadcast Screens (3)",
+          "desc": "Starting Soon countdown, BRB intermission, and Ending farewell"
+        }
+      }
+    },
+    "open_stream_pack": {
+      "name": "Open Stream Pack (General)",
+      "badge": "6 OVERLAYS · STREAMING PRO",
+      "desc": "Modern all-in-one pack for general streamers, variety, podcasts, talk shows, and full broadcast screens.",
+      "subfilters": {
+        "all": "📁 All Overlays (6)",
+        "chat": "💬 Talk & Podcast (2)",
+        "screen": "🖥️ Screen Share (1)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Just Chatting & Talk",
+          "desc": "Wide camera with interactive Twitch chat box and widgets"
+        },
+        "1": {
+          "name": "Screen Share",
+          "desc": "Monitor capture with floating picture-in-picture webcam frame"
+        },
+        "2": {
+          "name": "Podcast & Interview",
+          "desc": "Balanced dual cameras for interviews and co-hosts with lower-thirds"
+        },
+        "3": {
+          "name": "Stream Starting",
+          "desc": "Welcome countdown timer with glowing neon accent"
+        },
+        "4": {
+          "name": "Technical Break",
+          "desc": "Intermission pause with animated radar and dynamic messages"
+        },
+        "5": {
+          "name": "Stream Ending",
+          "desc": "Stream wrap-up screen with thank-you notes and social handles"
+        }
+      }
+    },
+    "gamer_pro_pack": {
+      "name": "Gamer Pro & Esports Pack",
+      "badge": "6 OVERLAYS · ESPORTS & HUD",
+      "desc": "Tactical military HUD aesthetics, beveled angular borders, and high adrenaline for competitive gaming and speedruns.",
+      "subfilters": {
+        "all": "📁 All Overlays (6)",
+        "game": "🎯 Gameplay & HUD (2)",
+        "event": "🏆 Victory & Clutch (1)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Tactical Gameplay HUD",
+          "desc": "Beveled webcam frame with military angular HUD and alerts"
+        },
+        "1": {
+          "name": "Speedrun & Splits",
+          "desc": "Side panel with segment splits, stopwatch, and webcam"
+        },
+        "2": {
+          "name": "Victory & Clutch",
+          "desc": "Epic center camera with victory laurels and animations"
+        },
+        "3": {
+          "name": "Warmup & Start",
+          "desc": "Tactical countdown timer for match preparation"
+        },
+        "4": {
+          "name": "Tactical Intermission",
+          "desc": "Tournament/match break with combat radar and squad status"
+        },
+        "5": {
+          "name": "GG & Match Over",
+          "desc": "Farewell screen with match summary statistics and credits"
+        }
+      }
+    },
+    "cozy_lofi_pack": {
+      "name": "Cozy Lo-Fi & Art Pack",
+      "badge": "6 OVERLAYS · CHILL & RELAX",
+      "desc": "Rounded borders, pastel palettes, and cozy relaxing vibes for study, digital drawing, coffee, and lo-fi music.",
+      "subfilters": {
+        "all": "📁 All Overlays (6)",
+        "study": "📖 Pomodoro & Study (1)",
+        "creative": "🎨 Art & Talk (2)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Study & Pomodoro (25:00)",
+          "desc": "Integrated Pomodoro timer with concentration and break cycles"
+        },
+        "1": {
+          "name": "Art & Canvas Dual Cam",
+          "desc": "Overhead camera on canvas/tablet with facecam support"
+        },
+        "2": {
+          "name": "Coffee & Chill Chat",
+          "desc": "Cozy scene for talking with soft ambient background music"
+        },
+        "3": {
+          "name": "Cozy Welcome",
+          "desc": "Starting screen with gentle countdown and coffee steam animation"
+        },
+        "4": {
+          "name": "Coffee Break",
+          "desc": "Intermission pause to stretch and refill coffee or tea"
+        },
+        "5": {
+          "name": "Good Night & Farewell",
+          "desc": "Warm dimmed farewell with relaxing music and goodnight wishes"
+        }
+      }
+    }
+  },
+  "colors": {
+    "cyan": "Cyan",
+    "orange": "Orange",
+    "pink": "Pink",
+    "green": "Green",
+    "yellow": "Yellow",
+    "red": "Red",
+    "blue": "Blue",
+    "white": "White",
+    "gold": "Gold"
+  },
+  "rewards": {
+    "twitch_rewards_title": "REWARDS ON YOUR TWITCH (Channel Points):",
+    "icon_color": "Icon Color on Twitch:",
+    "twitch_rewards_prefix": "REWARDS ON YOUR TWITCH"
+  },
+  "roles": {
+    "channel_team_title": "CHANNEL ROLES & TEAM (Roles):",
+    "sync_status_title": "ℹ️ TWITCH SYNC STATUS:",
+    "sync_mods_vips": "🛡️ <strong>Moderator</strong> and 💎 <strong>VIP</strong>: Synced directly with official Twitch Helix API.",
+    "sync_editors": "🎬 <strong>Editor</strong>: Synced via Twitch Helix API (currently your channel has 0 editors on Twitch).",
+    "sync_artists": "🎨 <strong>Artist</strong>: <em>Twitch does not provide an API to query artists</em>. Our system <strong>automatically detects them by chat badge</strong> or you can add them here with \"+ Assign\" or \"Paste list\".",
+    "sync_custom_roles": "⚔️ <strong>Lead Mod</strong> and 💼 <strong>Business Mgr</strong>: Twitch panel roles managed and assigned from this panel.",
+    "channel_team_prefix": "CHANNEL ROLES & TEAM"
+  },
+  "alerts": {
+    "sim_title": "🚨 LIVE ALERTS SIMULATOR",
+    "sim_subtitle": "Test the design, animation and audio synthesizer of your alerts before or during live stream with a single click.",
+    "sim_instant_title": "🧪 INSTANT TEST BUTTONS",
+    "sim_btn_follow": "❤️ Test Follow",
+    "sim_btn_sub": "⭐ Test Sub (Tier 1)",
+    "sim_btn_bits": "💎 Test 100 Bits",
+    "sim_btn_raid": "🚀 Test Raid (25 p.)",
+    "sim_custom_title": "TEST WITH CUSTOM TEXT & NAME:",
+    "sim_btn_fire": "Trigger",
+    "sim_obs_title": "📋 HOW TO CONFIGURE ALERTS IN OBS",
+    "sim_obs_steps": "1. Add a <strong>Browser</strong> source in OBS.<br>2. Paste the URL: <code id=\"alerts-source-code\">http://localhost:8080/alerts/index.html</code><br>3. Set Width: <code>1920</code>, Height: <code>1080</code>.<br>4. <strong>Very important:</strong> Place this source at the <strong>top layer</strong> of your sources list so alerts and memes appear above your cameras.",
+    "sim_btn_copy_alerts": "📋 Copy Alerts URL"
   }
 }

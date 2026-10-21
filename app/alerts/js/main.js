@@ -127,5 +127,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Polling de estado cada 6 segundos
   setInterval(checkStatus, 6000);
+
+  // Escuchar cambio de idioma para re-renderizar componentes dinámicos
+  window.addEventListener('oss-lang-change', () => {
+    if (typeof renderOverlayFolders === 'function') {
+      try { renderOverlayFolders(); } catch (_) {}
+    }
+    if (typeof renderWidgetsGrid === 'function') {
+      try { renderWidgetsGrid(); } catch (_) {}
+    }
+    if (window.AlertsStudio && typeof AlertsStudio.renderAlertTypes === 'function') {
+      try { AlertsStudio.renderAlertTypes(); } catch (_) {}
+    }
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(document);
+    }
+  });
 });
 

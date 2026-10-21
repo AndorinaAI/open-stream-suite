@@ -245,5 +245,297 @@
     "hint_save": "Changes are saved and synchronized instantly on OBS without restarting.",
     "btn_restore": "🔄 Restore Texts",
     "btn_save_apply": "💾 Save and Apply Live"
+  },
+  "scene_catalog": {
+    "maker-desk": {
+      "name": "Overlay: Main Scene (Camera + Auxiliary)",
+      "badge": "MAIN SCENE · CAMERA",
+      "desc": "Main broadcast scene with frontal or overhead camera, lower stage roadmap bar, and auxiliary window."
+    },
+    "maker-pc": {
+      "name": "Overlay: Screen Share (PC + Webcam)",
+      "badge": "SCREEN SHARE · PC",
+      "desc": "Screen share scene with active project stages lower bar and webcam/camera window."
+    },
+    "print-machine": {
+      "name": "Overlay: Secondary Camera (Process / Action)",
+      "badge": "SECONDARY CAM · PROCESS",
+      "desc": "Direct camera shot over the ongoing process or action, with status badge and stages."
+    },
+    "print-design": {
+      "name": "Overlay: CAD Design / App (Full Screen)",
+      "badge": "FULL SCREEN · DESIGN",
+      "desc": "Full screen capture for design, 3D modeling, coding, or any app with secondary camera inset."
+    },
+    "game": {
+      "name": "Overlay: Gameplay (Game + Camera)",
+      "badge": "GAMEPLAY + WEBCAM",
+      "desc": "Clean overlay for video games. Corner webcam frame with tech badge and alert support."
+    },
+    "chill": {
+      "name": "Overlay: Talk & Chat (Just Chatting)",
+      "badge": "JUST CHATTING",
+      "desc": "Wide camera frame with Twitch OBS chat window and bottom topic ribbon."
+    },
+    "startingSoon": {
+      "name": "Screen: Starting Soon (Countdown)",
+      "badge": "STREAM STARTING",
+      "desc": "Full welcome screen with synchronized countdown timer, neon headline accent, and socials."
+    },
+    "beRightBack": {
+      "name": "Screen: Be Right Back (Intermission)",
+      "badge": "TECHNICAL BREAK",
+      "desc": "Break screen with animated technical radar scanner and customizable rotating phrases."
+    },
+    "ending": {
+      "name": "Screen: Stream Ending (Farewell)",
+      "badge": "STREAM ENDING",
+      "desc": "Stream farewell screen with subscriber thank-you card, closing badge, and socials."
+    },
+    "oss_chatting": {
+      "name": "Overlay: Just Chatting & Talk",
+      "badge": "JUST CHATTING",
+      "desc": "Wide frontal camera frame with integrated Twitch chat, brand badges, and real-time widgets."
+    },
+    "oss_desktop": {
+      "name": "Overlay: Desktop Share (Desktop)",
+      "badge": "DESKTOP SHARE",
+      "desc": "Monitor capture for tutorials and coding with repositionable floating webcam and badges."
+    },
+    "oss_podcast": {
+      "name": "Overlay: Podcast & Interview (Multi-Cam)",
+      "badge": "PODCAST & INTERVIEW",
+      "desc": "Balanced camera frames for interviews or co-op streaming with lower-third titles."
+    },
+    "oss_starting": {
+      "name": "Screen: Starting Soon (Neon Start)",
+      "badge": "STREAM START",
+      "desc": "High-tech countdown timer with progress bar, glowing neon title, and social media handles."
+    },
+    "oss_brb": {
+      "name": "Screen: Be Right Back (Radar Intermission)",
+      "badge": "TECHNICAL BREAK",
+      "desc": "Clean intermission screen with dynamic circular radar and rotating custom messages."
+    },
+    "oss_ending": {
+      "name": "Screen: Stream Ending (Wrap Up)",
+      "badge": "STREAM ENDING",
+      "desc": "Closing broadcast screen with community thank-you card, social links, and farewell text."
+    },
+    "gamer_gameplay": {
+      "name": "Overlay: Tactical Gameplay HUD",
+      "badge": "TACTICAL GAMEPLAY",
+      "desc": "Beveled webcam frame with live game stats, mode switchers, and esports styling."
+    },
+    "gamer_speedrun": {
+      "name": "Overlay: Speedrun & Splits Tracker",
+      "badge": "SPEEDRUN & SPLITS",
+      "desc": "Interactive speedrun splits panel with live stopwatch, lap deltas (+/-), and webcam."
+    },
+    "gamer_victory": {
+      "name": "Overlay: Victory & Clutch Moment",
+      "badge": "VICTORY & CLUTCH",
+      "desc": "Center celebration camera with cycleable triumphal banner (Victory/Defeat/Ace/Match Point)."
+    },
+    "gamer_starting": {
+      "name": "Screen: Warmup & Match Start",
+      "badge": "WARMUP / START",
+      "desc": "Military tactical countdown timer with combat HUD radar and matchmaking status."
+    },
+    "gamer_brb": {
+      "name": "Screen: Tactical Intermission (BRB)",
+      "badge": "TACTICAL INTERMISSION",
+      "desc": "Tactical pause between rounds or maps with combat radar and session status."
+    },
+    "gamer_ending": {
+      "name": "Screen: GG & Match Over (Ending)",
+      "badge": "GG · MATCH OVER",
+      "desc": "Gamer closing screen with end-of-session statistics, GG emblem, and credits."
+    },
+    "cozy_pomodoro": {
+      "name": "Overlay: Study & Pomodoro (25:00)",
+      "badge": "POMODORO & STUDY",
+      "desc": "Integrated Pomodoro timer with active concentration and break intervals for lo-fi study."
+    },
+    "cozy_art": {
+      "name": "Overlay: Art & Canvas Dual Cam",
+      "badge": "ART & CANVAS DUAL",
+      "desc": "Overhead drawing/crafting camera with auxiliary facecam in soft pastel tones."
+    },
+    "cozy_cafe": {
+      "name": "Overlay: Coffee & Chill Chat",
+      "badge": "COFFEE & CHILL CHAT",
+      "desc": "Warm and cozy scene for chatting with integrated twitch chat and relaxing ambiance."
+    },
+    "cozy_starting": {
+      "name": "Screen: Cozy Welcome (Starting Soon)",
+      "badge": "COZY WELCOME",
+      "desc": "Gentle starting screen with smooth countdown clock and steaming coffee animation."
+    },
+    "cozy_brb": {
+      "name": "Screen: Coffee Break (Be Right Back)",
+      "badge": "COFFEE BREAK",
+      "desc": "Relaxing intermission screen to stretch and refill coffee/tea with rotating thoughts."
+    },
+    "cozy_ending": {
+      "name": "Screen: Good Night & Farewell (Ending)",
+      "badge": "GOOD NIGHT · RELAX",
+      "desc": "Peaceful farewell screen with warm dimmed lighting and gentle goodnight wishes."
+    }
+  },
+  "folder_catalog": {
+    "maker_theme_pack": {
+      "name": "Maker & Workshop Pack",
+      "badge": "9 OVERLAYS · WORKSHOP & MAKER",
+      "desc": "Flagship pack for creators, workshops, electronics, CAD coding, and 3D printing with 9 ready scenes.",
+      "subfilters": {
+        "all": "📁 All Overlays (9)",
+        "maker": "🛠️ Desk & PC (2)",
+        "print": "📷 Secondary Camera (2)",
+        "stream": "🎮 Stream & Talk (2)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Main Scene (Camera)",
+          "desc": "Main camera with phase roadmap and auxiliary window"
+        },
+        "1": {
+          "name": "PC & Code (Terminal)",
+          "desc": "Full screen coding or CAD capture with auxiliary camera"
+        },
+        "2": {
+          "name": "Secondary Cam (Process)",
+          "desc": "Direct camera shot on active process with status indicator"
+        },
+        "3": {
+          "name": "CAD Design & Slicer",
+          "desc": "3D modeling (Fusion, FreeCAD) or slicer app with webcam"
+        },
+        "4": {
+          "name": "Gameplay & Camera",
+          "desc": "Clean gaming layer with technical webcam frame and alerts"
+        },
+        "5": {
+          "name": "Talk & Chat (Just Chatting)",
+          "desc": "Wide camera with integrated Twitch chat box and topic ribbon"
+        },
+        "6": {
+          "name": "Broadcast Screens (3)",
+          "desc": "Starting Soon countdown, BRB intermission, and Ending farewell"
+        }
+      }
+    },
+    "open_stream_pack": {
+      "name": "Open Stream Pack (General)",
+      "badge": "6 OVERLAYS · STREAMING PRO",
+      "desc": "Modern all-in-one pack for general streamers, variety, podcasts, talk shows, and full broadcast screens.",
+      "subfilters": {
+        "all": "📁 All Overlays (6)",
+        "chat": "💬 Talk & Podcast (2)",
+        "screen": "🖥️ Screen Share (1)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Just Chatting & Talk",
+          "desc": "Wide camera with interactive Twitch chat box and widgets"
+        },
+        "1": {
+          "name": "Screen Share",
+          "desc": "Monitor capture with floating picture-in-picture webcam frame"
+        },
+        "2": {
+          "name": "Podcast & Interview",
+          "desc": "Balanced dual cameras for interviews and co-hosts with lower-thirds"
+        },
+        "3": {
+          "name": "Stream Starting",
+          "desc": "Welcome countdown timer with glowing neon accent"
+        },
+        "4": {
+          "name": "Technical Break",
+          "desc": "Intermission pause with animated radar and dynamic messages"
+        },
+        "5": {
+          "name": "Stream Ending",
+          "desc": "Stream wrap-up screen with thank-you notes and social handles"
+        }
+      }
+    },
+    "gamer_pro_pack": {
+      "name": "Gamer Pro & Esports Pack",
+      "badge": "6 OVERLAYS · ESPORTS & HUD",
+      "desc": "Tactical military HUD aesthetics, beveled angular borders, and high adrenaline for competitive gaming and speedruns.",
+      "subfilters": {
+        "all": "📁 All Overlays (6)",
+        "game": "🎯 Gameplay & HUD (2)",
+        "event": "🏆 Victory & Clutch (1)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Tactical Gameplay HUD",
+          "desc": "Beveled webcam frame with military angular HUD and alerts"
+        },
+        "1": {
+          "name": "Speedrun & Splits",
+          "desc": "Side panel with segment splits, stopwatch, and webcam"
+        },
+        "2": {
+          "name": "Victory & Clutch",
+          "desc": "Epic center camera with victory laurels and animations"
+        },
+        "3": {
+          "name": "Warmup & Start",
+          "desc": "Tactical countdown timer for match preparation"
+        },
+        "4": {
+          "name": "Tactical Intermission",
+          "desc": "Tournament/match break with combat radar and squad status"
+        },
+        "5": {
+          "name": "GG & Match Over",
+          "desc": "Farewell screen with match summary statistics and credits"
+        }
+      }
+    },
+    "cozy_lofi_pack": {
+      "name": "Cozy Lo-Fi & Art Pack",
+      "badge": "6 OVERLAYS · CHILL & RELAX",
+      "desc": "Rounded borders, pastel palettes, and cozy relaxing vibes for study, digital drawing, coffee, and lo-fi music.",
+      "subfilters": {
+        "all": "📁 All Overlays (6)",
+        "study": "📖 Pomodoro & Study (1)",
+        "creative": "🎨 Art & Talk (2)",
+        "screens": "📺 Broadcast Screens (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Study & Pomodoro (25:00)",
+          "desc": "Integrated Pomodoro timer with concentration and break cycles"
+        },
+        "1": {
+          "name": "Art & Canvas Dual Cam",
+          "desc": "Overhead camera on canvas/tablet with facecam support"
+        },
+        "2": {
+          "name": "Coffee & Chill Chat",
+          "desc": "Cozy scene for talking with soft ambient background music"
+        },
+        "3": {
+          "name": "Cozy Welcome",
+          "desc": "Starting screen with gentle countdown and coffee steam animation"
+        },
+        "4": {
+          "name": "Coffee Break",
+          "desc": "Intermission pause to stretch and refill coffee or tea"
+        },
+        "5": {
+          "name": "Good Night & Farewell",
+          "desc": "Warm dimmed farewell with relaxing music and goodnight wishes"
+        }
+      }
+    }
   }
 }

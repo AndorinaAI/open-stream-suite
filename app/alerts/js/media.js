@@ -266,13 +266,15 @@ function renderMediaExplorer() {
 
   // Actualizar indicadores de conteo
   const totalCount = filtered.length;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
   if (countLabel) {
     countLabel.textContent = mediaSearchQuery ? 
-      `Encontrados ${totalCount} archivo(s) para "${mediaSearchQuery}"` :
-      `Mostrando ${totalCount} archivo(s)`;
+      tr('media.found_files', `Encontrados ${totalCount} archivo(s) para "${mediaSearchQuery}"`, { count: totalCount, query: mediaSearchQuery }) :
+      tr('media.showing_files', `Mostrando ${totalCount} archivo(s)`, { count: totalCount });
   }
   if (statusInfo) {
-    statusInfo.textContent = `${totalCount} archivo(s) en ${currentFolder || 'raíz'}`;
+    const rootName = tr('media.root_folder', 'raíz');
+    statusInfo.textContent = tr('media.files_in_folder', `${totalCount} archivo(s) en ${currentFolder || rootName}`, { count: totalCount, folder: currentFolder || rootName });
   }
 
   // 4. Mostrar según modo de vista
@@ -281,11 +283,13 @@ function renderMediaExplorer() {
     if (tableContainer) tableContainer.style.display = 'none';
 
     if (totalCount === 0) {
+      const emptyTitle = tr('media.empty_folder_title', 'No hay archivos en esta carpeta.');
+      const emptyDesc = tr('media.empty_folder_desc', 'Arrastra archivos aquí o haz clic en "Subir Archivos" para añadirlos.');
       gridContainer.innerHTML = `
         <div style="grid-column: 1 / -1; padding: 36px 16px; text-align: center; color: var(--color-text-dim); font-size: 13px;">
           <div style="font-size: 32px; margin-bottom: 8px;">📂</div>
-          <b>No hay archivos en esta carpeta.</b><br>
-          <span style="font-size: 11px;">Arrastra archivos aquí o haz clic en "Subir Archivos" para añadirlos.</span>
+          <b data-i18n="media.empty_folder_title">${emptyTitle}</b><br>
+          <span style="font-size: 11px;" data-i18n="media.empty_folder_desc">${emptyDesc}</span>
         </div>
       `;
       return;
@@ -465,9 +469,10 @@ function updateMediaActionButtons() {
   const clipIndicator = document.getElementById('media-clipboard-indicator');
   const clipText = document.getElementById('media-clipboard-text');
 
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
   if (countBadge) {
     countBadge.style.display = count > 0 ? 'inline' : 'none';
-    countBadge.textContent = `(${count} seleccionados)`;
+    countBadge.textContent = tr('media.selected_count', `(${count} seleccionados)`, { count });
   }
 
   if (btnCut) btnCut.disabled = count === 0;
@@ -485,8 +490,9 @@ function updateMediaActionButtons() {
   if (clipIndicator && clipText) {
     if (hasClipboard) {
       clipIndicator.style.display = 'flex';
-      const verb = mediaClipboard.mode === 'cut' ? '✂️ Cortando' : '📋 Copiando';
-      clipText.textContent = `${verb} ${mediaClipboard.paths.length} elemento(s)`;
+      const verb = mediaClipboard.mode === 'cut' ? tr('media.cutting', '✂️ Cortando') : tr('media.copying', '📋 Copiando');
+      const itemWord = tr('media.items_word', `${mediaClipboard.paths.length} elemento(s)`, { count: mediaClipboard.paths.length });
+      clipText.textContent = `${verb} ${itemWord}`;
     } else {
       clipIndicator.style.display = 'none';
     }
@@ -711,7 +717,8 @@ async function uploadFiles(files, forcedFolder = null) {
 // ====================================================================
 
 async function deleteMediaSingle(relPath) {
-  if (!confirm(`¿Eliminar definitivamente "${relPath}"?`)) return;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('media.confirm_delete_single', `¿Eliminar definitivamente "${relPath}"?`, { path: relPath }))) return;
   await API.deleteMedia(relPath);
   selectedMediaPaths.delete(relPath);
   await loadMedia();
@@ -720,7 +727,8 @@ async function deleteMediaSingle(relPath) {
 async function deleteSelectedMedia() {
   const count = selectedMediaPaths.size;
   if (count === 0) return;
-  if (!confirm(`¿Eliminar los ${count} elementos seleccionados de tu disco local?`)) return;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('media.confirm_delete_batch', `¿Eliminar los ${count} elementos seleccionados de tu disco local?`, { count }))) return;
 
   const paths = Array.from(selectedMediaPaths);
   await API.deleteMediaBatch(paths);
@@ -760,7 +768,7 @@ async function submitCreateFolder() {
     closeCreateFolderModal();
     await loadMedia();
   } catch (e) {
-    alert('Error al crear la carpeta. Asegúrate de usar caracteres válidos.');
+    const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb; alert(tr('media.error_create_folder', 'Error al crear la carpeta. Asegúrate de usar caracteres válidos.'));
   }
 }
 
@@ -799,7 +807,7 @@ async function submitRename() {
     closeRenameModal();
     await loadMedia();
   } catch (e) {
-    alert('Error al renombrar. Verifica que el nombre no contenga caracteres inválidos.');
+    const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb; alert(tr('media.error_rename', 'Error al renombrar. Verifica que el nombre no contenga caracteres inválidos.'));
   }
 }
 

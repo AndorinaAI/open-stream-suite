@@ -28,7 +28,7 @@ window.OSS_CONFIG = {
   },
   "maker": {
     "projectName": "SUPER ESTACION MAKER 2026",
-    "currentPhase": "02 MONTAJE",
+    "currentPhase": "03 SOFTWARE",
     "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "panelTitle": "ESTADO DEL PROYECTO",
     "projectPrefix": "PROYECTO:",
@@ -43,12 +43,13 @@ window.OSS_CONFIG = {
       "03 SOFTWARE",
       "04 PRUEBAS"
     ],
-    "showAuxView": true
+    "showAuxView": true,
+    "panelStatus": "DEV: ACTIVE"
   },
   "print": {
     "projectName": "PEGATINAS PERSONALIZADAS",
     "material": "Vinilo Holográfico Adhesivo",
-    "currentPhase": "CORTE DE VINILO",
+    "currentPhase": "03 PELADO",
     "panelTitle": "TRABAJO DE CORTE / IMPRESIÓN",
     "projectPrefix": "TRABAJO:",
     "frames": {

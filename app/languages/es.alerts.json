@@ -70,7 +70,9 @@
     "confirm_body": "¿Deseas descargar e instalar la última versión de la rama '{branch}'?\\n\\nSe ejecutará 'git pull' y se actualizarán las dependencias.",
     "success_title": "Actualización completada",
     "success_body": "Actualizado con éxito a la última versión. Reinicia la aplicación para aplicar todos los cambios.",
-    "error_title": "Error al actualizar"
+    "error_title": "Error al actualizar",
+    "new_version": "🚀 NUEVA VERSIÓN",
+    "view_changes": "Ver cambios en GitHub"
   },
   "tabs": {
     "server": "🚀 Servidor",
@@ -91,10 +93,13 @@
     "ticker_desc": "Cinta minimalista estilo telediario con último seguidor, suscriptor y donación.",
     "alerts_title": "Alertas y Memes en Pantalla",
     "alerts_desc": "Alertas visuales animadas por CSS y vídeos transparentes de reacciones.",
-    "btn_copy_url": "Copiar URL para OBS",
+    "btn_copy_url": "📋 Copiar URL",
     "btn_test": "Probar en Vivo",
     "btn_save": "Guardar Configuración",
-    "copied_toast": "¡URL copiada al portapapeles! Pégala en OBS Studio como Fuente de Navegador (1920x1080)."
+    "copied_toast": "¡URL copiada al portapapeles! Pégala en OBS Studio como Fuente de Navegador (1920x1080).",
+    "title_banner": "🧩 WIDGETS MODULARES & MINI-APPS PARA OBS",
+    "guide_banner_desc": "En OBS Studio, en tu lista de <strong>Fuentes</strong>, pulsa el botón <strong>+</strong> y selecciona <strong>Navegador</strong> (<em>Browser</em>). Pulsa el botón verde en cualquiera de los widgets de abajo y pégala en la casilla <em>URL</em> de OBS. Escribe el <strong>Ancho</strong> y <strong>Alto</strong> recomendados que te indicamos en cada tarjeta. ¡Y listo! El fondo es 100% transparente de forma automática.",
+    "btn_close_miniapp": "✕ Cerrar Mini-App"
   },
   "scenes": {
     "starting_soon": "Empezamos Pronto",
@@ -179,7 +184,7 @@
     "label_title": "Título visible en Twitch (lo que leen los espectadores):",
     "placeholder_title": "ej. ¡Susto con Meme del Gato!",
     "label_cost": "Coste en Puntos de Canal:",
-    "label_color": "Color del Icono en Twitch:",
+    "label_color": "Color identificativo:",
     "label_prompt": "Descripción / Mensaje para el espectador (opcional):",
     "placeholder_prompt": "ej. ¡Haz saltar este susto en pantalla y asusta a Andorina en directo!",
     "label_active": "Recompensa Activa en Twitch (habilitada)",
@@ -203,7 +208,6 @@
     "label_role_name": "Nombre de la Función / Rol:",
     "placeholder_role_name": "ej. Artista, Moderador principal, etc.",
     "label_badge": "Insignia / Emoji:",
-    "label_color": "Color identificativo:",
     "label_members": "Espectadores asignados (Nombres de usuario en Twitch separados por comas):",
     "placeholder_members": "ej. andorina, pepito, streamer_amigo",
     "btn_save_role": "💾 Guardar Función",
@@ -320,9 +324,7 @@
     "font_pixel": "👾 Retro Pixel 8-bit",
     "font_impact": "💥 Impact Bold (Meme)",
     "label_font_size": "Tamaño Texto:",
-    "size_small": "Pequeño (14px)",
     "size_medium": "Medio (18px)",
-    "size_large": "Grande (24px)",
     "size_xlarge": "Gigante (32px)",
     "label_position": "Posición Rótulo:",
     "pos_below": "⬇️ Debajo",
@@ -368,11 +370,43 @@
     "label_timer_sec": "Segundos a sumar al Temporizador de Stream en OBS:",
     "btn_preview": "▶️ Previsualizar Aquí",
     "btn_save_trigger": "💾 Guardar Trigger",
-    "btn_cancel_edit": "✕ Cancelar"
+    "btn_cancel_edit": "✕ Cancelar",
+    "drag_hint": "Haz clic o arrastra arriba en el monitor",
+    "shortcuts_label": "Atajos:",
+    "active_triggers_title": "📋 TUS TRIGGERS ACTIVOS",
+    "badge_new": "NUEVO",
+    "step_tab_trigger": "🎯 1. Disparador",
+    "step_tab_media": "🎬 2. Multimedia & Audio",
+    "step_tab_caption": "🏷️ 3. Rótulo de Texto",
+    "step_tab_extras": "⚡ 4. Posición & Extras",
+    "subcard_activation": "🎯 NOMBRE Y MÉTODO DE ACTIVACIÓN",
+    "step1_done": "Paso 1 de 4 configurado",
+    "btn_next_media": "Siguiente: 🎬 Multimedia & Audio ➡️",
+    "subcard_points": "💎 CANJE CON PUNTOS DE CANAL (TWITCH)",
+    "subcard_chat": "💬 COMANDO DE CHAT, PERMISOS Y ANTI-SPAM",
+    "points_only_msg": "🔒 <strong>Modo Solo Puntos:</strong> El comando de chat está deshabilitado para obligar el canje de puntos de canal.",
+    "subcard_screen_media": "🖼️ IMAGEN O VÍDEO EN PANTALLA",
+    "subcard_audio": "🎵 AUDIO Y EFECTOS DE SONIDO",
+    "subcard_duration": "⏱️ DURACIÓN EN PANTALLA",
+    "btn_prev_trigger": "⬅️ Anterior (Disparador)",
+    "btn_next_caption": "Siguiente: 🏷️ Rótulo de Texto ➡️",
+    "subcard_caption": "🏷️ RÓTULO / BANNER DE TEXTO EN OBS",
+    "caption_vars_hint": "<code>{user}</code> = espectador • <code>{reward}</code> = recompensa • <code>{cost}</code> = puntos",
+    "btn_prev_media": "⬅️ Anterior (Multimedia)",
+    "btn_next_extras": "Siguiente: ⚡ Posición & Extras ➡️",
+    "subcard_position": "🎯 UBICACIÓN EN PANTALLA (OBS)",
+    "subcard_actions": "⚡ ACCIONES ESPECIALES DE STREAM (INTERACCIÓN)",
+    "btn_prev_caption": "⬅️ Anterior (Rótulo)",
+    "ready_to_save": "¡Todo listo para guardar!",
+    "reward_color_locked": "(Color de la Recompensa)",
+    "cmd_disabled_points_only": "El comando de chat está deshabilitado para obligar el canje de puntos de canal.",
+    "var_user_help": "= espectador •",
+    "var_reward_help": "= recompensa •",
+    "var_cost_help": "= puntos"
   },
   "media": {
     "section_title": "EXPLORADOR & GESTOR DE MEDIOS LOCAL",
-    "section_subtitle": "Explorador de archivos completo tipo SO para tu carpeta local alerts/media/. Auto-clasifica al subir, navega por árbol de carpetas, mueve con drag & drop y gestiona con cortar, copiar y pegar.",
+    "section_subtitle": "Explorador de archivos completo tipo SO para tu carpeta local <code>/media</code>. Auto-clasifica al subir, navega por árbol de carpetas, mueve con drag & drop y gestiona con cortar, copiar y pegar.",
     "btn_up": "⬆️ Arriba",
     "btn_new_folder": "📁+ Nueva Carpeta",
     "btn_upload": "📤 Subir Archivos",
@@ -394,14 +428,14 @@
     "view_list": "☰",
     "tree_title": "ÁRBOL DE CARPETAS",
     "storage": "Almacenamiento Local",
-    "dropzone_text": "Arrastra archivos aquí o haz clic para subir a",
+    "dropzone_text": "la biblioteca",
     "dropzone_formats": "(WebM, MP4, MP3, WAV, GIF, PNG, WebP)",
     "items_count": "Mostrando {count} elementos",
     "selected_count": "({count} seleccionados)",
     "btn_select_all": "Seleccionar todo",
     "btn_deselect": "Deseleccionar",
     "path_label": "📍 Ruta:",
-    "files_in_folder": "{count} archivos en esta carpeta",
+    "files_in_folder": "{count} archivo(s) en {folder}",
     "modal_preview_title": "Previsualización Multimedia",
     "modal_title": "Archivo",
     "modal_close": "✕",
@@ -429,7 +463,31 @@
     "placeholder_banner_text": "ej. ¡{user} HA DESATADO EL SUSTO! (o déjalo vacío para usar el título)",
     "placeholder_print_material": "ej. Vinilo Holográfico Adhesivo",
     "placeholder_chat_prompt": "¡Escribe en el chat para participar!",
-    "placeholder_end_farewell": "¡Gracias por acompañar el stream! Nos vemos en el próximo directo."
+    "placeholder_end_farewell": "¡Gracias por acompañar el stream! Nos vemos en el próximo directo.",
+    "th_name": "Nombre",
+    "th_folder": "Carpeta",
+    "th_type": "Tipo",
+    "th_size": "Tamaño",
+    "th_modified": "Modificado",
+    "th_actions": "Acciones",
+    "desc_full": "Explorador de archivos completo tipo SO para tu carpeta local <code>alerts/media/</code>. Auto-clasifica al subir, navega por árbol de carpetas, mueve con drag & drop y gestiona con cortar, copiar y pegar.",
+    "stat_total_label": "📦 Total:",
+    "stat_videos_label": "🎬 Vídeos:",
+    "stat_audios_label": "🎵 Audios:",
+    "stat_images_label": "🖼️ Imágenes:",
+    "stat_storage_label": "💾 Espacio en disco:",
+    "col_actions": "Acciones",
+    "drop_prompt": "Arrastra aquí archivos o haz clic para subir a",
+    "badge_total_files": "{count} ARCHIVOS",
+    "showing_files": "Mostrando {count} archivo(s)",
+    "found_files": "Encontrados {count} archivo(s) para \"{query}\"",
+    "empty_folder_title": "No hay archivos en esta carpeta.",
+    "empty_folder_desc": "Arrastra archivos aquí o haz clic en \"Subir Archivos\" para añadirlos.",
+    "cutting": "✂️ Cortando",
+    "copying": "📋 Copiando",
+    "items_word": "{count} elemento(s)",
+    "confirm_delete_single": "¿Eliminar definitivamente \"{path}\"?",
+    "confirm_delete_batch": "¿Eliminar los {count} elementos seleccionados de tu disco local?"
   },
   "themes": {
     "section_title": "TUS ESCENAS DE OBS STUDIO Y ESTILOS VISUALES",
@@ -468,7 +526,7 @@
     "btn_save_theme": "💾 Guardar Código y Ajustes",
     "btn_apply_live": "🎨 Aplicar Estilo a OBS Ahora",
     "label_theme_name": "Nombre del Tema:",
-    "label_badge": "Etiqueta / Badge:",
+    "label_badge": "Texto de la Insignia de Webcam",
     "label_cyan": "Acento Primario (Cyan/Acento 1):",
     "label_orange": "Acento Secundario (Naranja/Acento 2):",
     "label_bg": "Fondo Oscuro:",
@@ -476,7 +534,7 @@
     "label_border_style": "Bordes del Tema:",
     "label_animation": "Animación / Efecto:",
     "label_glow": "Glow / Resplandor Neón:",
-    "border_rounded": "Redondeado Moderno (6px)",
+    "border_rounded": "Redondeada",
     "border_pill": "Orgánico Curvado (14px)",
     "border_square": "Cuadrado Sólido Retro (0px)",
     "border_chamfer": "Biselado 45° Sci-Fi",
@@ -492,7 +550,7 @@
     "chat_anchor": "💬 ANCLAJE DE ESTILOS DE CHAT",
     "label_anchored": "🔗 Anclado al tema",
     "chat_anchored_info": "✓ El widget de chat hereda automáticamente los colores, tipografía y estilo de este tema en OBS.",
-    "chat_derivative": "✨ Personalización Derivada para el Chat:",
+    "chat_derivative": "✨ Chat Derivado",
     "label_shape": "Forma de Burbuja:",
     "label_opacity": "Opacidad Fondo (%):",
     "btn_reanchor": "🔗 Descartar derivado y volver a anclar al tema",
@@ -536,7 +594,6 @@
     "label_style": "🎨 Cambiar Estilo Visual:",
     "btn_customize": "🎨 Personalizar Colores ↗",
     "tab_texts_title": "Etiquetas de la Escena Game",
-    "label_badge": "Texto de la Insignia de Webcam",
     "placeholder_badge": "GAME MODE",
     "label_tagline": "Subtítulo / Modo",
     "placeholder_tagline": "MODO JUEGO / GAMEPLAY",
@@ -651,6 +708,487 @@
     "hint_save": "Los cambios se guardan y se sincronizan al instante en OBS sin reiniciar.",
     "btn_restore_scene": "🔄 Restaurar Textos",
     "btn_save_apply": "💾 Guardar y Aplicar en Directo",
-    "btn_restore_texts_scene": "Restaurar textos de esta escena a los valores originales de fábrica"
+    "btn_restore_texts_scene": "Restaurar textos de esta escena a los valores originales de fábrica",
+    "card_assigned_style": "🎨 Estilo Visual Asignado:",
+    "card_edit_style": "🎨 Editar Estilo ↗",
+    "card_pending_change": "● Cambio sin guardar — pulsa 💾 Guardar para aplicarlo en OBS",
+    "card_customized": "⚠️ Personalizado (Original: <b>{name}</b>)",
+    "card_factory_original": "⭐ Original de fábrica: <b>{name}</b>",
+    "card_restore_original": "🔄 Restaurar Original",
+    "card_view_fullscreen": "🖥️ Ver Pantalla Completa",
+    "card_edit_texts": "✏️ Editar Textos",
+    "card_copy_obs": "📋 Copiar URL OBS",
+    "card_restore_texts": "🔄 Restaurar Textos",
+    "folder_crumb_root": "📁 Carpetas de Overlays",
+    "folder_crumb_title": "📁 Carpetas de Actividades del Stream",
+    "folder_apply_all": "🎨 Aplicar Estilo Visual a todos los Overlays de la carpeta:",
+    "folder_restore_styles": "🔄 Restaurar Estilos Originales",
+    "folder_restore_texts": "📝 Restaurar Textos",
+    "folder_btn_apply_all": "✨ Aplicar a Todos en OBS",
+    "folder_activities_title": "ACTIVIDADES INCLUIDAS DENTRO DE ESTA CARPETA:",
+    "folder_open_scenes": "📂 Entrar a la Carpeta de Overlays y Editar ({count} Escenas) →",
+    "folder_filter_activity": "🔍 FILTRAR ACTIVIDAD:",
+    "folder_scenes_available": "{count} ESCENAS DISPONIBLES",
+    "btn_back_folders": "⬅️ Volver a Carpetas",
+    "btn_back_packs": "⬅️ Volver a Packs",
+    "badge_total_packs": "2 PACKS",
+    "badge_total_theme_packs": "2 PACKS",
+    "obs_step_1": "En OBS Studio, pulsa <b>+</b> en el panel de <b>Fuentes</b> y elige <b>Navegador (Browser Source)</b>.",
+    "obs_step_2": "Pega esta URL exacta en el campo <b>URL</b>:",
+    "obs_step_3": "Establece el <b>Ancho (Width): 1920</b> y el <b>Alto (Height): 1080</b>.",
+    "obs_step_4": "Marca las casillas: <b>«Apagar la fuente cuando no sea visible»</b> y <b>«Actualizar el navegador cuando la escena se active»</b>.",
+    "obs_step_5": "Coloca esta fuente en la <b>parte superior de la lista</b> (por encima de tu cámara y juego).",
+    "border_arcade": "8-Bit Arcade",
+    "border_bubble": "Burbuja Cómic",
+    "border_scifi": "Cyberpunk 2077",
+    "border_tag": "Etiqueta Maker",
+    "border_glass": "Cristal Flotante",
+    "placeholder_print_panel": "TRABAJO DE CORTE / IMPRESIÓN",
+    "placeholder_print_prefix": "TRABAJO:",
+    "placeholder_print_cam_main": "CÁMARA SECUNDARIA · PROCESO",
+    "placeholder_print_cam_face": "STREAMER",
+    "placeholder_print_cam_aux": "SOFTWARE & CORTE",
+    "placeholder_channel_name": "ej. ANDORINA",
+    "placeholder_channel_tagline": "ej. JUGAR · CREAR · COMPARTIR",
+    "placeholder_live_text": "ej. EN DIRECTO",
+    "placeholder_soc_user": "usuario",
+    "placeholder_soc_channel": "canal",
+    "placeholder_filter": "🔍 Filtrar...",
+    "placeholder_cost": "250",
+    "placeholder_role_name": "ej. Artista, Moderador principal, etc.",
+    "placeholder_role_members": "ej. andorina, pepito, streamer_amigo",
+    "placeholder_reward_manual": "O escribe el nombre exacto de la recompensa...",
+    "placeholder_command": "ej. !susto",
+    "placeholder_sound_url": "O pega enlace directo a archivo MP3/WAV...",
+    "placeholder_emotes": "ej. 🎉,🔥,😂",
+    "placeholder_so_user": "Usuario Twitch (ej. midudev)",
+    "placeholder_sim_user": "Nombre",
+    "placeholder_sim_msg": "Mensaje",
+    "placeholder_search": "🔍 Buscar archivos...",
+    "placeholder_folder_name": "Nombre de la carpeta (ej. memes_subs)",
+    "placeholder_rename": "nuevo_nombre.ext",
+    "placeholder_css": "/* CSS del tema */",
+    "view_details": "ℹ️ Ver detalles",
+    "obs_intro_step1": "En OBS Studio sólo agregas cada escena como <b>Fuente de Navegador</b> (<i>Browser Source</i>). No necesitas instalar plugins extraños.",
+    "obs_intro_step2": "Al guardar un texto o cambiar un estilo aquí, nuestro servidor se lo envía a OBS por <b>WebSocket</b> y <b>se actualiza en directo en tu stream</b> sin reiniciar la escena.",
+    "folder_style_all_label": "🎨 Estilo a todos:",
+    "folder_help_text": "Haz clic en el cuadro para <b>entrar en la carpeta</b> y editar individualmente todos los textos y actividades de tu stream. Desde fuera puedes <b>aplicar un estilo a todos los overlays del pack</b> o restaurar los estilos originales de fábrica.",
+    "folder_overlays_title": "OVERLAYS Y ACTIVIDADES DE ESTA CARPETA",
+    "btn_restore_factory_texts": "📝 Restaurar Textos de Fábrica",
+    "pack_themes_title": "ESTILOS VISUALES / TEMAS DE ESTE PACK (PALETAS Y CSS)",
+    "tab_colors_styles": "// 1. PALETA CROMÁTICA & ESTILOS",
+    "badge_label": "Etiqueta / Badge:",
+    "tab_texts_game": "🎮 Textos Gameplay",
+    "tab_texts_main": "🎥 Textos Escena Principal",
+    "tab_texts_pc": "💻 Textos Pantalla PC",
+    "tab_texts_aux": "📷 Textos Cámara Secundaria",
+    "tab_texts_chill": "💬 Textos Chill",
+    "tab_texts_starting": "⏳ Textos Starting",
+    "tab_texts_brb": "☕ Textos Pausa",
+    "tab_texts_ending": "🎬 Textos Ending",
+    "css_compile_hint": "💡 Se compila automáticamente en <code>common/themes.css</code> para que todas las escenas de OBS Studio lo reciban.",
+    "btn_preview_fs": "🖥️ Pantalla Completa 1080p ↗",
+    "btn_view_fullscreen_arrow": "🖥️ Ver Pantalla Completa ↗",
+    "preview_frame_sync": "● VISTA PREVIA ACTIVA",
+    "preview_frame_cam": "CÁMARA WEBCAM",
+    "applied_style_badge": "ESTILO APLICADO",
+    "synced_obs_badge": "1920×1080 · Sincronizado en OBS Studio",
+    "change_style_label": "Cambiar Estilo Visual:",
+    "card_maker_info": "Información del Proyecto Maker",
+    "card_print_info": "Información del Proyecto Print",
+    "cam_main_label": "Cámara Principal (Máquina / Cama):",
+    "cam_aux_label": "Cámara Auxiliar / Software CAD:",
+    "card_print_stages": "Fases del Proyecto Print",
+    "card_chill_texts": "Textos de la Escena Chill",
+    "card_headline_sub": "Titular Principal y Subtítulo",
+    "card_countdown_status": "Cuenta Atrás y Estado",
+    "card_broadcast_modes": "Modos de Emisión (Panel Derecho)",
+    "card_brb_texts": "Textos de Pantalla de Pausa",
+    "card_ending_texts": "Textos de Fin de Stream",
+    "card_brand_identity": "Marca e Identidad del Canal",
+    "card_live_indicator": "Indicador de Directo",
+    "card_socials": "Redes Sociales (Overlays y Pantallas)",
+    "modal_obs_step1": "En OBS Studio, pulsa <b>+</b> en el panel de <b>Fuentes</b> y elige <b>Navegador</b> (<i>Browser Source</i>).",
+    "modal_obs_step2": "Pega esta URL exacta en el campo <b>URL</b>:",
+    "modal_obs_step3": "Establece el <b>Ancho (Width): 1920</b> y el <b>Alto (Height): 1080</b>.",
+    "modal_obs_step4": "Marca las casillas: <b>«Apagar la fuente cuando no sea visible»</b> y <b>«Actualizar el navegador cuando la escena se active»</b>.",
+    "modal_obs_step5": "Coloca esta fuente en la <b>parte superior de la lista</b> (por encima de tu cámara y juego).",
+    "crumb_packs": "📁 Packs de Temas",
+    "pack_active_obs": "🟢 Pack Activo en OBS",
+    "pack_local_col": "📦 Colección local",
+    "btn_open_folder": "Abrir Carpeta ➜",
+    "themes_count_label": "{count} TEMAS",
+    "no_packs": "No hay packs creados. Haz clic en \"+ Nuevo Pack\" para crear uno.",
+    "live_badge": "● EN VIVO",
+    "chat_anchored": "🔗 Chat Anclado",
+    "overlays_using_style": "🎬 Overlays que usan este estilo:",
+    "linked_badge": "{count} ENLAZADAS",
+    "no_overlays_linked": "Sin overlays asignadas (se puede asignar en la pestaña Overlays)",
+    "assign_to_scene": "🎯 Asignar a una Escena...",
+    "btn_edit_theme": "🛠️ Editar",
+    "btn_apply_all_scenes_obs": "🎨 Aplicar a Todas las Escenas en OBS",
+    "card_save": "💾 Guardar",
+    "obs_intro_step1_text": "En OBS Studio sólo agregas cada escena como <b>Fuente de Navegador</b> (<i>Browser Source</i>). No necesitas instalar plugins extraños.",
+    "obs_intro_step2_text": "Al guardar un texto o cambiar un estilo aquí, nuestro servidor se lo envía a OBS por <b>WebSocket</b> y se actualiza en directo en tu stream sin reiniciar la escena.",
+    "crumb_stream_folders": "📁 Carpetas de Actividades del Stream",
+    "style_all_label": "🎨 Estilo a todos:",
+    "badge_packs_folders": "4 PACKS EN CARPETAS",
+    "folders_hint": "Haz clic en el cuadro para <b>entrar en la carpeta</b> y editar individualmente todos los textos y actividades de tu stream. Desde fuera puedes <b>aplicar un estilo a todos los overlays del pack</b> o restaurar los estilos originales de fábrica.",
+    "badge_folder_suite": "9 OVERLAYS · SUITE COMPLETA",
+    "folder_suite_desc": "Gestiona y edita individualmente cada overlay y actividad de tu stream.",
+    "badge_scenes_available": "9 ESCENAS DISPONIBLES",
+    "crumb_theme_packs": "📁 Packs de Temas",
+    "badge_themes_in_pack": "6 TEMAS",
+    "theme_compile_hint": "💡 Se compila automáticamente en <code>style.css</code> para que todas las escenas de OBS Studio lo reciban.",
+    "obs_guide_step1": "En OBS Studio, pulsa <b>+</b> en el panel de <b>Fuentes</b> y elige <b>Navegador</b> (<i>Browser Source</i>).",
+    "obs_guide_step2": "Pega esta URL exacta en el campo <b>URL</b>:",
+    "obs_guide_step3": "Establece el <b>Ancho (Width): 1920</b> y el <b>Alto (Height): 1080</b>.",
+    "obs_guide_step4": "Marca las casillas: <b>«Apagar la fuente cuando no sea visible»</b> y <b>«Actualizar el navegador cuando la escena se active»</b>.",
+    "obs_guide_step5": "Coloca esta fuente en la <b>capa superior</b> (por encima de tu cámara y juego).",
+    "confirm_apply_all": "¿Deseas aplicar el estilo \"{name}\" a todas las 9 escenas de OBS Studio?",
+    "toast_applied_all": "✓ Estilo \"{name}\" aplicado a todas las escenas en OBS",
+    "confirm_restore_theme": "¿Restablecer el estilo \"{name}\" a sus colores y código CSS original de fábrica?",
+    "confirm_restore_folder_themes": "¿Restaurar todos los overlays de la carpeta \"{name}\" a sus estilos originales de fábrica?",
+    "toast_folder_themes_restored": "↺ Overlays de \"{name}\" restauradas a sus estilos originales",
+    "confirm_restore_folder_texts": "¿Restaurar todos los textos de la carpeta \"{name}\" a los valores originales de fábrica?",
+    "toast_folder_texts_restored": "↺ Textos de \"{name}\" restaurados a sus valores de fábrica",
+    "confirm_restore_scene_texts": "¿Restaurar los textos de la escena \"{name}\" a los valores originales de fábrica?",
+    "confirm_restore_all_scenes_texts": "¿Restaurar TODOS los textos de todas las 9 escenas a sus valores originales de fábrica?",
+    "confirm_restore_all_scenes_themes": "¿Deseas restaurar todas las 9 overlays a sus estilos visuales originales de fábrica?",
+    "toast_all_themes_restored": "↺ Todas las overlays han sido restauradas a sus estilos originales de fábrica",
+    "toast_style_assigned": "✓ Estilo \"{name}\" asignado a la escena",
+    "toast_url_copied": "📋 URL copiada para OBS: {url}",
+    "alert_url_copied": "URL copiada al portapapeles:\n{url}\n\nPégala en OBS Studio como Fuente Navegador (1920×1080)."
+  },
+  "scene_catalog": {
+    "maker-desk": {
+      "name": "Overlay: Escena Principal (Cámara + Webcam)",
+      "badge": "ESCENA PRINCIPAL · CÁMARA",
+      "desc": "Escena principal con cámara frontal o aérea, barra inferior con fases del proyecto y ventana auxiliar."
+    },
+    "maker-pc": {
+      "name": "Overlay: Pantalla Compartida (PC + Webcam)",
+      "badge": "PANTALLA COMPARTIDA · PC",
+      "desc": "Escena de pantalla compartida con barra inferior de fases activas y ventana para webcam/cámara."
+    },
+    "print-machine": {
+      "name": "Overlay: Cámara Secundaria (Proceso / Acción)",
+      "badge": "CÁMARA SECUNDARIA · PROCESO",
+      "desc": "Cámara directa sobre el proceso o acción en curso, con indicador de estado y fases."
+    },
+    "print-design": {
+      "name": "Overlay: Pantalla Diseño / CAD (Full Screen)",
+      "badge": "PANTALLA COMPLETA · DISEÑO",
+      "desc": "Pantalla completa para diseño, programación o cualquier app a pantalla completa con cámara secundaria."
+    },
+    "game": {
+      "name": "Overlay: Gameplay (Juego + Cámara)",
+      "badge": "GAMEPLAY + WEBCAM",
+      "desc": "Capa limpia para videojuegos. Marco de webcam en esquina con insignia técnica y soporte de alertas."
+    },
+    "chill": {
+      "name": "Overlay: Charla y Chat (Just Chatting)",
+      "badge": "JUST CHATTING",
+      "desc": "Cámara amplia con marco para el chat de Twitch en OBS y cinta inferior con el tema de conversación."
+    },
+    "startingSoon": {
+      "name": "Pantalla: Inicio de Stream (Starting Soon)",
+      "badge": "INICIO DE EMISIÓN",
+      "desc": "Pantalla completa de bienvenida con cuenta atrás regresiva, titular con acento neón y redes."
+    },
+    "beRightBack": {
+      "name": "Pantalla: Pausa Técnica (Be Right Back)",
+      "badge": "PAUSA TÉCNICA",
+      "desc": "Pausa con escáner técnico animado y rotación automática de frases personalizables."
+    },
+    "ending": {
+      "name": "Pantalla: Despedida (Ending)",
+      "badge": "FIN DE TRANSMISIÓN",
+      "desc": "Cierre de directo con tarjeta de agradecimiento a suscriptores, etiqueta de despedida y redes."
+    },
+    "oss_chatting": {
+      "name": "Overlay: Just Chatting & Talk",
+      "badge": "JUST CHATTING",
+      "desc": "Cámara frontal amplia con chat lateral de Twitch integrado, etiquetas de marca y widgets en tiempo real."
+    },
+    "oss_desktop": {
+      "name": "Overlay: Pantalla Compartida (Desktop)",
+      "badge": "PANTALLA COMPARTIDA",
+      "desc": "Captura de monitor para tutoriales y navegación con webcam flotante reubicable y rótulos."
+    },
+    "oss_podcast": {
+      "name": "Overlay: Podcast & Entrevista (Dual Cam)",
+      "badge": "PODCAST & ENTREVISTA",
+      "desc": "Dos cámaras proporcionales para entrevistas o streaming cooperativo con rótulos inferiores."
+    },
+    "oss_starting": {
+      "name": "Pantalla: Inicio de Emisión (Starting Soon)",
+      "badge": "INICIO DE STREAM",
+      "desc": "Cuenta atrás tecnológica con barra de progreso milimétrica, titular neón y redes."
+    },
+    "oss_brb": {
+      "name": "Pantalla: Pausa Técnica (Be Right Back)",
+      "badge": "PAUSA TÉCNICA",
+      "desc": "Pausa limpia con radar circular dinámico y rotación periódica de frases personalizables."
+    },
+    "oss_ending": {
+      "name": "Pantalla: Fin de Emisión (Ending)",
+      "badge": "FIN DE STREAM",
+      "desc": "Pantalla de despedida con tarjeta de agradecimientos, redes sociales y mensaje final."
+    },
+    "gamer_gameplay": {
+      "name": "Overlay: Gameplay HUD Táctico",
+      "badge": "GAMEPLAY TÁCTICO",
+      "desc": "Marco de webcam biselado con estadísticas de juego, selector de modo y badges esports."
+    },
+    "gamer_speedrun": {
+      "name": "Overlay: Speedrun & Splits Tracker",
+      "badge": "SPEEDRUN & SPLITS",
+      "desc": "Panel interactivo de tramos de speedrun con cronómetro integrado, deltas y webcam."
+    },
+    "gamer_victory": {
+      "name": "Overlay: Victoria & Clutch Moment",
+      "badge": "VICTORIA & CLUTCH",
+      "desc": "Cámara central de celebración con estandarte triunfal ciclable (Victory/Defeat/Ace/Match Point)."
+    },
+    "gamer_starting": {
+      "name": "Pantalla: Calentamiento & Match Start",
+      "badge": "WARMUP / START",
+      "desc": "Cuenta regresiva táctica militar con radar HUD y estado de emparejamiento."
+    },
+    "gamer_brb": {
+      "name": "Pantalla: Intermisión Táctica (Be Right Back)",
+      "badge": "INTERMISIÓN TÁCTICA",
+      "desc": "Pausa táctica entre partidas o mapas con radar de combate y estado de sesión."
+    },
+    "gamer_ending": {
+      "name": "Pantalla: GG & Fin de Partida (Ending)",
+      "badge": "GG · FIN DE PARTIDA",
+      "desc": "Despedida gamer con estadísticas finales del día, GG y agradecimientos."
+    },
+    "cozy_pomodoro": {
+      "name": "Overlay: Study & Pomodoro (25:00)",
+      "badge": "POMODORO & ESTUDIO",
+      "desc": "Temporizador Pomodoro integrado con ciclo activo de concentración y descanso con música lo-fi."
+    },
+    "cozy_art": {
+      "name": "Overlay: Arte & Lienzo Dual Cam",
+      "badge": "ARTE & LIENZO DUAL",
+      "desc": "Cámara cenital principal para ilustrar, pintar o escribir con webcam auxiliar en tonos pastel."
+    },
+    "cozy_cafe": {
+      "name": "Overlay: Café & Charla Chill",
+      "badge": "CAFÉ & CHARLA CHILL",
+      "desc": "Escena cálida y relajada para conversar con chat integrado y ambientación tranquila."
+    },
+    "cozy_starting": {
+      "name": "Pantalla: Bienvenida Acogedora (Starting Soon)",
+      "badge": "BIENVENIDA ACOGEDORA",
+      "desc": "Pantalla de inicio suave con cuenta atrás calmada y animación de vapor de café."
+    },
+    "cozy_brb": {
+      "name": "Pantalla: Pausa de Café (Be Right Back)",
+      "badge": "PAUSA DE CAFÉ",
+      "desc": "Pausa relajante para estirar y recargar la taza de café o té con mensajes rotativos."
+    },
+    "cozy_ending": {
+      "name": "Pantalla: Hasta Pronto & Buenas Noches (Ending)",
+      "badge": "HASTA PRONTO · RELAX",
+      "desc": "Despedida calmada con luces tenues, música tranquila y mensaje de buenas noches."
+    }
+  },
+  "folder_catalog": {
+    "maker_theme_pack": {
+      "name": "Pack Maker & Taller",
+      "badge": "9 OVERLAYS · TALLER & MAKER",
+      "desc": "Carpeta insignia para creadores, talleres, electrónica, programación CAD e impresión 3D con 9 pantallas listas.",
+      "subfilters": {
+        "all": "📁 Todos los Overlays (9)",
+        "maker": "🛠️ Mesa & PC (2)",
+        "print": "📷 Cámara Secundaria (2)",
+        "stream": "🎮 Directo & Charla (2)",
+        "screens": "📺 Pantallas de Emisión (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Escena Principal (Cámara)",
+          "desc": "Cámara principal con barra de fases y ventana auxiliar"
+        },
+        "1": {
+          "name": "PC & Código (Terminal)",
+          "desc": "Pantalla completa de programación o CAD y cámara de apoyo"
+        },
+        "2": {
+          "name": "Cámara Secundaria (Proceso)",
+          "desc": "Cámara directa sobre el proceso en curso con indicador de estado"
+        },
+        "3": {
+          "name": "Diseño CAD & Slicer",
+          "desc": "Modelado 3D (Fusion, FreeCAD) o laminado slicer con webcam"
+        },
+        "4": {
+          "name": "Gameplay & Cámara",
+          "desc": "Capa limpia para juegos con cámara técnica y alertas"
+        },
+        "5": {
+          "name": "Charla & Chat (Just Chatting)",
+          "desc": "Cámara amplia, caja de Twitch chat integrada y tema"
+        },
+        "6": {
+          "name": "Pantallas de Emisión (3)",
+          "desc": "Starting Soon regresivo, Pausa BRB y Despedida Ending"
+        }
+      }
+    },
+    "open_stream_pack": {
+      "name": "Pack Open Stream (General)",
+      "badge": "6 OVERLAYS · STREAMING PRO",
+      "desc": "Pack moderno todo-en-uno para streamers generales, variedad, podcasts, charlas y pantallas de emisión completas.",
+      "subfilters": {
+        "all": "📁 Todos los Overlays (6)",
+        "chat": "💬 Charla & Podcast (2)",
+        "screen": "🖥️ Pantalla Compartida (1)",
+        "screens": "📺 Pantallas de Emisión (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Just Chatting & Talk",
+          "desc": "Cámara amplia con caja de chat interactivo Twitch y widgets"
+        },
+        "1": {
+          "name": "Pantalla Compartida",
+          "desc": "Captura de monitor con PiP de webcam en marco flotante"
+        },
+        "2": {
+          "name": "Podcast & Entrevista",
+          "desc": "Dos cámaras equilibradas para entrevistas y co-hosts con rótulos"
+        },
+        "3": {
+          "name": "Inicio de Emisión",
+          "desc": "Cuenta atrás regresiva de bienvenida con acento neón"
+        },
+        "4": {
+          "name": "Pausa Técnica",
+          "desc": "Pausa intermedia con radar animado y mensajes dinámicos"
+        },
+        "5": {
+          "name": "Fin de Stream",
+          "desc": "Pantalla de cierre de directo con agradecimientos y redes"
+        }
+      }
+    },
+    "gamer_pro_pack": {
+      "name": "Pack Gamer Pro & Esports",
+      "badge": "6 OVERLAYS · ESPORTS & HUD",
+      "desc": "Estética HUD táctica militar, bordes angulares biselados y alta adrenalina para gaming competitivo y speedruns.",
+      "subfilters": {
+        "all": "📁 Todos los Overlays (6)",
+        "game": "🎯 Gameplay & HUD (2)",
+        "event": "🏆 Victoria & Clutch (1)",
+        "screens": "📺 Pantallas de Emisión (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Gameplay HUD Táctico",
+          "desc": "Marco biselado para webcam con HUD angular militar y alertas"
+        },
+        "1": {
+          "name": "Speedrun & Splits",
+          "desc": "Panel lateral de splits, cronómetro de segmentos y webcam"
+        },
+        "2": {
+          "name": "Victoria & Clutch",
+          "desc": "Cámara central épica con laureles de victoria y animaciones"
+        },
+        "3": {
+          "name": "Calentamiento & Start",
+          "desc": "Cuenta regresiva táctica de preparación de partida"
+        },
+        "4": {
+          "name": "Intermisión Táctica",
+          "desc": "Pausa de torneo/partida con radar y estado del equipo"
+        },
+        "5": {
+          "name": "GG & Fin de Partida",
+          "desc": "Despedida con resumen de estadísticas y créditos"
+        }
+      }
+    },
+    "cozy_lofi_pack": {
+      "name": "Pack Cozy Lo-Fi & Arte",
+      "badge": "6 OVERLAYS · CHILL & RELAX",
+      "desc": "Bordes redondeados, tonos pastel y atmósfera relajante para estudio, dibujo digital, café y música lo-fi.",
+      "subfilters": {
+        "all": "📁 Todos los Overlays (6)",
+        "study": "📖 Pomodoro & Estudio (1)",
+        "creative": "🎨 Arte & Charla (2)",
+        "screens": "📺 Pantallas de Emisión (3)"
+      },
+      "activities": {
+        "0": {
+          "name": "Study & Pomodoro (25:00)",
+          "desc": "Temporizador Pomodoro integrado con ciclo de concentración y descanso"
+        },
+        "1": {
+          "name": "Arte & Lienzo Dual Cam",
+          "desc": "Cámara cenital sobre el lienzo/tableta y webcam de apoyo"
+        },
+        "2": {
+          "name": "Café & Charla Chill",
+          "desc": "Escena acogedora para conversar con música de fondo suave"
+        },
+        "3": {
+          "name": "Bienvenida Acogedora",
+          "desc": "Pantalla de inicio con cuenta atrás suave y vapor de café"
+        },
+        "4": {
+          "name": "Pausa de Café",
+          "desc": "Pausa para estirar y recargar la taza de té o café"
+        },
+        "5": {
+          "name": "Hasta Pronto & Buenas Noches",
+          "desc": "Despedida con luces tenues y música relajante"
+        }
+      }
+    }
+  },
+  "colors": {
+    "cyan": "Cyan",
+    "orange": "Naranja",
+    "pink": "Rosa",
+    "green": "Verde",
+    "yellow": "Amarillo",
+    "red": "Rojo",
+    "blue": "Azul",
+    "white": "Blanco",
+    "gold": "Oro"
+  },
+  "rewards": {
+    "twitch_rewards_title": "RECOMPENSAS EN TU TWITCH (Puntos de Canal):",
+    "icon_color": "Color del Icono en Twitch:",
+    "twitch_rewards_prefix": "RECOMPENSAS EN TU TWITCH"
+  },
+  "roles": {
+    "channel_team_title": "FUNCIONES Y EQUIPO DEL CANAL (Roles):",
+    "sync_status_title": "ℹ️ ESTADO DE SINCRONIZACIÓN CON TWITCH:",
+    "sync_mods_vips": "🛡️ <strong>Moderador</strong> y 💎 <strong>VIP</strong>: Sincronizados directamente con la API oficial de Twitch Helix.",
+    "sync_editors": "🎬 <strong>Editor</strong>: Sincronizado vía Twitch API Helix (actualmente tu canal tiene 0 editores en Twitch).",
+    "sync_artists": "🎨 <strong>Artista</strong>: <em>Twitch no dispone de API de consulta de artistas</em>. Nuestro sistema los <strong>detecta automáticamente por su insignia en el chat</strong> o puedes añadirlos aquí con \"+ Asignar\" o \"Pegar lista\".",
+    "sync_custom_roles": "⚔️ <strong>Mod. Principal</strong> y 💼 <strong>Dir. Comercial</strong>: Funciones de panel de Twitch gestionadas y asignadas desde este panel.",
+    "channel_team_prefix": "FUNCIONES Y EQUIPO DEL CANAL"
+  },
+  "alerts": {
+    "sim_title": "🚨 SIMULADOR DE ALERTAS DE DIRECTO",
+    "sim_subtitle": "Prueba el diseño, animación y sintetizador de audio de tus alertas antes o durante el directo con un solo clic.",
+    "sim_instant_title": "🧪 BOTONES DE PRUEBA INSTANTÁNEA",
+    "sim_btn_follow": "❤️ Probar Follow",
+    "sim_btn_sub": "⭐ Probar Suscripción (N1)",
+    "sim_btn_bits": "💎 Probar 100 Bits",
+    "sim_btn_raid": "🚀 Probar Raid (25 p.)",
+    "sim_custom_title": "PROBAR CON TEXTO Y NOMBRE PERSONALIZADO:",
+    "sim_btn_fire": "Disparar",
+    "sim_obs_title": "📋 CÓMO CONFIGURAR LA ALERTA EN OBS",
+    "sim_obs_steps": "1. Añade una fuente de tipo <strong>Navegador</strong> en OBS.<br>2. Pega la URL: <code id=\"alerts-source-code\">http://localhost:8080/alerts/index.html</code><br>3. Pon Ancho: <code>1920</code>, Alto: <code>1080</code>.<br>4. <strong>Muy importante:</strong> Coloca esta fuente en la <strong>capa superior</strong> (arriba del todo) de tu lista de fuentes para que las alertas y memes aparezcan por encima de tus cámaras.",
+    "sim_btn_copy_alerts": "📋 Copiar URL de Alertas"
   }
 }

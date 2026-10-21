@@ -95,6 +95,25 @@ function updateActiveThemeBadge() {
 // VISTA 1: NAVEGACIÓN Y CARPETAS DE PACKS
 // ====================================================================
 
+function getPackLocalized(pack) {
+  if (!pack) return pack;
+  if (window.i18n && typeof window.i18n.tr === 'function') {
+    const nameKey = `folder_catalog.${pack.id}.name`;
+    const badgeKey = `folder_catalog.${pack.id}.badge`;
+    const descKey = `folder_catalog.${pack.id}.desc`;
+    const name = window.i18n.tr(nameKey);
+    const badge = window.i18n.tr(badgeKey);
+    const desc = window.i18n.tr(descKey);
+    return {
+      ...pack,
+      name: (name && name !== nameKey) ? name : pack.name,
+      badge: (badge && badge !== badgeKey) ? badge : (pack.badge || 'PACK'),
+      description: (desc && desc !== descKey) ? desc : pack.description
+    };
+  }
+  return pack;
+}
+
 function renderThemePacks() {
   const container = document.getElementById('themes-packs-grid');
   const badge = document.getElementById('themes-total-packs-badge');
@@ -104,24 +123,35 @@ function renderThemePacks() {
   const packsView = document.getElementById('themes-packs-view');
   const detailsView = document.getElementById('themes-pack-details-view');
 
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const crumbPacks = tr('themes.crumb_packs', '📁 Packs de Temas');
+
   if (packsView) packsView.style.display = 'block';
   if (detailsView) detailsView.style.display = 'none';
   if (btnBack) btnBack.style.display = 'none';
   if (btnAddTheme) btnAddTheme.style.display = 'none';
   if (breadcrumbs) {
-    breadcrumbs.innerHTML = `<span class="crumb-item active" onclick="showThemePacksView()">📁 Packs de Temas</span>`;
+    breadcrumbs.innerHTML = `<span class="crumb-item active" onclick="showThemePacksView()">${crumbPacks}</span>`;
   }
 
-  if (badge) badge.textContent = `${cachedThemePacks.length} PACKS`;
+  const badgeTotalPacks = tr('themes.badge_total_theme_packs', `${cachedThemePacks.length} PACKS`).replace('{count}', cachedThemePacks.length);
+  if (badge) badge.textContent = badgeTotalPacks;
   if (!container) return;
 
   if (cachedThemePacks.length === 0) {
-    container.innerHTML = '<div style="color: var(--color-text-dim); padding: 24px;">No hay packs creados. Haz clic en "+ Nuevo Pack" para crear uno.</div>';
+    container.innerHTML = `<div style="color: var(--color-text-dim); padding: 24px;">${tr('themes.no_packs', 'No hay packs creados. Haz clic en "+ Nuevo Pack" para crear uno.')}</div>`;
     return;
   }
 
-  container.innerHTML = cachedThemePacks.map(pack => {
+  const activeObs = tr('themes.pack_active_obs', '🟢 Pack Activo en OBS');
+  const localCol = tr('themes.pack_local_col', '📦 Colección local');
+  const openFolderBtn = tr('themes.btn_open_folder', 'Abrir Carpeta ➜');
+  const themesLabel = tr('themes.themes_count_label', '{count} TEMAS');
+
+  container.innerHTML = cachedThemePacks.map(rawPack => {
+    const pack = getPackLocalized(rawPack);
     const isPackActive = pack.id === currentActivePackId;
+    const countText = themesLabel.replace('{count}', pack.themesCount || 0);
     return `
       <div class="pack-folder-card ${isPackActive ? 'active-pack' : ''}" onclick="openThemePack('${pack.id}')">
         <div class="pack-folder-header">
@@ -133,7 +163,7 @@ function renderThemePacks() {
             </div>
           </div>
           <span class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan);">
-            ${pack.themesCount || 0} TEMAS
+            ${countText}
           </span>
         </div>
 
@@ -143,10 +173,10 @@ function renderThemePacks() {
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.05); font-family: var(--font-tech); font-size: 11px;">
           <span style="color: ${isPackActive ? 'var(--color-accent-cyan)' : 'var(--color-text-dim)'}; font-weight: 700;">
-            ${isPackActive ? '🟢 Pack Activo en OBS' : '📦 Colección local'}
+            ${isPackActive ? activeObs : localCol}
           </span>
           <button class="btn-action-test" style="padding: 4px 10px; font-size: 11px;">
-            Abrir Carpeta ➜
+            ${openFolderBtn}
           </button>
         </div>
       </div>
@@ -164,8 +194,9 @@ function showThemePacksView() {
 // ====================================================================
 
 function openThemePack(packId) {
-  const pack = cachedThemePacks.find(p => p.id === packId);
-  if (!pack) return;
+  const rawPack = cachedThemePacks.find(p => p.id === packId);
+  if (!rawPack) return;
+  const pack = getPackLocalized(rawPack);
 
   currentOpenPackId = packId;
   const packsView = document.getElementById('themes-packs-view');
@@ -174,6 +205,9 @@ function openThemePack(packId) {
   const btnAddTheme = document.getElementById('themes-btn-add-theme');
   const breadcrumbs = document.getElementById('themes-breadcrumbs');
 
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const crumbPacks = tr('themes.crumb_packs', '📁 Packs de Temas');
+
   if (packsView) packsView.style.display = 'none';
   if (detailsView) detailsView.style.display = 'block';
   if (btnBack) btnBack.style.display = 'inline-flex';
@@ -181,7 +215,7 @@ function openThemePack(packId) {
 
   if (breadcrumbs) {
     breadcrumbs.innerHTML = `
-      <span class="crumb-item" onclick="showThemePacksView()">📁 Packs de Temas</span>
+      <span class="crumb-item" onclick="showThemePacksView()">${crumbPacks}</span>
       <span class="crumb-sep">/</span>
       <span class="crumb-item active">${pack.icon || '📁'} ${pack.name}</span>
     `;
@@ -200,7 +234,8 @@ function openThemePack(packId) {
   if (dBadge) dBadge.textContent = pack.badge || 'PACK';
   if (dDesc) dDesc.textContent = pack.description || '';
   if (dPath) dPath.textContent = `streamthemes/${pack.id}/`;
-  if (dCount) dCount.textContent = `${(pack.themes || []).length} TEMAS`;
+  const themesCountText = tr('themes.themes_count_label', '{count} TEMAS').replace('{count}', (pack.themes || []).length);
+  if (dCount) dCount.textContent = themesCountText;
 
   // Renderizar tarjetas de temas
   const container = document.getElementById('themes-cards-grid');
@@ -252,7 +287,7 @@ function openThemePack(packId) {
         <!-- Estado de Chat -->
         <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-tech); font-size: 11px; margin-top: 4px;">
           <span style="color: ${isChatAnchored ? 'var(--color-accent-cyan)' : 'var(--color-accent-orange)'};">
-            ${isChatAnchored ? '🔗 Chat Anclado' : '✨ Chat Derivado'}
+            ${isChatAnchored ? tr('themes.chat_anchored', '🔗 Chat Anclado') : tr('themes.chat_derivative', '✨ Chat Derivado')}
           </span>
           <span style="color: var(--color-text-dim); font-size: 10px;">
             Glow: ${t.glowIntensity || 50}%
@@ -262,22 +297,25 @@ function openThemePack(packId) {
         <!-- Overlays Vinculadas a este Estilo -->
         <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255, 120, 63, 0.3); padding: 8px; border-radius: 4px; margin-top: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-bottom: 5px;">
-            <span style="color: var(--color-text-dim);">🎬 Overlays que usan este estilo:</span>
+            <span style="color: var(--color-text-dim);">${tr('themes.overlays_using_style', '🎬 Overlays que usan este estilo:')}</span>
             <span style="color: var(--color-accent-orange); font-family: var(--font-tech); font-weight: 700;">
-              ${OSS_SCENES.filter(sc => (cachedOverlayThemes[sc.key] || currentActiveThemeId) === t.id).length} ENLAZADA${OSS_SCENES.filter(sc => (cachedOverlayThemes[sc.key] || currentActiveThemeId) === t.id).length === 1 ? '' : 'S'}
+              ${tr('themes.linked_badge', '{count} ENLAZADAS').replace('{count}', OSS_SCENES.filter(sc => (cachedOverlayThemes[sc.key] || currentActiveThemeId) === t.id).length)}
             </span>
           </div>
           <div style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 52px; overflow-y: auto;">
             ${(() => {
               const linked = OSS_SCENES.filter(sc => (cachedOverlayThemes[sc.key] || currentActiveThemeId) === t.id);
               if (linked.length === 0) {
-                return '<span style="font-size: 10px; color: var(--color-text-dim); font-style: italic;">Sin overlays asignadas (se puede asignar en la pestaña Overlays)</span>';
+                return `<span style="font-size: 10px; color: var(--color-text-dim); font-style: italic;">${tr('themes.no_overlays_linked', 'Sin overlays asignadas (se puede asignar en la pestaña Overlays)')}</span>`;
               }
-              return linked.map(sc => `
-                <button type="button" class="badge-pill" style="cursor: pointer; border: 1px solid rgba(255, 120, 63, 0.4); background: rgba(255, 120, 63, 0.15); color: #FF783F; font-size: 9px; padding: 2px 6px;" onclick="openOverlayFullscreen('${sc.key}', '${sc.path}')" title="Clic para ver en pantalla completa y editar textos de ${sc.name}">
-                  ${sc.icon} ${sc.name.split(':')[0]} 🖥️✏️
+              return linked.map(sc => {
+                const localizedSc = getSceneLocalized(sc);
+                return `
+                <button type="button" class="badge-pill" style="cursor: pointer; border: 1px solid rgba(255, 120, 63, 0.4); background: rgba(255, 120, 63, 0.15); color: #FF783F; font-size: 9px; padding: 2px 6px;" onclick="openOverlayFullscreen('${sc.key}', '${sc.path}')" title="${localizedSc.name}">
+                  ${localizedSc.icon} ${localizedSc.name.split(':')[0]} 🖥️✏️
                 </button>
-              `).join('');
+              `;
+              }).join('');
             })()}
           </div>
         </div>
@@ -285,17 +323,20 @@ function openThemePack(packId) {
         <!-- Botones de Acción -->
         <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
           <div style="display: flex; gap: 6px;">
-            <select class="monitor-select" style="flex: 1; font-size: 11px; padding: 6px;" onchange="if(this.value){ assignThemeToScene(this.value, '${t.id}'); this.value=''; }" title="Asignar este estilo a una escena específica de OBS">
-              <option value="">🎯 Asignar a una Escena...</option>
-              ${OSS_SCENES.map(sc => `<option value="${sc.key}">➔ ${sc.icon} ${sc.name.split(':')[0]}</option>`).join('')}
+            <select class="monitor-select" style="flex: 1; font-size: 11px; padding: 6px;" onchange="if(this.value){ assignThemeToScene(this.value, '${t.id}'); this.value=''; }">
+              <option value="">${tr('themes.assign_to_scene', '🎯 Asignar a una Escena...')}</option>
+              ${OSS_SCENES.map(sc => {
+                const locSc = getSceneLocalized(sc);
+                return `<option value="${sc.key}">➔ ${locSc.icon} ${locSc.name.split(':')[0]}</option>`;
+              }).join('')}
             </select>
-            <button class="btn-action-test" style="font-size: 11px; padding: 6px 12px;" onclick="openThemeEditor('${pack.id}', '${t.id}')" title="Editar colores, paleta y código CSS">
-              🛠️ Editar
+            <button class="btn-action-test" style="font-size: 11px; padding: 6px 12px;" onclick="openThemeEditor('${pack.id}', '${t.id}')">
+              ${tr('themes.btn_edit_theme', '🛠️ Editar')}
             </button>
           </div>
 
-          <button class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 6px; display: inline-flex; justify-content: center; align-items: center; gap: 5px;" onclick="applyThemeToAllScenes('${t.id}', '${pack.id}')" title="Vestir todas las 9 escenas de OBS con este estilo">
-            🎨 Aplicar a Todas las Escenas en OBS
+          <button class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 6px; display: inline-flex; justify-content: center; align-items: center; gap: 5px;" onclick="applyThemeToAllScenes('${t.id}', '${pack.id}')">
+            ${tr('themes.btn_apply_all_scenes_obs', '🎨 Aplicar a Todas las Escenas en OBS')}
           </button>
         </div>
       </div>
@@ -331,7 +372,8 @@ async function assignThemeToScene(sceneKey, themeId) {
 
 async function applyThemeToAllScenes(themeId, packId) {
   const info = getThemeDisplayNameById(themeId);
-  if (!confirm(`¿Deseas aplicar el estilo "${info.name}" a todas las 9 escenas de OBS Studio?`)) return;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('themes.confirm_apply_all', `¿Deseas aplicar el estilo "${info.name}" a todas las 9 escenas de OBS Studio?`, { name: info.name }))) return;
   for (const sc of OSS_SCENES) {
     cachedOverlayThemes[sc.key] = themeId;
     try {
@@ -345,7 +387,8 @@ async function applyThemeToAllScenes(themeId, packId) {
   renderThemeScenes();
   if (currentOpenPackId) openThemePack(currentOpenPackId);
   if (window.OverlayTexts && OverlayTexts.showToast) {
-    OverlayTexts.showToast(`✓ Estilo "${info.name}" aplicado a todas las escenas en OBS`, 'success');
+    const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  OverlayTexts.showToast(tr('themes.toast_applied_all', `✓ Estilo "${info.name}" aplicado a todas las escenas en OBS`, { name: info.name }), 'success');
   }
 }
 
@@ -712,7 +755,8 @@ async function applyCurrentThemeLive() {
 async function resetThemeCodeToDefaults() {
   if (!currentEditingTheme || !currentEditingPackId) return;
   const themeName = currentEditingTheme.name || currentEditingTheme.id;
-  if (!confirm(`¿Restablecer el estilo "${themeName}" a sus colores y código CSS original de fábrica?\n\nSe revertirán todas las modificaciones guardadas en este tema.`)) {
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('themes.confirm_restore_theme', `¿Restablecer el estilo "${themeName}" a sus colores y código CSS original de fábrica?\n\nSe revertirán todas las modificaciones guardadas en este tema.`, { name: themeName }))) {
     return;
   }
 
@@ -1485,7 +1529,8 @@ async function applyThemeToAllOverlaysFromFolderCard(folderId = 'maker_theme_pac
 async function restoreFolderThemes(folderId) {
   const folder = OVERLAY_FOLDERS.find(f => f.id === folderId);
   if (!folder) return;
-  if (!confirm(`¿Restaurar todos los overlays de la carpeta "${folder.name}" a sus estilos originales de fábrica?`)) return;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('themes.confirm_restore_folder_themes', `¿Restaurar todos los overlays de la carpeta "${folder.name}" a sus estilos originales de fábrica?`, { name: folder.name }))) return;
   for (const k of folder.keys) {
     const def = DEFAULT_OVERLAY_THEMES[k] || 'maker';
     cachedOverlayThemes[k] = def;
@@ -1495,14 +1540,16 @@ async function restoreFolderThemes(folderId) {
   }
   renderOverlayFolders();
   if (window.OverlayTexts && OverlayTexts.showToast) {
-    OverlayTexts.showToast(`↺ Overlays de "${folder.name}" restauradas a sus estilos originales`, 'success');
+    const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  OverlayTexts.showToast(tr('themes.toast_folder_themes_restored', `↺ Overlays de "${folder.name}" restauradas a sus estilos originales`, { name: folder.name }), 'success');
   }
 }
 
 async function restoreFolderTexts(folderId) {
   const folder = OVERLAY_FOLDERS.find(f => f.id === folderId);
   if (!folder) return;
-  if (!confirm(`¿Restaurar todos los textos de la carpeta "${folder.name}" a los valores originales de fábrica?`)) return;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('themes.confirm_restore_folder_texts', `¿Restaurar todos los textos de la carpeta "${folder.name}" a los valores originales de fábrica?`, { name: folder.name }))) return;
   if (window.OverlayTexts) {
     for (const k of folder.keys) {
       try {
@@ -1510,7 +1557,8 @@ async function restoreFolderTexts(folderId) {
       } catch (e) {}
     }
     if (OverlayTexts.showToast) {
-      OverlayTexts.showToast(`↺ Textos de "${folder.name}" restaurados a sus valores de fábrica`, 'success');
+      const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  OverlayTexts.showToast(tr('themes.toast_folder_texts_restored', `↺ Textos de "${folder.name}" restaurados a sus valores de fábrica`, { name: folder.name }), 'success');
     }
   }
 }
@@ -1518,6 +1566,68 @@ async function restoreFolderTexts(folderId) {
 async function restoreCurrentFolderThemes() {
   if (!currentOpenOverlayFolderId) return;
   await restoreFolderThemes(currentOpenOverlayFolderId);
+}
+
+function getSceneLocalized(s) {
+  if (!s) return s;
+  if (window.i18n && typeof window.i18n.tr === 'function') {
+    const nameKey = `scene_catalog.${s.key}.name`;
+    const badgeKey = `scene_catalog.${s.key}.badge`;
+    const descKey = `scene_catalog.${s.key}.desc`;
+    const name = window.i18n.tr(nameKey);
+    const badge = window.i18n.tr(badgeKey);
+    const desc = window.i18n.tr(descKey);
+    return {
+      ...s,
+      name: (name && name !== nameKey) ? name : s.name,
+      badge: (badge && badge !== badgeKey) ? badge : s.badge,
+      desc: (desc && desc !== descKey) ? desc : s.desc
+    };
+  }
+  return s;
+}
+
+function getFolderLocalized(f) {
+  if (!f) return f;
+  if (window.i18n && typeof window.i18n.tr === 'function') {
+    const nameKey = `folder_catalog.${f.id}.name`;
+    const badgeKey = `folder_catalog.${f.id}.badge`;
+    const descKey = `folder_catalog.${f.id}.desc`;
+    const name = window.i18n.tr(nameKey);
+    const badge = window.i18n.tr(badgeKey);
+    const desc = window.i18n.tr(descKey);
+
+    const subfilters = (f.subfilters || []).map(sf => {
+      const sfKey = `folder_catalog.${f.id}.subfilters.${sf.id}`;
+      const sfLabel = window.i18n.tr(sfKey);
+      return {
+        ...sf,
+        label: (sfLabel && sfLabel !== sfKey) ? sfLabel : sf.label
+      };
+    });
+
+    const activities = (f.activities || []).map((act, idx) => {
+      const actNameKey = `folder_catalog.${f.id}.activities.${idx}.name`;
+      const actDescKey = `folder_catalog.${f.id}.activities.${idx}.desc`;
+      const actName = window.i18n.tr(actNameKey);
+      const actDesc = window.i18n.tr(actDescKey);
+      return {
+        ...act,
+        name: (actName && actName !== actNameKey) ? actName : act.name,
+        desc: (actDesc && actDesc !== actDescKey) ? actDesc : act.desc
+      };
+    });
+
+    return {
+      ...f,
+      name: (name && name !== nameKey) ? name : f.name,
+      badge: (badge && badge !== badgeKey) ? badge : f.badge,
+      desc: (desc && desc !== descKey) ? desc : f.desc,
+      subfilters,
+      activities
+    };
+  }
+  return f;
 }
 
 function renderOverlayFolders() {
@@ -1532,15 +1642,17 @@ function renderOverlayFolders() {
   const subfilterContainer = document.getElementById('folder-subfilter-container');
 
   if (currentOpenOverlayFolderId) {
-    const folder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId) || OVERLAY_FOLDERS[0];
+    const rawFolder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId) || OVERLAY_FOLDERS[0];
+    const folder = getFolderLocalized(rawFolder);
 
     if (foldersView) foldersView.style.display = 'none';
     if (detailsView) detailsView.style.display = 'block';
     if (btnBack) btnBack.style.display = 'inline-flex';
 
+    const crumbRoot = (window.i18n && window.i18n.tr('themes.folder_crumb_root')) || '📁 Carpetas de Overlays';
     if (breadcrumbs) {
       breadcrumbs.innerHTML = `
-        <span class="crumb-item" onclick="showOverlayFoldersView()">📁 Carpetas de Overlays</span>
+        <span class="crumb-item" onclick="showOverlayFoldersView()">${crumbRoot}</span>
         <span class="crumb-divider">/</span>
         <span class="crumb-item active">${folder.icon} ${folder.name}</span>
       `;
@@ -1558,10 +1670,11 @@ function renderOverlayFolders() {
     if (insideThemeSelect) insideThemeSelect.innerHTML = buildThemeOptionsHtml(currentActiveThemeId);
 
     // Subfiltros dinámicos según el pack abierto
+    const filterTitle = (window.i18n && window.i18n.tr('themes.folder_filter_activity')) || '🔍 FILTRAR ACTIVIDAD:';
     if (subfilterContainer && folder.subfilters) {
       subfilterContainer.innerHTML = `
         <span style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan); font-weight: 700;">
-          🔍 FILTRAR ACTIVIDAD:
+          ${filterTitle}
         </span>
         ${folder.subfilters.map(sf => {
           const isActive = (currentFolderSubFilter === sf.cat);
@@ -1579,24 +1692,37 @@ function renderOverlayFolders() {
       scenesInFolder = scenesInFolder.filter(sc => sc.category === currentFolderSubFilter || sc.key.startsWith(currentFolderSubFilter));
     }
 
+    const scenesAvailableTpl = (window.i18n && window.i18n.tr('themes.folder_scenes_available', { count: scenesInFolder.length })) || `${scenesInFolder.length} ESCENAS DISPONIBLES`;
     if (countBadge) {
-      countBadge.textContent = `${scenesInFolder.length} ESCENAS DISPONIBLES`;
+      countBadge.textContent = scenesAvailableTpl;
     }
 
     if (scenesGrid) {
       scenesGrid.innerHTML = scenesInFolder.map(s => buildSceneCardHtml(s)).join('');
+    }
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(detailsView);
     }
   } else {
     if (foldersView) foldersView.style.display = 'block';
     if (detailsView) detailsView.style.display = 'none';
     if (btnBack) btnBack.style.display = 'none';
 
+    const crumbTitle = (window.i18n && window.i18n.tr('themes.folder_crumb_title')) || '📁 Carpetas de Actividades del Stream';
     if (breadcrumbs) {
-      breadcrumbs.innerHTML = `<span class="crumb-item active" onclick="showOverlayFoldersView()">📁 Carpetas de Actividades del Stream</span>`;
+      breadcrumbs.innerHTML = `<span class="crumb-item active" onclick="showOverlayFoldersView()">${crumbTitle}</span>`;
     }
 
     if (foldersGrid) {
-      foldersGrid.innerHTML = OVERLAY_FOLDERS.map(f => {
+      const applyAllLabel = (window.i18n && window.i18n.tr('themes.folder_apply_all')) || '🎨 Aplicar Estilo Visual a todos los Overlays de la carpeta:';
+      const restoreStylesLabel = (window.i18n && window.i18n.tr('themes.folder_restore_styles')) || '🔄 Restaurar Estilos Originales';
+      const restoreTextsLabel = (window.i18n && window.i18n.tr('themes.folder_restore_texts')) || '📝 Restaurar Textos';
+      const applyBtnLabel = (window.i18n && window.i18n.tr('themes.folder_btn_apply_all')) || '✨ Aplicar a Todos en OBS';
+      const actTitleLabel = (window.i18n && window.i18n.tr('themes.folder_activities_title')) || 'ACTIVIDADES INCLUIDAS DENTRO DE ESTA CARPETA:';
+
+      foldersGrid.innerHTML = OVERLAY_FOLDERS.map(rawF => {
+        const f = getFolderLocalized(rawF);
+        const openBtnLabel = (window.i18n && window.i18n.tr('themes.folder_open_scenes', { count: f.keys.length })) || `📂 Entrar a la Carpeta de Overlays y Editar (${f.keys.length} Escenas) →`;
         return `
           <div class="dash-card theme-pack-card pack-folder-card" style="padding: 22px; border: 1.5px solid rgba(87, 214, 196, 0.35); border-radius: 10px; background: rgba(14, 18, 24, 0.95); box-shadow: 0 8px 24px rgba(0,0,0,0.45); cursor: pointer; transition: all 0.2s;" onclick="openOverlayFolder('${f.id}')" onmouseover="this.style.borderColor='var(--color-accent-cyan)'" onmouseout="this.style.borderColor='rgba(87, 214, 196, 0.35)'">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
@@ -1620,14 +1746,14 @@ function renderOverlayFolders() {
             <div style="background: rgba(0,0,0,0.5); border: 1.5px solid rgba(87, 214, 196, 0.4); border-radius: 8px; padding: 12px 16px; margin: 12px 0;" onclick="event.stopPropagation()">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
                 <span style="font-size: 12px; font-weight: 800; color: #FFFFFF; display: flex; align-items: center; gap: 6px;">
-                  <span>🎨</span> Aplicar Estilo Visual a todos los Overlays de la carpeta:
+                  <span>🎨</span> ${applyAllLabel}
                 </span>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                   <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15); cursor: pointer;" onclick="restoreFolderThemes('${f.id}')" title="Restablecer todas las escenas de este pack a sus temas originales">
-                    🔄 Restaurar Estilos Originales
+                    ${restoreStylesLabel}
                   </button>
                   <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.6); font-weight: 800; background: rgba(255, 120, 63, 0.12); cursor: pointer;" onclick="restoreFolderTexts('${f.id}')" title="Restablecer textos del pack a los de fábrica">
-                    📝 Restaurar Textos
+                    ${restoreTextsLabel}
                   </button>
                 </div>
               </div>
@@ -1637,13 +1763,13 @@ function renderOverlayFolders() {
                   ${buildThemeOptionsHtml(currentActiveThemeId)}
                 </select>
                 <button type="button" class="btn-action-primary" style="font-size: 12px; padding: 7px 16px; font-weight: 800;" onclick="applyThemeToAllOverlaysFromFolderCard('${f.id}')">
-                  ✨ Aplicar a Todos en OBS
+                  ${applyBtnLabel}
                 </button>
               </div>
             </div>
 
             <div style="font-size: 11px; font-family: var(--font-tech); color: var(--color-accent-cyan); margin-bottom: 6px; font-weight: 700;">
-              ACTIVIDADES INCLUIDAS DENTRO DE ESTA CARPETA:
+              ${actTitleLabel}
             </div>
             <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
               ${(f.activities || []).map(act => `
@@ -1654,11 +1780,14 @@ function renderOverlayFolders() {
             </div>
 
             <button type="button" class="btn-action-primary" style="width: 100%; font-size: 13px; font-weight: 800; padding: 11px; display: inline-flex; justify-content: center; align-items: center; gap: 8px;" onclick="openOverlayFolder('${f.id}')">
-              📂 Entrar a la Carpeta de Overlays y Editar (${f.keys.length} Escenas) →
+              ${openBtnLabel}
             </button>
           </div>
         `;
       }).join('');
+    }
+    if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
+      window.i18n.applyTranslations(foldersView);
     }
   }
 }
@@ -1735,7 +1864,9 @@ async function restoreCurrentSceneTexts() {
   else if (key === 'beRightBack') section = 'beRightBack';
   else if (key === 'ending') section = 'ending';
 
-  if (!confirm(`¿Restaurar los textos de esta escena (${currentEditingScene.name}) a sus valores originales de fábrica?`)) {
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  const locSceneName = currentEditingScene.name || currentEditingScene.key;
+  if (!confirm(tr('themes.confirm_restore_scene_texts', `¿Restaurar los textos de esta escena (${locSceneName}) a sus valores originales de fábrica?`, { name: locSceneName }))) {
     return;
   }
 
@@ -1764,7 +1895,8 @@ async function restoreSceneTexts(sceneKey) {
 }
 
 async function restoreAllOverlaysTexts() {
-  if (!confirm('¿Restaurar TODOS los textos de todas las 9 escenas a sus valores originales de fábrica?')) {
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('themes.confirm_restore_all_scenes_texts', '¿Restaurar TODOS los textos de todas las 9 escenas a sus valores originales de fábrica?'))) {
     return;
   }
   if (window.OverlayTexts) {
@@ -1772,12 +1904,26 @@ async function restoreAllOverlaysTexts() {
   }
 }
 
-function buildSceneCardHtml(s) {
+function buildSceneCardHtml(rawS) {
+  const s = getSceneLocalized(rawS);
   const assignedThemeId = cachedOverlayThemes[s.key] || currentActiveThemeId;
   const assignedThemeObj = getThemeObjectById(assignedThemeId);
   const defaultThemeId = DEFAULT_OVERLAY_THEMES[s.key] || 'maker';
   const defaultInfo = getThemeDisplayNameById(defaultThemeId);
   const isModified = (assignedThemeId !== defaultThemeId);
+
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const cardAssignedStyle = tr('themes.card_assigned_style', '🎨 Estilo Visual Asignado:');
+  const cardEditStyle = tr('themes.card_edit_style', '🎨 Editar Estilo ↗');
+  const cardSave = tr('themes.card_save', '💾 Guardar');
+  const cardPending = tr('themes.card_pending_change', '● Cambio sin guardar — pulsa 💾 Guardar para aplicarlo en OBS');
+  const cardCustomized = tr('themes.card_customized', '⚠️ Personalizado (Original: <b>{name}</b>)').replace('{name}', defaultInfo.name);
+  const cardOriginal = tr('themes.card_factory_original', '⭐ Original de fábrica: <b>{name}</b>').replace('{name}', defaultInfo.name);
+  const cardRestoreOrig = tr('themes.card_restore_original', '🔄 Restaurar Original');
+  const cardViewFs = tr('themes.card_view_fullscreen', '🖥️ Ver Pantalla Completa');
+  const cardEditTexts = tr('themes.card_edit_texts', '✏️ Editar Textos');
+  const cardCopyObs = tr('themes.card_copy_obs', '📋 Copiar URL OBS');
+  const cardRestoreTexts = tr('themes.card_restore_texts', '🔄 Restaurar Textos');
 
   return `
     <div class="dash-card theme-card-rich" style="border-top: 3px solid ${isModified ? '#FF783F' : 'var(--color-accent-cyan)'}; margin-bottom: 0;">
@@ -1799,29 +1945,29 @@ function buildSceneCardHtml(s) {
       <!-- Selector Interactivo de Estilo Visual -->
       <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(87, 214, 196, 0.25); padding: 8px 10px; border-radius: 4px; margin: 8px 0;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-          <span style="font-size: 11px; color: var(--color-text-dim);">🎨 Estilo Visual Asignado:</span>
-          <button type="button" class="btn-action-test" style="font-size: 10px; padding: 2px 8px; border-color: var(--color-accent-cyan); color: var(--color-accent-cyan); cursor: pointer;" onclick="openThemeEditorByThemeId('${assignedThemeId}')" title="Clic para ir directo a personalizar colores, neón y CSS de este estilo">
-            🎨 Editar Estilo ↗
+          <span style="font-size: 11px; color: var(--color-text-dim);">${cardAssignedStyle}</span>
+          <button type="button" class="btn-action-test" style="font-size: 10px; padding: 2px 8px; border-color: var(--color-accent-cyan); color: var(--color-accent-cyan); cursor: pointer;" onclick="openThemeEditorByThemeId('${assignedThemeId}')" title="${cardEditStyle}">
+            ${cardEditStyle}
           </button>
         </div>
         <div style="display: flex; gap: 6px; align-items: stretch;">
-          <select id="scene-theme-select-${s.key}" class="form-select" style="flex: 1; min-width: 0; font-size: 11px; padding: 5px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid ${isModified ? 'rgba(255,120,63,0.5)' : 'rgba(87,214,196,0.35)'}; border-radius: 4px;" onchange="previewOverlayThemeChange('${s.key}', this.value)" title="Elige un estilo y pulsa Guardar para aplicarlo en OBS">
+          <select id="scene-theme-select-${s.key}" class="form-select" style="flex: 1; min-width: 0; font-size: 11px; padding: 5px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid ${isModified ? 'rgba(255,120,63,0.5)' : 'rgba(87,214,196,0.35)'}; border-radius: 4px;" onchange="previewOverlayThemeChange('${s.key}', this.value)">
             ${buildThemeOptionsHtml(assignedThemeId, defaultThemeId)}
           </select>
-          <button type="button" id="scene-theme-save-${s.key}" class="btn-action-primary" style="font-size: 11px; padding: 5px 10px; font-weight: 800; white-space: nowrap;" onclick="saveOverlayThemeFromCard('${s.key}')" title="Guardar este estilo para esta escena y aplicarlo en OBS">
-            💾 Guardar
+          <button type="button" id="scene-theme-save-${s.key}" class="btn-action-primary" style="font-size: 11px; padding: 5px 10px; font-weight: 800; white-space: nowrap;" onclick="saveOverlayThemeFromCard('${s.key}')">
+            ${cardSave}
           </button>
         </div>
-        <div id="scene-theme-pending-${s.key}" style="display: none; font-size: 10px; color: #FFD166; margin-top: 4px;">● Cambio sin guardar — pulsa 💾 Guardar para aplicarlo en OBS</div>
+        <div id="scene-theme-pending-${s.key}" style="display: none; font-size: 10px; color: #FFD166; margin-top: 4px;">${cardPending}</div>
 
         <!-- Indicador y Botón de Restauración al Estilo de Fábrica -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding: 4px 8px; border-radius: 4px; ${isModified ? 'background: rgba(255, 120, 63, 0.12); border: 1px solid rgba(255, 120, 63, 0.35);' : 'background: rgba(87, 214, 196, 0.08); border: 1px solid rgba(87, 214, 196, 0.2);'}">
           <span style="font-size: 10px; color: ${isModified ? '#FF783F' : 'var(--color-accent-cyan)'};">
-            ${isModified ? `⚠️ Personalizado (Original: <b>${defaultInfo.name}</b>)` : `⭐ Original de fábrica: <b>${defaultInfo.name}</b>`}
+            ${isModified ? cardCustomized : cardOriginal}
           </span>
           ${isModified ? `
-            <button type="button" class="btn-action-test" style="font-size: 9px; padding: 2px 7px; color: #FF783F; border-color: #FF783F; cursor: pointer; background: rgba(255,120,63,0.15);" onclick="restoreOverlayTheme('${s.key}')" title="Restaurar al estilo visual original de fábrica (${defaultInfo.name})">
-              🔄 Restaurar Original
+            <button type="button" class="btn-action-test" style="font-size: 9px; padding: 2px 7px; color: #FF783F; border-color: #FF783F; cursor: pointer; background: rgba(255,120,63,0.15);" onclick="restoreOverlayTheme('${s.key}')">
+              ${cardRestoreOrig}
             </button>
           ` : ''}
         </div>
@@ -1832,16 +1978,16 @@ function buildSceneCardHtml(s) {
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
-        <button class="btn-action-primary" style="width: 100%; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 2px; line-height: 1.25;" onclick="openOverlayFullscreen('${s.key}', '${s.path}')" title="Ver a resolución completa 1080p y editar todos los textos directamente en pantalla">
-          <span style="font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px;">🖥️ Ver Pantalla Completa</span>
-          <span style="font-size: 10px; font-weight: 700; color: #0D1117; opacity: 0.95;">✏️ Editar Textos</span>
+        <button class="btn-action-primary" style="width: 100%; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 2px; line-height: 1.25;" onclick="openOverlayFullscreen('${s.key}', '${s.path}')">
+          <span style="font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px;">${cardViewFs}</span>
+          <span style="font-size: 10px; font-weight: 700; color: #0D1117; opacity: 0.95;">${cardEditTexts}</span>
         </button>
         <div style="display: flex; gap: 6px;">
-          <button class="btn-action-test" style="flex: 1; font-size: 11px; padding: 6px 8px; display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="copyOverlaySceneUrl('${s.key}', '${s.path}')" title="Copiar URL para pegar como Fuente Navegador en OBS Studio">
-            📋 Copiar URL OBS
+          <button class="btn-action-test" style="flex: 1; font-size: 11px; padding: 6px 8px; display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="copyOverlaySceneUrl('${s.key}', '${s.path}')">
+            ${cardCopyObs}
           </button>
-          <button class="btn-action-test" style="font-size: 10px; padding: 6px 8px; color: #FF783F; border-color: rgba(255,120,63,0.3); display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="restoreSceneTexts('${s.key}')" title="Restaurar textos de fábrica para esta escena">
-            🔄 Restaurar Textos
+          <button class="btn-action-test" style="font-size: 10px; padding: 6px 8px; color: #FF783F; border-color: rgba(255,120,63,0.3); display: inline-flex; justify-content: center; align-items: center; gap: 4px;" onclick="restoreSceneTexts('${s.key}')">
+            ${cardRestoreTexts}
           </button>
         </div>
       </div>
@@ -1886,7 +2032,8 @@ async function restoreOverlayTheme(sceneKey) {
 }
 
 async function restoreAllOverlaysToDefaultThemes() {
-  if (!confirm('¿Deseas restaurar todas las 9 overlays a sus estilos visuales originales de fábrica?')) return;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('themes.confirm_restore_all_scenes_themes', '¿Deseas restaurar todas las 9 overlays a sus estilos visuales originales de fábrica?'))) return;
   for (const [key, defaultThemeId] of Object.entries(DEFAULT_OVERLAY_THEMES)) {
     cachedOverlayThemes[key] = defaultThemeId;
     try {
@@ -1895,7 +2042,8 @@ async function restoreAllOverlaysToDefaultThemes() {
   }
   renderThemeScenes();
   if (window.OverlayTexts && OverlayTexts.showToast) {
-    OverlayTexts.showToast('↺ Todas las overlays han sido restauradas a sus estilos originales de fábrica', 'success');
+    const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  OverlayTexts.showToast(tr('themes.toast_all_themes_restored', '↺ Todas las overlays han sido restauradas a sus estilos originales de fábrica'), 'success');
   }
 }
 
@@ -1912,7 +2060,8 @@ async function onOverlayThemeChange(sceneKey, themeId) {
   try {
     await API.setOverlayTheme(sceneKey, themeId);
     if (window.OverlayTexts && OverlayTexts.showToast) {
-      OverlayTexts.showToast(`✓ Estilo "${themeObj.name}" asignado a la escena`, 'success');
+      const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  OverlayTexts.showToast(tr('themes.toast_style_assigned', `✓ Estilo "${themeObj.name}" asignado a la escena`, { name: themeObj.name }), 'success');
     }
   } catch (err) {
     console.error('Error asignando tema a overlay:', err);
@@ -1941,9 +2090,11 @@ function copySceneUrl(path) {
   const fullUrl = /^https?:\/\//i.test(path) ? path : `${window.location.origin}${path}`;
   navigator.clipboard.writeText(fullUrl).then(() => {
     if (window.OverlayTexts && OverlayTexts.showToast) {
-      OverlayTexts.showToast(`📋 URL copiada para OBS: ${fullUrl}`, 'success');
+      const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+      OverlayTexts.showToast(tr('themes.toast_url_copied', `📋 URL copiada para OBS: ${fullUrl}`, { url: fullUrl }), 'success');
     } else {
-      alert(`URL copiada al portapapeles:\n${fullUrl}\n\nPégala en OBS Studio como Fuente Navegador (1920×1080).`);
+      const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+      alert(tr('themes.alert_url_copied', `URL copiada al portapapeles:\n${fullUrl}\n\nPégala en OBS Studio como Fuente Navegador (1920×1080).`, { url: fullUrl }));
     }
   });
 }

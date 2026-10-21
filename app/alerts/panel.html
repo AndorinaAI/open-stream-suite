@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open Stream Suite — Panel de Control</title>
+  <title data-i18n="app.title">Open Stream Suite — Panel de Control</title>
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="stylesheet" href="../common/styles.css">
   <link rel="stylesheet" href="../common/themes.css?v=42">
@@ -95,10 +95,10 @@
 
       <!-- Badge de actualización disponible -->
       <div id="panel-update-badge" style="display: none; margin-top: 8px; background: rgba(87, 214, 196, 0.12); border: 1px solid var(--color-accent-cyan); border-radius: 6px; padding: 6px 8px; text-align: center;">
-        <div style="font-family: var(--font-tech); font-size: 10px; font-weight: 800; color: var(--color-accent-cyan);" id="panel-update-title">
+        <div style="font-family: var(--font-tech); font-size: 10px; font-weight: 800; color: var(--color-accent-cyan);" id="panel-update-title" data-i18n="updates.new_version">
           🚀 NUEVA VERSIÓN
         </div>
-        <a id="panel-update-link" href="https://github.com/AndorinaAI/open-stream-suite/releases" target="_blank" style="color: #fff; font-size: 10px; text-decoration: underline; display: inline-block; margin-top: 2px;">
+        <a id="panel-update-link" href="https://github.com/AndorinaAI/open-stream-suite/releases" target="_blank" style="color: #fff; font-size: 10px; text-decoration: underline; display: inline-block; margin-top: 2px;" data-i18n="updates.view_changes">
           Ver cambios en GitHub
         </a>
       </div>
@@ -165,9 +165,9 @@
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
               <span style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: var(--color-text-dim); text-transform: uppercase;">
-                RECOMPENSAS EN TU TWITCH (<span id="tw-rewards-count-badge">0</span>):
+                <span data-i18n="rewards.twitch_rewards_prefix">RECOMPENSAS EN TU TWITCH</span> (<span id="tw-rewards-count-badge">0</span>):
               </span>
-              <input type="text" id="tw-rewards-filter-input" placeholder="🔍 Filtrar..." style="width: 130px; padding: 2px 8px; font-size: 11px; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-dim); border-radius: 4px; color: #fff;" oninput="renderTwitchRewardsInDrawer()">
+              <input type="text" id="tw-rewards-filter-input" placeholder="🔍 Filtrar..." style="width: 130px; padding: 2px 8px; font-size: 11px; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-dim); border-radius: 4px; color: #fff;" oninput="renderTwitchRewardsInDrawer()" data-i18n-placeholder="themes.placeholder_filter">
             </div>
             <div id="tw-rewards-list-container" style="display: flex; flex-direction: column; gap: 8px; max-height: 400px; overflow-y: auto; padding-right: 6px;">
               <!-- Tarjetas de recompensas inyectadas por JS -->
@@ -194,11 +194,11 @@
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="form-group" style="margin-bottom: 0;">
                   <label style="font-size: 11px;" data-i18n="triggers.label_cost">Coste en Puntos de Canal:</label>
-                  <input type="number" id="tw-reward-cost" class="form-input" placeholder="250" value="250" min="1" max="10000000" required oninput="updateTwitchRewardPreview()">
+                  <input type="number" id="tw-reward-cost" class="form-input" placeholder="250" value="250" min="1" max="10000000" required oninput="updateTwitchRewardPreview()" data-i18n-placeholder="themes.placeholder_cost">
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;">Color del Icono en Twitch:</label>
+                  <label style="font-size: 11px;" data-i18n="rewards.icon_color">Color del Icono en Twitch:</label>
                   <div style="display: flex; gap: 6px; align-items: center;">
                     <input type="color" id="tw-reward-color" value="#57D6C4" style="height: 34px; width: 40px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncTwitchRewardColor(this.value)">
                     <input type="text" id="tw-reward-color-hex" class="form-input" style="width: 80px; font-family: monospace; text-transform: uppercase;" value="#57D6C4" oninput="syncTwitchRewardColor(this.value)">
@@ -208,14 +208,14 @@
 
               <!-- Paleta de colores rápidos -->
               <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#57D6C4')">Cyan</button>
+                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#57D6C4')" data-i18n="colors.cyan">Cyan</button>
                 <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#9146FF')" data-i18n="themes.label_social_twitch">Twitch</button>
-                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#F97316')">Naranja</button>
-                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#EC4899')">Rosa</button>
-                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#10B981')">Verde</button>
-                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#EAB308')">Amarillo</button>
-                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#EF4444')">Rojo</button>
-                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#3B82F6')">Azul</button>
+                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#F97316')" data-i18n="colors.orange">Naranja</button>
+                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#EC4899')" data-i18n="colors.pink">Rosa</button>
+                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#10B981')" data-i18n="colors.green">Verde</button>
+                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#EAB308')" data-i18n="colors.yellow">Amarillo</button>
+                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#EF4444')" data-i18n="colors.red">Rojo</button>
+                <button type="button" class="btn-stage-preset" onclick="syncTwitchRewardColor('#3B82F6')" data-i18n="colors.blue">Azul</button>
               </div>
 
               <div class="form-group" style="margin-bottom: 0;">
@@ -288,13 +288,13 @@
         <!-- Banner Explicativo de Estado de Sincronización con Twitch -->
         <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(139, 92, 246, 0.25); border-left: 4px solid #8B5CF6; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 11px; line-height: 1.5; color: var(--color-text-dim);">
           <div style="font-weight: 700; color: #E9D5FF; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-            <span>ℹ️ ESTADO DE SINCRONIZACIÓN CON TWITCH:</span>
+            <span data-i18n="roles.sync_status_title">ℹ️ ESTADO DE SINCRONIZACIÓN CON TWITCH:</span>
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 10px; margin-top: 6px;">
-            <div>🛡️ <strong>Moderador</strong> y 💎 <strong>VIP</strong>: Sincronizados directamente con la API oficial de Twitch Helix.</div>
-            <div>🎬 <strong>Editor</strong>: Sincronizado vía Twitch API Helix (actualmente tu canal tiene 0 editores en Twitch).</div>
-            <div>🎨 <strong>Artista</strong>: <em>Twitch no dispone de API de consulta de artistas</em>. Nuestro sistema los <strong>detecta automáticamente por su insignia en el chat</strong> o puedes añadirlos aquí con "+ Asignar" o "Pegar lista".</div>
-            <div>⚔️ <strong>Mod. Principal</strong> y 💼 <strong>Dir. Comercial</strong>: Funciones de panel de Twitch gestionadas y asignadas desde este panel.</div>
+            <div data-i18n="roles.sync_mods_vips">🛡️ <strong>Moderador</strong> y 💎 <strong>VIP</strong>: Sincronizados directamente con la API oficial de Twitch Helix.</div>
+            <div data-i18n="roles.sync_editors">🎬 <strong>Editor</strong>: Sincronizado vía Twitch API Helix (actualmente tu canal tiene 0 editores en Twitch).</div>
+            <div data-i18n="roles.sync_artists">🎨 <strong>Artista</strong>: <em>Twitch no dispone de API de consulta de artistas</em>. Nuestro sistema los <strong>detecta automáticamente por su insignia en el chat</strong> o puedes añadirlos aquí con "+ Asignar" o "Pegar lista".</div>
+            <div data-i18n="roles.sync_custom_roles">⚔️ <strong>Mod. Principal</strong> y 💼 <strong>Dir. Comercial</strong>: Funciones de panel de Twitch gestionadas y asignadas desde este panel.</div>
           </div>
         </div>
 
@@ -311,7 +311,7 @@
 
             <div class="form-group" style="margin-bottom: 0;">
               <label style="font-size: 11px;" data-i18n="triggers.label_role_name">Nombre de la Función / Rol:</label>
-              <input type="text" id="role-edit-name" class="form-input" placeholder="ej. Artista, Moderador principal, etc." required>
+              <input type="text" id="role-edit-name" class="form-input" placeholder="ej. Artista, Moderador principal, etc." required data-i18n-placeholder="themes.placeholder_role_name">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -339,7 +339,7 @@
 
             <div class="form-group" style="margin-bottom: 0;">
               <label style="font-size: 11px;" data-i18n="triggers.label_members">Espectadores asignados (Nombres de usuario en Twitch separados por comas):</label>
-              <textarea id="role-edit-members" class="form-input" rows="2" placeholder="ej. andorina, pepito, streamer_amigo"></textarea>
+              <textarea id="role-edit-members" class="form-input" rows="2" placeholder="ej. andorina, pepito, streamer_amigo" data-i18n-placeholder="themes.placeholder_role_members"></textarea>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px;">
@@ -352,7 +352,7 @@
         <!-- Cuadrícula Completa de Todas las Funciones (Responsive Grid, Sin recortes ni scroll interno) -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <span style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: #C4B5FD; text-transform: uppercase;">
-            FUNCIONES Y EQUIPO DEL CANAL (<span id="roles-count-badge">6</span>):
+            <span data-i18n="roles.channel_team_prefix">FUNCIONES Y EQUIPO DEL CANAL</span> (<span id="roles-count-badge">6</span>):
           </span>
           <span style="font-size: 11px; color: var(--color-text-dim);" data-i18n="triggers.roles_hint">
             Pulsa "+ Asignar" o "Pegar lista" en cualquier tarjeta para añadir espectadores
@@ -440,10 +440,10 @@
                   <span class="badge-pill badge-pos" id="badge-coord-x">X: <strong id="coord-x-val">50%</strong></span>
                   <span class="badge-pill badge-pos" id="badge-coord-y">Y: <strong id="coord-y-val">50%</strong></span>
                 </div>
-                <span style="font-size: 10px; color: var(--color-text-dim);">Haz clic o arrastra arriba en el monitor</span>
+                <span style="font-size: 10px; color: var(--color-text-dim);" data-i18n="triggers.drag_hint">Haz clic o arrastra arriba en el monitor</span>
               </div>
               <div class="stage-presets-row" style="margin-top: 0;">
-                <span style="font-size: 10px; font-family: var(--font-tech); color: var(--color-text-dim); margin-right: 2px;">Atajos:</span>
+                <span style="font-size: 10px; font-family: var(--font-tech); color: var(--color-text-dim); margin-right: 2px;" data-i18n="triggers.shortcuts_label">Atajos:</span>
                 <button type="button" class="btn-stage-preset" onclick="setCustomPosition(50, 50)" data-i18n="triggers.presets_center">🎯 Centro</button>
                 <button type="button" class="btn-stage-preset" onclick="setCustomPosition(82, 82)" data-i18n="triggers.presets_br">↘️ Abajo Der</button>
                 <button type="button" class="btn-stage-preset" onclick="setCustomPosition(18, 82)" data-i18n="triggers.presets_bl">↙️ Abajo Izq</button>
@@ -458,7 +458,7 @@
           <div class="dash-card">
             <div class="card-header-bar">
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="card-header-title">📋 TUS TRIGGERS ACTIVOS</span>
+                <span class="card-header-title" data-i18n="triggers.active_triggers_title">📋 TUS TRIGGERS ACTIVOS</span>
                 <span id="trigger-count-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">0 ACTIVOS</span>
               </div>
               <button class="btn-action-test" onclick="resetEditorForm()" style="padding: 4px 10px; font-size: 11px;" data-i18n="triggers.btn_new_trigger">
@@ -479,7 +479,7 @@
           <div class="card-header-bar" style="margin-bottom: 12px;">
             <div style="display: flex; align-items: center; gap: 8px;">
               <span class="card-header-title" id="form-heading-title" data-i18n="triggers.form_title_trigger">🛠️ CONFIGURADOR DE TRIGGER & MEME</span>
-              <span id="trigger-mode-badge" class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: #57D6C4; border: 1px solid #57D6C4;">NUEVO</span>
+              <span id="trigger-mode-badge" class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: #57D6C4; border: 1px solid #57D6C4;" data-i18n="triggers.badge_new">NUEVO</span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
               <span style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim);" id="lbl-current-tab-step" data-i18n="triggers.step_1_of_4">1/4 ACTIVACIÓN</span>
@@ -488,17 +488,17 @@
 
           <!-- Pestañas de Navegación del Trigger (Agrupación Lógica y Visual) -->
           <div class="trigger-step-tabs">
-            <button type="button" class="trigger-step-tab active" data-tab="activation" onclick="setTriggerEditorTab('activation')">
-              <span>🎯</span> 1. Disparador
+            <button type="button" class="trigger-step-tab active" data-tab="activation" onclick="setTriggerEditorTab('activation')" data-i18n="triggers.step_tab_trigger">
+              🎯 1. Disparador
             </button>
-            <button type="button" class="trigger-step-tab" data-tab="media" onclick="setTriggerEditorTab('media')">
-              <span>🎬</span> 2. Multimedia & Audio
+            <button type="button" class="trigger-step-tab" data-tab="media" onclick="setTriggerEditorTab('media')" data-i18n="triggers.step_tab_media">
+              🎬 2. Multimedia & Audio
             </button>
-            <button type="button" class="trigger-step-tab" data-tab="caption" onclick="setTriggerEditorTab('caption')">
-              <span>🏷️</span> 3. Rótulo de Texto
+            <button type="button" class="trigger-step-tab" data-tab="caption" onclick="setTriggerEditorTab('caption')" data-i18n="triggers.step_tab_caption">
+              🏷️ 3. Rótulo de Texto
             </button>
-            <button type="button" class="trigger-step-tab" data-tab="actions" onclick="setTriggerEditorTab('actions')">
-              <span>⚡</span> 4. Posición & Extras
+            <button type="button" class="trigger-step-tab" data-tab="actions" onclick="setTriggerEditorTab('actions')" data-i18n="triggers.step_tab_extras">
+              ⚡ 4. Posición & Extras
             </button>
           </div>
 
@@ -516,9 +516,7 @@
               <!-- 1.1 Nombre y Modo Principal -->
               <div class="trig-subcard">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #57D6C4;">
-                    <span>🎯</span> NOMBRE Y MÉTODO DE ACTIVACIÓN
-                  </div>
+                  <div class="trig-subcard-title" style="color: #57D6C4;" data-i18n="triggers.subcard_activation">🎯 NOMBRE Y MÉTODO DE ACTIVACIÓN</div>
                   <span style="font-size: 10px; color: var(--color-text-dim);" data-i18n="triggers.name_subtitle">¿Quién y cómo se dispara?</span>
                 </div>
 
@@ -551,9 +549,7 @@
               <!-- 1.2 Puntos de Canal de Twitch -->
               <div class="trig-subcard" id="twitch-reward-select-group">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #A855F7;">
-                    <span>🪙</span> CANJE CON PUNTOS DE CANAL (TWITCH)
-                  </div>
+                  <div class="trig-subcard-title" style="color: #A855F7;" data-i18n="triggers.subcard_points">💎 CANJE CON PUNTOS DE CANAL (TWITCH)</div>
                   <div style="display: flex; gap: 6px;">
                     <button type="button" class="btn-stage-preset" style="font-size: 10px; padding: 2px 8px; color: #C4B5FD; border-color: rgba(139, 92, 246, 0.4);" onclick="openTwitchRewardEditorForCurrentSelect()" title="Editar precio, color o nombre de esta recompensa en Twitch" data-i18n="triggers.btn_edit_reward">
                       ✏️ Editar en Twitch
@@ -569,13 +565,13 @@
                   <select id="twitch-rewards-select" class="form-select" onchange="onSelectTwitchReward(this.value)">
                     <option value="" data-i18n="triggers.placeholder_select">-- Cargando recompensas de Twitch... --</option>
                   </select>
-                  <input type="text" id="trig-reward-manual" class="form-input" placeholder="O escribe el nombre exacto de la recompensa..." style="margin-top: 6px;" oninput="onManualRewardInput(this.value)">
+                  <input type="text" id="trig-reward-manual" class="form-input" placeholder="O escribe el nombre exacto de la recompensa..." style="margin-top: 6px;" oninput="onManualRewardInput(this.value)" data-i18n-placeholder="themes.placeholder_reward_manual">
                 </div>
 
                 <div id="trigger-color-reward-locked-group" style="margin-top: 2px;">
                   <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-dim); border-radius: 6px; padding: 6px 10px;">
                     <span id="trigger-locked-color-dot" style="display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #57D6C4; box-shadow: 0 0 6px #57D6C4; flex-shrink: 0;"></span>
-                    <span id="trigger-locked-color-text" style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: #57D6C4;">#57D6C4 (Color de la Recompensa)</span>
+                    <span id="trigger-locked-color-text" style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: #57D6C4;" data-i18n="triggers.reward_color_locked">#57D6C4 (Color de la Recompensa)</span>
                     <span style="font-size: 10px; color: var(--color-text-dim); margin-left: auto;" data-i18n="triggers.color_inherited">🔒 Heredado de Twitch</span>
                   </div>
                 </div>
@@ -584,20 +580,18 @@
               <!-- 1.3 Comando de Chat y Permisos -->
               <div class="trig-subcard" id="step-command-box">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #38BDF8;">
-                    <span>💬</span> COMANDO DE CHAT, PERMISOS Y ANTI-SPAM
-                  </div>
+                  <div class="trig-subcard-title" style="color: #38BDF8;" data-i18n="triggers.subcard_chat">💬 COMANDO DE CHAT, PERMISOS Y ANTI-SPAM</div>
                 </div>
 
                 <div id="points-only-locked-msg" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px dashed rgba(245, 158, 11, 0.4); border-radius: 4px; padding: 8px 12px; color: #FBBF24; font-size: 11px; font-family: var(--font-tech);">
-                  🔒 <strong>Modo Solo Puntos:</strong> El comando de chat está deshabilitado para obligar el canje de puntos de canal.
+                  🔒 <strong data-i18n="triggers.points_only_msg">Modo Solo Puntos:</strong> <span data-i18n="triggers.cmd_disabled_points_only">El comando de chat está deshabilitado para obligar el canje de puntos de canal.</span>
                 </div>
 
                 <div id="command-fields-wrapper" style="display: flex; flex-direction: column; gap: 10px;">
                   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div class="form-group" style="margin-bottom: 0;">
                       <label style="font-size: 11px;" data-i18n="triggers.label_command">Comando en el chat:</label>
-                      <input type="text" id="trig-command" class="form-input" placeholder="ej. !susto">
+                      <input type="text" id="trig-command" class="form-input" placeholder="ej. !susto" data-i18n-placeholder="themes.placeholder_command">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
@@ -635,9 +629,9 @@
                     <div style="display: flex; gap: 6px; align-items: center;">
                       <input type="color" id="trig-accent-color" value="#57D6C4" style="height: 32px; width: 38px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncTriggerAccentColor(this.value)">
                       <input type="text" id="trig-accent-color-hex" class="form-input" style="width: 80px; font-family: monospace; text-transform: uppercase;" value="#57D6C4" oninput="syncTriggerAccentColor(this.value)">
-                      <button type="button" class="btn-stage-preset" onclick="syncTriggerAccentColor('#57D6C4')">Cyan</button>
+                      <button type="button" class="btn-stage-preset" onclick="syncTriggerAccentColor('#57D6C4')" data-i18n="colors.cyan">Cyan</button>
                       <button type="button" class="btn-stage-preset" onclick="syncTriggerAccentColor('#9146FF')" data-i18n="themes.label_social_twitch">Twitch</button>
-                      <button type="button" class="btn-stage-preset" onclick="syncTriggerAccentColor('#F97316')">Naranja</button>
+                      <button type="button" class="btn-stage-preset" onclick="syncTriggerAccentColor('#F97316')" data-i18n="colors.orange">Naranja</button>
                     </div>
                   </div>
                 </div>
@@ -645,8 +639,8 @@
 
               <!-- Navegación entre pestañas -->
               <div class="trig-step-nav">
-                <span style="font-size: 10px; color: var(--color-text-dim);">Paso 1 de 4 configurado</span>
-                <button type="button" class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('media')">
+                <span style="font-size: 10px; color: var(--color-text-dim);" data-i18n="triggers.step1_done">Paso 1 de 4 configurado</span>
+                <button type="button" class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('media')" data-i18n="triggers.btn_next_media">
                   Siguiente: 🎬 Multimedia & Audio ➡️
                 </button>
               </div>
@@ -661,9 +655,7 @@
               <!-- 2.1 Capa Visual -->
               <div class="trig-subcard">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #34D399;">
-                    <span>🎬</span> IMAGEN O VÍDEO EN PANTALLA
-                  </div>
+                  <div class="trig-subcard-title" style="color: #34D399;" data-i18n="triggers.subcard_screen_media">🖼️ IMAGEN O VÍDEO EN PANTALLA</div>
                   <span style="font-size: 10px; color: var(--color-text-dim);" data-i18n="triggers.visual_subtitle">Capa gráfica en OBS</span>
                 </div>
 
@@ -691,8 +683,8 @@
                   <label style="font-size: 11px;" data-i18n="triggers.label_size">Escala / Tamaño en pantalla:</label>
                   <select id="trig-size" class="form-select" onchange="updateLivePreviewSize(this.value)">
                     <option value="medium" selected data-i18n="triggers.size_normal">Normal / Estándar (520px)</option>
-                    <option value="small">Pequeño (340px)</option>
-                    <option value="large">Grande (850px)</option>
+                    <option value="small" data-i18n="triggers.size_small">Pequeño (340px)</option>
+                    <option value="large" data-i18n="triggers.size_large">Grande (850px)</option>
                     <option value="fullscreen" data-i18n="triggers.size_full">Pantalla Completa (1920x1080)</option>
                   </select>
                 </div>
@@ -701,9 +693,7 @@
               <!-- 2.2 Capa de Audio -->
               <div class="trig-subcard">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #60A5FA;">
-                    <span>🔊</span> AUDIO Y EFECTOS DE SONIDO
-                  </div>
+                  <div class="trig-subcard-title" style="color: #60A5FA;" data-i18n="triggers.subcard_audio">🎵 AUDIO Y EFECTOS DE SONIDO</div>
                   <span style="font-size: 10px; color: var(--color-text-dim);" data-i18n="triggers.audio_subtitle">Capa sonora independiente</span>
                 </div>
 
@@ -728,7 +718,7 @@
                       🔊 Probar
                     </button>
                   </div>
-                  <input type="text" id="trig-sound-custom-url" class="form-input" placeholder="O pega enlace directo a archivo MP3/WAV..." style="margin-top: 6px;">
+                  <input type="text" id="trig-sound-custom-url" class="form-input" placeholder="O pega enlace directo a archivo MP3/WAV..." style="margin-top: 6px;" data-i18n-placeholder="themes.placeholder_sound_url">
                 </div>
 
                 <!-- Sonido sintetizado selector -->
@@ -762,9 +752,7 @@
               <!-- 2.3 Duración -->
               <div class="trig-subcard">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #F59E0B;">
-                    <span>⏱️</span> DURACIÓN EN PANTALLA
-                  </div>
+                  <div class="trig-subcard-title" style="color: #F59E0B;" data-i18n="triggers.subcard_duration">⏱️ DURACIÓN EN PANTALLA</div>
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
                   <label style="font-size: 11px;" data-i18n="triggers.label_duration">Segundos que permanece activo antes de ocultarse:</label>
@@ -782,10 +770,10 @@
 
               <!-- Navegación entre pestañas -->
               <div class="trig-step-nav">
-                <button type="button" class="btn-action-test" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('activation')">
+                <button type="button" class="btn-action-test" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('activation')" data-i18n="triggers.btn_prev_trigger">
                   ⬅️ Anterior (Disparador)
                 </button>
-                <button type="button" class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('caption')">
+                <button type="button" class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('caption')" data-i18n="triggers.btn_next_caption">
                   Siguiente: 🏷️ Rótulo de Texto ➡️
                 </button>
               </div>
@@ -799,9 +787,7 @@
               
               <div class="trig-subcard">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #FBBF24;">
-                    <span>🏷️</span> RÓTULO / BANNER DE TEXTO EN OBS
-                  </div>
+                  <div class="trig-subcard-title" style="color: #FBBF24;" data-i18n="triggers.subcard_caption">🏷️ RÓTULO / BANNER DE TEXTO EN OBS</div>
                   <label style="display: flex; align-items: center; gap: 6px; font-size: 11px; cursor: pointer;">
                     <input type="checkbox" id="trig-show-banner" checked onchange="toggleBannerField(this.checked)">
                     <span style="font-weight: 700; color: #FBBF24;" data-i18n="triggers.label_show_banner">Mostrar Rótulo</span>
@@ -821,7 +807,7 @@
                     </div>
                     <input type="text" id="trig-banner-text" class="form-input" placeholder="ej. ¡{user} HA DESATADO EL SUSTO! (o déjalo vacío para usar el título)" data-i18n-placeholder="triggers.placeholder_banner_text" oninput="updateLivePreviewCaption()">
                     <span style="font-size: 10px; color: var(--color-text-dim); margin-top: 3px; display: block;">
-                      <code>{user}</code> = espectador • <code>{reward}</code> = recompensa • <code>{cost}</code> = puntos
+                      <code>{user}</code> = espectador • <code>{reward}</code> = recompensa • <code data-i18n="triggers.caption_vars_hint">{cost}</code> = puntos
                     </span>
                   </div>
 
@@ -832,8 +818,8 @@
                       <div style="display: flex; gap: 6px; align-items: center;">
                         <input type="color" id="trig-banner-text-color" value="#FFFFFF" style="height: 32px; width: 36px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncBannerTextColor(this.value)">
                         <input type="text" id="trig-banner-text-color-hex" class="form-input" style="width: 78px; padding: 4px 6px; font-size: 11px; font-family: monospace;" value="#FFFFFF" oninput="syncBannerTextColor(this.value)">
-                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerTextColor('#FFFFFF')">Blanco</button>
-                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerTextColor('#FBBF24')">Oro</button>
+                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerTextColor('#FFFFFF')" data-i18n="colors.white">Blanco</button>
+                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerTextColor('#FBBF24')" data-i18n="colors.gold">Oro</button>
                       </div>
                     </div>
 
@@ -842,8 +828,8 @@
                       <div style="display: flex; gap: 6px; align-items: center;">
                         <input type="color" id="trig-banner-border-color" value="#57D6C4" style="height: 32px; width: 36px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncBannerBorderColor(this.value)">
                         <input type="text" id="trig-banner-border-color-hex" class="form-input" style="width: 78px; padding: 4px 6px; font-size: 11px; font-family: monospace;" value="#57D6C4" oninput="syncBannerBorderColor(this.value)">
-                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerBorderColor('#57D6C4')">Cyan</button>
-                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerBorderColor('#EC4899')">Rosa</button>
+                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerBorderColor('#57D6C4')" data-i18n="colors.cyan">Cyan</button>
+                        <button type="button" class="btn-stage-preset" style="padding: 2px 5px; font-size: 10px;" onclick="syncBannerBorderColor('#EC4899')" data-i18n="colors.pink">Rosa</button>
                       </div>
                     </div>
                   </div>
@@ -924,10 +910,10 @@
 
               <!-- Navegación entre pestañas -->
               <div class="trig-step-nav">
-                <button type="button" class="btn-action-test" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('media')">
+                <button type="button" class="btn-action-test" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('media')" data-i18n="triggers.btn_prev_media">
                   ⬅️ Anterior (Multimedia)
                 </button>
-                <button type="button" class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('actions')">
+                <button type="button" class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('actions')" data-i18n="triggers.btn_next_extras">
                   Siguiente: ⚡ Posición & Extras ➡️
                 </button>
               </div>
@@ -942,9 +928,7 @@
               <!-- 4.1 Ubicación en Pantalla -->
               <div class="trig-subcard">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #57D6C4;">
-                    <span>📍</span> UBICACIÓN EN PANTALLA (OBS)
-                  </div>
+                  <div class="trig-subcard-title" style="color: #57D6C4;" data-i18n="triggers.subcard_position">🎯 UBICACIÓN EN PANTALLA (OBS)</div>
                   <span style="font-size: 10px; color: var(--color-text-dim);" data-i18n="triggers.actions_subtitle">Coordenadas X/Y</span>
                 </div>
 
@@ -962,7 +946,7 @@
                 </div>
 
                 <div class="stage-presets-row" style="margin-top: 4px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.08);">
-                  <span style="font-size: 10px; font-family: var(--font-tech); color: var(--color-text-dim); margin-right: 4px;">Atajos:</span>
+                  <span style="font-size: 10px; font-family: var(--font-tech); color: var(--color-text-dim); margin-right: 4px;" data-i18n="triggers.shortcuts_label">Atajos:</span>
                   <button type="button" class="btn-stage-preset" onclick="setCustomPosition(50, 50)" data-i18n="triggers.presets_center">🎯 Centro</button>
                   <button type="button" class="btn-stage-preset" onclick="setCustomPosition(82, 82)" data-i18n="triggers.presets_br">↘️ Abajo Der</button>
                   <button type="button" class="btn-stage-preset" onclick="setCustomPosition(18, 82)" data-i18n="triggers.presets_bl">↙️ Abajo Izq</button>
@@ -975,9 +959,7 @@
               <!-- 4.2 Acciones Especiales de Stream -->
               <div class="trig-subcard">
                 <div class="trig-subcard-header">
-                  <div class="trig-subcard-title" style="color: #EC4899;">
-                    <span>⚡</span> ACCIONES ESPECIALES DE STREAM (INTERACCIÓN)
-                  </div>
+                  <div class="trig-subcard-title" style="color: #EC4899;" data-i18n="triggers.subcard_actions">⚡ ACCIONES ESPECIALES DE STREAM (INTERACCIÓN)</div>
                   <span style="font-size: 10px; color: var(--color-text-dim);" data-i18n="triggers.actions_special_sub">Twitch Chat & OBS Effects</span>
                 </div>
 
@@ -1012,7 +994,7 @@
 
                   <div id="param-group-emotes" class="form-group" style="display: none; margin-bottom: 0;">
                     <label style="font-size: 10px;" data-i18n="triggers.label_emotes">Emojis para la explosión en pantalla:</label>
-                    <input type="text" id="trig-action-emotes" class="form-input" value="🎉,🔥,✨,❤️,⭐,🚀,💥" placeholder="ej. 🎉,🔥,😂">
+                    <input type="text" id="trig-action-emotes" class="form-input" value="🎉,🔥,✨,❤️,⭐,🚀,💥" placeholder="ej. 🎉,🔥,😂" data-i18n-placeholder="themes.placeholder_emotes">
                     <div style="display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap;">
                       <button type="button" class="btn-stage-preset" onclick="document.getElementById('trig-action-emotes').value='🎉,🎊,🥳,✨,⭐'" data-i18n="triggers.btn_party">🎉 Fiesta</button>
                       <button type="button" class="btn-stage-preset" onclick="document.getElementById('trig-action-emotes').value='🔥,💥,💣,⚡,🌋'" data-i18n="triggers.btn_fire">🔥 Fuego</button>
@@ -1034,10 +1016,10 @@
 
               <!-- Navegación entre pestañas -->
               <div class="trig-step-nav">
-                <button type="button" class="btn-action-test" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('caption')">
+                <button type="button" class="btn-action-test" style="padding: 6px 14px; font-size: 11px;" onclick="setTriggerEditorTab('caption')" data-i18n="triggers.btn_prev_caption">
                   ⬅️ Anterior (Rótulo)
                 </button>
-                <span style="font-size: 10px; color: #57D6C4;">¡Todo listo para guardar!</span>
+                <span style="font-size: 10px; color: #57D6C4;" data-i18n="triggers.ready_to_save">¡Todo listo para guardar!</span>
               </div>
 
             </div>
@@ -1066,8 +1048,8 @@
     <!-- ============================================================== -->
     <div id="sec-widgets" class="section-view">
       <div class="section-header">
-        <h1 class="section-title">
-          <span>🧩</span> WIDGETS MODULARES & MINI-APPS PARA OBS
+        <h1 class="section-title" data-i18n="widgets.title_banner">
+          🧩 WIDGETS MODULARES & MINI-APPS PARA OBS
         </h1>
         <div class="section-subtitle" data-i18n="widgets.subtitle">
           Cada widget es una mini-app modular: un overlay transparente para OBS Studio y un centro de control con acciones rápidas personalizables.
@@ -1079,9 +1061,9 @@
         <span class="guide-banner-icon">🚀</span>
         <div>
           <div class="guide-banner-title" data-i18n="widgets.guide_title">¿CÓMO SE PONEN LOS WIDGETS EN OBS STUDIO? (EN 3 PASOS)</div>
-          <p class="guide-banner-text">
+          <p class="guide-banner-text" data-i18n="widgets.guide_banner_desc">
             <strong>1.</strong> En OBS Studio, en tu lista de <strong>Fuentes</strong>, pulsa el botón <strong><code>+</code></strong> y selecciona <strong>Navegador</strong> (*Browser*).<br>
-            <strong>2.</strong> Pulsa el botón verde <strong data-i18n="media.btn_copy_url">📋 Copiar URL para OBS</strong> en cualquiera de los widgets de abajo y pégala en la casilla <em>URL</em> de OBS.<br>
+            <strong>2.</strong> Pulsa el botón verde <strong>📋 Copiar URL para OBS</strong> en cualquiera de los widgets de abajo y pégala en la casilla <em>URL</em> de OBS.<br>
             <strong>3.</strong> Escribe el <strong>Ancho</strong> y <strong>Alto</strong> recomendados que te indicamos en cada tarjeta. ¡Y listo! El fondo es 100% transparente de forma automática.
           </p>
         </div>
@@ -1096,7 +1078,7 @@
             <span style="font-size: 20px;">⚙️</span>
             <h2 id="miniapp-title" style="margin: 0; font-family: var(--font-tech); font-size: 16px; color: #fff; letter-spacing: 1px;" data-i18n="widgets.drawer_title">MINI-APP DE WIDGET</h2>
           </div>
-          <button type="button" class="btn-stage-preset" onclick="closeWidgetMiniApp()" style="font-size: 13px; padding: 6px 14px;">✕ Cerrar Mini-App</button>
+          <button type="button" class="btn-stage-preset" onclick="closeWidgetMiniApp()" style="font-size: 13px; padding: 6px 14px;" data-i18n="widgets.btn_close_miniapp">✕ Cerrar Mini-App</button>
         </div>
 
         <div style="display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px;">
@@ -1202,7 +1184,7 @@
 
           <div class="widget-url-box">
             <span id="widget-url-chat" class="widget-url-string">http://localhost:8080/widgets/chat/index.html</span>
-            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-chat').textContent)">📋 Copiar URL</button>
+            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-chat').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
         </div>
 
@@ -1238,7 +1220,7 @@
 
           <div class="widget-url-box">
             <span id="widget-url-timer" class="widget-url-string">http://localhost:8080/widgets/timer/index.html</span>
-            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-timer').textContent)">📋 Copiar URL</button>
+            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-timer').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
         </div>
 
@@ -1256,7 +1238,7 @@
             <!-- Lanzador rápido y Atajos -->
             <div style="background: rgba(25, 29, 33, 0.5); border: 1px solid var(--color-border-dim); border-radius: 4px; padding: 12px; margin-top: 6px;">
               <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                <input type="text" id="shoutout-username" class="form-input" placeholder="Usuario Twitch (ej. midudev)" value="andorina">
+                <input type="text" id="shoutout-username" class="form-input" placeholder="Usuario Twitch (ej. midudev)" value="andorina" data-i18n-placeholder="themes.placeholder_so_user">
                 <button class="btn-action-primary" style="white-space: nowrap; font-size: 11px; padding: 4px 10px;" onclick="triggerShoutout()" data-i18n="widgets.shoutout.btn_promo">📢 Promocionar</button>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -1278,7 +1260,7 @@
 
           <div class="widget-url-box">
             <span id="widget-url-so" class="widget-url-string">http://localhost:8080/widgets/shoutout/index.html</span>
-            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-so').textContent)">📋 Copiar URL</button>
+            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-so').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
         </div>
 
@@ -1316,7 +1298,7 @@
 
           <div class="widget-url-box">
             <span id="widget-url-goal" class="widget-url-string">http://localhost:8080/widgets/goal/index.html</span>
-            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-goal').textContent)">📋 Copiar URL</button>
+            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-goal').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
         </div>
 
@@ -1351,7 +1333,7 @@
 
           <div class="widget-url-box">
             <span id="widget-url-ticker" class="widget-url-string">http://localhost:8080/widgets/ticker/index.html</span>
-            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-ticker').textContent)">📋 Copiar URL</button>
+            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-ticker').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
         </div>
 
@@ -1369,7 +1351,7 @@
 
           <div class="widget-url-box">
             <span id="widget-url-alerts" class="widget-url-string">http://localhost:8080/alerts/index.html</span>
-            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-alerts').textContent)">📋 Copiar URL</button>
+            <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-alerts').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
         </div>
 
@@ -1381,10 +1363,10 @@
     <!-- ============================================================== -->
     <div id="sec-alerts" class="section-view">
       <div class="section-header">
-        <h1 class="section-title">
-          <span>🚨</span> SIMULADOR DE ALERTAS DE DIRECTO
+        <h1 class="section-title" data-i18n="alerts.sim_title">
+          🚨 SIMULADOR DE ALERTAS DE DIRECTO
         </h1>
-        <div class="section-subtitle">
+        <div class="section-subtitle" data-i18n="alerts.sim_subtitle">
           Prueba el diseño, animación y sintetizador de audio de tus alertas antes o durante el directo con un solo clic.
         </div>
       </div>
@@ -1392,47 +1374,47 @@
       <div class="grid-2col">
         <div class="dash-card">
           <div class="card-header-bar">
-            <span class="card-header-title">🧪 BOTONES DE PRUEBA INSTANTÁNEA</span>
+            <span class="card-header-title" data-i18n="alerts.sim_instant_title">🧪 BOTONES DE PRUEBA INSTANTÁNEA</span>
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <button class="btn-action-test" style="padding: 14px;" onclick="sendAlertTest('follow')">
-              <span style="font-size: 18px;">❤️</span> Probar Follow
+            <button class="btn-action-test" style="padding: 14px;" onclick="sendAlertTest('follow')" data-i18n="alerts.sim_btn_follow">
+              ❤️ Probar Follow
             </button>
-            <button class="btn-action-test" style="padding: 14px; border-color: rgba(255,120,63,0.4);" onclick="sendAlertTest('sub')">
-              <span style="font-size: 18px;">⭐</span> Probar Suscripción (N1)
+            <button class="btn-action-test" style="padding: 14px; border-color: rgba(255,120,63,0.4);" onclick="sendAlertTest('sub')" data-i18n="alerts.sim_btn_sub">
+              ⭐ Probar Suscripción (N1)
             </button>
-            <button class="btn-action-test" style="padding: 14px; border-color: rgba(245,158,11,0.4);" onclick="sendAlertTest('bits')">
-              <span style="font-size: 18px;">💎</span> Probar 100 Bits
+            <button class="btn-action-test" style="padding: 14px; border-color: rgba(245,158,11,0.4);" onclick="sendAlertTest('bits')" data-i18n="alerts.sim_btn_bits">
+              💎 Probar 100 Bits
             </button>
-            <button class="btn-action-test" style="padding: 14px; border-color: rgba(236,72,153,0.4);" onclick="sendAlertTest('raid')">
-              <span style="font-size: 18px;">🚀</span> Probar Raid (25 p.)
+            <button class="btn-action-test" style="padding: 14px; border-color: rgba(236,72,153,0.4);" onclick="sendAlertTest('raid')" data-i18n="alerts.sim_btn_raid">
+              🚀 Probar Raid (25 p.)
             </button>
           </div>
 
           <div style="margin-top: 14px; border-top: 1px solid var(--color-border-dim); padding-top: 16px;">
-            <div style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim); margin-bottom: 8px;">
+            <div style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim); margin-bottom: 8px;" data-i18n="alerts.sim_custom_title">
               PROBAR CON TEXTO Y NOMBRE PERSONALIZADO:
             </div>
             <div style="display: flex; gap: 8px;">
-              <input type="text" id="sim-user-input" class="form-input" placeholder="Nombre" value="AndorinaDev">
-              <input type="text" id="sim-msg-input" class="form-input" placeholder="Mensaje" value="¡Un saludo!">
-              <button class="btn-action-primary" onclick="sendCustomAlertTest()">Disparar</button>
+              <input type="text" id="sim-user-input" class="form-input" placeholder="Nombre" value="AndorinaDev" data-i18n-placeholder="themes.placeholder_sim_user">
+              <input type="text" id="sim-msg-input" class="form-input" placeholder="Mensaje" value="¡Un saludo!" data-i18n-placeholder="themes.placeholder_sim_msg">
+              <button class="btn-action-primary" onclick="sendCustomAlertTest()" data-i18n="alerts.sim_btn_fire">Disparar</button>
             </div>
           </div>
         </div>
 
         <div class="dash-card">
           <div class="card-header-bar">
-            <span class="card-header-title">📋 CÓMO CONFIGURAR LA ALERTA EN OBS</span>
+            <span class="card-header-title" data-i18n="alerts.sim_obs_title">📋 CÓMO CONFIGURAR LA ALERTA EN OBS</span>
           </div>
-          <p style="font-size: 13px; color: var(--color-text-light); line-height: 1.6; margin: 0;">
+          <p style="font-size: 13px; color: var(--color-text-light); line-height: 1.6; margin: 0;" data-i18n="alerts.sim_obs_steps">
             1. Añade una fuente de tipo <strong>Navegador</strong> en OBS.<br>
             2. Pega la URL: <code id="alerts-source-code">http://localhost:8080/alerts/index.html</code><br>
             3. Pon Ancho: <code>1920</code>, Alto: <code>1080</code>.<br>
             4. <strong>Muy importante:</strong> Coloca esta fuente en la <strong>capa superior</strong> (arriba del todo) de tu lista de fuentes para que las alertas y memes aparezcan por encima de tus cámaras.
           </p>
-          <button class="btn-action-copy" style="align-self: flex-start;" onclick="copyText('http://localhost:8080/alerts/index.html')">
+          <button class="btn-action-copy" style="align-self: flex-start;" onclick="copyText('http://localhost:8080/alerts/index.html')" data-i18n="alerts.sim_btn_copy_alerts">
             📋 Copiar URL de Alertas
           </button>
         </div>
@@ -1450,8 +1432,8 @@
         <h1 class="section-title" data-i18n="media.section_title">
           <span>📁</span> EXPLORADOR & GESTOR DE MEDIOS LOCAL
         </h1>
-        <div class="section-subtitle">
-          Explorador de archivos completo tipo SO para tu carpeta local <code>alerts/media/</code>. Auto-clasifica al subir, navega por árbol de carpetas, mueve con drag & drop y gestiona con cortar, copiar y pegar.
+        <div class="section-subtitle" data-i18n-html="media.section_subtitle">
+          Explorador de archivos completo tipo SO para tu carpeta local <code data-i18n="media.desc_full">alerts/media/</code>. Auto-clasifica al subir, navega por árbol de carpetas, mueve con drag & drop y gestiona con cortar, copiar y pegar.
         </div>
       </div>
 
@@ -1460,23 +1442,23 @@
         <!-- 1. Barra de Estadísticas de Almacenamiento -->
         <div class="media-stats-banner">
           <div class="media-stat-item">
-            <span>📦 Total:</span>
+            <span data-i18n="media.stat_total_label">📦 Total:</span>
             <span id="media-total-badge" style="color: var(--color-accent-cyan); font-weight: 700;">0 ARCHIVOS</span>
           </div>
           <div class="media-stat-item">
-            <span>🎬 Vídeos:</span>
+            <span data-i18n="media.stat_videos_label">🎬 Vídeos:</span>
             <span id="media-stat-videos" style="color: var(--color-accent-cyan); font-weight: 700;">0</span>
           </div>
           <div class="media-stat-item">
-            <span>🎵 Audios:</span>
+            <span data-i18n="media.stat_audios_label">🎵 Audios:</span>
             <span id="media-stat-sounds" style="color: var(--color-accent-orange); font-weight: 700;">0</span>
           </div>
           <div class="media-stat-item">
-            <span>🖼️ Imágenes:</span>
+            <span data-i18n="media.stat_images_label">🖼️ Imágenes:</span>
             <span id="media-stat-images" style="color: #A575FF; font-weight: 700;">0</span>
           </div>
           <div class="media-stat-item">
-            <span>💾 Espacio en disco:</span>
+            <span data-i18n="media.stat_storage_label">💾 Espacio en disco:</span>
             <span id="media-stat-storage" style="color: var(--color-text-light); font-weight: 700;">0.00 MB</span>
           </div>
         </div>
@@ -1528,7 +1510,7 @@
           <!-- Grupo Búsqueda, Filtro y Vistas -->
           <div class="media-toolbar-group">
             <div style="position: relative;">
-              <input type="text" id="media-search-input" class="form-input" placeholder="🔍 Buscar archivos..." style="padding: 5px 28px 5px 10px; font-size: 11px; width: 150px;" oninput="onMediaSearch(this.value)">
+              <input type="text" id="media-search-input" class="form-input" placeholder="🔍 Buscar archivos..." style="padding: 5px 28px 5px 10px; font-size: 11px; width: 150px;" oninput="onMediaSearch(this.value)" data-i18n-placeholder="themes.placeholder_search">
               <button type="button" onclick="clearMediaSearch()" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-dim); cursor: pointer; font-size: 11px;" data-i18n="media.modal_close">✕</button>
             </div>
 
@@ -1590,7 +1572,7 @@
             <div id="media-dropzone" class="media-dropzone-strip" onclick="document.getElementById('media-file-input').click()">
               <span style="font-size: 20px;">📥</span>
               <span style="font-size: 13px; font-weight: 700; color: var(--color-text-light);">
-                Arrastra aquí archivos o haz clic para subir a <span id="lbl-current-folder-dest" style="color: var(--color-accent-cyan);">la biblioteca</span>
+                <span id="lbl-dropzone-prompt" data-i18n="media.drop_prompt">Arrastra aquí archivos o haz clic para subir a</span> <span id="lbl-current-folder-dest" style="color: var(--color-accent-cyan);" data-i18n="media.dropzone_text">la biblioteca</span>
               </span>
               <span style="font-size: 11px; font-family: var(--font-tech); color: var(--color-text-dim);" data-i18n="media.dropzone_formats">
                 (WebM, MP4, MP3, WAV, GIF, PNG, WebP)
@@ -1603,7 +1585,7 @@
             <!-- Barra de Selección y Conteo -->
             <div class="media-selection-bar">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span id="media-items-count-label">Mostrando 0 elementos</span>
+                <span id="media-items-count-label" data-i18n="media.showing_files">Mostrando 0 elementos</span>
                 <span id="media-selected-count-label" style="display:none; color: var(--color-accent-cyan); font-weight: 700;">(0 seleccionados)</span>
               </div>
               <div style="display: flex; gap: 8px;">
@@ -1628,12 +1610,12 @@
                 <thead>
                   <tr>
                     <th style="width: 32px;"><input type="checkbox" onchange="selectAllMedia(this.checked)" style="accent-color: var(--color-accent-cyan);">
-                    <th>Nombre</th>
-                    <th>Carpeta</th>
-                    <th>Tipo</th>
-                    <th>Tamaño</th>
-                    <th>Modificado</th>
-                    <th style="text-align: right;">Acciones</th>
+                    <th data-i18n="media.th_name">Nombre</th>
+                    <th data-i18n="media.th_folder">Carpeta</th>
+                    <th data-i18n="media.th_type">Tipo</th>
+                    <th data-i18n="media.th_size">Tamaño</th>
+                    <th data-i18n="media.th_modified">Modificado</th>
+                    <th style="text-align: right;" data-i18n="media.col_actions">Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="media-items-table-body">
@@ -1648,7 +1630,7 @@
         <footer class="media-statusbar">
           <div style="display: flex; align-items: center; gap: 12px;">
             <span data-i18n="media.path_label">📍 Ruta: <code id="media-status-path" style="color: var(--color-text-light);">/media/</code></span>
-            <span id="media-status-info">0 archivos en esta carpeta</span>
+            <span id="media-status-info" data-i18n="media.files_in_folder">0 archivos en esta carpeta</span>
           </div>
           <div id="media-clipboard-indicator" style="display: none; align-items: center; gap: 8px;">
             <span id="media-clipboard-text" style="color: var(--color-accent-orange);"></span>
@@ -1703,7 +1685,7 @@
           <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="media.label_parent">
             Crear dentro de: <b id="lbl-mkdir-parent" style="color: var(--color-accent-cyan);">raíz</b>
           </label>
-          <input type="text" id="mkdir-folder-name" class="form-input" placeholder="Nombre de la carpeta (ej. memes_subs)" onkeydown="if(event.key === 'Enter') submitCreateFolder()">
+          <input type="text" id="mkdir-folder-name" class="form-input" placeholder="Nombre de la carpeta (ej. memes_subs)" onkeydown="if(event.key === 'Enter') submitCreateFolder()" data-i18n-placeholder="themes.placeholder_folder_name">
           <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
             <button class="btn-action-test" onclick="closeCreateFolderModal()" data-i18n="common.cancel">Cancelar</button>
             <button class="btn-action-primary" onclick="submitCreateFolder()" data-i18n="media.btn_create_folder">Crear Carpeta</button>
@@ -1722,7 +1704,7 @@
         <div style="padding: 18px 20px;">
           <input type="hidden" id="rename-target-path">
           <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="media.label_new_name">Nuevo nombre:</label>
-          <input type="text" id="rename-new-name" class="form-input" placeholder="nuevo_nombre.ext" onkeydown="if(event.key === 'Enter') submitRename()">
+          <input type="text" id="rename-new-name" class="form-input" placeholder="nuevo_nombre.ext" onkeydown="if(event.key === 'Enter') submitRename()" data-i18n-placeholder="themes.placeholder_rename">
           <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
             <button class="btn-action-test" onclick="closeRenameModal()" data-i18n="common.cancel">Cancelar</button>
             <button class="btn-action-primary" onclick="submitRename()" data-i18n="media.btn_save_rename">Guardar Cambios</button>
@@ -1771,19 +1753,19 @@
             <span style="font-size: 16px;">📡</span>
             <span data-i18n="themes.guide_title">¿CÓMO CONECTA ESTE PANEL CON OBS STUDIO? (Clic para ver guía rápida)</span>
           </div>
-          <span style="font-size: 10px; color: var(--color-text-dim); font-weight: normal;">ℹ️ Ver detalles</span>
+          <span style="font-size: 10px; color: var(--color-text-dim); font-weight: normal;" data-i18n="themes.view_details">ℹ️ Ver detalles</span>
         </summary>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; padding: 14px 16px; font-size: 12px; color: var(--color-text-dim); line-height: 1.5; border-top: 1px solid rgba(87, 214, 196, 0.15);">
           <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
             <strong style="color: #FFFFFF; font-size: 13px;" data-i18n="themes.step1">1. En OBS pegas la URL una sola vez</strong>
-            <p style="margin: 4px 0 0 0;">
+            <p style="margin: 4px 0 0 0;" data-i18n-html="themes.obs_intro_step1_text">
               En OBS Studio sólo agregas cada escena como <b>Fuente de Navegador</b> (<i>Browser Source</i>). No necesitas instalar plugins extraños.
             </p>
           </div>
           <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
             <strong style="color: #FFFFFF; font-size: 13px;" data-i18n="themes.step2">2. Sincronización en vivo por WebSocket</strong>
-            <p style="margin: 4px 0 0 0;">
-              Al guardar un texto o cambiar un estilo aquí, nuestro servidor se lo envía a OBS por <b>WebSocket</b> y <b>se actualiza en directo en tu stream</b> sin reiniciar la escena.
+            <p style="margin: 4px 0 0 0;" data-i18n-html="themes.obs_intro_step2_text">
+              Al guardar un texto o cambiar un estilo aquí, nuestro servidor se lo envía a OBS por <b>WebSocket</b> y se actualiza en directo en tu stream sin reiniciar la escena.
             </p>
           </div>
           <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
@@ -1802,17 +1784,17 @@
         <!-- Barra de Navegación de Carpetas y Acciones Globales (Sticky Siempre Visible) -->
         <div class="media-toolbar" style="position: sticky; top: 0; z-index: 20; margin-bottom: 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: rgba(14, 18, 24, 0.96); backdrop-filter: blur(10px); border: 1px solid rgba(87, 214, 196, 0.35); padding: 8px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
           <div class="media-toolbar-group" style="align-items: center;">
-            <button id="overlays-btn-back-folders" class="media-btn-tool" onclick="showOverlayFoldersView()" style="display: none; background: rgba(87, 214, 196, 0.2); border-color: var(--color-accent-cyan); color: var(--color-accent-cyan); font-weight: 800;">
+            <button id="overlays-btn-back-folders" class="media-btn-tool" onclick="showOverlayFoldersView()" style="display: none; background: rgba(87, 214, 196, 0.2); border-color: var(--color-accent-cyan); color: var(--color-accent-cyan); font-weight: 800;" data-i18n="themes.btn_back_folders">
               ⬅️ Volver a Carpetas
             </button>
             <div id="overlays-breadcrumbs" class="media-breadcrumbs">
-              <span class="crumb-item active" onclick="showOverlayFoldersView()">📁 Carpetas de Actividades del Stream</span>
+              <span class="crumb-item active" onclick="showOverlayFoldersView()" data-i18n="themes.crumb_stream_folders">📁 Carpetas de Actividades del Stream</span>
             </div>
           </div>
 
           <div class="media-toolbar-group" style="align-items: center; flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.4); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.3);">
-              <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;">🎨 Estilo a todos:</span>
+              <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="themes.style_all_label">🎨 Estilo a todos:</span>
               <select id="select-global-theme-all" class="monitor-select" style="font-size: 11px; padding: 4px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
                 <!-- Opciones cargadas dinámicamente -->
               </select>
@@ -1833,9 +1815,9 @@
         <div id="overlays-folders-view">
           <div class="card-header-bar">
             <span class="card-header-title" data-i18n="themes.folders_title">CARPETAS DE ACTIVIDADES DEL STREAM Y OVERLAYS</span>
-            <span id="overlays-total-folders-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">4 PACKS EN CARPETAS</span>
+            <span id="overlays-total-folders-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="themes.badge_packs_folders">4 PACKS EN CARPETAS</span>
           </div>
-          <div style="font-size: 12px; color: var(--color-text-dim); margin-top: 4px; margin-bottom: 14px;">
+          <div style="font-size: 12px; color: var(--color-text-dim); margin-top: 4px; margin-bottom: 14px;" data-i18n-html="themes.folders_hint">
             Haz clic en el cuadro para <b>entrar en la carpeta</b> y editar individualmente todos los textos y actividades de tu stream. Desde fuera puedes <b>aplicar un estilo a todos los overlays del pack</b> o restaurar los estilos originales de fábrica.
           </div>
 
@@ -1849,13 +1831,13 @@
           <div class="dash-card" style="margin-bottom: 16px; padding: 16px 20px; background: rgba(14, 18, 24, 0.95); border: 1.5px solid rgba(87, 214, 196, 0.4); border-radius: var(--radius-sm); box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
               <div style="display: flex; align-items: center; gap: 14px;">
-                <button type="button" class="btn-action-test" onclick="showOverlayFoldersView()" style="font-size: 12px; padding: 6px 12px; font-weight: 800; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); background: rgba(87, 214, 196, 0.15);" title="Volver a la vista general de carpetas">
+                <button type="button" class="btn-action-test" onclick="showOverlayFoldersView()" style="font-size: 12px; padding: 6px 12px; font-weight: 800; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); background: rgba(87, 214, 196, 0.15);" title="Volver a la vista general de carpetas" data-i18n="themes.btn_back_folders">
                   ⬅️ Volver a Carpetas
                 </button>
                 <div>
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <span id="folder-detail-name" style="font-size: 17px; font-weight: 800; color: #FFFFFF;">Mis Overlays</span>
-                    <span id="folder-detail-badge" class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan); font-weight: 800;">9 OVERLAYS · SUITE COMPLETA</span>
+                    <span id="folder-detail-badge" class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan); font-weight: 800;" data-i18n="themes.badge_folder_suite">9 OVERLAYS · SUITE COMPLETA</span>
                   </div>
                   <div id="folder-detail-desc" style="font-size: 12px; color: var(--color-text-dim); margin-top: 3px;">
                     Gestiona y edita individualmente cada overlay y actividad de tu stream.
@@ -1864,7 +1846,7 @@
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.35);">
-                  <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;">🎨 Estilo para todos:</span>
+                  <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="themes.style_all_label">🎨 Estilo para todos:</span>
                   <select id="folder-inside-theme-select" class="monitor-select" style="font-size: 11px; padding: 4px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
                     <!-- Opciones de tema -->
                   </select>
@@ -1875,7 +1857,7 @@
                 <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="restoreCurrentFolderThemes()" title="Restablecer todas las escenas de esta carpeta a sus temas visuales de fábrica" data-i18n="themes.btn_restore_themes">
                   🔄 Restaurar Estilos Originales
                 </button>
-                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.5); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreCurrentFolderTexts()" title="Restablecer todos los textos de fábrica">
+                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.5); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreCurrentFolderTexts()" title="Restablecer todos los textos de fábrica" data-i18n="themes.btn_restore_factory_texts">
                   📝 Restaurar Textos de Fábrica
                 </button>
               </div>
@@ -1888,8 +1870,8 @@
           </div>
 
           <div class="card-header-bar">
-            <span class="card-header-title">OVERLAYS Y ACTIVIDADES DE ESTA CARPETA</span>
-            <span id="overlays-count-in-folder-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">9 ESCENAS DISPONIBLES</span>
+            <span class="card-header-title" data-i18n="themes.folder_overlays_title">OVERLAYS Y ACTIVIDADES DE ESTA CARPETA</span>
+            <span id="overlays-count-in-folder-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="themes.badge_scenes_available">9 ESCENAS DISPONIBLES</span>
           </div>
 
           <div id="overlays-scenes-in-folder-grid" class="widget-showcase-grid" style="margin-top: 14px;">
@@ -1905,11 +1887,11 @@
         <!-- Barra de Navegación de Packs y Acciones -->
         <div class="media-toolbar" style="margin-bottom: 16px; border-radius: var(--radius-sm);">
           <div class="media-toolbar-group">
-            <button id="themes-btn-back-packs" class="media-btn-tool" onclick="showThemePacksView()" style="display: none;">
+            <button id="themes-btn-back-packs" class="media-btn-tool" onclick="showThemePacksView()" style="display: none;" data-i18n="themes.btn_back_packs">
               ⬅️ Volver a Packs
             </button>
             <div id="themes-breadcrumbs" class="media-breadcrumbs">
-              <span class="crumb-item active" onclick="showThemePacksView()">📁 Packs de Temas</span>
+              <span class="crumb-item active" onclick="showThemePacksView()" data-i18n="themes.crumb_theme_packs">📁 Packs de Temas</span>
             </div>
           </div>
 
@@ -1927,7 +1909,7 @@
         <div id="themes-packs-view">
           <div class="card-header-bar">
             <span class="card-header-title" data-i18n="themes.pack_title">CARPETAS DE PACKS DE ESTILOS DISPONIBLES</span>
-            <span id="themes-total-packs-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">2 PACKS</span>
+            <span id="themes-total-packs-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="themes.badge_total_packs">2 PACKS</span>
           </div>
           <div style="font-size: 12px; color: var(--color-text-dim); margin-top: 6px; margin-bottom: 14px;" data-i18n="themes.pack_desc">
             Un tema es una paleta visual de colores, fuentes, bordes y resplandor neón que se aplica a todas tus overlays y widgets al mismo tiempo. No cambia los textos de tus escenas.
@@ -1960,8 +1942,8 @@
           </div>
 
           <div class="card-header-bar">
-            <span class="card-header-title">ESTILOS VISUALES / TEMAS DE ESTE PACK (PALETAS Y CSS)</span>
-            <span id="themes-count-in-pack-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">6 TEMAS</span>
+            <span class="card-header-title" data-i18n="themes.pack_themes_title">ESTILOS VISUALES / TEMAS DE ESTE PACK (PALETAS Y CSS)</span>
+            <span id="themes-count-in-pack-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="themes.badge_themes_in_pack">6 TEMAS</span>
           </div>
 
           <div id="themes-cards-grid" class="widget-showcase-grid" style="margin-top: 14px;">
@@ -1997,7 +1979,7 @@
         <div class="theme-editor-split" style="display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 18px;">
           <!-- Columna 1: Ajustes Visuales Rápidos del Tema -->
           <div style="display: flex; flex-direction: column; gap: 14px;">
-            <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 800; color: var(--color-accent-cyan); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 6px;">
+            <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 800; color: var(--color-accent-cyan); border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 6px;" data-i18n="themes.tab_colors_styles">
               // 1. PALETA CROMÁTICA & ESTILOS
             </div>
 
@@ -2008,7 +1990,7 @@
                 <input type="text" id="edit-theme-name" class="form-input" style="font-size: 12px; padding: 6px 8px;" oninput="onVisualSettingChange()">
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;">Etiqueta / Badge:</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.badge_label">Etiqueta / Badge:</label>
                 <input type="text" id="edit-theme-badge" class="form-input" style="font-size: 12px; padding: 6px 8px;" oninput="onVisualSettingChange()">
               </div>
             </div>
@@ -2107,12 +2089,12 @@
                   <div>
                     <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_shape">Forma de Burbuja:</label>
                     <select id="edit-chat-shape" class="form-select" style="font-size: 11px; padding: 4px;" onchange="onDerivativeChange()">
-                      <option value="rounded">Redondeada</option>
-                      <option value="arcade">8-Bit Arcade</option>
-                      <option value="bubble">Burbuja Cómic</option>
-                      <option value="scifi">Cyberpunk 2077</option>
-                      <option value="tag">Etiqueta Maker</option>
-                      <option value="glass">Cristal Flotante</option>
+                      <option value="rounded" data-i18n="themes.border_rounded">Redondeada</option>
+                      <option value="arcade" data-i18n="themes.border_arcade">8-Bit Arcade</option>
+                      <option value="bubble" data-i18n="themes.border_bubble">Burbuja Cómic</option>
+                      <option value="scifi" data-i18n="themes.border_scifi">Cyberpunk 2077</option>
+                      <option value="tag" data-i18n="themes.border_tag">Etiqueta Maker</option>
+                      <option value="glass" data-i18n="themes.border_glass">Cristal Flotante</option>
                     </select>
                   </div>
                   <div>
@@ -2134,14 +2116,14 @@
                 Este tema viste cromáticamente a todas las overlays. Pulsa en cualquiera para editar directamente sus textos:
               </div>
               <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;">
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('game')">🎮 Textos Gameplay</button>
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('maker-desk')">🎥 Textos Escena Principal</button>
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('maker-pc')">💻 Textos Pantalla PC</button>
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('print-machine')">📷 Textos Cámara Secundaria</button>
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('chill')">💬 Textos Chill</button>
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('startingSoon')">⏳ Textos Starting</button>
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('beRightBack')">☕ Textos Pausa</button>
-                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('ending')">🎬 Textos Ending</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('game')" data-i18n="themes.tab_texts_game">🎮 Textos Gameplay</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('maker-desk')" data-i18n="themes.tab_texts_main">🎥 Textos Escena Principal</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('maker-pc')" data-i18n="themes.tab_texts_pc">💻 Textos Pantalla PC</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('print-machine')" data-i18n="themes.tab_texts_aux">📷 Textos Cámara Secundaria</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('chill')" data-i18n="themes.tab_texts_chill">💬 Textos Chill</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('startingSoon')" data-i18n="themes.tab_texts_starting">⏳ Textos Starting</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('beRightBack')" data-i18n="themes.tab_texts_brb">☕ Textos Pausa</button>
+                <button type="button" class="btn-action-test" style="font-size: 10px; padding: 4px 8px;" onclick="openSceneEditorFromTheme('ending')" data-i18n="themes.tab_texts_ending">🎬 Textos Ending</button>
               </div>
             </div>
           </div>
@@ -2166,9 +2148,9 @@
 
             <!-- Vista 1: Editor CSS -->
             <div id="editor-view-css">
-              <textarea id="theme-code-css-textarea" class="theme-code-editor-area" placeholder="/* CSS del tema */"></textarea>
-              <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim); margin-top: 4px;">
-                💡 Se compila automáticamente en <code>common/themes.css</code> para que todas las escenas de OBS Studio lo reciban.
+              <textarea id="theme-code-css-textarea" class="theme-code-editor-area" placeholder="/* CSS del tema */" data-i18n-placeholder="themes.placeholder_css"></textarea>
+              <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim); margin-top: 4px;" data-i18n-html="themes.theme_compile_hint">
+                💡 Se compila automáticamente en <code>style.css</code> para que todas las escenas de OBS Studio lo reciban.
               </div>
             </div>
 
@@ -2194,7 +2176,7 @@
                     <option value="screens/ending" data-i18n="themes.scene_ending">🎬 Pantalla: Despedida (Ending)</option>
                   </select>
                 </div>
-                <button type="button" class="btn-action-primary" style="padding: 4px 10px; font-size: 11px;" onclick="openFullscreenPreview()">
+                <button type="button" class="btn-action-primary" style="padding: 4px 10px; font-size: 11px;" onclick="openFullscreenPreview()" data-i18n="themes.btn_preview_fs">
                   🖥️ Pantalla Completa 1080p ↗
                 </button>
               </div>
@@ -2231,13 +2213,13 @@
         </div>
         <div style="padding: 18px 20px;">
           <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_name">Nombre del Pack:</label>
-          <input type="text" id="new-pack-name" class="form-input" placeholder="ej. Pack Synthwave Neon" style="margin-bottom: 12px;">
+          <input type="text" id="new-pack-name" class="form-input" placeholder="ej. Pack Synthwave Neon" style="margin-bottom: 12px;" data-i18n-placeholder="themes.placeholder_pack_name">
 
           <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_icon">Icono representativo:</label>
           <input type="text" id="new-pack-icon" class="form-input" value="🎨" style="margin-bottom: 12px; width: 60px;">
 
           <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_desc">Descripción corta:</label>
-          <textarea id="new-pack-desc" class="form-input" style="height: 60px;" placeholder="Temas oscuros inspirados en..."></textarea>
+          <textarea id="new-pack-desc" class="form-input" style="height: 60px;" placeholder="Temas oscuros inspirados en..." data-i18n-placeholder="themes.placeholder_pack_desc"></textarea>
 
           <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
             <button class="btn-action-test" onclick="closeNewPackModal()" data-i18n="common.cancel">Cancelar</button>
@@ -2256,7 +2238,7 @@
         </div>
         <div style="padding: 18px 20px;">
           <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_theme_name">Nombre del Tema:</label>
-          <input type="text" id="new-theme-name" class="form-input" placeholder="ej. Matrix Glitch" style="margin-bottom: 12px;">
+          <input type="text" id="new-theme-name" class="form-input" placeholder="ej. Matrix Glitch" style="margin-bottom: 12px;" data-i18n-placeholder="themes.placeholder_theme_name">
 
           <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_accent">Color de Acento Principal:</label>
           <input type="color" id="new-theme-accent" value="#57D6C4" style="width: 100%; height: 36px; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 14px;">
@@ -2287,7 +2269,7 @@
             </div>
           </div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <button class="btn-action-primary" id="btn-scene-modal-fullscreen" style="padding: 5px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" onclick="openCurrentSceneFullscreen()" title="Abrir en pestaña nueva a pantalla completa 1920x1080">
+            <button class="btn-action-primary" id="btn-scene-modal-fullscreen" style="padding: 5px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" onclick="openCurrentSceneFullscreen()" title="Abrir en pestaña nueva a pantalla completa 1920x1080" data-i18n="themes.btn_view_fullscreen_arrow">
               🖥️ Ver Pantalla Completa ↗
             </button>
             <button class="btn-action-test" id="btn-scene-modal-copy-url" style="padding: 5px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" onclick="copyCurrentSceneUrl()" title="Copiar URL para pegar como Fuente Navegador en OBS" data-i18n="media.btn_copy_url">
@@ -2323,7 +2305,7 @@
                 <span style="font-family: var(--font-tech); font-size: 11px; font-weight: 800; color: var(--color-accent-cyan); text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="themes.preview_title">
                   VISTA RÁPIDA EN DIRECTO (BORDES, COLORES Y RESPLANDOR NEÓN)
                 </span>
-                <span id="preview-frame-sync-badge" class="badge-pill" style="font-size: 9px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan);">● VISTA PREVIA ACTIVA</span>
+                <span id="preview-frame-sync-badge" class="badge-pill" style="font-size: 9px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan);" data-i18n="themes.preview_frame_sync">● VISTA PREVIA ACTIVA</span>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="openCurrentSceneFullscreen()" title="Ver a pantalla completa nativa 1920x1080" data-i18n="themes.btn_fullscreen_preview">
@@ -2382,7 +2364,7 @@
                     transition: all 0.25s ease;
                   ">
                     <span style="font-size: 16px;">📹</span>
-                    <span id="preview-frame-cam-label" style="font-size: 8px; font-weight: 800; color: #57D6C4; font-family: var(--font-tech);">CÁMARA WEBCAM</span>
+                    <span id="preview-frame-cam-label" style="font-size: 8px; font-weight: 800; color: #57D6C4; font-family: var(--font-tech);" data-i18n="themes.preview_frame_cam">CÁMARA WEBCAM</span>
                   </div>
 
                   <!-- Títulos y textos activos -->
@@ -2401,7 +2383,7 @@
 
                 <!-- Info de estilo activo -->
                 <div style="text-align: right; background: rgba(0,0,0,0.35); padding: 6px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.06);">
-                  <div style="font-size: 9px; color: #8B969C; font-family: var(--font-tech);">ESTILO APLICADO</div>
+                  <div style="font-size: 9px; color: #8B969C; font-family: var(--font-tech);" data-i18n="themes.applied_style_badge">ESTILO APLICADO</div>
                   <div id="preview-frame-theme-tag" style="font-size: 11px; font-weight: 800; color: #57D6C4;">Maker Electrónico</div>
                   <div id="preview-frame-pack-tag" style="font-size: 9px; color: #FF783F; margin-top: 2px;">PACK OPEN STREAM SUITE</div>
                 </div>
@@ -2412,7 +2394,7 @@
                 <div id="preview-frame-bottom-text" style="font-size: 10px; font-weight: 700; color: #FFFFFF;" data-i18n="themes.placeholder_prefix">
                   PROYECTO: <span id="preview-frame-bottom-project" style="color: #57D6C4;">NAS CON RASPBERRY PI</span>
                 </div>
-                <div style="font-size: 9px; color: #8B969C; font-family: var(--font-tech);">
+                <div style="font-size: 9px; color: #8B969C; font-family: var(--font-tech);" data-i18n="themes.synced_obs_badge">
                   1920×1080 · Sincronizado en OBS Studio
                 </div>
               </div>
@@ -2421,7 +2403,7 @@
             <!-- Selector de Estilo y Enlace Rápido -->
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <span style="font-size: 12px; color: var(--color-text-dim);">🎨 <b>Cambiar Estilo Visual:</b></span>
+                <span style="font-size: 12px; color: var(--color-text-dim);">🎨 <b data-i18n="themes.change_style_label">Cambiar Estilo Visual:</b></span>
                 <select id="scene-modal-theme-select" class="monitor-select" style="font-size: 12px; padding: 5px 10px;" onchange="onSceneModalThemeChange(this.value)">
                   <!-- Opciones cargadas dinámicamente -->
                 </select>
@@ -2445,11 +2427,11 @@
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_badge">Texto de la Insignia de Webcam</label>
-                    <input type="text" id="txt-game-badge" class="form-input" placeholder="GAME MODE">
+                    <input type="text" id="txt-game-badge" class="form-input" placeholder="GAME MODE" data-i18n-placeholder="themes.placeholder_badge">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_tagline">Subtítulo / Modo</label>
-                    <input type="text" id="txt-game-tagline" class="form-input" placeholder="MODO JUEGO / GAMEPLAY">
+                    <input type="text" id="txt-game-tagline" class="form-input" placeholder="MODO JUEGO / GAMEPLAY" data-i18n-placeholder="themes.placeholder_tagline">
                   </div>
                 </div>
               </div>
@@ -2461,27 +2443,27 @@
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">🛠️</span>
-                    <span class="text-card-title">Información del Proyecto Maker</span>
+                    <span class="text-card-title" data-i18n="themes.card_maker_info">Información del Proyecto Maker</span>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_project">Nombre del Proyecto</label>
-                    <input type="text" id="txt-maker-project" class="form-input" placeholder="ej. NAS CON RASPBERRY PI">
+                    <input type="text" id="txt-maker-project" class="form-input" placeholder="ej. NAS CON RASPBERRY PI" data-i18n-placeholder="themes.placeholder_project">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_phase">Fase Actual Activa <span class="text-field-help">(debe coincidir con la lista de fases)</span></label>
-                    <input type="text" id="txt-maker-phase" class="form-input" placeholder="ej. 02 MONTAJE">
+                    <input type="text" id="txt-maker-phase" class="form-input" placeholder="ej. 02 MONTAJE" data-i18n-placeholder="themes.placeholder_phase">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_panel_title">Título del Panel Lateral</label>
-                    <input type="text" id="txt-maker-panel-title" class="form-input" placeholder="ESTADO DEL PROYECTO">
+                    <input type="text" id="txt-maker-panel-title" class="form-input" placeholder="ESTADO DEL PROYECTO" data-i18n-placeholder="themes.placeholder_panel">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_prefix">Prefijo de Proyecto (Barra Inferior)</label>
-                    <input type="text" id="txt-maker-prefix" class="form-input" placeholder="PROYECTO:">
+                    <input type="text" id="txt-maker-prefix" class="form-input" placeholder="PROYECTO:" data-i18n-placeholder="themes.placeholder_prefix">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_detail">Detalles / Componentes / Entorno</label>
-                    <input type="text" id="txt-maker-detail" class="form-input" placeholder="ej. Armbian OS · PCB v1.2 · Caja a medida">
+                    <input type="text" id="txt-maker-detail" class="form-input" placeholder="ej. Armbian OS · PCB v1.2 · Caja a medida" data-i18n-placeholder="themes.placeholder_detail">
                   </div>
                   <!-- Rótulos de Cámaras -->
                   <div style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border: 1px dashed rgba(87, 214, 196, 0.25); border-radius: 4px;">
@@ -2491,15 +2473,15 @@
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                       <div>
                         <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_main">Cámara Principal (Banco / Mesa):</label>
-                        <input type="text" id="txt-maker-frame-main" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="CÁMARA PRINCIPAL · ESCENA">
+                        <input type="text" id="txt-maker-frame-main" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="CÁMARA PRINCIPAL · ESCENA" data-i18n-placeholder="themes.placeholder_cam_main">
                       </div>
                       <div>
                         <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_face">Cámara Streamer / Rostro:</label>
-                        <input type="text" id="txt-maker-frame-face" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="STREAMER">
+                        <input type="text" id="txt-maker-frame-face" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="STREAMER" data-i18n-placeholder="themes.placeholder_cam_face">
                       </div>
                       <div>
                         <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_aux">Cámara Auxiliar / PC Terminal:</label>
-                        <input type="text" id="txt-maker-frame-aux" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="PC / TERMINAL">
+                        <input type="text" id="txt-maker-frame-aux" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="PC / TERMINAL" data-i18n-placeholder="themes.placeholder_cam_aux">
                       </div>
                     </div>
                   </div>
@@ -2532,11 +2514,11 @@
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">🖨️</span>
-                    <span class="text-card-title">Información del Proyecto Print</span>
+                    <span class="text-card-title" data-i18n="themes.card_print_info">Información del Proyecto Print</span>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_print_project">Nombre del Trabajo / Pieza</label>
-                    <input type="text" id="txt-print-project" class="form-input" placeholder="ej. PEGATINAS PERSONALIZADAS">
+                    <input type="text" id="txt-print-project" class="form-input" placeholder="ej. PEGATINAS PERSONALIZADAS" data-i18n-placeholder="themes.placeholder_print">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_print_material">Material / Filamento / Soporte</label>
@@ -2544,15 +2526,15 @@
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_phase">Fase Actual Activa</label>
-                    <input type="text" id="txt-print-phase" class="form-input" placeholder="ej. CORTE DE VINILO">
+                    <input type="text" id="txt-print-phase" class="form-input" placeholder="ej. CORTE DE VINILO" data-i18n-placeholder="themes.placeholder_print_phase">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_panel_title">Título del Panel Lateral</label>
-                    <input type="text" id="txt-print-panel-title" class="form-input" placeholder="TRABAJO DE CORTE / IMPRESIÓN">
+                    <input type="text" id="txt-print-panel-title" class="form-input" placeholder="TRABAJO DE CORTE / IMPRESIÓN" data-i18n-placeholder="themes.placeholder_print_panel">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_prefix">Prefijo de Proyecto (Barra Inferior)</label>
-                    <input type="text" id="txt-print-prefix" class="form-input" placeholder="TRABAJO:">
+                    <input type="text" id="txt-print-prefix" class="form-input" placeholder="TRABAJO:" data-i18n-placeholder="themes.placeholder_print_prefix">
                   </div>
                   <!-- Rótulos de las Cámaras de Impresión / Corte -->
                   <div style="margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border: 1px dashed rgba(87, 214, 196, 0.25); border-radius: 4px;">
@@ -2561,16 +2543,16 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);">Cámara Principal (Máquina / Cama):</label>
-                        <input type="text" id="txt-print-frame-main" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="CÁMARA SECUNDARIA · PROCESO">
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.cam_main_label">Cámara Principal (Máquina / Cama):</label>
+                        <input type="text" id="txt-print-frame-main" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="CÁMARA SECUNDARIA · PROCESO" data-i18n-placeholder="themes.placeholder_print_cam_main">
                       </div>
                       <div>
                         <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_face">Cámara Streamer / Rostro:</label>
-                        <input type="text" id="txt-print-frame-face" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="STREAMER">
+                        <input type="text" id="txt-print-frame-face" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="STREAMER" data-i18n-placeholder="themes.placeholder_print_cam_face">
                       </div>
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);">Cámara Auxiliar / Software CAD:</label>
-                        <input type="text" id="txt-print-frame-aux" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="SOFTWARE & CORTE">
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.cam_aux_label">Cámara Auxiliar / Software CAD:</label>
+                        <input type="text" id="txt-print-frame-aux" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="SOFTWARE & CORTE" data-i18n-placeholder="themes.placeholder_print_cam_aux">
                       </div>
                     </div>
                   </div>
@@ -2586,7 +2568,7 @@
                   <div class="text-card-header" style="justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                       <span class="text-card-icon">📋</span>
-                      <span class="text-card-title">Fases del Proyecto Print</span>
+                      <span class="text-card-title" data-i18n="themes.card_print_stages">Fases del Proyecto Print</span>
                     </div>
                     <button type="button" class="btn-action-primary" style="padding: 4px 10px; font-size: 11px;" onclick="OverlayTexts.addPhase('print')" data-i18n="themes.btn_add_phase">
                       ➕ Añadir Fase
@@ -2603,19 +2585,19 @@
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">💬</span>
-                    <span class="text-card-title">Textos de la Escena Chill</span>
+                    <span class="text-card-title" data-i18n="themes.card_chill_texts">Textos de la Escena Chill</span>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_chill_subtitle">Subtítulo Superior</label>
-                    <input type="text" id="txt-chill-subtitle" class="form-input" placeholder="CHARLA / DUDAS / IDEAS / COMUNIDAD">
+                    <input type="text" id="txt-chill-subtitle" class="form-input" placeholder="CHARLA / DUDAS / IDEAS / COMUNIDAD" data-i18n-placeholder="themes.placeholder_chill_sub">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_chill_chat">Título del Marco de Chat</label>
-                    <input type="text" id="txt-chill-chat-title" class="form-input" placeholder="CHAT EN DIRECTO">
+                    <input type="text" id="txt-chill-chat-title" class="form-input" placeholder="CHAT EN DIRECTO" data-i18n-placeholder="themes.placeholder_chill_chat">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_chill_topic">Tema de Charla (Banda Inferior)</label>
-                    <input type="text" id="txt-chill-topic" class="form-input" placeholder="Tema de hoy, proyectos y preguntas del chat">
+                    <input type="text" id="txt-chill-topic" class="form-input" placeholder="Tema de hoy, proyectos y preguntas del chat" data-i18n-placeholder="themes.placeholder_chill_topic">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_chill_prompt">Llamada a la Acción (Prompt)</label>
@@ -2637,30 +2619,30 @@
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">⏳</span>
-                    <span class="text-card-title">Titular Principal y Subtítulo</span>
+                    <span class="text-card-title" data-i18n="themes.card_headline_sub">Titular Principal y Subtítulo</span>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_tag">Etiqueta Superior // Tag</label>
-                    <input type="text" id="txt-ss-hero-tag" class="form-input" placeholder="// STREAM EN DIRECTO">
+                    <input type="text" id="txt-ss-hero-tag" class="form-input" placeholder="// STREAM EN DIRECTO" data-i18n-placeholder="themes.placeholder_ss_tag">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_title">Título Principal (Línea 1)</label>
-                    <input type="text" id="txt-ss-title" class="form-input" placeholder="ENSEGUIDA">
+                    <input type="text" id="txt-ss-title" class="form-input" placeholder="ENSEGUIDA" data-i18n-placeholder="themes.placeholder_ss_title">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_highlight">Texto Destacado en Color Cian (Línea 2)</label>
-                    <input type="text" id="txt-ss-highlight" class="form-input" placeholder="ESTAMOS EN DIRECTO">
+                    <input type="text" id="txt-ss-highlight" class="form-input" placeholder="ESTAMOS EN DIRECTO" data-i18n-placeholder="themes.placeholder_ss_highlight">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_subtitle">Subtítulo Informativo</label>
-                    <input type="text" id="txt-ss-subtitle" class="form-input" placeholder="PREPARANDO EL DIRECTO...">
+                    <input type="text" id="txt-ss-subtitle" class="form-input" placeholder="PREPARANDO EL DIRECTO..." data-i18n-placeholder="themes.placeholder_ss_sub">
                   </div>
                 </div>
 
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">⏱️</span>
-                    <span class="text-card-title">Cuenta Atrás y Estado</span>
+                    <span class="text-card-title" data-i18n="themes.card_countdown_status">Cuenta Atrás y Estado</span>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_countdown">Minutos de Cuenta Atrás <span class="text-field-help" data-i18n="themes.hint_countdown">(0 para modo barra sin reloj)</span></label>
@@ -2668,37 +2650,37 @@
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_status">Estado de Transmisión (Cabecera)</label>
-                    <input type="text" id="txt-ss-live-status" class="form-input" placeholder="TRANSMISIÓN INICIANDO">
+                    <input type="text" id="txt-ss-live-status" class="form-input" placeholder="TRANSMISIÓN INICIANDO" data-i18n-placeholder="themes.placeholder_ss_status">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_footer">Pie de Pantalla</label>
-                    <input type="text" id="txt-ss-footer" class="form-input" placeholder="ESTACIÓN DE TRABAJO · LINUX / OBS STUDIO / RASPBERRY PI">
+                    <input type="text" id="txt-ss-footer" class="form-input" placeholder="ESTACIÓN DE TRABAJO · LINUX / OBS STUDIO / RASPBERRY PI" data-i18n-placeholder="themes.placeholder_ss_footer">
                   </div>
                 </div>
 
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">🎮</span>
-                    <span class="text-card-title">Modos de Emisión (Panel Derecho)</span>
+                    <span class="text-card-title" data-i18n="themes.card_broadcast_modes">Modos de Emisión (Panel Derecho)</span>
                   </div>
                   <div style="font-size: 11px; color: var(--color-text-dim); margin-bottom: 10px;" data-i18n="themes.label_ss_mode">
                     Etiquetas de las tarjetas de modo que aparecen a la derecha en la pantalla de inicio.
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_mode_1">Modo 1 (ej. 01 // GAME)</label>
-                    <input type="text" id="txt-ss-mode-0" class="form-input" placeholder="01 // GAME">
+                    <input type="text" id="txt-ss-mode-0" class="form-input" placeholder="01 // GAME" data-i18n-placeholder="themes.placeholder_ss_mode_1">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_mode_2">Modo 2 (ej. 02 // MAKER)</label>
-                    <input type="text" id="txt-ss-mode-1" class="form-input" placeholder="02 // MAKER">
+                    <input type="text" id="txt-ss-mode-1" class="form-input" placeholder="02 // MAKER" data-i18n-placeholder="themes.placeholder_ss_mode_2">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_mode_3">Modo 3 (ej. 03 // PRINT)</label>
-                    <input type="text" id="txt-ss-mode-2" class="form-input" placeholder="03 // PRINT">
+                    <input type="text" id="txt-ss-mode-2" class="form-input" placeholder="03 // PRINT" data-i18n-placeholder="themes.placeholder_ss_mode_3">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_mode_4">Modo 4 (ej. 04 // CHILL)</label>
-                    <input type="text" id="txt-ss-mode-3" class="form-input" placeholder="04 // CHILL">
+                    <input type="text" id="txt-ss-mode-3" class="form-input" placeholder="04 // CHILL" data-i18n-placeholder="themes.placeholder_ss_mode_4">
                   </div>
                 </div>
               </div>
@@ -2710,23 +2692,23 @@
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">☕</span>
-                    <span class="text-card-title">Textos de Pantalla de Pausa</span>
+                    <span class="text-card-title" data-i18n="themes.card_brb_texts">Textos de Pantalla de Pausa</span>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_brb_title">Título Principal</label>
-                    <input type="text" id="txt-brb-title" class="form-input" placeholder="AHORA VUELVO">
+                    <input type="text" id="txt-brb-title" class="form-input" placeholder="AHORA VUELVO" data-i18n-placeholder="themes.placeholder_brb_title">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_brb_subtitle">Subtítulo</label>
-                    <input type="text" id="txt-brb-subtitle" class="form-input" placeholder="UN MOMENTO...">
+                    <input type="text" id="txt-brb-subtitle" class="form-input" placeholder="UN MOMENTO..." data-i18n-placeholder="themes.placeholder_brb_sub">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_status">Estado de Transmisión (Cabecera)</label>
-                    <input type="text" id="txt-brb-live-status" class="form-input" placeholder="PAUSA TÉCNICA">
+                    <input type="text" id="txt-brb-live-status" class="form-input" placeholder="PAUSA TÉCNICA" data-i18n-placeholder="themes.placeholder_brb_status">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_footer">Pie de Pantalla</label>
-                    <input type="text" id="txt-brb-footer" class="form-input" placeholder="EL DIRECTO CONTINÚA EN BREVES INSTANTES">
+                    <input type="text" id="txt-brb-footer" class="form-input" placeholder="EL DIRECTO CONTINÚA EN BREVES INSTANTES" data-i18n-placeholder="themes.placeholder_brb_footer">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_brb_interval">Intervalo de Rotación de Frases (Segundos)</label>
@@ -2755,15 +2737,15 @@
                 <div class="text-form-card">
                   <div class="text-card-header">
                     <span class="text-card-icon">🎬</span>
-                    <span class="text-card-title">Textos de Fin de Stream</span>
+                    <span class="text-card-title" data-i18n="themes.card_ending_texts">Textos de Fin de Stream</span>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_brb_title">Título Principal</label>
-                    <input type="text" id="txt-end-title" class="form-input" placeholder="GRACIAS POR PASARTE">
+                    <input type="text" id="txt-end-title" class="form-input" placeholder="GRACIAS POR PASARTE" data-i18n-placeholder="themes.placeholder_end_title">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_brb_subtitle">Subtítulo</label>
-                    <input type="text" id="txt-end-subtitle" class="form-input" placeholder="NOS VEMOS EN EL PRÓXIMO DIRECTO">
+                    <input type="text" id="txt-end-subtitle" class="form-input" placeholder="NOS VEMOS EN EL PRÓXIMO DIRECTO" data-i18n-placeholder="themes.placeholder_end_sub">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_end_farewell">Mensaje de la Tarjeta de Despedida</label>
@@ -2771,15 +2753,15 @@
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_end_tag">Etiqueta Inferior de la Tarjeta</label>
-                    <input type="text" id="txt-end-farewell-tag" class="form-input" placeholder="// SIGUE TRASTEANDO Y CREANDO">
+                    <input type="text" id="txt-end-farewell-tag" class="form-input" placeholder="// SIGUE TRASTEANDO Y CREANDO" data-i18n-placeholder="themes.placeholder_end_tag">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_status">Estado de Transmisión (Cabecera)</label>
-                    <input type="text" id="txt-end-live-status" class="form-input" placeholder="FIN DE TRANSMISIÓN">
+                    <input type="text" id="txt-end-live-status" class="form-input" placeholder="FIN DE TRANSMISIÓN" data-i18n-placeholder="themes.placeholder_end_status">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_ss_footer">Pie de Pantalla</label>
-                    <input type="text" id="txt-end-footer" class="form-input" placeholder="ANDORINA · OPEN STREAM SUITE · TRANSMISIÓN FINALIZADA">
+                    <input type="text" id="txt-end-footer" class="form-input" placeholder="ANDORINA · OPEN STREAM SUITE · TRANSMISIÓN FINALIZADA" data-i18n-placeholder="themes.placeholder_end_footer">
                   </div>
                 </div>
               </div>
@@ -2792,15 +2774,15 @@
               <div class="text-form-card">
                 <div class="text-card-header">
                   <span class="text-card-icon">🏷️</span>
-                  <span class="text-card-title">Marca e Identidad del Canal</span>
+                  <span class="text-card-title" data-i18n="themes.card_brand_identity">Marca e Identidad del Canal</span>
                 </div>
                 <div class="text-field-group">
                   <label class="text-field-label" data-i18n="themes.label_channel_name">Nombre del Canal / Streamer</label>
-                  <input type="text" id="txt-channel-name" class="form-input" placeholder="ej. ANDORINA">
+                  <input type="text" id="txt-channel-name" class="form-input" placeholder="ej. ANDORINA" data-i18n-placeholder="themes.placeholder_channel_name">
                 </div>
                 <div class="text-field-group">
                   <label class="text-field-label" data-i18n="themes.label_channel_tagline">Lema / Subtítulo Oficial</label>
-                  <input type="text" id="txt-channel-tagline" class="form-input" placeholder="ej. JUGAR · CREAR · COMPARTIR">
+                  <input type="text" id="txt-channel-tagline" class="form-input" placeholder="ej. JUGAR · CREAR · COMPARTIR" data-i18n-placeholder="themes.placeholder_channel_tagline">
                 </div>
                 <div class="text-field-group">
                   <label class="text-toggle-label">
@@ -2813,11 +2795,11 @@
               <div class="text-form-card">
                 <div class="text-card-header">
                   <span class="text-card-icon">🔴</span>
-                  <span class="text-card-title">Indicador de Directo</span>
+                  <span class="text-card-title" data-i18n="themes.card_live_indicator">Indicador de Directo</span>
                 </div>
                 <div class="text-field-group">
                   <label class="text-field-label" data-i18n="themes.label_live_text">Texto del Indicador "En Directo"</label>
-                  <input type="text" id="txt-channel-live-text" class="form-input" placeholder="ej. EN DIRECTO">
+                  <input type="text" id="txt-channel-live-text" class="form-input" placeholder="ej. EN DIRECTO" data-i18n-placeholder="themes.placeholder_live_text">
                 </div>
                 <div class="text-field-group">
                   <label class="text-toggle-label">
@@ -2830,7 +2812,7 @@
               <div class="text-form-card full-width">
                 <div class="text-card-header">
                   <span class="text-card-icon">🌐</span>
-                  <span class="text-card-title">Redes Sociales (Overlays y Pantallas)</span>
+                  <span class="text-card-title" data-i18n="themes.card_socials">Redes Sociales (Overlays y Pantallas)</span>
                 </div>
                 <div class="text-field-group">
                   <label class="text-toggle-label">
@@ -2841,23 +2823,23 @@
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 8px;">
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_social_twitch">Twitch</label>
-                    <input type="text" id="txt-soc-twitch" class="form-input" placeholder="usuario">
+                    <input type="text" id="txt-soc-twitch" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_social_youtube">YouTube</label>
-                    <input type="text" id="txt-soc-youtube" class="form-input" placeholder="canal">
+                    <input type="text" id="txt-soc-youtube" class="form-input" placeholder="canal" data-i18n-placeholder="themes.placeholder_soc_channel">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_social_twitter">Twitter / X</label>
-                    <input type="text" id="txt-soc-twitter" class="form-input" placeholder="usuario">
+                    <input type="text" id="txt-soc-twitter" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_social_instagram">Instagram</label>
-                    <input type="text" id="txt-soc-instagram" class="form-input" placeholder="usuario">
+                    <input type="text" id="txt-soc-instagram" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_social_github">GitHub</label>
-                    <input type="text" id="txt-soc-github" class="form-input" placeholder="usuario">
+                    <input type="text" id="txt-soc-github" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                 </div>
               </div>
@@ -2874,9 +2856,9 @@
               
               <div style="font-size: 13px; line-height: 1.6; color: var(--color-text-light);">
                 <ol style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
-                  <li>En OBS Studio, pulsa <b>+</b> en el panel de <b>Fuentes</b> y elige <b>Navegador</b> (<i>Browser Source</i>).</li>
+                  <li data-i18n-html="themes.obs_guide_step1">En OBS Studio, pulsa <b>+</b> en el panel de <b>Fuentes</b> y elige <b>Navegador</b> (<i>Browser Source</i>).</li>
                   <li>
-                    Pega esta URL exacta en el campo <b>URL</b>:
+                    <span data-i18n-html="themes.obs_guide_step2">Pega esta URL exacta en el campo <b>URL</b>:</span>
                     <div style="display: flex; gap: 8px; margin: 6px 0;">
                       <code id="obs-guide-url" style="background: #0E1012; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--color-border-dim); color: var(--color-accent-cyan); font-family: var(--font-tech); font-size: 12px; flex: 1;">
                         http://localhost:8080/scenes/...
@@ -2884,9 +2866,9 @@
                       <button class="btn-action-primary" style="padding: 4px 10px; font-size: 11px;" onclick="copyCurrentSceneUrl()" data-i18n="media.btn_copy">📋 Copiar</button>
                     </div>
                   </li>
-                  <li>Establece el <b>Ancho (Width): 1920</b> y el <b>Alto (Height): 1080</b>.</li>
-                  <li>Marca las casillas: <b>«Apagar la fuente cuando no sea visible»</b> y <b>«Actualizar el navegador cuando la escena se active»</b>.</li>
-                  <li>Coloca esta fuente en la <b>parte superior de la lista</b> (por encima de tu cámara y juego).</li>
+                  <li data-i18n-html="themes.obs_guide_step3">Establece el <b>Ancho (Width): 1920</b> y el <b>Alto (Height): 1080</b>.</li>
+                  <li data-i18n-html="themes.obs_guide_step4">Marca las casillas: <b>«Apagar la fuente cuando no sea visible»</b> y <b>«Actualizar el navegador cuando la escena se active»</b>.</li>
+                  <li data-i18n-html="themes.obs_guide_step5">Coloca esta fuente en la <b>capa superior</b> (por encima de tu cámara y juego).</li>
                 </ol>
               </div>
 
