@@ -56,11 +56,14 @@ def main():
         print(_("launcher.already_open"))
         try:
             import webbrowser
-            webbrowser.open("http://localhost:8080/index.html")
+            webbrowser.open("http://localhost:8080/alerts/panel.html")
         except Exception:
-            if sys.platform != "win32":
+            if sys.platform == "darwin":
                 import subprocess
-                subprocess.Popen(["xdg-open", "http://localhost:8080/index.html"])
+                subprocess.Popen(["open", "http://localhost:8080/alerts/panel.html"])
+            elif sys.platform != "win32":
+                import subprocess
+                subprocess.Popen(["xdg-open", "http://localhost:8080/alerts/panel.html"])
         return 0
 
     root = tk.Tk()

@@ -38,7 +38,8 @@
     "options_title": "STARTUP OPTIONS",
     "opt_auto_browser": "Open control panel in browser automatically on start",
     "opt_minimize_tray": "Minimize to system tray when pressing the close button",
-    "started_pid": "Server started (PID {pid})"
+    "started_pid": "Server started (PID {pid})",
+    "start_error_title": "Error Starting"
   },
   "twitch": {
     "account_title": "TWITCH ACCOUNT",
@@ -54,8 +55,11 @@
     "btn_connect": "🟣 Connect with Twitch",
     "btn_logout": "Sign Out",
     "msg_creds_saved": "Credentials saved successfully to .env file.",
+    "msg_creds_saved_title": "Saved",
     "msg_creds_incomplete": "Please provide both Client ID and Client Secret.",
-    "msg_logged_out": "Signed out from Twitch successfully."
+    "msg_creds_incomplete_title": "Incomplete Credentials",
+    "msg_logged_out": "Signed out from Twitch successfully.",
+    "msg_logged_out_title": "Session Closed"
   },
   "updates": {
     "title": "UPDATES",
@@ -82,6 +86,9 @@
     "twitch": "🟣 Twitch",
     "guide": "📖 Guide",
     "logs": "📜 Logs"
+  },
+  "logs": {
+    "btn_clear": "Clear Logs"
   },
   "widgets": {
     "chat_title": "On-Screen Chat & Floating Emotes",

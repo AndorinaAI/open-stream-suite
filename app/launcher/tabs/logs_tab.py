@@ -17,11 +17,9 @@ def build_logs_tab(gui):
     )
     gui.txt_logs.pack(fill="both", expand=True, pady=(0, 8))
 
-    btn_clear = tk.Button(
-        container, text="Limpiar Registro", font=("Helvetica", 9),
+    gui.btn_clear_logs = tk.Button(
+        container, text=_("logs.btn_clear", "Limpiar Registro"), font=("Helvetica", 9),
         bg="#21262D", fg=C_MUTED, activebackground="#30363D", activeforeground=C_TEXT,
         relief="flat", padx=10, pady=4, cursor="hand2", command=gui.on_clear_logs
     )
-    btn_clear.pack(anchor="e")
-
-# --- MÉTODOS Y ACCIONES ---
+    gui.btn_clear_logs.pack(anchor="e")

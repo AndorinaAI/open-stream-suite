@@ -12,4 +12,4 @@ if exist "venv\Scripts\pythonw.exe" (
     set "PYTHON_EXEC=pythonw"
 )
 
-start "" "%PYTHON_EXEC%" launcher.py %*
+start "" "%PYTHON_EXEC%" launcher.py --start-server %*

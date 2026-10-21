@@ -169,11 +169,11 @@ class LauncherGUI:
         cid = self.entry_client_id.get().strip()
         sec = self.entry_client_secret.get().strip()
         if not cid or not sec:
-            messagebox.showwarning("Credenciales incompletas", "Por favor introduce tanto el Client ID como el Client Secret.")
+            messagebox.showwarning(_("twitch.msg_creds_incomplete_title", "Credenciales incompletas"), _("twitch.msg_creds_incomplete", "Por favor introduce tanto el Client ID como el Client Secret."))
             return
 
         self.twitch_ctl.save_env_credentials(cid, sec)
-        messagebox.showinfo("Guardado", "Credenciales guardadas con éxito en el archivo .env.")
+        messagebox.showinfo(_("twitch.msg_creds_saved_title", "Guardado"), _("twitch.msg_creds_saved", "Credenciales guardadas con éxito en el archivo .env."))
 
     def on_toggle_server(self):
         alive, _data = self.server_ctl.is_running()
@@ -183,7 +183,7 @@ class LauncherGUI:
         else:
             ok, msg = self.server_ctl.start()
             if not ok:
-                messagebox.showerror("Error al iniciar", msg)
+                messagebox.showerror(_("server.start_error_title", "Error al iniciar"), msg)
             else:
                 self.root.after(300, lambda: self._check_after_start(0))
 
@@ -192,39 +192,43 @@ class LauncherGUI:
         if alive:
             self._update_server_ui(True, data)
             if self.var_open_browser.get():
-                self.on_open_catalog()
+                self.on_open_panel()
         elif attempts < 15:
             self.root.after(250, lambda: self._check_after_start(attempts + 1))
         else:
             if self.var_open_browser.get():
-                self.on_open_catalog()
+                self.on_open_panel()
 
     def _open_url(self, url):
         try:
             webbrowser.open(url)
         except Exception:
-            if sys.platform != "win32":
+            if sys.platform == "darwin":
+                import subprocess
+                subprocess.Popen(["open", url])
+            elif sys.platform != "win32":
                 import subprocess
                 subprocess.Popen(["xdg-open", url])
-
-    def on_open_catalog(self):
-        url = f"{self.server_ctl.base_url}/index.html"
-        self._open_url(url)
 
     def on_open_panel(self):
         url = f"{self.server_ctl.base_url}/alerts/panel.html"
         self._open_url(url)
 
+    def on_open_catalog(self):
+        self.on_open_panel()
+
     def on_open_folder(self):
-        if OVERLAYS_DIR.exists():
-            if sys.platform == "win32":
-                os.startfile(str(OVERLAYS_DIR))
-            elif sys.platform == "darwin":
-                import subprocess
-                subprocess.Popen(["open", str(OVERLAYS_DIR)])
-            else:
-                import subprocess
-                subprocess.Popen(["xdg-open", str(OVERLAYS_DIR)])
+        target = APP_DIR / "streamthemes"
+        if not target.exists():
+            target = APP_DIR
+        if sys.platform == "win32":
+            os.startfile(str(target))
+        elif sys.platform == "darwin":
+            import subprocess
+            subprocess.Popen(["open", str(target)])
+        else:
+            import subprocess
+            subprocess.Popen(["xdg-open", str(target)])
 
     def on_twitch_auth(self):
         alive, _data = self.server_ctl.is_running()
@@ -365,22 +369,28 @@ class LauncherGUI:
         set_current_language(new_lang)
         os.environ["APP_LANG"] = new_lang
 
-        # Actualizar títulos de pestañas
+        # Pestañas
         self.notebook.tab(self.tab_server, text=_("tabs.server", "🚀 Servidor"))
         self.notebook.tab(self.tab_twitch, text=_("tabs.twitch", "🟣 Twitch"))
         self.notebook.tab(self.tab_guide, text=_("tabs.guide", "📖 Guía"))
         self.notebook.tab(self.tab_logs, text=_("tabs.logs", "📜 Registro"))
 
-        # Guía de inicio y estado de actualización
-        if getattr(self, "guide_txt", None):
-            self.guide_txt.configure(state="normal")
-            self.guide_txt.delete("1.0", "end")
-            self.guide_txt.insert("1.0", _("launcher.guide_text"))
-            self.guide_txt.configure(state="disabled")
-        if hasattr(self, "lbl_update_status"):
-            self.lbl_update_status.configure(text=_("launcher.installed_version", version=VERSION))
+        # Pestaña Servidor
+        if hasattr(self, "lbl_server_title"):
+            self.lbl_server_title.configure(text=_("server.status_title", "ESTADO DEL SERVIDOR"))
+        if hasattr(self, "lbl_server_info"):
+            self.lbl_server_info.configure(text=_("server.address_info", "http://127.0.0.1:8080 · WebSocket listo para OBS"))
+        if hasattr(self, "lbl_opts_title"):
+            self.lbl_opts_title.configure(text=_("server.options_title", "OPCIONES DE ARRANQUE"))
+        if hasattr(self, "cb_browser"):
+            self.cb_browser.configure(text=_("server.opt_auto_browser", "Abrir el panel en el navegador automáticamente al iniciar"))
+        if hasattr(self, "cb_tray"):
+            self.cb_tray.configure(text=_("server.opt_minimize_tray", "Minimizar a la bandeja del sistema al pulsar la X de cerrar"))
+        if hasattr(self, "lbl_upd_title"):
+            self.lbl_upd_title.configure(text=_("updates.title", "ACTUALIZACIONES"))
+        if hasattr(self, "lbl_branch_label"):
+            self.lbl_branch_label.configure(text=_("updates.branch_label", "Rama:"))
 
-        # Estado del servidor y botón toggle
         try:
             alive, _alive_data = self.server_ctl.is_running()
         except Exception:
@@ -390,13 +400,43 @@ class LauncherGUI:
         self.btn_toggle_server.configure(
             text=_("server.btn_stop", "⏹️ Detener Servidor") if alive else _("server.btn_start", "⚡ Iniciar Servidor"))
 
-        # Actualizar botones clave
-        if hasattr(self, "btn_open_catalog"):
-            self.btn_open_catalog.configure(text=_("server.btn_open_catalog", "🏠 Portada / Inicio"))
-        self.btn_open_panel.configure(text=_("server.btn_open_panel", "🎛️ Panel de Alertas"))
-        self.btn_check_updates.configure(text=_("updates.btn_check", "🔄 Comprobar"))
-        self.btn_apply_upd.configure(text=_("updates.btn_update_now", "📥 Actualizar ahora"))
-        self.btn_save_creds.configure(text=_("twitch.btn_save_creds", "💾 Guardar Credenciales"))
-        self.btn_connect_twitch.configure(text=_("twitch.btn_connect", "🟣 Conectar con Twitch"))
-        self.btn_logout_twitch.configure(text=_("twitch.btn_logout", "Cerrar Sesión"))
+        if hasattr(self, "btn_open_panel"):
+            self.btn_open_panel.configure(text=_("server.btn_open_panel", "🎛️ Abrir Panel de Control"))
+        if hasattr(self, "btn_folder"):
+            self.btn_folder.configure(text=_("server.btn_folder", "📂 Overlays"))
+        if hasattr(self, "btn_check_updates"):
+            self.btn_check_updates.configure(text=_("updates.btn_check", "🔄 Comprobar"))
+        if hasattr(self, "btn_apply_upd"):
+            self.btn_apply_upd.configure(text=_("updates.btn_update_now", "📥 Actualizar ahora"))
+        if hasattr(self, "btn_view_release"):
+            self.btn_view_release.configure(text=_("updates.btn_github", "🌐 GitHub"))
+
+        # Pestaña Twitch
+        if hasattr(self, "lbl_twitch_acc_title"):
+            self.lbl_twitch_acc_title.configure(text=_("twitch.account_title", "CUENTA DE TWITCH"))
+        if hasattr(self, "lbl_twitch_creds_title"):
+            self.lbl_twitch_creds_title.configure(text=_("twitch.creds_title", "CREDENCIALES DE LA APLICACIÓN (dev.twitch.tv)"))
+        if hasattr(self, "lbl_client_id"):
+            self.lbl_client_id.configure(text=_("twitch.client_id", "Client ID:"))
+        if hasattr(self, "lbl_client_secret"):
+            self.lbl_client_secret.configure(text=_("twitch.client_secret", "Client Secret:"))
+        if hasattr(self, "btn_toggle_secret"):
+            self.btn_toggle_secret.configure(text=_("twitch.toggle_secret", "👁️ Ver / Ocultar"))
+        if hasattr(self, "btn_save_creds"):
+            self.btn_save_creds.configure(text=_("twitch.btn_save_creds", "💾 Guardar Credenciales"))
+        if hasattr(self, "btn_twitch_auth"):
+            self.btn_twitch_auth.configure(text=_("twitch.btn_connect", "🟣 Conectar con Twitch"))
+        if hasattr(self, "btn_logout_twitch"):
+            self.btn_logout_twitch.configure(text=_("twitch.btn_logout", "Cerrar Sesión"))
+
+        # Pestaña Guía y Logs
+        if getattr(self, "guide_txt", None):
+            self.guide_txt.configure(state="normal")
+            self.guide_txt.delete("1.0", "end")
+            self.guide_txt.insert("1.0", _("launcher.guide_text"))
+            self.guide_txt.configure(state="disabled")
+        if hasattr(self, "lbl_update_status"):
+            self.lbl_update_status.configure(text=_("launcher.installed_version", version=VERSION))
+        if hasattr(self, "btn_clear_logs"):
+            self.btn_clear_logs.configure(text=_("logs.btn_clear", "Limpiar Registro"))
 

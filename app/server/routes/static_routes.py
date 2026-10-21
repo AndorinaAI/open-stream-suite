@@ -6,7 +6,7 @@ PLUGINS_DIR = BASE_DIR.parent / "plugins"
 
 # Únicos archivos sueltos de la raíz de app/ que se sirven por HTTP.
 # NUNCA servir la raíz completa: contiene .env, token.json y .local_token.
-ROOT_PUBLIC_FILES = ("config.js", "index.html", "CONVENTIONS.md", "CONVENTIONS.en.md")
+ROOT_PUBLIC_FILES = ("config.js", "CONVENTIONS.md", "CONVENTIONS.en.md")
 
 SCENE_COMPAT_MAP = {
     "maker-desk": "/overlays/maker/desk/index.html",
@@ -42,6 +42,7 @@ def _make_file_handler(filename):
 def register_static_routes(app):
     """Registra las rutas de ficheros estáticos de overlays, escenas, widgets, alertas y media"""
     app.router.add_get("/", handle_index)
+    app.router.add_get("/index.html", handle_index)
     app.router.add_get("/scenes/{scene}", handle_legacy_scene_redirect)
     app.router.add_get("/scenes/{scene}/", handle_legacy_scene_redirect)
     app.router.add_get("/scenes/{scene}/index.html", handle_legacy_scene_redirect)

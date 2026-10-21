@@ -12,4 +12,4 @@ else
 fi
 
 echo "🚀 Iniciando Open Stream Suite..."
-exec $PYTHON_EXEC launcher.py "$@"
+exec $PYTHON_EXEC launcher.py --start-server "$@"

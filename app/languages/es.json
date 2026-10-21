@@ -38,7 +38,8 @@
     "options_title": "OPCIONES DE ARRANQUE",
     "opt_auto_browser": "Abrir el panel en el navegador automáticamente al iniciar",
     "opt_minimize_tray": "Minimizar a la bandeja del sistema al pulsar la X de cerrar",
-    "started_pid": "Servidor iniciado (PID {pid})"
+    "started_pid": "Servidor iniciado (PID {pid})",
+    "start_error_title": "Error al iniciar"
   },
   "twitch": {
     "account_title": "CUENTA DE TWITCH",
@@ -54,8 +55,11 @@
     "btn_connect": "🟣 Conectar con Twitch",
     "btn_logout": "Cerrar Sesión",
     "msg_creds_saved": "Credenciales guardadas con éxito en el archivo .env.",
+    "msg_creds_saved_title": "Guardado",
     "msg_creds_incomplete": "Por favor introduce tanto el Client ID como el Client Secret.",
-    "msg_logged_out": "Sesión de Twitch cerrada correctamente."
+    "msg_creds_incomplete_title": "Credenciales incompletas",
+    "msg_logged_out": "Sesión de Twitch cerrada correctamente.",
+    "msg_logged_out_title": "Sesión cerrada"
   },
   "updates": {
     "title": "ACTUALIZACIONES",
@@ -82,6 +86,9 @@
     "twitch": "🟣 Twitch",
     "guide": "📖 Guía",
     "logs": "📜 Registro"
+  },
+  "logs": {
+    "btn_clear": "Limpiar Registro"
   },
   "widgets": {
     "chat_title": "Chat en Pantalla & Emotes Flotantes",
