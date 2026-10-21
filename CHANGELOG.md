@@ -1,7 +1,7 @@
 # Historial de cambios
 
 <p align="center">
-  <b>Español</b> | <a href="CHANGELOG.en.md">English</a>
+  <a href="CHANGELOG.en.md"><b>English</b></a> | <b>Español</b>
 </p>
 
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).

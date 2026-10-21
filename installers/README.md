@@ -1,7 +1,7 @@
 # 📦 Instaladores de Open Stream Suite
 
 <p align="center">
-  <b>Español</b> | <a href="README.en.md">English</a>
+  <a href="README.en.md"><b>English</b></a> | <b>Español</b>
 </p>
 
 Los instaladores y lanzadores oficiales se han organizado en carpetas dedicadas por sistema operativo en la raíz del proyecto para mayor comodidad:

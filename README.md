@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <b>Español</b> | <a href="README.en.md">English</a>
+  <a href="README.en.md"><b>English</b></a> | <b>Español</b>
 </p>
 
 # OPEN STREAM SUITE — SISTEMA COMPLETO DE OVERLAYS PARA TWITCH Y OBS STUDIO

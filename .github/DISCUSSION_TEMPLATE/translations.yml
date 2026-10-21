@@ -4,16 +4,16 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## 🌍 Reporte de Traducción Faltante / Missing Translation Report
-        ¡Gracias por ayudarnos a que Open Stream Suite esté disponible en más idiomas y sin errores de traducción! / *Thank you for helping keep Open Stream Suite localized and typo-free!*
+        ## 🌍 Missing Translation Report / Reporte de Traducción Faltante
+        Thank you for helping keep Open Stream Suite localized and typo-free! / *¡Gracias por ayudarnos a que Open Stream Suite esté disponible en más idiomas y sin errores de traducción!*
   - type: dropdown
     id: language
     attributes:
-      label: Idioma / Language
+      label: Language / Idioma
       options:
-        - Español (es)
         - English (en)
-        - Otro / Other (Proponer nuevo idioma)
+        - Español (es)
+        - Other / Otro (Propose new language)
     validations:
       required: true
   - type: input

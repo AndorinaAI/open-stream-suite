@@ -1,23 +1,25 @@
-name: 🌍 Traducción / Translation
-description: Falta o hay un error en una traducción / Missing or wrong translation
+name: 🌍 Translation / Traducción
+description: Missing or wrong translation / Falta o hay un error en una traducción
 title: "[i18n]: "
 labels: ["i18n"]
 body:
   - type: input
     id: lang
     attributes:
-      label: Idioma / Language
-      placeholder: "es, en, fr..."
+      label: Language / Idioma
+      placeholder: "en, es, fr, de, pt..."
     validations:
       required: true
   - type: textarea
     id: where
     attributes:
-      label: Dónde aparece / Where it appears
-      description: Pestaña, menú, texto exacto / Tab, menu, exact text
+      label: Where it appears / Dónde aparece
+      description: Tab, menu, exact text / Pestaña, menú, texto exacto
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Texto propuesto / Proposed text
+      label: Proposed text / Texto propuesto
+    validations:
+      required: true
