@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">Español</a> | <b>English</b>
+  <b>English</b> | <a href="README.es.md">Español</a>
 </p>
 
 # OPEN STREAM SUITE — MODULAR OVERLAYS, ALERTS & CONTROL SUITE FOR TWITCH & OBS STUDIO
@@ -35,8 +35,8 @@
 
 ```text
 OpenStreamSuite/
-├── README.md               # Spanish README
-├── README.en.md            # English README (this file)
+├── README.md               # English README (primary)
+├── README.es.md            # Spanish README (Español)
 ├── LICENSE                 # License (PolyForm Noncommercial 1.0.0)
 │
 ├── Linux/                  # Installer, launcher, updater and instructions (ES/EN)

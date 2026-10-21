@@ -86,13 +86,13 @@ def list_media_library() -> dict:
 
     for p in sorted(media_root.rglob("*")):
         try:
-            rel = str(p.relative_to(media_root))
+            rel = p.relative_to(media_root).as_posix()
             if p.is_dir():
                 folders.append(rel)
             elif p.is_file() and p.suffix.lower() in ALLOWED_MEDIA_EXTENSIONS:
                 stat = p.stat()
                 mtype = get_media_type(p.suffix)
-                folder_rel = str(p.parent.relative_to(media_root)) if p.parent != media_root else ""
+                folder_rel = p.parent.relative_to(media_root).as_posix() if p.parent != media_root else ""
                 files.append({
                     "name": p.name,
                     "rel_path": rel,
@@ -152,7 +152,7 @@ def create_media_folder(folder_name: str, parent_path: str = "") -> tuple[bool, 
             return False, "Ruta no autorizada"
 
     new_dir.mkdir(parents=True, exist_ok=True)
-    rel = str(new_dir.relative_to(media_root))
+    rel = new_dir.relative_to(media_root).as_posix()
     logger.info(f"📁 Directorio creado: {rel}")
     return True, rel
 
@@ -182,7 +182,7 @@ def rename_media_item(rel_path: str, new_name: str) -> tuple[int, dict]:
 
     target.rename(dest)
     media_root = MEDIA_DIR.resolve()
-    new_rel = str(dest.relative_to(media_root))
+    new_rel = dest.relative_to(media_root).as_posix()
     logger.info(f"✏️ Elemento renombrado: {rel_path} ➜ {new_rel}")
     return 200, {"status": "ok", "old_path": rel_path, "new_path": new_rel, "url": "/media/" + new_rel}
 

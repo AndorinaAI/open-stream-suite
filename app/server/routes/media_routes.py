@@ -89,7 +89,7 @@ async def handle_upload_media(request):
                     break
                 f.write(chunk)
 
-        rel_saved = str(target_path.relative_to(media_root))
+        rel_saved = target_path.relative_to(media_root).as_posix()
         saved.append(raw_fn)
         destinations.append("/media/" + rel_saved)
         logger.info(f"✓ Archivo subido con éxito y verificado: {rel_saved}")

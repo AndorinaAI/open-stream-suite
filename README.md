@@ -3,201 +3,196 @@
 </p>
 
 <p align="center">
-  <a href="README.en.md"><b>English</b></a> | <b>Español</b>
+  <b>English</b> | <a href="README.es.md">Español</a>
 </p>
 
-# OPEN STREAM SUITE — SISTEMA COMPLETO DE OVERLAYS PARA TWITCH Y OBS STUDIO
+# OPEN STREAM SUITE — MODULAR OVERLAYS, ALERTS & CONTROL SUITE FOR TWITCH & OBS STUDIO
 
-> **JUGAR · CREAR · COMPARTIR**  
-> Identidad visual contemporánea, modular y ligera para streaming de videojuegos, programación, creación de contenido, just chatting y cualquier tipo de directo.  
-> 🚀 **[Guía Paso a Paso de Instalación e Inicio](app/docs/INSTALACION_E_INICIO.md)** · [English](app/docs/INSTALLATION_AND_STARTUP.md)
-
----
-
-## 1. Introducción
-
-**Open Stream Suite** es un paquete de overlays profesionales diseñado para cualquier tipo de streamer. En lugar de plantillas genéricas o recargadas con estética gamer estridente, este sistema se basa en una estética limpia y técnica: marcas de registro, tipografía monoespaciada para metadatos, toques sutiles de color de acento y un respeto absoluto por el contenido del directo.
-
-### Características Clave
-- **100% Offline (Sin conexión a Internet obligatoria para overlays)**: Las tipografías están descargadas en local en `common/fonts/` y servidas por el backend. Funciona de manera local en tu ordenador sin CDNs externas.
-- **Rendimiento ultra-ligero**: Desarrollado en HTML5 nativo, CSS y Vanilla JS. Sin frameworks pesados ni dependencias npm para el frontend.
-- **Transparencia real**: Las escenas de directo tienen fondo transparente real para que tus juegos, terminales y cámaras se vean debajo sin filtros oscuros molestos.
-- **Configuración centralizada**: Modifica el nombre del canal, los títulos de los proyectos, las fases activas y las redes sociales desde [`app/config.js`](app/config.js).
-- **Temas Modulares y Restauración de Fábrica**: Paletas y trajes visuales en `themes/<pack>/<tema>/` con respaldo `.default.json` / `.default.css` para restaurar con 1 solo clic si modificas algo por error.
-- **Estilos Visuales Independientes por Overlay**: Cada overlay de OBS Studio puede vestir su propio estilo visual (Arcade para Gameplay, Chill para charla, Cyberpunk para tech, etc.).
-- **Overlays con Lógica Programada y Controles Flotantes**: Las overlays son aplicaciones web dinámicas con cronómetros de centésimas, splits interactivos de speedrun (+/-), temporizadores Pomodoro sincronizados, conmutadores multicámara, insignias interactivas al clic y menús HUD flotantes reposicionables (*draggables*) sin obstruir contenido.
-- **Plugins para Macro Decks**: Integraciones nativas en [`plugins/`](plugins/README.md) ([English](plugins/README.en.md)) para Elgato Stream Deck, Ajazz AKP05/AKP153 y OpenDeck (Bitfocus Companion), con guía de instalación.
-- **Seguridad Robusta**: Control de subida de archivos con lista blanca y protección anti path-traversal, CORS restringido a localhost/dominio propio y autenticación con token local criptográfico en llamadas POST.
+> **PLAY · CREATE · SHARE**  
+> Contemporary, modular, and lightweight visual identity for gaming, programming, maker streams, content creation, and just chatting.  
+> 🚀 **[Step-by-Step Installation & Startup Guide](app/docs/INSTALLATION_AND_STARTUP.md)** · [Español](app/docs/INSTALACION_E_INICIO.md)
 
 ---
 
-## 2. Estructura del Proyecto
+## 1. Overview
+
+**Open Stream Suite** is a collection of professional, modular overlays and streaming tools tailored for content creators. Instead of loud, heavy, generic gaming templates, it uses a technical, clean aesthetic: registration marks, clean monospace typography for metadata, subtle accent colors, and deep respect for on-screen live content.
+
+### Key Features
+- **100% Offline (No Internet connection required for overlays)**: Typography is bundled locally in `common/fonts/` and served by the backend. Works completely offline on your computer without external CDNs.
+- **Ultra-lightweight Performance**: Built with native HTML5, CSS3, and Vanilla JavaScript. Zero heavy web frameworks or npm build steps for the frontend.
+- **True Transparency**: Live broadcast scenes have real transparent backgrounds so games, terminals, and webcams sit seamlessly underneath without muddy dark tint filters.
+- **Centralized Configuration**: Edit streamer channel names, project titles, active development phases, and social links from [`app/config.js`](app/config.js) or via the web control panel.
+- **Modular Themes & Factory Reset**: Complete theme packs in `themes/<pack>/<theme>/` with backup `.default.json` / `.default.css` files allowing 1-click instant factory restoration.
+- **Independent Visual Themes per Scene**: Each OBS Studio scene overlay can wear its own style (Arcade for Gaming, Chill for Just Chatting, Cyberpunk for coding/tech, etc.).
+- **Programmed Overlay Logic & Floating Draggable Controls**: Overlays are dynamic broadcast web applications rather than passive templates. They feature centisecond speedrun split timers with live deltas (+/-), millisecond-synchronized Pomodoro countdowns, multi-cam grid switchers, click-cycle victory badges, and floating draggable HUD menus designed never to obstruct gameplay or cameras.
+- **Physical Deck Plugins**: Native integrations in [`plugins/`](plugins/README.en.md) for Elgato Stream Deck, Ajazz AKP05 (10 keys + panoramic touch strip + 4 knobs), Ajazz AKP153/03/846, and OpenDeck (Bitfocus Companion).
+- **Robust Security**: Whitelisted file upload controls, anti path-traversal protection, CORS restricted to localhost/custom domain, and cryptographic local token authentication for mutating requests.
+
+---
+
+## 2. Project Structure
 
 ```text
 OpenStreamSuite/
-├── README.md               # Este documento
-├── LICENSE                 # Licencia (PolyForm Noncommercial 1.0.0)
+├── README.md               # English README (primary)
+├── README.es.md            # Spanish README (Español)
+├── LICENSE                 # License (PolyForm Noncommercial 1.0.0)
 │
-├── Linux/                  # Instaladores, lanzador, actualizador e instrucciones (ES/EN)
-├── Mac/                    # Idem para macOS
-├── Windows/                # Idem para Windows
+├── Linux/                  # Installer, launcher, updater and instructions (ES/EN)
+├── Mac/                    # same for macOS
+├── Windows/                # same for Windows
 │
-├── app/assets/imagencorp/  # Identidad visual, logos vectoriales y capturas
-│   ├── README.md           # Manual de identidad y paleta de colores
-│   ├── logos/              # Isotipos, favicon y logos horizontales (SVG y PNG)
-│   └── screenshots/        # Capturas de pantalla reales en alta resolución
+├── languages/              # Multi-language dictionary files (JSON)
+│   ├── es.json             # Spanish localization
+│   └── en.json             # English localization
 │
-├── plugins/                # Plugins para decks (fuera de app/ para encontrarlos fácil)
-│   ├── README.md           # Guía de instalación de todos los plugins
-│   ├── stream_deck/        # Plugin nativo Elgato (.sdPlugin)
-│   ├── ajazz/              # Perfiles Ajazz AKP05 y AKP153/03/846 + bridge CLI
-│   ├── opendeck_companion/ # Página lista para Bitfocus Companion y OpenDeck
-│   └── assets/             # Iconos SVG para las teclas LCD
+├── app/assets/imagencorp/  # Visual identity, vector logos, and screenshots
+│   ├── README.en.md        # Brand manual and color palette
+│   ├── logos/              # Symbols, favicon, horizontal logos (SVG & PNG)
+│   └── screenshots/        # High-resolution live screenshots
 │
-└── app/                    # Todo el proyecto
-    ├── CONVENTIONS.md      # Estándares de arquitectura y guía para desarrollo
-    ├── config.js           # Archivo central de personalización del stream
-    ├── index.html          # Catálogo interactivo de previsualización local
-    ├── server.py           # Servidor backend Python (aiohttp + WebSockets)
-    ├── launcher.py         # Lanzador de escritorio
-    ├── requirements.txt    # Dependencias Python
-    ├── .env.example        # Plantilla de configuración (copiar a .env)
-    ├── scripts/            # Scripts auxiliares de túneles VPS y utilidades de desarrollo
-    ├── server/             # Backend modular (rutas, estado, EventSub, IRC)
-    ├── alerts/             # Panel de control web y fuente de alertas para OBS
-    ├── widgets/            # Chat, metas, shoutout, ticker y temporizador
-    ├── overlays/           # Paquetes de escenas para OBS Studio
-    ├── themes/             # Packs de temas modulares (theme.json, style.css, copias de fábrica)
-    │   ├── pack_open_stream_suite/   # maker, print, terminal, chill, cyberpunk, synthwave
-    │   ├── pack_personalizado/       # variante personalizable de los 6 estilos base
-    │   ├── pack_retro_arcade/        # arcade_8bit, vapor_sunset
-    │   ├── pack_cozy_lofi/           # cozy_terracotta, nordic_forest
-    │   ├── pack_manga_ink/           # manga_dark_ink, manga_shonen
-    │   └── pack_sci_fi_blueprint/    # blueprint_cad, neon_matrix
-    ├── common/             # Estilos compartidos, fuentes locales y utilidades
-    ├── docs/               # Guías (OBS, temas, decks, dominio propio)
-    ├── scripts/            # Auxiliares (Cloudflare Tunnel, VPS)
-    └── tests/              # Suite de pruebas automatizadas (47 tests)
+├── plugins/                # Physical deck plugins and macros
+│   ├── README.en.md        # Deck plugins setup guide
+│   ├── stream_deck/        # Native Elgato Stream Deck plugin (.sdPlugin)
+│   ├── ajazz/              # Ajazz AKP05 & AKP153 profiles + CLI bridge
+│   ├── opendeck_companion/ # Companion page for OpenDeck and stream controllers
+│   └── assets/             # SVG icons for LCD buttons
+│
+└── app/                    # Core project files
+    ├── CONVENTIONS.en.md   # Architecture standards & dev guidelines
+    ├── config.js           # Stream customization settings
+    ├── index.html          # Interactive scene catalog & preview
+    ├── server.py           # Backend Python server (aiohttp + WebSockets)
+    ├── launcher.py         # Desktop launcher application
+    ├── requirements.txt    # Python dependencies
+    ├── .env.example        # Environment variables template
+    ├── server/             # Modular backend (routes, state, EventSub, IRC)
+    ├── alerts/             # Web control panel & OBS alert engine
+    ├── widgets/            # Chat, goals, shoutout, ticker, and timer
+    ├── overlays/           # OBS Studio broadcast scenes
+    ├── themes/             # Modular theme packs
+    ├── common/             # Shared CSS, local fonts, and i18n engine
+    └── tests/              # Automated unit tests (49 tests)
 ```
 
 ---
 
-## 3. Guía Paso a Paso para Configurar OBS Studio
+## 3. Step-by-Step OBS Studio Setup
 
-Las overlays son páginas HTML locales que se añaden a OBS como **Fuentes de Navegador** (*Browser Sources*).
+All overlays are local HTML files loaded into OBS as **Browser Sources**.
 
-### Paso 1: Configurar el lienzo base
-1. Abre **OBS Studio**.
-2. Ve a **Ajustes** → **Vídeo**.
-3. Asegúrate de que la **Resolución de la base (Lienzo)** y la **Resolución de salida** estén en **`1920x1080`**.
+### Step 1: Base Canvas Setup
+1. Open **OBS Studio**.
+2. Go to **Settings** → **Video**.
+3. Set both **Base (Canvas) Resolution** and **Output (Scaled) Resolution** to **`1920x1080`**.
 
-### Paso 2: Crear tus escenas
-Crea una escena en el panel *Escenas* para cada uno de tus modos habituales de directo:
+### Step 2: Create Your Broadcast Scenes
+In the *Scenes* dock, create a scene for each stream mode:
 - `1 - GAME`
-- `2 - ESCENA PRINCIPAL` *(cámara + webcam)*
-- `3 - PANTALLA PC` *(captura de pantalla + webcam)*
-- `4 - CÁMARA SECUNDARIA` *(proceso o acción en curso)*
-- `5 - PANTALLA DISEÑO` *(app a pantalla completa)*
-- `6 - CHILL`
+- `2 - MAIN SCENE` *(camera + desk/webcam)*
+- `3 - PC SCREEN` *(screen share + webcam)*
+- `4 - SECONDARY CAM` *(workbench, 3D printer, or action)*
+- `5 - DESIGN SCREEN` *(full-screen app)*
+- `6 - CHILL` *(Just Chatting)*
 - `7 - STARTING SOON`
-- `8 - PAUSA`
+- `8 - BRB / PAUSE`
 - `9 - ENDING`
 
-### Paso 3: Añadir la overlay a una escena
-1. Selecciona la escena en OBS (por ejemplo `2 - ESCENA PRINCIPAL`).
-2. En la lista de **Fuentes**, pulsa en el botón **`+`** y selecciona **Navegador** (*Browser*).
-3. Nómbrala `Overlay - Escena Principal`.
-4. En las propiedades de la fuente:
-   - Marca la casilla **Archivo local** (*Local file*).
-   - Pulsa **Examinar** y busca el archivo `app/overlays/maker/desk/index.html` (o usa la URL `http://localhost:8080/overlays/maker/desk/index.html`).
-   - **Ancho**: `1920`
-   - **Alto**: `1080`
-   - Marca **Apagar la fuente cuando no sea visible**.
-   - Marca **Actualizar el navegador cuando la escena se active**.
-5. Pulsa **Aceptar**.
+### Step 3: Add an Overlay to a Scene
+1. Select the scene in OBS (e.g. `2 - MAIN SCENE`).
+2. In the **Sources** dock, click **`+`** and choose **Browser**.
+3. Name it `Overlay - Main Scene`.
+4. In the source properties:
+   - Check **Local file** and browse to `app/overlays/maker/desk/index.html` (or enter `http://localhost:8080/overlays/maker/desk/index.html`).
+   - **Width**: `1920`
+   - **Height**: `1080`
+   - Check **Shutdown source when not visible**.
+   - Check **Refresh browser when scene becomes active**.
+5. Click **OK**.
 
-### Paso 4: Colocar las cámaras y capturas de vídeo
-Añade tus dispositivos de captura de vídeo o capturas de pantalla **debajo de la fuente del overlay**:
-- **Orden de capas**:
-  1. `Overlay` *(siempre arriba para que los marcos dibujen sobre el vídeo)*.
-  2. `Cámaras secundarias` *(rostro, auxiliar)*.
-  3. `Cámara o captura principal` *(mesa, monitor, juego)*.
+### Step 4: Arrange Cameras & Capture Devices
+Add video capture devices or window captures **below the overlay source**:
+- **Layer Order**:
+  1. `Overlay` *(always top so borders render cleanly over video)*.
+  2. `Webcams / Facecam` *(secondary frames)*.
+  3. `Main Capture` *(gameplay, monitor, workbench)*.
 
-Para alinear tus cámaras exactamente con los marcos, consulta las medidas de [app/docs/OBS_SETUP.md](app/docs/OBS_SETUP.md) ([English](app/docs/OBS_SETUP.en.md)).
+To align cameras with pixel precision, see the layout guide in [app/docs/OBS_SETUP.en.md](app/docs/OBS_SETUP.en.md).
 
 ---
 
-## 4. Servidor Local y App de Escritorio
+## 4. Local Server & Desktop Application
 
-El proyecto incluye una aplicación de escritorio con panel de control, bandeja del sistema (*tray*), supervisión del servidor y gestión de credenciales de Twitch:
+Open Stream Suite includes a desktop application with a control dashboard, system tray support, server health monitor, and Twitch API credentials manager:
 
 > [!IMPORTANT]
-> **Desarrollo en GNU/Linux & Feedback de la Comunidad para Windows / macOS:**  
-> Desarrollamos y testeamos Open Stream Suite activamente en **GNU/Linux**. Aunque se proporcionan instaladores automáticos y lanzadores para **Windows** (`.bat`) y **macOS** (`.command`), el equipo de desarrollo **no utiliza sistemas operativos privativos en su día a día**. Por ello, el soporte y la resolución de casos especiales en Windows y Mac dependen de vuestro feedback y contribuciones. Si detectas cualquier fallo o deseas optimizar los scripts en esas plataformas, te animamos a [abrir una issue o enviar una pull request](https://github.com/AndorinaAI/open-stream-suite/issues). ¡Agradecemos enormemente vuestra colaboración!
+> **GNU/Linux Development & Community Feedback for Windows / macOS:**  
+> Open Stream Suite is actively developed and tested on **GNU/Linux**. While automated installers and native launch scripts are provided for **Windows** (`.bat`) and **macOS** (`.command`), our core team **does not use proprietary operating systems in their daily workflows**. Therefore, support, compatibility checks, and edge-case fixes on Windows and Mac rely heavily on community testing and feedback. If you encounter any unexpected behavior or wish to refine the launchers on those platforms, please [open an issue or submit a pull request](https://github.com/AndorinaAI/open-stream-suite/issues). Your collaboration is greatly appreciated!
 
-### Instalación Rápida:
-Ejecuta el instalador automático según tu sistema operativo:
+### Quick Install:
+Run the installer for your operating system:
 - **Linux**: `./Linux/install.sh`
-- **Windows**: Haz doble clic en `Windows\install.bat`
-- **macOS**: Haz doble clic en `Mac/install.command`
+- **Windows**: Double-click `Windows\install.bat`
+- **macOS**: Double-click `Mac/install.command`
 
-El instalador creará el entorno virtual en `app/venv/`, instalará las dependencias y registrará el acceso directo en el sistema.
+The installer prepares the Python virtual environment in `app/venv/`, installs dependencies, and creates system desktop shortcuts.
 
-### Cómo Iniciar la Aplicación:
-Haz doble clic en el script correspondiente en la raíz del proyecto:
+### Launching the Application:
+Double-click the corresponding root launcher:
 - 🐧 **Linux**: `Linux/Iniciar Open Stream Suite.sh`
 - 🪟 **Windows**: `Windows/Iniciar Open Stream Suite.bat`
 - 🍎 **macOS**: `Mac/Iniciar Open Stream Suite.command`
 
-Desde la ventana del lanzador podrás **iniciar/detener el servidor**, configurar tus credenciales de Twitch con un clic, ver cuántos clientes OBS están conectados y abrir el **Panel de Control** directamente en tu navegador.
+From the desktop launcher you can **start/stop the server**, configure Twitch credentials, switch language (ES/EN), check for software updates, and open the **Web Control Panel**.
 
 > [!NOTE]
-> **Seguridad:** Por defecto el servidor escucha exclusivamente en tu propio equipo (`127.0.0.1`). Para usar un deck o tableta desde otro dispositivo en tu red local, define `SERVER_HOST=0.0.0.0` y `DECK_TOKEN` en `app/.env` (ver [`plugins/README.md`](plugins/README.md) / [English](plugins/README.en.md)).
+> **Network Security:** By default the server binds exclusively to `127.0.0.1`. To access the control panel or deck API from a secondary device or tablet on your local network, set `SERVER_HOST=0.0.0.0` and configure `DECK_TOKEN` in `app/.env` (see [`plugins/README.en.md`](plugins/README.en.md)).
 
-### URLs del Sistema en Vivo:
-- **🎛️ Panel de Control del Streamer**: [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html)
-- **🚨 Fuente de Alertas y Memes para OBS**: [http://localhost:8080/alerts/index.html](http://localhost:8080/alerts/index.html) *(1920×1080)*
-- **📰 Visualizador de Catálogo**: [http://localhost:8080/index.html](http://localhost:8080/index.html)
+### Live URLs:
+- **🎛️ Streamer Control Panel**: [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html)
+- **🚨 OBS Alert Engine**: [http://localhost:8080/alerts/index.html](http://localhost:8080/alerts/index.html) *(1920×1080)*
+- **📰 Interactive Catalog**: [http://localhost:8080/index.html](http://localhost:8080/index.html)
 
 ---
 
-## 5. Widgets Modulares para OBS
+## 5. Modular OBS Widgets
 
-Puedes añadir estos widgets independientes como fuentes de Navegador en cualquier escena:
+Each widget can be loaded as an independent Browser Source in any scene:
 
-| Widget | URL Local | Tamaño Recomendado | Descripción |
+| Widget | Local URL | Recommended Size | Description |
 | :--- | :--- | :--- | :--- |
-| **🚨 Alertas & Triggers** | `http://localhost:8080/alerts/index.html` | `1920 × 1080` | Alertas animadas + Memes/vídeos en pantalla. |
-| **💬 Chat & Partículas** | `http://localhost:8080/widgets/chat/index.html` | `440 × 850` | Conexión directa a Twitch IRC + física de emotes. |
-| **⏱️ Temporizador** | `http://localhost:8080/widgets/timer/index.html` | `400 × 140` | Cronómetro controlado desde el panel (curado, pomodoro). |
-| **📢 Shoutout Streamer** | `http://localhost:8080/widgets/shoutout/index.html` | `600 × 200` | Tarjeta holográfica con avatar y juego del streamer. |
-| **🎯 Barra de Objetivo** | `http://localhost:8080/widgets/goal/index.html` | `460 × 120` | Progreso de seguidores o suscripciones. |
-| **📰 Ticker de Eventos** | `http://localhost:8080/widgets/ticker/index.html` | `800 × 60` | Cinta minimalista de último follow, sub y top bits. |
+| **🚨 Alerts & Triggers** | `http://localhost:8080/alerts/index.html` | `1920 × 1080` | Animated CSS alerts & green-screen reaction clips. |
+| **💬 Chat & Physics** | `http://localhost:8080/widgets/chat/index.html` | `440 × 850` | Direct Twitch IRC connection + floating bouncing emotes. |
+| **⏱️ Timer** | `http://localhost:8080/widgets/timer/index.html` | `400 × 140` | Stopwatch, countdown timer, and pomodoro breaks. |
+| **📢 Shoutout Card** | `http://localhost:8080/widgets/shoutout/index.html` | `600 × 200` | Holographic promo card with streamer avatar and game. |
+| **🎯 Goal Bar** | `http://localhost:8080/widgets/goal/index.html` | `460 × 120` | Real-time follower, subscriber, or bits target tracker. |
+| **📰 Event Ticker** | `http://localhost:8080/widgets/ticker/index.html` | `800 × 60` | Minimal broadcast ribbon for latest follow, sub, and tip. |
 
 ---
 
-## 6. Documentación Adicional y Tests
+## 6. Documentation & Testing
 
-- **Instalación de plugins para decks**: [plugins/README.md](plugins/README.md) ([English](plugins/README.en.md))
-- **Integración de decks (API y perfiles)**: [app/docs/GUIA_INTEGRACION_DECKS.md](app/docs/GUIA_INTEGRACION_DECKS.md) ([English](app/docs/GUIA_INTEGRACION_DECKS.en.md))
-- **Crear temas y escenas desde cero**: [app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md](app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md) ([English](app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.en.md))
-- **Arquitectura y Convenciones**: [app/CONVENTIONS.md](app/CONVENTIONS.md) ([English](app/CONVENTIONS.en.md))
-- **Guía Técnica de Desarrollo y Temas**: [app/docs/GUIA_DESARROLLO_Y_TEMAS.md](app/docs/GUIA_DESARROLLO_Y_TEMAS.md) ([English](app/docs/GUIA_DESARROLLO_Y_TEMAS.en.md))
-- **Medidas de Escenas para OBS**: [app/docs/OBS_SETUP.md](app/docs/OBS_SETUP.md) ([English](app/docs/OBS_SETUP.en.md))
-- **Ejecutar los tests** (con el servidor en marcha, desde `app/`):
+- **Deck Plugins Setup Guide**: [plugins/README.en.md](plugins/README.en.md)
+- **Deck Hardware Integration (API & Profiles)**: [app/docs/GUIA_INTEGRACION_DECKS.en.md](app/docs/GUIA_INTEGRACION_DECKS.en.md)
+- **Create Themes & Scenes from Scratch**: [app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.en.md](app/docs/GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.en.md)
+- **Architecture & Conventions**: [app/CONVENTIONS.en.md](app/CONVENTIONS.en.md)
+- **Development & Theme Engine Guide**: [app/docs/GUIA_DESARROLLO_Y_TEMAS.en.md](app/docs/GUIA_DESARROLLO_Y_TEMAS.en.md)
+- **OBS Scene Coordinates & Measurements**: [app/docs/OBS_SETUP.en.md](app/docs/OBS_SETUP.en.md)
+- **Run the Automated Test Suite** (with server running, from `app/`):
   ```bash
   ./venv/bin/python3 -m unittest discover tests -v
   ```
 
 ---
 
-## 7. Licencia y Contribuciones
+## 7. License & Contributions
 
-Open Stream Suite se distribuye bajo la licencia **[PolyForm Noncommercial 1.0.0](LICENSE)**: puedes usarlo, estudiarlo, modificarlo y compartirlo libremente para **fines no comerciales**, incluido su uso personal para hacer streaming. **No está permitido venderlo ni usarlo para obtener beneficio comercial** sin permiso del autor.
+Open Stream Suite is released under the **[PolyForm Noncommercial 1.0.0 License](LICENSE)**: you are free to use, modify, study, and share it for **non-commercial personal streaming purposes**. **Selling it or using it for commercial monetization is strictly prohibited** without prior written permission from the author.
 
 > [!NOTE]
-> Es una licencia de código disponible (*source-available*), no una licencia "open source" en el sentido estricto de la OSI, porque restringe el uso comercial. La licencia no puede obligar a que los forks envíen sus cambios al proyecto original, pero las contribuciones son muy bienvenidas: consulta [CONTRIBUTING.md](.github/CONTRIBUTING.md) ([English](.github/CONTRIBUTING.en.md)).
+> This is a source-available license, not an OSI-approved open source license, because it restricts commercial use. Contributions and improvements are warmly welcome: see [CONTRIBUTING.en.md](.github/CONTRIBUTING.en.md).
 
-Las dependencias de terceros mantienen sus propias licencias.
+Third-party dependencies and assets retain their respective licenses.
 
-¡A disfrutar creando, emitiendo y compartiendo en directo! 🎮🚀
+Enjoy building, streaming, and sharing live! 🎮🚀
