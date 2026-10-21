@@ -6,7 +6,15 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] — 2026-10-20
+## [Unreleased] — 2026-10-21
+
+### Changed — Comprehensive Modular Architecture Refactor
+- **Modular Backend (`app/server/`)**: Routes completely decoupled into `server/routes/` and business logic into `server/services/`, with transparent backward-compatibility re-exports in `server/*.py`.
+- **Alerts Overlay (`app/alerts/`)**: `alerts/index.html` reduced to ~60 lines with styles extracted to `css/alerts-widget.css` and dedicated engines in `js/overlay/` (audio synth, canvas particles, alert queue, WebSocket client).
+- **Decoupled Widgets (`app/widgets/`)**: Every widget now follows a standardized two-layer architecture with submodules in `widgets/<widget>/panel/` (Mini-App controls) and `widgets/<widget>/js/` (OBS runtime), with `panel.js` serving as an auto-loading loader shim.
+- **Scene Catalog (`app/index.html`)**: Extracted `common/catalog.css` and `common/catalog.js` with responsive ResizeObserver logic.
+- **Directory Layout & Scripts**: Deployment assistants and tunnel scripts organized into `app/scripts/` with wrapper entry points preserved in `app/` root.
+- **Zero Breakage**: 100% backward compatibility preserved across OBS Studio browser sources, Stream Deck macro pads, and web panels.
 
 ### Added — Full Internationalization (i18n)
 - Complete English translation of the entire control panel: headers, tabs, buttons, labels, modals, dropdowns, floating/emerging panels (widget mini-apps), toasts, and `alert()` / `confirm()` dialogs.

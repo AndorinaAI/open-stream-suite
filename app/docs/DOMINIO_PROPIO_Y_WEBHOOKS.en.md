@@ -29,7 +29,15 @@ This guide explains how to route a **custom domain** (e.g. `stream.yourdomain.co
 
 ---
 
-### Step-by-Step for Linux (Ubuntu / Debian / Mint):
+### ⚡ Automated 1-Click Setup Assistant (Recommended):
+The suite includes an automated assistant script in `scripts/setup_cloudflare.sh` that installs the connector, logs in, creates the tunnel, and routes your DNS:
+```bash
+./scripts/setup_cloudflare.sh stream.yourdomain.com 8080
+```
+
+---
+
+### Manual Step-by-Step for Linux (Ubuntu / Debian / Mint):
 
 #### 1. Install the Official `cloudflared` Connector
 Open a terminal and execute:

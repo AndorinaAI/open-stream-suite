@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="imagencorp/banner_github_header.png" alt="Open Stream Suite" width="100%">
+  <img src="app/assets/imagencorp/banner_github_header.png" alt="Open Stream Suite" width="100%">
 </p>
 
 <p align="center">
@@ -10,7 +10,7 @@
 
 > **JUGAR · CREAR · COMPARTIR**  
 > Identidad visual contemporánea, modular y ligera para streaming de videojuegos, programación, creación de contenido, just chatting y cualquier tipo de directo.  
-> 🚀 **[Guía Paso a Paso de Instalación e Inicio](INSTALACION_E_INICIO.md)** · [English](INSTALLATION_AND_STARTUP.md)
+> 🚀 **[Guía Paso a Paso de Instalación e Inicio](app/docs/INSTALACION_E_INICIO.md)** · [English](app/docs/INSTALLATION_AND_STARTUP.md)
 
 ---
 
@@ -25,6 +25,7 @@
 - **Configuración centralizada**: Modifica el nombre del canal, los títulos de los proyectos, las fases activas y las redes sociales desde [`app/config.js`](app/config.js).
 - **Temas Modulares y Restauración de Fábrica**: Paletas y trajes visuales en `themes/<pack>/<tema>/` con respaldo `.default.json` / `.default.css` para restaurar con 1 solo clic si modificas algo por error.
 - **Estilos Visuales Independientes por Overlay**: Cada overlay de OBS Studio puede vestir su propio estilo visual (Arcade para Gameplay, Chill para charla, Cyberpunk para tech, etc.).
+- **Overlays con Lógica Programada y Controles Flotantes**: Las overlays son aplicaciones web dinámicas con cronómetros de centésimas, splits interactivos de speedrun (+/-), temporizadores Pomodoro sincronizados, conmutadores multicámara, insignias interactivas al clic y menús HUD flotantes reposicionables (*draggables*) sin obstruir contenido.
 - **Plugins para Macro Decks**: Integraciones nativas en [`plugins/`](plugins/README.md) ([English](plugins/README.en.md)) para Elgato Stream Deck, Ajazz AKP05/AKP153 y OpenDeck (Bitfocus Companion), con guía de instalación.
 - **Seguridad Robusta**: Control de subida de archivos con lista blanca y protección anti path-traversal, CORS restringido a localhost/dominio propio y autenticación con token local criptográfico en llamadas POST.
 
@@ -35,18 +36,13 @@
 ```text
 OpenStreamSuite/
 ├── README.md               # Este documento
-├── INSTALACION_E_INICIO.md # Guía paso a paso de instalación e inicio
 ├── LICENSE                 # Licencia (PolyForm Noncommercial 1.0.0)
-├── CONTRIBUTING.md         # Cómo contribuir
-├── CHANGELOG.md            # Historial de versiones
 │
-├── Iniciar Open Stream Suite.sh / .bat / .command   # Lanzadores directos
-├── installers/             # Instaladores automáticos (Linux, Windows, macOS)
-│   ├── install_linux.sh
-│   ├── install_windows.bat
-│   └── install_macos.command
+├── Linux/                  # Instaladores, lanzador, actualizador e instrucciones (ES/EN)
+├── Mac/                    # Idem para macOS
+├── Windows/                # Idem para Windows
 │
-├── imagencorp/             # Identidad visual, logos vectoriales y capturas
+├── app/assets/imagencorp/  # Identidad visual, logos vectoriales y capturas
 │   ├── README.md           # Manual de identidad y paleta de colores
 │   ├── logos/              # Isotipos, favicon y logos horizontales (SVG y PNG)
 │   └── screenshots/        # Capturas de pantalla reales en alta resolución
@@ -66,7 +62,7 @@ OpenStreamSuite/
     ├── launcher.py         # Lanzador de escritorio
     ├── requirements.txt    # Dependencias Python
     ├── .env.example        # Plantilla de configuración (copiar a .env)
-    ├── iniciar_stream.sh / iniciar_stream.bat   # Lanzadores (Linux/macOS y Windows)
+    ├── scripts/            # Scripts auxiliares de túneles VPS y utilidades de desarrollo
     ├── server/             # Backend modular (rutas, estado, EventSub, IRC)
     ├── alerts/             # Panel de control web y fuente de alertas para OBS
     ├── widgets/            # Chat, metas, shoutout, ticker y temporizador
@@ -135,19 +131,23 @@ Para alinear tus cámaras exactamente con los marcos, consulta las medidas de [a
 
 El proyecto incluye una aplicación de escritorio con panel de control, bandeja del sistema (*tray*), supervisión del servidor y gestión de credenciales de Twitch:
 
+> [!IMPORTANT]
+> **Desarrollo en GNU/Linux & Feedback de la Comunidad para Windows / macOS:**  
+> Desarrollamos y testeamos Open Stream Suite activamente en **GNU/Linux**. Aunque se proporcionan instaladores automáticos y lanzadores para **Windows** (`.bat`) y **macOS** (`.command`), el equipo de desarrollo **no utiliza sistemas operativos privativos en su día a día**. Por ello, el soporte y la resolución de casos especiales en Windows y Mac dependen de vuestro feedback y contribuciones. Si detectas cualquier fallo o deseas optimizar los scripts en esas plataformas, te animamos a [abrir una issue o enviar una pull request](https://github.com/AndorinaAI/open-stream-suite/issues). ¡Agradecemos enormemente vuestra colaboración!
+
 ### Instalación Rápida:
 Ejecuta el instalador automático según tu sistema operativo:
-- **Linux**: `./installers/install_linux.sh`
-- **Windows**: Haz doble clic en `installers\install_windows.bat`
-- **macOS**: Haz doble clic en `installers/install_macos.command`
+- **Linux**: `./Linux/install.sh`
+- **Windows**: Haz doble clic en `Windows\install.bat`
+- **macOS**: Haz doble clic en `Mac/install.command`
 
 El instalador creará el entorno virtual en `app/venv/`, instalará las dependencias y registrará el acceso directo en el sistema.
 
 ### Cómo Iniciar la Aplicación:
 Haz doble clic en el script correspondiente en la raíz del proyecto:
-- 🐧 **Linux**: `Iniciar Open Stream Suite.sh`
-- 🪟 **Windows**: `Iniciar Open Stream Suite.bat`
-- 🍎 **macOS**: `Iniciar Open Stream Suite.command`
+- 🐧 **Linux**: `Linux/Iniciar Open Stream Suite.sh`
+- 🪟 **Windows**: `Windows/Iniciar Open Stream Suite.bat`
+- 🍎 **macOS**: `Mac/Iniciar Open Stream Suite.command`
 
 Desde la ventana del lanzador podrás **iniciar/detener el servidor**, configurar tus credenciales de Twitch con un clic, ver cuántos clientes OBS están conectados y abrir el **Panel de Control** directamente en tu navegador.
 
@@ -196,7 +196,7 @@ Puedes añadir estos widgets independientes como fuentes de Navegador en cualqui
 Open Stream Suite se distribuye bajo la licencia **[PolyForm Noncommercial 1.0.0](LICENSE)**: puedes usarlo, estudiarlo, modificarlo y compartirlo libremente para **fines no comerciales**, incluido su uso personal para hacer streaming. **No está permitido venderlo ni usarlo para obtener beneficio comercial** sin permiso del autor.
 
 > [!NOTE]
-> Es una licencia de código disponible (*source-available*), no una licencia "open source" en el sentido estricto de la OSI, porque restringe el uso comercial. La licencia no puede obligar a que los forks envíen sus cambios al proyecto original, pero las contribuciones son muy bienvenidas: consulta [CONTRIBUTING.md](CONTRIBUTING.md) ([English](CONTRIBUTING.en.md)).
+> Es una licencia de código disponible (*source-available*), no una licencia "open source" en el sentido estricto de la OSI, porque restringe el uso comercial. La licencia no puede obligar a que los forks envíen sus cambios al proyecto original, pero las contribuciones son muy bienvenidas: consulta [CONTRIBUTING.md](.github/CONTRIBUTING.md) ([English](.github/CONTRIBUTING.en.md)).
 
 Las dependencias de terceros mantienen sus propias licencias.
 

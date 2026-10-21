@@ -22,6 +22,7 @@ TRIGGERS_FILE = BASE_DIR / "triggers.json"
 ROLES_FILE = BASE_DIR / "roles.json"
 WIDGETS_DIR = BASE_DIR / "widgets"
 WIDGETS_CONFIG_FILE = BASE_DIR / "widgets_config.json"
+DONATIONS_CONFIG_FILE = BASE_DIR / "donations_config.json"
 
 WIDGET_CONFIG_MAPPING = {
     "timer": WIDGETS_DIR / "timer" / "config.json",

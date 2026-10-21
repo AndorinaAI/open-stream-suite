@@ -34,85 +34,126 @@ Este documento define la arquitectura oficial, convenciones de estructura de dir
 ## 2. Mapa y Estructura del Proyecto
 
 ```
-app/                           # (la carpeta del proyecto; plugins/ está al lado, fuera de app/)
-├── server.py                     # Entrypoint raíz (~35 líneas) para iniciar_alertas.sh
-├── server/                       # Backend modular en Python (aiohttp + websockets)
-│   ├── config.py                 # Constantes, rutas (BASE_DIR, MEDIA_DIR), scopes Twitch
-│   ├── state.py                  # Singleton TwitchAlertSystem, clientes WS, estado en memoria
-│   ├── eventsub.py               # Twitch EventSub WebSocket (Follows, Subs, Bits, Puntos)
-│   ├── irc.py                    # Twitch IRC WebSocket (Comandos chat, permisos, artistas)
-│   ├── app.py                    # Factory create_app() y configuración del servidor
-│   └── routes/                   # Controladores REST y WS desacoplados
-│       ├── auth_routes.py        # /auth, /callback (OAuth2 de Twitch)
-│       ├── ws_routes.py          # /ws (WebSockets para OBS y panel)
-│       ├── triggers_routes.py    # /api/triggers (GET, POST)
-│       ├── roles_routes.py       # /api/roles, /api/twitch/mods_and_vips
-│       ├── rewards_routes.py     # /api/twitch/rewards (CRUD en Twitch Helix)
-│       ├── media_routes.py       # /api/media, /api/upload, /api/media/delete
-│       ├── actions_routes.py     # /api/test, /api/explode, /api/timer, /api/theme...
-│       └── static_routes.py      # Estáticos con lista blanca (/alerts/, /widgets/, /media/, /docs/, /plugins/...); NUNCA servir la raíz
+app/                           # Carpeta principal del proyecto
+├── server.py                  # Entrypoint raíz (~35 líneas) para iniciar_alertas.sh
+├── server/                    # Backend modular en Python (aiohttp + WebSockets)
+│   ├── config.py              # Constantes, rutas (BASE_DIR, MEDIA_DIR, DONATIONS_CONFIG_FILE)
+│   ├── state.py               # Singleton TwitchAlertSystem y coordinador de estado (~127 líneas)
+│   ├── eventsub.py            # Twitch EventSub WebSocket (Follows, Subs, Bits, Puntos de Canal)
+│   ├── irc.py                 # Twitch IRC WebSocket (Comandos chat, artistas, moderación)
+│   ├── app.py                 # Factory create_app() y configuración del servidor
+│   ├── routes/                # Controladores REST y WS desacoplados por dominio
+│   │   ├── deck_routes.py     # /api/deck/* (control de Stream Deck, Ajazz, Loupedeck)
+│   │   ├── media_routes.py    # /api/media, /api/upload, /api/media/delete
+│   │   ├── overlay_routes.py  # /api/overlays/texts (GET, POST, reset)
+│   │   ├── rewards_routes.py  # /api/twitch/rewards (Twitch Helix CRUD)
+│   │   ├── themes_routes.py   # /api/themes/* (packs, creación, restauración, chat-anchor)
+│   │   ├── webhooks_routes.py # /api/webhooks/* (Ko-fi, PayPal, Buy Me a Coffee, Streamlabs)
+│   │   └── widgets_routes.py  # /api/widgets/config (GET, POST, reset)
+│   └── services/              # Capa de servicios y lógica de negocio
+│       ├── actions/           # Submódulos de acciones para Stream Deck y comandos
+│       │   ├── alert_actions.py, deck_actions.py, game_actions.py, media_actions.py...
+│       │   └── promo_actions.py (promoción de creadores y shoutouts por chat)
+│       ├── alerts_service.py      # Motor de alertas y disparadores
+│       ├── bot_timers_service.py  # Mensajes periódicos automáticos del bot en IRC
+│       ├── deck_service.py        # Orquestador de hardware macro pads
+│       ├── donations_service.py   # Procesamiento unificado de propinas y donaciones
+│       ├── media_service.py       # Gestión física de archivos multimedia
+│       ├── overlay_service.py     # Persistencia y sincronización de textos de escenas
+│       ├── theme_manager.py       # Gestión física de temas y carpetas
+│       ├── theme_service.py       # Lógica de packs, herencia y anclaje
+│       ├── triggers_service.py    # Búsqueda de triggers, roles y payloads OBS
+│       ├── twitch_service.py      # Operaciones con la API Helix de Twitch
+│       └── widgets_service.py     # Configuración y presets de widgets
 │
-├── alerts/                       # Panel de control del streamer y overlay de alertas
-│   ├── panel.html                # Dashboard del streamer (layout HTML limpio y semántico)
-│   ├── index.html                # Widget OBS transparente para alertas y memes
+├── alerts/                    # Panel de control del streamer y overlay de alertas
+│   ├── panel.html             # Dashboard de control para el streamer
+│   ├── index.html             # Overlay transparente para OBS Studio (~60 líneas)
 │   ├── css/
-│   │   └── panel.css             # Estilos del dashboard (sidebar, tabs, drawers, cards)
-│   ├── js/                       # Módulos frontend desacoplados del panel
-│   │   ├── api.js                # Cliente REST API unificado (con X-Local-Token)
-│   │   ├── audio.js              # Sintetizador Web Audio API y reproductor de sonido
-│   │   ├── rewards.js            # Lógica de recompensas Twitch (puntos de canal)
-│   │   ├── roles.js              # Funciones del canal y roles personalizados
-│   │   ├── monitor.js            # Monitor 16:9 OBS, drag de coordenadas y live preview
-│   │   ├── triggers.js           # Formulario y gestión de triggers y acciones especiales
-│   │   ├── media.js              # Gestor de medios local
-│   │   ├── widgets-core.js       # Core de widgets: Drawer, pestañas, PiP y modales
-│   │   ├── widgets-shortcuts.js  # Gestor universal de accesos directos / Stream Deck
-│   │   ├── widgets.js            # Orquestador e inicializador de widgets
-│   │   └── main.js               # Bootstrap, navegación entre tabs y polling
-│   └── media/                    # Almacenamiento local de archivos (vídeos, gifs, audios)
+│   │   ├── panel/             # Estilos del panel modularizados por componente (01-08)
+│   │   ├── alerts-widget.css  # Estilos para el overlay de alertas en OBS
+│   │   ├── alerts-themes.css  # Temas procedurales de alertas (cyberpunk, neon, etc.)
+│   │   └── panel.css          # Importador unificado de css/panel/*.css
+│   └── js/                    # Módulos frontend desacoplados
+│       ├── alerts-studio/     # Estudio de edición de alertas (01-06)
+│       ├── media/             # Explorador multimedia (01-06)
+│       ├── overlay/           # Motor de alertas para OBS Studio (01-04)
+│       ├── overlay-texts/     # Editor de textos de escenas (01-03)
+│       ├── rewards/           # Gestor de recompensas Twitch (01-03)
+│       ├── roles/             # Gestor de funciones y VIPs (01-04)
+│       ├── themes/            # Gestor de temas y escenas (01-12)
+│       ├── triggers/          # Editor de triggers y memes (01-03)
+│       ├── widgets-core/      # Núcleo de Mini-Apps y modales de donaciones (01-06)
+│       ├── api.js             # Cliente REST API unificado con X-Local-Token
+│       ├── audio.js           # Reproductor y generador de audio
+│       ├── monitor.js         # Monitor interactivo 16:9 con drag-and-drop
+│       ├── overlay-widget.js  # Coordinador autocargable del overlay de alertas
+│       └── main.js            # Inicialización, navegación entre tabs y polling
 │
-├── widgets/                      # Widgets modulares desacoplados (Mini-App + OBS Overlay)
-│   ├── timer/                    # Temporizador de stream
-│   │   ├── index.html            # Overlay para OBS
-│   │   ├── style.css             # Estilos del timer
-│   │   ├── widget.js             # Lógica de temporización para OBS
-│   │   ├── panel.js              # Controles y Mini-App para el dashboard
-│   │   └── config.json           # Configuración persistente
-│   ├── chat/                     # Overlay de chat interactivo con emotes y partículas
-│   │   ├── index.html, style.css, widget.js, panel.js, config.json
-│   │   └── fonts.css / custom CSS
-│   ├── shoutout/                 # Tarjeta de promoción y reconocimiento a creadores
-│   │   ├── index.html, style.css, widget.js, panel.js, config.json
-│   ├── goal/                     # Barra de metas de seguidores, subs o bits
-│   │   ├── index.html, style.css, widget.js, panel.js, config.json
-│   └── ticker/                   # Marquesina de noticias, eventos y redes
-│       ├── index.html, style.css, widget.js, panel.js, config.json
+├── widgets/                   # Widgets modulares desacoplados (Mini-App + OBS Overlay)
+│   ├── timer/                 # Temporizador (cuenta atrás, cronómetro, pomodoro)
+│   │   ├── panel/             # Submódulos de Mini-App (01-06)
+│   │   ├── js/                # Submódulos de renderizado OBS (render.js, etc.)
+│   │   ├── index.html, style.css, widget.js, panel.html
+│   ├── chat/                  # Overlay de chat interactivo con emotes y partículas
+│   │   ├── panel/             # Submódulos de Mini-App (01-08)
+│   │   ├── js/                # Submódulos de chat (feed, particles, timers)
+│   │   ├── index.html, style.css, widget.js, panel.html
+│   ├── shoutout/              # Tarjeta de shoutout y reconocimiento a creadores
+│   │   ├── panel/             # Submódulos de Mini-App (01-08)
+│   │   ├── index.html, style.css, widget.js, panel.html
+│   ├── goal/                  # Barra de metas de seguidores, subs o donaciones
+│   │   ├── panel/             # Submódulos de Mini-App (01-05)
+│   │   ├── index.html, style.css, widget.js, panel.html
+│   └── ticker/                # Marquesina de noticias, eventos y redes
+│       ├── panel/             # Submódulos de Mini-App (01-04)
+│       ├── index.html, style.css, widget.js, panel.html
 │
-├── overlays/                     # Overlays organizados por Temas / Packs de Escenas
-│   ├── maker/                    # Pack Maker (escena principal con cámara + webcam)
-│   │   ├── desk/index.html       # Escena principal (cámara + webcam)
-│   │   └── pc/index.html         # Escena de terminal / programación en PC
-│   ├── print/                    # Pack Print (cámara secundaria y pantalla diseño)
-│   │   ├── machine/index.html    # Escena de cámara secundaria (proceso/acción)
-│   │   └── design/index.html     # Escena de diseño gráfico / CAD
-│   ├── game/                     # Pack Videojuegos (diseño minimalista limpio)
-│   │   └── index.html            # Escena de gameplay + cámara 16:9
-│   ├── chill/                    # Pack Chill (Charla / Just Chatting / Comunidad)
-│   │   └── index.html            # Escena de charla + marco transparente para chat
-│   └── screens/                  # Pack Pantallas de Emisión (Stream Flow)
-│       ├── starting-soon/        # Pantalla de inicio con cuenta atrás animada
-│       ├── be-right-back/        # Pantalla de pausa con radar y frases rotativas
-│       └── ending/               # Pantalla de despedida y agradecimiento
+├── scenes/                    # Overlays completos para OBS Studio (1920×1080)
+│   ├── game/                  # Gameplay con HUD de cámara y estadísticas
+│   ├── maker/                 # Taller con cámara cenital y proyecto activo
+│   ├── podcast/               # Podcast / Charla con rótulos de invitados
+│   ├── coffee-break/          # Pausa relajada
+│   ├── starting-soon/         # Pantalla de inicio con cuenta atrás
+│   ├── be-right-back/         # Pausa técnica
+│   ├── ending/                # Despedida y créditos
+│   └── study_pomodoro/        # Sesión Pomodoro de estudio
 │
-├── common/                       # Estilos compartidos y tokens del sistema de diseño
-│   ├── styles.css                # Variables CSS, fuentes, resets, utilidades
-│   ├── themes.css                # Paletas de temas (Maker, Print, Chill, Cyberpunk, etc.)
-│   ├── components.css            # Componentes comunes de overlays (tarjetas, badges)
-│   └── overlay.js                # Lógica base de escenas (fases, frases, rotación, WS)
+├── common/                    # Recursos compartidos y tokens del sistema de diseño
+│   ├── overlay/
+│   │   ├── editor/            # Submódulos del editor flotante HUD (01-05a)
+│   │   ├── dom-injector.js    # Inyector de configuración visual al DOM de escenas
+│   │   └── icons.js           # Iconografía SVG compartida
+│   ├── catalog.css            # Estilos del catálogo de overlays
+│   ├── catalog.js             # Lógica responsiva del catálogo
+│   ├── components.css         # Componentes comunes de UI
+│   ├── editor.js              # Editor interactivo in-situ para escenas
+│   ├── i18n.js                # Sistema de traducción internacional ES / EN
+│   ├── overlay.js             # Runtime base para OBS Studio
+│   ├── styles.css             # Variables CSS globales, tipografías y reset
+│   └── themes.css             # Estilos de temas sincronizados en tiempo real
 │
-├── triggers.json                 # Base de datos local de triggers y memes configurados
-├── roles.json                    # Base de datos local de funciones y miembros asignados
-└── token.json                    # Tokens OAuth de Twitch (local, no compartir)
+├── launcher/                  # Lanzador de escritorio multiplataforma (Tkinter)
+│   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py
+│   └── tabs/                  # Pestañas desacopladas (server, twitch, logs, guide)
+│
+├── assets/                    # Identidad de marca y recursos gráficos
+│   └── imagencorp/            # Logos (SVG/PNG), favicon y capturas de pantalla
+│
+├── languages/                 # Diccionarios de internacionalización (i18n)
+│   ├── es.json, en.json       # Diccionarios unificados principales
+│   └── *.alerts.json, *.widgets.json, *.overlays.json # Subdiccionarios modulares
+│
+├── scripts/                   # Asistentes de despliegue y scripts de arranque
+│   ├── iniciar_stream.sh/.bat # Arranque directo del launcher
+│   ├── iniciar_alertas.sh     # Servidor backend directo
+│   ├── iniciar_preview.sh     # Previsualizador local ligero
+│   └── setup_cloudflare.sh, setup_vps_tunnel.sh # Automatización de túneles
+│
+├── tests/                     # Suite de pruebas unitarias automatizadas (unittest)
+├── docs/                      # Guías completas de arquitectura, instalación y OBS
+├── index.html                 # Catálogo interactivo de escenas (~320 líneas)
+└── iniciar_stream.sh/.bat     # Wrappers de compatibilidad en la raíz de app/
 ```
 
 ---

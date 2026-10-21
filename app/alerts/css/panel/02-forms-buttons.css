@@ -1,0 +1,175 @@
+    /* Formularios limpios y legibles */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(25, 29, 33, 0.85);
+      border: 1px solid var(--color-border-dim);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--color-text-light);
+      font-family: var(--font-primary);
+      font-size: 13px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--color-accent-cyan);
+    }
+
+    .form-select {
+      width: 100%;
+      background: #191D21;
+      border: 1px solid var(--color-border-dim);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      color: var(--color-text-light);
+      font-family: var(--font-tech);
+      font-size: 12px;
+      outline: none;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    .form-select option {
+      background: #191D21;
+      color: #F2EEE5;
+    }
+
+    /* Botones de acción */
+    .btn-action-primary {
+      background: var(--color-accent-cyan);
+      color: #121518;
+      font-family: var(--font-tech);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition-smooth);
+      text-decoration: none;
+    }
+
+    .btn-action-primary:hover {
+      background: #73e5d5;
+      box-shadow: 0 0 16px rgba(87, 214, 196, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-action-copy {
+      background: rgba(87, 214, 196, 0.15);
+      color: var(--color-accent-cyan);
+      border: 1px solid var(--color-border-cyan);
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-action-copy:hover {
+      background: var(--color-accent-cyan);
+      color: #121518;
+    }
+
+    .btn-action-test {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--color-border-dim);
+      color: var(--color-text-light);
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-action-test:hover {
+      background: rgba(87, 214, 196, 0.15);
+      border-color: var(--color-accent-cyan);
+      color: var(--color-accent-cyan);
+    }
+
+    .btn-action-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #F87171;
+      font-family: var(--font-tech);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-action-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #EF4444;
+    }
+
+    /* Lista de Triggers / Cards */
+    .trigger-card-item {
+      background: rgba(25, 29, 33, 0.6);
+      border: 1px solid var(--color-border-dim);
+      border-left: 3px solid var(--color-accent-cyan);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .trigger-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .trigger-name-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-light);
+    }
+
+    .trigger-reward-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-tech);
+      font-size: 11px;
+      color: var(--color-accent-cyan);
+    }
+

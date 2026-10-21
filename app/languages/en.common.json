@@ -17,7 +17,8 @@
     "guide_arch": "⚙️ Architecture Docs",
     "guide_decks": "🎮 Stream Deck, Ajazz & OpenDeck Guide",
     "guide_plugins": "🔌 Deck Plugins & Macros",
-    "guide_conventions": "📜 Coding Conventions"
+    "guide_conventions": "📜 Coding Conventions",
+    "guide_install": "🚀 Installation & Startup Guide"
   },
   "sidebar": {
     "obs_active": "OBS STUDIO · 9 ACTIVE SCENES",

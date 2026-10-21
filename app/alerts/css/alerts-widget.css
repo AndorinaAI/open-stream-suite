@@ -1,0 +1,379 @@
+/**
+ * alerts-widget.css — Estilos visuales del widget de Alertas y Triggers para OBS Studio
+ * Modos transparente para stream y modo vista previa para panel.
+ */
+
+/* Estilos del widget de alertas en OBS (100% transparente por defecto) */
+html, body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+html.preview-mode,
+body.preview-mode {
+  background-color: #121518 !important;
+}
+
+.alerts-stage {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  pointer-events: none;
+}
+
+/* Contenedor de la alerta visual */
+.alert-box {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-30px) scale(0.95);
+  min-width: 540px;
+  background: rgba(25, 29, 33, 0.94);
+  border: 1px solid var(--color-border-cyan);
+  border-top: 3px solid var(--color-accent-cyan);
+  border-radius: var(--radius-sm);
+  padding: 20px 32px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+}
+
+.alert-box.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.alert-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  background: rgba(87, 214, 196, 0.15);
+  border: 1px solid var(--color-border-cyan);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent-cyan);
+  flex-shrink: 0;
+}
+
+.alert-icon-wrapper svg {
+  width: 28px;
+  height: 28px;
+}
+
+.alert-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alert-type-title {
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-accent-cyan);
+  text-transform: uppercase;
+}
+
+.alert-username {
+  font-family: var(--font-primary);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--color-text-light);
+  line-height: 1.1;
+}
+
+.alert-message {
+  font-family: var(--font-tech);
+  font-size: 13px;
+  color: var(--color-text-dim);
+  margin-top: 2px;
+}
+
+/* Esquinas técnicas en la alerta */
+.alert-corner-tr {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: 12px;
+  height: 12px;
+  border-top: 2px solid var(--color-accent-cyan);
+  border-right: 2px solid var(--color-accent-cyan);
+}
+
+.alert-corner-bl {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 12px;
+  height: 12px;
+  border-bottom: 2px solid var(--color-accent-cyan);
+  border-left: 2px solid var(--color-accent-cyan);
+}
+
+/* Contenedor de Vídeo / Meme (TriggerFyre) */
+.trigger-media-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 960px;
+  max-height: 720px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+}
+
+.trigger-media-container.visible {
+  opacity: 1;
+}
+
+.trigger-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Rótulo / Banner de Texto Personalizable */
+.trigger-caption-banner {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  border: 2px solid var(--color-accent-cyan);
+  border-radius: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(87, 214, 196, 0.4);
+  transition: all 0.25s ease-out;
+  pointer-events: none;
+}
+
+.trigger-caption-banner.pos-below {
+  top: calc(100% + 14px);
+}
+
+.trigger-caption-banner.pos-above {
+  bottom: calc(100% + 14px);
+}
+
+.trigger-caption-banner.pos-inside {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.trigger-caption-banner.pos-bottom_screen {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  top: auto;
+  transform: translateX(-50%);
+}
+
+@keyframes bannerPop {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.65); }
+  70% { transform: translateX(-50%) scale(1.08); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes bannerSlide {
+  0% { opacity: 0; transform: translateX(-50%) translateY(24px); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes bannerFade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes bannerPulse {
+  0% { transform: translateX(-50%) scale(0.95); opacity: 0.8; }
+  50% { transform: translateX(-50%) scale(1.04); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+.trigger-caption-banner.anim-pop { animation: bannerPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+.trigger-caption-banner.anim-slide { animation: bannerSlide 0.3s ease-out forwards; }
+.trigger-caption-banner.anim-fade { animation: bannerFade 0.3s ease-out forwards; }
+.trigger-caption-banner.anim-pulse { animation: bannerPulse 0.4s ease-out forwards; }
+
+/* Conexión status ping sutil */
+.ws-status-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  color: #10B981;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+/* ============================================================== */
+/* CREADOR DE ALERTAS POR BANNER PROCEDURAL                       */
+/* ============================================================== */
+.banner-alert-root {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-25px) scale(0.95);
+  min-width: 580px;
+  max-width: 820px;
+  padding: 20px 32px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1500;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.banner-alert-root.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+/* Temas del Banner Creator */
+.banner-theme-cyberpunk {
+  background: linear-gradient(135deg, rgba(14, 18, 24, 0.96) 0%, rgba(20, 10, 30, 0.96) 100%);
+  border: 2px solid var(--banner-border, #57D6C4);
+  box-shadow: 0 0 30px rgba(87, 214, 196, 0.35), inset 0 0 20px rgba(87, 214, 196, 0.1);
+  clip-path: polygon(0 14px, 14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px));
+}
+.banner-theme-glassmorphism {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+.banner-theme-neon {
+  background: rgba(10, 10, 15, 0.95);
+  border: 2px solid var(--banner-border, #FF007F);
+  border-radius: 14px;
+  box-shadow: 0 0 25px var(--banner-border, #FF007F), 0 0 50px rgba(255, 0, 127, 0.3), inset 0 0 15px rgba(255, 0, 127, 0.15);
+}
+.banner-theme-taller {
+  background: #14181C;
+  border: 2px solid var(--banner-border, #F59E0B);
+  border-top: 5px solid var(--banner-border, #F59E0B);
+  border-radius: 8px;
+  background-image: repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.04), rgba(245, 158, 11, 0.04) 10px, transparent 10px, transparent 20px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8);
+}
+.banner-theme-retro {
+  background: #0B0E14;
+  border: 4px solid var(--banner-border, #38BDF8);
+  border-radius: 0;
+  box-shadow: 6px 6px 0px #000, 10px 10px 0px var(--banner-border, #38BDF8);
+  font-family: monospace;
+}
+.banner-theme-minimal {
+  background: rgba(18, 20, 24, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 5px solid var(--banner-accent, #57D6C4);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.banner-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--banner-accent, #57D6C4);
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+.banner-icon-box svg {
+  width: 32px;
+  height: 32px;
+}
+.banner-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+.banner-badge-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  font-family: var(--font-tech, monospace);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--banner-accent, #57D6C4);
+  margin-bottom: 2px;
+}
+.banner-primary-title {
+  font-family: var(--font-tech, monospace);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--banner-accent, #57D6C4);
+}
+.banner-user-display {
+  font-family: var(--font-primary, sans-serif);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--banner-text, #FFFFFF);
+  line-height: 1.15;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  word-break: break-word;
+}
+.banner-subtitle-msg {
+  font-family: var(--font-tech, monospace);
+  font-size: 13px;
+  color: var(--color-text-dim, #94A3B8);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Animaciones del Banner */
+@keyframes bannerSlideDown {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-50px) scale(0.9); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes bannerSlideUp {
+  0% { opacity: 0; transform: translateX(-50%) translateY(50px) scale(0.9); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+@keyframes bannerBounce {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.3); }
+  50% { transform: translateX(-50%) scale(1.08); }
+  70% { transform: translateX(-50%) scale(0.95); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}

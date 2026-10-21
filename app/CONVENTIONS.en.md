@@ -37,56 +37,123 @@ This document defines the official system architecture, folder conventions, and 
 app/                           # Core project application
 ├── server.py                  # Server entrypoint (~35 lines)
 ├── server/                    # Modular Python backend (aiohttp + WebSockets)
-│   ├── config.py              # Constants, paths (BASE_DIR, MEDIA_DIR), Twitch scopes
-│   ├── state.py               # Singleton TwitchAlertSystem, WS clients, in-memory state
+│   ├── config.py              # Constants, paths (BASE_DIR, MEDIA_DIR, DONATIONS_CONFIG_FILE)
+│   ├── state.py               # Singleton TwitchAlertSystem state coordinator (~127 lines)
 │   ├── eventsub.py            # Twitch EventSub WebSocket (Follows, Subs, Bits, Channel Points)
-│   ├── irc.py                 # Twitch IRC WebSocket (Chat commands, permissions, artists)
+│   ├── irc.py                 # Twitch IRC WebSocket (Chat commands, artists, moderation)
 │   ├── app.py                 # create_app() factory and server startup configuration
-│   └── routes/                # Decoupled REST controllers & WS handlers
-│       ├── auth_routes.py     # /auth, /callback (Twitch OAuth2)
-│       ├── ws_routes.py       # /ws (WebSockets for OBS & panel)
-│       ├── triggers_routes.py # /api/triggers (GET, POST)
-│       ├── roles_routes.py    # /api/roles, /api/twitch/mods_and_vips
-│       ├── rewards_routes.py  # /api/twitch/rewards (Twitch Helix CRUD)
-│       ├── media_routes.py    # /api/media, /api/upload, /api/media/delete
-│       ├── actions_routes.py  # /api/test, /api/explode, /api/timer, /api/theme...
-│       ├── deck_routes.py     # /api/deck/* (dedicated hardware & macro controller API)
-│       └── static_routes.py   # Whitelisted static assets; never exposes app/ root
+│   ├── routes/                # Decoupled domain REST controllers & WS handlers
+│   │   ├── deck_routes.py     # /api/deck/* (dedicated hardware & macro controller API)
+│   │   ├── media_routes.py    # /api/media, /api/upload, /api/media/delete
+│   │   ├── overlay_routes.py  # /api/overlays/texts (GET, POST, reset)
+│   │   ├── rewards_routes.py  # /api/twitch/rewards (Twitch Helix CRUD)
+│   │   ├── themes_routes.py   # /api/themes/* (packs, creation, restoration, chat-anchor)
+│   │   ├── webhooks_routes.py # /api/webhooks/* (Ko-fi, PayPal, Buy Me a Coffee, Streamlabs)
+│   │   └── widgets_routes.py  # /api/widgets/config (GET, POST, reset)
+│   └── services/              # Domain services and business logic
+│       ├── actions/           # Dedicated action modules for Stream Deck & commands
+│       │   ├── alert_actions.py, deck_actions.py, game_actions.py, media_actions.py...
+│       │   └── promo_actions.py (chat shoutouts & channel promotion)
+│       ├── alerts_service.py      # Core alert triggers and broadcast engine
+│       ├── bot_timers_service.py  # Automated periodic chat announcements
+│       ├── deck_service.py        # Macro pad orchestrator & hardware mappings
+│       ├── donations_service.py   # Unified tips & multi-platform webhook handler
+│       ├── media_service.py       # Physical filesystem media management
+│       ├── overlay_service.py     # Scene texts configuration and persistence
+│       ├── theme_manager.py       # Physical theme directory and file operations
+│       ├── theme_service.py       # Theme packs, inheritance, and chat anchor logic
+│       ├── triggers_service.py    # Trigger lookups, custom roles, and OBS payloads
+│       ├── twitch_service.py      # Helix API communication operations
+│       └── widgets_service.py     # Widget configuration presets and schemas
 │
 ├── alerts/                    # Streamer web dashboard & OBS alert engine
-│   ├── panel.html             # Streamer dashboard (clean semantic HTML)
-│   ├── index.html             # OBS transparent alert & video meme engine
-│   ├── css/panel.css          # Dashboard styling
+│   ├── panel.html             # Streamer control dashboard
+│   ├── index.html             # OBS transparent alert & video meme engine (~60 lines)
+│   ├── css/
+│   │   ├── panel/             # Modular dashboard styles by component (01-08)
+│   │   ├── alerts-widget.css  # Dedicated OBS overlay styles
+│   │   ├── alerts-themes.css  # Procedural visual alert styles (cyberpunk, neon, etc.)
+│   │   └── panel.css          # Unified CSS bundle loader
 │   └── js/                    # Decoupled frontend modules
+│       ├── alerts-studio/     # Alert customization studio (01-06)
+│       ├── media/             # Media explorer (01-06)
+│       ├── overlay/           # OBS alert engine runtime (01-04)
+│       ├── overlay-texts/     # Scene text editor (01-03)
+│       ├── rewards/           # Twitch reward manager (01-03)
+│       ├── roles/             # Custom roles & VIP manager (01-04)
+│       ├── themes/            # Theme & scene pack manager (01-12)
+│       ├── triggers/          # Meme & trigger editor (01-03)
+│       ├── widgets-core/      # Mini-App core & donations modal (01-06)
 │       ├── api.js             # Unified REST API client (with X-Local-Token)
-│       ├── audio.js           # Web Audio API sound synthesizer & player
-│       ├── rewards.js         # Twitch channel points reward manager
-│       ├── roles.js           # Channel roles and community VIP manager
-│       ├── triggers.js        # Trigger configuration and special actions
-│       ├── media.js           # Local media manager
-│       ├── widgets-core.js    # Widgets modal, Drawer, tabs, and PiP preview
-│       ├── widgets-shortcuts.js # Universal shortcuts and macro deck manager
-│       ├── widgets.js         # Widgets grid orchestrator
+│       ├── audio.js           # Audio player & Web Audio synthesizer
+│       ├── monitor.js         # Interactive 16:9 OBS monitor with drag-and-drop
+│       ├── overlay-widget.js  # Self-loading OBS alert engine coordinator
 │       └── main.js            # Bootstrap, tab navigation, and polling
 │
 ├── widgets/                   # Modular decoupled widgets (Mini-App + OBS Overlay)
-│   ├── timer/                 # Multi-mode broadcast timer
+│   ├── timer/                 # Broadcast timer (countdown, stopwatch, pomodoro)
+│   │   ├── panel/             # Mini-App submodules (01-06)
+│   │   ├── js/                # OBS rendering submodules (render.js, etc.)
+│   │   ├── index.html, style.css, widget.js, panel.html
 │   ├── chat/                  # Interactive chat overlay with floating emote physics
+│   │   ├── panel/             # Mini-App submodules (01-08)
+│   │   ├── js/                # Chat submodules (feed, particles, timers)
+│   │   ├── index.html, style.css, widget.js, panel.html
 │   ├── shoutout/              # Streamer promo & shoutout card
+│   │   ├── panel/             # Mini-App submodules (01-08)
+│   │   ├── index.html, style.css, widget.js, panel.html
 │   ├── goal/                  # Follower, subscriber, and bit target progress bar
+│   │   ├── panel/             # Mini-App submodules (01-05)
+│   │   ├── index.html, style.css, widget.js, panel.html
 │   └── ticker/                # Minimal broadcast ribbon
+│       ├── panel/             # Mini-App submodules (01-04)
+│       ├── index.html, style.css, widget.js, panel.html
 │
-├── overlays/                  # OBS Studio scene overlays organized by packs
-│   ├── maker/                 # Maker pack (workbench + webcam)
-│   ├── print/                 # 3D print/cutter pack (machine + design)
-│   ├── game/                  # Gaming pack (gameplay + camera)
-│   ├── chill/                 # Just Chatting / community discussion
-│   └── screens/               # Stream flow screens (starting-soon, BRB, ending)
+├── scenes/                    # Full OBS Studio scene overlays (1920×1080)
+│   ├── game/                  # Gameplay with camera HUD & stats
+│   ├── maker/                 # Workshop with overhead camera & project banner
+│   ├── podcast/               # Podcast / discussion with guest nameplates
+│   ├── coffee-break/          # Relaxed break
+│   ├── starting-soon/         # Starting soon with live countdown
+│   ├── be-right-back/         # Technical pause
+│   ├── ending/                # Stream outro with rolling credits
+│   └── study_pomodoro/        # Dedicated study pomodoro session
 │
-├── themes/                    # Modular theme packs (theme.json, style.css, factory backups)
-├── languages/                 # Multi-language dictionary files (es.json, en.json)
-├── common/                    # Shared CSS tokens, local fonts, and i18n engine
-└── tests/                     # Automated unit test suite
+├── common/                    # Shared design system tokens and runtime libraries
+│   ├── overlay/
+│   │   ├── editor/            # Floating HUD overlay editor submodules (01-05a)
+│   │   ├── dom-injector.js    # Visual config DOM injector for scenes
+│   │   └── icons.js           # Shared SVG icons
+│   ├── catalog.css            # Overlay catalog styling
+│   ├── catalog.js             # Responsive catalog logic
+│   ├── components.css         # Common UI components
+│   ├── editor.js              # In-situ interactive scene editor
+│   ├── i18n.js                # Internationalization engine (ES / EN)
+│   ├── overlay.js             # Base runtime for OBS Studio scenes
+│   ├── styles.css             # Global CSS variables, fonts, and reset
+│   └── themes.css             # Live synced theme style definitions
+│
+├── launcher/                  # Cross-platform desktop launcher (Tkinter)
+│   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py
+│   └── tabs/                  # Decoupled tabs (server, twitch, logs, guide)
+│
+├── assets/                    # Brand identity and visual assets
+│   └── imagencorp/            # Logos (SVG/PNG), favicon and screenshots
+│
+├── languages/                 # Internationalization dictionaries (i18n)
+│   ├── es.json, en.json       # Main unified language dictionaries
+│   └── *.alerts.json, *.widgets.json, *.overlays.json # Domain dictionaries
+│
+├── scripts/                   # Deployment assistants and startup scripts
+│   ├── iniciar_stream.sh/.bat # Direct desktop launcher
+│   ├── iniciar_alertas.sh     # Direct backend server runner
+│   ├── iniciar_preview.sh     # Lightweight local preview runner
+│   └── setup_cloudflare.sh, setup_vps_tunnel.sh # Tunnel deployment assistants
+│
+├── tests/                     # Automated unit test suite (unittest)
+├── docs/                      # Architectural, setup, and OBS guides
+├── index.html                 # Interactive scene catalog (~320 lines)
+└── iniciar_stream.sh/.bat     # Backward-compatibility wrappers in app/ root
 ```
 
 ---

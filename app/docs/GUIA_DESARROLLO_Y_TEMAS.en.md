@@ -40,6 +40,71 @@ Historically, streamers designed overlays in graphic software like Photoshop, ex
 
 ## 2. Project Architecture & Conventions
 
+```text
+app/                           # Core project root directory
+├── server.py                  # Entrypoint (~35 lines) for direct server launch
+├── server/                    # Modular Python backend (aiohttp + WebSockets)
+│   ├── config.py, state.py, eventsub.py, irc.py, app.py
+│   ├── routes/                # Decoupled REST & WS controllers by domain
+│   │   ├── deck_routes.py, media_routes.py, overlay_routes.py, rewards_routes.py...
+│   │   └── themes_routes.py, webhooks_routes.py, widgets_routes.py, static_routes.py
+│   └── services/              # Domain business logic & persistence
+│       ├── alerts_service.py, deck_service.py, donations_service.py, media_service.py...
+│       ├── overlay_service.py, theme_manager.py, theme_service.py, widgets_service.py
+│       └── actions/           # Submodules for Stream Deck actions & chat triggers
+│
+├── alerts/                    # Streamer dashboard and OBS alerts overlay
+│   ├── panel.html             # Full-featured control dashboard for the streamer
+│   ├── index.html             # Transparent alerts canvas for OBS Studio (~60 lines)
+│   ├── css/
+│   │   ├── panel/             # Modular dashboard styles by component (01-08)
+│   │   ├── alerts-widget.css  # Dedicated styles for OBS alerts overlay
+│   │   └── panel.css          # Unified CSS bundle importer
+│   └── js/                    # Decoupled frontend modules
+│       ├── alerts-studio/, media/, overlay/, overlay-texts/, rewards/, roles/, themes/, triggers/, widgets-core/
+│       ├── api.js, audio.js, monitor.js, overlay-widget.js, main.js
+│       └── forwarders: media.js, triggers.js, widgets-core.js, overlay-texts.js, rewards.js, roles.js
+│
+├── widgets/                   # Modular decoupled widgets (Mini-App + OBS Overlay)
+│   ├── chat/                  # On-screen chat with emotes, badges, and particles
+│   │   ├── panel/             # Mini-App dashboard submodules (01-08)
+│   │   ├── js/                # OBS overlay submodules (styles.js, parser.js, render.js, network.js, particles.js)
+│   │   └── index.html, style.css, widget.js, panel.js, config.json
+│   ├── goal/                  # Multi-item follower, sub, and tip goal bars
+│   │   ├── panel/             # Mini-App dashboard submodules (01-05)
+│   │   ├── js/                # OBS overlay submodules (confetti.js, render.js, network.js)
+│   │   └── index.html, style.css, widget.js, panel.js, config.json
+│   ├── shoutout/              # Holographic streamer promo cards & dynamic QR
+│   │   ├── panel/             # Mini-App dashboard submodules (01-08)
+│   │   ├── js/                # OBS overlay submodules (styles.js, render.js, network.js)
+│   │   └── index.html, style.css, widget.js, panel.js, config.json
+│   ├── ticker/                # News prompter, RSS ticker, and real-time metrics
+│   │   ├── panel/             # Mini-App dashboard submodules (01-04)
+│   │   ├── js/                # OBS overlay submodules (state-data.js, render.js, network.js)
+│   │   └── index.html, style.css, widget.js, panel.js, config.json
+│   └── timer/                 # Modular timer (countdown, stopwatch, block layouts)
+│       ├── panel/             # Mini-App dashboard submodules (01-06)
+│       ├── js/                # OBS overlay submodules (state-data.js, render.js, engine.js, network.js)
+│       └── index.html, style.css, widget.js, panel.js, config.json
+│
+├── scenes/                    # Full 1920×1080 scene overlays for OBS Studio
+│   ├── game/, maker-desk/, maker-pc/, print-machine/, print-design/, chill/, starting-soon/, be-right-back/, ending/
+│
+├── common/                    # Shared design system tokens & runtime
+│   ├── overlay/               # Overlay submodules: editor/, dom-injector.js, icons.js
+│   ├── catalog.css, catalog.js, components.css, editor.js, i18n.js, overlay.js, styles.css, themes.css
+│
+├── launcher/                  # Cross-platform desktop launcher (Tkinter)
+│   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py
+│   └── tabs/                  # Decoupled tabs (server, twitch, logs, guide)
+│
+├── assets/                    # Brand identity and visual assets
+│   └── imagencorp/            # Logos (SVG/PNG), favicon and screenshots
+├── languages/                 # Internationalization dictionaries (i18n)
+├── scripts/                   # Deployment assistants and startup scripts
+└── docs/                      # Architectural, setup, and OBS guides
+```
+
 All widgets adhere to 4 core principles:
 1. **100% Transparent Background**: `html, body { background: transparent !important; margin: 0; overflow: hidden; }`.
 2. **Global CSS Design Tokens**: Link `../../common/styles.css` and `../../common/themes.css`.
@@ -50,12 +115,20 @@ All widgets adhere to 4 core principles:
 
 ## 3. Building a New Modular Widget from Scratch
 
-Create a folder `app/widgets/my-widget/` containing:
-- `index.html`: Browser source rendered in OBS.
-- `style.css`: Visual styling with CSS variables.
-- `widget.js`: WebSocket listeners and animation logic.
-- `panel.js`: Interactive controls for the dashboard mini-app.
-- `config.json`: Default state and user settings.
+Every widget inside `app/widgets/<widget_id>/` follows a clean two-layer decoupled architecture (OBS Overlay + Dashboard Mini-App):
+- `index.html`: Browser source rendered in OBS Studio with zero lag.
+- `style.css`: Visual styling with CSS variables and design tokens.
+- `widget.js`: Entry point coordinator for the OBS overlay (dynamically loads `js/` if needed).
+- `js/`: Modular runtime scripts for the OBS overlay:
+  - `render.js`: DOM rendering and visual updates.
+  - `styles.js`: Theme reactivity and dynamic styles.
+  - `network.js`: WebSocket auto-reconnect and IRC listeners.
+- `panel/`: Modular Mini-App controls for the streamer dashboard:
+  - `01-shortcuts.js`: Fast action buttons and deck macros.
+  - `02-controls.js`: Parameter form controls and live state sync.
+  - `03-presets.js`: Visual preset picker and customization.
+- `panel.js`: Backward-compatibility loader shim dynamically importing `panel/*.js`.
+- `config.json`: Default isolated configuration state for the widget.
 
 ---
 

@@ -18,6 +18,24 @@ APP_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = APP_DIR.parent
 
 
+def parse_version(ver):
+    """Convierte '1.0.0-Alpha' en una clave comparable: (nums, es_estable, prerelease)."""
+    ver = (ver or "").strip().lower().lstrip("v")
+    core, _, pre = ver.partition("-")
+    nums = tuple(int(x) for x in re.findall(r"\d+", core)[:4]) or (0,)
+    nums = nums + (0,) * (4 - len(nums))
+    pre_parts = tuple(
+        (0, int(p)) if p.isdigit() else (1, p)
+        for p in re.split(r"[.\-_]", pre) if p
+    )
+    return (nums, 0 if pre else 1, pre_parts)
+
+
+def is_newer_version(remote, current):
+    """True sólo si 'remote' es estrictamente posterior a 'current' (alpha < beta < rc < estable)."""
+    return parse_version(remote) > parse_version(current)
+
+
 class UpdateManager:
     def __init__(self, app_dir=APP_DIR, root_dir=ROOT_DIR):
         self.app_dir = Path(app_dir)
@@ -130,7 +148,7 @@ class UpdateManager:
                     if m:
                         remote_ver = m.group(1).strip()
                         result["remote_version"] = remote_ver
-                        if remote_ver != current_version:
+                        if is_newer_version(remote_ver, current_version):
                             result["update_available"] = True
                             result["message"] = _("launcher.update_new_version", remote_ver=remote_ver, branch=branch)
         except Exception:

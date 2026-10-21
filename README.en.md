@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="imagencorp/banner_github_header.png" alt="Open Stream Suite" width="100%">
+  <img src="app/assets/imagencorp/banner_github_header.png" alt="Open Stream Suite" width="100%">
 </p>
 
 <p align="center">
@@ -10,7 +10,7 @@
 
 > **PLAY · CREATE · SHARE**  
 > Contemporary, modular, and lightweight visual identity for gaming, programming, maker streams, content creation, and just chatting.  
-> 🚀 **[Step-by-Step Installation & Startup Guide](INSTALLATION_AND_STARTUP.md)** · [Español](INSTALACION_E_INICIO.md)
+> 🚀 **[Step-by-Step Installation & Startup Guide](app/docs/INSTALLATION_AND_STARTUP.md)** · [Español](app/docs/INSTALACION_E_INICIO.md)
 
 ---
 
@@ -25,6 +25,7 @@
 - **Centralized Configuration**: Edit streamer channel names, project titles, active development phases, and social links from [`app/config.js`](app/config.js) or via the web control panel.
 - **Modular Themes & Factory Reset**: Complete theme packs in `themes/<pack>/<theme>/` with backup `.default.json` / `.default.css` files allowing 1-click instant factory restoration.
 - **Independent Visual Themes per Scene**: Each OBS Studio scene overlay can wear its own style (Arcade for Gaming, Chill for Just Chatting, Cyberpunk for coding/tech, etc.).
+- **Programmed Overlay Logic & Floating Draggable Controls**: Overlays are dynamic broadcast web applications rather than passive templates. They feature centisecond speedrun split timers with live deltas (+/-), millisecond-synchronized Pomodoro countdowns, multi-cam grid switchers, click-cycle victory badges, and floating draggable HUD menus designed never to obstruct gameplay or cameras.
 - **Physical Deck Plugins**: Native integrations in [`plugins/`](plugins/README.en.md) for Elgato Stream Deck, Ajazz AKP05 (10 keys + panoramic touch strip + 4 knobs), Ajazz AKP153/03/846, and OpenDeck (Bitfocus Companion).
 - **Robust Security**: Whitelisted file upload controls, anti path-traversal protection, CORS restricted to localhost/custom domain, and cryptographic local token authentication for mutating requests.
 
@@ -36,22 +37,17 @@
 OpenStreamSuite/
 ├── README.md               # Spanish README
 ├── README.en.md            # English README (this file)
-├── INSTALLATION_AND_STARTUP.md # Step-by-step installation and startup guide
 ├── LICENSE                 # License (PolyForm Noncommercial 1.0.0)
-├── CONTRIBUTING.en.md      # How to contribute
-├── CHANGELOG.en.md         # Version history
 │
-├── Iniciar Open Stream Suite.sh / .bat / .command   # 1-click root launchers
-├── installers/             # Automated installers (Linux, Windows, macOS)
-│   ├── install_linux.sh
-│   ├── install_windows.bat
-│   └── install_macos.command
+├── Linux/                  # Installer, launcher, updater and instructions (ES/EN)
+├── Mac/                    # same for macOS
+├── Windows/                # same for Windows
 │
 ├── languages/              # Multi-language dictionary files (JSON)
 │   ├── es.json             # Spanish localization
 │   └── en.json             # English localization
 │
-├── imagencorp/             # Visual identity, vector logos, and screenshots
+├── app/assets/imagencorp/  # Visual identity, vector logos, and screenshots
 │   ├── README.en.md        # Brand manual and color palette
 │   ├── logos/              # Symbols, favicon, horizontal logos (SVG & PNG)
 │   └── screenshots/        # High-resolution live screenshots
@@ -130,19 +126,23 @@ To align cameras with pixel precision, see the layout guide in [app/docs/OBS_SET
 
 Open Stream Suite includes a desktop application with a control dashboard, system tray support, server health monitor, and Twitch API credentials manager:
 
+> [!IMPORTANT]
+> **GNU/Linux Development & Community Feedback for Windows / macOS:**  
+> Open Stream Suite is actively developed and tested on **GNU/Linux**. While automated installers and native launch scripts are provided for **Windows** (`.bat`) and **macOS** (`.command`), our core team **does not use proprietary operating systems in their daily workflows**. Therefore, support, compatibility checks, and edge-case fixes on Windows and Mac rely heavily on community testing and feedback. If you encounter any unexpected behavior or wish to refine the launchers on those platforms, please [open an issue or submit a pull request](https://github.com/AndorinaAI/open-stream-suite/issues). Your collaboration is greatly appreciated!
+
 ### Quick Install:
 Run the installer for your operating system:
-- **Linux**: `./installers/install_linux.sh`
-- **Windows**: Double-click `installers\install_windows.bat`
-- **macOS**: Double-click `installers/install_macos.command`
+- **Linux**: `./Linux/install.sh`
+- **Windows**: Double-click `Windows\install.bat`
+- **macOS**: Double-click `Mac/install.command`
 
 The installer prepares the Python virtual environment in `app/venv/`, installs dependencies, and creates system desktop shortcuts.
 
 ### Launching the Application:
 Double-click the corresponding root launcher:
-- 🐧 **Linux**: `Iniciar Open Stream Suite.sh`
-- 🪟 **Windows**: `Iniciar Open Stream Suite.bat`
-- 🍎 **macOS**: `Iniciar Open Stream Suite.command`
+- 🐧 **Linux**: `Linux/Iniciar Open Stream Suite.sh`
+- 🪟 **Windows**: `Windows/Iniciar Open Stream Suite.bat`
+- 🍎 **macOS**: `Mac/Iniciar Open Stream Suite.command`
 
 From the desktop launcher you can **start/stop the server**, configure Twitch credentials, switch language (ES/EN), check for software updates, and open the **Web Control Panel**.
 
@@ -191,7 +191,7 @@ Each widget can be loaded as an independent Browser Source in any scene:
 Open Stream Suite is released under the **[PolyForm Noncommercial 1.0.0 License](LICENSE)**: you are free to use, modify, study, and share it for **non-commercial personal streaming purposes**. **Selling it or using it for commercial monetization is strictly prohibited** without prior written permission from the author.
 
 > [!NOTE]
-> This is a source-available license, not an OSI-approved open source license, because it restricts commercial use. Contributions and improvements are warmly welcome: see [CONTRIBUTING.en.md](CONTRIBUTING.en.md).
+> This is a source-available license, not an OSI-approved open source license, because it restricts commercial use. Contributions and improvements are warmly welcome: see [CONTRIBUTING.en.md](.github/CONTRIBUTING.en.md).
 
 Third-party dependencies and assets retain their respective licenses.
 

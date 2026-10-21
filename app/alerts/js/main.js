@@ -84,26 +84,47 @@ function copyText(str) {
   });
 }
 
-// Comprobación de actualizaciones en segundo plano
+// Comprobación de actualizaciones en segundo plano (al abrir y cada 6 h)
+const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
+
 async function checkUpdates() {
   try {
     const res = await fetch('/api/updates/check?branch=main');
     if (!res.ok) return;
     const data = await res.json();
-    if (data.update_available) {
-      const badge = document.getElementById('panel-update-badge');
-      const title = document.getElementById('panel-update-title');
-      const link = document.getElementById('panel-update-link');
-      if (badge) {
-        badge.style.display = 'block';
-        if (title) title.textContent = `🚀 NUEVA VERSIÓN v${data.remote_version}`;
-        if (link && data.release_url) link.href = data.release_url;
-      }
-    }
+    const badge = document.getElementById('panel-update-badge');
+    if (!badge) return;
+    if (!data.update_available) { badge.style.display = 'none'; return; }
+
+    const tag = data.remote_version || String(data.commits_behind || '');
+    // Si el usuario ya descartó este aviso concreto, no volver a mostrarlo
+    if (localStorage.getItem('oss-update-dismissed') === tag) return;
+
+    const title = document.getElementById('panel-update-title');
+    const current = document.getElementById('panel-update-current');
+    const link = document.getElementById('panel-update-link');
+    const ver = data.remote_version && data.remote_version !== data.current_version
+      ? ` v${data.remote_version}` : '';
+    const T = (k, fb, p) => (window.i18n && window.i18n.tr(k, p)) || fb;
+    if (title) title.textContent = `${T('updates.new_version', '🚀 NUEVA VERSIÓN')}${ver}`;
+    if (current) current.textContent = T('updates.your_version', 'Tu versión: v{version}', { version: data.current_version });
+    if (link && data.release_url) link.href = data.release_url;
+    badge.dataset.tag = tag;
+    badge.style.display = 'block';
   } catch (e) {
     // Modo offline o sin internet
   }
 }
+
+function dismissUpdateBadge() {
+  const badge = document.getElementById('panel-update-badge');
+  if (!badge) return;
+  localStorage.setItem('oss-update-dismissed', badge.dataset.tag || '');
+  badge.style.display = 'none';
+}
+
+setInterval(checkUpdates, UPDATE_CHECK_INTERVAL_MS);
+window.addEventListener('oss-lang-change', checkUpdates);
 
 // Arranque de la aplicación
 window.addEventListener('DOMContentLoaded', () => {
@@ -136,8 +157,23 @@ window.addEventListener('DOMContentLoaded', () => {
     if (typeof renderWidgetsGrid === 'function') {
       try { renderWidgetsGrid(); } catch (_) {}
     }
-    if (window.AlertsStudio && typeof AlertsStudio.renderAlertTypes === 'function') {
-      try { AlertsStudio.renderAlertTypes(); } catch (_) {}
+    if (typeof renderRoles === 'function') {
+      try { renderRoles(); } catch (_) {}
+    }
+    if (typeof populatePermissionRolesSelect === 'function') {
+      try { populatePermissionRolesSelect(); } catch (_) {}
+    }
+    if (typeof renderMediaExplorer === 'function') {
+      try { renderMediaExplorer(); } catch (_) {}
+    }
+    if (typeof renderTriggers === 'function') {
+      try { renderTriggers(); } catch (_) {}
+    }
+    if (window.AlertsStudio && typeof AlertsStudio.renderStudio === 'function') {
+      try { AlertsStudio.renderStudio(); } catch (_) {}
+    }
+    if (typeof currentMiniAppWidget !== 'undefined' && currentMiniAppWidget && typeof renderMiniAppControls === 'function') {
+      try { renderMiniAppControls(); } catch (_) {}
     }
     if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
       window.i18n.applyTranslations(document);

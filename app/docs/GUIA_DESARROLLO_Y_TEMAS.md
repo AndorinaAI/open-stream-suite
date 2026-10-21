@@ -47,39 +47,68 @@ En OBS Studio, cuando agregas una fuente de tipo **Navegador** (*Browser Source*
 ## 2. Arquitectura del Proyecto y Convenciones
 
 ```
-app/                   # (la carpeta del proyecto; plugins/ está al lado, fuera de app/)
-├── config.js              # Configuración central (textos, proyectos, fases)
-├── server.py              # Backend local (EventSub Twitch, WebSocket, API REST)
-├── triggers.json          # Mapeo de triggers y puntos de canal
-├── .env                   # Credenciales de Twitch (NUNCA subir a GitHub)
-├── common/
-│   ├── styles.css         # Reset, fuentes, tokens de color base, responsive
-│   ├── components.css     # Marcos de cámara, badges, paneles glassmorphic, marcas de mira
-│   ├── themes.css         # Presets de color (maker, print, terminal, chill, etc.)
-│   └── overlay.js         # Motor compartido (iconos SVG, auto-detección OBS, config)
-├── scenes/                # Escenas completas 1920×1080 para OBS
-│   ├── game/              # Modo videojuegos
-│   ├── maker-desk/        # Escena principal (cámara + webcam)
-│   ├── maker-pc/          # Pantalla PC (captura + webcam)
-│   ├── print-machine/     # Cámara secundaria (proceso/acción)
-│   ├── print-design/      # Pantalla diseño (app full screen)
-│   ├── chill/             # Charla / Just Chatting con panel de chat
-│   ├── starting-soon/     # Pantalla completa con cuenta atrás
-│   ├── be-right-back/     # Pantalla de pausa con radar y frases rotativas
-│   └── ending/            # Pantalla de cierre de emisión
-├── widgets/               # Widgets modulares independientes
-│   ├── chat/              # Chat en pantalla con física de emotes
-│   ├── goal/              # Barra de objetivo (seguidores/subs)
-│   ├── ticker/            # Tira de últimos eventos
-│   ├── timer/             # Temporizador modular (cuenta atrás, cronómetro, layout de bloques y temas)
-│   └── shoutout/          # Tarjeta holográfica de recomendación
-└── alerts/
-    ├── index.html         # Receptor de alertas y memes para OBS (1920×1080)
-    ├── panel.html         # Panel de control interactivo para el streamer
-    └── media/             # Carpeta local para vídeos, sonidos e imágenes
-        ├── videos/        # WebM transparentes y MP4
-        ├── sounds/        # MP3 y WAV
-        └── images/        # GIF, PNG y JPG
+app/                           # Carpeta principal del proyecto
+├── server.py                  # Entrypoint raíz (~35 líneas) para iniciar_alertas.sh
+├── server/                    # Backend modular en Python (aiohttp + WebSockets)
+│   ├── config.py, state.py, eventsub.py, irc.py, app.py
+│   ├── routes/                # Controladores REST y WS desacoplados por dominio
+│   │   ├── deck_routes.py, media_routes.py, overlay_routes.py, rewards_routes.py...
+│   │   └── themes_routes.py, webhooks_routes.py, widgets_routes.py, static_routes.py
+│   └── services/              # Capa de servicios y lógica de negocio
+│       ├── alerts_service.py, deck_service.py, donations_service.py, media_service.py...
+│       ├── overlay_service.py, theme_manager.py, theme_service.py, widgets_service.py
+│       └── actions/           # Submódulos de acciones para Stream Deck y comandos
+│
+├── alerts/                    # Panel de control del streamer y overlay de alertas
+│   ├── panel.html             # Dashboard de control para el streamer
+│   ├── index.html             # Overlay transparente para OBS Studio (~60 líneas)
+│   ├── css/
+│   │   ├── panel/             # Estilos del panel modularizados por componente (01-08)
+│   │   ├── alerts-widget.css  # Estilos para el overlay de alertas en OBS
+│   │   └── panel.css          # Importador unificado de css/panel/*.css
+│   └── js/                    # Módulos frontend desacoplados
+│       ├── alerts-studio/, media/, overlay/, overlay-texts/, rewards/, roles/, themes/, triggers/, widgets-core/
+│       ├── api.js, audio.js, monitor.js, overlay-widget.js, main.js
+│       └── forwarders: media.js, triggers.js, widgets-core.js, overlay-texts.js, rewards.js, roles.js
+│
+├── widgets/                   # Widgets modulares independientes (Mini-App + Overlay OBS)
+│   ├── chat/                  # Chat en pantalla con emotes, roles y partículas
+│   │   ├── panel/             # Submódulos de control Mini-App (01-08)
+│   │   ├── js/                # Submódulos OBS (styles.js, parser.js, render.js, network.js, particles.js)
+│   │   ├── index.html, style.css, widget.js, panel.js, config.json
+│   ├── goal/                  # Barra de objetivos y metas múltiples
+│   │   ├── panel/             # Submódulos de control Mini-App (01-05)
+│   │   ├── js/                # Submódulos OBS (confetti.js, render.js, network.js)
+│   │   ├── index.html, style.css, widget.js, panel.js, config.json
+│   ├── shoutout/              # Tarjeta holográfica de recomendación y QR
+│   │   ├── panel/             # Submódulos de control Mini-App (01-08)
+│   │   ├── js/                # Submódulos OBS (styles.js, render.js, network.js)
+│   │   ├── index.html, style.css, widget.js, panel.js, config.json
+│   ├── ticker/                # Marquesina de noticias, eventos y RSS
+│   │   ├── panel/             # Submódulos de control Mini-App (01-04)
+│   │   ├── js/                # Submódulos OBS (state-data.js, render.js, network.js)
+│   │   ├── index.html, style.css, widget.js, panel.js, config.json
+│   └── timer/                 # Temporizador modular (cuenta atrás, cronómetro, bloques)
+│       ├── panel/             # Submódulos de control Mini-App (01-06)
+│       ├── js/                # Submódulos OBS (state-data.js, render.js, engine.js, network.js)
+│       └── index.html, style.css, widget.js, panel.js, config.json
+│
+├── scenes/                    # Overlays completos 1920×1080 para OBS Studio
+│   ├── game/, maker-desk/, maker-pc/, print-machine/, print-design/, chill/, starting-soon/, be-right-back/, ending/
+│
+├── common/                    # Recursos compartidos y tokens del sistema de diseño
+│   ├── overlay/               # Submódulos de overlay: editor/, dom-injector.js, icons.js
+│   ├── catalog.css, catalog.js, components.css, editor.js, i18n.js, overlay.js, styles.css, themes.css
+│
+├── launcher/                  # Lanzador de escritorio multiplataforma (Tkinter)
+│   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py
+│   └── tabs/                  # Pestañas desacopladas (server, twitch, logs, guide)
+│
+├── assets/                    # Identidad de marca y recursos gráficos
+│   └── imagencorp/            # Logos (SVG/PNG), favicon y capturas de pantalla
+├── languages/                 # Diccionarios de internacionalización (i18n)
+├── scripts/                   # Asistentes de despliegue y scripts de arranque
+└── docs/                      # Guías completas de arquitectura, instalación y OBS
 ```
 
 ---

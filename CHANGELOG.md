@@ -6,7 +6,15 @@
 
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
-## [Sin versión] — 2026-10-20
+## [Sin versión] — 2026-10-21
+
+### Cambiado — Refactorización Completa y Modularización por Dominios
+- **Backend Modular (`app/server/`)**: Rutas desacopladas en `server/routes/` y lógica de negocio en `server/services/`, con shims transparentes de compatibilidad hacia atrás en `server/*.py`.
+- **Overlay de Alertas (`app/alerts/`)**: `alerts/index.html` reducido a ~60 líneas con extracción de estilos a `css/alerts-widget.css` y motores dedicados en `js/overlay/` (audio, partículas, cola de alertas, WebSocket).
+- **Widgets Desacoplados (`app/widgets/`)**: Cada widget ahora sigue una arquitectura limpia de dos capas con submódulos en `widgets/<widget>/panel/` (controles Mini-App) y `widgets/<widget>/js/` (runtime de OBS), manteniendo `panel.js` como forwarder autocargable.
+- **Catálogo de Escenas (`app/index.html`)**: Separación limpia de `common/catalog.css` y `common/catalog.js` con observador reactivo de dimensiones.
+- **Estructura y Scripts**: Scripts de despliegue y túneles centralizados en `app/scripts/` con wrappers automáticos en la raíz de `app/`.
+- **Cero roturas**: 100% compatibilidad hacia atrás garantizada para OBS Studio, Stream Deck, Companion y navegadores.
 
 ### Añadido — Internacionalización (i18n) completa
 - Traducción completa al inglés de todo el panel de control: encabezados, pestañas, botones, etiquetas, modales, desplegables, paneles emergentes (mini-apps de widgets), toasts y diálogos `alert()` / `confirm()`.

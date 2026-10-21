@@ -75,7 +75,7 @@ def is_origin_allowed(origin: str) -> bool:
         return True
     # Comprobar tunnelUrl configurado (dominio propio o túnel público)
     import os
-    from server.routes.webhooks_routes import DONATIONS_CONFIG_FILE
+    from server.config import DONATIONS_CONFIG_FILE
     if os.path.exists(DONATIONS_CONFIG_FILE):
         try:
             import json

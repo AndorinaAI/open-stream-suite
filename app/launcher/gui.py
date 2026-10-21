@@ -64,6 +64,8 @@ class LauncherGUI:
         # Ciclo de polling no bloqueante
         self.root.protocol("WM_DELETE_WINDOW", self.on_close_window)
         self.root.after(800, self._poll_status)
+        # Aviso automático de nuevas versiones al abrir el launcher
+        self.root.after(3000, self.on_check_updates)
 
     def _setup_icon(self):
         if ICON_PATH.exists():
@@ -130,230 +132,18 @@ class LauncherGUI:
         self._build_tab_logs()
 
     # --- PESTAÑA SERVIDOR ---
+    # --- VISTAS DE PESTAÑAS (MODULARIZADAS EN launcher/tabs/) ---
     def _build_tab_server(self):
-        # Tarjeta de estado
-        card = tk.Frame(self.tab_server, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=14)
-        card.pack(fill="x", pady=(0, 16))
+        build_server_tab(self)
 
-        top_row = tk.Frame(card, bg=C_PANEL)
-        top_row.pack(fill="x")
-
-        tk.Label(top_row, text="ESTADO DEL SERVIDOR", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(side="left")
-
-        self.lbl_server_badge = tk.Label(
-            top_row, text="DETENIDO", font=("Helvetica", 10, "bold"),
-            fg=C_RED, bg="#2A1616", padx=8, pady=2, bd=1, relief="solid"
-        )
-        self.lbl_server_badge.pack(side="right")
-
-        self.lbl_server_info = tk.Label(
-            card, text="http://127.0.0.1:8080 · WebSocket listo para OBS",
-            font=("Helvetica", 11), fg=C_TEXT, bg=C_PANEL, anchor="w"
-        )
-        self.lbl_server_info.pack(fill="x", pady=(10, 4))
-
-        self.lbl_clients_info = tk.Label(
-            card, text=_("launcher.clients_line_empty"),
-            font=("Helvetica", 10), fg=C_MUTED, bg=C_PANEL, anchor="w"
-        )
-        self.lbl_clients_info.pack(fill="x")
-
-        # Botones de acción principales
-        btn_frame = tk.Frame(self.tab_server, bg=C_BG)
-        btn_frame.pack(fill="x", pady=(0, 16))
-
-        self.btn_toggle_server = tk.Button(
-            btn_frame, text="⚡ Iniciar Servidor", font=("Helvetica", 11, "bold"),
-            bg=C_CYAN, fg="#000000", activebackground="#45B6A6", activeforeground="#000000",
-            relief="flat", padx=16, pady=8, cursor="hand2", command=self.on_toggle_server
-        )
-        self.btn_toggle_server.pack(side="left", padx=(0, 10))
-
-        self.btn_open_panel = tk.Button(
-            btn_frame, text="🎛️ Abrir Panel de Control", font=("Helvetica", 11, "bold"),
-            bg="#21262D", fg=C_CYAN, activebackground="#30363D", activeforeground=C_TEXT,
-            relief="flat", padx=16, pady=8, cursor="hand2", command=self.on_open_panel
-        )
-        self.btn_open_panel.pack(side="left", padx=(0, 10))
-
-        btn_folder = tk.Button(
-            btn_frame, text="📂 Overlays", font=("Helvetica", 10),
-            bg="#21262D", fg=C_TEXT, activebackground="#30363D", activeforeground=C_TEXT,
-            relief="flat", padx=12, pady=8, cursor="hand2", command=self.on_open_folder
-        )
-        btn_folder.pack(side="left")
-
-        # Opciones de comportamiento
-        opts_frame = tk.Frame(self.tab_server, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=12)
-        opts_frame.pack(fill="x")
-
-        tk.Label(opts_frame, text="OPCIONES DE ARRANQUE", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(anchor="w", pady=(0, 8))
-
-        cb_browser = tk.Checkbutton(
-            opts_frame, text="Abrir el panel en el navegador automáticamente al iniciar",
-            variable=self.var_open_browser, fg=C_TEXT, bg=C_PANEL, selectcolor=C_INPUT,
-            activebackground=C_PANEL, activeforeground=C_TEXT, font=("Helvetica", 10)
-        )
-        cb_browser.pack(anchor="w", pady=2)
-
-        cb_tray = tk.Checkbutton(
-            opts_frame, text="Minimizar a la bandeja del sistema al pulsar la X de cerrar",
-            variable=self.var_minimize_tray, fg=C_TEXT, bg=C_PANEL, selectcolor=C_INPUT,
-            activebackground=C_PANEL, activeforeground=C_TEXT, font=("Helvetica", 10)
-        )
-        cb_tray.pack(anchor="w", pady=2)
-
-        # Tarjeta de actualizaciones
-        upd_card = tk.Frame(self.tab_server, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=10)
-        upd_card.pack(fill="x", pady=(12, 0))
-
-        u_row = tk.Frame(upd_card, bg=C_PANEL)
-        u_row.pack(fill="x")
-        tk.Label(u_row, text="ACTUALIZACIONES", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(side="left")
-
-        tk.Label(u_row, text="Rama:", font=("Helvetica", 9), fg=C_TEXT, bg=C_PANEL).pack(side="left", padx=(14, 4))
-        self.branch_combo = ttk.Combobox(
-            u_row, textvariable=self.var_update_branch, values=["main", "dev"],
-            state="readonly", width=7, font=("Helvetica", 9)
-        )
-        self.branch_combo.pack(side="left", padx=(0, 8))
-
-        self.btn_check_updates = tk.Button(
-            u_row, text="🔄 Comprobar", font=("Helvetica", 9),
-            bg="#21262D", fg=C_CYAN, activebackground="#30363D", activeforeground=C_TEXT,
-            relief="flat", padx=8, pady=1, cursor="hand2", command=self.on_check_updates
-        )
-        self.btn_check_updates.pack(side="left")
-
-        # Banner interactivo si hay actualización disponible (oculto por defecto)
-        self.upd_banner = tk.Frame(upd_card, bg="#13232A", bd=1, relief="solid", highlightbackground=C_CYAN, padx=8, pady=6)
-
-        self.lbl_upd_banner = tk.Label(self.upd_banner, text="", font=("Helvetica", 9), fg=C_CYAN, bg="#13232A")
-        self.lbl_upd_banner.pack(side="left")
-
-        self.btn_apply_upd = tk.Button(
-            self.upd_banner, text="📥 Actualizar ahora", font=("Helvetica", 9, "bold"),
-            bg=C_CYAN, fg="#000000", activebackground="#45B6A6", activeforeground="#000000",
-            relief="flat", padx=8, pady=2, cursor="hand2", command=self.on_apply_update
-        )
-        self.btn_apply_upd.pack(side="right", padx=(8, 0))
-
-        self.btn_view_release = tk.Button(
-            self.upd_banner, text="🌐 GitHub", font=("Helvetica", 9),
-            bg="#21262D", fg=C_TEXT, activebackground="#30363D", activeforeground=C_TEXT,
-            relief="flat", padx=8, pady=2, cursor="hand2", command=self.on_open_release_url
-        )
-        self.btn_view_release.pack(side="right")
-
-        self.lbl_update_status = tk.Label(
-            upd_card, text=_("launcher.installed_version", version=VERSION),
-            font=("Helvetica", 9), fg=C_MUTED, bg=C_PANEL, anchor="w"
-        )
-        self.lbl_update_status.pack(fill="x", pady=(6, 0))
-
-    # --- PESTAÑA TWITCH ---
     def _build_tab_twitch(self):
-        # Tarjeta de usuario
-        user_card = tk.Frame(self.tab_twitch, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=12)
-        user_card.pack(fill="x", pady=(0, 16))
+        build_twitch_tab(self)
 
-        top_row = tk.Frame(user_card, bg=C_PANEL)
-        top_row.pack(fill="x")
-        tk.Label(top_row, text="CUENTA DE TWITCH", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(side="left")
-
-        self.lbl_twitch_badge = tk.Label(
-            top_row, text="NO CONECTADO", font=("Helvetica", 9, "bold"),
-            fg=C_MUTED, bg="#21262D", padx=8, pady=2
-        )
-        self.lbl_twitch_badge.pack(side="right")
-
-        self.lbl_twitch_user = tk.Label(
-            user_card, text=_("twitch.user_disconnected", "Inicia sesión para recibir alertas de followers, subs y chat en directo"),
-            font=("Helvetica", 10), fg=C_TEXT, bg=C_PANEL, anchor="w"
-        )
-        self.lbl_twitch_user.pack(fill="x", pady=(8, 0))
-
-        # Formulario de credenciales
-        form = tk.Frame(self.tab_twitch, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=14)
-        form.pack(fill="x", pady=(0, 16))
-
-        tk.Label(form, text="CREDENCIALES DE LA APLICACIÓN (dev.twitch.tv)", font=("Helvetica", 9, "bold"), fg=C_MUTED, bg=C_PANEL).pack(anchor="w", pady=(0, 10))
-
-        # Client ID
-        tk.Label(form, text="Client ID:", font=("Helvetica", 10), fg=C_TEXT, bg=C_PANEL).pack(anchor="w")
-        self.entry_client_id = tk.Entry(form, font=("Courier", 10), bg=C_INPUT, fg=C_TEXT, insertbackground=C_TEXT, relief="flat", bd=4)
-        self.entry_client_id.pack(fill="x", pady=(2, 8))
-
-        # Client Secret
-        secret_row = tk.Frame(form, bg=C_PANEL)
-        secret_row.pack(fill="x")
-        tk.Label(secret_row, text="Client Secret:", font=("Helvetica", 10), fg=C_TEXT, bg=C_PANEL).pack(side="left")
-        btn_eye = tk.Button(secret_row, text="👁️ Ver / Ocultar", font=("Helvetica", 8), bg=C_PANEL, fg=C_MUTED, relief="flat", cursor="hand2", command=self.on_toggle_secret)
-        btn_eye.pack(side="right")
-
-        self.entry_client_secret = tk.Entry(form, font=("Courier", 10), bg=C_INPUT, fg=C_TEXT, insertbackground=C_TEXT, relief="flat", bd=4, show="*")
-        self.entry_client_secret.pack(fill="x", pady=(2, 12))
-
-        # Botones de acción Twitch
-        tw_btn_frame = tk.Frame(self.tab_twitch, bg=C_BG)
-        tw_btn_frame.pack(fill="x")
-
-        btn_save = tk.Button(
-            tw_btn_frame, text="💾 Guardar Credenciales", font=("Helvetica", 10, "bold"),
-            bg="#21262D", fg=C_TEXT, activebackground="#30363D", activeforeground=C_TEXT,
-            relief="flat", padx=14, pady=7, cursor="hand2", command=self.on_save_credentials
-        )
-        btn_save.pack(side="left", padx=(0, 8))
-
-        self.btn_twitch_auth = tk.Button(
-            tw_btn_frame, text="🟣 Conectar con Twitch", font=("Helvetica", 10, "bold"),
-            bg="#9146FF", fg="#FFFFFF", activebackground="#772CE8", activeforeground="#FFFFFF",
-            relief="flat", padx=14, pady=7, cursor="hand2", command=self.on_twitch_auth
-        )
-        self.btn_twitch_auth.pack(side="left", padx=(0, 8))
-
-        btn_logout = tk.Button(
-            tw_btn_frame, text="Cerrar Sesión", font=("Helvetica", 10),
-            bg="#21262D", fg=C_RED, activebackground="#30363D", activeforeground=C_RED,
-            relief="flat", padx=10, pady=7, cursor="hand2", command=self.on_twitch_logout
-        )
-        btn_logout.pack(side="left")
-
-    # --- PESTAÑA GUÍA ---
     def _build_tab_guide(self):
-        container = tk.Frame(self.tab_guide, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=16, pady=14)
-        container.pack(fill="both", expand=True)
+        build_guide_tab(self)
 
-        guide_text = _("launcher.guide_text")
-
-        txt = scrolledtext.ScrolledText(
-            container, wrap="word", font=("Courier", 10),
-            bg=C_INPUT, fg=C_TEXT, insertbackground=C_TEXT, bd=0, padx=10, pady=10
-        )
-        txt.insert("1.0", guide_text)
-        txt.configure(state="disabled")
-        self.guide_txt = txt
-        txt.pack(fill="both", expand=True)
-
-    # --- PESTAÑA REGISTRO ---
     def _build_tab_logs(self):
-        container = tk.Frame(self.tab_logs, bg=C_PANEL, bd=1, relief="solid", highlightbackground=C_BORDER, padx=10, pady=10)
-        container.pack(fill="both", expand=True)
-
-        self.txt_logs = scrolledtext.ScrolledText(
-            container, wrap="none", font=("Courier", 9),
-            bg="#05070A", fg=C_CYAN, insertbackground=C_TEXT, bd=0, padx=8, pady=8
-        )
-        self.txt_logs.pack(fill="both", expand=True, pady=(0, 8))
-
-        btn_clear = tk.Button(
-            container, text="Limpiar Registro", font=("Helvetica", 9),
-            bg="#21262D", fg=C_MUTED, activebackground="#30363D", activeforeground=C_TEXT,
-            relief="flat", padx=10, pady=4, cursor="hand2", command=self.on_clear_logs
-        )
-        btn_clear.pack(anchor="e")
-
-    # --- MÉTODOS Y ACCIONES ---
+        build_logs_tab(self)
     def add_log_line(self, line):
         try:
             self.txt_logs.insert("end", line + "\n")

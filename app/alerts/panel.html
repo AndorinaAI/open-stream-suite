@@ -92,12 +92,17 @@
       <a id="link-doc-conventions" href="/CONVENTIONS.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(63, 185, 80, 0.4); color: #3FB950;" data-i18n="nav.guide_conventions">
         📜 Convenciones de Programación
       </a>
+      <a id="link-doc-install" href="../docs/INSTALACION_E_INICIO.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(56, 189, 248, 0.4); color: #38BDF8;" data-i18n="nav.guide_install">
+        🚀 Guía de Instalación y Arranque
+      </a>
 
       <!-- Badge de actualización disponible -->
-      <div id="panel-update-badge" style="display: none; margin-top: 8px; background: rgba(87, 214, 196, 0.12); border: 1px solid var(--color-accent-cyan); border-radius: 6px; padding: 6px 8px; text-align: center;">
-        <div style="font-family: var(--font-tech); font-size: 10px; font-weight: 800; color: var(--color-accent-cyan);" id="panel-update-title" data-i18n="updates.new_version">
+      <div id="panel-update-badge" style="display: none; margin-top: 8px; background: rgba(87, 214, 196, 0.12); border: 1px solid var(--color-accent-cyan); border-radius: 6px; padding: 6px 8px; text-align: center; position: relative;">
+        <button type="button" id="panel-update-dismiss" onclick="dismissUpdateBadge()" data-i18n-title="updates.dismiss" title="Descartar" style="position: absolute; top: 2px; right: 4px; background: none; border: none; color: var(--color-accent-cyan); cursor: pointer; font-size: 12px; line-height: 1;">✕</button>
+        <div style="font-family: var(--font-tech); font-size: 10px; font-weight: 800; color: var(--color-accent-cyan);" id="panel-update-title">
           🚀 NUEVA VERSIÓN
         </div>
+        <div id="panel-update-current" style="font-size: 9px; color: var(--color-text-muted, #8b949e);"></div>
         <a id="panel-update-link" href="https://github.com/AndorinaAI/open-stream-suite/releases" target="_blank" style="color: #fff; font-size: 10px; text-decoration: underline; display: inline-block; margin-top: 2px;" data-i18n="updates.view_changes">
           Ver cambios en GitHub
         </a>
@@ -262,9 +267,9 @@
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 26px;">🎭</span>
             <div>
-              <div style="font-family: var(--font-tech); font-weight: 800; font-size: 15px; color: #C4B5FD; display: flex; align-items: center; gap: 8px;" data-i18n="triggers.roles_title">
-                GESTOR DE FUNCIONES DEL CANAL (TWITCH)
-                <span class="badge-pill" style="font-size: 10px; background: rgba(139, 92, 246, 0.2); color: #C4B5FD; border: 1px solid #8B5CF6;">6 FUNCIONES OFICIALES</span>
+              <div style="font-family: var(--font-tech); font-weight: 800; font-size: 15px; color: #C4B5FD; display: flex; align-items: center; gap: 8px;">
+                <span data-i18n="triggers.roles_title">GESTOR DE FUNCIONES DEL CANAL (TWITCH)</span>
+                <span class="badge-pill" style="font-size: 10px; background: rgba(139, 92, 246, 0.2); color: #C4B5FD; border: 1px solid #8B5CF6;" data-i18n="roles.official_roles_badge">6 FUNCIONES OFICIALES</span>
               </div>
               <div style="font-size: 12px; color: var(--color-text-dim); margin-top: 2px;" data-i18n="triggers.roles_subtitle">
                 Administra los miembros y permisos de las funciones oficiales de Twitch (Moderador, VIP, Artista, Editor, Moderador principal y Director comercial).
@@ -272,13 +277,13 @@
             </div>
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn-action-primary" style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.6); color: #DDD6FE; padding: 5px 12px; font-size: 11px;" onclick="toggleRoleForm(true)" title="Crear una función personalizada adicional" data-i18n="triggers.btn_new_role">
+            <button class="btn-action-primary" style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.6); color: #DDD6FE; padding: 5px 12px; font-size: 11px;" onclick="toggleRoleForm(true)" title="Crear una función personalizada adicional" data-i18n="triggers.btn_new_role" data-i18n-title="triggers.title_new_role">
               ➕ Nueva Función
             </button>
-            <button class="btn-action-primary" style="background: rgba(147, 51, 234, 0.2); border: 1px solid rgba(147, 51, 234, 0.5); color: #D8B4FE; padding: 5px 12px; font-size: 11px;" onclick="window.location.href='/auth'" title="Autorizar en Twitch los permisos para sincronizar moderadores, VIPs y editores automáticamente" data-i18n="triggers.btn_sync_perms">
+            <button class="btn-action-primary" style="background: rgba(147, 51, 234, 0.2); border: 1px solid rgba(147, 51, 234, 0.5); color: #D8B4FE; padding: 5px 12px; font-size: 11px;" onclick="window.location.href='/auth'" title="Autorizar en Twitch los permisos para sincronizar moderadores, VIPs y editores automáticamente" data-i18n="triggers.btn_sync_perms" data-i18n-title="triggers.title_sync_perms">
               🔑 Sincronizar Permisos de Twitch
             </button>
-            <button class="btn-action-test" onclick="importTwitchModsAndVips()" style="padding: 5px 12px; font-size: 11px;" title="Importar moderadores, VIPs y editores desde la API de Twitch" data-i18n="triggers.btn_import">
+            <button class="btn-action-test" onclick="importTwitchModsAndVips()" style="padding: 5px 12px; font-size: 11px;" title="Importar moderadores, VIPs y editores desde la API de Twitch" data-i18n="triggers.btn_import" data-i18n-title="triggers.title_import">
               📥 Importar de Twitch
             </button>
             <button class="btn-action-test" onclick="toggleRolesDrawer()" style="padding: 5px 12px;" data-i18n="triggers.btn_close">✕ Cerrar</button>
@@ -1398,7 +1403,7 @@
             </div>
             <div style="display: flex; gap: 8px;">
               <input type="text" id="sim-user-input" class="form-input" placeholder="Nombre" value="AndorinaDev" data-i18n-placeholder="themes.placeholder_sim_user">
-              <input type="text" id="sim-msg-input" class="form-input" placeholder="Mensaje" value="¡Un saludo!" data-i18n-placeholder="themes.placeholder_sim_msg">
+              <input type="text" id="sim-msg-input" class="form-input" placeholder="Mensaje" value="¡Un saludo!" data-i18n-placeholder="themes.placeholder_sim_msg" data-i18n-value="alerts.sim_default_msg">
               <button class="btn-action-primary" onclick="sendCustomAlertTest()" data-i18n="alerts.sim_btn_fire">Disparar</button>
             </div>
           </div>
@@ -2914,23 +2919,102 @@
   <script src="/api/local-token.js"></script>
   <script src="js/api.js?v=41"></script>
   <script src="js/audio.js"></script>
-  <script src="js/rewards.js"></script>
-  <script src="js/roles.js"></script>
+  <script src="js/rewards/01-state-colors.js?v=50"></script>
+  <script src="js/rewards/02-drawer-render.js?v=50"></script>
+  <script src="js/rewards/03-actions-crud.js?v=50"></script>
+  <script src="js/roles/01-state.js?v=50"></script>
+  <script src="js/roles/02-render.js?v=50"></script>
+  <script src="js/roles/03-actions.js?v=50"></script>
+  <script src="js/roles/04-twitch-sync.js?v=50"></script>
   <script src="js/monitor.js"></script>
-  <script src="js/triggers.js"></script>
-  <script src="js/media.js"></script>
-  <script src="js/alerts-studio.js?v=1"></script>
+  <script src="js/triggers/01-editor-ui.js?v=50"></script>
+  <script src="js/triggers/02-editor-data.js?v=50"></script>
+  <script src="js/triggers/03-crud.js?v=50"></script>
+  <script src="js/media/01-state-load.js?v=50"></script>
+  <script src="js/media/02-render.js?v=50"></script>
+  <script src="js/media/03-selection-dnd.js?v=50"></script>
+  <script src="js/media/04-upload-folders.js?v=50"></script>
+  <script src="js/media/05-preview-assign.js?v=50"></script>
+  <script src="js/media/06-filters-select-init.js?v=50"></script>
+  <script src="js/alerts-studio/01-state-data.js?v=50"></script>
+  <script src="js/alerts-studio/02a-layout-dom.js?v=50"></script>
+  <script src="js/alerts-studio/02b-gallery-toast.js?v=50"></script>
+  <script src="js/alerts-studio/02-layout.js?v=50"></script>
+  <script src="js/alerts-studio/03-controls.js?v=50"></script>
+  <script src="js/alerts-studio/04-themes.js?v=50"></script>
+  <script src="js/alerts-studio/05-donations.js?v=50"></script>
+  <script src="js/alerts-studio/06-preview-test.js?v=50"></script>
   <!-- Módulos de Widgets (Centralizados en /widgets/[nombre]/) -->
-  <script src="js/widgets-core.js?v=6"></script>
+  <script src="js/widgets-core/01-miniapp.js?v=50"></script>
+  <script src="js/widgets-core/02-dev-guide.js?v=50"></script>
+  <script src="js/widgets-core/03-css-guide.js?v=50"></script>
+  <script src="js/widgets-core/04-pip-zoom.js?v=50"></script>
+  <script src="js/widgets-core/05-donations-modal.js?v=50"></script>
+  <script src="js/widgets-core/06-donations-actions.js?v=50"></script>
   <script src="js/widgets-shortcuts.js?v=6"></script>
-  <script src="/widgets/timer/panel.js?v=6"></script>
-  <script src="/widgets/shoutout/panel.js?v=6"></script>
-  <script src="/widgets/chat/panel.js?v=6"></script>
-  <script src="/widgets/goal/panel.js?v=6"></script>
-  <script src="/widgets/ticker/panel.js?v=6"></script>
+  <script src="/widgets/timer/panel/01-shortcuts.js?v=50"></script>
+  <script src="/widgets/timer/panel/02a-time-setup.js?v=50"></script>
+  <script src="/widgets/timer/panel/02b-styles-alerts.js?v=50"></script>
+  <script src="/widgets/timer/panel/02-controls.js?v=50"></script>
+  <script src="/widgets/timer/panel/03a-preset-loader.js?v=50"></script>
+  <script src="/widgets/timer/panel/03b-preset-crud.js?v=50"></script>
+  <script src="/widgets/timer/panel/03-presets.js?v=50"></script>
+  <script src="/widgets/timer/panel/04-save-as.js?v=50"></script>
+  <script src="/widgets/timer/panel/05-preview-actions.js?v=50"></script>
+  <script src="/widgets/timer/panel/06-save.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/01-shortcuts.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/02a-creator-tab.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/02b-styles-tab.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/02-controls.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/03a-creator-actions.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/03b-creator-preview.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/03-creator.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/04-history.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/05-presets.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/06-style-sync.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/07-qr.js?v=50"></script>
+  <script src="/widgets/shoutout/panel/08-save.js?v=50"></script>
+  <script src="/widgets/chat/panel/01-shortcuts.js?v=50"></script>
+  <script src="/widgets/chat/panel/02a-styles-presets.js?v=50"></script>
+  <script src="/widgets/chat/panel/02b-spotlight-timers.js?v=50"></script>
+  <script src="/widgets/chat/panel/02-controls.js?v=50"></script>
+  <script src="/widgets/chat/panel/03-presets.js?v=50"></script>
+  <script src="/widgets/chat/panel/04-preview-feed.js?v=50"></script>
+  <script src="/widgets/chat/panel/05-bot-timers.js?v=50"></script>
+  <script src="/widgets/chat/panel/06-particles.js?v=50"></script>
+  <script src="/widgets/chat/panel/07-css-guide.js?v=50"></script>
+  <script src="/widgets/chat/panel/08-simulate-save.js?v=50"></script>
+  <script src="/widgets/goal/panel/01a-target-tab.js?v=50"></script>
+  <script src="/widgets/goal/panel/01b-styles-tab.js?v=50"></script>
+  <script src="/widgets/goal/panel/01-controls.js?v=50"></script>
+  <script src="/widgets/goal/panel/02-items-state.js?v=50"></script>
+  <script src="/widgets/goal/panel/03-presets-actions.js?v=50"></script>
+  <script src="/widgets/goal/panel/04-preview-presets.js?v=50"></script>
+  <script src="/widgets/goal/panel/05-shortcuts-save.js?v=50"></script>
+  <script src="/widgets/ticker/panel/01a-content-tab.js?v=50"></script>
+  <script src="/widgets/ticker/panel/01b-styles-tab.js?v=50"></script>
+  <script src="/widgets/ticker/panel/01-controls.js?v=50"></script>
+  <script src="/widgets/ticker/panel/02-phrases-rss.js?v=50"></script>
+  <script src="/widgets/ticker/panel/03-preview-save.js?v=50"></script>
+  <script src="/widgets/ticker/panel/04-presets-shortcuts.js?v=50"></script>
   <script src="js/widgets.js?v=41"></script>
-  <script src="js/themes.js?v=45"></script>
-  <script src="js/overlay-texts.js?v=41"></script>
+  <script src="js/themes/01-state.js?v=50"></script>
+  <script src="js/themes/02-packs.js?v=50"></script>
+  <script src="js/themes/03a-editor-modal.js?v=50"></script>
+  <script src="js/themes/03b-editor-save.js?v=50"></script>
+  <script src="js/themes/03-editor.js?v=50"></script>
+  <script src="js/themes/04-modals.js?v=50"></script>
+  <script src="js/themes/05-scenes-data.js?v=50"></script>
+  <script src="js/themes/06-scene-helpers.js?v=50"></script>
+  <script src="js/themes/07-overlay-folders-data.js?v=50"></script>
+  <script src="js/themes/08-overlay-folders.js?v=50"></script>
+  <script src="js/themes/09-overlay-folders-render.js?v=50"></script>
+  <script src="js/themes/10-overlay-actions.js?v=50"></script>
+  <script src="js/themes/11-scene-editor.js?v=50"></script>
+  <script src="js/themes/12-exports-init.js?v=50"></script>
+  <script src="js/overlay-texts/01-core.js?v=50"></script>
+  <script src="js/overlay-texts/02-render.js?v=50"></script>
+  <script src="js/overlay-texts/03-api.js?v=50"></script>
   <script src="js/main.js?v=43"></script>
 </body>
 </html>

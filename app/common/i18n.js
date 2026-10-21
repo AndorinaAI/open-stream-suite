@@ -137,6 +137,9 @@ const i18n = (() => {
 
     const translated = tr(key);
     if (translated && translated !== key) {
+      if (parent.childNodes.length === 1 && !parent.hasAttribute('data-i18n')) {
+        parent.setAttribute('data-i18n', key);
+      }
       node.textContent = translated;
     }
   }
@@ -152,6 +155,48 @@ const i18n = (() => {
     }
     for (const n of nodes) {
       translateTextNodeByContent(n);
+    }
+
+    // Traducir también placeholders dinámicos sin data-i18n-placeholder
+    const inputs = root.querySelectorAll ? root.querySelectorAll('input[placeholder], textarea[placeholder]') : [];
+    for (const inp of inputs) {
+      if (inp.hasAttribute('data-i18n-placeholder')) continue;
+      const ph = (inp.placeholder || '').trim();
+      if (!ph) continue;
+      const key = esTextToKey[ph];
+      if (key) {
+        inp.setAttribute('data-i18n-placeholder', key);
+        const trans = tr(key);
+        if (trans && trans !== key) inp.placeholder = trans;
+      }
+    }
+
+    // Traducir options de selects sin data-i18n
+    const options = root.querySelectorAll ? root.querySelectorAll('select option') : [];
+    for (const opt of options) {
+      if (opt.hasAttribute('data-i18n')) continue;
+      const txt = (opt.textContent || '').trim();
+      if (!txt) continue;
+      const key = esTextToKey[txt];
+      if (key) {
+        opt.setAttribute('data-i18n', key);
+        const trans = tr(key);
+        if (trans && trans !== key) opt.textContent = trans;
+      }
+    }
+
+    // Traducir titles / tooltips sin data-i18n-title
+    const titled = root.querySelectorAll ? root.querySelectorAll('[title]') : [];
+    for (const el of titled) {
+      if (el.hasAttribute('data-i18n-title')) continue;
+      const title = (el.title || '').trim();
+      if (!title) continue;
+      const key = esTextToKey[title];
+      if (key) {
+        el.setAttribute('data-i18n-title', key);
+        const trans = tr(key);
+        if (trans && trans !== key) el.title = trans;
+      }
     }
   }
 
@@ -194,6 +239,16 @@ const i18n = (() => {
       const translated = tr(key);
       if (translated && translated !== key) {
         node.placeholder = translated;
+      }
+    }
+
+    // 2.5 Traducir valores iniciales con data-i18n-value
+    const valNodes = root.querySelectorAll('[data-i18n-value]');
+    for (const node of valNodes) {
+      const key = node.getAttribute('data-i18n-value');
+      const translated = tr(key);
+      if (translated && translated !== key) {
+        node.value = translated;
       }
     }
 

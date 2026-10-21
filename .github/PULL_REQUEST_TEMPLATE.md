@@ -12,7 +12,7 @@ Closes #
 - [ ] ♻️ Refactor / CI / Chore
 
 ## Checklist
-- [ ] Sigo [CONTRIBUTING.md](../CONTRIBUTING.md) y [app/CONVENTIONS.md](../app/CONVENTIONS.md)
+- [ ] Sigo [CONTRIBUTING.md](CONTRIBUTING.md) y [app/CONVENTIONS.md](../app/CONVENTIONS.md)
 - [ ] Los tests pasan (`cd app && python -m unittest discover tests`)
 - [ ] He actualizado ES **y** EN (docs/i18n) si procede
 - [ ] He actualizado el CHANGELOG si procede

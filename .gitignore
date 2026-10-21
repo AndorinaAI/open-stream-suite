@@ -23,5 +23,16 @@ app/roles.private.bak.json
 .idea/
 .vscode/
 *.swp
+*.bak
+*.old
+*~
+guia.md
+app/guia.md
+scratch/
+app/releases/
+releases/
+*.zip
+*.tar.gz
 .DS_Store
 Thumbs.db
+

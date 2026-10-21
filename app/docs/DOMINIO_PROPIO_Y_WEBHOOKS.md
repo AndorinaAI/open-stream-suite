@@ -34,7 +34,15 @@ Existen dos formas de configurarlo. **El Método 1 (Cloudflare Tunnel) es el 100
 
 ---
 
-### Paso a Paso para Linux (Ubuntu / Debian / Mint):
+### ⚡ Vía Automática con Asistente (Recomendado):
+La suite incluye un script en `scripts/setup_cloudflare.sh` que descarga el conector oficial, autoriza el dominio, genera el túnel y enruta el DNS automáticamente:
+```bash
+./scripts/setup_cloudflare.sh stream.tudominio.com 8080
+```
+
+---
+
+### Paso a Paso Manual para Linux (Ubuntu / Debian / Mint):
 
 #### 1. Instalar el conector oficial `cloudflared`
 Abre una terminal y ejecuta:
