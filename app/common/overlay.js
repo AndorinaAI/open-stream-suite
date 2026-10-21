@@ -159,11 +159,11 @@
       const phaseContainer = document.querySelector('.project-phases');
       if (phaseContainer && Array.isArray(projConfig.phases)) {
         phaseContainer.innerHTML = '';
+        const cur = projConfig.currentPhase || '';
         projConfig.phases.forEach((phaseText, idx) => {
           const item = document.createElement('div');
           item.className = 'phase-item';
-          const cur = projConfig.currentPhase || '';
-          if (cur && (phaseText.includes(cur) || cur.includes(phaseText))) {
+          if (cur && (phaseText.trim().toLowerCase() === cur.trim().toLowerCase() || phaseText.includes(cur) || cur.includes(phaseText))) {
             item.classList.add('active');
           }
           item.textContent = phaseText;
@@ -176,6 +176,22 @@
             phaseContainer.appendChild(div);
           }
         });
+
+        // Asegurar que al menos una fase esté activa y sincronizada con FASE ACTUAL
+        let activeItem = phaseContainer.querySelector('.phase-item.active');
+        if (!activeItem && phaseContainer.querySelector('.phase-item')) {
+          activeItem = phaseContainer.querySelector('.phase-item');
+          activeItem.classList.add('active');
+        }
+        if (activeItem) {
+          const activeText = activeItem.textContent.trim();
+          document.querySelectorAll('.panel-project-phase').forEach(pp => {
+            pp.textContent = activeText;
+          });
+        }
+        if (typeof window.__refreshHudPhases === 'function') {
+          window.__refreshHudPhases();
+        }
       }
 
       // Rótulos de marcos de cámara y paneles
@@ -198,18 +214,6 @@
       if (projConfig.projectPrefix) {
         const pfx = document.querySelector('.project-prefix');
         if (pfx) pfx.textContent = projConfig.projectPrefix;
-      }
-      if (projConfig.focusedRowIndex !== undefined && projConfig.focusedRowIndex >= 0) {
-        const rows = document.querySelectorAll('.side-info-panel .info-row');
-        rows.forEach((r, idx) => {
-          if (idx === projConfig.focusedRowIndex) {
-            r.classList.add('focused', 'active');
-            r.querySelector('.info-value')?.classList.add(isPrintMode ? 'highlight-orange' : 'highlight-cyan');
-          } else {
-            r.classList.remove('focused', 'active');
-            r.querySelector('.info-value')?.classList.remove('highlight-cyan', 'highlight-orange');
-          }
-        });
       }
 
       // Cámara auxiliar
@@ -1622,9 +1626,6 @@
           const panelStatus = document.querySelector('.side-info-panel .panel-header span:last-child')?.textContent?.trim();
           if (panelStatus) texts.maker.panelStatus = panelStatus;
 
-          const focusedRowIdx = Array.from(document.querySelectorAll('.side-info-panel .info-row')).findIndex(r => r.classList.contains('focused') || r.classList.contains('active') || r.querySelector('.info-value.highlight-cyan, .info-value.highlight-orange'));
-          if (focusedRowIdx >= 0) texts.maker.focusedRowIndex = focusedRowIdx;
-
           const phases = Array.from(document.querySelectorAll('.project-phases .phase-item'))
             .map(el => el.textContent.trim())
             .filter(Boolean);
@@ -1663,9 +1664,6 @@
 
           const printPanelStatus = document.querySelector('.side-info-panel .panel-header span:last-child')?.textContent?.trim();
           if (printPanelStatus) texts.print.panelStatus = printPanelStatus;
-
-          const printFocusedRowIdx = Array.from(document.querySelectorAll('.side-info-panel .info-row')).findIndex(r => r.classList.contains('focused') || r.classList.contains('active') || r.querySelector('.info-value.highlight-cyan, .info-value.highlight-orange'));
-          if (printFocusedRowIdx >= 0) texts.print.focusedRowIndex = printFocusedRowIdx;
 
           const phases = Array.from(document.querySelectorAll('.project-phases .phase-item'))
             .map(el => el.textContent.trim())
@@ -1925,96 +1923,121 @@
     if (speedControl) makeDraggable(speedControl, '.hud-drag-handle');
     if (phrasesControl) makeDraggable(phrasesControl, '.hud-drag-handle');
 
-    // Gestión dinámica de Fases, Enfoque en paneles laterales y Modos de emisión
-    function setupPhaseAndSideControls() {
-      const phaseItems = document.querySelectorAll('.project-phases .phase-item');
+    // Gestión dinámica y delegada de Fases (01, 02, 03, 04) y sincronización con FASE ACTUAL
+    window.__refreshHudPhases = function() {
       const hudPhaseSwitcher = hud.querySelector('#hud-phase-switcher');
       const hudPhaseButtons = hud.querySelector('#hud-phase-buttons');
-
-      function updatePhaseButtons() {
-        if (!hudPhaseButtons) return;
-        hudPhaseButtons.innerHTML = '';
-        phaseItems.forEach(pi => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'hud-btn';
-          const pText = pi.textContent.trim();
-          btn.textContent = pText;
-          const isActive = pi.classList.contains('active');
-          if (isActive) {
-            btn.style.borderColor = '#57D6C4';
-            btn.style.color = '#57D6C4';
-            btn.style.background = 'rgba(87,214,196,0.18)';
-            btn.style.fontWeight = '700';
-          }
-          btn.addEventListener('click', () => {
-            selectActivePhase(pi);
-          });
-          hudPhaseButtons.appendChild(btn);
-        });
+      const phaseItems = document.querySelectorAll('.project-phases .phase-item');
+      if (!hudPhaseButtons) return;
+      if (phaseItems.length === 0) {
+        if (hudPhaseSwitcher) hudPhaseSwitcher.style.display = 'none';
+        return;
       }
-
-      function selectActivePhase(targetPi) {
-        phaseItems.forEach(p => p.classList.remove('active'));
-        targetPi.classList.add('active');
-        const phaseText = targetPi.textContent.trim();
-        document.querySelectorAll('.panel-project-phase').forEach(pp => {
-          pp.textContent = phaseText;
+      if (hudPhaseSwitcher) hudPhaseSwitcher.style.display = 'flex';
+      hudPhaseButtons.innerHTML = '';
+      phaseItems.forEach(pi => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'hud-btn';
+        const pText = pi.textContent.trim();
+        btn.textContent = pText;
+        const isActive = pi.classList.contains('active');
+        if (isActive) {
+          btn.style.borderColor = '#57D6C4';
+          btn.style.color = '#57D6C4';
+          btn.style.background = 'rgba(87,214,196,0.18)';
+          btn.style.fontWeight = '700';
+        }
+        btn.addEventListener('click', () => {
+          activatePhase(pi);
         });
-        updatePhaseButtons();
-        showHudToast(`🏷️ Fase activa cambiada a: ${phaseText}`);
-      }
+        hudPhaseButtons.appendChild(btn);
+      });
+    };
 
-      if (phaseItems.length > 0) {
-        if (hudPhaseSwitcher) hudPhaseSwitcher.style.display = 'flex';
-        updatePhaseButtons();
+    async function activatePhase(targetPi) {
+      const allPhases = document.querySelectorAll('.project-phases .phase-item');
+      allPhases.forEach(p => p.classList.remove('active'));
+      targetPi.classList.add('active');
+      const phaseText = targetPi.textContent.trim();
 
-        phaseItems.forEach(pi => {
-          pi.addEventListener('click', (e) => {
-            if (e.target.isContentEditable) return;
-            selectActivePhase(pi);
-          });
-        });
-      }
-
-      // Enfoque / Focus en filas del panel lateral (.side-info-panel .info-row)
-      const infoRows = document.querySelectorAll('.side-info-panel .info-row');
-      infoRows.forEach((row, rIdx) => {
-        row.addEventListener('click', (e) => {
-          if (e.target.isContentEditable) return;
-          const isPrint = document.body.dataset.mode === 'print';
-          const hlClass = isPrint ? 'highlight-orange' : 'highlight-cyan';
-          const wasFocused = row.classList.contains('focused') || row.classList.contains('active');
-
-          infoRows.forEach(r => {
-            r.classList.remove('focused', 'active');
-            r.querySelector('.info-value')?.classList.remove('highlight-cyan', 'highlight-orange');
-          });
-
-          if (!wasFocused) {
-            row.classList.add('focused', 'active');
-            row.querySelector('.info-value')?.classList.add(hlClass);
-            const lbl = row.querySelector('.info-label')?.textContent?.trim() || 'Fila';
-            showHudToast(`🎯 Foco asignado a: ${lbl}`);
-          }
-        });
+      // Sincronizar FASE ACTUAL inmediatamente en el panel lateral
+      document.querySelectorAll('.panel-project-phase').forEach(pp => {
+        pp.textContent = phaseText;
       });
 
-      // Alternar modos activos en Starting Soon (.starting-side-modes .stream-mode-card)
-      const modeCards = document.querySelectorAll('.starting-side-modes .stream-mode-card');
-      modeCards.forEach((card, cIdx) => {
-        card.addEventListener('click', (e) => {
-          if (e.target.isContentEditable) return;
-          const isOrange = card.classList.contains('active-orange') || cIdx === 2;
-          const activeClass = isOrange ? 'active-orange' : 'active-cyan';
-          card.classList.toggle(activeClass);
-          const lbl = card.querySelector('.ss-mode-label')?.textContent?.trim() || `Modo ${cIdx+1}`;
-          showHudToast(`🎯 Modo ${lbl} ${card.classList.contains(activeClass) ? 'activado' : 'desactivado'}`);
+      if (typeof window.__refreshHudPhases === 'function') {
+        window.__refreshHudPhases();
+      }
+      showHudToast(`🏷️ Fase seleccionada: ${phaseText}`);
+
+      // Persistir al servidor para sincronizar con OBS Studio
+      try {
+        const isPrintMode = document.body.dataset.mode === 'print';
+        const section = isPrintMode ? 'print' : 'maker';
+        const res = await fetch('/api/overlays/texts');
+        if (!res.ok) return;
+        const serverData = await res.json();
+        const texts = serverData.texts || {};
+        if (!texts[section]) texts[section] = {};
+        texts[section].currentPhase = phaseText;
+
+        let localToken = window.__LOCAL_AUTH_TOKEN__ || localStorage?.getItem('local_auth_token') || '';
+        if (!localToken) {
+          try {
+            const tokRes = await fetch('/api/local-token');
+            if (tokRes.ok) { const td = await tokRes.json(); localToken = td.token || ''; }
+          } catch(e){}
+        }
+
+        await fetch('/api/overlays/texts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(localToken ? { 'X-Local-Token': localToken } : {})
+          },
+          body: JSON.stringify({ texts })
         });
-      });
+      } catch(e) {
+        console.error('Error al persistir fase activa:', e);
+      }
     }
 
-    setupPhaseAndSideControls();
+    // Delegación de eventos infalible en document para cualquier .phase-item (incluso tras recargar dinámicamente)
+    document.addEventListener('click', (e) => {
+      const phaseItem = e.target.closest('.project-phases .phase-item');
+      if (phaseItem) {
+        if (phaseItem.isContentEditable && document.activeElement === phaseItem) return;
+        activatePhase(phaseItem);
+        return;
+      }
+
+      // Delegación de eventos para Speedrun splits (.split-row)
+      const splitRow = e.target.closest('.split-row');
+      if (splitRow) {
+        if (splitRow.isContentEditable && document.activeElement === splitRow) return;
+        document.querySelectorAll('.split-row').forEach(sr => sr.classList.remove('active'));
+        splitRow.classList.add('active');
+        const sName = splitRow.querySelector('.split-name')?.textContent?.trim() || 'Tramo';
+        showHudToast(`⚡ Tramo activo: ${sName}`);
+        return;
+      }
+
+      // Alternar modos activos en Starting Soon (.starting-side-modes .stream-mode-card)
+      const modeCard = e.target.closest('.starting-side-modes .stream-mode-card');
+      if (modeCard) {
+        if (modeCard.isContentEditable && document.activeElement === modeCard) return;
+        const isOrange = modeCard.classList.contains('active-orange');
+        const activeClass = isOrange ? 'active-orange' : 'active-cyan';
+        modeCard.classList.toggle(activeClass);
+        const lbl = modeCard.querySelector('.ss-mode-label')?.textContent?.trim() || 'Modo';
+        showHudToast(`🎯 Modo ${lbl} ${modeCard.classList.contains(activeClass) ? 'activado' : 'desactivado'}`);
+      }
+    });
+
+    if (typeof window.__refreshHudPhases === 'function') {
+      window.__refreshHudPhases();
+    }
 
     // Botón de Restaurar textos a fábrica desde el HUD
     const btnResetTexts = hud.querySelector('#hud-btn-reset-texts');
