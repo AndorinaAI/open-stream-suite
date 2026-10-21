@@ -16,7 +16,8 @@ This guide explains the architecture of Open Stream Suite: **how the workflow op
 4. [Creating a New Visual Theme from Scratch](#4-creating-a-new-visual-theme-from-scratch)
 5. [Creating a New Scene / Overlay from Scratch](#5-creating-a-new-scene--overlay-from-scratch)
 6. [Live Text Customization & OBS Synchronization](#6-live-text-customization--obs-synchronization)
-7. [Frequently Asked Questions & Troubleshooting](#7-frequently-asked-questions--troubleshooting)
+7. [Programmed Overlay Functions & Draggable Floating Controls](#7-programmed-overlay-functions--draggable-floating-controls)
+8. [Frequently Asked Questions & Troubleshooting](#8-frequently-asked-questions--troubleshooting)
 
 ---
 
@@ -126,8 +127,74 @@ Themes are defined as modular folders in `app/themes/<pack_id>/<theme_id>/`:
 
 ## 6. Live Text Customization & OBS Synchronization
 
-To update streamer name, project phases, and on-screen phrases without editing HTML files:
-1. Open the control panel at [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html).
-2. Go to the **Textos de Escenas** tab.
-3. Edit the fields (Streamer Name, Project Title, Active Phase, BRB phrases).
-4. Click **Guardar y Aplicar a OBS**: the server broadcasts the changes via WebSockets, and all connected OBS browser sources update instantly in real time!
+Text customization in **Open Stream Suite** does not rely on obscure JSON editing or modals blocking your view; you edit texts directly on the canvas:
+
+1. **Unified Action Button**:
+   - Every overlay card features the **`🖥️ Ver Pantalla Completa / ✏️ Editar Textos`** button.
+   - Clicking it launches the overlay at full 1920×1080 resolution with the interactive editing suite enabled.
+
+2. **Direct On-Canvas Editing (`contenteditable="true"`)**:
+   - All titles, subtitles, project phases, personal bests, and badge labels can be edited directly by clicking on them.
+   - A bright cyan/neon focus ring highlights the active text field.
+
+3. **Floating Control HUD (`#open-stream-suite-screen-hud`)**:
+   - The top floating toolbar provides:
+     - **`🎯 Ir a Texto...`**: Comprehensive dropdown jumping directly to any label on screen.
+     - **`💾 Guardar Cambios`**: Persists changes to `/api/overlays/texts` and triggers WebSocket broadcasts to all OBS instances.
+     - **`🔄 Restablecer`**: Reverts texts back to factory defaults.
+     - **`❌ Cerrar HUD`**: Hides HUD to view the clean broadcast canvas.
+     - **`⋮⋮ Drag Handle`**: Reposition the HUD anywhere to avoid blocking content.
+
+4. **Reactive Animation Pausing (`window.__OSS_IS_EDITING__`)**:
+   - When any editable text receives focus or keyboard input, `window.__OSS_IS_EDITING__` automatically engages.
+   - All timed rotations (e.g., BRB phrases) pause to prevent the DOM from updating underneath your cursor.
+
+---
+
+## 7. Programmed Overlay Functions & Draggable Floating Controls
+
+Overlays in Open Stream Suite are fully programmable web applications:
+
+### Golden Rule: All Floating Menus MUST be Draggable (`makeDraggable`)
+> [!IMPORTANT]
+> **Non-Obtrusive Guarantee**: Never leave a floating panel or control menu in a static CSS fixed position. Always wrap it with `makeDraggable(panel, handleSelector)` so the streamer can drag it out of the way of cameras, chat, and critical on-stream information.
+
+- **Pointer Events**: Uses `pointerdown`, `pointermove`, `pointerup` with `setPointerCapture` and `touch-action: none`.
+- **Drag Handle**: Visual header with `.hud-drag-handle`, `⋮⋮` glyph, and `cursor: grab / grabbing`.
+- **Screen Clamping**: Floating controls cannot be dragged off-screen.
+
+### Native Programmed Capabilities:
+1. **Speedrun Splits Stopwatch (`Gamer_Pro_Pack`)**:
+   - Centisecond timer with lap splits.
+   - Floating draggable HUD `#oss-speedrun-control` with `[▶ Start]`, `[⚡ Split]`, `[⏮ Prev]`, `[🔄 Reset]`.
+   - `Space` key shortcut for splits (automatically ignored when typing in editable inputs).
+   - Direct click on deltas (`+` / `-`) or PBs to adjust split targets.
+2. **Pomodoro & Countdown Timers (`Cozy_LoFi_Pack` & Starting Soon)**:
+   - Synchronized countdown with SVG/CSS progress fills (`.tech-progress-fill`).
+   - Draggable `#oss-countdown-control` with 25m, 50m, 5m, 10m presets and `±1m` micro-adjustments.
+   - Direct click on the giant clock digits to pause/resume.
+3. **Interactive Project Phase Manager (`Maker_Theme_Pack`)**:
+   - Direct click on any stage (`01 PLAN`, `02 MONTAJE`, etc.) sets it as active and syncs with `FASE ACTUAL`.
+   - HUD buttons `➕ Add Phase` and `🗑️ Delete Phase` to manage roadmaps live on stream.
+4. **Podcast Multi-Cam Layout Switcher (`Open_stream_Pack`)**:
+   - HUD buttons: `[👥 2 Cams]`, `[👥 3 Cams]`, `[👥 4 Cams]`.
+   - Automatically recalibrates CSS Grid dimensions and generates guest lower-thirds.
+5. **Direct Canvas Interactions**:
+   - Click victory clutch banners to cycle states (`VICTORY`, `DEFEAT`, `ACE`, `MATCH POINT`).
+   - Click stats badges to toggle modes (`COMPETITIVE`, `RANKED`, FPS).
+   - Click floating webcam (`desktop_share`) to cycle between the 4 corners.
+
+---
+
+## 8. Frequently Asked Questions & Troubleshooting
+
+### ❓ Does `server.py` need to run continuously?
+- **For live Twitch alerts, channel point triggers, and real-time syncing**: Yes, the local server handles WebSockets and Twitch API connectivity.
+- **For offline frame graphics**: You can load scenes locally via OBS browser source with file paths.
+
+### ❓ Why does my webcam appear in front of overlay borders or texts?
+In the OBS Sources list, layer order is top-to-bottom. **The Browser Source (Overlay) must be at the very top of the list**. Your webcam video capture device must be placed underneath.
+
+### ❓ How do I preview scenes at full resolution?
+Click **`🖥️ Ver Pantalla Completa / ✏️ Editar Textos`** on any scene card in the control panel.
+

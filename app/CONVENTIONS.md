@@ -186,6 +186,49 @@ El gestor en `alerts/` evolucionará hacia un explorador visual potente:
 - **Restauración (`POST /api/themes/restore`)**: Permite restaurar cualquier tema a sus valores de fábrica con un clic desde el editor visual.
 - **Estilos por Overlay (`themes_state.json`)**: Cada overlay de OBS Studio tiene asignado su propio estilo visual en `overlayThemes` (ej: `game` -> `arcade_8bit`, `maker-desk` -> `maker`, etc.), sincronizándose dinámicamente con OBS vía WebSocket.
 
+### G. Overlays con Funciones Programadas, Elementos Draggables y Edición en Caliente
+
+Los overlays en Open Stream Suite no son meras plantillas visuales estáticas; son **aplicaciones web de emisión dinámicas** que combinan estética de alta gama con lógica programada nativa:
+
+1. **Capacidades Funcionales Nativas en Overlays**:
+   - **Cronómetros & Speedrun (`Gamer_Pro_Pack`)**:
+     - Cronómetro interactivo con tiempos de vuelta y splits (`⚡ Split`, `⏮ Prev`, `🔄 Reset`).
+     - Almacenamiento y captura de tiempos por tramo (`.split-time`), cálculo/alternancia de deltas (`+` retraso / `-` adelanto) y edición directa de títulos y PB (Personal Best).
+     - Acceso rápido vía teclado (tecla `Espacio` para registrar split o pausar sin interferir con inputs de texto).
+   - **Pomodoro y Cuenta Atrás (`Cozy_LoFi_Pack` y pantallas Starting Soon)**:
+     - Temporizadores regresivos sincronizados milisegundo a milisegundo con la barra de carga tecnológica (`.tech-progress-fill`).
+     - Presets rápidos de concentración y café (25m, 50m, 5m, 10m) y micro-ajustes (`+1m` / `-1m`).
+     - Pausa y reanudación con clic directo sobre el tiempo gigante en pantalla.
+   - **Gestor Dinámico de Fases (`Maker_Theme_Pack`)**:
+     - Conmutación directa de fase haciendo clic sobre cualquier tramo inferior (`01 PLAN`, `02 MONTAJE`, etc.).
+     - Sincronización automática de `FASE ACTUAL` en la ficha técnica y en los botones del HUD.
+     - Botones `➕` y `🗑️` en el HUD para añadir o eliminar fases del proyecto en caliente.
+   - **Distribución Dinámica de Cámaras (`Open_stream_Pack` Podcast)**:
+     - Conmutador multi-cámara en el HUD (`[2 Cams] [3 Cams] [4 Cams]`) que reorganiza el CSS Grid y genera rótulos editables para cada invitado.
+   - **Interacciones Directas en Lienzo**:
+     - Clic en banners de victoria (`victory_clutch`) para ciclar estados (`VICTORY`, `DEFEAT`, `ACE`, `MATCH POINT`).
+     - Clic en estadísticas (`gameplay_hud`) para alternar modos (`COMPETITIVE`, `RANKED`) y FPS (`240`, `144`, etc.).
+     - Clic en webcam flotante (`desktop_share`) para rotar entre las 4 esquinas del viewport.
+
+2. **Regla de Oro: Todo Panel o Menú Flotante DEBE ser Draggable (`makeDraggable`)**:
+   - **Principio de No Invasión**: El contenido de la emisión, cámaras o textos nunca deben quedar tapados por un menú flotante estático.
+   - Todo menú flotante (`#open-stream-suite-screen-hud`, `#oss-countdown-control`, `#oss-speedrun-control`, `#oss-brb-phrases-control`) debe inicializarse con la función helper universal `makeDraggable(panel, handleSelector)`.
+   - **Tirador de Arrastre**: Cada ventana flotante debe disponer de una cabecera con tirador visual (`.hud-drag-handle`) que contenga el glifo `⋮⋮` y `cursor: grab / grabbing`.
+   - **Pointer Events**: Debe implementarse usando la API estándar de puntero (`pointerdown`, `pointermove`, `pointerup`) con `setPointerCapture`, asegurando compatibilidad fluida con ratón, trackpads y pantallas táctiles (`touch-action: none`).
+   - Las coordenadas deben acotarse para evitar que los controles se pierdan fuera de los límites de la pantalla.
+
+3. **Arquitectura del Motor de Edición en Caliente (`common/overlay.js`)**:
+   - **Catálogo Exhaustivo `editableSelectors`**: Todos los elementos con texto en las 27 escenas deben estar indexados para activarse con `contenteditable="true"` y aparecer en el menú desplegable flotante `"🎯 Ir a Texto..."`.
+   - **Pausa Reactiva de Animaciones e Intervalos (`window.__OSS_IS_EDITING__`)**:
+     - Mientras el usuario tenga el cursor dentro de un elemento editable o esté escribiendo, `window.__OSS_IS_EDITING__` se activa automáticamente.
+     - Todos los bucles (rotación de frases de pausa, refresco de listas) pausan sus transiciones para que el texto no cambie ni se mueva bajo el cursor del usuario.
+   - **Delegación de Eventos en `document`**:
+     - Las escuchas de clics para selección activa (`.split-row`, `.phase-item`, `.split-delta`, etc.) deben adjuntarse a nivel de `document` mediante delegación (`e.target.closest(...)`).
+     - Esto garantiza que sigan funcionando sin romperse aunque el DOM se regenere dinámicamente con `innerHTML = ''` tras cargar datos del servidor.
+   - **Persistencia Bidireccional y Sincronización OBS**:
+     - Al pulsar `💾 Guardar` en el HUD, `saveTexts()` recopila los textos y estados activos específicos del pack (vía detección de `sceneKey` y rutas pathname).
+     - Se envían a `POST /api/overlays/texts` (protegido con `X-Local-Token`) y el servidor emite el evento WebSocket `overlay_texts_updated` a todas las instancias conectadas en OBS Studio.
+
 ---
 
 ## 4. Convenciones de Código y Nomenclatura

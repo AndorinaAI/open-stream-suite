@@ -17,6 +17,7 @@ Bienvenido a la guía técnica oficial del sistema de overlays para **Andorina**
 5. [Comunicación en Tiempo Real: WebSocket y Eventos](#5-comunicación-en-tiempo-real)
 6. [TriggerFyre Local: Vídeos, Memes y Puntos de Canal](#6-triggerfyre-local)
 7. [Buenas Prácticas para OBS Studio y Directos](#7-buenas-prácticas-para-obs-studio)
+8. [Funciones Programadas en Overlays y Menús Flotantes Draggables](#8-funciones-programadas-en-overlays-y-menús-flotantes-draggables)
 
 ---
 
@@ -473,3 +474,171 @@ Puedes combinar libremente:
    - Activar: *Controlar audio vía OBS* (si quieres ajustar el volumen individual de la fuente en el mezclador).
    - Activar: *Apagar fuente cuando no esté visible* (ahorra recursos cuando cambias a otra escena).
    - Frecuencia de actualización: 60 FPS (para animaciones super suaves).
+
+---
+
+## 8. Funciones Programadas en Overlays y Menús Flotantes Draggables
+
+### 8.1. Filosofía: Overlays como Aplicaciones Interactivas de Emisión
+En **Open Stream Suite**, los overlays no son simples plantillas estáticas con texto fijo; son **aplicaciones web de emisión vivas** ejecutadas en el navegador integrado de OBS Studio o en pantalla completa en el navegador de control.
+
+Los overlays pueden incorporar:
+- Cronómetros con registro de vueltas y deltas en tiempo real.
+- Temporizadores regresivos sincronizados con barras de progreso SVG/CSS.
+- Gestores de fases de proyecto con selección activa.
+- Conmutadores de rejilla de cámaras para podcast y entrevistas.
+- Banners de estado de partida clicables.
+
+---
+
+### 8.2. Regla de Oro: Todo Menú Flotante DEBE ser Draggable (`makeDraggable`)
+> [!IMPORTANT]
+> **Principio de No Obstrucción**: Un menú flotante, HUD o panel de control **nunca debe tapar** permanentemente la cámara, el chat, el gameplay o un texto editable que el streamer necesite visualizar o editar.
+
+Por ello, todo panel flotante (`#open-stream-suite-screen-hud`, `#oss-countdown-control`, `#oss-speedrun-control`, `#oss-brb-phrases-control`) debe implementarse como **draggable**:
+
+1. **Helper Universal `makeDraggable(panel, handleSelector)`**:
+   Disponible de forma global en `common/overlay.js`:
+   ```javascript
+   function makeDraggable(panel, handleSelector) {
+     if (!panel) return;
+     const handle = handleSelector ? (panel.querySelector(handleSelector) || panel) : panel;
+     handle.style.cursor = 'grab';
+     handle.style.touchAction = 'none';
+
+     let isDragging = false;
+     let startX = 0, startY = 0, initialLeft = 0, initialTop = 0;
+
+     handle.addEventListener('pointerdown', (e) => {
+       if (e.target.closest('button, input, select, textarea, [contenteditable="true"]')) return;
+       isDragging = true;
+       handle.style.cursor = 'grabbing';
+       handle.setPointerCapture(e.pointerId);
+
+       const rect = panel.getBoundingClientRect();
+       startX = e.clientX;
+       startY = e.clientY;
+       initialLeft = rect.left;
+       initialTop = rect.top;
+
+       panel.style.bottom = 'auto';
+       panel.style.right = 'auto';
+       panel.style.left = initialLeft + 'px';
+       panel.style.top = initialTop + 'px';
+       e.preventDefault();
+     });
+
+     handle.addEventListener('pointermove', (e) => {
+       if (!isDragging) return;
+       const dx = e.clientX - startX;
+       const dy = e.clientY - startY;
+       let nextX = initialLeft + dx;
+       let nextY = initialTop + dy;
+
+       // Mantener dentro del viewport
+       const pWidth = panel.offsetWidth;
+       const pHeight = panel.offsetHeight;
+       nextX = Math.max(10, Math.min(window.innerWidth - pWidth - 10, nextX));
+       nextY = Math.max(10, Math.min(window.innerHeight - pHeight - 10, nextY));
+
+       panel.style.left = nextX + 'px';
+       panel.style.top = nextY + 'px';
+     });
+
+     const stopDrag = (e) => {
+       if (!isDragging) return;
+       isDragging = false;
+       handle.style.cursor = 'grab';
+       try { handle.releasePointerCapture(e.pointerId); } catch (_) {}
+     };
+
+     handle.addEventListener('pointerup', stopDrag);
+     handle.addEventListener('pointercancel', stopDrag);
+   }
+   ```
+
+2. **Tirador Visual Obligatorio**:
+   - Cada ventana o HUD debe incluir en su cabecera un tirador visual (`.hud-drag-handle`) con el icono `⋮⋮` o título de arrastre y estilo CSS:
+   ```css
+   .hud-drag-handle {
+     cursor: grab;
+     user-select: none;
+     touch-action: none;
+     display: flex;
+     align-items: center;
+     gap: 6px;
+   }
+   .hud-drag-handle:active {
+     cursor: grabbing;
+   }
+   ```
+
+---
+
+### 8.3. Catálogo de Funciones Programadas Nativas
+
+| Pack / Escena | Función Programada | Controles / HUD Interactivo |
+|---|---|---|
+| **Gamer Pro (`speedrun_splits`)** | Cronómetro con milisegundos, tiempos de vuelta (Splits), registro dinámico de tramo, cálculo de deltas (`+` / `-`) y atajo `Espacio`. | `#oss-speedrun-control` flotante con `[▶/⏸ Iniciar]`, `[⚡ Split]`, `[⏮ Prev]`, `[🔄 Reset]`. |
+| **Lo-Fi / Synthwave (`starting_soon`, `countdown`)** | Temporizador regresivo sincronizado milisegundo a milisegundo con barra SVG/CSS (`.tech-progress-fill`). Pausa con clic en el reloj gigante. | `#oss-countdown-control` con presets (25m Pomodoro, 50m, 5m descanso, 10m) y micro-ajustes `+1m` / `-1m`. |
+| **Maker Desk (`fases_proyecto`)** | Selector de fase de taller interactivo. Al hacer clic sobre cualquier fase (`01 PLAN`, `02 MONTAJE`, etc.) se activa en el lienzo y actualiza la ficha técnica. | HUD con conmutación dinámica de fase, botón `➕ Añadir Fase` y `🗑️ Eliminar Fase`. |
+| **Open Stream (`podcast_talk`)** | Conmutador dinámico de rejilla multicámara (2, 3 o 4 invitados) con re-distribución CSS Grid automática y rótulos editables. | Botones de distribución en HUD: `[👥 2 Cams]`, `[👥 3 Cams]`, `[👥 4 Cams]`. |
+| **Gameplay HUD & Victory Clutch** | Clic directo en el banner para alternar estados (`VICTORY`, `DEFEAT`, `ACE`, `MATCH POINT`) y en badges de estadísticas (`COMPETITIVE`, `RANKED`, FPS). | Eventos clic directos sobre los elementos en pantalla con persistencia de estado. |
+
+---
+
+### 8.4. Arquitectura de Edición en Caliente (`common/overlay.js`)
+
+1. **Pausa Reactiva de Intervalos (`window.__OSS_IS_EDITING__`)**:
+   - Cuando el usuario hace clic o escribe dentro de un campo editable (`contenteditable="true"`), se activa el flag global `window.__OSS_IS_EDITING__ = true`.
+   - Las funciones periódicas (como la rotación de frases de "Ahora Vuelvo") comprueban este flag y suspenden cualquier alteración del DOM para no perturbar al streamer mientras teclea.
+2. **Delegación de Eventos en `document`**:
+   - Las filas generadas dinámicamente (`.split-row`, `.phase-item`, etc.) usan escuchas de eventos delegadas:
+   ```javascript
+   document.addEventListener('click', (e) => {
+     const splitRow = e.target.closest('.split-row');
+     if (splitRow) {
+       // Activar split o editar tramo sin romper escuchas tras re-renders
+     }
+   });
+   ```
+3. **Persistencia y Difusión WebSocket**:
+   - Al pulsar `💾 Guardar` en el HUD, se extraen los valores modificados del DOM y se envían a:
+     `POST /api/overlays/texts`
+   - El backend actualiza `overlay_texts_config.json` y emite el evento WebSocket `overlay_texts_updated` a todas las ventanas abiertas en OBS Studio en tiempo real.
+
+---
+
+### 8.5. Paso a Paso: Cómo Crear un Nuevo Overlay con Lógica Interactiva
+
+1. **Estructura HTML básica**:
+   Añade tu contenedor principal y las etiquetas semánticas con identificadores o clases descriptivas.
+   ```html
+   <link rel="stylesheet" href="../../../common/themes.css">
+   <link rel="stylesheet" href="style.css">
+   ...
+   <div class="interactive-card" id="my-custom-widget">
+     <div class="widget-header">
+       <span class="widget-title">ESTADO DE SESIÓN</span>
+       <span class="badge" id="session-badge">EN CURSO</span>
+     </div>
+     <div class="counter-display" id="session-counter">00:00</div>
+   </div>
+   <script src="../../../common/overlay.js"></script>
+   ```
+
+2. **Registro de Selectores Editables**:
+   En `common/overlay.js`, añade las clases de tu nuevo overlay al array `editableSelectors`:
+   ```javascript
+   '.widget-title', '#session-badge', '#session-counter'
+   ```
+
+3. **Inclusión de Menú Draggable (si procede)**:
+   Si tu overlay requiere un panel de configuración o control flotante, constrúyelo con una cabecera `.hud-drag-handle` y llama a:
+   ```javascript
+   makeDraggable(document.getElementById('my-custom-control'), '.hud-drag-handle');
+   ```
+
+4. **Sincronización de Estado en `overlay_texts_config.json`**:
+   Define la clave de tu escena en `overlay_texts_config.json` para que guarde y restaure tanto los textos como los estados funcionales (índice activo, contadores, flags).
+

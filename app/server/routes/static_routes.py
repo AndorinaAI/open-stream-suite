@@ -6,7 +6,7 @@ PLUGINS_DIR = BASE_DIR.parent / "plugins"
 
 # Únicos archivos sueltos de la raíz de app/ que se sirven por HTTP.
 # NUNCA servir la raíz completa: contiene .env, token.json y .local_token.
-ROOT_PUBLIC_FILES = ("config.js", "index.html")
+ROOT_PUBLIC_FILES = ("config.js", "index.html", "CONVENTIONS.md", "CONVENTIONS.en.md")
 
 SCENE_COMPAT_MAP = {
     "maker-desk": "/overlays/maker/desk/index.html",

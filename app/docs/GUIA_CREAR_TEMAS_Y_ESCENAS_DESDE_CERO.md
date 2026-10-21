@@ -16,7 +16,8 @@ Esta guía responde de forma clara y definitiva a todas las dudas de arquitectur
 4. [Cómo Crear un Nuevo Tema Visual desde Cero](#4-cómo-crear-un-nuevo-tema-visual-desde-cero)
 5. [Cómo Crear una Nueva Escena / Overlay desde Cero](#5-cómo-crear-una-nueva-escena--overlay-desde-cero)
 6. [Cómo Personalizar Textos en Caliente y Sincronizarlos con OBS](#6-cómo-personalizar-textos-en-caliente-y-sincronizarlos-con-obs)
-7. [Preguntas Frecuentes y Solución de Problemas](#7-preguntas-frecuentes-y-solución-de-problemas)
+7. [Overlays con Funciones Programadas y Menús Flotantes Draggables](#7-overlays-con-funciones-programadas-y-menús-flotantes-draggables)
+8. [Preguntas Frecuentes y Solución de Problemas](#8-preguntas-frecuentes-y-solución-de-problemas)
 
 ---
 
@@ -380,18 +381,87 @@ Crea la carpeta `scenes/entrevista/` y dentro el archivo `index.html`:
 
 ## 6. Cómo Personalizar Textos en Caliente y Sincronizarlos con OBS
 
-1. En el panel de control, abre la vista de **Temas y Escenas**.
-2. Cada escena tiene una tarjeta con su botón **`📝 Editar Textos`**.
-3. Al hacer clic se abre el modal de esa escena específica:
-   - Modifica el titular, los subtítulos, los nombres de fases o las frases de espera.
-4. Pulsa **`💾 Guardar y Aplicar en Directo`**:
-   - Se guardará en disco (`overlay_texts_config.json`).
-   - Se regenerará `config.js` para asegurar que funcione sin internet en OBS.
-   - El WebSocket enviará `overlay_texts_update` a OBS y los textos cambiarán en pantalla **de inmediato sin recargar la fuente**.
+En versiones anteriores, la edición de textos requería un modal externo que ocultaba la vista del overlay. En la versión actual de **Open Stream Suite**, los textos se editan de forma directa e interactiva en la propia escena:
+
+1. **Botón Unificado en Cada Tarjeta**:
+   - Cada tarjeta de overlay cuenta con el botón **`🖥️ Ver Pantalla Completa / ✏️ Editar Textos`**.
+   - Al pulsarlo, el overlay se abre en una pestaña a resolución completa 1920×1080 con el motor de edición activado.
+
+2. **Edición Directa en Lienzo (`contenteditable="true"`)**:
+   - Todos los rótulos, nombres de fases, personal bests, titulares, subtítulos y badges son editables directamente haciendo clic sobre ellos.
+   - El contorno visual cian/neón te indica de inmediato qué campo estás editando.
+
+3. **HUD Flotante de Control (`#open-stream-suite-screen-hud`)**:
+   - En la parte superior de la pantalla completa dispones de un HUD de herramientas con:
+     - **`🎯 Ir a Texto...`**: Desplegable exhaustivo que localiza y enfoca instantáneamente cualquier rótulo del lienzo.
+     - **`💾 Guardar Cambios`**: Envía todos los textos modificados al backend vía `POST /api/overlays/texts` y emite el evento WebSocket `overlay_texts_updated` a OBS Studio.
+     - **`🔄 Restablecer`**: Devuelve los textos de la escena a sus valores originales de fábrica.
+     - **`❌ Cerrar HUD`**: Oculta el panel flotante para comprobar el aspecto limpio de la escena.
+     - **`⋮⋮ Tirador Arrastrable`**: Permite mover el HUD a cualquier posición de la pantalla para no tapar elementos.
+
+4. **Pausa Reactiva de Animaciones (`window.__OSS_IS_EDITING__`)**:
+   - Cuando haces clic dentro de cualquier texto editable, el sistema activa automáticamente `window.__OSS_IS_EDITING__ = true`.
+   - Esto congela momentáneamente las rotaciones automáticas (como las frases de pausa o refrescos periódicos) para que el texto no cambie ni se desplace bajo tu cursor mientras escribes.
 
 ---
 
-## 7. Preguntas Frecuentes y Solución de Problemas
+## 7. Overlays con Funciones Programadas y Menús Flotantes Draggables
+
+Los overlays modernos no son meros dibujos estáticos: son **aplicaciones interactivas de emisión**.
+
+### Regla de Oro: Todo Menú Flotante DEBE ser Draggable (`makeDraggable`)
+> [!IMPORTANT]
+> **Principio de No Obstrucción**: Jamás coloques un menú o panel de control flotante en posición fija estática. Siempre debe implementarse con `makeDraggable(panel, handleSelector)` para que el streamer o editor pueda moverlo y no tape cámaras, chats o textos clave.
+
+- **Pointer Events**: El helper `makeDraggable` usa `pointerdown`, `pointermove` y `pointerup` con `setPointerCapture`, garantizando compatibilidad total con ratón, trackpad y pantallas táctiles (`touch-action: none`).
+- **Tirador `.hud-drag-handle`**: El glifo visual `⋮⋮` y el cursor `grab / grabbing` avisan al usuario de que el panel es arrastrable.
+- **Límites de Pantalla**: La función acota las coordenadas para que ninguna ventana pueda quedar inaccesible fuera de la pantalla.
+
+### Catálogo de Funciones Nativas Disponibles
+
+1. **Cronómetro y Speedrun Splits (`Gamer_Pro_Pack`)**:
+   - Cronómetro con centésimas de segundo y panel de vueltas (Splits).
+   - Panel draggable `#oss-speedrun-control` con botones `[▶ Iniciar]`, `[⚡ Split]`, `[⏮ Prev]` y `[🔄 Reset]`.
+   - Al pulsar `⚡ Split` se guarda el tiempo del tramo activo, se calcula el delta (`+` rojo o `-` verde respecto al PB) y se avanza al siguiente tramo.
+   - Atajo de teclado: la tecla `Espacio` registra el split o pausa el cronómetro (ignorado automáticamente si estás escribiendo en un input o campo editable).
+   - Clic directo sobre el delta (`+0.42` / `-0.18`) o el PB para editar tiempos de referencia.
+
+2. **Pomodoro y Cuenta Atrás (`Cozy_LoFi_Pack` y pantallas Starting Soon)**:
+   - Temporizador regresivo milimétrico sincronizado con barras SVG/CSS (`.tech-progress-fill`).
+   - Panel draggable `#oss-countdown-control` con presets rápidos:
+     - ☕ Pomodoro: 25 min concentración / 5 min descanso.
+     - ☕ Sesión Larga: 50 min concentración / 10 min descanso.
+     - Micro-ajustes de `+1 min` y `-1 min`.
+   - Pausa y reanudación con clic directo sobre los dígitos del reloj gigante.
+
+3. **Gestor Dinámico de Fases (`Maker_Theme_Pack`)**:
+   - Conmutación directa de fase haciendo clic sobre cualquier bloque inferior (`01 PLAN`, `02 MONTAJE`, etc.).
+   - Sincronización automática de `FASE ACTUAL` en la ficha técnica y en el HUD.
+   - Botones `➕ Añadir Fase` y `🗑️ Eliminar Fase` en el HUD para modificar la hoja de ruta en pleno directo.
+
+4. **Conmutador Multicámara de Podcast (`Open_stream_Pack`)**:
+   - Botones en el HUD para alternar entre `[👥 2 Cams]`, `[👥 3 Cams]` y `[👥 4 Cams]`.
+   - Reorganización dinámica del CSS Grid de la escena y generación de rótulos editables para cada invitado.
+
+5. **Interacciones en Lienzo**:
+   - Clic en banners de victoria (`victory_clutch`) para alternar entre `VICTORY`, `DEFEAT`, `ACE` y `MATCH POINT`.
+   - Clic en tarjetas de estadísticas para cambiar de modo (`COMPETITIVE`, `RANKED`, FPS).
+   - Clic en webcam flotante (`desktop_share`) para rotarla entre las 4 esquinas del monitor.
+
+### Delegación de Eventos en `document`
+Al programar nuevas funciones interactivas, vincula los eventos de clic con delegación en `document`:
+```javascript
+document.addEventListener('click', (e) => {
+  const targetSplit = e.target.closest('.split-row');
+  if (targetSplit) {
+    // Lógica del split sin romperse al recargar el DOM
+  }
+});
+```
+
+---
+
+## 8. Preguntas Frecuentes y Solución de Problemas
 
 ### ❓ ¿Se necesita tener abierto el servidor `server.py` siempre?
 - **Para directos con alertas y triggers de Twitch**: Sí, `server.py` se encarga de escuchar los eventos de Twitch, los puntos de canal y emitirlos por WebSocket a OBS.
@@ -401,4 +471,5 @@ Crea la carpeta `scenes/entrevista/` y dentro el archivo `index.html`:
 En la lista de fuentes de OBS, el orden de arriba a abajo determina qué capa tapa a cuál. **El Navegador (Overlay) debe ser la primera fuente de la lista**. Tu cámara debe estar por debajo.
 
 ### ❓ ¿Cómo abro una escena en pantalla completa sin entrar en OBS?
-En el panel, haz clic en el botón **`🖥️ Pantalla Completa`** de cualquier escena. Se abrirá en una pestaña de tu navegador a resolución nativa 1920×1080.
+En el panel, haz clic en el botón **`🖥️ Ver Pantalla Completa / ✏️ Editar Textos`** de cualquier escena. Se abrirá en una pestaña de tu navegador a resolución nativa 1920×1080 con todos los controles activos.
+

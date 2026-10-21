@@ -39,7 +39,7 @@ class StaticExposureTests(unittest.TestCase):
     def test_03_public_files_still_served(self):
         """La lista blanca sigue sirviendo lo necesario para panel, overlays y guías"""
         for path in ("alerts/panel.html", "common/styles.css", "config.js", "index.html",
-                     "docs/GUIA_INTEGRACION_DECKS.md", "plugins/README.md"):
+                     "CONVENTIONS.md", "docs/GUIA_INTEGRACION_DECKS.md", "plugins/README.md"):
             r = requests.get(f"{BASE_URL}/{path}", timeout=5)
             self.assertEqual(r.status_code, 200, f"/{path} debería servirse")
 

@@ -116,6 +116,47 @@ Themes live in `themes/<pack>/<theme>/`:
 - `theme.default.json` & `style.default.css`: Clean factory backups.
 - `POST /api/themes/restore`: Reverts user modifications back to original factory defaults with 1 click.
 
+### D. Overlays with Programmed Functions, Draggable Elements & Live Editing
+
+Overlays in Open Stream Suite are dynamic broadcast web apps combining high-end aesthetics with client-side logic:
+
+1. **Native Functional Capabilities in Overlays**:
+   - **Stopwatches & Speedrun (`Gamer_Pro_Pack`)**:
+     - Interactive stopwatch with split times (`⚡ Split`, `⏮ Prev`, `🔄 Reset`).
+     - Split time recording (`.split-time`), delta calculation/toggle (`+` red / `-` green), run title and Personal Best (PB) editing.
+     - Keyboard shortcut support (`Spacebar` to record split or pause without interfering with text fields).
+   - **Pomodoro & Countdown Timers (`Cozy_LoFi_Pack` and Starting Soon screens)**:
+     - Countdowns strictly synchronized millisecond-by-millisecond with progress bars (`.tech-progress-fill`).
+     - Quick focus and coffee presets (25m, 50m, 5m, 10m) plus micro-adjustments (`+1m` / `-1m`).
+     - Pause/Resume by clicking directly on the large on-screen clock.
+   - **Dynamic Project Phase Manager (`Maker_Theme_Pack`)**:
+     - Direct phase switching by clicking any bottom bar item (`01 PLAN`, `02 MONTAJE`, etc.).
+     - Instant synchronization of `FASE ACTUAL` in the info panel and HUD buttons.
+     - `➕` and `🗑️` buttons in the HUD to add or remove project phases in real time.
+   - **Dynamic Camera Layouts (`Open_stream_Pack` Podcast)**:
+     - Multi-camera HUD switcher (`[2 Cams] [3 Cams] [4 Cams]`) updating the CSS Grid and generating editable guest nameplates.
+   - **Direct Canvas Interactions**:
+     - Click victory banner (`victory_clutch`) to cycle states (`VICTORY`, `DEFEAT`, `ACE`, `MATCH POINT`).
+     - Click stats bar (`gameplay_hud`) to cycle game modes (`COMPETITIVE`, `RANKED`) and FPS (`240`, `144`).
+     - Click floating webcam (`desktop_share`) to rotate across the 4 viewport corners.
+
+2. **Golden Rule: All Floating Panels & Menus MUST be Draggable (`makeDraggable`)**:
+   - **Non-Obtrusive Guarantee**: Live stream content, cameras, and texts must never be obscured by static floating menus.
+   - Every floating control (`#open-stream-suite-screen-hud`, `#oss-countdown-control`, `#oss-speedrun-control`, `#oss-brb-phrases-control`) must be initialized with `makeDraggable(panel, handleSelector)`.
+   - **Drag Handle**: Floating windows must include a visual handle (`.hud-drag-handle`) with the `⋮⋮` glyph and `cursor: grab / grabbing`.
+   - **Pointer Events**: Standard pointer API (`pointerdown`, `pointermove`, `pointerup`) with `setPointerCapture` and `touch-action: none` ensures seamless cross-device compatibility (mouse, trackpad, touchscreen).
+   - Bounds must prevent floating tools from being dragged outside the viewport.
+
+3. **Live Text Editing Architecture (`common/overlay.js`)**:
+   - **Exhaustive `editableSelectors` Catalog**: All text elements across all 27 scenes must be indexed for `contenteditable="true"` and populated in the `"🎯 Ir a Texto..."` quick jump dropdown.
+   - **Reactive Animation & Interval Pausing (`window.__OSS_IS_EDITING__`)**:
+     - When a user focuses or edits text, `window.__OSS_IS_EDITING__` automatically engages.
+     - All rotation timers pause so text does not switch underneath the user's cursor.
+   - **Document Event Delegation**:
+     - Click listeners for active items (`.split-row`, `.phase-item`, `.split-delta`) are attached to `document` via delegation (`e.target.closest(...)`) to survive dynamic re-renders.
+   - **Bidirectional Persistence**:
+     - Saving collects all modified texts and active states, posting to `POST /api/overlays/texts` with `X-Local-Token` and broadcasting over WebSockets to OBS Studio.
+
 ---
 
 ## 4. Coding Standards
