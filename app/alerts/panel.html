@@ -188,7 +188,7 @@
 
               <div class="form-group" style="margin-bottom: 0;">
                 <label style="font-size: 11px;" data-i18n="triggers.label_title">Título visible en Twitch (lo que leen los espectadores):</label>
-                <input type="text" id="tw-reward-title" class="form-input" placeholder="ej. ¡Susto con Meme del Gato!" required oninput="updateTwitchRewardPreview()">
+                <input type="text" id="tw-reward-title" class="form-input" placeholder="ej. ¡Susto con Meme del Gato!" data-i18n-placeholder="triggers.placeholder_reward_title" required oninput="updateTwitchRewardPreview()">
               </div>
 
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -220,7 +220,7 @@
 
               <div class="form-group" style="margin-bottom: 0;">
                 <label style="font-size: 11px;" data-i18n="triggers.label_prompt">Descripción / Mensaje para el espectador (opcional):</label>
-                <input type="text" id="tw-reward-prompt" class="form-input" placeholder="ej. ¡Haz saltar este susto en pantalla y asusta a Andorina en directo!" oninput="updateTwitchRewardPreview()">
+                <input type="text" id="tw-reward-prompt" class="form-input" placeholder="ej. ¡Haz saltar este susto en pantalla y asusta a Andorina en directo!" data-i18n-placeholder="triggers.placeholder_reward_prompt" oninput="updateTwitchRewardPreview()">
               </div>
 
               <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -529,7 +529,7 @@
                       📋 Copiar nombre de Recompensa
                     </button>
                   </div>
-                  <input type="text" id="trig-title" class="form-input" placeholder="ej. ¡Susto con Meme del Gato!" required oninput="updateLivePreviewCaption()">
+                  <input type="text" id="trig-title" class="form-input" placeholder="ej. ¡Susto con Meme del Gato!" data-i18n-placeholder="triggers.placeholder_reward_title" required oninput="updateLivePreviewCaption()">
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
@@ -684,7 +684,7 @@
                   <select id="trig-media-file" class="form-select" onchange="onVisualFileChange(this.value)">
                     <option value="" data-i18n="triggers.placeholder_media">-- Seleccionar archivo subido --</option>
                   </select>
-                  <input type="text" id="trig-media-custom-url" class="form-input" placeholder="O pega enlace directo a vídeo WebM/MP4 o GIF..." style="margin-top: 6px;" onchange="onVisualFileChange(this.value)">
+                  <input type="text" id="trig-media-custom-url" class="form-input" placeholder="O pega enlace directo a vídeo WebM/MP4 o GIF..." data-i18n-placeholder="triggers.placeholder_media_url" style="margin-top: 6px;" onchange="onVisualFileChange(this.value)">
                 </div>
 
                 <div id="visual-size-group" class="form-group" style="margin-bottom: 0;">
@@ -819,7 +819,7 @@
                         <button type="button" class="btn-stage-preset" style="font-size: 10px; padding: 2px 6px;" onclick="insertBannerVar('{cost}')">+ {cost}</button>
                       </div>
                     </div>
-                    <input type="text" id="trig-banner-text" class="form-input" placeholder="ej. ¡{user} HA DESATADO EL SUSTO! (o déjalo vacío para usar el título)" oninput="updateLivePreviewCaption()">
+                    <input type="text" id="trig-banner-text" class="form-input" placeholder="ej. ¡{user} HA DESATADO EL SUSTO! (o déjalo vacío para usar el título)" data-i18n-placeholder="triggers.placeholder_banner_text" oninput="updateLivePreviewCaption()">
                     <span style="font-size: 10px; color: var(--color-text-dim); margin-top: 3px; display: block;">
                       <code>{user}</code> = espectador • <code>{reward}</code> = recompensa • <code>{cost}</code> = puntos
                     </span>
@@ -2540,7 +2540,7 @@
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_print_material">Material / Filamento / Soporte</label>
-                    <input type="text" id="txt-print-material" class="form-input" placeholder="ej. Vinilo Holográfico Adhesivo">
+                    <input type="text" id="txt-print-material" class="form-input" placeholder="ej. Vinilo Holográfico Adhesivo" data-i18n-placeholder="triggers.placeholder_print_material">
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_phase">Fase Actual Activa</label>
@@ -2619,7 +2619,7 @@
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_chill_prompt">Llamada a la Acción (Prompt)</label>
-                    <input type="text" id="txt-chill-chat-prompt" class="form-input" placeholder="¡Escribe en el chat para participar!">
+                    <input type="text" id="txt-chill-chat-prompt" class="form-input" placeholder="¡Escribe en el chat para participar!" data-i18n-placeholder="triggers.placeholder_chat_prompt">
                   </div>
                   <div class="text-field-group">
                     <label class="text-toggle-label">
@@ -2767,7 +2767,7 @@
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_end_farewell">Mensaje de la Tarjeta de Despedida</label>
-                    <textarea id="txt-end-farewell" class="form-input" rows="3" placeholder="¡Gracias por acompañar el stream! Nos vemos en el próximo directo."></textarea>
+                    <textarea id="txt-end-farewell" class="form-input" rows="3" placeholder="¡Gracias por acompañar el stream! Nos vemos en el próximo directo." data-i18n-placeholder="triggers.placeholder_end_farewell"></textarea>
                   </div>
                   <div class="text-field-group">
                     <label class="text-field-label" data-i18n="themes.label_end_tag">Etiqueta Inferior de la Tarjeta</label>

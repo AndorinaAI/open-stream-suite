@@ -421,7 +421,15 @@
     "btn_save_rename": "Save Changes",
     "error_create_folder": "Error creating folder. Make sure to use valid characters.",
     "error_rename": "Error renaming. Verify the name does not contain invalid characters.",
-    "success_operation": "✓ Operation completed successfully!"
+    "success_operation": "✓ Operation completed successfully!",
+    "root_folder": "root",
+    "placeholder_reward_title": "e.g. !Cat Meme Scare!",
+    "placeholder_reward_prompt": "e.g. Make this scare pop on screen and frighten Andorina live!",
+    "placeholder_media_url": "Or paste direct link to WebM/MP4 video or GIF...",
+    "placeholder_banner_text": "e.g. !{user} HAS UNLEASHED THE SCARE! (or leave empty to use the title)",
+    "placeholder_print_material": "e.g. Holographic Adhesive Vinyl",
+    "placeholder_chat_prompt": "Write in chat to participate!",
+    "placeholder_end_farewell": "Thanks for watching the stream! See you next live."
   },
   "themes": {
     "section_title": "YOUR OBS STUDIO SCENES AND VISUAL STYLES",

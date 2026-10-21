@@ -16,7 +16,8 @@
     "guide_themes": "📖 Guía: Crear Temas y Escenas",
     "guide_arch": "⚙️ Docs de Arquitectura",
     "guide_decks": "🎮 Guía Stream Deck, Ajazz & OpenDeck",
-    "guide_plugins": "🔌 Plugins de Decks & Macros"
+    "guide_plugins": "🔌 Plugins de Decks & Macros",
+    "guide_conventions": "📜 Convenciones de Programación"
   },
   "sidebar": {
     "obs_active": "OBS STUDIO · 9 ESCENAS ACTIVAS",

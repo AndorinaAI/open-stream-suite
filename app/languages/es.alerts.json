@@ -421,7 +421,15 @@
     "btn_save_rename": "Guardar Cambios",
     "error_create_folder": "Error al crear la carpeta. Asegúrate de usar caracteres válidos.",
     "error_rename": "Error al renombrar. Verifica que el nombre no contenga caracteres inválidos.",
-    "success_operation": "✓ ¡Operación completada con éxito!"
+    "success_operation": "✓ ¡Operación completada con éxito!",
+    "root_folder": "raíz",
+    "placeholder_reward_title": "ej. ¡Susto con Meme del Gato!",
+    "placeholder_reward_prompt": "ej. ¡Haz saltar este susto en pantalla y asusta a Andorina en directo!",
+    "placeholder_media_url": "O pega enlace directo a vídeo WebM/MP4 o GIF...",
+    "placeholder_banner_text": "ej. ¡{user} HA DESATADO EL SUSTO! (o déjalo vacío para usar el título)",
+    "placeholder_print_material": "ej. Vinilo Holográfico Adhesivo",
+    "placeholder_chat_prompt": "¡Escribe en el chat para participar!",
+    "placeholder_end_farewell": "¡Gracias por acompañar el stream! Nos vemos en el próximo directo."
   },
   "themes": {
     "section_title": "TUS ESCENAS DE OBS STUDIO Y ESTILOS VISUALES",
