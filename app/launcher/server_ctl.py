@@ -20,9 +20,23 @@ APP_DIR = Path(__file__).resolve().parent.parent
 PID_FILE = APP_DIR / ".server.pid"
 
 
+def get_configured_port(default=8080):
+    env_file = APP_DIR / ".env"
+    if env_file.exists():
+        try:
+            with open(env_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("SERVER_PORT=") and not line.startswith("#"):
+                        return int(line.split("=", 1)[1].strip())
+        except Exception:
+            pass
+    return default
+
+
 class ServerController:
-    def __init__(self, port=8080, on_log_line=None):
-        self.port = port
+    def __init__(self, port=None, on_log_line=None):
+        self.port = port if port is not None else get_configured_port()
         self.on_log_line = on_log_line
         self.process = None
         self._reader_thread = None
@@ -111,49 +125,93 @@ class ServerController:
             pass
 
     def stop(self, timeout=4.0):
-        """Detiene el subproceso del servidor de forma limpia"""
+        """Detiene el subproceso del servidor de forma limpia y garantizada"""
         self._stopping = True
 
-        if not self.process:
-            # Si no hay subproceso pero hay PID_FILE, intentar limpiar si es nuestro
-            if PID_FILE.exists():
-                try:
-                    pid = int(PID_FILE.read_text().strip())
-                    if sys.platform != "win32":
-                        os.kill(pid, signal.SIGTERM)
-                except Exception:
-                    pass
-                try:
-                    PID_FILE.unlink(missing_ok=True)
-                except Exception:
-                    pass
-            return True
-
-        proc = self.process
-        self.process = None
-
-        if proc.poll() is not None:
-            PID_FILE.unlink(missing_ok=True)
-            return True
-
+        # 1. Intentar apagado elegante vía API HTTP local (/api/system/shutdown)
         try:
-            if sys.platform == "win32":
-                proc.terminate()
-            else:
-                proc.send_signal(signal.SIGINT)
-
-            start_t = time.time()
-            while time.time() - start_t < timeout:
-                if proc.poll() is not None:
-                    break
-                time.sleep(0.15)
-
-            if proc.poll() is None:
-                proc.kill()
-                proc.wait(timeout=1.5)
+            req = urllib.request.Request(
+                f"{self.base_url}/api/system/shutdown",
+                data=b"{}",
+                headers={"Content-Type": "application/json", "User-Agent": "OpenStreamSuite-Launcher"}
+            )
+            with urllib.request.urlopen(req, timeout=1.0) as resp:
+                pass
         except Exception:
             pass
-        finally:
-            PID_FILE.unlink(missing_ok=True)
 
-        return True
+        # 2. Si tenemos el subproceso instanciado directamente
+        if self.process:
+            proc = self.process
+            self.process = None
+            try:
+                if sys.platform == "win32":
+                    proc.terminate()
+                else:
+                    proc.send_signal(signal.SIGINT)
+
+                start_t = time.time()
+                while time.time() - start_t < 1.2:
+                    if proc.poll() is not None:
+                        break
+                    time.sleep(0.1)
+
+                if proc.poll() is None:
+                    proc.kill()
+                    proc.wait(timeout=1.0)
+            except Exception:
+                pass
+
+        # 3. Limpiar procesos por archivo PID
+        pid_candidates = [
+            PID_FILE,
+            APP_DIR.parent / "OpenStreamSuite" / "app" / ".server.pid",
+            Path.home() / "OpenStreamSuite" / "app" / ".server.pid"
+        ]
+        for pid_path in pid_candidates:
+            if pid_path.exists():
+                try:
+                    pid = int(pid_path.read_text().strip())
+                    if sys.platform != "win32":
+                        try:
+                            os.kill(pid, signal.SIGTERM)
+                            time.sleep(0.2)
+                            if os.path.exists(f"/proc/{pid}"):
+                                os.kill(pid, signal.SIGKILL)
+                        except ProcessLookupError:
+                            pass
+                    else:
+                        subprocess.run(["taskkill", "/F", "/PID", str(pid)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                except Exception:
+                    pass
+                try:
+                    pid_path.unlink(missing_ok=True)
+                except Exception:
+                    pass
+
+        # 4. Comprobación y liberación del puerto si todavía responde
+        start_wait = time.time()
+        while time.time() - start_wait < timeout:
+            alive, _ = self.is_running()
+            if not alive:
+                break
+
+            if sys.platform != "win32":
+                try:
+                    subprocess.run(["fuser", "-k", f"{self.port}/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                except Exception:
+                    pass
+            else:
+                try:
+                    out = subprocess.check_output(f'netstat -ano | findstr :{self.port}', shell=True, text=True)
+                    for line in out.strip().splitlines():
+                        parts = line.split()
+                        if len(parts) >= 5 and "LISTENING" in parts:
+                            p = parts[-1]
+                            subprocess.run(["taskkill", "/F", "/PID", p], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                except Exception:
+                    pass
+            time.sleep(0.2)
+
+        alive, _ = self.is_running()
+        return not alive

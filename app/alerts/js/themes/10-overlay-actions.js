@@ -1,10 +1,12 @@
 
 function buildSceneCardHtml(rawS) {
-  const s = getSceneLocalized(rawS);
-  const assignedThemeId = cachedOverlayThemes[s.key] || currentActiveThemeId;
+  if (!rawS) return '';
+  const s = getSceneLocalized(rawS) || rawS;
+  const assignedThemeId = (cachedOverlayThemes && cachedOverlayThemes[s.key]) || currentActiveThemeId || 'maker';
   const assignedThemeObj = getThemeObjectById(assignedThemeId);
-  const defaultThemeId = DEFAULT_OVERLAY_THEMES[s.key] || 'maker';
-  const defaultInfo = getThemeDisplayNameById(defaultThemeId);
+  const defaultThemeId = (DEFAULT_OVERLAY_THEMES && DEFAULT_OVERLAY_THEMES[s.key]) || 'maker';
+  const defaultInfo = getThemeDisplayNameById(defaultThemeId) || { name: 'Maker' };
+  const defaultName = (defaultInfo && defaultInfo.name) || 'Original';
   const isModified = (assignedThemeId !== defaultThemeId);
 
   const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
@@ -12,13 +14,14 @@ function buildSceneCardHtml(rawS) {
   const cardEditStyle = tr('themes.card_edit_style', '🎨 Editar Estilo ↗');
   const cardSave = tr('themes.card_save', '💾 Guardar');
   const cardPending = tr('themes.card_pending_change', '● Cambio sin guardar — pulsa 💾 Guardar para aplicarlo en OBS');
-  const cardCustomized = tr('themes.card_customized', '⚠️ Personalizado (Original: <b>{name}</b>)').replace('{name}', defaultInfo.name);
-  const cardOriginal = tr('themes.card_factory_original', '⭐ Original de fábrica: <b>{name}</b>').replace('{name}', defaultInfo.name);
+  const cardCustomized = tr('themes.card_customized', '⚠️ Personalizado (Original: <b>{name}</b>)').replace('{name}', defaultName);
+  const cardOriginal = tr('themes.card_factory_original', '⭐ Original de fábrica: <b>{name}</b>').replace('{name}', defaultName);
   const cardRestoreOrig = tr('themes.card_restore_original', '🔄 Restaurar Original');
   const cardViewFs = tr('themes.card_view_fullscreen', '🖥️ Ver Pantalla Completa');
   const cardEditTexts = tr('themes.card_edit_texts', '✏️ Editar Textos');
   const cardCopyObs = tr('themes.card_copy_obs', '📋 Copiar URL OBS');
   const cardRestoreTexts = tr('themes.card_restore_texts', '🔄 Restaurar Textos');
+  const isFusionChecked = !!(window.selectedFusionScenes && window.selectedFusionScenes.has && window.selectedFusionScenes.has(s.key));
 
   return `
     <div class="dash-card theme-card-rich" style="border-top: 3px solid ${isModified ? '#FF783F' : 'var(--color-accent-cyan)'}; margin-bottom: 0;">
@@ -27,7 +30,7 @@ function buildSceneCardHtml(rawS) {
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="font-family: var(--font-tech); font-size: 10px; color: var(--color-accent-cyan);">1920×1080</span>
           <label style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; cursor: pointer; background: rgba(87, 214, 196, 0.12); padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.35); color: var(--color-accent-cyan);" title="Marcar este overlay para añadir o crear un Pack de Fusión">
-            <input type="checkbox" class="cb-fusion-scene-picker" data-key="${s.key}" onchange="toggleSceneForFusionSelection('${s.key}', this.checked)" ${window.selectedFusionScenes && window.selectedFusionScenes.has(s.key) ? 'checked' : ''} style="cursor: pointer; width: 13px; height: 13px; accent-color: var(--color-accent-cyan); margin: 0;">
+            <input type="checkbox" class="cb-fusion-scene-picker" data-key="${s.key}" onchange="toggleSceneForFusionSelection('${s.key}', this.checked)" ${isFusionChecked ? 'checked' : ''} style="cursor: pointer; width: 13px; height: 13px; accent-color: var(--color-accent-cyan); margin: 0;">
             <span style="font-weight: 800;">⚡ Fusión</span>
           </label>
         </div>

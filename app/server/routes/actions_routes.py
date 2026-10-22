@@ -104,3 +104,22 @@ async def handle_play_sound(request):
     volume = data.get("volume", 0.8)
     await system.broadcast({"type": "sound", "sound_url": sound_url, "volume": volume})
     return web.json_response({"status": "ok", "sound": sound_url})
+
+async def handle_system_shutdown(request):
+    """Apaga el servidor de forma limpia cuando lo solicita el launcher o un comando local"""
+    logger.info("🛑 Petición de apagado del servidor recibida (/api/system/shutdown).")
+
+    async def _graceful_stop():
+        await asyncio.sleep(0.2)
+        try:
+            import os, signal
+            os.kill(os.getpid(), signal.SIGTERM)
+        except Exception:
+            try:
+                raise web.GracefulExit()
+            except Exception:
+                import sys
+                sys.exit(0)
+
+    asyncio.create_task(_graceful_stop())
+    return web.json_response({"status": "ok", "message": "Servidor apagándose..."})

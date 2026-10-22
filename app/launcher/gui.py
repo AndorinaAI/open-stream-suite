@@ -178,10 +178,17 @@ class LauncherGUI:
     def on_toggle_server(self):
         alive, _data = self.server_ctl.is_running()
         if alive:
+            self.btn_toggle_server.configure(text="⏳ Deteniendo...", state="disabled")
+            self.root.update_idletasks()
             self.server_ctl.stop()
-            self._update_server_ui(False, {})
+            self.btn_toggle_server.configure(state="normal")
+            still_alive, data = self.server_ctl.is_running()
+            self._update_server_ui(still_alive, data)
         else:
+            self.btn_toggle_server.configure(text="⏳ Iniciando...", state="disabled")
+            self.root.update_idletasks()
             ok, msg = self.server_ctl.start()
+            self.btn_toggle_server.configure(state="normal")
             if not ok:
                 messagebox.showerror(_("server.start_error_title", "Error al iniciar"), msg)
             else:

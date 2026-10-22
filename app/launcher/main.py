@@ -68,8 +68,8 @@ def main():
 
     root = tk.Tk()
 
-    server_ctl = ServerController(port=8080)
-    twitch_ctl = TwitchController(port=8080)
+    server_ctl = ServerController()
+    twitch_ctl = TwitchController(port=server_ctl.port)
 
     gui = None
 
