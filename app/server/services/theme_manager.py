@@ -163,6 +163,16 @@ def sync_common_themes_css():
     except Exception as e:
         logger.warning(f"Error sincronizando common/themes.css: {e}")
 
+def infer_archetype(pack_id: str, theme_id: str = "") -> str:
+    combined = f"{pack_id} {theme_id}".lower()
+    if any(k in combined for k in ["cozy", "lofi", "chill", "latte", "matcha", "sakura", "lavender", "nordic", "kawaii"]):
+        return "cozy"
+    if any(k in combined for k in ["gamer", "esport", "cyber", "toxic", "glory", "stealth", "arcade", "matrix"]):
+        return "gamer"
+    if any(k in combined for k in ["maker", "terminal", "print", "blueprint", "circuit", "taller", "workbench"]):
+        return "maker"
+    return "openstream"
+
 def get_all_packs_and_themes():
     """Escanea el directorio streamthemes/ y devuelve los packs con sus temas, overlays y metadatos"""
     init_themes_directory()
@@ -170,16 +180,6 @@ def get_all_packs_and_themes():
     state = load_theme_state()
     active_theme = state.get("activeTheme", "maker")
     active_pack = state.get("activePack", "Open_stream_Pack")
-
-    def infer_archetype(pack_id: str, theme_id: str = "") -> str:
-        combined = f"{pack_id} {theme_id}".lower()
-        if any(k in combined for k in ["cozy", "lofi", "chill", "latte", "matcha", "sakura", "lavender", "nordic", "kawaii"]):
-            return "cozy"
-        if any(k in combined for k in ["gamer", "esport", "cyber", "toxic", "glory", "stealth", "arcade", "matrix"]):
-            return "gamer"
-        if any(k in combined for k in ["maker", "terminal", "print", "blueprint", "circuit", "taller", "workbench"]):
-            return "maker"
-        return "openstream"
 
     for pack_dir in sorted(STREAMTHEMES_DIR.iterdir()):
         if not pack_dir.is_dir():

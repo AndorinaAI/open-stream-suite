@@ -196,15 +196,33 @@ window.OSSEditor = window.OSSEditor || {};
     // 1. Configuración del Selector de Forma Física de Escena
     if (shapeSelect) {
       const urlShape = currentUrl.searchParams.get('shape');
-      const activeShape = urlShape || document.body.getAttribute('data-theme-archetype') || 'original';
+      const activeShape = urlShape || 'auto';
       shapeSelect.value = activeShape;
 
       shapeSelect.addEventListener('change', () => {
         const selectedShape = shapeSelect.value;
         const url = new URL(window.location.href);
 
-        if (selectedShape === 'original') {
+        if (selectedShape === 'auto') {
           url.searchParams.delete('shape');
+          window.history.replaceState({}, '', url.toString());
+          const curTheme = themeSelect ? themeSelect.value : document.body.getAttribute('data-theme');
+          if (typeof window.applyActiveThemeToBody === 'function') {
+            window.applyActiveThemeToBody(curTheme, true);
+          }
+          if (sceneKey) {
+            fetch('/api/themes/overlay-assignment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ overlayKey: sceneKey, shapeId: null })
+            }).catch(() => {});
+          }
+          window.OSSEditor.showHudToast(`⚡ Forma sincronizada automáticamente con el tema`);
+          return;
+        }
+
+        if (selectedShape === 'original') {
+          url.searchParams.set('shape', 'original');
         } else {
           url.searchParams.set('shape', selectedShape);
         }
@@ -252,9 +270,9 @@ window.OSSEditor = window.OSSEditor || {};
         // Poblar Selector de Forma Física dinámicamente con las variantes reales de cada pack
         if (shapeSelect) {
           const url = new URL(window.location.href);
-          const currentShape = url.searchParams.get('shape') || (data.overlayShapes && sceneKey && data.overlayShapes[sceneKey]) || data.activeShape || 'original';
+          const currentShape = url.searchParams.get('shape') || (data.overlayShapes && sceneKey && data.overlayShapes[sceneKey]) || 'auto';
 
-          let shapeHtml = `<option value="original">📐 Forma: Original de Escena</option>`;
+          let shapeHtml = `<option value="auto">⚡ Forma: Automática (según estilo)</option><option value="original">📐 Forma: Original del Pack</option>`;
           data.packs.forEach(p => {
             if (p.shapes && p.shapes.length > 0) {
               shapeHtml += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
@@ -284,7 +302,7 @@ window.OSSEditor = window.OSSEditor || {};
         window.history.replaceState({}, '', url.toString());
 
         if (typeof window.applyActiveThemeToBody === 'function') {
-          window.applyActiveThemeToBody(selected, false);
+          window.applyActiveThemeToBody(selected, true);
         } else {
           document.body.setAttribute('data-theme', selected);
         }
@@ -306,7 +324,7 @@ window.OSSEditor = window.OSSEditor || {};
       window.history.replaceState({}, '', url.toString());
 
       if (typeof window.applyActiveThemeToBody === 'function') {
-        window.applyActiveThemeToBody(selected, false);
+        window.applyActiveThemeToBody(selected, true);
       } else {
         document.body.setAttribute('data-theme', selected);
       }

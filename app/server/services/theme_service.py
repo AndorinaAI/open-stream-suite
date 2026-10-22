@@ -20,7 +20,8 @@ from server.services.theme_manager import (
     load_theme_state,
     save_theme_state,
     sync_common_themes_css,
-    sync_chat_with_theme
+    sync_chat_with_theme,
+    infer_archetype
 )
 
 
@@ -193,9 +194,10 @@ async def apply_theme_service(pack_id: str, theme_id: str) -> dict:
         except Exception as e:
             logger.warning(f"Error sincronizando chat con tema: {e}")
 
-    await system.broadcast({"type": "theme_change", "theme": theme_id, "pack": pack_id})
-    logger.info(f"🎨 Tema activado en vivo: {pack_id}/{theme_id}")
-    return {"theme": theme_id, "pack": pack_id}
+    archetype = infer_archetype(pack_id, theme_id)
+    await system.broadcast({"type": "theme_change", "theme": theme_id, "pack": pack_id, "archetype": archetype})
+    logger.info(f"🎨 Tema activado en vivo: {pack_id}/{theme_id} (arquetipo: {archetype})")
+    return {"theme": theme_id, "pack": pack_id, "archetype": archetype}
 
 
 async def apply_shape_service(shape_id: str) -> dict:
@@ -309,19 +311,27 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
 
     if theme_id:
         overlay_themes[overlay_key] = theme_id
-    if shape_id:
-        overlay_shapes[overlay_key] = shape_id
+    if shape_id is not None:
+        if shape_id in ("auto", "__clear__", "", "null"):
+            overlay_shapes.pop(overlay_key, None)
+        else:
+            overlay_shapes[overlay_key] = shape_id
 
     save_theme_state(state)
+
+    assigned_theme = overlay_themes.get(overlay_key, theme_id)
+    assigned_shape = overlay_shapes.get(overlay_key)
+    archetype = assigned_shape if (assigned_shape and assigned_shape not in ("original", "auto")) else infer_archetype("", assigned_theme or "")
 
     await system.broadcast({
         "type": "overlay_theme_change",
         "overlayKey": overlay_key,
-        "theme": theme_id or overlay_themes.get(overlay_key),
-        "shape": shape_id or overlay_shapes.get(overlay_key)
+        "theme": assigned_theme,
+        "shape": assigned_shape,
+        "archetype": archetype
     })
 
-    logger.info(f"🎨 Asignación para '{overlay_key}': tema='{theme_id}', forma='{shape_id}'")
+    logger.info(f"🎨 Asignación para '{overlay_key}': tema='{assigned_theme}', forma='{assigned_shape}', arquetipo='{archetype}'")
     return {
         "overlayKey": overlay_key,
         "themeId": overlay_themes.get(overlay_key),
