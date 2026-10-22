@@ -142,6 +142,32 @@ body[data-pack="cozy"]:not([data-theme-archetype]) .reg-mark {
   display: none !important;
 }
 
+/* 🏷️ Adorno característico Cozy: Cinta adhesiva Washi Tape automática en la cámara */
+body[data-theme-archetype="cozy"] .camera-main::before,
+body[data-theme-archetype="cozy"] .camera-frame:not(:has(.washi-tape))::before,
+body[data-pack="cozy"]:not([data-theme-archetype]) .camera-main:not(:has(.washi-tape))::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 140px;
+  height: 30px;
+  background: rgba(230, 215, 195, 0.82);
+  border-left: 2px dashed rgba(180, 150, 120, 0.5);
+  border-right: 2px dashed rgba(180, 150, 120, 0.5);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 2px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Ocultar cinta washi tape si el tema activo no es Cozy */
+body:not([data-theme-archetype="cozy"]):not([data-pack="cozy"]) .washi-tape,
+body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .washi-tape {
+  display: none !important;
+}
+
 /* ⚡ ARQUETIPO GAMER PRO: Mecha tournament, cortes 45° y telemetría */
 body[data-theme-archetype="gamer"] .camera-frame,
 body[data-theme-archetype="gamer"] .camera-main,
@@ -172,6 +198,26 @@ body[data-theme-archetype="gamer"] .reg-mark {
   display: none !important;
 }
 
+/* 🎮 Adorno característico Gamer: Indicador Sci-Fi HUD en la esquina de la cámara */
+body[data-theme-archetype="gamer"] .camera-main::before,
+body[data-theme-archetype="gamer"] .camera-frame::before {
+  content: "HUD // LIVE";
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-family: var(--font-tech, 'Orbitron', monospace);
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--color-accent, #00F0FF);
+  background: rgba(6, 10, 16, 0.85);
+  padding: 2px 6px;
+  border-left: 2px solid var(--color-accent, #00F0FF);
+  border-radius: 2px;
+  letter-spacing: 1px;
+  z-index: 10;
+  pointer-events: none;
+}
+
 /* 🛠️ ARQUETIPO MAKER & PRINT: Blueprint, precisión CAD y esquinas técnicas */
 body[data-theme-archetype="maker"] .frame-corner-tr,
 body[data-theme-archetype="maker"] .frame-corner-bl,
@@ -188,6 +234,21 @@ body[data-theme-archetype="maker"] .camera-main,
 body[data-theme-archetype="maker"] .cam-box {
   border-radius: 0px !important;
   clip-path: none !important;
+}
+
+/* 🛠️ Adorno característico Maker: Escuadra angular de taller en esquinas */
+body[data-theme-archetype="maker"] .camera-main::after,
+body[data-theme-archetype="maker"] .camera-frame:not(:has(.frame-corner-tr))::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 18px;
+  height: 18px;
+  border-right: 3px solid var(--color-accent, #57D6C4);
+  border-bottom: 3px solid var(--color-accent, #57D6C4);
+  pointer-events: none;
+  z-index: 10;
 }
 
 /* 🌐 ARQUETIPO OPEN STREAM: Broadcast moderno con esquinas suavemente curvadas */
