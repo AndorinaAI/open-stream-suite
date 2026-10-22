@@ -169,6 +169,11 @@ function renderFusionDetails(fusionId) {
     themeSelect.innerHTML = buildThemeOptionsHtml(fusion.defaultTheme || 'maker');
   }
 
+  const shapeSelect = document.getElementById('fusion-batch-shape-select');
+  if (shapeSelect) {
+    shapeSelect.innerHTML = buildShapeOptionsHtml(fusion.defaultShape || 'original');
+  }
+
   if (!scenesGrid) return;
 
   const scenesInFusion = (fusion.scenes || []).map(scKey => {
@@ -191,6 +196,7 @@ function renderFusionDetails(fusionId) {
   scenesGrid.innerHTML = scenesInFusion.map(scene => {
     const packObj = OVERLAY_FOLDERS.find(f => f.id === scene.packId) || { name: scene.packId, icon: '📁' };
     const currentTheme = (cachedOverlayThemes && cachedOverlayThemes[scene.key]) || fusion.defaultTheme || 'maker';
+    const currentShape = (window.cachedOverlayShapes && window.cachedOverlayShapes[scene.key]) || fusion.defaultShape || 'original';
 
     return `
       <div class="dash-card scene-card" id="fusion-scene-card-${scene.key}" style="border: 1px solid rgba(87, 214, 196, 0.3); padding: 14px; border-radius: 8px; background: rgba(14, 18, 24, 0.95); display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
@@ -213,11 +219,19 @@ function renderFusionDetails(fusionId) {
         </div>
 
         <div>
-          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
-            <span style="font-size: 10px; color: var(--color-text-dim); font-weight: 700;">${tr('themes.style_label', 'Estilo:')}</span>
-            <select class="monitor-select" style="font-size: 10px; padding: 3px 6px; flex: 1;" onchange="assignThemeToScene('${scene.key}', this.value)">
-              ${buildThemeOptionsHtml(currentTheme)}
-            </select>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 10px; color: var(--color-text-dim); font-weight: 700; width: 42px;">Color:</span>
+              <select class="monitor-select" style="font-size: 10px; padding: 3px 6px; flex: 1;" onchange="assignThemeToScene('${scene.key}', this.value)">
+                ${buildThemeOptionsHtml(currentTheme)}
+              </select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 10px; color: var(--color-text-dim); font-weight: 700; width: 42px;">Forma:</span>
+              <select class="monitor-select" style="font-size: 10px; padding: 3px 6px; flex: 1;" onchange="assignShapeToScene('${scene.key}', this.value)">
+                ${buildShapeOptionsHtml(currentShape)}
+              </select>
+            </div>
           </div>
 
           <div style="display: flex; gap: 6px;">
@@ -280,6 +294,72 @@ async function applyFusionThemeAction(fusionId, themeId) {
     if (window.OverlayTexts && OverlayTexts.showToast) {
       OverlayTexts.showToast(tr('fusions.toast_theme_error', 'Error aplicando estilo en lote'), 'error');
     }
+  }
+}
+
+function buildShapeOptionsHtml(selectedShape = 'original') {
+  let html = `<option value="original" ${selectedShape === 'original' ? 'selected' : ''}>📐 Forma: Original</option>`;
+  if (window.cachedThemePacks && window.cachedThemePacks.length > 0) {
+    window.cachedThemePacks.forEach(p => {
+      if (p.shapes && p.shapes.length > 0) {
+        html += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
+        p.shapes.forEach(s => {
+          const val = s.archetype || s.id;
+          const isSel = (val === selectedShape || s.id === selectedShape);
+          html += `<option value="${val}" ${isSel ? 'selected' : ''}>${s.icon || '📐'} ${s.name}</option>`;
+        });
+        html += `</optgroup>`;
+      }
+    });
+  } else {
+    html += `
+      <option value="cozy" ${selectedShape === 'cozy' ? 'selected' : ''}>☕ Cozy Polaroid</option>
+      <option value="gamer" ${selectedShape === 'gamer' ? 'selected' : ''}>🎮 Gamer 45° HUD</option>
+      <option value="maker" ${selectedShape === 'maker' ? 'selected' : ''}>🛠️ Maker CAD</option>
+      <option value="openstream" ${selectedShape === 'openstream' ? 'selected' : ''}>⚡ OpenStream Glass</option>
+    `;
+  }
+  return html;
+}
+
+async function assignShapeToScene(sceneKey, shapeId) {
+  if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
+  window.cachedOverlayShapes[sceneKey] = shapeId;
+  try {
+    await API.setOverlayTheme(sceneKey, null, shapeId);
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(`📐 Forma "${shapeId}" asignada a ${sceneKey}`, 'success');
+    }
+  } catch (e) {
+    console.warn('Error al asignar forma a escena:', e);
+  }
+}
+
+async function applyBatchShapeToCurrentFusion() {
+  if (!currentOpenFusionId) return;
+  const sel = document.getElementById('fusion-batch-shape-select');
+  if (!sel || !sel.value) return;
+  const chosenShape = sel.value;
+
+  try {
+    const res = await API.applyFusionShape(currentOpenFusionId, chosenShape);
+    if (res.appliedScenes) {
+      if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
+      res.appliedScenes.forEach(k => {
+        window.cachedOverlayShapes[k] = chosenShape;
+      });
+    }
+
+    const fusion = cachedFusions.find(f => f.id === currentOpenFusionId);
+    if (fusion) fusion.defaultShape = chosenShape;
+
+    renderFusionDetails(currentOpenFusionId);
+
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(`✓ Forma "${chosenShape}" aplicada en lote a toda la fusión`, 'success');
+    }
+  } catch (e) {
+    console.error('Error aplicando forma a la fusión:', e);
   }
 }
 
@@ -703,4 +783,7 @@ window.confirmAddSelectedToFusion = confirmAddSelectedToFusion;
 window.applyBatchThemeToSelectedScenes = applyBatchThemeToSelectedScenes;
 window.goToThemeEditorForCurrentPack = goToThemeEditorForCurrentPack;
 window.updateFolderSelectAllButton = updateFolderSelectAllButton;
+window.applyBatchShapeToCurrentFusion = applyBatchShapeToCurrentFusion;
+window.assignShapeToScene = assignShapeToScene;
+window.buildShapeOptionsHtml = buildShapeOptionsHtml;
 

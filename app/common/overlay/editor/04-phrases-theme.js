@@ -249,9 +249,25 @@ window.OSSEditor = window.OSSEditor || {};
           themeSelect.value = currentTheme;
         }
 
-        // Si el servidor guardó una forma específica para esta escena, sincronizar selector
-        if (shapeSelect && data.overlayShapes && sceneKey && data.overlayShapes[sceneKey]) {
-          shapeSelect.value = data.overlayShapes[sceneKey];
+        // Poblar Selector de Forma Física dinámicamente con las variantes reales de cada pack
+        if (shapeSelect) {
+          const url = new URL(window.location.href);
+          const currentShape = url.searchParams.get('shape') || (data.overlayShapes && sceneKey && data.overlayShapes[sceneKey]) || data.activeShape || 'original';
+
+          let shapeHtml = `<option value="original">📐 Forma: Original de Escena</option>`;
+          data.packs.forEach(p => {
+            if (p.shapes && p.shapes.length > 0) {
+              shapeHtml += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
+              p.shapes.forEach(s => {
+                const shapeVal = s.archetype || s.id;
+                const isSel = (shapeVal === currentShape || s.id === currentShape);
+                shapeHtml += `<option value="${shapeVal}" ${isSel ? 'selected' : ''}>${s.icon || '📐'} ${s.name}</option>`;
+              });
+              shapeHtml += `</optgroup>`;
+            }
+          });
+          shapeSelect.innerHTML = shapeHtml;
+          shapeSelect.value = currentShape;
         }
       })
       .catch(() => {});

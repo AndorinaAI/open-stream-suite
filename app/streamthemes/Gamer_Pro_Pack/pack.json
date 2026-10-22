@@ -1,10 +1,33 @@
 {
   "id": "Gamer_Pro_Pack",
-  "name": "Pack Gamer Pro & Esports",
+  "name": "Pack Gamer Pro & eSports",
   "icon": "🎮",
-  "badge": "ESPORTS & GAMING (5 TEMAS)",
-  "description": "Estética HUD táctica, bordes biselados angulares y alto impacto visual para streamers competitivos.",
-  "version": "1.0.0",
+  "badge": "COMPETITIVO & NEÓN (5 TEMAS)",
+  "description": "Geometría angular a 45°, retículas tácticas, HUDs de telemetría y brillos láser para torneos y FPS.",
+  "version": "2.0.0",
   "archetype": "gamer",
-  "author": "Open Stream Suite"
+  "author": "Open Stream Suite",
+  "shapes": [
+    {
+      "id": "gamer_mecha",
+      "name": "Mecha Tournament 45°",
+      "icon": "🎮",
+      "archetype": "gamer",
+      "description": "Cortes poligonales a 45°, retículas tácticas en esquinas y brillo láser neón."
+    },
+    {
+      "id": "gamer_tactical_hud",
+      "name": "Tactical FPS HUD",
+      "icon": "🎯",
+      "archetype": "gamer",
+      "description": "Telemetría militar, barras de datos, marcadores de ping y etiquetas LIVE."
+    },
+    {
+      "id": "gamer_stealth",
+      "name": "Stealth Dark Cyber",
+      "icon": "🕶️",
+      "archetype": "gamer",
+      "description": "Geometría angular pura sin retículas con acentos minimalistas oscuros."
+    }
+  ]
 }

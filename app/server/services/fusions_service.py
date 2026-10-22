@@ -155,3 +155,31 @@ async def apply_fusion_theme_batch(fusion_id: str, theme_id: str) -> dict:
         "themeId": theme_id,
         "appliedScenes": applied_scenes
     }
+
+
+async def apply_fusion_shape_batch(fusion_id: str, shape_id: str) -> dict:
+    """Aplica una forma física a todas las escenas que componen la fusión"""
+    fusion = get_fusion_by_id(fusion_id)
+    if not fusion:
+        raise ValueError(f"Fusión '{fusion_id}' no encontrada")
+
+    scenes = fusion.get("scenes", [])
+    applied_scenes = []
+
+    for sc_key in scenes:
+        try:
+            await set_overlay_theme_service(sc_key, shape_id=shape_id)
+            applied_scenes.append(sc_key)
+        except Exception as e:
+            logger.warning(f"Error asignando forma '{shape_id}' a escena '{sc_key}' en fusión: {e}")
+
+    fusion["defaultShape"] = shape_id
+    create_or_update_fusion(fusion)
+
+    logger.info(f"✨ Forma '{shape_id}' aplicada en lote a {len(applied_scenes)} escenas de la fusión '{fusion_id}'")
+    return {
+        "status": "ok",
+        "fusionId": fusion_id,
+        "shapeId": shape_id,
+        "appliedScenes": applied_scenes
+    }
