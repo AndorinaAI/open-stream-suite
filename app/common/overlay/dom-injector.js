@@ -441,6 +441,162 @@ window.OSSDomInjector = (function() {
         footerNote.textContent = e.footerNote || e.footer;
       }
     }
+
+    // 11. Cozy Lo-Fi Pack
+    if (config.cozy) {
+      if (config.cozy.pomodoro) {
+        const cp = config.cozy.pomodoro;
+        if (cp.pomoTitle) {
+          const pt = document.querySelector('.header-title span:last-child');
+          if (pt) pt.textContent = cp.pomoTitle;
+        }
+        if (cp.pomoTime) {
+          const pt = document.querySelector('.pomo-time');
+          if (pt) pt.textContent = cp.pomoTime;
+        }
+        if (cp.pomoBadge) {
+          const pb = document.querySelector('.pomo-badge');
+          if (pb) pb.textContent = cp.pomoBadge;
+        }
+        if (Array.isArray(cp.ambientItems)) {
+          const ambSpans = document.querySelectorAll('.ambient-pill span');
+          cp.ambientItems.forEach((txt, i) => {
+            if (ambSpans[i]) ambSpans[i].textContent = txt;
+          });
+        }
+        if (Array.isArray(cp.taskItems)) {
+          const taskEls = document.querySelectorAll('.task-item');
+          cp.taskItems.forEach((t, i) => {
+            if (taskEls[i]) {
+              taskEls[i].classList.toggle('done', !!t.done);
+              const label = taskEls[i].querySelector('span:last-child');
+              if (label) label.textContent = t.text;
+            }
+          });
+        }
+      }
+      if (config.cozy.art) {
+        const ca = config.cozy.art;
+        if (ca.canvasTag) {
+          const ct = document.querySelector('.canvas-tag span:last-child');
+          if (ct) ct.textContent = ca.canvasTag;
+        }
+        if (ca.brushTool) {
+          const bt = document.querySelector('.tools-palette-bar div:last-child');
+          if (bt) bt.textContent = ca.brushTool;
+        }
+        if (ca.faceFooter) {
+          const ff = document.querySelector('.face-footer');
+          if (ff) ff.textContent = ca.faceFooter;
+        }
+        if (Array.isArray(ca.projectFields)) {
+          const fieldEls = document.querySelectorAll('.project-field');
+          ca.projectFields.forEach((f, i) => {
+            if (fieldEls[i]) {
+              const lbl = fieldEls[i].querySelector('.field-label');
+              const val = fieldEls[i].querySelector('.field-value');
+              if (lbl && f.label) lbl.textContent = f.label;
+              if (val && f.value) val.textContent = f.value;
+            }
+          });
+        }
+      }
+      if (config.cozy.cafe) {
+        const cc = config.cozy.cafe;
+        if (cc.handwritten) {
+          const hw = document.querySelector('.polaroid-handwritten');
+          if (hw) hw.textContent = cc.handwritten;
+        }
+        if (cc.handle) {
+          const h = document.querySelector('.polaroid-footer span:last-child');
+          if (h) h.textContent = cc.handle;
+        }
+        if (cc.trackTitle) {
+          const tt = document.querySelector('.track-title');
+          if (tt) tt.textContent = cc.trackTitle;
+        }
+        if (cc.trackAuthor) {
+          const ta = document.querySelector('.track-author');
+          if (ta) ta.textContent = cc.trackAuthor;
+        }
+        if (cc.chatTitle) {
+          const ct = document.querySelector('.chat-header-title span:last-child');
+          if (ct) ct.textContent = cc.chatTitle;
+        }
+        if (cc.goalText) {
+          const gt = document.querySelector('.goal-text');
+          if (gt) gt.textContent = cc.goalText;
+        }
+        if (cc.goalCount) {
+          const gc = document.querySelector('.goal-count');
+          if (gc) gc.textContent = cc.goalCount;
+        }
+      }
+    }
+
+    // 12. Gamer Pro Pack
+    if (config.gamer) {
+      if (config.gamer.telemetry) {
+        const gt = config.gamer.telemetry;
+        if (gt.serverInfo) {
+          const si = document.querySelector('.server-info');
+          if (si) si.textContent = gt.serverInfo;
+        }
+        if (gt.heroTag) {
+          const ht = document.querySelector('.hero-tag');
+          if (ht) ht.textContent = gt.heroTag;
+        }
+        if (Array.isArray(gt.telemetry)) {
+          const pills = document.querySelectorAll('.telemetry-pills div');
+          gt.telemetry.forEach((t, i) => {
+            if (pills[i]) pills[i].textContent = t;
+          });
+        }
+        if (Array.isArray(gt.mapPills)) {
+          const mp = document.querySelectorAll('.map-pill');
+          gt.mapPills.forEach((p, i) => {
+            if (mp[i]) {
+              const nameSpan = mp[i].querySelector('span:first-child');
+              const statusSpan = mp[i].querySelector('span:last-child');
+              if (nameSpan && p.name) nameSpan.textContent = p.name;
+              if (statusSpan && p.status) statusSpan.textContent = p.status;
+              mp[i].classList.toggle('picked', !!p.picked);
+            }
+          });
+        }
+        if (gt.arenaBottom) {
+          const ab = document.querySelector('.arena-bottom-bar > div:first-child');
+          if (ab) ab.textContent = gt.arenaBottom;
+        }
+      }
+    }
+
+    // 13. Mapeo Universal Infalible (customScenes)
+    if (config.customScenes) {
+      const p = window.location.pathname;
+      let matchedKey = null;
+      for (const k of Object.keys(config.customScenes)) {
+        if (p.includes(k) || (document.body.dataset.scene === k)) {
+          matchedKey = k;
+          break;
+        }
+      }
+      if (matchedKey && config.customScenes[matchedKey]) {
+        const keyStore = config.customScenes[matchedKey];
+        for (const [token, val] of Object.entries(keyStore)) {
+          if (!val) continue;
+          const [sel, idxStr] = token.split('::');
+          const idx = parseInt(idxStr, 10);
+          try {
+            const matches = document.querySelectorAll(sel);
+            const target = (!isNaN(idx) && matches[idx]) ? matches[idx] : matches[0];
+            if (target && target.textContent.trim() !== val) {
+              target.textContent = val;
+            }
+          } catch (e) {}
+        }
+      }
+    }
   }
 
   function injectIcons() {

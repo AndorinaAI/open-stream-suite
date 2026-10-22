@@ -270,6 +270,131 @@ window.OSSEditor = window.OSSEditor || {};
       if (liveLabel) texts.ending.liveStatusText = liveLabel;
     }
 
+    // ==========================================
+    // EXTRACTORES DEDICADOS POR PACK TEMÁTICO
+    // ==========================================
+
+    // ☕ 1. COZY LO-FI & ART PACK
+    texts.cozy = texts.cozy || {};
+    // A) Pomodoro (study_pomodoro)
+    if (window.location.pathname.includes('/study_pomodoro/') || document.querySelector('.pomodoro-card')) {
+      texts.cozy.pomodoro = texts.cozy.pomodoro || {};
+      const pomoTitle = document.querySelector('.header-title span:last-child')?.textContent?.trim();
+      if (pomoTitle) texts.cozy.pomodoro.pomoTitle = pomoTitle;
+      const pomoTime = document.querySelector('.pomo-time')?.textContent?.trim();
+      if (pomoTime) texts.cozy.pomodoro.pomoTime = pomoTime;
+      const pomoBadge = document.querySelector('.pomo-badge')?.textContent?.trim();
+      if (pomoBadge) texts.cozy.pomodoro.pomoBadge = pomoBadge;
+      const ambientEls = document.querySelectorAll('.ambient-pill span');
+      if (ambientEls.length > 0) {
+        texts.cozy.pomodoro.ambientItems = Array.from(ambientEls).map(s => s.textContent.trim()).filter(Boolean);
+      }
+      const taskEls = document.querySelectorAll('.task-item');
+      if (taskEls.length > 0) {
+        texts.cozy.pomodoro.taskItems = Array.from(taskEls).map(t => ({
+          done: t.classList.contains('done'),
+          text: t.querySelector('span:last-child')?.textContent?.trim() || t.textContent.trim()
+        }));
+      }
+    }
+    // B) Arte & Proceso Creativo (art_dual_cam)
+    if (window.location.pathname.includes('/art_dual_cam/') || document.querySelector('.face-polaroid')) {
+      texts.cozy.art = texts.cozy.art || {};
+      const canvasTag = document.querySelector('.canvas-tag span:last-child')?.textContent?.trim();
+      if (canvasTag) texts.cozy.art.canvasTag = canvasTag;
+      const brushTool = document.querySelector('.tools-palette-bar div:last-child')?.textContent?.trim();
+      if (brushTool) texts.cozy.art.brushTool = brushTool;
+      const faceFooter = document.querySelector('.face-footer')?.textContent?.trim();
+      if (faceFooter) texts.cozy.art.faceFooter = faceFooter;
+      const fields = document.querySelectorAll('.project-field');
+      if (fields.length > 0) {
+        texts.cozy.art.projectFields = Array.from(fields).map(f => ({
+          label: f.querySelector('.field-label')?.textContent?.trim() || '',
+          value: f.querySelector('.field-value')?.textContent?.trim() || ''
+        }));
+      }
+    }
+    // C) Café & Charla Chill (cafe_chat)
+    if (window.location.pathname.includes('/cafe_chat/') || document.querySelector('.polaroid-handwritten')) {
+      texts.cozy.cafe = texts.cozy.cafe || {};
+      const handwritten = document.querySelector('.polaroid-handwritten')?.textContent?.trim();
+      if (handwritten) texts.cozy.cafe.handwritten = handwritten;
+      const handle = document.querySelector('.polaroid-footer span:last-child')?.textContent?.trim();
+      if (handle) texts.cozy.cafe.handle = handle;
+      const trackTitle = document.querySelector('.track-title')?.textContent?.trim();
+      if (trackTitle) texts.cozy.cafe.trackTitle = trackTitle;
+      const trackAuthor = document.querySelector('.track-author')?.textContent?.trim();
+      if (trackAuthor) texts.cozy.cafe.trackAuthor = trackAuthor;
+      const chatTitle = document.querySelector('.chat-header-title span:last-child')?.textContent?.trim();
+      if (chatTitle) texts.cozy.cafe.chatTitle = chatTitle;
+      const goalText = document.querySelector('.goal-text')?.textContent?.trim();
+      if (goalText) texts.cozy.cafe.goalText = goalText;
+      const goalCount = document.querySelector('.goal-count')?.textContent?.trim();
+      if (goalCount) texts.cozy.cafe.goalCount = goalCount;
+    }
+
+    // ⚡ 2. GAMER PRO & ESPORTS PACK
+    texts.gamer = texts.gamer || {};
+    if (window.location.pathname.includes('/Gamer_Pro_Pack/') || document.querySelector('.match-hero-card')) {
+      const serverInfo = document.querySelector('.server-info')?.textContent?.trim();
+      const telemetry = Array.from(document.querySelectorAll('.telemetry-pills div')).map(d => d.textContent.trim());
+      const heroTag = document.querySelector('.hero-tag')?.textContent?.trim();
+      const mapPills = Array.from(document.querySelectorAll('.map-pill')).map(p => ({
+        name: p.querySelector('span:first-child')?.textContent?.trim() || '',
+        status: p.querySelector('span:last-child')?.textContent?.trim() || '',
+        picked: p.classList.contains('picked')
+      }));
+      const arenaBottom = document.querySelector('.arena-bottom-bar > div:first-child')?.textContent?.trim();
+      texts.gamer.telemetry = { serverInfo, telemetry, heroTag, mapPills, arenaBottom };
+    }
+
+    // 🌐 3. MAPEO UNIVERSAL PER-SCENE (Fallback Infalible para CUALQUIER elemento editado)
+    const effectiveSceneKey = sceneKey || (function() {
+      const p = window.location.pathname;
+      if (p.includes('/study_pomodoro/')) return 'cozy_pomodoro';
+      if (p.includes('/art_dual_cam/')) return 'cozy_art';
+      if (p.includes('/cafe_chat/')) return 'cozy_cafe';
+      if (p.includes('/maker/desk/')) return 'maker-desk';
+      if (p.includes('/maker/pc/')) return 'maker-pc';
+      if (p.includes('/print/machine/')) return 'print-machine';
+      if (p.includes('/print/design/')) return 'print-design';
+      if (p.includes('/gameplay_hud/')) return 'gamer_gameplay';
+      if (p.includes('/speedrun_split/')) return 'gamer_speedrun';
+      if (p.includes('/victory_clutch/')) return 'gamer_victory';
+      if (p.includes('/just_chatting/')) return 'oss_chatting';
+      if (p.includes('/desktop_share/')) return 'oss_desktop';
+      if (p.includes('/podcast_talk/')) return 'oss_podcast';
+      return document.body.dataset.scene || 'current_scene';
+    })();
+
+    if (effectiveSceneKey) {
+      texts.customScenes = texts.customScenes || {};
+      texts.customScenes[effectiveSceneKey] = texts.customScenes[effectiveSceneKey] || {};
+      const keyStore = texts.customScenes[effectiveSceneKey];
+
+      document.querySelectorAll('.editable-screen-element, [contenteditable="true"]').forEach((el, i) => {
+        const text = el.textContent.trim();
+        if (!text) return;
+        let sel = '';
+        if (el.className) {
+          const cleanClasses = el.className
+            .replace(/editable-screen-element|editing-active/g, '')
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+          if (cleanClasses.length > 0) {
+            sel = '.' + cleanClasses.join('.');
+          }
+        }
+        if (!sel && el.tagName) {
+          sel = el.tagName.toLowerCase();
+        }
+        if (sel) {
+          keyStore[sel + '::' + i] = text;
+        }
+      });
+    }
+
     return texts;
   }
 

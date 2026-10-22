@@ -83,7 +83,7 @@ window.OSSEditor = window.OSSEditor || {};
     let totalSecondsInitial = totalMins * 60;
 
     const countdownEl = document.querySelector('.starting-countdown, .pomo-time, .pomodoro-countdown');
-    const progressFill = document.querySelector('.tech-progress-fill');
+    const progressFill = document.querySelector('.tech-progress-fill, .pomo-progress');
     const statusSpan = document.getElementById('oss-cd-status');
     const toggleBtn = document.getElementById('oss-cd-toggle');
 
