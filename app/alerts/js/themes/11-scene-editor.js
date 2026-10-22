@@ -7,10 +7,11 @@ function updateModalMiniPreview(themeId) {
   const frame = document.getElementById('scene-modal-preview-frame');
   if (!frame) return;
 
-  const isRounded = theme.borderStyle === 'rounded';
-  const isSquare = theme.borderStyle === 'square';
-  const bRadius = isRounded ? '8px' : (isSquare ? '0px' : '4px');
-  const camRadius = isRounded ? '6px' : (isSquare ? '0px' : '3px');
+  const isCozy = currentEditingScene.key.startsWith('cozy_');
+  const isRounded = theme.borderStyle === 'rounded' || isCozy;
+  const isSquare = theme.borderStyle === 'square' && !isCozy;
+  const bRadius = isCozy ? '16px' : (isRounded ? '8px' : (isSquare ? '0px' : '4px'));
+  const camRadius = isCozy ? '14px' : (isRounded ? '6px' : (isSquare ? '0px' : '3px'));
   const glow = Math.round((theme.glowIntensity || 50) * 0.3);
 
   frame.style.background = theme.bgDark;

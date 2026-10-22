@@ -54,6 +54,87 @@
   --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ====================================================================
+   ARQUETIPOS GEOMÉTRICOS Y FORMAS FÍSICAS INTRÍNSECAS POR PACK
+   (Garantizan que cada pack preserve su belleza y estilo propio al cambiar temas)
+   ==================================================================== */
+
+/* ☕ PACK COZY LO-FI: Formas ultra suaves, redondeadas y píldoras */
+body[data-pack="cozy"],
+body.pack-cozy,
+[data-pack="cozy"] {
+  --cozy-frame-radius: 28px;
+  --cozy-panel-radius: 24px;
+  --cozy-pill-radius: 50px;
+}
+
+body[data-pack="cozy"] .cam-frame,
+body[data-pack="cozy"] .camera-frame,
+body[data-pack="cozy"] .cam-inner-viewport {
+  border-radius: 28px !important;
+  clip-path: none !important;
+}
+
+body[data-pack="cozy"] .pomodoro-card,
+body[data-pack="cozy"] .tasks-card,
+body[data-pack="cozy"] .cam-polaroid,
+body[data-pack="cozy"] .face-polaroid,
+body[data-pack="cozy"] .canvas-card,
+body[data-pack="cozy"] .chat-card,
+body[data-pack="cozy"] .side-panel-box,
+body[data-pack="cozy"] .ending-farewell-card {
+  border-radius: 24px !important;
+  clip-path: none !important;
+}
+
+body[data-pack="cozy"] .header-bar,
+body[data-pack="cozy"] .scene-header,
+body[data-pack="cozy"] .ambient-pill,
+body[data-pack="cozy"] .lofi-player-bar,
+body[data-pack="cozy"] .tools-palette-bar,
+body[data-pack="cozy"] .daily-goal-pill,
+body[data-pack="cozy"] .pomo-badge,
+body[data-pack="cozy"] .pomo-bar,
+body[data-pack="cozy"] .pomo-progress,
+body[data-pack="cozy"] .brand-badge {
+  border-radius: 50px !important;
+  clip-path: none !important;
+}
+
+body[data-pack="cozy"] .frame-corner-tr,
+body[data-pack="cozy"] .frame-corner-bl,
+body[data-pack="cozy"] .reg-mark {
+  display: none !important;
+}
+
+/* ⚡ PACK GAMER PRO: Mecha tournament, cortes 45° y telemetría */
+body[data-pack="gamer"] .camera-frame,
+body[data-pack="gamer"] .camera-main {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px)) !important;
+  border-radius: 0px !important;
+}
+
+body[data-pack="gamer"] .side-panel-box,
+body[data-pack="gamer"] .match-hero-card {
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
+  border-radius: 0px !important;
+}
+
+/* 🛠️ PACK MAKER & PRINT: Blueprint, precisión CAD y esquinas técnicas */
+body[data-pack="maker"] .frame-corner-tr,
+body[data-pack="maker"] .frame-corner-bl,
+body[data-pack="maker"] .reg-mark {
+  display: block !important;
+}
+
+/* 🌐 PACK OPEN STREAM: Broadcast moderno con esquinas suavemente curvadas */
+body[data-pack="openstream"] .camera-frame,
+body[data-pack="openstream"] .pod-cam-box,
+body[data-pack="openstream"] .agenda-card {
+  border-radius: 12px !important;
+  clip-path: none !important;
+}
+
 /* Reset técnico para OBS */
 *, *::before, *::after {
   box-sizing: border-box;

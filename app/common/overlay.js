@@ -120,7 +120,21 @@
       return document.body.dataset.scene || document.body.dataset.mode || null;
     }
 
+    function detectCurrentPack() {
+      const p = window.location.pathname;
+      if (p.includes('/Cozy_LoFi_Pack/')) return 'cozy';
+      if (p.includes('/Gamer_Pro_Pack/')) return 'gamer';
+      if (p.includes('/Open_stream_Pack/')) return 'openstream';
+      if (p.includes('/Maker_Theme_Pack/') || p.includes('/maker/') || p.includes('/print/') || p.includes('/game/') || p.includes('/chill/')) return 'maker';
+      return document.body.dataset.pack || 'maker';
+    }
+
     const currentSceneKey = detectCurrentSceneKey();
+    const currentPack = detectCurrentPack();
+    document.body.setAttribute('data-pack', currentPack);
+    if (currentSceneKey) {
+      document.body.setAttribute('data-scene', currentSceneKey);
+    }
 
     // 1.2 Resolución y aplicación de temas dinámicos
     const urlParams = new URLSearchParams(window.location.search);
@@ -132,7 +146,10 @@
       activeTheme = config.overlayThemes[currentSceneKey];
     }
     if (!activeTheme) {
-      activeTheme = config.activeTheme || config.themeName;
+      if (currentPack === 'cozy') activeTheme = 'latte_caramel';
+      else if (currentPack === 'gamer') activeTheme = 'cyber_glitch';
+      else if (currentPack === 'openstream') activeTheme = 'neon_streamer';
+      else activeTheme = config.activeTheme || config.themeName || 'maker';
     }
     if (activeTheme) {
       document.body.setAttribute('data-theme', activeTheme);
@@ -145,7 +162,8 @@
         .then(r => r.ok ? r.json() : null)
         .then(data => {
           if (!data) return;
-          const t = (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) || data.activeTheme;
+          const fallbackByPack = (currentPack === 'cozy' ? 'latte_caramel' : (currentPack === 'gamer' ? 'cyber_glitch' : (currentPack === 'openstream' ? 'neon_streamer' : data.activeTheme)));
+          const t = (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) || fallbackByPack;
           if (t) document.body.setAttribute('data-theme', t);
         })
         .catch(() => {});

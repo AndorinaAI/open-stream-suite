@@ -79,7 +79,10 @@ function buildSceneMiniMockupHtml(sceneKey, rawTheme) {
   let bStyle = `2px solid ${accentCyan}`;
   let bShadow = `0 0 ${glow}px ${accentCyan}80`;
 
-  if (theme.borderStyle === 'square') {
+  const isCozy = sceneKey.startsWith('cozy_') || sceneKey.includes('pomodoro') || sceneKey.includes('cafe') || sceneKey.includes('art');
+  if (isCozy) {
+    bRadius = '14px';
+  } else if (theme.borderStyle === 'square') {
     bRadius = '0px';
   } else if (theme.borderStyle === 'pill') {
     bRadius = '14px';
