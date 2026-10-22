@@ -293,6 +293,14 @@ window.OSSEditor = window.OSSEditor || {};
           </select>
         </div>
 
+        <button type="button" class="hud-btn" id="hud-btn-toggle-chat" title="Mostrar u ocultar el chat integrado en esta escena (ideal si usas una fuente de chat independiente en OBS)">
+          💬 Chat: <span id="hud-chat-state" style="color:#57D6C4;">ON</span>
+        </button>
+
+        <button type="button" class="hud-btn" id="hud-btn-copy-obs-url" title="Copiar enlace limpio y reactivo para pegar en OBS Studio">
+          🔗 Enlace OBS
+        </button>
+
         <button type="button" class="hud-btn btn-save" id="hud-btn-save-texts" title="Guardar cambios de texto y emitirlos a OBS">
           💾 Guardar
         </button>

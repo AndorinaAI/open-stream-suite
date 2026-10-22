@@ -55,18 +55,144 @@
 }
 
 /* ====================================================================
-   ARQUETIPOS GEOMÉTRICOS Y FORMAS FÍSICAS INTRÍNSECAS POR PACK
-   (Garantizan que cada pack preserve su belleza y estilo propio al cambiar temas)
+   MOTOR DE MORPHING Y TRANSICIÓN DINÁMICA (TIPO OBS MOVE PLUGIN)
+   Interpola fluidamente clip-path, border-radius, colores, sombras y posiciones
+   ==================================================================== */
+.camera-frame, .cam-box, .cam-frame, .hud-cam-box, .stream-frame,
+.canvas-frame, .face-frame, .desktop-main-viewport, .cam-inner-viewport,
+.scene-header, .bottom-project-bar, .side-info-panel, .chat-column,
+.chat-card, .panel-card, .pomodoro-card, .tasks-card, .lofi-player-bar,
+.tools-palette-bar, .washi-tape, .frame-label, .canvas-tag,
+.project-phases .phase-item, .mode-badge, .brand-badge, .chat-message {
+  transition: 
+    clip-path 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-radius 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-width 0.35s ease,
+    border-color 0.35s ease,
+    background-color 0.35s ease,
+    box-shadow 0.4s ease,
+    backdrop-filter 0.35s ease,
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s ease !important;
+  will-change: clip-path, border-radius, transform;
+}
+
+/* ====================================================================
+   ARQUITECTURA DE TOKENS DE SKIN (--skin-*)
    ==================================================================== */
 
-/* ☕ PACK COZY LO-FI: Formas ultra suaves, redondeadas y píldoras */
-body[data-pack="cozy"],
-body.pack-cozy,
-[data-pack="cozy"] {
-  --cozy-frame-radius: 28px;
-  --cozy-panel-radius: 24px;
-  --cozy-pill-radius: 50px;
+/* ☕ ARQUETIPO COZY LO-FI */
+[data-theme-archetype="cozy"],
+body[data-theme-archetype="cozy"],
+body[data-pack="cozy"]:not([data-theme-archetype]) {
+  --skin-font-display: 'Comfortaa', cursive, sans-serif;
+  --skin-font-body: 'Outfit', -apple-system, sans-serif;
+  --skin-frame-radius: 28px;
+  --skin-frame-clip: none;
+  --skin-header-radius: 50px;
+  --skin-panel-radius: 24px;
+  --skin-badge-radius: 50px;
+  --skin-pill-radius: 50px;
+  --skin-ornament-tape: block;
+  --skin-ornament-reticle: none;
+  --skin-ornament-brackets: none;
 }
+
+/* 🎮 ARQUETIPO GAMER PRO */
+[data-theme-archetype="gamer"],
+body[data-theme-archetype="gamer"],
+body[data-pack="gamer"]:not([data-theme-archetype]) {
+  --skin-font-display: 'Share Tech Mono', monospace;
+  --skin-font-body: 'Rajdhani', -apple-system, sans-serif;
+  --skin-frame-radius: 0px;
+  --skin-frame-clip: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+  --skin-header-radius: 0px;
+  --skin-header-clip: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  --skin-panel-radius: 0px;
+  --skin-panel-clip: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  --skin-badge-radius: 0px;
+  --skin-pill-radius: 0px;
+  --skin-ornament-tape: none;
+  --skin-ornament-reticle: block;
+  --skin-ornament-brackets: none;
+}
+
+/* 🛠️ ARQUETIPO MAKER / CAD */
+[data-theme-archetype="maker"],
+body[data-theme-archetype="maker"],
+body[data-pack="maker"]:not([data-theme-archetype]) {
+  --skin-font-display: 'JetBrains Mono', monospace;
+  --skin-font-body: 'Inter', -apple-system, sans-serif;
+  --skin-frame-radius: 4px;
+  --skin-frame-clip: none;
+  --skin-header-radius: 2px;
+  --skin-header-clip: none;
+  --skin-panel-radius: 4px;
+  --skin-panel-clip: none;
+  --skin-badge-radius: 3px;
+  --skin-pill-radius: 4px;
+  --skin-ornament-tape: none;
+  --skin-ornament-reticle: none;
+  --skin-ornament-brackets: block;
+}
+
+/* ⚡ ARQUETIPO OPEN STREAM (SWISS GLASS) */
+[data-theme-archetype="openstream"],
+body[data-theme-archetype="openstream"],
+body[data-pack="openstream"]:not([data-theme-archetype]) {
+  --skin-font-display: 'Inter', -apple-system, sans-serif;
+  --skin-font-body: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --skin-frame-radius: 16px;
+  --skin-frame-clip: none;
+  --skin-header-radius: 12px;
+  --skin-header-clip: none;
+  --skin-panel-radius: 16px;
+  --skin-panel-clip: none;
+  --skin-badge-radius: 8px;
+  --skin-pill-radius: 16px;
+  --skin-ornament-tape: none;
+  --skin-ornament-reticle: none;
+  --skin-ornament-brackets: none;
+}
+
+/* --- ESTILO ADAPTABLE DEL CHAT INTEGRADO --- */
+.chat-column, .chat-card, .cozy-chat-card, .chat-box, .chat-viewport {
+  border-radius: var(--skin-panel-radius, 16px);
+  clip-path: var(--skin-panel-clip, none);
+}
+
+/* Toggle para desactivar chat de escena y usar fuente OBS independiente */
+body.hide-scene-chat .chat-column,
+body.hide-scene-chat .chat-card,
+body.hide-scene-chat .cozy-chat-card,
+body.hide-scene-chat .chat-box {
+  display: none !important;
+}
+
+body[data-theme-archetype="gamer"] .chat-message,
+body[data-theme-archetype="gamer"] .msg-bubble {
+  border-radius: 0px !important;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%) !important;
+  border-left: 2px solid var(--color-accent-cyan, #00F0FF) !important;
+}
+
+body[data-theme-archetype="cozy"] .chat-message,
+body[data-theme-archetype="cozy"] .msg-bubble {
+  border-radius: 18px !important;
+  clip-path: none !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+body[data-theme-archetype="maker"] .chat-message,
+body[data-theme-archetype="maker"] .msg-bubble {
+  border-radius: 4px !important;
+  clip-path: none !important;
+  font-family: var(--skin-font-display, monospace) !important;
+}
+
+/* ====================================================================
+   ARQUETIPOS GEOMÉTRICOS Y FORMAS FÍSICAS INTRÍNSECAS POR PACK
+   ==================================================================== */
 
 /* --- 1. ARQUETIPO COZY: ESTILO CÁLIDO, POLAROID, PASTEL Y SOFT --- */
 body[data-theme-archetype="cozy"],
