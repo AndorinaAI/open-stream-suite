@@ -1,0 +1,12 @@
+body[data-theme="crimson_pulse"],
+[data-theme="crimson_pulse"] {
+  --color-bg-dark: #150B10;
+  --color-text-light: #FFF1F2;
+  --color-accent-cyan: #F43F5E;
+  --color-accent-orange: #FB7185;
+  --color-panel-bg: #26131D;
+  --color-text-dim: #A68896;
+  --color-border-cyan: rgba(244, 63, 94, 0.45);
+  --color-border-cyan-bright: #F43F5E;
+  --theme-glow: 0 0 18px rgba(244, 63, 94, 0.6);
+}

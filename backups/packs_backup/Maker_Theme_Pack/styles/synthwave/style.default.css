@@ -1,0 +1,11 @@
+body[data-theme="synthwave"] {
+  --color-bg-dark: #1A1028;
+  --color-text-light: #FCE7F3;
+  --color-accent-cyan: #00F9FF;
+  --color-accent-orange: #FF2A85;
+  --color-panel-bg: #2B1A42;
+  --color-text-dim: #C084FC;
+  --color-border-cyan: rgba(0, 249, 255, 0.45);
+  --color-border-cyan-bright: #00F9FF;
+  --theme-glow: 0 0 18px rgba(255, 42, 133, 0.6);
+}

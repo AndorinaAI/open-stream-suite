@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Overlay — Study With Me & Pomodoro</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 36px 42px;
+      box-sizing: border-box;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-family: 'Quicksand', 'Comfortaa', var(--font-primary), sans-serif;
+      overflow: hidden;
+    }
+
+    /* Barra Superior Suave */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--color-panel-bg, rgba(48, 38, 30, 0.9));
+      backdrop-filter: var(--panel-backdrop, blur(16px));
+      border: 1px solid var(--color-border-cyan, rgba(196, 130, 67, 0.25));
+      border-radius: var(--cozy-pill-radius, 50px);
+      padding: 12px 28px;
+      box-shadow: var(--panel-shadow, 0 10px 25px rgba(0,0,0,0.15));
+    }
+
+    .header-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text-light, #FFFBEB);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ambient-pill {
+      font-size: 12px;
+      color: var(--color-text-dim, #B3A091);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Grid Central */
+    .main-grid {
+      display: flex;
+      gap: 32px;
+      flex: 1;
+      margin: 24px 0;
+    }
+
+    .cam-frame {
+      flex: 3;
+      background: #181411;
+      border: var(--frame-border-width, 2.5px) solid var(--color-border-cyan, rgba(196, 130, 67, 0.35));
+      border-radius: var(--cozy-frame-radius, 28px);
+      box-shadow: var(--frame-shadow, 0 16px 36px rgba(30, 20, 15, 0.16));
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Columna Derecha: Pomodoro y Tareas */
+    .side-column {
+      flex: 1.15;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .pomodoro-card {
+      background: var(--color-panel-bg, rgba(48, 38, 30, 0.9));
+      backdrop-filter: var(--panel-backdrop, blur(16px));
+      border: 1px solid var(--color-border-cyan, rgba(196, 130, 67, 0.25));
+      border-radius: var(--cozy-panel-radius, 24px);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--panel-shadow, 0 12px 28px rgba(0,0,0,0.15));
+    }
+
+    .pomo-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(196, 130, 67, 0.18);
+      color: var(--color-accent-orange, #E0C097);
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 12px;
+    }
+
+    .pomo-time {
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--color-accent-cyan, #C48243);
+      font-family: 'Comfortaa', cursive, sans-serif;
+      margin: 4px 0;
+      letter-spacing: 2px;
+    }
+
+    .pomo-cycles {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0 14px 0;
+    }
+
+    .cycle-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .cycle-dot.active {
+      background: var(--color-accent-cyan, #C48243);
+    }
+
+    .pomo-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .pomo-progress {
+      width: 72%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-accent-cyan, #C48243), var(--color-accent-orange, #E0C097));
+      border-radius: 50px;
+    }
+
+    /* Tarjeta de Lista de Tareas */
+    .tasks-card {
+      flex: 1;
+      background: var(--color-panel-bg, rgba(48, 38, 30, 0.9));
+      backdrop-filter: var(--panel-backdrop, blur(16px));
+      border: 1px solid var(--color-border-cyan, rgba(196, 130, 67, 0.25));
+      border-radius: var(--cozy-panel-radius, 24px);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--panel-shadow, 0 12px 28px rgba(0,0,0,0.15));
+    }
+
+    .tasks-header {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-accent-cyan, #C48243);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--color-text-light, #FDFBF7);
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      margin-bottom: 8px;
+    }
+
+    .task-item.done {
+      color: var(--color-text-dim, #B3A091);
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .task-check {
+      font-size: 14px;
+      color: var(--color-accent-orange, #E0C097);
+    }
+  </style>
+</head>
+<body data-theme="latte_caramel">
+
+  <!-- Barra Superior -->
+  <div class="header-bar">
+    <div class="header-title">
+      <span>📖</span>
+      <span>STUDY WITH ME · ESPACIO DE ENFOQUE & LECTURA</span>
+    </div>
+    <div class="ambient-pill">
+      <span>🌧️ Lluvia suave: 45%</span>
+      <span>•</span>
+      <span>☕ Café caliente listo</span>
+      <span>•</span>
+      <span>🎧 Lo-Fi 432Hz</span>
+    </div>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div class="main-grid">
+    <div class="cam-frame"></div>
+
+    <div class="side-column">
+      <!-- Reloj Pomodoro -->
+      <div class="pomodoro-card">
+        <span class="pomo-badge">SESIÓN DE CONCENTRACIÓN</span>
+        <div class="pomo-time">25:00</div>
+        <div style="font-size: 11px; color: var(--color-text-dim);">Ciclo 2 de 4 antes del descanso largo</div>
+        <div class="pomo-cycles">
+          <span class="cycle-dot active"></span>
+          <span class="cycle-dot active"></span>
+          <span class="cycle-dot"></span>
+          <span class="cycle-dot"></span>
+        </div>
+        <div class="pomo-bar">
+          <div class="pomo-progress"></div>
+        </div>
+      </div>
+
+      <!-- Cuaderno de Tareas -->
+      <div class="tasks-card">
+        <div class="tasks-header">
+          <span>📋</span>
+          <span>OBJETIVOS DE LA SESIÓN</span>
+        </div>
+        <div class="task-item done">
+          <span class="task-check">✓</span>
+          <span>Revisar apuntes de teoría (Tema 4)</span>
+        </div>
+        <div class="task-item done">
+          <span class="task-check">✓</span>
+          <span>Redactar introducción del proyecto</span>
+        </div>
+        <div class="task-item">
+          <span class="task-check">○</span>
+          <span>Resolver ejercicios de programación</span>
+        </div>
+        <div class="task-item">
+          <span class="task-check">○</span>
+          <span>Organizar notas y planificar semana</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/config.js"></script>
+  <script src="/common/overlay.js"></script>
+</body>
+</html>

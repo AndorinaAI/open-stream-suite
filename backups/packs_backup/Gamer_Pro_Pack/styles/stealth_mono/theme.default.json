@@ -1,0 +1,19 @@
+{
+  "id": "stealth_mono",
+  "packId": "Gamer_Pro_Pack",
+  "name": "Stealth Titanium",
+  "badge": "05 // STEALTH",
+  "accentCyan": "#E2E8F0",
+  "accentOrange": "#94A3B8",
+  "bgDark": "#0A0B0E",
+  "textLight": "#F8FAFC",
+  "panelBg": "#181A22",
+  "textDim": "#7A8296",
+  "fontPrimary": "var(--font-tech)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 50,
+  "borderStyle": "chamfer",
+  "desc": "Titanio sigiloso monocromo de alta precisión militar.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

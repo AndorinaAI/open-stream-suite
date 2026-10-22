@@ -22,8 +22,23 @@ El widget de chat (`/widgets/chat/index.html`) soporta dos modos de integración
 - **URL estándar**: `http://localhost:8080/widgets/chat/`
 - **Con esquina inferior derecha**: `http://localhost:8080/widgets/chat/?pos=bottom-right`
 - **Con esquina superior izquierda**: `http://localhost:8080/widgets/chat/?pos=top-left`
-- **Tema Flotante Pantalla recomendado**: `http://localhost:8080/widgets/chat/?theme=screen_no_overlay` (sombra de contraste profundo y fondo sutil translúcido para máxima legibilidad).
-- **Tema Ghost transparente**: `http://localhost:8080/widgets/chat/?theme=ghost` (fondo 100% transparente sin bordes).
+
+### Modo 3: Enlaces OBS Multi-Estilo por Perfil de Escena (`?profile=<id>`)
+Permite usar estilos visuales completamente diferentes en cada escena de OBS Studio simplemente añadiendo el parámetro `?profile=...` a la URL:
+- **🌿 Escena Cozy (Just Chatting / Relax)**: `http://localhost:8080/widgets/chat/index.html?profile=cozy_lofi` (tarjeta suave polaroid, fondo cálido translúcido al 85%, acento pastel)
+- **⚡ Escena Gamer (Gameplay / Esports)**: `http://localhost:8080/widgets/chat/index.html?profile=gamer_pro` (biselado sci-fi 45°, brillo neón cian/esmeralda, fuente Orbitron)
+- **🛠️ Escena Maker (Taller / CAD / 3D)**: `http://localhost:8080/widgets/chat/index.html?profile=maker_glass` (cristal frosted tech, corchete lateral cyan)
+- **📺 Escena Pantalla Completa (Sin Overlay)**: `http://localhost:8080/widgets/chat/index.html?profile=screen_no_overlay` (píldora translúcida ultra-limpia al 28%)
+- **👻 Escena Minimalista 100% Transparente**: `http://localhost:8080/widgets/chat/index.html?profile=ghost` (sin fondo ni bordes, sombras profundas en el texto)
+- **💬 Escena Cómic / Pop**: `http://localhost:8080/widgets/chat/index.html?profile=bubble` (bocadillo asimétrico con degradado dual)
+
+#### Parámetros Opcionales de Ajuste Fino en la URL:
+Puedes sobreescribir cualquier propiedad directamente en la URL del navegador en OBS:
+- `&shape=rounded|soft_card|scifi|bubble|pill|arcade|box|tag|slant` (silueta del mensaje)
+- `&opacity=0..100` (opacidad del fondo)
+- `&size=12..24` (tamaño de fuente en px)
+- `&font=outfit|orbitron|poppins|inter|comfortaa|rajdhani|mono` (tipografía)
+- `&border=57D6C4` (color hexadecimal de borde)
 
 ---
 

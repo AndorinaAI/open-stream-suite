@@ -70,40 +70,50 @@ window.ChatStyles = (function() {
     }
     document.body.classList.add(`theme-${activeTheme}`);
 
-    const shape = chatConfig.shape || (
+    const shapeParam = urlParams.get('shape');
+    const bgTypeParam = urlParams.get('bgtype') || urlParams.get('bg_type');
+    const opacityParam = urlParams.get('opacity');
+    const fontParam = urlParams.get('font');
+    const sizeParam = urlParams.get('size');
+    const borderParam = urlParams.get('border');
+    const borderStyleParam = urlParams.get('borderstyle');
+
+    const shape = shapeParam || chatConfig.shape || (
       activeTheme === 'bubble' ? 'bubble' :
-      activeTheme === 'scifi' || activeTheme === 'cyberpunk' ? 'scifi' :
+      activeTheme === 'scifi' || activeTheme === 'cyberpunk' || activeTheme === 'gamer_pro' ? 'scifi' :
       activeTheme === 'arcade' || activeTheme === 'retro' ? 'arcade' :
       activeTheme === 'pill' ? 'pill' :
+      activeTheme === 'cozy_lofi' || activeTheme === 'kawaii' ? 'soft_card' :
       activeTheme === 'ghost' ? 'box' : 'rounded'
     );
 
-    const bgType = chatConfig.bgType || (
+    const bgType = bgTypeParam || chatConfig.bgType || (
       activeTheme === 'ghost' ? 'transparent' :
       activeTheme === 'bubble' || activeTheme === 'synthwave' || activeTheme === 'candy' ? 'gradient' :
-      activeTheme === 'cyberpunk' || activeTheme === 'retro' || activeTheme === 'matrix' ? 'solid' : 'glass'
+      activeTheme === 'cyberpunk' || activeTheme === 'retro' || activeTheme === 'matrix' || activeTheme === 'gamer_pro' ? 'solid' : 'glass'
     );
 
-    const fontFamily = chatConfig.fontFamily || (
+    const fontFamily = fontParam || chatConfig.fontFamily || (
       activeTheme === 'cyberpunk' ? 'courier' :
       activeTheme === 'retro' ? 'press_start' :
       activeTheme === 'pill' ? 'inter' :
-      activeTheme === 'matrix' ? 'mono' : 'outfit'
+      activeTheme === 'matrix' ? 'mono' :
+      activeTheme === 'gamer_pro' ? 'orbitron' : 'outfit'
     );
 
-    const borderStyle = chatConfig.borderStyle || (
+    const borderStyle = borderStyleParam || chatConfig.borderStyle || (
       activeTheme === 'ghost' ? 'none' :
       activeTheme === 'retro' ? 'double' :
-      activeTheme === 'maker_glass' || activeTheme === 'matrix' ? 'left_neon' : 'full'
+      activeTheme === 'maker_glass' || activeTheme === 'matrix' || activeTheme === 'cozy_lofi' ? 'left_neon' : 'full'
     );
 
     const borderWidth = (chatConfig.borderWidth !== undefined) ? chatConfig.borderWidth : (borderStyle === 'double' ? 3 : 2);
-    const borderColor = chatConfig.borderColor || '#57D6C4';
+    const borderColor = borderParam ? ('#' + borderParam.replace('#', '')) : (chatConfig.borderColor || '#57D6C4');
     const bgColor = chatConfig.bgColor || '#191D21';
     const bgGradient = chatConfig.bgGradient || '#0B0D0F';
     const glow = (chatConfig.glowIntensity !== undefined) ? chatConfig.glowIntensity : 35;
-    const opacity = (chatConfig.bgOpacity !== undefined ? chatConfig.bgOpacity : (activeTheme === 'ghost' ? 0 : 88)) / 100;
-    const fSize = chatConfig.fontSize || 14;
+    const opacity = (opacityParam !== null && opacityParam !== undefined ? parseInt(opacityParam, 10) : (chatConfig.bgOpacity !== undefined ? chatConfig.bgOpacity : (activeTheme === 'ghost' ? 0 : 88))) / 100;
+    const fSize = (sizeParam ? parseInt(sizeParam, 10) : null) || chatConfig.fontSize || 14;
 
     document.documentElement.style.setProperty('--chat-accent', borderColor);
     if (chatConfig.roleColors) {

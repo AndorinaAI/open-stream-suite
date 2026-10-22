@@ -1,0 +1,26 @@
+body[data-theme="crimson_pulse"],
+[data-theme="crimson_pulse"] {
+  --color-bg-dark: #150B10;
+  --color-text-light: #FFF1F2;
+  --color-accent-cyan: #F43F5E;
+  --color-accent-orange: #FB7185;
+  --color-panel-bg: #26131D;
+  --color-text-dim: #A68896;
+  --color-border-cyan: rgba(244, 63, 94, 0.45);
+  --color-border-cyan-bright: #F43F5E;
+  --theme-glow: 0 0 18px rgba(244, 63, 94, 0.6);
+  --frame-radius: 8px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 18px rgba(244, 63, 94, 0.45);
+  --frame-corner-display: none;
+  --panel-radius: 8px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 6px 18px rgba(244, 63, 94, 0.2);
+  --badge-radius: 6px;
+  --badge-clip-path: none;
+  --header-radius: 8px;
+  --header-clip-path: none;
+}

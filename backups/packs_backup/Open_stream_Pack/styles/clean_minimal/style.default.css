@@ -1,0 +1,12 @@
+body[data-theme="clean_minimal"],
+[data-theme="clean_minimal"] {
+  --color-bg-dark: #0B1120;
+  --color-text-light: #F8FAFC;
+  --color-accent-cyan: #38BDF8;
+  --color-accent-orange: #F1F5F9;
+  --color-panel-bg: #1E293B;
+  --color-text-dim: #94A3B8;
+  --color-border-cyan: rgba(56, 189, 248, 0.35);
+  --color-border-cyan-bright: #38BDF8;
+  --theme-glow: 0 0 12px rgba(56, 189, 248, 0.4);
+}

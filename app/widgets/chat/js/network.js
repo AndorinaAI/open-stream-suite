@@ -6,6 +6,20 @@ window.ChatNetwork = (function() {
   const urlParams = new URLSearchParams(window.location.search);
   const channelName = (urlParams.get('channel') || window.OSS_CONFIG?.channel?.twitch || window.OSS_CONFIG?.channel?.name || "andorina").toLowerCase().trim();
 
+  const profileParam = urlParams.get('profile') || urlParams.get('preset');
+
+  function resolveChatStyles(chatData) {
+    if (!chatData) return null;
+    let s = chatData.styles || {};
+    if (profileParam && chatData.presets && Array.isArray(chatData.presets)) {
+      const match = chatData.presets.find(p => p.id === profileParam);
+      if (match) {
+        s = Object.assign({}, s, match);
+      }
+    }
+    return s;
+  }
+
   async function fetchInitialConfig() {
     try {
       const res = await fetch('/api/widgets/config');
@@ -15,8 +29,9 @@ window.ChatNetwork = (function() {
           if (data.config.chat.shortcuts && window.ChatParser) {
             window.ChatParser.setShortcuts(data.config.chat.shortcuts);
           }
-          if (data.config.chat.styles && window.ChatStyles) {
-            window.ChatStyles.applyChatConfig(data.config.chat.styles);
+          const s = resolveChatStyles(data.config.chat);
+          if (s && window.ChatStyles) {
+            window.ChatStyles.applyChatConfig(s);
           }
           if (data.config.chat.spotlight && window.ChatRenderer) {
             window.ChatRenderer.handleSpotlightMessage(data.config.chat.spotlight);
@@ -101,7 +116,8 @@ window.ChatNetwork = (function() {
           if (R) R.clearChat();
         } else if (data.type === 'widgets_config_updated' && data.config?.chat) {
           if (data.config.chat.shortcuts && P) P.setShortcuts(data.config.chat.shortcuts);
-          if (data.config.chat.styles && S) S.applyChatConfig(data.config.chat.styles);
+          const s = resolveChatStyles(data.config.chat);
+          if (s && S) S.applyChatConfig(s);
         } else if (data.type === 'sub' || data.type === 'raid') {
           if (window.ParticleEngine) window.ParticleEngine.explode('⭐', 40);
         } else if (data.type === 'follow') {

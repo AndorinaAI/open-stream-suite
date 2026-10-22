@@ -1,0 +1,19 @@
+{
+  "id": "crimson_esport",
+  "packId": "Gamer_Pro_Pack",
+  "name": "Crimson Esport",
+  "badge": "01 // CRIMSON",
+  "accentCyan": "#EF4444",
+  "accentOrange": "#EAB308",
+  "bgDark": "#0B0C10",
+  "textLight": "#F8FAFC",
+  "panelBg": "#1A171E",
+  "textDim": "#94A3B8",
+  "fontPrimary": "var(--font-tech)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 85,
+  "borderStyle": "chamfer",
+  "desc": "Rojo agresivo de competición con destellos dorados de victoria.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}
