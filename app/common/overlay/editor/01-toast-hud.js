@@ -273,10 +273,23 @@ window.OSSEditor = window.OSSEditor || {};
           <option value="">🎯 Ir a Texto...</option>
         </select>
 
-        <div style="display:flex; align-items:center; gap:3px;">
+        <!-- 1. Selector de Forma Física de Escena -->
+        <div style="display:flex; align-items:center; gap:3px;" title="Forma física y estética de marcos, paneles y accesorios">
+          <span style="color:#8B949E; font-size:10px;">📐</span>
+          <select class="hud-select" id="hud-shape-select" style="max-width:130px; font-size:10px;">
+            <option value="original">📐 Forma: Original</option>
+            <option value="cozy">☕ Forma: Cozy Polaroid</option>
+            <option value="gamer">🎮 Forma: Gamer 45° HUD</option>
+            <option value="maker">🛠️ Forma: Maker CAD</option>
+            <option value="openstream">⚡ Forma: OpenStream Glass</option>
+          </select>
+        </div>
+
+        <!-- 2. Selector de Paleta de Color -->
+        <div style="display:flex; align-items:center; gap:3px;" title="Paleta de colores del tema">
           <span style="color:#8B949E; font-size:10px;">🎨</span>
-          <select class="hud-select" id="hud-theme-select">
-            <option value="">Cargando estilos...</option>
+          <select class="hud-select" id="hud-theme-select" style="max-width:145px; font-size:10px;">
+            <option value="">Cargando colores...</option>
           </select>
         </div>
 

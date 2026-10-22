@@ -283,9 +283,47 @@ body[data-theme-archetype="cozy"] .camera-aux::before {
   transform: translateX(-50%) rotate(1.5deg) !important;
 }
 
-/* Ocultar cinta washi tape si el tema activo no es Cozy */
-body:not([data-theme-archetype="cozy"]):not([data-pack="cozy"]) .washi-tape,
-body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .washi-tape {
+/* ====================================================================
+   RESETEOS Y NORMALIZACIÓN CRUZADA ENTRE PACKS (CROSS-PACK RESETS)
+   Garantiza que al cambiar entre estéticas no queden residuos visuales
+   ==================================================================== */
+
+/* Si la forma no es Cozy, resetea la caja Polaroid para que no doble-envuelva los visores */
+body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-frame {
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  outline: none !important;
+}
+
+body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-footer,
+body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .washi-tape,
+body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .steam-dot,
+body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-handwritten,
+body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-channel {
+  display: none !important;
+}
+
+/* Si la forma no es Gamer, oculta retículas y tags tácticos */
+body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .reticle-tl,
+body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .reticle-br,
+body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .cam-header-tag,
+body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .cam-footer-tag,
+body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .live-match-chip {
+  display: none !important;
+}
+
+/* Si la forma no es Maker, oculta esquinas técnicas y marcas de calibración CAD */
+body[data-theme-archetype]:not([data-theme-archetype="maker"]) .frame-corner-tr,
+body[data-theme-archetype]:not([data-theme-archetype="maker"]) .frame-corner-bl,
+body[data-theme-archetype]:not([data-theme-archetype="maker"]) .reg-mark {
+  display: none !important;
+}
+
+/* Si la forma no es OpenStream, oculta badges de estudio */
+body[data-theme-archetype]:not([data-theme-archetype="openstream"]) .cam-badge-studio {
   display: none !important;
 }
 

@@ -179,6 +179,7 @@ window.OSSEditor = window.OSSEditor || {};
   }
 
   function setupThemeSelector(hud, sceneKey) {
+    const shapeSelect = hud.querySelector('#hud-shape-select');
     const themeSelect = hud.querySelector('#hud-theme-select');
     if (!themeSelect) return;
 
@@ -190,6 +191,44 @@ window.OSSEditor = window.OSSEditor || {};
       return 'maker';
     }
 
+    const currentUrl = new URL(window.location.href);
+
+    // 1. Configuración del Selector de Forma Física de Escena
+    if (shapeSelect) {
+      const urlShape = currentUrl.searchParams.get('shape');
+      const activeShape = urlShape || document.body.getAttribute('data-theme-archetype') || 'original';
+      shapeSelect.value = activeShape;
+
+      shapeSelect.addEventListener('change', () => {
+        const selectedShape = shapeSelect.value;
+        const url = new URL(window.location.href);
+
+        if (selectedShape === 'original') {
+          url.searchParams.delete('shape');
+        } else {
+          url.searchParams.set('shape', selectedShape);
+        }
+        window.history.replaceState({}, '', url.toString());
+
+        if (typeof window.applyActiveShapeToBody === 'function') {
+          window.applyActiveShapeToBody(selectedShape);
+        } else {
+          document.body.setAttribute('data-theme-archetype', selectedShape);
+        }
+
+        if (sceneKey) {
+          fetch('/api/themes/overlay-assignment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ overlayKey: sceneKey, shapeId: selectedShape })
+          }).catch(() => {});
+        }
+
+        window.OSSEditor.showHudToast(`📐 Forma de escena cambiada a: ${selectedShape}`);
+      });
+    }
+
+    // 2. Configuración del Selector de Paleta de Color
     fetch('/api/themes/packs')
       .then(r => r.ok ? r.json() : null)
       .then(data => {
@@ -197,7 +236,7 @@ window.OSSEditor = window.OSSEditor || {};
         const currentTheme = document.body.getAttribute('data-theme') || data.activeTheme || getDefaultThemeForScene();
         const defaultTheme = getDefaultThemeForScene();
 
-        let html = `<option value="__default__" style="font-weight:700;">🔄 Tema Original de la Escena (${defaultTheme})</option>`;
+        let html = `<option value="__default__" style="font-weight:700;">🔄 Color Original (${defaultTheme})</option>`;
         data.packs.forEach(p => {
           html += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
           (p.themes || []).forEach(t => {
@@ -209,6 +248,11 @@ window.OSSEditor = window.OSSEditor || {};
         if (currentTheme) {
           themeSelect.value = currentTheme;
         }
+
+        // Si el servidor guardó una forma específica para esta escena, sincronizar selector
+        if (shapeSelect && data.overlayShapes && sceneKey && data.overlayShapes[sceneKey]) {
+          shapeSelect.value = data.overlayShapes[sceneKey];
+        }
       })
       .catch(() => {});
 
@@ -216,16 +260,15 @@ window.OSSEditor = window.OSSEditor || {};
       let selected = themeSelect.value;
       if (!selected) return;
 
-      const currentUrl = new URL(window.location.href);
+      const url = new URL(window.location.href);
 
       if (selected === '__default__') {
         selected = getDefaultThemeForScene();
-        // Limpiar el parámetro de la URL
-        currentUrl.searchParams.delete('theme');
-        window.history.replaceState({}, '', currentUrl.toString());
+        url.searchParams.delete('theme');
+        window.history.replaceState({}, '', url.toString());
 
         if (typeof window.applyActiveThemeToBody === 'function') {
-          window.applyActiveThemeToBody(selected);
+          window.applyActiveThemeToBody(selected, false);
         } else {
           document.body.setAttribute('data-theme', selected);
         }
@@ -239,17 +282,15 @@ window.OSSEditor = window.OSSEditor || {};
         }
 
         themeSelect.value = selected;
-        window.OSSEditor.showHudToast(`🔄 Escena restaurada a su tema original: ${selected}`);
+        window.OSSEditor.showHudToast(`🔄 Color restaurado al original: ${selected}`);
         return;
       }
 
-      // Actualizar el parámetro en la URL dinámicamente
-      currentUrl.searchParams.set('theme', selected);
-      window.history.replaceState({}, '', currentUrl.toString());
+      url.searchParams.set('theme', selected);
+      window.history.replaceState({}, '', url.toString());
 
-      // Aplicar tema completo con su arquetipo
       if (typeof window.applyActiveThemeToBody === 'function') {
-        window.applyActiveThemeToBody(selected);
+        window.applyActiveThemeToBody(selected, false);
       } else {
         document.body.setAttribute('data-theme', selected);
       }
@@ -262,7 +303,7 @@ window.OSSEditor = window.OSSEditor || {};
         }).catch(() => {});
       }
 
-      window.OSSEditor.showHudToast(`🎨 Estilo aplicado a esta escena: ${selected}`);
+      window.OSSEditor.showHudToast(`🎨 Color cambiado a: ${selected}`);
     });
   }
 

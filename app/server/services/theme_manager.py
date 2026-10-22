@@ -251,7 +251,8 @@ def get_all_packs_and_themes():
         "packs": packs,
         "activePack": active_pack,
         "activeTheme": active_theme,
-        "overlayThemes": state.get("overlayThemes", dict(DEFAULT_OVERLAY_THEMES))
+        "overlayThemes": state.get("overlayThemes", dict(DEFAULT_OVERLAY_THEMES)),
+        "overlayShapes": state.get("overlayShapes", {})
     }
 
 # ====================================================================
