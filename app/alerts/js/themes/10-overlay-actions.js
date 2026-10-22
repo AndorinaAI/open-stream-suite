@@ -22,9 +22,15 @@ function buildSceneCardHtml(rawS) {
 
   return `
     <div class="dash-card theme-card-rich" style="border-top: 3px solid ${isModified ? '#FF783F' : 'var(--color-accent-cyan)'}; margin-bottom: 0;">
-      <div class="card-header-bar">
+      <div class="card-header-bar" style="display: flex; justify-content: space-between; align-items: center;">
         <span class="card-header-title">${s.badge}</span>
-        <span style="font-family: var(--font-tech); font-size: 10px; color: var(--color-accent-cyan);">1920×1080</span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-family: var(--font-tech); font-size: 10px; color: var(--color-accent-cyan);">1920×1080</span>
+          <label style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; cursor: pointer; background: rgba(87, 214, 196, 0.12); padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.35); color: var(--color-accent-cyan);" title="Marcar este overlay para añadir o crear un Pack de Fusión">
+            <input type="checkbox" class="cb-fusion-scene-picker" data-key="${s.key}" onchange="toggleSceneForFusionSelection('${s.key}', this.checked)" ${window.selectedFusionScenes && window.selectedFusionScenes.has(s.key) ? 'checked' : ''} style="cursor: pointer; width: 13px; height: 13px; accent-color: var(--color-accent-cyan); margin: 0;">
+            <span style="font-weight: 800;">⚡ Fusión</span>
+          </label>
+        </div>
       </div>
 
       <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">

@@ -1393,6 +1393,21 @@
     "toast_theme_error": "Error applying batch style",
     "toast_saved": "✓ Fusion saved successfully",
     "confirm_delete": "Are you sure you want to delete the fusion \"{name}\"?",
-    "toast_deleted": "🗑️ Fusion \"{name}\" deleted"
+    "toast_deleted": "🗑️ Fusion \"{name}\" deleted",
+    "floating_selected": "{count} OVERLAYS SELECTED",
+    "btn_create_from_selected": "➕ Create Fusion Pack from Selected",
+    "btn_add_to_existing": "📥 Add to Existing Fusion",
+    "btn_batch_style_selected": "🎨 Batch Style",
+    "btn_clear_selection": "✕ Deselect",
+    "modal_add_title": "📥 ADD SCENES TO EXISTING FUSION",
+    "label_choose_fusion": "Choose the Fusion to add selected scenes to:",
+    "btn_confirm_add": "📥 Add Selected Scenes",
+    "toast_added_to_fusion": "✓ {count} scenes added to fusion \"{name}\"",
+    "toast_batch_applied_selected": "✓ Style \"{theme}\" applied to {count} selected overlays",
+    "btn_select_all_fusion": "☑️ Select all for Fusion",
+    "btn_deselect_all_fusion": "☐ Deselect Fusion",
+    "btn_customize_pack_styles": "🎨 Customize Styles of this Pack →",
+    "css_library_info_title": "🎨 PACKS LIBRARY & BASE CSS EDITOR",
+    "css_library_info_desc": "What does this editor do? This is where the <b>active definition</b> of each visual style is configured (colors, physical frames, geometric borders, clip-path cuts, and typography). Whatever you modify and save here <b>becomes the active live design</b> for all overlays using this theme. The <b>'Restore Original'</b> button will always let you restore the clean factory default version from Open Stream Suite."
   }
 }

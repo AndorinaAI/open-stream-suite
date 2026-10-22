@@ -1393,6 +1393,21 @@
     "toast_theme_error": "Error aplicando estilo en lote",
     "toast_saved": "✓ Fusión guardada correctamente",
     "confirm_delete": "¿Seguro que deseas eliminar la fusión \"{name}\"?",
-    "toast_deleted": "🗑️ Fusión \"{name}\" eliminada"
+    "toast_deleted": "🗑️ Fusión \"{name}\" eliminada",
+    "floating_selected": "{count} OVERLAYS SELECCIONADOS",
+    "btn_create_from_selected": "➕ Crear Pack de Fusión con Seleccionados",
+    "btn_add_to_existing": "📥 Añadir a Fusión Existente",
+    "btn_batch_style_selected": "🎨 Estilo en Lote",
+    "btn_clear_selection": "✕ Desmarcar",
+    "modal_add_title": "📥 AÑADIR ESCENAS A FUSIÓN EXISTENTE",
+    "label_choose_fusion": "Elige la Fusión donde añadir las escenas seleccionadas:",
+    "btn_confirm_add": "📥 Añadir Escenas Seleccionadas",
+    "toast_added_to_fusion": "✓ {count} escenas añadidas a la fusión \"{name}\"",
+    "toast_batch_applied_selected": "✓ Estilo \"{theme}\" aplicado a {count} overlays seleccionados",
+    "btn_select_all_fusion": "☑️ Marcar todos para Fusión",
+    "btn_deselect_all_fusion": "☐ Desmarcar Fusión",
+    "btn_customize_pack_styles": "🎨 Personalizar Estilos de este Pack →",
+    "css_library_info_title": "🎨 BIBLIOTECA DE PACKS & EDITOR BASE DE CSS",
+    "css_library_info_desc": "¿Qué hace este editor? Aquí se define la <b>apariencia activa</b> de cada estilo (colores, marcos físicos, bordes geométricos, recortes clip-path y fuentes). Lo que modifiques y guardes aquí <b>se convierte en el nuevo diseño en vivo</b> para todas las overlays que usen este tema. El botón <b>'Restablecer Original'</b> siempre te permitirá recuperar el archivo de fábrica original de Open Stream Suite."
   }
 }

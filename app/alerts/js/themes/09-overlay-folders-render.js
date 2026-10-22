@@ -68,6 +68,9 @@ function renderOverlayFolders() {
     if (scenesGrid) {
       scenesGrid.innerHTML = scenesInFolder.map(s => buildSceneCardHtml(s)).join('');
     }
+    if (typeof updateFolderSelectAllButton === 'function') {
+      updateFolderSelectAllButton();
+    }
     if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
       window.i18n.applyTranslations(detailsView);
     }
