@@ -1,5 +1,5 @@
 
-const OVERLAY_FOLDERS = [
+var OVERLAY_FOLDERS = window.OVERLAY_FOLDERS || [
   {
     id: 'maker_theme_pack',
     packId: 'Maker_Theme_Pack',
@@ -100,6 +100,6 @@ const OVERLAY_FOLDERS = [
   }
 ];
 
-let currentOpenOverlayFolderId = null;
-let currentFolderSubFilter = 'all';
 window.OVERLAY_FOLDERS = OVERLAY_FOLDERS;
+var currentOpenOverlayFolderId = window.currentOpenOverlayFolderId || null;
+var currentFolderSubFilter = window.currentFolderSubFilter || 'all';
