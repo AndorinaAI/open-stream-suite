@@ -23,6 +23,7 @@ from server.routes.widgets_routes import register_widgets_routes
 from server.routes.webhooks_routes import register_webhooks_routes
 from server.routes.alerts_routes import register_alerts_routes
 from server.routes.themes_routes import register_themes_routes
+from server.routes.fusions_routes import register_fusions_routes
 from server.routes.overlay_routes import register_overlay_routes
 from server.routes.deck_routes import register_deck_routes
 from server.routes.updates_routes import register_updates_routes
@@ -225,6 +226,9 @@ def create_app():
 
     # API de Temas Modulares y Packs
     register_themes_routes(app)
+
+    # API de Fusiones (Fusions) de Overlays
+    register_fusions_routes(app)
 
     # API de Textos de Overlays y Escenas
     register_overlay_routes(app)

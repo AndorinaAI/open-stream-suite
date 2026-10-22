@@ -9,4 +9,18 @@ body[data-theme="latte_caramel"],
   --color-border-cyan: rgba(245, 158, 11, 0.35);
   --color-border-cyan-bright: #F59E0B;
   --theme-glow: 0 0 14px rgba(245, 158, 11, 0.4);
+  --frame-radius: 24px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 14px 36px rgba(24, 20, 17, 0.5);
+  --frame-corner-display: none;
+  --panel-radius: 20px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 18px;
+  --header-clip-path: none;
 }

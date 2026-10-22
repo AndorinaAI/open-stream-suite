@@ -9,4 +9,18 @@ body[data-theme="nordic_twilight"],
   --color-border-cyan: rgba(56, 189, 248, 0.3);
   --color-border-cyan-bright: #38BDF8;
   --theme-glow: 0 0 12px rgba(56, 189, 248, 0.35);
+  --frame-radius: 20px;
+  --frame-border-width: 1.5px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 12px 32px rgba(15, 20, 28, 0.6);
+  --frame-corner-display: none;
+  --panel-radius: 16px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(18px);
+  --panel-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 16px;
+  --header-clip-path: none;
 }

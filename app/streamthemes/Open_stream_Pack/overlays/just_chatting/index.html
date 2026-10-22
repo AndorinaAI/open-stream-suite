@@ -27,7 +27,7 @@
       border: 1px solid var(--color-border-cyan);
       border-radius: var(--radius-md);
       padding: 12px 24px;
-      backdrop-filter: blur(12px);
+      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
     }
     .stream-tag {
       font-weight: 800;
@@ -54,8 +54,7 @@
     }
     .cam-box {
       flex: 3;
-      border: 2px solid var(--color-border-cyan-bright);
-      border-radius: var(--radius-md);
+      border: 2px solid var(--color-border-cyan-bright); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
       background: rgba(0,0,0,0.25);
       position: relative;
       box-shadow: var(--theme-glow);
@@ -77,7 +76,7 @@
       border: 1px solid var(--color-border-cyan);
       border-radius: var(--radius-md);
       background: var(--color-panel-bg-trans);
-      backdrop-filter: blur(8px);
+      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
       padding: 16px;
       display: flex;
       flex-direction: column;

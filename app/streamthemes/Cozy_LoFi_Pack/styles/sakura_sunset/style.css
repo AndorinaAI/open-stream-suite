@@ -9,4 +9,18 @@ body[data-theme="sakura_sunset"],
   --color-border-cyan: rgba(251, 113, 133, 0.35);
   --color-border-cyan-bright: #FB7185;
   --theme-glow: 0 0 14px rgba(251, 113, 133, 0.4);
+  --frame-radius: 26px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 14px 34px rgba(251, 113, 133, 0.35);
+  --frame-corner-display: none;
+  --panel-radius: 22px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 12px 32px rgba(42, 28, 37, 0.4);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 20px;
+  --header-clip-path: none;
 }

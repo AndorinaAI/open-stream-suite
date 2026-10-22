@@ -16,7 +16,6 @@ function renderOverlayFolders() {
 
     if (foldersView) foldersView.style.display = 'none';
     if (detailsView) detailsView.style.display = 'block';
-    if (btnBack) btnBack.style.display = 'inline-flex';
 
     const crumbRoot = (window.i18n && window.i18n.tr('themes.folder_crumb_root')) || '📁 Carpetas de Overlays';
     if (breadcrumbs) {

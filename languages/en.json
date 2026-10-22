@@ -912,7 +912,8 @@
     "toast_all_themes_restored": "↺ All overlays have been restored to their factory original styles",
     "toast_style_assigned": "✓ Style \"{name}\" assigned to scene",
     "toast_url_copied": "📋 OBS URL copied: {url}",
-    "alert_url_copied": "URL copied to clipboard:\n{url}\n\nPaste it into OBS Studio as a Browser Source (1920×1080)."
+    "alert_url_copied": "URL copied to clipboard:\n{url}\n\nPaste it into OBS Studio as a Browser Source (1920×1080).",
+    "tab_fusions": "⚡ Fusions (Custom Packs)"
   },
   "scene_catalog": {
     "maker-desk": {
@@ -1367,5 +1368,44 @@
     "sim_default_msg": "Great stream! Keep it up!",
     "sim_default_user": "AndorinaDev",
     "btn_fire_obs": "🚀 FIRE ALERT IN OBS NOW"
+  },
+  "fusions": {
+    "tab_title": "⚡ Overlay Fusions (Custom Packs)",
+    "crumb_fusions": "⚡ Overlay Fusions (Custom Packs)",
+    "btn_new_fusion": "➕ New Fusion",
+    "title_list": "YOUR CUSTOM PACKS AND HYBRID FUSIONS",
+    "badge_total": "{count} ACTIVE FUSIONS",
+    "hint_list": "<b>Fusions</b> allow you to pick your favorite overlays from any pack and group them into a custom hybrid pack. You can <b>apply batch styles</b> to all overlays in your fusion in a single click.",
+    "btn_back_fusions": "⬅️ Back to Fusions",
+    "badge_scenes_in_fusion": "{count} OVERLAYS IN THIS FUSION",
+    "label_batch_style": "🎨 Style for all in Fusion:",
+    "btn_apply_batch": "✨ Apply to Batch",
+    "btn_edit_scenes": "✏️ Modify Scenes",
+    "modal_title": "⚡ MANAGE OVERLAY FUSION",
+    "modal_new_title": "⚡ Create New Overlay Fusion",
+    "modal_edit_title": "✏️ Edit Overlay Fusion",
+    "label_icon": "Icon:",
+    "label_name": "Fusion Name:",
+    "placeholder_name": "e.g. My Hybrid Gaming + Maker Stream",
+    "label_desc": "Description (Optional):",
+    "placeholder_desc": "e.g. Setups for weekends and special broadcasts",
+    "label_default_theme": "Default Style for Batch:",
+    "label_select_scenes": "SELECT SCENES THAT COMPOSE THIS FUSION:",
+    "btn_save_fusion": "💾 Save Fusion",
+    "empty_title": "You have not created any Fusions yet",
+    "empty_desc": "Create a Fusion to combine scenes from different packs (e.g. Maker workshop camera, Cozy chatting screen, and Gamer HUD) and manage them together.",
+    "btn_create_first": "➕ Create My First Fusion",
+    "card_scene_count": "{count} COMBINED OVERLAYS",
+    "btn_open_fusion": "⚡ Open Fusion & Manage →",
+    "btn_batch_style": "🎨 Batch Style",
+    "title_edit": "Edit this fusion",
+    "title_delete": "Delete this fusion",
+    "no_scenes_warning": "This fusion does not have any overlays selected.",
+    "btn_select_scenes": "➕ Select Overlays for this Fusion",
+    "toast_theme_applied": "✓ Style applied to entire fusion batch",
+    "toast_theme_error": "Error applying batch style",
+    "toast_saved": "✓ Fusion saved successfully",
+    "confirm_delete": "Are you sure you want to delete the fusion \"{name}\"?",
+    "toast_deleted": "🗑️ Fusion \"{name}\" deleted"
   }
 }

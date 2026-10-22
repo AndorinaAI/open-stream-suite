@@ -9,4 +9,18 @@ body[data-theme="lavender_dream"],
   --color-border-cyan: rgba(192, 132, 252, 0.35);
   --color-border-cyan-bright: #C084FC;
   --theme-glow: 0 0 14px rgba(192, 132, 252, 0.4);
+  --frame-radius: 22px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 12px 32px rgba(192, 132, 252, 0.3);
+  --frame-corner-display: none;
+  --panel-radius: 18px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 10px 28px rgba(36, 27, 51, 0.4);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 18px;
+  --header-clip-path: none;
 }

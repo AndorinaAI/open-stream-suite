@@ -333,6 +333,48 @@ const API = {
       body: JSON.stringify({ texts })
     });
     return res.json();
+  },
+
+  // API de Fusiones (Fusions) de Overlays
+  async getFusions() {
+    const res = await fetch('/api/fusions');
+    if (!res.ok) throw new Error(`HTTP ${res.status} al cargar fusiones`);
+    return res.json();
+  },
+
+  async getFusion(id) {
+    const res = await fetch(`/api/fusions/${encodeURIComponent(id)}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status} al obtener fusión`);
+    return res.json();
+  },
+
+  async saveFusion(fusionData) {
+    const res = await fetch('/api/fusions', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(fusionData)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al guardar fusión`);
+    return res.json();
+  },
+
+  async deleteFusion(id) {
+    const res = await fetch(`/api/fusions/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al eliminar fusión`);
+    return res.json();
+  },
+
+  async applyFusionTheme(id, themeId) {
+    const res = await fetch(`/api/fusions/${encodeURIComponent(id)}/apply-theme`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ themeId })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al aplicar tema a la fusión`);
+    return res.json();
   }
 };
 

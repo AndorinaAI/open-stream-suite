@@ -14,11 +14,14 @@
   justify-content: space-between;
   padding: 0 16px;
   background: var(--color-panel-bg-trans);
-  backdrop-filter: blur(8px);
+  backdrop-filter: var(--panel-backdrop, blur(8px));
   border: 1px solid var(--color-border-dim);
   border-left: 3px solid var(--color-accent-cyan);
-  border-radius: var(--radius-sm);
+  border-radius: var(--header-radius, var(--radius-sm));
+  clip-path: var(--header-clip-path, none);
+  box-shadow: var(--panel-shadow, none);
   z-index: 100;
+  transition: var(--transition-smooth);
 }
 
 .scene-header.theme-orange {
@@ -43,7 +46,8 @@
   color: var(--color-accent-cyan);
   border: 1px solid var(--color-border-cyan);
   padding: 6px 14px;
-  border-radius: 4px;
+  border-radius: var(--badge-radius, 4px);
+  clip-path: var(--badge-clip-path, none);
   font-family: var(--font-tech);
   font-size: 13px;
   font-weight: 700;
@@ -157,19 +161,24 @@
   position: absolute;
   background: transparent;
   pointer-events: none;
-  border: 1px solid var(--color-border-cyan);
-  border-radius: var(--radius-sm);
-  box-shadow: inset 0 0 12px rgba(87, 214, 196, 0.04);
+  border: var(--frame-border-width, 1px) var(--frame-border-style, solid) var(--color-border-cyan);
+  border-radius: var(--frame-radius, var(--radius-sm));
+  clip-path: var(--frame-clip-path, none);
+  box-shadow: var(--frame-shadow, inset 0 0 12px rgba(87, 214, 196, 0.04));
+  transition: var(--transition-smooth);
 }
 
 .camera-frame.theme-orange {
   border-color: var(--color-border-orange);
-  box-shadow: inset 0 0 12px rgba(255, 120, 63, 0.04);
+  box-shadow: var(--frame-shadow, inset 0 0 12px rgba(255, 120, 63, 0.04));
 }
 
-/* Esquinas técnicas decorativas */
+/* Esquinas técnicas decorativas (se ocultan automáticamente en temas orgánicos o limpios) */
 .camera-frame::before,
-.camera-frame::after {
+.camera-frame::after,
+.frame-corner-tr,
+.frame-corner-bl {
+  display: var(--frame-corner-display, block);
   content: '';
   position: absolute;
   width: 14px;

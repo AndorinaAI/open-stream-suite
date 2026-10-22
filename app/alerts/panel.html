@@ -1739,6 +1739,9 @@
           <button id="tab-btn-overlays" class="media-btn-tool active" onclick="switchThemesMainTab('overlays')" style="font-size: 12px; font-weight: 700; padding: 8px 16px;" data-i18n="themes.tab_overlays">
             🎬 Tus 4 Packs y Escenas en OBS (Textos y Estilos)
           </button>
+          <button id="tab-btn-fusions" class="media-btn-tool" onclick="switchThemesMainTab('fusions')" style="font-size: 12px; font-weight: 700; padding: 8px 16px;" data-i18n="themes.tab_fusions">
+            ⚡ Fusiones (Packs Personalizados)
+          </button>
           <button id="tab-btn-themes" class="media-btn-tool" onclick="switchThemesMainTab('themes')" style="font-size: 12px; font-weight: 700; padding: 8px 16px;" data-i18n="themes.tab_themes">
             📁 Biblioteca de Packs y Editor CSS
           </button>
@@ -1789,9 +1792,6 @@
         <!-- Barra de Navegación de Carpetas y Acciones Globales (Sticky Siempre Visible) -->
         <div class="media-toolbar" style="position: sticky; top: 0; z-index: 20; margin-bottom: 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: rgba(14, 18, 24, 0.96); backdrop-filter: blur(10px); border: 1px solid rgba(87, 214, 196, 0.35); padding: 8px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
           <div class="media-toolbar-group" style="align-items: center;">
-            <button id="overlays-btn-back-folders" class="media-btn-tool" onclick="showOverlayFoldersView()" style="display: none; background: rgba(87, 214, 196, 0.2); border-color: var(--color-accent-cyan); color: var(--color-accent-cyan); font-weight: 800;" data-i18n="themes.btn_back_folders">
-              ⬅️ Volver a Carpetas
-            </button>
             <div id="overlays-breadcrumbs" class="media-breadcrumbs">
               <span class="crumb-item active" onclick="showOverlayFoldersView()" data-i18n="themes.crumb_stream_folders">📁 Carpetas de Actividades del Stream</span>
             </div>
@@ -2209,6 +2209,81 @@
       </div>
     </div>
 
+    <!-- ============================================================ -->
+    <!-- PESTAÑA 3: FUSIONES (FUSIONS) DE OVERLAYS - PACKS HÍBRIDOS     -->
+    <!-- ============================================================ -->
+    <div id="tab-view-fusions" style="display: none;">
+      <!-- Barra de Herramientas de Fusiones -->
+      <div class="media-toolbar" style="margin-bottom: 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: rgba(14, 18, 24, 0.96); backdrop-filter: blur(10px); border: 1px solid rgba(87, 214, 196, 0.35); padding: 8px 14px;">
+        <div class="media-toolbar-group" style="align-items: center;">
+          <div class="media-breadcrumbs">
+            <span class="crumb-item active" onclick="showFusionsListView()" data-i18n="fusions.crumb_fusions">⚡ Fusiones de Overlays (Packs Personalizados)</span>
+          </div>
+        </div>
+        <div class="media-toolbar-group" style="align-items: center; gap: 8px;">
+          <button type="button" class="btn-action-primary" onclick="openNewFusionModal()" style="font-size: 11px; padding: 6px 14px; font-weight: 800;" data-i18n="fusions.btn_new_fusion">
+            ➕ Nueva Fusión
+          </button>
+        </div>
+      </div>
+
+      <!-- Vista 1: Lista de Fusiones -->
+      <div id="fusions-list-view">
+        <div class="card-header-bar">
+          <span class="card-header-title" data-i18n="fusions.title_list">TUS PACKS PERSONALIZADOS Y FUSIONES HÍBRIDAS</span>
+          <span id="fusions-total-count-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="fusions.badge_total">1 FUSIÓN</span>
+        </div>
+        <div style="font-size: 12px; color: var(--color-text-dim); margin-top: 4px; margin-bottom: 16px;" data-i18n="fusions.hint_list">
+          Las <b>Fusiones</b> te permiten seleccionar tus overlays favoritos de cualquier pack y agruparlos en un pack personalizado. Puedes <b>aplicar estilos en lote</b> a todos los overlays de tu fusión en un solo clic.
+        </div>
+        <div id="fusions-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 18px;">
+          <!-- Renderizado dinámicamente por 13-fusions.js -->
+        </div>
+      </div>
+
+      <!-- Vista 2: Detalle de la Fusión Abierta -->
+      <div id="fusion-details-view" style="display: none;">
+        <div class="dash-card" style="margin-bottom: 16px; padding: 16px 20px; background: rgba(14, 18, 24, 0.95); border: 1.5px solid rgba(87, 214, 196, 0.4); border-radius: var(--radius-sm); box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <button type="button" class="btn-action-test" onclick="showFusionsListView()" style="font-size: 12px; padding: 6px 12px; font-weight: 800; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); background: rgba(87, 214, 196, 0.15);" title="Volver a la lista de fusiones" data-i18n="fusions.btn_back_fusions">
+                ⬅️ Volver a Fusiones
+              </button>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span id="fusion-detail-icon" style="font-size: 24px;">⚡</span>
+                  <span id="fusion-detail-name" style="font-size: 18px; font-weight: 800; color: #FFFFFF;">Mi Fusión</span>
+                  <span id="fusion-detail-badge" class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan); font-weight: 800;">4 OVERLAYS</span>
+                </div>
+                <div id="fusion-detail-desc" style="font-size: 12px; color: var(--color-text-dim); margin-top: 3px;">
+                  Descripción de la fusión.
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.35);">
+                <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="fusions.label_batch_style">🎨 Estilo a toda la Fusión:</span>
+                <select id="fusion-batch-theme-select" class="monitor-select" style="font-size: 11px; padding: 4px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
+                  <!-- Opciones de temas -->
+                </select>
+                <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="applyBatchThemeToCurrentFusion()" data-i18n="fusions.btn_apply_batch">
+                  ✨ Aplicar en Lote
+                </button>
+              </div>
+              <button type="button" class="btn-action-test" onclick="openEditFusionModal(currentOpenFusionId)" style="font-size: 11px; padding: 6px 12px;" data-i18n="fusions.btn_edit_scenes">
+                ✏️ Modificar Escenas
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cuadrícula de Escenas en la Fusión -->
+        <div id="fusion-scenes-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </div>
+    </div>
+
     <!-- Modal Crear Nuevo Pack de Temas -->
     <div id="theme-new-pack-modal" class="media-preview-backdrop" onclick="if(event.target === this) closeNewPackModal()">
       <div class="media-preview-dialog" style="max-width: 440px;">
@@ -2253,6 +2328,52 @@
             <button class="btn-action-primary" onclick="submitCreateTheme()" data-i18n="themes.btn_create_theme">Crear y Abrir en Editor</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Modal Editor/Creación de Fusión de Overlays -->
+    <div id="modal-fusion-editor" class="media-preview-backdrop" onclick="if(event.target === this) closeFusionModal()" style="display: none;">
+      <div class="media-preview-dialog" style="max-width: 680px; width: 92%; max-height: 90vh; display: flex; flex-direction: column; background: #12161C; border: 1.5px solid var(--color-accent-cyan); border-radius: 8px; box-shadow: 0 12px 40px rgba(0,0,0,0.7); overflow: hidden;">
+        <div class="media-preview-header" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: rgba(14, 18, 24, 0.95); border-bottom: 1px solid rgba(87, 214, 196, 0.25);">
+          <div id="fusion-modal-title" style="font-weight: 800; font-size: 14px; color: #FFFFFF;" data-i18n="fusions.modal_title">⚡ GESTIONAR FUSIÓN DE OVERLAYS</div>
+          <button type="button" class="btn-action-test" onclick="closeFusionModal()" style="padding: 4px 10px;">✕</button>
+        </div>
+        <form id="form-fusion-editor" onsubmit="saveFusionFromModal(event)" style="display: flex; flex-direction: column; overflow-y: auto; padding: 18px 22px; gap: 14px;">
+          <input type="hidden" id="fusion-modal-id" value="">
+          
+          <div style="display: grid; grid-template-columns: 80px 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_icon">Icono:</label>
+              <input type="text" id="fusion-modal-icon" class="form-input" value="⚡" style="text-align: center; font-size: 20px; padding: 6px;" required>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_name">Nombre de la Fusión:</label>
+              <input type="text" id="fusion-modal-name" class="form-input" placeholder="ej. Mi Stream Híbrido Gaming + Maker" required data-i18n-placeholder="fusions.placeholder_name">
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_desc">Descripción (Opcional):</label>
+            <input type="text" id="fusion-modal-desc" class="form-input" placeholder="ej. Setups para fin de semana y directos especiales" data-i18n-placeholder="fusions.placeholder_desc">
+          </div>
+
+          <div>
+            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_theme">Estilo Predeterminado para el Lote:</label>
+            <select id="fusion-modal-theme" class="monitor-select" style="width: 100%; padding: 6px 10px; font-size: 12px;"></select>
+          </div>
+
+          <div>
+            <label style="font-size: 11px; color: var(--color-accent-cyan); font-weight: 800; display: block; margin-bottom: 6px;" data-i18n="fusions.label_select_scenes">SELECCIONA LAS ESCENAS QUE COMPONEN ESTA FUSIÓN:</label>
+            <div id="fusion-modal-scenes-list" style="max-height: 280px; overflow-y: auto; padding-right: 4px;">
+              <!-- Checkboxes agrupados por Pack -->
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">
+            <button type="button" class="btn-action-test" onclick="closeFusionModal()" data-i18n="common.cancel">Cancelar</button>
+            <button type="submit" class="btn-action-primary" style="padding: 7px 18px; font-weight: 800;" data-i18n="fusions.btn_save_fusion">💾 Guardar Fusión</button>
+          </div>
+        </form>
       </div>
     </div>
     <!-- ============================================================== -->
@@ -3011,6 +3132,7 @@
   <script src="js/themes/09-overlay-folders-render.js?v=50"></script>
   <script src="js/themes/10-overlay-actions.js?v=50"></script>
   <script src="js/themes/11-scene-editor.js?v=50"></script>
+  <script src="js/themes/13-fusions.js?v=50"></script>
   <script src="js/themes/12-exports-init.js?v=50"></script>
   <script src="js/overlay-texts/01-core.js?v=50"></script>
   <script src="js/overlay-texts/02-render.js?v=50"></script>

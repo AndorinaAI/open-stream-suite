@@ -8,4 +8,18 @@ body[data-theme="chill"] {
   --color-border-cyan: rgba(137, 180, 250, 0.4);
   --color-border-cyan-bright: #89B4FA;
   --theme-glow: 0 0 14px rgba(137, 180, 250, 0.4);
+  --frame-radius: 8px;
+  --frame-border-width: 1.5px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --frame-corner-display: none;
+  --panel-radius: 8px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(12px);
+  --panel-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --badge-radius: 6px;
+  --badge-clip-path: none;
+  --header-radius: 6px;
+  --header-clip-path: none;
 }
