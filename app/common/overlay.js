@@ -71,6 +71,11 @@
       ensureScript('icons.js', () => window.OSSIcons).then(injectIcons);
     }
 
+    // 1.05 Inyección del motor de fondos con recorte y apertura de cámaras
+    if (!window.OSSAperture) {
+      ensureScript('backdrop-aperture.js', () => window.OSSAperture);
+    }
+
     // 1.1 Detección de clave de escena para estilos independientes
     function detectCurrentSceneKey() {
       const p = window.location.pathname;
@@ -186,6 +191,8 @@
             syncThemeFromServer();
           } else if (msg.type === 'overlay_texts_update' && msg.texts) {
             applyConfigToDOM(msg.texts);
+          } else if (msg.type === 'overlay_backdrop_change' && msg.backdrop) {
+            if (window.OSSAperture) window.OSSAperture.setBackdrop(msg.backdrop);
           }
         } catch (err) {}
       };

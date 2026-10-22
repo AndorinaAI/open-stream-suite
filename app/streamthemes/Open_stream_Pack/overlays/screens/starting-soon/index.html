@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Pantalla — Empezamos Pronto (Open Stream)</title>
+  <title>Open Stream Suite — Swiss Broadcast Master Control Starting Soon</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
   <style>
@@ -10,177 +10,245 @@
       width: 1920px;
       height: 1080px;
       margin: 0;
-      background: var(--color-bg-dark);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: var(--color-text-light);
-      font-family: var(--font-primary);
-      position: relative;
-      overflow: hidden;
-      padding: 50px 70px;
+      padding: 36px 48px;
       box-sizing: border-box;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+      color: #f8fafc;
     }
-    .pulse-glow {
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, var(--color-accent-cyan) 0%, transparent 70%);
-      opacity: 0.16;
-      animation: pulse 4s infinite alternate;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-    @keyframes pulse {
-      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.1; }
-      100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.22; }
-    }
-    .top-bar {
+
+    /* Swiss Broadcast Header */
+    .broadcast-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
-      z-index: 2;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 28px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
     }
-    .brand-box {
+    .broadcast-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
-    .brand-name {
-      font-size: 24px;
+    .prep-pill {
+      background: #0284c7;
+      color: #fff;
+      font-size: 11px;
       font-weight: 900;
-      color: #FFFFFF;
       letter-spacing: 2px;
-    }
-    .brand-tagline {
-      font-size: 12px;
-      color: var(--color-accent-cyan);
-      font-family: var(--font-tech);
-      letter-spacing: 1px;
-    }
-    .live-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: var(--font-tech);
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--color-accent-orange);
-      background: rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,120,63,0.4);
-      padding: 6px 14px;
-      border-radius: var(--radius-sm);
-    }
-    .center-stage {
-      position: relative;
-      z-index: 2;
+      padding: 4px 12px;
+      border-radius: 4px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      text-align: center;
+      gap: 6px;
+    }
+    .prep-dot {
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      animation: pulse-dot 1.2s infinite;
+    }
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .channel-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    /* Center Stage Layout */
+    .studio-stage {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
       margin: auto 0;
     }
-    .tag-line {
-      font-family: var(--font-tech);
-      font-size: 14px;
-      letter-spacing: 3px;
-      color: var(--color-accent-cyan);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      font-weight: 800;
+    .studio-hero-card {
+      flex: 1.3;
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 48px 56px;
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6);
     }
-    h1.main-stream-title {
-      font-size: 72px;
+    .tagline-pill {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #38bdf8;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .main-stream-title {
+      font-size: 54px;
       font-weight: 900;
-      margin: 0;
-      letter-spacing: 2px;
-      color: #FFFFFF;
+      letter-spacing: -0.5px;
+      margin: 0 0 14px 0;
       line-height: 1.1;
     }
-    .title-cyan-accent {
-      color: var(--color-accent-cyan);
-      text-shadow: var(--theme-glow);
+    .stream-subtitle {
+      font-size: 17px;
+      color: #94a3b8;
+      margin-bottom: 30px;
+      line-height: 1.5;
     }
-    p.stream-subtitle {
-      font-size: 20px;
-      color: var(--color-text-dim);
-      margin: 16px 0 28px 0;
-      max-width: 800px;
+    .starting-countdown {
+      font-size: 72px;
+      font-weight: 900;
+      font-family: monospace;
+      color: #38bdf8;
+      letter-spacing: 4px;
+      margin-bottom: 14px;
     }
-    .tech-progress-bar {
-      width: 640px;
+    .broadcast-progress-bar {
+      width: 100%;
       height: 8px;
-      background: rgba(0,0,0,0.6);
-      border: 1px solid var(--color-border-cyan);
+      background: rgba(255, 255, 255, 0.08);
       border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 16px;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
     }
-    .tech-progress-fill {
+    .broadcast-progress-fill {
       height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-orange));
-      box-shadow: 0 0 12px var(--color-accent-cyan);
+      width: 60%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      border-radius: 4px;
       transition: width 1s linear;
     }
-    .countdown-display {
-      font-family: var(--font-tech);
-      font-size: 48px;
-      font-weight: 900;
-      color: var(--color-accent-cyan);
-      letter-spacing: 4px;
-      text-shadow: 0 0 18px var(--color-accent-cyan);
+
+    /* Side Agenda Preview Card */
+    .studio-side-card {
+      flex: 0.9;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
     }
-    .bottom-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding-top: 16px;
+    .side-card-title {
       font-size: 13px;
-      color: var(--color-text-dim);
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 16px;
+    }
+    .agenda-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+      font-size: 14px;
+    }
+    .agenda-num {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    /* Lower-Third News Ticker */
+    .broadcast-lower-third {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .ticker-tag {
+      background: #0284c7;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      padding: 6px 14px;
+      border-radius: 6px;
+    }
+    .ticker-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      flex: 1;
     }
   </style>
 </head>
-<body data-theme="neon_streamer" data-scene="oss_starting">
-  <div class="pulse-glow"></div>
-
-  <div class="top-bar">
-    <div class="brand-box">
-      <span class="brand-name">OPEN STREAM</span>
-      <span class="brand-tagline">// EMISIÓN EN DIRECTO</span>
+<body data-theme="neon_streamer">
+  <!-- Swiss Broadcast Header -->
+  <header class="broadcast-header">
+    <div class="broadcast-brand">
+      <div class="prep-pill">
+        <span class="prep-dot"></span>
+        <span>STANDBY // CONTROL DE EMISIÓN</span>
+      </div>
+      <div class="channel-title">OPEN STREAM STUDIO CENTRAL</div>
     </div>
-    <div class="live-status">
-      <span>●</span> <span data-text-key="status">TRANSMISIÓN INICIANDO</span>
+    <div style="font-size:12px; font-weight:600; color:#94a3b8; font-family:monospace;">
+      FEED: STUDIO MASTER 1080p60 · SEÑAL TEST OK
     </div>
-  </div>
+  </header>
 
-  <div class="center-stage starting-hero-text">
-    <div class="tag-line">// EN DIRECTO EN BREVES MINUTOS</div>
-    <h1 class="main-stream-title">
-      ENSEGUIDA<br>
-      <span class="title-cyan-accent">ESTAMOS EN DIRECTO</span>
-    </h1>
-    <p class="stream-subtitle">Ajustando cámaras, audio y preparándolo todo para empezar.</p>
-
-    <!-- Barra de progreso sincronizada -->
-    <div class="tech-progress-bar">
-      <div class="tech-progress-fill"></div>
+  <!-- Studio Stage -->
+  <main class="studio-stage">
+    <div class="studio-hero-card">
+      <div class="tagline-pill">PROGRAMACIÓN EN DIRECTO</div>
+      <h1 class="main-stream-title">EMPEZAMOS EN BREVE</h1>
+      <p class="stream-subtitle">Ajustando niveles de audio y enlaces de emisión con los invitados.</p>
+      <div class="starting-countdown">05:00</div>
+      <div class="broadcast-progress-bar">
+        <div class="broadcast-progress-fill"></div>
+      </div>
     </div>
-    <!-- Contador numérico sincronizado -->
-    <div class="countdown-display starting-countdown">05:00</div>
-  </div>
 
-  <div class="bottom-bar">
-    <div class="footer-note">OPEN STREAM SUITE · STREAMING PRO MULTI-ESCENA</div>
-    <div>SÍGUENOS EN REDES: <b style="color:var(--color-text-light);">@MiCanalTwitch</b></div>
-  </div>
+    <!-- Agenda Preview Card -->
+    <aside class="studio-side-card">
+      <div class="side-card-title">ÍNDICE DE LA TRANSMISIÓN</div>
+      <div class="agenda-row">
+        <span class="agenda-num">01</span>
+        <div>Apertura del programa, sumario y titulares del día</div>
+      </div>
+      <div class="agenda-row">
+        <span class="agenda-num">02</span>
+        <div>Mesa de debate central con análisis en profundidad</div>
+      </div>
+      <div class="agenda-row">
+        <span class="agenda-num">03</span>
+        <div>Preguntas de la audiencia en tiempo real y cierre</div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Broadcast Lower-Third Ticker -->
+  <footer class="broadcast-lower-third">
+    <div class="ticker-tag">AVISO</div>
+    <div class="ticker-text">
+      Comprueba el volumen de tus auriculares · El chat ya se encuentra activo para los espectadores
+    </div>
+    <div style="font-size:13px; font-weight:600; color:#94a3b8;">
+      CANAL: <strong style="color:#f8fafc;">@CanalOficial</strong>
+    </div>
+  </footer>
 
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>

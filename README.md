@@ -31,6 +31,12 @@
 - **Centralized Configuration**: Edit streamer channel names, project titles, active development phases, and social links from [`app/config.js`](app/config.js) or via the web control panel.
 - **Modular Themes & Factory Reset**: Complete theme packs in `themes/<pack>/<theme>/` with backup `.default.json` / `.default.css` files allowing 1-click instant factory restoration.
 - **Independent Visual Themes per Scene**: Each OBS Studio scene overlay can wear its own style (Arcade for Gaming, Chill for Just Chatting, Cyberpunk for coding/tech, etc.).
+- **Backdrop Aperture & Cutouts System**: Apply decorative backgrounds, textures, and gradients to your stream overlays with automatic SVG mask cutouts (`<mask id="oss-aperture-mask">`). OBS video sources (webcams, gameplay captures) underneath remain 100% visible and unblocked.
+- **Radical Pack Visual Differentiation**:
+  - ☕ **Cozy Lo-Fi**: Warm, organic, analog aesthetic. **Strictly neon-free**. Soft 28px squircles, Polaroid webcam frames with washi tape, warm paper drop shadows, spinning vinyl player, and Pomodoro focus widgets.
+  - ⚡ **Gamer Pro**: Aggressive tournament esports & tactical HUD. 45° chamfers, target reticles `[+]`, live match telemetry (FPS, Ping, K/D, Streak), real Speedrun Split board with gold/green deltas, victory clutch podium.
+  - 🎙️ **Open Stream**: Swiss broadcast studio neo-glass. Frosted glassmorphism (`blur(24px)`), stereo audio VU meters, `ON AIR` broadcast indicators, lower-third news ticker, and debate agenda cards.
+  - 🛠️ **Maker & Taller**: CAD engineering blueprint and industrial fab lab. Millimeter drafting grid, edge ruler tick marks, registration marks `⌖`, project phases lifecycle bar, 3D printing & plotter telemetry.
 - **Programmed Overlay Logic & Floating Draggable Controls**: Overlays are dynamic broadcast web applications rather than passive templates. They feature centisecond speedrun split timers with live deltas (+/-), millisecond-synchronized Pomodoro countdowns, multi-cam grid switchers, click-cycle victory badges, and floating draggable HUD menus designed never to obstruct gameplay or cameras.
 - **Physical Deck Plugins**: Native integrations in [`plugins/`](plugins/README.en.md) for Elgato Stream Deck, Ajazz AKP05 (10 keys + panoramic touch strip + 4 knobs), Ajazz AKP153/03/846, and OpenDeck (Bitfocus Companion).
 - **Robust Security**: Whitelisted file upload controls, anti path-traversal protection, CORS restricted to localhost/custom domain, and cryptographic local token authentication for mutating requests.

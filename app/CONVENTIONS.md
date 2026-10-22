@@ -215,10 +215,24 @@ El gestor en `alerts/` evolucionará hacia un explorador visual potente:
   - Guardar y exportar presets personalizados de overlays y temas.
 
 ### E. Organización de Overlays y Escenas
-- La carpeta canónica de overlays de stream es `overlays/`, estructurada por carpetas temáticas o de propósito (ej. `maker/`, `print/`, `game/`, `chill/`, `screens/`).
-- El servidor mantiene en `server/routes/static_routes.py` redirecciones automáticas y transparentes desde las rutas históricas `/scenes/...` hacia `/overlays/...` para que cualquier fuente previamente configurada en OBS Studio continúe funcionando sin interrupciones.
+- La carpeta canónica de overlays de stream es `streamthemes/<pack>/overlays/`, estructurada por packs temáticos (`Cozy_LoFi_Pack`, `Gamer_Pro_Pack`, `Open_stream_Pack`, `Maker_Theme_Pack`) y sus carpetas de escena (`screens/`, `just_chatting/`, etc.).
+- El servidor mantiene en `server/routes/static_routes.py` redirecciones automáticas y transparentes desde las rutas históricas `/scenes/...` y `/overlays/...` hacia `/streamthemes/...` para que cualquier fuente previamente configurada en OBS Studio continúe funcionando sin interrupciones.
 
-### F. Temas Modulares, Restauración de Fábrica y Estilos por Overlay
+### F. Sistema de Fondos con Apertura y Recorte Automático (Backdrop Aperture Engine)
+Para permitir que cualquier escena incorpore fondos decorativos (texturas, degradados o imágenes personalizadas) **sin bloquear jamás las fuentes de vídeo o capturas de OBS** situadas detrás de la capa del navegador:
+1. **Motor Central (`app/common/overlay/backdrop-aperture.js`)**:
+   - Inyecta una capa de fondo (`#oss-backdrop-aperture-layer`) con `z-index: 0` y máscara SVG (`mask: url(#oss-aperture-mask)`).
+   - Localiza dinámicamente todos los elementos marcados o reconocidos como visores de cámara y gameplay (`.camera-frame`, `.cam-box`, `.cam-inner-viewport`, `.face-viewport`, `.desk-viewport`, `.stream-frame`, `.pip-cam-box`, `.guest-cam`, `[data-cutout="true"]`).
+   - Genera perforaciones con `fill="#000000"` en la máscara SVG preservando radios de borde (`border-radius`) y cortes poligonales a 45° (`clip-path: polygon(...)`).
+   - Las fuentes de OBS (cámaras de vídeo, capturadoras, ventanas de juegos) permanecen 100% visibles y nítidas a través de los huecos transparentes.
+2. **Diferenciación Visual Radical entre Packs Temáticos**:
+   - **Cozy Lo-Fi**: Estética analógica, cálida y orgánica. **Prohibido el uso de neón**. Marcos tipo Polaroid con cinta washi tape, sombras difusas de papel, esquinas redondeadas suaves (28px), tocadiscos de vinilo y temporizadores Pomodoro.
+   - **Gamer Pro**: Cockpit táctico y torneo esports. Cortes biselados a 45°, retículas `[+]`, telemetría de partida en vivo (FPS, Ping, K/D, Racha), marcadores de Speedrun Splits y podio de victoria MVP.
+   - **Maker & Taller**: Laboratorio de ingeniería y fabricación digital. Cuadrículas CAD milimetradas, marcas de registro `⌖`, barras de fases de proyecto (`01 PLAN -> 02 MONTAJE -> 03 TEST`), telemetría de maquinaria de impresión 3D y plotters.
+   - **Open Stream**: Estudio central broadcast suizo. Neo-glassmorphism esmerilado (`blur(24px)`), vúmetros dinámicos estéreo (VU Meter L/R), indicadores de emisión `ON AIR`, cintillo de noticias (lower third) y temarios de debate.
+
+
+### G. Temas Modulares, Restauración de Fábrica y Estilos por Overlay
 - Los temas residen en `themes/<pack_id>/<theme_id>/` con 4 archivos:
   - `theme.json`: Metadatos y configuración activa.
   - `style.css`: Reglas CSS activas aplicadas a `body[data-theme="..."]`.

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Pantalla — Pausa Técnica</title>
+  <title>Open Stream Suite — Swiss Broadcast Intermission</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
   <style>
@@ -10,36 +10,136 @@
       width: 1920px;
       height: 1080px;
       margin: 0;
-      background: var(--color-bg-dark);
+      padding: 36px 48px;
+      box-sizing: border-box;
+      background: transparent;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+      color: #f8fafc;
+    }
+
+    /* Swiss Broadcast Header */
+    .broadcast-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 28px;
+    }
+    .intermission-pill {
+      background: #f59e0b;
+      color: #0f172a;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    /* Center Stage */
+    .intermission-center-stage {
+      display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--color-text-light);
-      font-family: var(--font-primary);
+      margin: auto 0;
     }
-    .box {
+    .intermission-card {
+      width: 880px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 48px 56px;
       text-align: center;
-      background: var(--color-panel-bg-trans);
-      border: 1px solid var(--color-border-cyan);
-      border-radius: var(--radius-lg);
-      padding: 40px 64px;
-      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
-      box-shadow: var(--theme-glow);
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6);
     }
-    h1 {
-      font-size: 48px;
+    .main-stream-title {
+      font-size: 52px;
       font-weight: 900;
-      color: var(--color-accent-cyan);
-      margin: 0 0 10px 0;
+      letter-spacing: -0.5px;
+      margin: 0 0 12px 0;
+    }
+    .stream-subtitle {
+      font-size: 18px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .upcoming-pills {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    .upcoming-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    /* Lower Third Ticker */
+    .broadcast-lower-third {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   </style>
 </head>
 <body data-theme="neon_streamer">
-  <div class="box">
-    <h1 class="main-stream-title">PAUSA TÉCNICA</h1>
-    <p class="stream-subtitle brb-status-phrase" style="color:var(--color-text-dim); font-size:18px;">Volvemos en un momento, no te vayas.</p>
-  </div>
+  <!-- Swiss Broadcast Header -->
+  <header class="broadcast-header">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="intermission-pill">INTERMISIÓN DEL PROGRAMA</div>
+      <div style="font-size:15px; font-weight:800;">OPEN STREAM STUDIO // PAUSA BREVE</div>
+    </div>
+    <div style="font-size:12px; font-weight:600; color:#94a3b8; font-family:monospace;">
+      REANUDACIÓN ESTIMADA: EN 3 MINUTOS
+    </div>
+  </header>
+
+  <!-- Center Stage -->
+  <main class="intermission-center-stage">
+    <div class="intermission-card">
+      <div style="font-size:12px; font-weight:800; letter-spacing:1.5px; color:#f59e0b; text-transform:uppercase; margin-bottom:10px;">
+        PAUSA TÉCNICA DEL ESTUDIO
+      </div>
+      <h1 class="main-stream-title">VOLVEMOS EN BREVE</h1>
+      <p class="stream-subtitle brb-status-phrase">Hacemos un breve receso en directo. Prepara tu bebida y no te muevas.</p>
+
+      <div class="upcoming-pills">
+        <div class="upcoming-pill">💬 Siguiente bloque: Turno de Preguntas</div>
+        <div class="upcoming-pill">📊 Encuesta de la comunidad en pantalla</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Lower Third Ticker -->
+  <footer class="broadcast-lower-third">
+    <div style="font-size:13px; font-weight:600; color:#cbd5e1;">
+      MANTENTE ATENTO AL CHAT · SÍGUENOS EN <strong style="color:#38bdf8;">@CanalOficial</strong>
+    </div>
+    <div style="font-size:12px; color:#64748b;">
+      BROADCAST ID: OSS-STUDIO-LIVE
+    </div>
+  </footer>
+
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
 </body>

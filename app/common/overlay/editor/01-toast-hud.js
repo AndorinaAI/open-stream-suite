@@ -292,6 +292,32 @@ window.OSSEditor = window.OSSEditor || {};
           👁️ Fondo OBS
         </button>
 
+        <!-- Selector de Fondo con Apertura y Recorte de Cámaras -->
+        <div class="hud-select-wrapper" title="Aplicar fondo decorativo con recorte automático de cámaras/juegos">
+          <span style="font-size:11px;">🖼️</span>
+          <select id="hud-aperture-bg-select" class="hud-select" style="max-width:135px; font-size:10px;">
+            <option value="none">Fondo: Transparente</option>
+            <optgroup label="☕ Cozy Lo-Fi">
+              <option value="cozy_warm_paper">Papel Kraft</option>
+              <option value="cozy_tatami_wood">Madera Tatami</option>
+              <option value="cozy_matcha_ambient">Matcha & Bambú</option>
+            </optgroup>
+            <optgroup label="⚡ Gamer Pro">
+              <option value="gamer_carbon_mesh">Fibra de Carbono</option>
+              <option value="gamer_cyber_grid">Matriz Táctica</option>
+            </optgroup>
+            <optgroup label="🛠️ Maker & Taller">
+              <option value="maker_cad_blueprint">Cuadrícula CAD</option>
+              <option value="maker_workshop_mat">Tapiz de Corte</option>
+            </optgroup>
+            <optgroup label="🎙️ Open Stream">
+              <option value="studio_acoustic_slate">Paneles Acústicos</option>
+              <option value="studio_frosted_glass">Cristal Glaseado</option>
+            </optgroup>
+            <option value="custom_url">🔗 URL Imagen...</option>
+          </select>
+        </div>
+
         <div id="hud-phase-switcher" style="display:none; align-items:center; gap:4px; padding:0 6px; border-left:1px solid rgba(255,255,255,0.15);">
           <span style="color:#57D6C4; font-size:10px; font-weight:700;">FASE:</span>
           <div id="hud-phase-buttons" style="display:flex; gap:3px;"></div>
@@ -358,6 +384,31 @@ window.OSSEditor = window.OSSEditor || {};
         document.body.classList.toggle('browser-preview-mode');
         const isTrans = !document.body.classList.contains('browser-preview-mode');
         btnToggleBg.textContent = isTrans ? '🔳 Modo OBS (Transp)' : '👁️ Fondo OBS';
+      });
+    }
+
+    // Selector de fondo decorativo con apertura / recorte de cámaras
+    const selApertureBg = hud.querySelector('#hud-aperture-bg-select');
+    if (selApertureBg) {
+      selApertureBg.addEventListener('change', () => {
+        const val = selApertureBg.value;
+        if (!window.OSSAperture) return;
+
+        if (val === 'none') {
+          window.OSSAperture.setBackdrop({ mode: 'none' });
+          showHudToast('🔳 Fondo transparente restaurado');
+        } else if (val === 'custom_url') {
+          const url = prompt('Introduce la URL de la imagen de fondo:');
+          if (url && url.trim()) {
+            window.OSSAperture.setBackdrop({ mode: 'image', customUrl: url.trim() });
+            showHudToast('🖼️ Fondo personalizado con recorte de cámaras aplicado');
+          } else {
+            selApertureBg.value = 'none';
+          }
+        } else {
+          window.OSSAperture.setBackdrop({ mode: 'preset', preset: val });
+          showHudToast(`🖼️ Fondo [${val}] con recorte automático aplicado`);
+        }
       });
     }
 

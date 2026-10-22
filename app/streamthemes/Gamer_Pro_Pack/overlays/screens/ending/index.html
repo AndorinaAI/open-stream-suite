@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Pantalla — Fin de Sesión</title>
+  <title>Gamer Pro — Post-Game Wrap Up & GG Screen</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
   <style>
@@ -10,27 +10,200 @@
       width: 1920px;
       height: 1080px;
       margin: 0;
-      background: var(--color-bg-dark);
+      padding: 40px 60px;
+      box-sizing: border-box;
+      background: transparent;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-tech);
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      font-family: var(--font-tech, 'JetBrains Mono', 'Segoe UI', monospace);
+      color: #f8fafc;
     }
-    .box {
-      border: 2px solid var(--color-accent-cyan);
-      padding: 40px 75px;
-      background: var(--color-panel-bg);
-      box-shadow: var(--theme-glow);
+
+    /* Top Bar */
+    .post-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 26, 0.88);
+      border: 1px solid var(--color-accent-cyan, #57d6c4);
+      clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+      padding: 12px 32px;
+    }
+    .gg-badge {
+      background: var(--color-accent-cyan, #57d6c4);
+      color: #0b0f19;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+    }
+
+    /* Main Stage */
+    .post-center-stage {
+      display: flex;
+      gap: 40px;
+      margin: auto 0;
+      align-items: center;
+    }
+    .post-hero-card {
+      flex: 1.2;
+      background: rgba(10, 15, 26, 0.88);
+      border: 2px solid var(--color-accent-cyan, #57d6c4);
+      clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px));
+      padding: 44px 50px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+    .corner-reticle {
+      position: absolute;
+      font-size: 14px;
+      color: var(--color-accent-orange, #ff783f);
+      font-weight: 900;
+    }
+    .main-stream-title {
+      font-size: 54px;
+      font-weight: 900;
+      margin: 0 0 10px 0;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+    .stream-subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+      margin-bottom: 28px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .stat-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 3px solid var(--color-accent-cyan, #57d6c4);
+      padding: 16px;
       text-align: center;
     }
-    h1 { font-size: 48px; color: var(--color-accent-cyan); margin: 0 0 10px 0; }
+    .stat-val {
+      font-size: 26px;
+      font-weight: 900;
+      color: #f1f5f9;
+      font-family: monospace;
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* Side Schedule Card */
+    .post-side-card {
+      flex: 0.8;
+      background: rgba(10, 15, 26, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-left: 4px solid var(--color-accent-orange, #ff783f);
+      padding: 28px;
+    }
+    .schedule-title {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--color-accent-orange, #ff783f);
+      margin-bottom: 16px;
+    }
+    .schedule-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 13px;
+    }
+
+    /* Bottom Bar */
+    .post-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 26, 0.88);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 14px 32px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
   </style>
 </head>
 <body data-theme="crimson_esport">
-  <div class="box">
-    <h1 class="main-stream-title">GG // STREAM OFF</h1>
-    <p class="stream-subtitle" style="color:var(--color-text-dim);">GRACIAS POR EL APOYO EN EL COMBATE DE HOY</p>
-  </div>
+  <!-- Top Bar -->
+  <header class="post-top-bar">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="gg-badge">GG WP</div>
+      <div style="font-size:12px; font-weight:700; color:#cbd5e1;">SESIÓN FINALIZADA // COMBATE COMPLETADO</div>
+    </div>
+    <div style="font-size:12px; font-weight:700; color:var(--color-accent-orange, #ff783f);">
+      MATCH RESULTS SAVED
+    </div>
+  </header>
+
+  <!-- Main Stage -->
+  <main class="post-center-stage">
+    <div class="post-hero-card">
+      <div class="corner-reticle" style="top:12px; left:14px;">[+]</div>
+      <div class="corner-reticle" style="bottom:12px; right:14px;">[+]</div>
+      <div style="font-size:13px; font-weight:900; letter-spacing:3px; color:var(--color-accent-orange, #ff783f); margin-bottom:8px;">// VICTORIA DE ESCUADRA</div>
+      <h1 class="main-stream-title">GG // STREAM OFF</h1>
+      <p class="stream-subtitle">GRACIAS POR EL APOYO Y LA INTENSIDAD EN EL CHAT HOY.</p>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-val" style="color:var(--color-accent-cyan, #57d6c4);">6 - 2</div>
+          <div class="stat-label">RECORD MATCHES</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">4.12</div>
+          <div class="stat-label">K/D RATIO</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">64%</div>
+          <div class="stat-label">PRECISIÓN HEADSHOT</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" style="color:#10b981;">+145</div>
+          <div class="stat-label">DELTA RANK RP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Schedule Card -->
+    <aside class="post-side-card">
+      <div class="schedule-title">PRÓXIMAS TRANSMISIONES</div>
+      <div class="schedule-row">
+        <span>MAÑANA: COMPETITIVO TORNEO</span>
+        <strong style="color:#f1f5f9;">20:00 CEST</strong>
+      </div>
+      <div class="schedule-row">
+        <span>VIERNES: DUELO COMUNITARIO</span>
+        <strong style="color:#f1f5f9;">21:30 CEST</strong>
+      </div>
+      <div class="schedule-row" style="border-bottom:none;">
+        <span>DOMINGO: SPEEDRUN SUNDAY</span>
+        <strong style="color:#f1f5f9;">18:00 CEST</strong>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Bottom Bar -->
+  <footer class="post-bottom-bar">
+    <div>REVIVE LAS MEJORES JUGADAS EN YOUTUBE // CANAL OFICIAL</div>
+    <div>SÍGUENOS: <strong style="color:#f1f5f9;">@ProGamerLive</strong></div>
+  </footer>
+
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
 </body>
