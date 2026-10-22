@@ -346,28 +346,12 @@ window.OSSDomInjector = (function() {
     // 8.1 Pantalla POMODORO / STUDY
     if (isPomodoro) {
       const pomoEl = document.querySelector('.pomo-time, .pomodoro-countdown');
-      const progressFill = document.querySelector('.tech-progress-fill');
-      const pomoMins = config.startingSoon?.countdownMinutes || 25;
-      if (countdownInterval) clearInterval(countdownInterval);
-      if (pomoEl && pomoMins > 0) {
-        let totalSeconds = pomoMins * 60;
-        const initialTotal = totalSeconds;
-        function updatePomoClock() {
-          const mins = Math.floor(totalSeconds / 60);
-          const secs = totalSeconds % 60;
-          pomoEl.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-          if (progressFill) {
-            const pct = Math.min(100, Math.max(0, ((initialTotal - totalSeconds) / initialTotal) * 100));
-            progressFill.style.width = `${pct}%`;
-          }
-          if (totalSeconds > 0) {
-            totalSeconds--;
-          } else {
-            pomoEl.textContent = "00:00 - ¡DESCANSO!";
-          }
+      if (pomoEl && !pomoEl.isContentEditable) {
+        if (config.cozy?.pomodoro?.pomoTime) {
+          pomoEl.textContent = config.cozy.pomodoro.pomoTime;
+        } else if (!pomoEl.textContent.trim()) {
+          pomoEl.textContent = "25:00";
         }
-        updatePomoClock();
-        countdownInterval = setInterval(updatePomoClock, 1000);
       }
     }
 
@@ -575,10 +559,47 @@ window.OSSDomInjector = (function() {
     if (config.customScenes) {
       const p = window.location.pathname;
       let matchedKey = null;
-      for (const k of Object.keys(config.customScenes)) {
-        if (p.includes(k) || (document.body.dataset.scene === k)) {
-          matchedKey = k;
-          break;
+
+      if (p.includes('/study_pomodoro/')) matchedKey = 'cozy_pomodoro';
+      else if (p.includes('/art_dual_cam/')) matchedKey = 'cozy_art';
+      else if (p.includes('/cafe_chat/')) matchedKey = 'cozy_cafe';
+      else if (p.includes('/maker/desk/')) matchedKey = 'maker-desk';
+      else if (p.includes('/maker/pc/')) matchedKey = 'maker-pc';
+      else if (p.includes('/print/machine/')) matchedKey = 'print-machine';
+      else if (p.includes('/print/design/')) matchedKey = 'print-design';
+      else if (p.includes('/gameplay_hud/')) matchedKey = 'gamer_gameplay';
+      else if (p.includes('/speedrun_split/')) matchedKey = 'gamer_speedrun';
+      else if (p.includes('/victory_clutch/')) matchedKey = 'gamer_victory';
+      else if (p.includes('/just_chatting/')) matchedKey = 'oss_chatting';
+      else if (p.includes('/desktop_share/')) matchedKey = 'oss_desktop';
+      else if (p.includes('/podcast_talk/')) matchedKey = 'oss_podcast';
+      else if (p.includes('/chill/')) matchedKey = 'chill';
+      else if (p.includes('/game/')) matchedKey = 'game';
+      else if (p.includes('/starting-soon/')) {
+        if (p.includes('Cozy')) matchedKey = 'cozy_starting';
+        else if (p.includes('Gamer')) matchedKey = 'gamer_starting';
+        else if (p.includes('Open_stream')) matchedKey = 'oss_starting';
+        else matchedKey = 'startingSoon';
+      }
+      else if (p.includes('/be-right-back/') || p.includes('/coffee-break/')) {
+        if (p.includes('Cozy')) matchedKey = 'cozy_brb';
+        else if (p.includes('Gamer')) matchedKey = 'gamer_brb';
+        else if (p.includes('Open_stream')) matchedKey = 'oss_brb';
+        else matchedKey = 'beRightBack';
+      }
+      else if (p.includes('/ending/')) {
+        if (p.includes('Cozy')) matchedKey = 'cozy_ending';
+        else if (p.includes('Gamer')) matchedKey = 'gamer_ending';
+        else if (p.includes('Open_stream')) matchedKey = 'oss_ending';
+        else matchedKey = 'ending';
+      }
+
+      if (!matchedKey) {
+        for (const k of Object.keys(config.customScenes)) {
+          if (p.includes(k) || (document.body.dataset.scene === k)) {
+            matchedKey = k;
+            break;
+          }
         }
       }
       if (matchedKey && config.customScenes[matchedKey]) {
