@@ -24,11 +24,44 @@ window.OSS_CONFIG = {
   },
   "game": {
     "badgeText": "GAME MODE",
-    "tagline": "MODO JUEGO / GAMEPLAY"
+    "tagline": "MODO JUEGO / GAMEPLAY",
+    "runTitle": "SUPER MARIO 64",
+    "runCategory": "16 STARS · N64 ORIGINAL",
+    "personalBest": "16:15.00",
+    "matchType": "COMPETITIVE",
+    "fps": "240",
+    "camLabel": "STREAMER // CAM",
+    "splits": [
+      {
+        "name": "01 BOB-OMB",
+        "delta": "-00:14",
+        "time": "02:18",
+        "type": "negative"
+      },
+      {
+        "name": "02 WHOMP'S FORT",
+        "delta": "-00:42",
+        "time": "05:30",
+        "type": "negative"
+      },
+      {
+        "name": "03 CCM MOUNTAIN",
+        "delta": "+00:08",
+        "time": "09:15",
+        "type": "positive",
+        "active": true
+      },
+      {
+        "name": "04 BOWSER IN DARK",
+        "delta": "-00:25",
+        "time": "15:40",
+        "type": "negative"
+      }
+    ]
   },
   "maker": {
     "projectName": "SUPER ESTACION MAKER 2026",
-    "currentPhase": "03 SOFTWARE",
+    "currentPhase": "01 PLAN",
     "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "panelTitle": "ESTADO DEL PROYECTO",
     "projectPrefix": "PROYECTO:",
@@ -67,8 +100,14 @@ window.OSS_CONFIG = {
   },
   "chill": {
     "subtitle": "CHARLA / DUDAS / IDEAS / COMUNIDAD",
-    "showChatPanel": true,
     "chatTitle": "CHAT EN DIRECTO",
+    "chatStatus": "CONECTADO A TWITCH",
+    "podcastTitle": "OPEN STREAM PODCAST",
+    "guestNameplates": [
+      "INVITADO 1",
+      "INVITADO 2"
+    ],
+    "showChatPanel": true,
     "topic": "Preguntas, proyectos de la semana y comunidad",
     "chatPrompt": "¡Escribe en el chat para participar!",
     "frames": {
@@ -76,13 +115,15 @@ window.OSS_CONFIG = {
     }
   },
   "startingSoon": {
-    "heroTag": "// STREAM EN DIRECTO",
     "title": "ENSEGUIDA",
-    "highlight": "ESTAMOS EN DIRECTO :)",
     "subtitle": "PREPARANDO EL DIRECTO...",
+    "countdownSeconds": 300,
+    "badgeText": "STARTING SOON",
+    "liveStatusText": "TRANSMISIÓN INICIANDO",
+    "heroTag": "// STREAM EN DIRECTO",
+    "highlight": "ESTAMOS EN DIRECTO :)",
     "countdownMinutes": 3,
     "footerNote": "ANDORINA · OPEN STREAM SUITE",
-    "liveStatusText": "TRANSMISIÓN INICIANDO",
     "showModesOverview": true,
     "modeLabels": [
       "01 // GAME",
@@ -94,6 +135,9 @@ window.OSS_CONFIG = {
   "beRightBack": {
     "title": "AHORA VUELVO",
     "subtitle": "UN MOMENTO...",
+    "countdownSeconds": 300,
+    "badgeText": "PAUSA TÉCNICA",
+    "liveStatusText": "PAUSA TÉCNICA",
     "statusPhrases": [
       "TOMANDO UN CAFÉ...",
       "PREPARANDO TODO...",
@@ -101,16 +145,27 @@ window.OSS_CONFIG = {
       "VOLVEMOS ENSEGUIDA"
     ],
     "phraseIntervalSeconds": 6,
-    "footerNote": "EL DIRECTO CONTINÚA EN BREVES INSTANTES",
-    "liveStatusText": "PAUSA TÉCNICA"
+    "footerNote": "EL DIRECTO CONTINÚA EN BREVES INSTANTES"
   },
   "ending": {
     "title": "GRACIAS POR PASARTE",
     "subtitle": "NOS VEMOS EN EL PRÓXIMO DIRECTO",
+    "badgeText": "OFFLINE",
+    "liveStatusText": "FIN DE TRANSMISIÓN",
+    "credits": [
+      "Gracias por el apoyo a todos los suscriptores y vips",
+      "Nos vemos en el próximo directo",
+      "¡Que tengáis un buen día!"
+    ],
     "farewellMessage": "¡Gracias por acompañar el stream! Recuerda seguir el canal para no perderte el próximo directo.",
     "farewellTag": "// HASTA LA PRÓXIMA",
-    "footerNote": "ANDORINA · OPEN STREAM SUITE · TRANSMISIÓN FINALIZADA",
-    "liveStatusText": "FIN DE TRANSMISIÓN"
+    "footerNote": "ANDORINA · OPEN STREAM SUITE · TRANSMISIÓN FINALIZADA"
+  },
+  "pomodoro": {
+    "taskName": "SESIÓN DE CONCENTRACIÓN & ESTUDIO",
+    "focusSeconds": 1500,
+    "shortBreakSeconds": 300,
+    "longBreakSeconds": 900
   },
   "performance": {
     "enableAnimations": true

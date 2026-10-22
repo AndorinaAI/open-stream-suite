@@ -129,8 +129,13 @@
       return document.body.dataset.pack || 'maker';
     }
 
+    window.__THEME_ARCHETYPES = window.__THEME_ARCHETYPES || {};
+
     function getThemeArchetype(themeName) {
       if (!themeName) return null;
+      if (window.__THEME_ARCHETYPES && window.__THEME_ARCHETYPES[themeName]) {
+        return window.__THEME_ARCHETYPES[themeName];
+      }
       const t = themeName.toLowerCase();
       if (t.includes('cozy') || t.includes('latte') || t.includes('matcha') || t.includes('sakura') || t.includes('lavender') || t.includes('nordic') || t.includes('kawaii') || t.includes('chill') || t.includes('warm') || t.includes('lofi')) {
         return 'cozy';
@@ -144,7 +149,7 @@
       if (t.includes('openstream') || t.includes('clean') || t.includes('streamer') || t.includes('sunset') || t.includes('pulse') || t.includes('synthwave') || t.includes('candy')) {
         return 'openstream';
       }
-      return null;
+      return 'openstream';
     }
 
     function adaptAtmosphereForArchetype(arch) {
@@ -195,6 +200,7 @@
         adaptAtmosphereForArchetype(arch);
       }
     }
+    window.applyActiveThemeToBody = applyActiveThemeToBody;
 
     const currentSceneKey = detectCurrentSceneKey();
     const currentPack = detectCurrentPack();
@@ -224,11 +230,23 @@
 
     // Consultar mapeo de temas por escena desde el servidor local
     function syncThemeFromServer() {
-      if (themeFromUrl) return;
       fetch('/api/themes/packs', { cache: 'no-store' })
         .then(r => r.ok ? r.json() : null)
         .then(data => {
           if (!data) return;
+          if (data.packs) {
+            data.packs.forEach(p => {
+              const pArch = p.archetype || getThemeArchetype(p.id);
+              (p.themes || []).forEach(th => {
+                window.__THEME_ARCHETYPES[th.id] = th.archetype || pArch || getThemeArchetype(th.id);
+              });
+            });
+          }
+          if (themeFromUrl) {
+            // Re-aplicar para asegurar el arquetipo tras recibir el registro dinámico
+            applyActiveThemeToBody(themeFromUrl);
+            return;
+          }
           const fallbackByPack = (currentPack === 'cozy' ? 'latte_caramel' : (currentPack === 'gamer' ? 'cyber_glitch' : (currentPack === 'openstream' ? 'neon_streamer' : data.activeTheme)));
           const t = (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) || fallbackByPack;
           if (t) applyActiveThemeToBody(t);

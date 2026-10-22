@@ -159,6 +159,15 @@ body[data-theme-archetype="cozy"] .camera-frame,
 body[data-theme-archetype="cozy"] .cam-frame,
 body[data-theme-archetype="cozy"] .camera-main,
 body[data-theme-archetype="cozy"] .cam-box,
+body[data-theme-archetype="cozy"] .hud-cam-box,
+body[data-theme-archetype="cozy"] .stream-frame,
+body[data-theme-archetype="cozy"] .polaroid-frame,
+body[data-theme-archetype="cozy"] .canvas-frame,
+body[data-theme-archetype="cozy"] .face-frame,
+body[data-theme-archetype="cozy"] .desktop-main-viewport,
+body[data-theme-archetype="cozy"] .game-box,
+body[data-theme-archetype="cozy"] .gameplay-box,
+body[data-theme-archetype="cozy"] [data-cutout="true"],
 body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame {
   box-sizing: border-box !important;
   background: #181412 !important;
@@ -183,13 +192,17 @@ body[data-theme-archetype="cozy"] .pip-cam-box {
 }
 
 /* En modo navegador, no tapar el marco de papel polaroid con el outline de depuración */
-body[data-theme-archetype="cozy"].browser-preview-mode .camera-frame {
+body[data-theme-archetype="cozy"].browser-preview-mode .camera-frame,
+body[data-theme-archetype="cozy"].browser-preview-mode .cam-frame,
+body[data-theme-archetype="cozy"].browser-preview-mode .canvas-frame,
+body[data-theme-archetype="cozy"].browser-preview-mode .stream-frame {
   outline: 1.5px solid rgba(220, 200, 185, 0.6) !important;
 }
 
 /* Etiquetas manuscritas en la barbilla blanca del Polaroid */
 body[data-theme-archetype="cozy"] .camera-frame .frame-label,
-body[data-theme-archetype="cozy"] .cam-frame .frame-label {
+body[data-theme-archetype="cozy"] .cam-frame .frame-label,
+body[data-theme-archetype="cozy"] .canvas-tag {
   position: absolute !important;
   bottom: -40px !important;
   left: 18px !important;
@@ -222,7 +235,8 @@ body[data-theme-archetype="cozy"] .frame-label [data-icon="chip"] {
   display: none !important;
 }
 
-body[data-theme-archetype="cozy"] .camera-frame .frame-label::before {
+body[data-theme-archetype="cozy"] .camera-frame .frame-label::before,
+body[data-theme-archetype="cozy"] .canvas-tag::before {
   content: "☕ " !important;
   font-size: 15px !important;
 }
@@ -238,6 +252,11 @@ body[data-theme-archetype="cozy"] .camera-frame::after {
 /* 🏷️ CINTA ADHESIVA WASHI TAPE EN CADA MARCO POLAROID */
 body[data-theme-archetype="cozy"] .camera-frame::before,
 body[data-theme-archetype="cozy"] .cam-frame::before,
+body[data-theme-archetype="cozy"] .hud-cam-box::before,
+body[data-theme-archetype="cozy"] .stream-frame::before,
+body[data-theme-archetype="cozy"] .canvas-frame::before,
+body[data-theme-archetype="cozy"] .polaroid-frame::before,
+body[data-theme-archetype="cozy"] .gameplay-box::before,
 body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame::before {
   content: "" !important;
   position: absolute !important;
@@ -282,7 +301,16 @@ body[data-theme-archetype="gamer"] .camera-face,
 body[data-theme-archetype="gamer"] .camera-aux,
 body[data-theme-archetype="gamer"] .cam-frame,
 body[data-theme-archetype="gamer"] .cam-box,
+body[data-theme-archetype="gamer"] .hud-cam-box,
+body[data-theme-archetype="gamer"] .stream-frame,
+body[data-theme-archetype="gamer"] .canvas-frame,
+body[data-theme-archetype="gamer"] .face-frame,
+body[data-theme-archetype="gamer"] .polaroid-frame,
+body[data-theme-archetype="gamer"] .desktop-main-viewport,
+body[data-theme-archetype="gamer"] .gameplay-box,
+body[data-theme-archetype="gamer"] .game-box,
 body[data-theme-archetype="gamer"] .cam-inner-viewport,
+body[data-theme-archetype="gamer"] [data-cutout="true"],
 body[data-pack="gamer"]:not([data-theme-archetype]) .camera-frame,
 body[data-pack="gamer"]:not([data-theme-archetype]) .camera-main {
   clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)) !important;
@@ -294,7 +322,8 @@ body[data-pack="gamer"]:not([data-theme-archetype]) .camera-main {
 }
 
 body[data-theme-archetype="gamer"] .camera-frame .frame-label,
-body[data-theme-archetype="gamer"] .cam-frame .frame-label {
+body[data-theme-archetype="gamer"] .cam-frame .frame-label,
+body[data-theme-archetype="gamer"] .canvas-tag {
   top: -14px !important;
   left: 20px !important;
   bottom: auto !important;
@@ -311,7 +340,12 @@ body[data-theme-archetype="gamer"] .cam-frame .frame-label {
 }
 
 /* Retículas tácticas Gamer en las esquinas del marco */
-body[data-theme-archetype="gamer"] .camera-frame::before {
+body[data-theme-archetype="gamer"] .camera-frame::before,
+body[data-theme-archetype="gamer"] .cam-frame::before,
+body[data-theme-archetype="gamer"] .hud-cam-box::before,
+body[data-theme-archetype="gamer"] .stream-frame::before,
+body[data-theme-archetype="gamer"] .canvas-frame::before,
+body[data-theme-archetype="gamer"] .polaroid-frame::before {
   content: "" !important;
   position: absolute !important;
   top: 6px !important;
@@ -328,7 +362,12 @@ body[data-theme-archetype="gamer"] .camera-frame::before {
   pointer-events: none !important;
 }
 
-body[data-theme-archetype="gamer"] .camera-frame::after {
+body[data-theme-archetype="gamer"] .camera-frame::after,
+body[data-theme-archetype="gamer"] .cam-frame::after,
+body[data-theme-archetype="gamer"] .hud-cam-box::after,
+body[data-theme-archetype="gamer"] .stream-frame::after,
+body[data-theme-archetype="gamer"] .canvas-frame::after,
+body[data-theme-archetype="gamer"] .polaroid-frame::after {
   content: "" !important;
   position: absolute !important;
   bottom: 6px !important;
@@ -385,9 +424,19 @@ body[data-pack="maker"]:not([data-theme-archetype]) .reg-mark {
 body[data-theme-archetype="maker"] .cam-frame,
 body[data-theme-archetype="maker"] .camera-frame,
 body[data-theme-archetype="maker"] .camera-main,
-body[data-theme-archetype="maker"] .cam-box {
-  border-radius: 0px !important;
+body[data-theme-archetype="maker"] .cam-box,
+body[data-theme-archetype="maker"] .hud-cam-box,
+body[data-theme-archetype="maker"] .stream-frame,
+body[data-theme-archetype="maker"] .canvas-frame,
+body[data-theme-archetype="maker"] .face-frame,
+body[data-theme-archetype="maker"] .polaroid-frame,
+body[data-theme-archetype="maker"] .desktop-main-viewport,
+body[data-theme-archetype="maker"] [data-cutout="true"],
+body[data-pack="maker"]:not([data-theme-archetype]) .camera-frame {
+  border: 1px solid var(--color-border-cyan) !important;
+  border-radius: 4px !important;
   clip-path: none !important;
+  box-shadow: inset 0 0 12px rgba(87, 214, 196, 0.04) !important;
 }
 
 /* 🛠️ Adorno característico Maker: Escuadra angular de taller en esquinas */
@@ -405,16 +454,34 @@ body[data-theme-archetype="maker"] .camera-frame:not(:has(.frame-corner-tr))::af
   z-index: 10;
 }
 
-/* 🌐 ARQUETIPO OPEN STREAM: Broadcast moderno con esquinas suavemente curvadas */
+/* 🌐 ARQUETIPO OPEN STREAM: Broadcast moderno con esquinas suavemente curvadas y cristal */
 body[data-theme-archetype="openstream"] .camera-frame,
+body[data-theme-archetype="openstream"] .camera-main,
+body[data-theme-archetype="openstream"] .camera-face,
+body[data-theme-archetype="openstream"] .camera-aux,
 body[data-theme-archetype="openstream"] .cam-frame,
+body[data-theme-archetype="openstream"] .cam-box,
+body[data-theme-archetype="openstream"] .hud-cam-box,
+body[data-theme-archetype="openstream"] .stream-frame,
+body[data-theme-archetype="openstream"] .canvas-frame,
+body[data-theme-archetype="openstream"] .face-frame,
+body[data-theme-archetype="openstream"] .polaroid-frame,
+body[data-theme-archetype="openstream"] .desktop-main-viewport,
 body[data-theme-archetype="openstream"] .pod-cam-box,
 body[data-theme-archetype="openstream"] .agenda-card,
-body[data-pack="openstream"]:not([data-theme-archetype]) .camera-frame,
-body[data-pack="openstream"]:not([data-theme-archetype]) .pod-cam-box,
-body[data-pack="openstream"]:not([data-theme-archetype]) .agenda-card {
-  border-radius: 12px !important;
+body[data-theme-archetype="openstream"] [data-cutout="true"],
+body[data-pack="openstream"]:not([data-theme-archetype]) .camera-frame {
+  border-radius: 16px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(20px) !important;
   clip-path: none !important;
+}
+
+body[data-theme-archetype="openstream"] .frame-corner-tr,
+body[data-theme-archetype="openstream"] .frame-corner-bl,
+body[data-theme-archetype="openstream"] .reg-mark {
+  display: none !important;
 }
 
 /* Reset técnico para OBS */

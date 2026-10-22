@@ -182,12 +182,22 @@ window.OSSEditor = window.OSSEditor || {};
     const themeSelect = hud.querySelector('#hud-theme-select');
     if (!themeSelect) return;
 
+    function getDefaultThemeForScene() {
+      const p = (document.body.dataset.pack || '').toLowerCase();
+      if (p.includes('cozy')) return 'latte_caramel';
+      if (p.includes('gamer')) return 'cyber_glitch';
+      if (p.includes('openstream') || p.includes('open_stream')) return 'neon_streamer';
+      return 'maker';
+    }
+
     fetch('/api/themes/packs')
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (!data || !data.packs) return;
-        const currentTheme = document.body.getAttribute('data-theme') || data.activeTheme || 'maker';
-        let html = '';
+        const currentTheme = document.body.getAttribute('data-theme') || data.activeTheme || getDefaultThemeForScene();
+        const defaultTheme = getDefaultThemeForScene();
+
+        let html = `<option value="__default__" style="font-weight:700;">🔄 Tema Original de la Escena (${defaultTheme})</option>`;
         data.packs.forEach(p => {
           html += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
           (p.themes || []).forEach(t => {
@@ -196,13 +206,54 @@ window.OSSEditor = window.OSSEditor || {};
           html += `</optgroup>`;
         });
         themeSelect.innerHTML = html;
+        if (currentTheme) {
+          themeSelect.value = currentTheme;
+        }
       })
       .catch(() => {});
 
     themeSelect.addEventListener('change', () => {
-      const selected = themeSelect.value;
+      let selected = themeSelect.value;
       if (!selected) return;
-      document.body.setAttribute('data-theme', selected);
+
+      const currentUrl = new URL(window.location.href);
+
+      if (selected === '__default__') {
+        selected = getDefaultThemeForScene();
+        // Limpiar el parámetro de la URL
+        currentUrl.searchParams.delete('theme');
+        window.history.replaceState({}, '', currentUrl.toString());
+
+        if (typeof window.applyActiveThemeToBody === 'function') {
+          window.applyActiveThemeToBody(selected);
+        } else {
+          document.body.setAttribute('data-theme', selected);
+        }
+
+        if (sceneKey) {
+          fetch('/api/themes/overlay-assignment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ overlayKey: sceneKey, themeId: selected })
+          }).catch(() => {});
+        }
+
+        themeSelect.value = selected;
+        window.OSSEditor.showHudToast(`🔄 Escena restaurada a su tema original: ${selected}`);
+        return;
+      }
+
+      // Actualizar el parámetro en la URL dinámicamente
+      currentUrl.searchParams.set('theme', selected);
+      window.history.replaceState({}, '', currentUrl.toString());
+
+      // Aplicar tema completo con su arquetipo
+      if (typeof window.applyActiveThemeToBody === 'function') {
+        window.applyActiveThemeToBody(selected);
+      } else {
+        document.body.setAttribute('data-theme', selected);
+      }
+
       if (sceneKey) {
         fetch('/api/themes/overlay-assignment', {
           method: 'POST',
@@ -210,6 +261,7 @@ window.OSSEditor = window.OSSEditor || {};
           body: JSON.stringify({ overlayKey: sceneKey, themeId: selected })
         }).catch(() => {});
       }
+
       window.OSSEditor.showHudToast(`🎨 Estilo aplicado a esta escena: ${selected}`);
     });
   }
