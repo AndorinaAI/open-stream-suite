@@ -191,13 +191,21 @@
       }
     }
 
-    function applyActiveThemeToBody(themeName) {
+    function applyActiveShapeToBody(shapeName) {
+      if (!shapeName) shapeName = 'original';
+      document.body.setAttribute('data-theme-archetype', shapeName);
+      adaptAtmosphereForArchetype(shapeName);
+    }
+    window.applyActiveShapeToBody = applyActiveShapeToBody;
+
+    function applyActiveThemeToBody(themeName, updateShape = false) {
       if (!themeName) return;
       document.body.setAttribute('data-theme', themeName);
-      const arch = getThemeArchetype(themeName);
-      if (arch) {
-        document.body.setAttribute('data-theme-archetype', arch);
-        adaptAtmosphereForArchetype(arch);
+      if (updateShape) {
+        const arch = getThemeArchetype(themeName);
+        if (arch) {
+          applyActiveShapeToBody(arch);
+        }
       }
     }
     window.applyActiveThemeToBody = applyActiveThemeToBody;
@@ -209,11 +217,14 @@
       document.body.setAttribute('data-scene', currentSceneKey);
     }
 
-    // 1.2 Resolución y aplicación de temas dinámicos
+    // 1.2 Resolución y aplicación de temas y formas dinámicas
     const urlParams = new URLSearchParams(window.location.search);
     const inOBS = typeof window.obsstudio !== 'undefined';
     const rawUrlTheme = urlParams.get('theme');
+    const rawUrlShape = urlParams.get('shape');
     const themeFromUrl = (inOBS && urlParams.get('lockTheme') !== '1') ? null : rawUrlTheme;
+    const shapeFromUrl = (inOBS && urlParams.get('lockShape') !== '1') ? null : rawUrlShape;
+
     let activeTheme = themeFromUrl;
     if (!activeTheme && config.overlayThemes && currentSceneKey && config.overlayThemes[currentSceneKey]) {
       activeTheme = config.overlayThemes[currentSceneKey];
@@ -224,11 +235,21 @@
       else if (currentPack === 'openstream') activeTheme = 'neon_streamer';
       else activeTheme = config.activeTheme || config.themeName || 'maker';
     }
-    if (activeTheme) {
-      applyActiveThemeToBody(activeTheme);
+
+    let activeShape = shapeFromUrl;
+    if (!activeShape && config.overlayShapes && currentSceneKey && config.overlayShapes[currentSceneKey]) {
+      activeShape = config.overlayShapes[currentSceneKey];
+    }
+    if (!activeShape) {
+      activeShape = 'original';
     }
 
-    // Consultar mapeo de temas por escena desde el servidor local
+    if (activeTheme) {
+      applyActiveThemeToBody(activeTheme, false);
+    }
+    applyActiveShapeToBody(activeShape);
+
+    // Consultar mapeo de temas y formas por escena desde el servidor local
     function syncThemeFromServer() {
       fetch('/api/themes/packs', { cache: 'no-store' })
         .then(r => r.ok ? r.json() : null)
@@ -242,14 +263,12 @@
               });
             });
           }
-          if (themeFromUrl) {
-            // Re-aplicar para asegurar el arquetipo tras recibir el registro dinámico
-            applyActiveThemeToBody(themeFromUrl);
-            return;
+          if (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey] && !themeFromUrl) {
+            applyActiveThemeToBody(data.overlayThemes[currentSceneKey], false);
           }
-          const fallbackByPack = (currentPack === 'cozy' ? 'latte_caramel' : (currentPack === 'gamer' ? 'cyber_glitch' : (currentPack === 'openstream' ? 'neon_streamer' : data.activeTheme)));
-          const t = (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) || fallbackByPack;
-          if (t) applyActiveThemeToBody(t);
+          if (data.overlayShapes && currentSceneKey && data.overlayShapes[currentSceneKey] && !shapeFromUrl) {
+            applyActiveShapeToBody(data.overlayShapes[currentSceneKey]);
+          }
         })
         .catch(() => {});
     }
@@ -291,9 +310,10 @@
       ws.onmessage = (e) => {
         try {
           const msg = JSON.parse(e.data);
-          if (msg.type === 'overlay_theme_change' && msg.theme) {
+          if (msg.type === 'overlay_theme_change') {
             if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
-              if (!themeFromUrl) applyActiveThemeToBody(msg.theme);
+              if (msg.theme && !themeFromUrl) applyActiveThemeToBody(msg.theme, false);
+              if (msg.shape && !shapeFromUrl) applyActiveShapeToBody(msg.shape);
             }
           } else if (msg.type === 'theme_change') {
             syncThemeFromServer();

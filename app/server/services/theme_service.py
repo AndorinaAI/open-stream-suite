@@ -286,25 +286,36 @@ async def restore_theme_service(pack_id: str, theme_id: str) -> dict:
     return {"theme": default_meta, "css": default_css}
 
 
-async def set_overlay_theme_service(overlay_key: str, theme_id: str) -> dict:
-    """Asigna un tema visual específico a una overlay o escena de OBS determinada"""
-    if not overlay_key or not theme_id:
-        raise ValueError("overlayKey y themeId requeridos")
+async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shape_id: str = None) -> dict:
+    """Asigna un tema visual (color) o forma física a una overlay o escena determinada"""
+    if not overlay_key:
+        raise ValueError("overlayKey requerido")
+    if not theme_id and not shape_id:
+        raise ValueError("themeId o shapeId requerido")
 
     state = load_theme_state()
     overlay_themes = state.setdefault("overlayThemes", dict(DEFAULT_OVERLAY_THEMES))
-    overlay_themes[overlay_key] = theme_id
+    overlay_shapes = state.setdefault("overlayShapes", {})
+
+    if theme_id:
+        overlay_themes[overlay_key] = theme_id
+    if shape_id:
+        overlay_shapes[overlay_key] = shape_id
+
     save_theme_state(state)
 
     await system.broadcast({
         "type": "overlay_theme_change",
         "overlayKey": overlay_key,
-        "theme": theme_id
+        "theme": theme_id or overlay_themes.get(overlay_key),
+        "shape": shape_id or overlay_shapes.get(overlay_key)
     })
 
-    logger.info(f"🎨 Estilo '{theme_id}' asignado específicamente a overlay '{overlay_key}'")
+    logger.info(f"🎨 Asignación para '{overlay_key}': tema='{theme_id}', forma='{shape_id}'")
     return {
         "overlayKey": overlay_key,
-        "themeId": theme_id,
-        "overlayThemes": overlay_themes
+        "themeId": overlay_themes.get(overlay_key),
+        "shapeId": overlay_shapes.get(overlay_key),
+        "overlayThemes": overlay_themes,
+        "overlayShapes": overlay_shapes
     }

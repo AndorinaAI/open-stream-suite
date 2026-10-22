@@ -162,10 +162,11 @@ async def handle_set_overlay_theme(request):
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     overlay_key = str(body.get("overlayKey", "")).strip()
-    theme_id = str(body.get("themeId", "")).strip()
+    theme_id = str(body.get("themeId", "")).strip() if body.get("themeId") else None
+    shape_id = str(body.get("shapeId", "")).strip() if body.get("shapeId") else None
 
     try:
-        res = await set_overlay_theme_service(overlay_key, theme_id)
+        res = await set_overlay_theme_service(overlay_key, theme_id=theme_id, shape_id=shape_id)
         return web.json_response({"status": "ok", **res})
     except ValueError as e:
         return web.json_response({"error": str(e)}, status=400)
