@@ -102,7 +102,7 @@ function buildSceneCardHtml(rawS) {
 function openOverlayFullscreen(sceneKey, scenePath) {
   const assignedTheme = (cachedOverlayThemes && cachedOverlayThemes[sceneKey]) || currentActiveThemeId;
   const fullUrl = `${scenePath}?theme=${encodeURIComponent(assignedTheme)}`;
-  window.open(fullUrl, '_blank');
+  window.open(fullUrl, '_blank', 'noopener,noreferrer');
 }
 
 function copyOverlaySceneUrl(sceneKey, scenePath) {

@@ -251,5 +251,5 @@ function openFullscreenPreview() {
   const cleanKey = scenePath.replace('screens/', '');
   const themeId = currentEditingTheme ? currentEditingTheme.id : currentActiveThemeId;
   const url = `/scenes/${cleanKey}/index.html?theme=${encodeURIComponent(themeId)}`;
-  window.open(url, '_blank');
+  window.open(url, '_blank', 'noopener,noreferrer');
 }
