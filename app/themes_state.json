@@ -31,5 +31,11 @@
     "cozy_starting": "lavender_dream",
     "cozy_brb": "latte_caramel",
     "cozy_ending": "nordic_twilight"
+  },
+  "overlayShapes": {
+    "oss_chatting": "cozy",
+    "maker-desk": "cozy",
+    "cozy_brb": "cozy",
+    "gamer_victory": "cozy"
   }
 }

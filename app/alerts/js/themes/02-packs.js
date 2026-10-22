@@ -188,6 +188,45 @@ function openThemePack(packId) {
   const themesCountText = tr('themes.themes_count_label', '{count} TEMAS').replace('{count}', (pack.themes || []).length);
   if (dCount) dCount.textContent = themesCountText;
 
+  // Renderizar tarjetas de formas físicas y visualizaciones del pack
+  const shapesGrid = document.getElementById('pack-shapes-cards-grid');
+  const shapesBadge = document.getElementById('shapes-count-in-pack-badge');
+  const shapesSection = document.getElementById('pack-shapes-section');
+  const shapes = pack.shapes || [];
+
+  if (shapesSection) {
+    if (shapes.length > 0) {
+      shapesSection.style.display = 'block';
+      if (shapesBadge) shapesBadge.textContent = `${shapes.length} FORMAS`;
+      if (shapesGrid) {
+        shapesGrid.innerHTML = shapes.map(s => {
+          const shapeVal = s.archetype || s.id;
+          const isLive = (window.cachedActiveShape === shapeVal);
+          return `
+            <div class="dash-card theme-card-rich" style="border-top: 4px solid var(--color-accent-orange); display: flex; flex-direction: column; justify-content: space-between; gap: 12px; padding: 14px;">
+              <div>
+                <div class="card-header-bar" style="margin-bottom: 6px;">
+                  <span class="card-header-title" style="font-size: 13px;">${s.icon || '📐'} ${s.name}</span>
+                  ${isLive ? '<span style="font-size: 10px; color: var(--color-accent-orange); font-family: var(--font-tech); font-weight: 700;">● ACTIVA</span>' : ''}
+                </div>
+                <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.4;">
+                  ${s.description || 'Geometría y ornamentación física de marcos y ventanas.'}
+                </div>
+              </div>
+              <div>
+                <button type="button" class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 7px; background: #FF783F; border-color: #FF783F; display: inline-flex; justify-content: center; align-items: center; gap: 6px;" onclick="applyShapeToAllScenes('${shapeVal}', '${escapeHtml(s.name)}')">
+                  📐 Aplicar esta forma a TODO el Stream
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    } else {
+      shapesSection.style.display = 'none';
+    }
+  }
+
   // Renderizar tarjetas de temas
   const container = document.getElementById('themes-cards-grid');
   if (!container) return;
@@ -352,3 +391,25 @@ async function changeLiveTheme(themeId) {
   });
   await activateTheme(themeId, targetPackId);
 }
+
+async function applyShapeToAllScenes(shapeId, shapeName) {
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  if (!confirm(tr('themes.confirm_shape_all', `¿Deseas aplicar la forma física "${shapeName || shapeId}" a todas las escenas de OBS Studio?`, { name: shapeName || shapeId }))) {
+    return;
+  }
+  try {
+    const res = await API.applyShapeGlobal(shapeId);
+    window.cachedActiveShape = shapeId;
+    if (typeof currentOpenPackId !== 'undefined' && currentOpenPackId) {
+      openThemePack(currentOpenPackId);
+    }
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(tr('themes.toast_shape_applied_all', `✓ Forma "${shapeName || shapeId}" aplicada a todo el Stream en OBS`, { name: shapeName || shapeId }), 'success');
+    }
+  } catch (e) {
+    console.error('Error aplicando forma global:', e);
+    alert('Error al aplicar forma: ' + e.message);
+  }
+}
+
+window.applyShapeToAllScenes = applyShapeToAllScenes;

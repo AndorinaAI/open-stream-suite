@@ -1974,6 +1974,17 @@
             </div>
           </div>
 
+          <!-- SECCIÓN: FORMAS FÍSICAS Y VISUALIZACIONES DEL PACK -->
+          <div id="pack-shapes-section" style="margin-bottom: 24px;">
+            <div class="card-header-bar">
+              <span class="card-header-title">📐 FORMAS FÍSICAS Y VISUALIZACIONES DEL PACK</span>
+              <span id="shapes-count-in-pack-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-orange);">FORMAS</span>
+            </div>
+            <div id="pack-shapes-cards-grid" class="widget-showcase-grid" style="margin-top: 14px;">
+              <!-- Tarjetas de formas físicas cargadas dinámicamente -->
+            </div>
+          </div>
+
           <div class="card-header-bar">
             <span class="card-header-title" data-i18n="themes.pack_themes_title">ESTILOS VISUALES / TEMAS DE ESTE PACK (PALETAS Y CSS)</span>
             <span id="themes-count-in-pack-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="themes.badge_themes_in_pack">6 TEMAS</span>
@@ -2290,12 +2301,21 @@
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
               <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.35);">
-                <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="fusions.label_batch_style">🎨 Estilo a toda la Fusión:</span>
+                <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="fusions.label_batch_style">🎨 Color en Lote:</span>
                 <select id="fusion-batch-theme-select" class="monitor-select" style="font-size: 11px; padding: 4px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
                   <!-- Opciones de temas -->
                 </select>
                 <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="applyBatchThemeToCurrentFusion()" data-i18n="fusions.btn_apply_batch">
-                  ✨ Aplicar en Lote
+                  ✨ Aplicar Color
+                </button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255, 120, 63, 0.4);">
+                <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;">📐 Forma en Lote:</span>
+                <select id="fusion-batch-shape-select" class="monitor-select" style="font-size: 11px; padding: 4px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(255, 120, 63, 0.4); border-radius: 4px;">
+                  <!-- Opciones de formas -->
+                </select>
+                <button type="button" class="btn-action-primary" style="background:#FF783F; border-color:#FF783F; font-size: 11px; padding: 4px 10px;" onclick="applyBatchShapeToCurrentFusion()">
+                  📐 Aplicar Forma
                 </button>
               </div>
               <button type="button" class="btn-action-test" onclick="openEditFusionModal(currentOpenFusionId)" style="font-size: 11px; padding: 6px 12px;" data-i18n="fusions.btn_edit_scenes">

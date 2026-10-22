@@ -244,6 +244,7 @@ def get_all_packs_and_themes():
         pack_meta["themesCount"] = len(themes)
         pack_meta["overlays"] = overlays
         pack_meta["overlaysCount"] = len(overlays)
+        pack_meta["shapes"] = pack_meta.get("shapes", [])
         pack_meta["isActivePack"] = (pack_meta.get("id") == active_pack)
         packs.append(pack_meta)
 
@@ -251,6 +252,7 @@ def get_all_packs_and_themes():
         "packs": packs,
         "activePack": active_pack,
         "activeTheme": active_theme,
+        "activeShape": state.get("activeShape", "original"),
         "overlayThemes": state.get("overlayThemes", dict(DEFAULT_OVERLAY_THEMES)),
         "overlayShapes": state.get("overlayShapes", {})
     }

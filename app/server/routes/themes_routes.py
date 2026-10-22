@@ -32,6 +32,7 @@ from server.services.theme_service import (
     create_theme_service,
     save_theme_service,
     apply_theme_service,
+    apply_shape_service,
     toggle_chat_anchor_service,
     restore_theme_service,
     set_overlay_theme_service
@@ -172,6 +173,21 @@ async def handle_set_overlay_theme(request):
         return web.json_response({"error": str(e)}, status=400)
 
 
+async def handle_apply_shape(request):
+    """Aplica una forma física globalmente a todas las escenas de OBS y el panel"""
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+
+    shape_id = str(body.get("shape", "original")).strip()
+    try:
+        res = await apply_shape_service(shape_id)
+        return web.json_response({"status": "ok", **res})
+    except ValueError as e:
+        return web.json_response({"error": str(e)}, status=400)
+
+
 def register_themes_routes(app):
     """Registra todas las rutas para la gestión modular de temas y packs"""
     init_themes_directory()
@@ -182,4 +198,5 @@ def register_themes_routes(app):
     app.router.add_post("/api/themes/restore", handle_restore_theme)
     app.router.add_post("/api/themes/overlay-assignment", handle_set_overlay_theme)
     app.router.add_post("/api/themes/apply", handle_apply_theme)
+    app.router.add_post("/api/themes/apply-shape", handle_apply_shape)
     app.router.add_post("/api/themes/chat-anchor", handle_chat_anchor_toggle)

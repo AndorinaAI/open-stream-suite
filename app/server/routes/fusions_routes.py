@@ -9,7 +9,8 @@ from server.services.fusions_service import (
     get_fusion_by_id,
     create_or_update_fusion,
     delete_fusion,
-    apply_fusion_theme_batch
+    apply_fusion_theme_batch,
+    apply_fusion_shape_batch
 )
 
 
@@ -77,6 +78,25 @@ async def handle_apply_fusion_theme(request):
         return web.json_response({"error": str(e)}, status=500)
 
 
+async def handle_apply_fusion_shape(request):
+    """Aplica una forma física a todos los overlays pertenecientes a una fusión"""
+    fusion_id = request.match_info.get("id", "").strip()
+    try:
+        body = await request.json()
+    except Exception:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+
+    shape_id = str(body.get("shapeId", "original")).strip()
+
+    try:
+        res = await apply_fusion_shape_batch(fusion_id, shape_id)
+        return web.json_response(res)
+    except ValueError as e:
+        return web.json_response({"error": str(e)}, status=404)
+    except Exception as e:
+        return web.json_response({"error": str(e)}, status=500)
+
+
 def register_fusions_routes(app):
     """Registra los endpoints HTTP para la gestión de Fusiones de overlays"""
     app.router.add_get("/api/fusions", handle_get_fusions)
@@ -84,3 +104,4 @@ def register_fusions_routes(app):
     app.router.add_get("/api/fusions/{id}", handle_get_single_fusion)
     app.router.add_delete("/api/fusions/{id}", handle_delete_fusion)
     app.router.add_post("/api/fusions/{id}/apply-theme", handle_apply_fusion_theme)
+    app.router.add_post("/api/fusions/{id}/apply-shape", handle_apply_fusion_shape)

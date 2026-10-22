@@ -4,7 +4,30 @@
   "icon": "☕",
   "badge": "CHILL & RELAX (5 TEMAS)",
   "description": "Bordes suaves y redondeados, paletas pastel y atmósfera relajante para estudio, dibujo, cocina y música.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "archetype": "cozy",
-  "author": "Open Stream Suite"
+  "author": "Open Stream Suite",
+  "shapes": [
+    {
+      "id": "cozy_polaroid",
+      "name": "Polaroid Vintage con Cinta",
+      "icon": "☕",
+      "archetype": "cozy",
+      "description": "Marco de papel marfil con textura, cinta washi tape y pie de foto manuscrito."
+    },
+    {
+      "id": "cozy_canvas",
+      "name": "Lienzo de Arte con Chinchetas",
+      "icon": "🎨",
+      "archetype": "cozy",
+      "description": "Bordes suaves de lienzo con chinchetas y paleta flotante de acuarelas."
+    },
+    {
+      "id": "cozy_soft",
+      "name": "Píldora Soft Minimal",
+      "icon": "☁️",
+      "archetype": "cozy",
+      "description": "Esquinas redondeadas de 28px y cabeceras en píldora sin texturas de papel."
+    }
+  ]
 }

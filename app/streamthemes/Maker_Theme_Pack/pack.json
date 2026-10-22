@@ -1,10 +1,26 @@
 {
   "id": "Maker_Theme_Pack",
-  "name": "Pack Maker & Taller",
+  "name": "Pack Maker & Taller Tecnológico",
   "icon": "🛠️",
-  "badge": "PACK MAKER (6 TEMAS)",
-  "description": "El pack insignia para creadores, talleres, electrónica, programación CAD e impresión 3D con 6 estilos visuales.",
-  "version": "1.0.0",
+  "badge": "CAD & WORKBENCH (6 TEMAS)",
+  "description": "Líneas técnicas, esquinas escuadra CAD, marcas de calibración ⌖ y barras de fases de proyecto.",
+  "version": "2.0.0",
   "archetype": "maker",
-  "author": "Open Stream Suite"
+  "author": "Open Stream Suite",
+  "shapes": [
+    {
+      "id": "maker_blueprint",
+      "name": "Blueprint Técnico CAD",
+      "icon": "🛠️",
+      "archetype": "maker",
+      "description": "Esquinas escuadra de precisión, marcas de calibración ⌖ y cuadrícula milimétrica."
+    },
+    {
+      "id": "maker_workbench",
+      "name": "Banco de Trabajo Studio",
+      "icon": "📐",
+      "archetype": "maker",
+      "description": "Cabecera de taller con fases de proyecto y paneles técnicos de herramientas."
+    }
+  ]
 }

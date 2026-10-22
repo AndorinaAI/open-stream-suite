@@ -286,13 +286,26 @@ const API = {
     return res.json();
   },
 
-  async setOverlayTheme(overlayKey, themeId) {
+  async setOverlayTheme(overlayKey, themeId, shapeId = null) {
+    const payload = { overlayKey };
+    if (themeId) payload.themeId = themeId;
+    if (shapeId) payload.shapeId = shapeId;
     const res = await fetch('/api/themes/overlay-assignment', {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ overlayKey, themeId })
+      body: JSON.stringify(payload)
     });
     if (!res.ok) throw new Error(`HTTP ${res.status} al asignar estilo`);
+    return res.json();
+  },
+
+  async applyShapeGlobal(shape) {
+    const res = await fetch('/api/themes/apply-shape', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ shape })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al aplicar forma global`);
     return res.json();
   },
 
@@ -374,6 +387,16 @@ const API = {
       body: JSON.stringify({ themeId })
     });
     if (!res.ok) throw new Error(`HTTP ${res.status} al aplicar tema a la fusión`);
+    return res.json();
+  },
+
+  async applyFusionShape(id, shapeId) {
+    const res = await fetch(`/api/fusions/${encodeURIComponent(id)}/apply-shape`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ shapeId })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al aplicar forma a la fusión`);
     return res.json();
   }
 };

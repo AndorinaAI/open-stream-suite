@@ -198,6 +198,16 @@ async def apply_theme_service(pack_id: str, theme_id: str) -> dict:
     return {"theme": theme_id, "pack": pack_id}
 
 
+async def apply_shape_service(shape_id: str) -> dict:
+    """Aplica una forma física globalmente a todas las escenas de OBS y panel"""
+    if not shape_id:
+        shape_id = "original"
+    save_theme_state({"activeShape": shape_id})
+    await system.broadcast({"type": "global_shape_change", "shape": shape_id})
+    logger.info(f"📐 Forma física aplicada globalmente a todo el stream: {shape_id}")
+    return {"shape": shape_id}
+
+
 def toggle_chat_anchor_service(pack_id: str, theme_id: str, anchored: bool) -> dict:
     """Alterna el anclaje del chat al tema activo o activa un derivado personalizado"""
     theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"

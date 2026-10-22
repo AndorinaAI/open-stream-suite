@@ -1,10 +1,26 @@
 {
   "id": "Open_stream_Pack",
-  "name": "Pack Open Stream (General)",
+  "name": "Pack Open Stream Suite Oficial",
   "icon": "⚡",
-  "badge": "STREAMING PRO (5 TEMAS)",
-  "description": "Pack moderno todo-en-uno para streamers generales, variedad, podcasts, charlas y directos versátiles.",
-  "version": "1.0.0",
+  "badge": "SWISS GLASS (5 TEMAS)",
+  "description": "Cristal glaseado suizo de 16px con desenfoque de 24px, vúmetros de audio estéreo y cintillo broadcast.",
+  "version": "2.0.0",
   "archetype": "openstream",
-  "author": "Open Stream Suite"
+  "author": "Open Stream Suite",
+  "shapes": [
+    {
+      "id": "openstream_glass",
+      "name": "Swiss Frosted Glass",
+      "icon": "⚡",
+      "archetype": "openstream",
+      "description": "Cristal glaseado suizo de 16px con desenfoque de 24px y bordes sutiles."
+    },
+    {
+      "id": "openstream_studio",
+      "name": "Broadcast Pro Studio",
+      "icon": "🎙️",
+      "archetype": "openstream",
+      "description": "Líneas de retransmisión con vúmetros de audio estéreo en vivo y lower-third ticker."
+    }
+  ]
 }
