@@ -461,9 +461,10 @@ function escapeHtml(text) {
 // GESTOR DE MULTI-SELECCIÓN DE ESCENAS PARA FUSIONES & BARRA FLOTANTE
 // ====================================================================
 
-window.selectedFusionScenes = new Set();
+window.selectedFusionScenes = window.selectedFusionScenes || new Set();
 
 function toggleSceneForFusionSelection(sceneKey, isChecked) {
+  window.selectedFusionScenes = window.selectedFusionScenes || new Set();
   if (isChecked) {
     window.selectedFusionScenes.add(sceneKey);
   } else {
@@ -479,6 +480,7 @@ function updateFolderSelectAllButton() {
   const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
   const folder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId);
   if (!folder) return;
+  window.selectedFusionScenes = window.selectedFusionScenes || new Set();
   const allSelected = folder.keys.length > 0 && folder.keys.every(k => window.selectedFusionScenes.has(k));
   if (allSelected) {
     btn.textContent = tr('fusions.btn_deselect_all_fusion', '☐ Desmarcar Fusión');

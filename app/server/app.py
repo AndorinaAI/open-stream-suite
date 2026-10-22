@@ -17,7 +17,8 @@ from server.routes.media_routes import (
 )
 from server.routes.actions_routes import (
     handle_status, handle_test_alert, handle_explode_emotes,
-    handle_timer_control, handle_shoutout, handle_theme_switch, handle_play_sound
+    handle_timer_control, handle_shoutout, handle_theme_switch, handle_play_sound,
+    handle_system_shutdown
 )
 from server.routes.widgets_routes import register_widgets_routes
 from server.routes.webhooks_routes import register_webhooks_routes
@@ -121,25 +122,29 @@ async def cors_and_auth_middleware(request, handler):
 
     # Protección de endpoints POST contra llamadas externas maliciosas (CSRF / Cross-Site Scripting)
     if request.method == "POST":
-        # Los webhooks públicos de donaciones y las peticiones de Decks (Elgato, Ajazz, OpenDeck)
-        is_public_webhook = (
-            request.path in PUBLIC_POST_PATHS or 
-            request.path.startswith("/api/webhooks/") or
-            request.path.startswith("/api/deck/")
-        )
-        if not is_public_webhook:
-            client_token = request.headers.get("X-Local-Token") or request.query.get("token")
-            if not client_token and request.headers.get("Authorization"):
-                parts = request.headers.get("Authorization").split()
-                if len(parts) == 2 and parts[0].lower() == "bearer":
-                    client_token = parts[1]
+        # Apagado directo local permitido desde loopback (Launcher / scripts locales)
+        if request.path == "/api/system/shutdown" and is_local_request(request):
+            pass
+        else:
+            # Los webhooks públicos de donaciones y las peticiones de Decks (Elgato, Ajazz, OpenDeck)
+            is_public_webhook = (
+                request.path in PUBLIC_POST_PATHS or 
+                request.path.startswith("/api/webhooks/") or
+                request.path.startswith("/api/deck/")
+            )
+            if not is_public_webhook:
+                client_token = request.headers.get("X-Local-Token") or request.query.get("token")
+                if not client_token and request.headers.get("Authorization"):
+                    parts = request.headers.get("Authorization").split()
+                    if len(parts) == 2 and parts[0].lower() == "bearer":
+                        client_token = parts[1]
 
-            if not client_token or client_token != LOCAL_AUTH_TOKEN:
-                logger.warning(f"🚫 Rechazada petición POST sin token local válido a {request.path} (Origin: {origin})")
-                return web.json_response({
-                    "status": "error",
-                    "error": "Acceso denegado: falta cabecera 'X-Local-Token' válida en la petición POST"
-                }, status=403)
+                if not client_token or client_token != LOCAL_AUTH_TOKEN:
+                    logger.warning(f"🚫 Rechazada petición POST sin token local válido a {request.path} (Origin: {origin})")
+                    return web.json_response({
+                        "status": "error",
+                        "error": "Acceso denegado: falta cabecera 'X-Local-Token' válida en la petición POST"
+                    }, status=403)
 
     resp = await handler(request)
     if request.path.endswith(".md") and resp.status == 200:
@@ -184,6 +189,7 @@ def create_app():
 
     # API de Estado y Acciones
     app.router.add_get("/api/status", handle_status)
+    app.router.add_post("/api/system/shutdown", handle_system_shutdown)
     app.router.add_post("/api/test", handle_test_alert)
     app.router.add_post("/api/explode", handle_explode_emotes)
     app.router.add_post("/api/timer", handle_timer_control)

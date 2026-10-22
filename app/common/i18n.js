@@ -235,10 +235,21 @@ const i18n = (() => {
     }
   }
 
+  let isTranslating = false;
+
   // Aplicar traducciones a un elemento del DOM (y sus hijos)
   function applyTranslations(root = document) {
     if (!root) return;
+    if (isTranslating) return;
+    isTranslating = true;
+    try {
+      _applyTranslationsInternal(root);
+    } finally {
+      isTranslating = false;
+    }
+  }
 
+  function _applyTranslationsInternal(root) {
     // 1. Traducir nodos con atributo data-i18n o data-i18n-html
     const nodes = root.querySelectorAll('[data-i18n], [data-i18n-html]');
     for (const node of nodes) {
@@ -366,16 +377,22 @@ const i18n = (() => {
   function initMutationObserver() {
     if (observer) return;
     observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.type === 'childList') {
-          for (const node of mutation.addedNodes) {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              applyTranslations(node);
-            } else if (node.nodeType === Node.TEXT_NODE) {
-              translateTextNodeByContent(node);
+      if (isTranslating) return;
+      isTranslating = true;
+      try {
+        for (const mutation of mutations) {
+          if (mutation.type === 'childList') {
+            for (const node of mutation.addedNodes) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                _applyTranslationsInternal(node);
+              } else if (node.nodeType === Node.TEXT_NODE) {
+                translateTextNodeByContent(node);
+              }
             }
           }
         }
+      } finally {
+        isTranslating = false;
       }
     });
     observer.observe(document.documentElement, { childList: true, subtree: true });

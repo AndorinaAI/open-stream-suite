@@ -68,7 +68,14 @@ function renderOverlayFolders() {
     }
 
     if (scenesGrid) {
-      scenesGrid.innerHTML = scenesInFolder.map(s => buildSceneCardHtml(s)).join('');
+      scenesGrid.innerHTML = scenesInFolder.map(s => {
+        try {
+          return buildSceneCardHtml(s);
+        } catch (err) {
+          console.warn('[Themes] Error rendering scene card:', s && s.key, err);
+          return '';
+        }
+      }).join('');
     }
     if (typeof updateFolderSelectAllButton === 'function') {
       updateFolderSelectAllButton();
