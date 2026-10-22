@@ -412,10 +412,13 @@ body[data-theme-archetype="cozy"] .camera-aux::before {
 /* ====================================================================
    RESETEOS Y NORMALIZACIÓN CRUZADA ENTRE PACKS (CROSS-PACK RESETS)
    Garantiza que al cambiar entre estéticas no queden residuos visuales
+   IMPORTANTE: Jamás deben afectar al estado Original nativo de la escena.
    ==================================================================== */
 
-/* Si la forma no es Cozy, resetea la caja Polaroid para que no doble-envuelva los visores */
-body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-frame {
+/* Si se fuerza explícitamente Gamer, Maker u OpenStream sobre una escena Polaroid */
+body[data-theme-archetype="gamer"] .polaroid-frame,
+body[data-theme-archetype="maker"] .polaroid-frame,
+body[data-theme-archetype="openstream"] .polaroid-frame {
   background: transparent !important;
   padding: 0 !important;
   border: none !important;
@@ -424,32 +427,54 @@ body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-frame {
   outline: none !important;
 }
 
-body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-footer,
-body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .washi-tape,
-body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .steam-dot,
-body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-handwritten,
-body[data-theme-archetype]:not([data-theme-archetype="cozy"]) .polaroid-channel {
+body[data-theme-archetype="gamer"] .polaroid-footer,
+body[data-theme-archetype="maker"] .polaroid-footer,
+body[data-theme-archetype="openstream"] .polaroid-footer,
+body[data-theme-archetype="gamer"] .washi-tape,
+body[data-theme-archetype="maker"] .washi-tape,
+body[data-theme-archetype="openstream"] .washi-tape,
+body[data-theme-archetype="gamer"] .steam-dot,
+body[data-theme-archetype="maker"] .steam-dot,
+body[data-theme-archetype="openstream"] .steam-dot,
+body[data-theme-archetype="gamer"] .polaroid-handwritten,
+body[data-theme-archetype="maker"] .polaroid-handwritten,
+body[data-theme-archetype="openstream"] .polaroid-handwritten,
+body[data-theme-archetype="gamer"] .polaroid-channel,
+body[data-theme-archetype="maker"] .polaroid-channel,
+body[data-theme-archetype="openstream"] .polaroid-channel {
   display: none !important;
 }
 
-/* Si la forma no es Gamer, oculta retículas y tags tácticos */
-body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .reticle-tl,
-body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .reticle-br,
-body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .cam-header-tag,
-body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .cam-footer-tag,
-body[data-theme-archetype]:not([data-theme-archetype="gamer"]) .live-match-chip {
+/* Ocultar retículas gamer solo si se fuerza explícitamente otro arquetipo */
+body[data-theme-archetype="cozy"] .reticle-tl,
+body[data-theme-archetype="cozy"] .reticle-br,
+body[data-theme-archetype="cozy"] .cam-header-tag,
+body[data-theme-archetype="cozy"] .cam-footer-tag,
+body[data-theme-archetype="cozy"] .live-match-chip,
+body[data-theme-archetype="maker"] .reticle-tl,
+body[data-theme-archetype="maker"] .reticle-br,
+body[data-theme-archetype="openstream"] .reticle-tl,
+body[data-theme-archetype="openstream"] .reticle-br {
   display: none !important;
 }
 
-/* Si la forma no es Maker, oculta esquinas técnicas y marcas de calibración CAD */
-body[data-theme-archetype]:not([data-theme-archetype="maker"]) .frame-corner-tr,
-body[data-theme-archetype]:not([data-theme-archetype="maker"]) .frame-corner-bl,
-body[data-theme-archetype]:not([data-theme-archetype="maker"]) .reg-mark {
+/* Ocultar esquinas técnicas solo si se fuerza explícitamente otro arquetipo */
+body[data-theme-archetype="cozy"] .frame-corner-tr,
+body[data-theme-archetype="cozy"] .frame-corner-bl,
+body[data-theme-archetype="cozy"] .reg-mark,
+body[data-theme-archetype="gamer"] .frame-corner-tr,
+body[data-theme-archetype="gamer"] .frame-corner-bl,
+body[data-theme-archetype="gamer"] .reg-mark,
+body[data-theme-archetype="openstream"] .frame-corner-tr,
+body[data-theme-archetype="openstream"] .frame-corner-bl,
+body[data-theme-archetype="openstream"] .reg-mark {
   display: none !important;
 }
 
-/* Si la forma no es OpenStream, oculta badges de estudio */
-body[data-theme-archetype]:not([data-theme-archetype="openstream"]) .cam-badge-studio {
+/* Ocultar badges de estudio solo si se fuerza otro arquetipo */
+body[data-theme-archetype="cozy"] .cam-badge-studio,
+body[data-theme-archetype="gamer"] .cam-badge-studio,
+body[data-theme-archetype="maker"] .cam-badge-studio {
   display: none !important;
 }
 
