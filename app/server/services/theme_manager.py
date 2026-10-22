@@ -171,6 +171,16 @@ def get_all_packs_and_themes():
     active_theme = state.get("activeTheme", "maker")
     active_pack = state.get("activePack", "Open_stream_Pack")
 
+    def infer_archetype(pack_id: str, theme_id: str = "") -> str:
+        combined = f"{pack_id} {theme_id}".lower()
+        if any(k in combined for k in ["cozy", "lofi", "chill", "latte", "matcha", "sakura", "lavender", "nordic", "kawaii"]):
+            return "cozy"
+        if any(k in combined for k in ["gamer", "esport", "cyber", "toxic", "glory", "stealth", "arcade", "matrix"]):
+            return "gamer"
+        if any(k in combined for k in ["maker", "terminal", "print", "blueprint", "circuit", "taller", "workbench"]):
+            return "maker"
+        return "openstream"
+
     for pack_dir in sorted(STREAMTHEMES_DIR.iterdir()):
         if not pack_dir.is_dir():
             continue
@@ -185,6 +195,9 @@ def get_all_packs_and_themes():
         else:
             pack_meta = {"id": pack_dir.name, "name": pack_dir.name}
 
+        pack_archetype = pack_meta.get("archetype") or infer_archetype(pack_dir.name)
+        pack_meta["archetype"] = pack_archetype
+
         # 1. Escanear estilos/temas del pack
         styles_dir = get_pack_styles_dir(pack_dir)
         themes = []
@@ -195,13 +208,21 @@ def get_all_packs_and_themes():
                 t_json_file = theme_dir / "theme.json"
                 t_css_file = theme_dir / "style.css"
 
-                theme_data = {"id": theme_dir.name, "name": theme_dir.name, "packId": pack_dir.name}
+                theme_data = {
+                    "id": theme_dir.name,
+                    "name": theme_dir.name,
+                    "packId": pack_dir.name,
+                    "archetype": pack_archetype
+                }
                 if t_json_file.exists():
                     try:
                         with open(t_json_file, "r", encoding="utf-8") as f:
                             theme_data.update(json.load(f))
                     except Exception:
                         pass
+
+                if not theme_data.get("archetype"):
+                    theme_data["archetype"] = infer_archetype(pack_dir.name, theme_dir.name)
 
                 theme_data["css"] = t_css_file.read_text(encoding="utf-8") if t_css_file.exists() else ""
                 theme_data["isActive"] = (theme_data["id"] == active_theme)

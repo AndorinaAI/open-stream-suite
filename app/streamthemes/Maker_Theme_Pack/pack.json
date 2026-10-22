@@ -5,5 +5,6 @@
   "badge": "PACK MAKER (6 TEMAS)",
   "description": "El pack insignia para creadores, talleres, electrónica, programación CAD e impresión 3D con 6 estilos visuales.",
   "version": "1.0.0",
+  "archetype": "maker",
   "author": "Open Stream Suite"
 }
