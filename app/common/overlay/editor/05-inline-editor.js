@@ -122,6 +122,63 @@ window.OSSEditor = window.OSSEditor || {};
     '.side-info-panel .info-row span',
     '.starting-side-modes > div:first-child',
     '.stream-mode-card span'
+    // Cozy Lo-Fi Pack
+    '.header-title span',
+    '.header-title',
+    '.ambient-pill span',
+    '.ambient-pill',
+    '.pomo-badge',
+    '.pomo-time',
+    '.tasks-header span',
+    '.tasks-header',
+    '.task-item span',
+    '.task-item',
+    '.canvas-tag span',
+    '.canvas-tag',
+    '.tools-palette-bar div',
+    '.tools-palette-bar b',
+    '.face-footer',
+    '.project-card-title span',
+    '.project-card-title',
+    '.field-label',
+    '.field-value',
+    '.polaroid-handwritten span',
+    '.polaroid-handwritten',
+    '.polaroid-footer span',
+    '.track-title',
+    '.track-author',
+    '.chat-header-title span',
+    '.chat-header-title',
+    '.chat-live-badge',
+    '.cozy-author',
+    '.cozy-text',
+    '.goal-text span',
+    '.goal-text',
+    '.goal-count',
+    // Gamer Pro Pack
+    '.match-badge span',
+    '.server-info',
+    '.telemetry-pills div',
+    '.telemetry-pills span',
+    '.telemetry-pills .val',
+    '.corner-reticle',
+    '.hero-tag',
+    '.side-panel-title',
+    '.map-pill span',
+    '.map-pill',
+    '.side-panel-box div',
+    '.side-panel-box strong',
+    '.arena-bottom-bar div',
+    '.social-links div',
+    '.social-links span',
+    '.arena-top-bar span',
+    '.arena-top-bar div',
+    // Open Stream Pack
+    '.agenda-item span',
+    '.agenda-item',
+    '.pod-cam-box span',
+    '.desktop-task-pill span',
+    '.desktop-task-pill'
   ];
 
   let isEditing = false;
@@ -140,30 +197,34 @@ window.OSSEditor = window.OSSEditor || {};
       }
 
       let tag = 'Texto';
-      if (el.matches('.panel-header span:last-child, .chat-panel-header span:last-child')) tag = 'Estado DEV/SYS';
-      else if (el.matches('.panel-header span, .chat-panel-header span, .window-title, .win-header')) tag = 'Cabecera Ventana';
-      else if (el.matches('.info-label')) tag = 'Etiqueta Info';
-      else if (el.matches('.info-value')) tag = 'Valor Info';
-      else if (el.matches('.stream-mode-card span')) tag = 'Modo Emisión';
+      if (el.matches('.panel-header span:last-child, .chat-panel-header span:last-child, .server-info')) tag = 'Estado DEV/SYS';
+      else if (el.matches('.panel-header span, .chat-panel-header span, .window-title, .win-header, .tasks-header, .project-card-title, .side-panel-title')) tag = 'Cabecera Ventana';
+      else if (el.matches('.info-label, .field-label')) tag = 'Etiqueta Info';
+      else if (el.matches('.info-value, .field-value')) tag = 'Valor Info';
+      else if (el.matches('.stream-mode-card span, .ss-mode-label')) tag = 'Modo Emisión';
       else if (el.matches('.run-title, .run-category')) tag = 'Juego Speedrun';
       else if (el.matches('.split-name')) tag = 'Segmento';
       else if (el.matches('.split-time, .split-delta, .timer-big, .pomo-time, .starting-countdown')) tag = 'Tiempo';
-      else if (el.matches('.pb-bar span, .pb-bar, .stat-item, .stat-val')) tag = 'Récord/Stat';
-      else if (el.matches('.live-indicator span, .live-status span, [data-text-key="status"], .live-status, .live-indicator')) tag = 'Estado Live';
-      else if (el.matches('.tag-line, .starting-hero-text > div:first-child, [data-i18n="themes.placeholder_ss_tag"], .game-tag')) tag = 'Etiqueta';
+      else if (el.matches('.pb-bar span, .pb-bar, .stat-item, .stat-val, .goal-count')) tag = 'Récord/Stat';
+      else if (el.matches('.live-indicator span, .live-status span, [data-text-key="status"], .live-status, .live-indicator, .chat-live-badge, .match-badge span')) tag = 'Estado Live';
+      else if (el.matches('.tag-line, .starting-hero-text > div:first-child, [data-i18n="themes.placeholder_ss_tag"], .game-tag, .hero-tag, .pomo-badge')) tag = 'Etiqueta';
       else if (el.matches('.project-name-value, .panel-project-name')) tag = 'Proyecto';
       else if (el.matches('.panel-project-phase')) tag = 'Fase Activa';
       else if (el.matches('.phase-item')) tag = 'Fase';
-      else if (el.matches('.frame-label span:last-child, .frame-label, .camera-label, .cam-label')) tag = 'Marco/Cámara';
+      else if (el.matches('.frame-label span:last-child, .frame-label, .camera-label, .cam-label, .canvas-tag span, .canvas-tag')) tag = 'Marco/Cámara';
       else if (el.matches('.panel-title')) tag = 'Título Panel';
       else if (el.matches('.project-prefix')) tag = 'Prefijo';
       else if (el.matches('.panel-project-detail')) tag = 'Notas';
       else if (el.matches('.brand-name')) tag = 'Streamer';
-      else if (el.matches('.brand-tagline')) tag = 'Lema';
+      else if (el.matches('.brand-tagline, .face-footer, .polaroid-handwritten')) tag = 'Lema/Firma';
       else if (el.matches('.hero-title, .main-stream-title')) tag = 'Título';
       else if (el.matches('.header-subtitle, .hero-subtitle, .stream-subtitle')) tag = 'Subtítulo';
       else if (el.matches('.brb-status-phrase')) tag = 'Frase Rotativa';
-      else if (el.matches('.footer-note, .bottom-bar div, .starting-footer div')) tag = 'Pie de página';
+      else if (el.matches('.track-title, .track-author')) tag = 'Música Lofi';
+      else if (el.matches('.task-item, .task-item span')) tag = 'Tarea Objetivo';
+      else if (el.matches('.map-pill, .map-pill span')) tag = 'Mapa Veto';
+      else if (el.matches('.ambient-pill span, .ambient-pill')) tag = 'Ambiente Cozy';
+      else if (el.matches('.footer-note, .bottom-bar div, .starting-footer div, .arena-bottom-bar div')) tag = 'Pie de página';
 
       const opt = document.createElement('option');
       opt.value = el.dataset.quickEditId;
@@ -220,14 +281,23 @@ window.OSSEditor = window.OSSEditor || {};
     // Captura universal de clics cuando el modo edición está activo
     document.addEventListener('click', (e) => {
       if (!isEditing) return;
-      if (e.target.closest('#oss-hud-editor') || e.target.closest('#oss-brb-phrases-control') || e.target.closest('.hud-toast') || e.target.closest('#open-stream-suite-screen-hud')) return;
-      const target = e.target;
-      if (!target.isContentEditable && target.textContent && target.textContent.trim().length > 0 && target.children.length === 0) {
-        target.setAttribute('contenteditable', 'true');
-        target.setAttribute('spellcheck', 'false');
-        target.classList.add('editable-screen-element', 'editing-active');
+      if (e.target.closest('#oss-hud-editor') || e.target.closest('#oss-brb-phrases-control') || e.target.closest('.hud-toast') || e.target.closest('#open-stream-suite-screen-hud') || e.target.closest('#oss-countdown-control')) return;
+
+      let leaf = e.target;
+      // Si el elemento clicado contiene hijos, obtener el elemento hoja más específico bajo el cursor
+      if (leaf.children.length > 0) {
+        const hit = document.elementFromPoint(e.clientX, e.clientY);
+        if (hit && hit !== leaf && leaf.contains(hit)) {
+          leaf = hit;
+        }
+      }
+
+      if (leaf && !leaf.isContentEditable && leaf.textContent && leaf.textContent.trim().length > 0) {
+        leaf.setAttribute('contenteditable', 'true');
+        leaf.setAttribute('spellcheck', 'false');
+        leaf.classList.add('editable-screen-element', 'editing-active');
         window.__OSS_IS_EDITING__ = true;
-        target.focus();
+        leaf.focus();
       }
     }, true);
 
@@ -244,7 +314,21 @@ window.OSSEditor = window.OSSEditor || {};
           if (isEditing) populateQuickJump(quickJumpSelect);
         }
 
-        document.querySelectorAll(editableSelectors.join(',')).forEach(el => {
+        // Recolectar candidatos según lista y cualquier elemento con texto directo en el lienzo
+        const allCandidates = new Set(document.querySelectorAll(editableSelectors.join(',')));
+        const canvas = document.querySelector('.overlay-canvas') || document.body;
+        canvas.querySelectorAll('*').forEach(el => {
+          if (el.closest('#open-stream-suite-screen-hud') || el.closest('#oss-countdown-control') || el.closest('.hud-toast')) return;
+          if (['SCRIPT', 'STYLE', 'SVG', 'PATH', 'MASK', 'DEFS', 'LINK'].includes(el.tagName)) return;
+          for (let i = 0; i < el.childNodes.length; i++) {
+            if (el.childNodes[i].nodeType === Node.TEXT_NODE && el.childNodes[i].textContent.trim().length > 0) {
+              allCandidates.add(el);
+              break;
+            }
+          }
+        });
+
+        allCandidates.forEach(el => {
           el.classList.toggle('editable-screen-element', isEditing);
           el.classList.toggle('editing-active', isEditing);
           if (isEditing) {

@@ -76,6 +76,11 @@
       ensureScript('backdrop-aperture.js', () => window.OSSAperture);
     }
 
+    // 1.06 Inyección del motor de interactividad y elementos switchables
+    if (!window.OSSInteractive) {
+      ensureScript('interactive-features.js', () => window.OSSInteractive);
+    }
+
     // 1.1 Detección de clave de escena para estilos independientes
     function detectCurrentSceneKey() {
       const p = window.location.pathname;
