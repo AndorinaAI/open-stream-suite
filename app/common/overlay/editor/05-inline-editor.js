@@ -121,7 +121,7 @@ window.OSSEditor = window.OSSEditor || {};
     '.card-header span',
     '.side-info-panel .info-row span',
     '.starting-side-modes > div:first-child',
-    '.stream-mode-card span'
+    '.stream-mode-card span',
     // Cozy Lo-Fi Pack
     '.header-title span',
     '.header-title',
