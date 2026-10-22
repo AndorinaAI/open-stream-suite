@@ -290,7 +290,7 @@ function openCurrentSceneFullscreen() {
   if (!currentEditingScene) return;
   const assignedTheme = (cachedOverlayThemes && cachedOverlayThemes[currentEditingScene.key]) || currentActiveThemeId;
   const fullUrl = `${currentEditingScene.path}?theme=${encodeURIComponent(assignedTheme)}`;
-  window.open(fullUrl, '_blank');
+  window.open(fullUrl, '_blank', 'noopener,noreferrer');
 }
 
 function copyCurrentSceneUrl() {

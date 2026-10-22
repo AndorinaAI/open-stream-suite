@@ -166,16 +166,19 @@
     maskEl = mask;
   }
 
+  let isUpdatingCutouts = false;
+
   /**
    * Recalcula y dibuja los huecos negros en la máscara SVG
    */
   function updateCutouts() {
-    if (!maskEl) return;
-
-    // Eliminar recortes anteriores (conservando el baseWhite inicial)
-    while (maskEl.childNodes.length > 1) {
-      maskEl.removeChild(maskEl.lastChild);
-    }
+    if (!maskEl || isUpdatingCutouts) return;
+    isUpdatingCutouts = true;
+    try {
+      // Eliminar recortes anteriores (conservando el baseWhite inicial)
+      while (maskEl.childNodes.length > 1) {
+        maskEl.removeChild(maskEl.lastChild);
+      }
 
     // Coordenadas respecto al lienzo 1920x1080
     const canvasEl = document.querySelector('.overlay-canvas') || document.body;
@@ -227,6 +230,12 @@
       cutRect.setAttribute('fill', '#000000');
       maskEl.appendChild(cutRect);
     });
+    } finally {
+      // Defer reset of flag to next animation frame so DOM mutations triggered by this update are ignored
+      requestAnimationFrame(() => {
+        isUpdatingCutouts = false;
+      });
+    }
   }
 
   /**
@@ -328,8 +337,22 @@
 
     // Observar mutaciones en el DOM para reposicionamientos dinámicos
     if (window.MutationObserver) {
-      const observer = new MutationObserver(() => {
-        updateCutouts();
+      let debounceTimer = null;
+      const observer = new MutationObserver((mutations) => {
+        if (isUpdatingCutouts) return;
+        const relevant = mutations.some(m => {
+          const t = m.target;
+          if (!t) return false;
+          if (t.id === 'oss-backdrop-aperture-layer' || t.id === 'oss-aperture-svg-defs' || t.id === 'oss-aperture-mask') return false;
+          if (t.closest && (t.closest('#oss-aperture-svg-defs') || t.closest('#oss-backdrop-aperture-layer') || t.closest('.open-stream-suite-screen-hud'))) return false;
+          return true;
+        });
+        if (!relevant) return;
+
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          updateCutouts();
+        }, 150);
       });
       observer.observe(document.body, { attributes: true, childList: true, subtree: true, attributeFilter: ['style', 'class'] });
     }
