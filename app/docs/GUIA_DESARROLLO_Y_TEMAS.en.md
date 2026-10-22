@@ -234,3 +234,38 @@ Every floating control (`#open-stream-suite-screen-hud`, `#oss-countdown-control
    - Clicking `💾 Guardar` posts modified texts and active states to `POST /api/overlays/texts` (authenticated via `X-Local-Token`).
    - The backend updates `overlay_texts_config.json` and broadcasts the WebSocket event `overlay_texts_updated` to all open browser sources in OBS Studio.
 
+---
+
+## 9. Pack Scene Unification: Geometric Physical Archetypes and Hybrid Fusions
+
+### 9.1. Decoupling Geometric Archetypes from Color Themes
+To allow scenes from different packs to coexist smoothly and be combined into custom **Fusions** without losing their distinct brand identity, the architecture strictly separates the **physical frame geometry** from the **color palette**:
+
+1. **Physical Geometric Archetypes (`data-pack`)**:
+   Automatically set on `document.body.dataset.pack` by `common/overlay.js`:
+   - `body[data-pack="cozy"]`: Enforces soft rounded camera frames (`--cozy-frame-radius: 28px`), polaroid badges, and pill tags (`50px`).
+   - `body[data-pack="gamer"]`: Enforces 45° chamfers and polygonal cuts (`clip-path: polygon(...)`), sci-fi HUD badges, and esports bevels.
+   - `body[data-pack="maker"]`: Enforces technical corner brackets, millimeter metric scale accents, and monospace technical fonts.
+   - `body[data-pack="oss"]`: Clean, straight translucent frames.
+
+2. **Color Palette Themes (`.theme-<id>`)**:
+   Defined in `common/themes.css`. They govern purely color design tokens (`--color-bg`, `--color-accent`, `--color-border`, etc.).
+   This allows any scene (e.g. Maker workshop or Cozy study) to adopt color themes like `synthwave`, `neon_glow`, `matrix`, or `candy` without altering its physical shape.
+
+### 9.2. Total Harmony with Hybrid Fusions
+**Fusions** (`⚡ Fusiones de Overlays` tab) allow streamers to group scenes from completely different packs (e.g. Cozy Lo-Fi chat + Maker desk + Gamer victory) into a single pack collection:
+- Applying a batch theme (`POST /api/fusions/{id}/apply-theme`) applies a unified color palette to all scenes in the fusion.
+- Each scene retains its physical frame archetype thanks to `data-pack`.
+- Zero CSS conflicts and zero geometric distortions!
+
+### 9.3. Preventative Pack Backups
+All original stream packs in their pre-unification state are safely archived in:
+`backups/packs_backup/`
+Including snapshots of `Cozy_LoFi_Pack`, `Gamer_Pro_Pack`, `Maker_Theme_Pack`, `Open_stream_Pack`, and `themes_state.json`.
+
+### 9.4. Multi-Style On-Screen Chat Links for OBS
+The chat widget provides a dedicated profile manager under **🔗 Enlaces OBS por Estilo**:
+- Add separate Browser Source URLs in OBS Studio for different scenes using `?profile=<id>` (e.g. `?profile=cozy_lofi`, `?profile=gamer_pro`, `?profile=maker_glass`).
+- Any updates made in the visual editor synchronize reactively to OBS in real time.
+
+

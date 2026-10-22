@@ -1,0 +1,19 @@
+{
+  "id": "clean_minimal",
+  "packId": "Open_stream_Pack",
+  "name": "Clean Minimal",
+  "badge": "03 // MINIMAL",
+  "accentCyan": "#38BDF8",
+  "accentOrange": "#F1F5F9",
+  "bgDark": "#0B1120",
+  "textLight": "#F8FAFC",
+  "panelBg": "#1E293B",
+  "textDim": "#94A3B8",
+  "fontPrimary": "var(--font-primary)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 40,
+  "borderStyle": "rounded",
+  "desc": "Azul celeste puro sobre gris pizarra cristalino. Nitidez impecable.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

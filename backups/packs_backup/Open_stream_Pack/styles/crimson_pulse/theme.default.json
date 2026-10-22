@@ -1,0 +1,19 @@
+{
+  "id": "crimson_pulse",
+  "packId": "Open_stream_Pack",
+  "name": "Crimson Pulse",
+  "badge": "05 // CRIMSON",
+  "accentCyan": "#F43F5E",
+  "accentOrange": "#FB7185",
+  "bgDark": "#150B10",
+  "textLight": "#FFF1F2",
+  "panelBg": "#26131D",
+  "textDim": "#A68896",
+  "fontPrimary": "var(--font-primary)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 70,
+  "borderStyle": "rounded",
+  "desc": "Rojo carmesí pasional con destellos magenta intenso.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

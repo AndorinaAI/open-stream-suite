@@ -1091,6 +1091,7 @@
           <div>
             <div class="miniapp-tab-nav">
               <button type="button" class="miniapp-tab-btn active" data-tab="controls" onclick="switchMiniAppTab('controls')" data-i18n="widgets.tab_controls">🎛️ Controles Visuales</button>
+              <button type="button" id="tab-btn-chat-profiles" class="miniapp-tab-btn" data-tab="chat-profiles" onclick="switchMiniAppTab('chat-profiles')" style="display: none;" data-i18n="widgets.tab_chat_profiles">🔗 Enlaces OBS por Estilo</button>
               <button type="button" class="miniapp-tab-btn" data-tab="shortcuts" onclick="switchMiniAppTab('shortcuts')" data-i18n="widgets.tab_shortcuts">⚡ Acciones Rápidas (Atajos)</button>
               <button type="button" class="miniapp-tab-btn" data-tab="code" onclick="switchMiniAppTab('code')" data-i18n="widgets.tab_code">💻 Código / JSON & Estilos</button>
             </div>
@@ -1127,6 +1128,11 @@
                 <button type="button" class="btn-action-primary" onclick="saveMiniAppCodeEditor()" data-i18n="widgets.btn_save_json">💾 Guardar y Aplicar Cambios JSON</button>
                 <button type="button" class="btn-stage-preset" onclick="renderMiniAppCodeEditor()" data-i18n="widgets.btn_reload_code">🔄 Recargar Código</button>
               </div>
+            </div>
+
+            <!-- 4. Vista Enlaces OBS por Estilo / Escena (Específica de Chat) -->
+            <div id="miniapp-view-chat-profiles" style="display: none;">
+              <!-- Renderizado dinámico por 09-profiles-links.js -->
             </div>
           </div>
 
@@ -1179,8 +1185,9 @@
               <div id="chat-shortcuts-container" class="widget-actions-deck">
                 <!-- Atajos cargados dinámicamente -->
               </div>
-              <div style="display: flex; gap: 6px; margin-top: 10px; border-top: 1px dashed var(--color-border-dim); padding-top: 8px;">
+              <div style="display: flex; gap: 6px; margin-top: 10px; border-top: 1px dashed var(--color-border-dim); padding-top: 8px; flex-wrap: wrap;">
                 <button type="button" id="btn-open-chat-miniapp" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="openWidgetMiniApp('chat', 'controls')" data-i18n="widgets.chat.btn_options">⚙️ Opciones Mini-App</button>
+                <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px; background: #0284C7; border-color: #38BDF8;" onclick="openWidgetMiniApp('chat', 'chat-profiles')" data-i18n="widgets.chat.btn_profiles">🔗 Enlaces por Estilo</button>
                 <button type="button" class="btn-stage-preset" style="font-size: 11px; padding: 4px 10px;" onclick="openWidgetMiniApp('chat', 'shortcuts')" data-i18n="widgets.chat.btn_shortcuts">✏️ Gestionar Atajos</button>
                 <button type="button" class="btn-stage-preset" style="font-size: 11px; padding: 4px 10px;" onclick="openWidgetMiniApp('chat', 'code')" data-i18n="widgets.chat.btn_css">💻 CSS / JSON</button>
               </div>
@@ -3182,6 +3189,7 @@
   <script src="/widgets/chat/panel/06-particles.js?v=50"></script>
   <script src="/widgets/chat/panel/07-css-guide.js?v=50"></script>
   <script src="/widgets/chat/panel/08-simulate-save.js?v=50"></script>
+  <script src="/widgets/chat/panel/09-profiles-links.js?v=50"></script>
   <script src="/widgets/goal/panel/01a-target-tab.js?v=50"></script>
   <script src="/widgets/goal/panel/01b-styles-tab.js?v=50"></script>
   <script src="/widgets/goal/panel/01-controls.js?v=50"></script>

@@ -671,3 +671,38 @@ Por ello, todo panel flotante (`#open-stream-suite-screen-hud`, `#oss-countdown-
 4. **Sincronización de Estado en `overlay_texts_config.json`**:
    Define la clave de tu escena en `overlay_texts_config.json` para que guarde y restaure tanto los textos como los estados funcionales (índice activo, contadores, flags).
 
+---
+
+## 9. Unificación de Escenas de Packs con Arquetipos Físicos y Fusiones Híbridas
+
+### 9.1. Desacoplamiento entre Arquetipo Geométrico y Paleta de Color
+Para permitir que las escenas de diferentes packs convivan en armonía y puedan combinarse en **Fusiones (Fusions)** sin perder su identidad visual, la arquitectura separa estrictamente la **geometría física del marco** de la **paleta cromática**:
+
+1. **Arquetipos Geométricos Físicos (`data-pack`)**:
+   Inyectados automáticamente en `document.body.dataset.pack` por `common/overlay.js`:
+   - `body[data-pack="cozy"]`: Enmarca las cámaras y paneles con esquinas redondeadas suaves (`--cozy-frame-radius: 28px`), polaroids y cápsulas píldora (`50px`).
+   - `body[data-pack="gamer"]`: Aplica chaflanes y cortes poliédricos a 45° (`clip-path: polygon(...)`), estética sci-fi HUD y biseles esports.
+   - `body[data-pack="maker"]`: Aplica soportes y corchetes angulares de esquina técnica, cotas métricas y tipografía mono/tech.
+   - `body[data-pack="oss"]`: Diseños rectos pulidos y translúcidos.
+
+2. **Paletas de Color de Tema (`.theme-<id>`)**:
+   Definidas en `common/themes.css`. Gobiernan exclusivamente los tokens cromáticos (`--color-bg`, `--color-accent`, `--color-border`, etc.).
+   Esto permite que una escena de taller Maker o una escena Cozy adopten colores como `synthwave`, `neon_glow`, `matrix` o `candy` sin romper sus esquinas ni sus siluetas físicas.
+
+### 9.2. Armonía con las Fusiones Híbridas (Fusions)
+Las **Fusiones** (pestaña `⚡ Fusiones de Overlays`) permiten agrupar escenas procedentes de packs completamente distintos (ej. charla Cozy + cámara cenital Maker + victoria Gamer) en una única colección:
+- Al aplicar un tema en lote a una Fusión (`POST /api/fusions/{id}/apply-theme`), todas las escenas comparten el mismo esquema cromático.
+- Sin embargo, cada escena mantiene su forma física original correspondiente a su pack de procedencia gracias a `data-pack`.
+- El resultado es una suite de stream visualmente cohesiva y elegante con **cero conflictos entre packs**.
+
+### 9.3. Copia de Seguridad Preventiva de Packs
+Todos los packs originales en su estado previo a la unificación geométrica se encuentran respaldados íntegramente en:
+`backups/packs_backup/`
+Contiene copias recursivas de `Cozy_LoFi_Pack`, `Gamer_Pro_Pack`, `Maker_Theme_Pack`, `Open_stream_Pack` y `themes_state.json`.
+
+### 9.4. Enlaces de Chat OBS por Perfil de Escena
+Para complementar la unificación visual de escenas, el widget de chat dispone de su propio gestor de perfiles en la pestaña **🔗 Enlaces OBS por Estilo**:
+- Cada escena en OBS puede llevar su propia fuente de navegador de chat con el parámetro `?profile=<id>` (ej. `?profile=cozy_lofi`, `?profile=gamer_pro`, `?profile=maker_glass`).
+- Cualquier ajuste realizado en el editor visual se sincroniza de forma reactiva a OBS sin necesidad de recargar la fuente.
+
+

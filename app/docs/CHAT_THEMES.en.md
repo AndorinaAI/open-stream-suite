@@ -22,8 +22,23 @@ Use as a 1920×1080 browser source directly overlaid onto gameplay or camera wit
 - **Default URL**: `http://localhost:8080/widgets/chat/`
 - **Bottom-Right Corner**: `http://localhost:8080/widgets/chat/?pos=bottom-right`
 - **Top-Left Corner**: `http://localhost:8080/widgets/chat/?pos=top-left`
-- **Recommended On-Screen Theme**: `http://localhost:8080/widgets/chat/?theme=screen_no_overlay` (deep contrast drop-shadow and translucent bubble for readability).
-- **Ghost Transparent Theme**: `http://localhost:8080/widgets/chat/?theme=ghost` (100% transparent text without borders).
+
+### Mode 3: Multi-Style OBS Links by Scene Profile (`?profile=<id>`)
+Allows streamers to assign unique chat aesthetics to different scenes in OBS Studio by simply passing `?profile=...` in the Browser Source URL:
+- **🌿 Cozy Scene (Just Chatting / Relax)**: `http://localhost:8080/widgets/chat/index.html?profile=cozy_lofi` (warm polaroid soft card, 85% translucent glass, pastel amber)
+- **⚡ Gamer Scene (Gameplay / Esports)**: `http://localhost:8080/widgets/chat/index.html?profile=gamer_pro` (45° sci-fi chamfered card, cyan & emerald neon glow, Orbitron font)
+- **🛠️ Maker Scene (Workshop / CAD / 3D)**: `http://localhost:8080/widgets/chat/index.html?profile=maker_glass` (frosted tech glass, cyan left neon strip)
+- **📺 Fullscreen Gameplay (No Overlay)**: `http://localhost:8080/widgets/chat/index.html?profile=screen_no_overlay` (clean 28% pill overlay)
+- **👻 Ghost Minimal 100% Transparent**: `http://localhost:8080/widgets/chat/index.html?profile=ghost` (borderless, deep drop-shadow on text)
+- **💬 Comic / Pop Scene**: `http://localhost:8080/widgets/chat/index.html?profile=bubble` (asymmetrical speech bubble with dual gradient)
+
+#### Optional Fine-Tuning Query Parameters:
+Any style property can be fine-tuned or overridden on the fly:
+- `&shape=rounded|soft_card|scifi|bubble|pill|arcade|box|tag|slant` (message card shape)
+- `&opacity=0..100` (background opacity percentage)
+- `&size=12..24` (font size in px)
+- `&font=outfit|orbitron|poppins|inter|comfortaa|rajdhani|mono` (typography)
+- `&border=57D6C4` (hex border accent color)
 
 ---
 

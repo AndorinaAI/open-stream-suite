@@ -1,0 +1,26 @@
+body[data-theme="stealth_mono"],
+[data-theme="stealth_mono"] {
+  --color-bg-dark: #0A0B0E;
+  --color-text-light: #F8FAFC;
+  --color-accent-cyan: #E2E8F0;
+  --color-accent-orange: #94A3B8;
+  --color-panel-bg: #181A22;
+  --color-text-dim: #7A8296;
+  --color-border-cyan: rgba(226, 232, 240, 0.4);
+  --color-border-cyan-bright: #E2E8F0;
+  --theme-glow: 0 0 14px rgba(226, 232, 240, 0.5);
+  --frame-radius: 0px;
+  --frame-border-width: 1px;
+  --frame-border-style: solid;
+  --frame-clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  --frame-shadow: none;
+  --frame-corner-display: block;
+  --panel-radius: 0px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(6px);
+  --panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  --badge-radius: 0px;
+  --badge-clip-path: none;
+  --header-radius: 0px;
+  --header-clip-path: none;
+}

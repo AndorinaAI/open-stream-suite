@@ -1,0 +1,19 @@
+{
+  "id": "sakura_sunset",
+  "packId": "Cozy_LoFi_Pack",
+  "name": "Sakura Bloom",
+  "badge": "04 // SAKURA",
+  "accentCyan": "#FB7185",
+  "accentOrange": "#FBBF24",
+  "bgDark": "#181216",
+  "textLight": "#FFF1F2",
+  "panelBg": "#2A1C25",
+  "textDim": "#A8949E",
+  "fontPrimary": "var(--font-primary)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 50,
+  "borderStyle": "rounded",
+  "desc": "Flores de cerezo en primavera con luz dorada crepuscular.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

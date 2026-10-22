@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Open Stream Suite — Swiss Broadcast Pantalla Compartida</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+      font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+      color: #f8fafc;
+    }
+
+    /* Screen Source Indicator Pill */
+    .screen-pill {
+      position: absolute;
+      top: 24px;
+      left: 28px;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .screen-pill .icon {
+      color: #38bdf8;
+      font-size: 15px;
+    }
+    .screen-pill .badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Picture in Picture Webcam Box */
+    .pip-cam-box {
+      position: absolute;
+      bottom: 32px;
+      right: 36px;
+      width: 420px;
+      height: 236px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .pip-label-bar {
+      margin: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      padding: 6px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .pip-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #38bdf8;
+    }
+    .pip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    /* Minimalist Bottom Left Info Card */
+    .stream-info-card {
+      position: absolute;
+      bottom: 32px;
+      left: 36px;
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #cbd5e1;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .stream-info-card span.highlight {
+      color: #f8fafc;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body data-theme="neon_streamer">
+  <!-- Top Left Screen Source -->
+  <div class="screen-pill">
+    <span class="icon">🖥️</span>
+    <span>CAPTURA DE PANTALLA // DEMOSTRACIÓN</span>
+    <span class="badge">1080p SOURCE</span>
+  </div>
+
+  <!-- Bottom Left Info Card -->
+  <div class="stream-info-card">
+    <div>TRANSMISIÓN EN DIRECTO: <span class="highlight">OPEN STREAM SUITE</span></div>
+    <div style="color: rgba(255,255,255,0.2);">|</div>
+    <div>SÍGUENOS: <span class="highlight">@CanalOficial</span></div>
+  </div>
+
+  <!-- Picture in Picture Presenter Webcam -->
+  <div class="pip-cam-box">
+    <div class="pip-label-bar">
+      <span>STREAMER // PRESENTADOR</span>
+      <div class="pip-status">
+        <span class="pip-dot"></span>
+        <span>MIC ACTIVO</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/config.js"></script>
+  <script src="/common/overlay.js"></script>
+</body>
+</html>

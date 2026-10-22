@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Open Stream Suite — Swiss Broadcast Just Chatting</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 28px 36px;
+      box-sizing: border-box;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+      color: #f8fafc;
+    }
+
+    /* Swiss Broadcast Neo-Glass Top Header */
+    .broadcast-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 28px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+    .broadcast-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .on-air-pill {
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+    .on-air-dot {
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      animation: pulse-dot 1.4s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.7); }
+    }
+    .channel-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #f8fafc;
+    }
+    .channel-category {
+      font-size: 12px;
+      font-weight: 500;
+      color: #94a3b8;
+      border-left: 1px solid rgba(255,255,255,0.2);
+      padding-left: 12px;
+      margin-left: 4px;
+    }
+    .broadcast-telemetry {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+    .live-time-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 14px;
+      border-radius: 6px;
+      font-family: monospace;
+      letter-spacing: 1px;
+    }
+
+    /* Main Stage Layout */
+    .main-stage {
+      display: flex;
+      gap: 28px;
+      flex: 1;
+      margin: 20px 0;
+      min-height: 0;
+    }
+
+    /* Swiss Studio Camera Frame with VU Meters */
+    .cam-container {
+      flex: 3;
+      display: flex;
+      gap: 12px;
+      position: relative;
+    }
+    .cam-box {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 12px;
+      position: relative;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+    .cam-badge-studio {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cam-badge-studio .lens-icon {
+      color: #38bdf8;
+    }
+
+    /* Audio Peak VU Meter */
+    .vu-meter-column {
+      width: 14px;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column-reverse;
+      padding: 4px 2px;
+      gap: 3px;
+      box-sizing: border-box;
+      align-items: center;
+    }
+    .vu-seg {
+      width: 8px;
+      height: 6px;
+      border-radius: 2px;
+      background: #1e293b;
+      transition: background 0.15s ease;
+    }
+    .vu-seg.g { background: #10b981; }
+    .vu-seg.y { background: #f59e0b; }
+    .vu-seg.r { background: #ef4444; }
+
+    /* Neo-Glass Chat Column */
+    .chat-column {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+    }
+    .chat-header {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
+    }
+    .chat-room-badge {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+    }
+
+    /* Swiss Broadcast Lower-Third News Ticker */
+    .broadcast-lower-third {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    }
+    .ticker-tag {
+      background: #0284c7;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      padding: 6px 14px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .ticker-headline {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f1f5f9;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ticker-headline .topic-bullet {
+      color: #38bdf8;
+      font-weight: 900;
+    }
+    .ticker-socials {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    .ticker-socials span {
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body data-theme="neon_streamer">
+  <!-- Swiss Broadcast Header -->
+  <header class="broadcast-header">
+    <div class="broadcast-brand">
+      <div class="on-air-pill">
+        <span class="on-air-dot"></span>
+        <span>ON AIR</span>
+      </div>
+      <div class="channel-title">STUDIO CENTRAL</div>
+      <div class="channel-category">CHARLA ABIERTA & DEBATE</div>
+    </div>
+    <div class="broadcast-telemetry">
+      <div class="live-time-pill" id="clock-display">02:15:40 LIVE</div>
+      <div style="color: #64748b;">1080p60 · STUDIO FEED</div>
+    </div>
+  </header>
+
+  <!-- Main Stage -->
+  <main class="main-stage">
+    <div class="cam-container">
+      <div class="cam-box">
+        <div class="cam-badge-studio">
+          <span class="lens-icon">◉</span>
+          <span>CÁMARA PRINCIPAL // HOST</span>
+        </div>
+      </div>
+      <!-- Dual Audio VU Meter -->
+      <div class="vu-meter-column" title="Stereo Master Audio L">
+        <div class="vu-seg r"></div>
+        <div class="vu-seg y"></div>
+        <div class="vu-seg y"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+      </div>
+      <div class="vu-meter-column" title="Stereo Master Audio R">
+        <div class="vu-seg r"></div>
+        <div class="vu-seg y"></div>
+        <div class="vu-seg y"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+        <div class="vu-seg g"></div>
+      </div>
+    </div>
+
+    <!-- Chat Column -->
+    <aside class="chat-column">
+      <div class="chat-header">
+        <span>Chat de la Comunidad</span>
+        <span class="chat-room-badge">EN VIVO</span>
+      </div>
+      <div style="flex:1;"></div>
+    </aside>
+  </main>
+
+  <!-- Broadcast Lower-Third News Ticker -->
+  <footer class="broadcast-lower-third">
+    <div class="ticker-tag">NOTICIA CENTRAL</div>
+    <div class="ticker-headline" id="lbl-topic">
+      <span class="topic-bullet">▶</span>
+      <span>Abriendo debate en directo con el chat · Opiniones, actualidad y reflexiones de la semana</span>
+    </div>
+    <div class="ticker-socials">
+      <div>TWITCH: <span>/TuCanal</span></div>
+      <div>DISCORD: <span>/Comunidad</span></div>
+    </div>
+  </footer>
+
+  <script src="/config.js"></script>
+  <script src="/common/overlay.js"></script>
+  <script>
+    // Live studio audio VU meter gentle pulse animation
+    setInterval(() => {
+      const segs = document.querySelectorAll('.vu-seg');
+      segs.forEach(s => {
+        if (!s.classList.contains('r') && Math.random() > 0.4) {
+          s.style.opacity = Math.random() > 0.3 ? '1' : '0.2';
+        }
+      });
+    }, 120);
+  </script>
+</body>
+</html>

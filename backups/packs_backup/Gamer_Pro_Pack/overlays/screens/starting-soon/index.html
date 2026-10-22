@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gamer Pro — Tournament Arena Match Countdown</title>
+  <link rel="stylesheet" href="/common/styles.css">
+  <link rel="stylesheet" href="/common/themes.css">
+  <style>
+    body {
+      width: 1920px;
+      height: 1080px;
+      margin: 0;
+      padding: 36px 48px;
+      box-sizing: border-box;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      font-family: var(--font-tech, 'JetBrains Mono', 'Segoe UI', monospace);
+      color: #f8fafc;
+    }
+
+    /* Top Tournament Telemetry Bar */
+    .arena-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 26, 0.88);
+      border: 1px solid var(--color-accent-cyan, #57d6c4);
+      clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+      padding: 12px 32px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    }
+    .match-status-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .match-badge {
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 10px;
+      clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .match-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fff;
+      animation: pulse-dot 1s infinite;
+    }
+    @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+    .server-info {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--color-accent-cyan, #57d6c4);
+    }
+    .telemetry-pills {
+      display: flex;
+      gap: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .telemetry-pills span.val {
+      color: #f1f5f9;
+    }
+
+    /* Center Match Arena Stage */
+    .arena-center-stage {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      margin: auto 0;
+    }
+    .match-hero-card {
+      flex: 1.4;
+      background: rgba(10, 15, 26, 0.85);
+      border: 2px solid var(--color-accent-cyan, #57d6c4);
+      clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 30px 100%, 0 calc(100% - 30px));
+      padding: 40px 50px;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+    .corner-reticle {
+      position: absolute;
+      font-size: 14px;
+      color: var(--color-accent-orange, #ff783f);
+      font-weight: 900;
+    }
+    .hero-tag {
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: var(--color-accent-orange, #ff783f);
+      margin-bottom: 8px;
+    }
+    .main-stream-title {
+      font-size: 58px;
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.1;
+    }
+    .stream-subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+      margin: 12px 0 24px 0;
+      letter-spacing: 1px;
+    }
+    .starting-countdown {
+      font-size: 76px;
+      font-weight: 900;
+      color: var(--color-accent-cyan, #57d6c4);
+      letter-spacing: 6px;
+      margin: 10px 0;
+      font-family: monospace;
+      text-shadow: 0 0 30px rgba(87, 214, 196, 0.4);
+    }
+    .tech-progress-bar {
+      width: 100%;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      clip-path: polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%);
+      overflow: hidden;
+      margin-top: 14px;
+      border: 1px solid rgba(87, 214, 196, 0.3);
+    }
+    .tech-progress-fill {
+      height: 100%;
+      width: 65%;
+      background: linear-gradient(90deg, var(--color-accent-cyan, #57d6c4), var(--color-accent-orange, #ff783f));
+      transition: width 1s linear;
+      box-shadow: 0 0 12px var(--color-accent-cyan, #57d6c4);
+    }
+
+    /* Side Match Lobby Card */
+    .match-side-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .side-panel-box {
+      background: rgba(10, 15, 26, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-left: 4px solid var(--color-accent-orange, #ff783f);
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+      padding: 20px 24px;
+    }
+    .side-panel-title {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--color-accent-orange, #ff783f);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .map-veto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .map-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 8px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .map-pill.picked {
+      border-color: var(--color-accent-cyan, #57d6c4);
+      background: rgba(87, 214, 196, 0.1);
+      color: var(--color-accent-cyan, #57d6c4);
+    }
+
+    /* Bottom Match Ticker */
+    .arena-bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 15, 26, 0.88);
+      border-top: 2px solid var(--color-accent-orange, #ff783f);
+      padding: 14px 32px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .social-links {
+      display: flex;
+      gap: 20px;
+    }
+    .social-links span {
+      color: #f1f5f9;
+    }
+  </style>
+</head>
+<body data-theme="crimson_esport">
+  <!-- Top Tournament Telemetry Bar -->
+  <header class="arena-top-bar">
+    <div class="match-status-group">
+      <div class="match-badge">
+        <span class="dot"></span>
+        <span>LOBBY EN VIVO</span>
+      </div>
+      <div class="server-info">// TOURNAMENT SERVER: EU-CENTRAL · 128 TICK</div>
+    </div>
+    <div class="telemetry-pills">
+      <div>PING: <span class="val">14ms</span></div>
+      <div>SESSION: <span class="val">COMPETITIVE S9</span></div>
+      <div>FPS: <span class="val">240 CAP</span></div>
+    </div>
+  </header>
+
+  <!-- Center Stage -->
+  <main class="arena-center-stage">
+    <div class="match-hero-card">
+      <div class="corner-reticle" style="top:12px; left:14px;">[+]</div>
+      <div class="corner-reticle" style="bottom:12px; right:14px;">[+]</div>
+      <div class="hero-tag">// CALENTAMIENTO Y ESTRATEGIA</div>
+      <h1 class="main-stream-title">MATCH INCOMING</h1>
+      <p class="stream-subtitle">SINCRONIZANDO COMUNICACIONES Y CONFIGURACIÓN DE EQUIPO...</p>
+      <div class="starting-countdown">05:00</div>
+      <div class="tech-progress-bar">
+        <div class="tech-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Side Match Lobby Card -->
+    <aside class="match-side-card">
+      <div class="side-panel-box">
+        <div class="side-panel-title">POZO DE MAPAS // SELECCIONADOS</div>
+        <div class="map-veto-grid">
+          <div class="map-pill picked">
+            <span>MAP 1: ASCENT</span>
+            <span style="font-size:10px;">PICK</span>
+          </div>
+          <div class="map-pill picked">
+            <span>MAP 2: BIND</span>
+            <span style="font-size:10px;">PICK</span>
+          </div>
+          <div class="map-pill">
+            <span>MAP 3: HAVEN</span>
+            <span style="font-size:10px; color:#64748b;">DECIDER</span>
+          </div>
+          <div class="map-pill" style="opacity:0.4;">
+            <span>SPLIT</span>
+            <span style="font-size:10px; color:#ef4444;">BAN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-panel-box" style="border-left-color: var(--color-accent-cyan, #57d6c4);">
+        <div class="side-panel-title" style="color:var(--color-accent-cyan, #57d6c4);">OBJETIVOS DE LA SESIÓN</div>
+        <div style="font-size:13px; line-height:1.6; color:#cbd5e1;">
+          <div>⚡ Racha actual: <strong style="color:#f1f5f9;">+5 Victorias</strong></div>
+          <div>🎯 Meta de MMR: <strong style="color:var(--color-accent-cyan, #57d6c4);">Ascendant III -> Immortal</strong></div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Bottom Ticker -->
+  <footer class="arena-bottom-bar">
+    <div>TORNEO EN DIRECTO // CANAL OFICIAL</div>
+    <div class="social-links">
+      <div>DISCORD: <span>/EsportsTeam</span></div>
+      <div>TWITTER: <span>@ProGamerLive</span></div>
+      <div>COMANDOS: <span>!sens !crosshair !mouse</span></div>
+    </div>
+  </footer>
+
+  <script src="/config.js"></script>
+  <script src="/common/overlay.js"></script>
+</body>
+</html>

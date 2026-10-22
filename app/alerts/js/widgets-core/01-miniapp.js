@@ -106,6 +106,11 @@ async function openWidgetMiniApp(widgetId, initialTab = 'controls') {
     }, 400);
   }
 
+  const chatProfilesTabBtn = document.getElementById('tab-btn-chat-profiles');
+  if (chatProfilesTabBtn) {
+    chatProfilesTabBtn.style.display = (widgetId === 'chat') ? 'inline-flex' : 'none';
+  }
+
   switchMiniAppTab(initialTab);
 }
 
@@ -122,14 +127,19 @@ function switchMiniAppTab(tabName) {
   });
 
   const controlsView = document.getElementById('miniapp-view-controls');
+  const chatProfilesView = document.getElementById('miniapp-view-chat-profiles');
   const shortcutsView = document.getElementById('miniapp-view-shortcuts');
   const codeView = document.getElementById('miniapp-view-code');
 
   if (controlsView) controlsView.style.display = (tabName === 'controls') ? 'block' : 'none';
+  if (chatProfilesView) chatProfilesView.style.display = (tabName === 'chat-profiles') ? 'block' : 'none';
   if (shortcutsView) shortcutsView.style.display = (tabName === 'shortcuts') ? 'block' : 'none';
   if (codeView) codeView.style.display = (tabName === 'code') ? 'block' : 'none';
 
   if (tabName === 'controls') renderMiniAppControls();
+  if (tabName === 'chat-profiles') {
+    if (typeof renderChatProfilesManager === 'function') renderChatProfilesManager();
+  }
   if (tabName === 'shortcuts') {
     if (typeof renderMiniAppShortcutsManager === 'function') renderMiniAppShortcutsManager();
   }

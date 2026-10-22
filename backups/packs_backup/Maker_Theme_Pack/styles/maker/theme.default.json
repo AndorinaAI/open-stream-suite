@@ -1,0 +1,19 @@
+{
+  "id": "maker",
+  "packId": "Maker_Theme_Pack",
+  "name": "Maker Electrónico",
+  "badge": "01 // MAKER",
+  "accentCyan": "#57D6C4",
+  "accentOrange": "#FF783F",
+  "bgDark": "#191D21",
+  "textLight": "#F2EEE5",
+  "panelBg": "#2E363B",
+  "textDim": "#8B969C",
+  "fontPrimary": "var(--font-primary)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 60,
+  "borderStyle": "rounded",
+  "desc": "Turquesa electrónico sobre grafito oscuro. El tono insignia del banco de pruebas y circuitos.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}

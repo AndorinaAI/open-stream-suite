@@ -1,0 +1,19 @@
+{
+  "id": "golden_glory",
+  "packId": "Gamer_Pro_Pack",
+  "name": "Golden Glory",
+  "badge": "04 // GOLDEN",
+  "accentCyan": "#F59E0B",
+  "accentOrange": "#D97706",
+  "bgDark": "#120F08",
+  "textLight": "#FEF3C7",
+  "panelBg": "#241D0F",
+  "textDim": "#A3977F",
+  "fontPrimary": "var(--font-tech)",
+  "fontTech": "var(--font-tech)",
+  "glowIntensity": 75,
+  "borderStyle": "chamfer",
+  "desc": "Oro triunfal y ámbar fuego de campeonato.",
+  "chatAnchored": true,
+  "chatDerivative": null
+}
