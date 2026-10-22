@@ -147,12 +147,52 @@
       return null;
     }
 
+    function adaptAtmosphereForArchetype(arch) {
+      if (!arch) return;
+      const modeBadge = document.querySelector('.mode-badge span:last-child');
+      const headerSub = document.querySelector('.header-subtitle');
+      const mainCamLabel = document.querySelector('.camera-main .frame-label span:last-child');
+      
+      if (arch === 'cozy') {
+        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('GAMER') || modeBadge.textContent.includes('MODE'))) {
+          modeBadge.textContent = 'COZY CHILL';
+        }
+        if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('ELECTRÓNICA') || headerSub.textContent.includes('MATCH'))) {
+          headerSub.textContent = 'Música Lo-Fi · Charla Relajada · Café';
+        }
+        if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('OVERVIEW'))) {
+          mainCamLabel.textContent = 'Cámara Principal';
+        }
+      } else if (arch === 'gamer') {
+        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL'))) {
+          modeBadge.textContent = 'ESPORTS HUD';
+        }
+        if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('Música') || headerSub.textContent.includes('Café'))) {
+          headerSub.textContent = 'LIVE MATCH // COMPETITIVE TOURNAMENT';
+        }
+        if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('Principal'))) {
+          mainCamLabel.textContent = 'CAM 01 // OVERVIEW';
+        }
+      } else if (arch === 'maker') {
+        if (modeBadge && (modeBadge.textContent.includes('ESPORTS') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL'))) {
+          modeBadge.textContent = 'MAKER MODE';
+        }
+        if (headerSub && (headerSub.textContent.includes('LIVE MATCH') || headerSub.textContent.includes('Música'))) {
+          headerSub.textContent = 'RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN';
+        }
+        if (mainCamLabel && mainCamLabel.textContent.includes('OVERVIEW')) {
+          mainCamLabel.textContent = 'CÁMARA CENITAL · BANCO DE TRABAJO';
+        }
+      }
+    }
+
     function applyActiveThemeToBody(themeName) {
       if (!themeName) return;
       document.body.setAttribute('data-theme', themeName);
       const arch = getThemeArchetype(themeName);
       if (arch) {
         document.body.setAttribute('data-theme-archetype', arch);
+        adaptAtmosphereForArchetype(arch);
       }
     }
 
