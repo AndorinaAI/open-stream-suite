@@ -26,10 +26,29 @@
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-tech: 'JetBrains Mono', 'Fira Code', 'DejaVu Sans Mono', 'Courier New', monospace;
 
-  /* Tamaños y espaciados */
+  /* Tamaños y espaciados estándar */
   --radius-sm: 3px;
   --radius-md: 6px;
   --radius-lg: 10px;
+
+  /* Geometría y formas físicas de marco por defecto (se sobreescriben por tema) */
+  --frame-radius: 3px;
+  --frame-border-width: 1px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: inset 0 0 12px rgba(87, 214, 196, 0.04);
+  --frame-corner-display: block;
+
+  /* Paneles, tarjetas y badges modulares */
+  --panel-radius: 6px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(8px);
+  --panel-shadow: none;
+
+  --badge-radius: 4px;
+  --badge-clip-path: none;
+  --header-radius: 3px;
+  --header-clip-path: none;
   
   /* Transición estándar */
   --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);

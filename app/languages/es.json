@@ -899,7 +899,8 @@
     "toast_all_themes_restored": "↺ Todas las overlays han sido restauradas a sus estilos originales de fábrica",
     "toast_style_assigned": "✓ Estilo \"{name}\" asignado a la escena",
     "toast_url_copied": "📋 URL copiada para OBS: {url}",
-    "alert_url_copied": "URL copiada al portapapeles:\n{url}\n\nPégala en OBS Studio como Fuente Navegador (1920×1080)."
+    "alert_url_copied": "URL copiada al portapapeles:\n{url}\n\nPégala en OBS Studio como Fuente Navegador (1920×1080).",
+    "tab_fusions": "⚡ Fusiones (Packs Personalizados)"
   },
   "scene_catalog": {
     "maker-desk": {
@@ -1354,5 +1355,44 @@
     "sim_default_msg": "¡Gran stream! ¡Sigue así!",
     "sim_default_user": "AndorinaDev",
     "btn_fire_obs": "🚀 DISPARAR ALERTA EN OBS AHORA"
+  },
+  "fusions": {
+    "tab_title": "⚡ Fusiones de Overlays (Packs Personalizados)",
+    "crumb_fusions": "⚡ Fusiones de Overlays (Packs Personalizados)",
+    "btn_new_fusion": "➕ Nueva Fusión",
+    "title_list": "TUS PACKS PERSONALIZADOS Y FUSIONES HÍBRIDAS",
+    "badge_total": "{count} FUSIONES ACTIVAS",
+    "hint_list": "Las <b>Fusiones</b> te permiten seleccionar tus overlays favoritos de cualquier pack y agruparlos en un pack personalizado. Puedes <b>aplicar estilos en lote</b> a todos los overlays de tu fusión en un solo clic.",
+    "btn_back_fusions": "⬅️ Volver a Fusiones",
+    "badge_scenes_in_fusion": "{count} OVERLAYS EN ESTA FUSIÓN",
+    "label_batch_style": "🎨 Estilo a toda la Fusión:",
+    "btn_apply_batch": "✨ Aplicar en Lote",
+    "btn_edit_scenes": "✏️ Modificar Escenas",
+    "modal_title": "⚡ GESTIONAR FUSIÓN DE OVERLAYS",
+    "modal_new_title": "⚡ Crear Nueva Fusión de Overlays",
+    "modal_edit_title": "✏️ Editar Fusión de Overlays",
+    "label_icon": "Icono:",
+    "label_name": "Nombre de la Fusión:",
+    "placeholder_name": "ej. Mi Stream Híbrido Gaming + Maker",
+    "label_desc": "Descripción (Opcional):",
+    "placeholder_desc": "ej. Setups para fin de semana y directos especiales",
+    "label_default_theme": "Estilo Predeterminado para el Lote:",
+    "label_select_scenes": "SELECCIONA LAS ESCENAS QUE COMPONEN ESTA FUSIÓN:",
+    "btn_save_fusion": "💾 Guardar Fusión",
+    "empty_title": "Aún no tienes ninguna Fusión creada",
+    "empty_desc": "Crea una Fusión para combinar escenas de diferentes packs (ej. la cámara de taller Maker, la pantalla de charla Cozy y el HUD Gamer) y gestionarlas juntas.",
+    "btn_create_first": "➕ Crear Mi Primera Fusión",
+    "card_scene_count": "{count} OVERLAYS COMBINADOS",
+    "btn_open_fusion": "⚡ Abrir Fusión y Gestionar →",
+    "btn_batch_style": "🎨 Estilo en Lote",
+    "title_edit": "Editar esta fusión",
+    "title_delete": "Eliminar esta fusión",
+    "no_scenes_warning": "Esta fusión no tiene ningún overlay seleccionado.",
+    "btn_select_scenes": "➕ Seleccionar Overlays para esta Fusión",
+    "toast_theme_applied": "✓ Estilo aplicado en lote a toda la fusión",
+    "toast_theme_error": "Error aplicando estilo en lote",
+    "toast_saved": "✓ Fusión guardada correctamente",
+    "confirm_delete": "¿Seguro que deseas eliminar la fusión \"{name}\"?",
+    "toast_deleted": "🗑️ Fusión \"{name}\" eliminada"
   }
 }

@@ -27,7 +27,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      backdrop-filter: blur(10px);
+      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
     }
     .podcast-title {
       font-size: 18px;
@@ -43,8 +43,7 @@
       margin: 28px 0;
     }
     .guest-cam {
-      border: 2px solid var(--color-border-cyan-bright);
-      border-radius: var(--radius-md);
+      border: 2px solid var(--color-border-cyan-bright); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
       background: rgba(0,0,0,0.3);
       position: relative;
       box-shadow: var(--theme-glow);

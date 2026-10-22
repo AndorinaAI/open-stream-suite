@@ -94,16 +94,24 @@ async function submitCreateTheme() {
 function switchThemesMainTab(tab) {
   const btnOverlays = document.getElementById('tab-btn-overlays');
   const btnThemes = document.getElementById('tab-btn-themes');
+  const btnFusions = document.getElementById('tab-btn-fusions');
   const viewOverlays = document.getElementById('tab-view-overlays');
   const viewThemes = document.getElementById('tab-view-themes');
+  const viewFusions = document.getElementById('tab-view-fusions');
 
   if (btnOverlays) btnOverlays.classList.toggle('active', tab === 'overlays');
   if (btnThemes) btnThemes.classList.toggle('active', tab === 'themes');
+  if (btnFusions) btnFusions.classList.toggle('active', tab === 'fusions');
 
   if (viewOverlays) viewOverlays.style.display = (tab === 'overlays') ? 'block' : 'none';
   if (viewThemes) viewThemes.style.display = (tab === 'themes') ? 'block' : 'none';
+  if (viewFusions) viewFusions.style.display = (tab === 'fusions') ? 'block' : 'none';
 
   if (tab === 'overlays') {
     renderThemeScenes();
+  } else if (tab === 'fusions') {
+    if (typeof loadAndRenderFusions === 'function') {
+      loadAndRenderFusions();
+    }
   }
 }

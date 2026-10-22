@@ -15,6 +15,20 @@ body[data-theme="latte_caramel"],
   --color-border-cyan: rgba(245, 158, 11, 0.35);
   --color-border-cyan-bright: #F59E0B;
   --theme-glow: 0 0 14px rgba(245, 158, 11, 0.4);
+  --frame-radius: 24px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 14px 36px rgba(24, 20, 17, 0.5);
+  --frame-corner-display: none;
+  --panel-radius: 20px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 18px;
+  --header-clip-path: none;
 }
 
 /* Pack: Cozy_LoFi_Pack | Tema: lavender_dream */
@@ -29,6 +43,20 @@ body[data-theme="lavender_dream"],
   --color-border-cyan: rgba(192, 132, 252, 0.35);
   --color-border-cyan-bright: #C084FC;
   --theme-glow: 0 0 14px rgba(192, 132, 252, 0.4);
+  --frame-radius: 22px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 12px 32px rgba(192, 132, 252, 0.3);
+  --frame-corner-display: none;
+  --panel-radius: 18px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 10px 28px rgba(36, 27, 51, 0.4);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 18px;
+  --header-clip-path: none;
 }
 
 /* Pack: Cozy_LoFi_Pack | Tema: matcha_bamboo */
@@ -43,6 +71,20 @@ body[data-theme="matcha_bamboo"],
   --color-border-cyan: rgba(132, 204, 22, 0.35);
   --color-border-cyan-bright: #84CC16;
   --theme-glow: 0 0 12px rgba(132, 204, 22, 0.4);
+  --frame-radius: 20px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 12px 30px rgba(17, 24, 17, 0.5);
+  --frame-corner-display: none;
+  --panel-radius: 16px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(14px);
+  --panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 16px;
+  --header-clip-path: none;
 }
 
 /* Pack: Cozy_LoFi_Pack | Tema: nordic_twilight */
@@ -57,6 +99,20 @@ body[data-theme="nordic_twilight"],
   --color-border-cyan: rgba(56, 189, 248, 0.3);
   --color-border-cyan-bright: #38BDF8;
   --theme-glow: 0 0 12px rgba(56, 189, 248, 0.35);
+  --frame-radius: 20px;
+  --frame-border-width: 1.5px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 12px 32px rgba(15, 20, 28, 0.6);
+  --frame-corner-display: none;
+  --panel-radius: 16px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(18px);
+  --panel-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 16px;
+  --header-clip-path: none;
 }
 
 /* Pack: Cozy_LoFi_Pack | Tema: sakura_sunset */
@@ -71,6 +127,20 @@ body[data-theme="sakura_sunset"],
   --color-border-cyan: rgba(251, 113, 133, 0.35);
   --color-border-cyan-bright: #FB7185;
   --theme-glow: 0 0 14px rgba(251, 113, 133, 0.4);
+  --frame-radius: 26px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 14px 34px rgba(251, 113, 133, 0.35);
+  --frame-corner-display: none;
+  --panel-radius: 22px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 12px 32px rgba(42, 28, 37, 0.4);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 20px;
+  --header-clip-path: none;
 }
 
 /* Pack: Gamer_Pro_Pack | Tema: crimson_esport */
@@ -85,6 +155,20 @@ body[data-theme="crimson_esport"],
   --color-border-cyan: rgba(239, 68, 68, 0.45);
   --color-border-cyan-bright: #EF4444;
   --theme-glow: 0 0 20px rgba(239, 68, 68, 0.7);
+  --frame-radius: 0px;
+  --frame-border-width: 2.5px;
+  --frame-border-style: solid;
+  --frame-clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+  --frame-shadow: 0 0 24px rgba(239, 68, 68, 0.7), inset 0 0 14px rgba(239, 68, 68, 0.2);
+  --frame-corner-display: none;
+  --panel-radius: 0px;
+  --panel-clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 6px 24px rgba(239, 68, 68, 0.3);
+  --badge-radius: 0px;
+  --badge-clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  --header-radius: 0px;
+  --header-clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
 }
 
 /* Pack: Gamer_Pro_Pack | Tema: cyber_glitch */
@@ -99,6 +183,20 @@ body[data-theme="cyber_glitch"],
   --color-border-cyan: rgba(6, 182, 212, 0.45);
   --color-border-cyan-bright: #06B6D4;
   --theme-glow: 0 0 18px rgba(6, 182, 212, 0.65);
+  --frame-radius: 0px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px);
+  --frame-shadow: -2px 0 16px rgba(6, 182, 212, 0.7), 2px 0 16px rgba(236, 72, 153, 0.7);
+  --frame-corner-display: none;
+  --panel-radius: 0px;
+  --panel-clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  --panel-backdrop: blur(12px);
+  --panel-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
+  --badge-radius: 0px;
+  --badge-clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  --header-radius: 0px;
+  --header-clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
 }
 
 /* Pack: Gamer_Pro_Pack | Tema: golden_glory */
@@ -113,6 +211,20 @@ body[data-theme="golden_glory"],
   --color-border-cyan: rgba(245, 158, 11, 0.45);
   --color-border-cyan-bright: #F59E0B;
   --theme-glow: 0 0 18px rgba(245, 158, 11, 0.6);
+  --frame-radius: 4px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 0 2px rgba(245, 158, 11, 0.35), 0 0 26px rgba(245, 158, 11, 0.55);
+  --frame-corner-display: none;
+  --panel-radius: 6px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(12px);
+  --panel-shadow: 0 6px 24px rgba(245, 158, 11, 0.25);
+  --badge-radius: 4px;
+  --badge-clip-path: none;
+  --header-radius: 6px;
+  --header-clip-path: none;
 }
 
 /* Pack: Gamer_Pro_Pack | Tema: stealth_mono */
@@ -127,6 +239,20 @@ body[data-theme="stealth_mono"],
   --color-border-cyan: rgba(226, 232, 240, 0.4);
   --color-border-cyan-bright: #E2E8F0;
   --theme-glow: 0 0 14px rgba(226, 232, 240, 0.5);
+  --frame-radius: 0px;
+  --frame-border-width: 1px;
+  --frame-border-style: solid;
+  --frame-clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  --frame-shadow: none;
+  --frame-corner-display: block;
+  --panel-radius: 0px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(6px);
+  --panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  --badge-radius: 0px;
+  --badge-clip-path: none;
+  --header-radius: 0px;
+  --header-clip-path: none;
 }
 
 /* Pack: Gamer_Pro_Pack | Tema: toxic_rad */
@@ -141,6 +267,20 @@ body[data-theme="toxic_rad"],
   --color-border-cyan: rgba(34, 197, 94, 0.45);
   --color-border-cyan-bright: #22C55E;
   --theme-glow: 0 0 18px rgba(34, 197, 94, 0.65);
+  --frame-radius: 0px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  --frame-shadow: 0 0 26px rgba(132, 204, 22, 0.8), inset 0 0 12px rgba(132, 204, 22, 0.25);
+  --frame-corner-display: none;
+  --panel-radius: 0px;
+  --panel-clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%);
+  --panel-backdrop: blur(8px);
+  --panel-shadow: 0 0 22px rgba(132, 204, 22, 0.4);
+  --badge-radius: 0px;
+  --badge-clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  --header-radius: 0px;
+  --header-clip-path: none;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: chill */
@@ -154,6 +294,20 @@ body[data-theme="chill"] {
   --color-border-cyan: rgba(137, 180, 250, 0.4);
   --color-border-cyan-bright: #89B4FA;
   --theme-glow: 0 0 14px rgba(137, 180, 250, 0.4);
+  --frame-radius: 8px;
+  --frame-border-width: 1.5px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --frame-corner-display: none;
+  --panel-radius: 8px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(12px);
+  --panel-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --badge-radius: 6px;
+  --badge-clip-path: none;
+  --header-radius: 6px;
+  --header-clip-path: none;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: cyberpunk */
@@ -167,6 +321,20 @@ body[data-theme="cyberpunk"] {
   --color-border-cyan: rgba(255, 230, 0, 0.45);
   --color-border-cyan-bright: #FFE600;
   --theme-glow: 0 0 20px rgba(255, 230, 0, 0.7);
+  --frame-radius: 0px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  --frame-shadow: 0 0 20px rgba(255, 230, 0, 0.6), inset 0 0 12px rgba(255, 0, 85, 0.25);
+  --frame-corner-display: none;
+  --panel-radius: 0px;
+  --panel-clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 0 18px rgba(255, 230, 0, 0.3);
+  --badge-radius: 0px;
+  --badge-clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  --header-radius: 0px;
+  --header-clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
 }
 
 /* Pack: Maker_Theme_Pack | Tema: maker */
@@ -180,6 +348,20 @@ body[data-theme="maker"] {
   --color-border-cyan: rgba(87, 214, 196, 0.35);
   --color-border-cyan-bright: #57D6C4;
   --theme-glow: 0 0 16px rgba(87, 214, 196, 0.5);
+  --frame-radius: 2px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 0 1px rgba(87, 214, 196, 0.25), inset 0 0 14px rgba(87, 214, 196, 0.08);
+  --frame-corner-display: block;
+  --panel-radius: 4px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --badge-radius: 3px;
+  --badge-clip-path: none;
+  --header-radius: 3px;
+  --header-clip-path: none;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: print */
@@ -193,6 +375,20 @@ body[data-theme="print"] {
   --color-border-cyan: rgba(255, 120, 63, 0.4);
   --color-border-cyan-bright: #FF783F;
   --theme-glow: 0 0 16px rgba(255, 120, 63, 0.5);
+  --frame-radius: 0px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 0 1px rgba(255, 120, 63, 0.3), inset 0 0 16px rgba(255, 120, 63, 0.1);
+  --frame-corner-display: block;
+  --panel-radius: 2px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(8px);
+  --panel-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  --badge-radius: 2px;
+  --badge-clip-path: none;
+  --header-radius: 2px;
+  --header-clip-path: none;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: synthwave */
@@ -206,6 +402,20 @@ body[data-theme="synthwave"] {
   --color-border-cyan: rgba(0, 249, 255, 0.45);
   --color-border-cyan-bright: #00F9FF;
   --theme-glow: 0 0 18px rgba(255, 42, 133, 0.6);
+  --frame-radius: 4px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 22px rgba(236, 72, 153, 0.65), inset 0 0 10px rgba(6, 182, 212, 0.25);
+  --frame-corner-display: none;
+  --panel-radius: 6px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 0 16px rgba(236, 72, 153, 0.3);
+  --badge-radius: 4px;
+  --badge-clip-path: none;
+  --header-radius: 4px;
+  --header-clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 12px 100%);
 }
 
 /* Pack: Maker_Theme_Pack | Tema: terminal */
@@ -220,6 +430,20 @@ body[data-theme="terminal"] {
   --color-border-cyan-bright: #22C55E;
   --font-primary: var(--font-tech);
   --theme-glow: 0 0 18px rgba(34, 197, 94, 0.6);
+  --frame-radius: 0px;
+  --frame-border-width: 1px;
+  --frame-border-style: dashed;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 10px rgba(34, 197, 94, 0.4), inset 0 0 10px rgba(34, 197, 94, 0.12);
+  --frame-corner-display: none;
+  --panel-radius: 0px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(4px);
+  --panel-shadow: 0 0 14px rgba(34, 197, 94, 0.2);
+  --badge-radius: 0px;
+  --badge-clip-path: none;
+  --header-radius: 0px;
+  --header-clip-path: none;
 }
 
 /* Pack: Open_stream_Pack | Tema: clean_minimal */
@@ -233,7 +457,21 @@ body[data-theme="clean_minimal"],
   --color-text-dim: #94A3B8;
   --color-border-cyan: rgba(56, 189, 248, 0.35);
   --color-border-cyan-bright: #38BDF8;
-  --theme-glow: 0 0 12px rgba(56, 189, 248, 0.4);
+  --theme-glow: none;
+  --frame-radius: 6px;
+  --frame-border-width: 1px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --frame-corner-display: none;
+  --panel-radius: 6px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(8px);
+  --panel-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --badge-radius: 4px;
+  --badge-clip-path: none;
+  --header-radius: 6px;
+  --header-clip-path: none;
 }
 
 /* Pack: Open_stream_Pack | Tema: crimson_pulse */
@@ -248,6 +486,20 @@ body[data-theme="crimson_pulse"],
   --color-border-cyan: rgba(244, 63, 94, 0.45);
   --color-border-cyan-bright: #F43F5E;
   --theme-glow: 0 0 18px rgba(244, 63, 94, 0.6);
+  --frame-radius: 8px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 18px rgba(244, 63, 94, 0.45);
+  --frame-corner-display: none;
+  --panel-radius: 8px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 6px 18px rgba(244, 63, 94, 0.2);
+  --badge-radius: 6px;
+  --badge-clip-path: none;
+  --header-radius: 8px;
+  --header-clip-path: none;
 }
 
 /* Pack: Open_stream_Pack | Tema: emerald_matrix */
@@ -262,6 +514,20 @@ body[data-theme="emerald_matrix"],
   --color-border-cyan: rgba(16, 185, 129, 0.4);
   --color-border-cyan-bright: #10B981;
   --theme-glow: 0 0 16px rgba(16, 185, 129, 0.5);
+  --frame-radius: 4px;
+  --frame-border-width: 1.5px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 14px rgba(16, 185, 129, 0.45);
+  --frame-corner-display: none;
+  --panel-radius: 4px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --badge-radius: 4px;
+  --badge-clip-path: none;
+  --header-radius: 4px;
+  --header-clip-path: none;
 }
 
 /* Pack: Open_stream_Pack | Tema: neon_streamer */
@@ -276,6 +542,20 @@ body[data-theme="neon_streamer"],
   --color-border-cyan: rgba(0, 223, 216, 0.4);
   --color-border-cyan-bright: #00DFD8;
   --theme-glow: 0 0 18px rgba(0, 223, 216, 0.6);
+  --frame-radius: 10px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+  --frame-corner-display: none;
+  --panel-radius: 10px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(12px);
+  --panel-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --badge-radius: 6px;
+  --badge-clip-path: none;
+  --header-radius: 8px;
+  --header-clip-path: none;
 }
 
 /* Pack: Open_stream_Pack | Tema: sunset_glow */
@@ -290,4 +570,18 @@ body[data-theme="sunset_glow"],
   --color-border-cyan: rgba(255, 94, 98, 0.4);
   --color-border-cyan-bright: #FF5E62;
   --theme-glow: 0 0 16px rgba(255, 94, 98, 0.5);
+  --frame-radius: 12px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 22px rgba(249, 115, 22, 0.45);
+  --frame-corner-display: none;
+  --panel-radius: 12px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(14px);
+  --panel-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --badge-radius: 8px;
+  --badge-clip-path: none;
+  --header-radius: 10px;
+  --header-clip-path: none;
 }

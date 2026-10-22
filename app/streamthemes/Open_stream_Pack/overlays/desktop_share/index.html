@@ -22,8 +22,7 @@
       right: 40px;
       width: 440px;
       height: 250px;
-      border: 2px solid var(--color-accent-cyan);
-      border-radius: var(--radius-md);
+      border: 2px solid var(--color-accent-cyan); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
       background: rgba(0,0,0,0.3);
       box-shadow: var(--theme-glow);
     }
@@ -50,7 +49,7 @@
       color: var(--color-text-light);
       font-size: 13px;
       font-weight: 700;
-      backdrop-filter: blur(8px);
+      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
     }
   </style>
 </head>

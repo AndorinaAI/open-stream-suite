@@ -20,8 +20,7 @@
     }
     .cam-polaroid {
       flex: 3;
-      border: 2px solid var(--color-border-cyan-bright);
-      border-radius: var(--radius-lg);
+      border: 2px solid var(--color-border-cyan-bright); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
       background: rgba(0,0,0,0.25);
       box-shadow: var(--theme-glow);
     }
@@ -33,7 +32,7 @@
       padding: 20px;
       display: flex;
       flex-direction: column;
-      backdrop-filter: blur(12px);
+      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
     }
   </style>
 </head>

@@ -20,8 +20,7 @@
     }
     .canvas-cam {
       flex: 3;
-      border: 2px solid var(--color-border-cyan);
-      border-radius: var(--radius-lg);
+      border: 2px solid var(--color-border-cyan); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
       background: rgba(0,0,0,0.25);
       position: relative;
     }
@@ -33,8 +32,7 @@
     }
     .face-cam {
       height: 260px;
-      border: 2px solid var(--color-border-cyan);
-      border-radius: var(--radius-lg);
+      border: 2px solid var(--color-border-cyan); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
       background: rgba(0,0,0,0.25);
     }
     .palette-box {
@@ -43,7 +41,7 @@
       border: 1px solid var(--color-border-cyan);
       border-radius: var(--radius-lg);
       padding: 16px;
-      backdrop-filter: blur(8px);
+      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
     }
   </style>
 </head>
