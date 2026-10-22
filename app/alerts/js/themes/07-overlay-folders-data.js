@@ -102,3 +102,4 @@ const OVERLAY_FOLDERS = [
 
 let currentOpenOverlayFolderId = null;
 let currentFolderSubFilter = 'all';
+window.OVERLAY_FOLDERS = OVERLAY_FOLDERS;
