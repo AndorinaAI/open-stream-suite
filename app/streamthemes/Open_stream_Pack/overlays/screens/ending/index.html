@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Pantalla — Fin del Stream</title>
+  <title>Open Stream Suite — Swiss Broadcast Sign-Off & Credits</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
   <style>
@@ -10,34 +10,204 @@
       width: 1920px;
       height: 1080px;
       margin: 0;
-      background: var(--color-bg-dark);
+      padding: 36px 48px;
+      box-sizing: border-box;
+      background: transparent;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+      color: #f8fafc;
+    }
+
+    /* Swiss Broadcast Header */
+    .broadcast-header {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      color: var(--color-text-light);
-      font-family: var(--font-primary);
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 28px;
     }
-    .box {
-      text-align: center;
-      background: var(--color-panel-bg-trans);
-      border: 1px solid var(--color-border-cyan);
-      border-radius: var(--radius-lg);
-      padding: 44px 70px;
-      box-shadow: var(--theme-glow);
+    .signoff-pill {
+      background: #64748b;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 4px;
     }
-    h1 {
-      font-size: 50px;
-      color: var(--color-accent-cyan);
+
+    /* Center Stage */
+    .signoff-center-stage {
+      display: flex;
+      gap: 36px;
+      margin: auto 0;
+      align-items: center;
+    }
+    .signoff-hero-card {
+      flex: 1.3;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 48px 56px;
+      box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6);
+    }
+    .main-stream-title {
+      font-size: 52px;
+      font-weight: 900;
       margin: 0 0 12px 0;
+      letter-spacing: -0.5px;
+    }
+    .stream-subtitle {
+      font-size: 18px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .credits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .credit-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+    }
+    .credit-box .role {
+      font-size: 10px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .credit-box .val {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    /* Side Schedule Card */
+    .signoff-side-card {
+      flex: 0.9;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+    .side-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 14px;
+    }
+    .schedule-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+    }
+
+    /* Lower Third */
+    .broadcast-lower-third {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   </style>
 </head>
 <body data-theme="neon_streamer">
-  <div class="box">
-    <h1 class="main-stream-title">¡GRACIAS POR ACOMPAÑARNOS!</h1>
-    <p class="stream-subtitle" style="color:var(--color-text-dim); font-size:20px;">Nos vemos en el próximo directo.</p>
-  </div>
+  <!-- Swiss Broadcast Header -->
+  <header class="broadcast-header">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <div class="signoff-pill">CIERRE DE EMISIÓN</div>
+      <div style="font-size:15px; font-weight:800;">OPEN STREAM STUDIO // GRACIAS POR SINTONIZAR</div>
+    </div>
+    <div style="font-size:12px; font-weight:600; color:#94a3b8; font-family:monospace;">
+      ESTUDIO OFF-AIR // 1080p60 ARCHIVADO
+    </div>
+  </header>
+
+  <!-- Center Stage -->
+  <main class="signoff-center-stage">
+    <div class="signoff-hero-card">
+      <div style="font-size:12px; font-weight:800; letter-spacing:1.5px; color:#38bdf8; text-transform:uppercase; margin-bottom:8px;">
+        FINAL DEL PROGRAMA
+      </div>
+      <h1 class="main-stream-title">¡GRACIAS POR ACOMPAÑARNOS!</h1>
+      <p class="stream-subtitle">
+        El directo ha concluido. Puedes consultar la repetición en vídeo y resúmenes en nuestras plataformas.
+      </p>
+
+      <div class="credits-grid">
+        <div class="credit-box">
+          <div class="role">DIRECCIÓN & HOST</div>
+          <div class="val">@TuCanal</div>
+        </div>
+        <div class="credit-box">
+          <div class="role">COMUNIDAD</div>
+          <div class="val">Moderadores & Chat</div>
+        </div>
+        <div class="credit-box">
+          <div class="role">REPETICIONES</div>
+          <div class="val">YouTube / Podcast</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Side Schedule Card -->
+    <aside class="signoff-side-card">
+      <div class="side-title">PRÓXIMAS EMISIONES EN DIRECTO</div>
+      <div class="schedule-row">
+        <span>MARTES: CHARLA Y DEBATE</span>
+        <strong style="color:#f1f5f9;">19:00 CEST</strong>
+      </div>
+      <div class="schedule-row">
+        <span>JUEVES: ENTREVISTAS / PODCAST</span>
+        <strong style="color:#f1f5f9;">20:30 CEST</strong>
+      </div>
+      <div class="schedule-row" style="border-bottom:none;">
+        <span>SÁBADO: ESPECIAL DE LA SEMANA</span>
+        <strong style="color:#f1f5f9;">17:00 CEST</strong>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Lower Third -->
+  <footer class="broadcast-lower-third">
+    <div style="font-size:13px; font-weight:600; color:#cbd5e1;">
+      SÍGUENOS EN REDES SOCIALES PARA NO PERDERTE EL PRÓXIMO DIRECTO: <strong style="color:#38bdf8;">@TuCanal</strong>
+    </div>
+    <div style="font-size:12px; color:#64748b;">
+      FIN DE LA SEÑAL · OPEN STREAM SUITE
+    </div>
+  </footer>
+
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
 </body>

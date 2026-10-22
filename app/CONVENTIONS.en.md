@@ -224,6 +224,18 @@ Overlays in Open Stream Suite are dynamic broadcast web apps combining high-end 
    - **Bidirectional Persistence**:
      - Saving collects all modified texts and active states, posting to `POST /api/overlays/texts` with `X-Local-Token` and broadcasting over WebSockets to OBS Studio.
 
+4. **Backdrop Aperture & Cutouts Engine (`app/common/overlay/backdrop-aperture.js`)**:
+   - **OBS Transparency Guarantee**: Allows applying decorative wallpapers, textures, or CSS gradients to overlays without obscuring OBS video capture sources (webcams, gameplay windows, capture cards) underneath.
+   - **Dynamic SVG Mask Layer (`#oss-backdrop-aperture-layer`)**:
+     - Automatically scans for all viewport elements (`.camera-frame`, `.cam-box`, `.cam-inner-viewport`, `.face-viewport`, `.desk-viewport`, `.stream-frame`, `.pip-cam-box`, `.guest-cam`, `[data-cutout="true"]`).
+     - Computes their bounding rects, border-radii (`rx, ry`), or 45° polygonal cuts (`clip-path: polygon(...)`), carving out transparent apertures (`fill="#000000"`) in the SVG mask (`<mask id="oss-aperture-mask">`).
+     - Real-time updates: Recalculates apertures upon window resize, responsive scaling, or element dragging.
+   - **Radical Pack Visual Differentiation Standards**:
+     - **Cozy Lo-Fi**: Warm, organic, analog coffeehouse/botanical aesthetic. **Strictly neon-free**. Soft 28px squircles, Polaroid frames with washi tape, warm paper drop shadows, spinning vinyl player, and Pomodoro focus widgets.
+     - **Gamer Pro**: High-intensity tournament esports HUD. 45° chamfers, target reticles `[+]`, live match telemetry (FPS, Ping, K/D, Streak), real Speedrun Split board with gold/green deltas, victory clutch podium.
+     - **Maker & Taller**: CAD engineering blueprint and industrial fab lab. Millimeter drafting grid, edge ruler tick marks, registration marks `⌖`, project phases lifecycle bar (`01 PLAN -> 02 BUILD -> 03 TEST`), 3D printing & plotter telemetry.
+     - **Open Stream**: Swiss broadcast studio neo-glass. Frosted glassmorphism (`blur(24px)`), stereo audio VU meters (Master L/R), `ON AIR` broadcast indicators, lower-third news ticker, and debate agenda cards.
+
 ---
 
 ## 4. Coding Standards

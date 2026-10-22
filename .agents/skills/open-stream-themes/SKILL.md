@@ -81,11 +81,24 @@ A **Fusion** allows streamers to assemble a personalized super-pack by selecting
 
 ---
 
-## 4. Testing & Compilation Procedure
+## 4. Backdrop Aperture & Cutouts Engine (`backdrop-aperture.js`)
+
+Allows applying decorative backgrounds (thematic gradients, textures, wallpapers, or custom image URLs) to stream overlays without blocking OBS video sources (webcams, gameplay captures) positioned behind the browser source:
+
+- **SVG Mask Architecture:**
+  - Injects `#oss-backdrop-aperture-layer` (`z-index: 0`) masked by `<mask id="oss-aperture-mask">`.
+  - Automatically queries all viewport/camera selectors (`.camera-frame`, `.cam-box`, `.cam-inner-viewport`, `.face-viewport`, `.desk-viewport`, `.stream-frame`, `.pip-cam-box`, `.guest-cam`, `[data-cutout="true"]`).
+  - Carves out transparent apertures (`fill="#000000"`) while preserving computed `border-radius` and polygonal 45° chamfers (`clip-path: polygon(...)`).
+- **HUD Controls:** Streamers can select preset backgrounds (Kraft paper, Tatami wood, Carbon mesh, CAD blueprint, Acoustic slate) or paste a custom image URL directly from the floating HUD toolbar.
+
+---
+
+## 5. Testing & Compilation Procedure
 
 1. When updating themes, compile `common/themes.css`:
    ```bash
-   python3 -c "import sys; sys.path.append('app'); from server.services.theme_manager import sync_common_themes_css; sync_common_themes_css()"
+   /home/andorina/OpenStreamSuite/app/venv/bin/python3 -c "import sys; sys.path.append('app'); from server.services.theme_manager import sync_common_themes_css; sync_common_themes_css()"
    ```
 2. Verify in browser: `http://localhost:8080/alerts/panel.html` -> Tab "⚡ Fusiones".
 3. Verify live OBS scene rendering at `http://localhost:8080/streamthemes/<Pack>/overlays/<Scene>/index.html`.
+
