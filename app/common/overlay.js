@@ -152,19 +152,64 @@
       return 'openstream';
     }
 
+    function tagSemanticElements() {
+      // 1. Cámaras y visores
+      const camSelectors = [
+        '.camera-frame', '.cam-frame', '.camera-main', '.camera-face', '.camera-aux',
+        '.cam-box', '.hud-cam-box', '.stream-frame', '.polaroid-frame', '.canvas-frame',
+        '.face-frame', '.desktop-main-viewport', '.gameplay-box', '.game-box',
+        '.game-viewport-box', '.runner-cam-box', '.stream-cam-card', '.pip-cam-box',
+        '[data-cutout="true"]'
+      ];
+      document.querySelectorAll(camSelectors.join(',')).forEach(el => {
+        if (!el.hasAttribute('data-oss-cam')) {
+          const isSmall = el.matches('.camera-face, .camera-aux, .pip-cam-box, .runner-cam-box, .host-cam-frame, .guest-cam-frame');
+          el.setAttribute('data-oss-cam', isSmall ? 'secondary' : 'main');
+        }
+      });
+
+      // 2. Paneles, tarjetas y contenedores de información
+      const panelSelectors = [
+        '.side-info-panel', '.side-panel-box', '.panel-card', '.pomodoro-card',
+        '.tasks-card', '.cozy-chat-card', '.hud-chat-box', '.stream-chat-card',
+        '.stream-info-card', '.splits-board', '.tactical-panel', '.victory-podium',
+        '.chat-panel-frame', '.warm-card', '.starting-side-modes', '.match-hero-card',
+        '.agenda-card', '.project-card', '.canvas-card', '.art-palette-card',
+        '.ending-farewell-card'
+      ];
+      document.querySelectorAll(panelSelectors.join(',')).forEach(el => {
+        if (!el.hasAttribute('data-oss-panel')) {
+          el.setAttribute('data-oss-panel', 'true');
+        }
+      });
+
+      // 3. Barras de cabecera y pie de página
+      document.querySelectorAll('.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar').forEach(el => {
+        if (!el.hasAttribute('data-oss-bar')) el.setAttribute('data-oss-bar', 'top');
+      });
+      document.querySelectorAll('.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar').forEach(el => {
+        if (!el.hasAttribute('data-oss-bar')) el.setAttribute('data-oss-bar', 'bottom');
+      });
+
+      // 4. Badges, etiquetas y chips
+      document.querySelectorAll('.mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label').forEach(el => {
+        if (!el.hasAttribute('data-oss-badge')) el.setAttribute('data-oss-badge', 'true');
+      });
+    }
+
     function resolveArchetypeToApply(theme, shape) {
-      if (shape && shape !== 'original') {
-        return shape;
-      }
       if (shape === 'original') {
         return currentPack;
       }
-      // Si no se especifica forma explícita, se deriva de forma natural del arquetipo del tema activo
+      if (shape && shape !== 'auto' && shape !== '__auto__') {
+        return shape;
+      }
       return getThemeArchetype(theme) || currentPack;
     }
 
     function adaptAtmosphereForArchetype(arch) {
       if (!arch) return;
+      tagSemanticElements();
       const modeBadge = document.querySelector('.mode-badge span:last-child, .live-match-chip, .live-badge');
       const headerSub = document.querySelector('.header-subtitle, .track-author, .episode-tag');
       const mainCamLabel = document.querySelector('.camera-main .frame-label span:last-child, .cam-label');
@@ -215,8 +260,9 @@
 
     function applyActiveThemeToBody(themeName, updateShape = true) {
       if (!themeName) return;
+      activeTheme = themeName;
       document.body.setAttribute('data-theme', themeName);
-      if (updateShape && (!activeShape || activeShape === 'original')) {
+      if (updateShape && (!activeShape || activeShape === 'auto' || activeShape === '__auto__')) {
         const arch = resolveArchetypeToApply(themeName, activeShape);
         applyActiveShapeToBody(arch);
       }
@@ -230,15 +276,15 @@
       document.body.setAttribute('data-scene', currentSceneKey);
     }
 
-    // 1.2 Resolución y aplicación de temas y formas dinámicas
+    // 1.2 Resolución inicial y control de bloqueo por URL
     const urlParams = new URLSearchParams(window.location.search);
     const inOBS = typeof window.obsstudio !== 'undefined';
     const rawUrlTheme = urlParams.get('theme');
     const rawUrlShape = urlParams.get('shape');
-    const themeFromUrl = (inOBS && urlParams.get('lockTheme') !== '1') ? null : rawUrlTheme;
-    const shapeFromUrl = (inOBS && urlParams.get('lockShape') !== '1') ? null : rawUrlShape;
+    // lock=1 o lockTheme=1 congela la escena permanentemente a lo que diga la URL
+    const isLocked = urlParams.get('lock') === '1' || urlParams.get('lockTheme') === '1';
 
-    let activeTheme = themeFromUrl;
+    let activeTheme = rawUrlTheme;
     if (!activeTheme && config.overlayThemes && currentSceneKey && config.overlayThemes[currentSceneKey]) {
       activeTheme = config.overlayThemes[currentSceneKey];
     }
@@ -249,7 +295,7 @@
       else activeTheme = config.activeTheme || config.themeName || 'maker';
     }
 
-    let activeShape = shapeFromUrl;
+    let activeShape = rawUrlShape;
     if (!activeShape && config.overlayShapes && currentSceneKey && config.overlayShapes[currentSceneKey]) {
       activeShape = config.overlayShapes[currentSceneKey];
     }
@@ -264,8 +310,16 @@
       }
       const arch = resolveArchetypeToApply(activeTheme, activeShape);
       applyActiveShapeToBody(arch);
+      tagSemanticElements();
+      try {
+        window.dispatchEvent(new CustomEvent('oss:themechange', {
+          detail: { theme: activeTheme, shape: activeShape, archetype: arch }
+        }));
+      } catch (e) {}
     }
 
+    // Inicializar semántica y tema activo
+    tagSemanticElements();
     updateOverlayThemeAndShape(activeTheme, activeShape);
 
     // Consultar mapeo de temas y formas por escena desde el servidor local
@@ -282,13 +336,20 @@
               });
             });
           }
+          if (isLocked) return;
           let th = null;
           let sh = null;
-          if (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey] && !themeFromUrl) {
+          if (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) {
             th = data.overlayThemes[currentSceneKey];
           }
-          if (data.overlayShapes && currentSceneKey && data.overlayShapes[currentSceneKey] && !shapeFromUrl) {
+          if (data.overlayShapes && currentSceneKey && data.overlayShapes[currentSceneKey]) {
             sh = data.overlayShapes[currentSceneKey];
+          }
+          if (!th && !rawUrlTheme && data.activeTheme) {
+            th = data.activeTheme;
+          }
+          if (!sh && !rawUrlShape && data.activeShape) {
+            sh = data.activeShape;
           }
           if (th || sh) {
             updateOverlayThemeAndShape(th, sh);
@@ -318,6 +379,7 @@
     ensureScript('dom-injector.js', () => window.OSSDomInjector).then(() => {
       applyConfigToDOM(config);
       syncTextsFromServer();
+      tagSemanticElements();
     });
 
     // 4. Escuchar cambios de temas y textos en vivo vía WebSocket local (con reconexión)
@@ -338,12 +400,18 @@
           const msg = JSON.parse(e.data);
           if (msg.type === 'overlay_theme_change') {
             if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
-              const th = (!themeFromUrl && msg.theme) ? msg.theme : null;
-              const sh = (!shapeFromUrl && msg.shape !== undefined) ? msg.shape : null;
-              updateOverlayThemeAndShape(th, sh);
+              if (!isLocked) {
+                updateOverlayThemeAndShape(msg.theme, msg.shape || msg.archetype);
+              }
             }
           } else if (msg.type === 'theme_change') {
-            syncThemeFromServer();
+            if (!isLocked) {
+              updateOverlayThemeAndShape(msg.theme, msg.archetype);
+            }
+          } else if (msg.type === 'global_shape_change') {
+            if (!isLocked) {
+              updateOverlayThemeAndShape(null, msg.shape);
+            }
           } else if (msg.type === 'overlay_texts_update' && msg.texts) {
             applyConfigToDOM(msg.texts);
           } else if (msg.type === 'overlay_backdrop_change' && msg.backdrop) {

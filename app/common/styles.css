@@ -216,8 +216,7 @@ body[data-theme-archetype="cozy"] *:not(code):not(pre) {
 }
 
 /* 🏷️ Cabeceras, Barras y Píldoras Cozy (Todas las 27 escenas) */
-body[data-theme-archetype="cozy"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
-body[data-theme-archetype="cozy"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+body[data-theme-archetype="cozy"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
   border-radius: 50px !important;
   clip-path: none !important;
   background: var(--color-panel-bg, rgba(28, 25, 23, 0.85)) !important;
@@ -235,7 +234,7 @@ body[data-theme-archetype="cozy"] :is(.header-subtitle, .track-author, .episode-
 }
 
 /* 🏷️ Insignias, Badges y Etiquetas en Modo Cozy */
-body[data-theme-archetype="cozy"] :is(.mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label) {
+body[data-theme-archetype="cozy"] :is([data-oss-badge], .mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label) {
   border-radius: 50px !important;
   clip-path: none !important;
   font-family: 'Comfortaa', 'Outfit', sans-serif !important;
@@ -245,7 +244,7 @@ body[data-theme-archetype="cozy"] :is(.mode-badge, .frame-label, .live-match-chi
 }
 
 /* 📄 Tarjetas, Paneles de Chat y Widgets Cozy */
-body[data-theme-archetype="cozy"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
+body[data-theme-archetype="cozy"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
   border-radius: 24px !important;
   clip-path: none !important;
   background: var(--color-panel-bg, rgba(28, 25, 23, 0.88)) !important;
@@ -263,7 +262,7 @@ body[data-theme-archetype="cozy"] :is(.panel-header, .chat-panel-header, .chat-h
 }
 
 /* 📷 MARCOS DE CÁMARA COZY: TRANSFORMACIÓN AUTÉNTICA EN POLAROID VINTAGE */
-body[data-theme-archetype="cozy"] :is(.camera-frame, .cam-frame, .camera-main, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .stream-cam-card, [data-cutout="true"]),
+body[data-theme-archetype="cozy"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .stream-cam-card, [data-cutout="true"]),
 body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame {
   box-sizing: border-box !important;
   background: #181412 !important;
@@ -370,8 +369,7 @@ body[data-theme-archetype="gamer"] *:not(code):not(pre) {
 }
 
 /* 🎯 Cabeceras y Barras Gamer (Cortes angulares a 45°) */
-body[data-theme-archetype="gamer"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
-body[data-theme-archetype="gamer"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+body[data-theme-archetype="gamer"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
   clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px)) !important;
   border-radius: 0px !important;
   background: rgba(14, 16, 20, 0.92) !important;
@@ -380,7 +378,7 @@ body[data-theme-archetype="gamer"] :is(.bottom-project-bar, .daily-goal-pill, .n
 }
 
 /* 🎯 Insignias y Chips Angulares Gamer */
-body[data-theme-archetype="gamer"] :is(.mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label) {
+body[data-theme-archetype="gamer"] :is([data-oss-badge], .mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label) {
   clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%) !important;
   border-radius: 0px !important;
   letter-spacing: 1px !important;
@@ -388,7 +386,7 @@ body[data-theme-archetype="gamer"] :is(.mode-badge, .frame-label, .live-match-ch
 }
 
 /* 🎯 Tarjetas y Paneles Gamer (Cortes tácticos) */
-body[data-theme-archetype="gamer"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
+body[data-theme-archetype="gamer"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
   clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
   border-radius: 0px !important;
   background: rgba(14, 18, 24, 0.95) !important;
@@ -397,7 +395,7 @@ body[data-theme-archetype="gamer"] :is(.side-info-panel, .side-panel-box, .panel
 }
 
 /* 🎯 Marcos de Cámara Gamer: Silueta Mecha a 45° con brillo láser */
-body[data-theme-archetype="gamer"] :is(.camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
+body[data-theme-archetype="gamer"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
 body[data-pack="gamer"]:not([data-theme-archetype]) .camera-frame {
   box-sizing: border-box !important;
   clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)) !important;
@@ -459,8 +457,7 @@ body[data-theme-archetype="maker"] *:not(code):not(pre) {
 }
 
 /* 🛠️ Cabeceras y Barras Maker (Precisión técnica) */
-body[data-theme-archetype="maker"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
-body[data-theme-archetype="maker"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+body[data-theme-archetype="maker"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
   border-radius: 6px !important;
   clip-path: none !important;
   background: rgba(19, 23, 29, 0.92) !important;
@@ -469,7 +466,7 @@ body[data-theme-archetype="maker"] :is(.bottom-project-bar, .daily-goal-pill, .n
 }
 
 /* 🛠️ Tarjetas y Paneles Maker */
-body[data-theme-archetype="maker"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
+body[data-theme-archetype="maker"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
   border-radius: 6px !important;
   clip-path: none !important;
   background: rgba(19, 23, 29, 0.94) !important;
@@ -477,7 +474,7 @@ body[data-theme-archetype="maker"] :is(.side-info-panel, .side-panel-box, .panel
 }
 
 /* 🛠️ Marcos de Cámara Maker (Brackets técnicos CAD) */
-body[data-theme-archetype="maker"] :is(.camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
+body[data-theme-archetype="maker"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
 body[data-pack="maker"]:not([data-theme-archetype]) .camera-frame {
   box-sizing: border-box !important;
   border: 1.5px solid var(--color-border-cyan, rgba(87, 214, 196, 0.5)) !important;
@@ -492,7 +489,7 @@ body[data-pack="maker"]:not([data-theme-archetype]) .camera-frame {
 }
 
 /* Escuadra angular Maker de taller en la esquina inferior derecha */
-body[data-theme-archetype="maker"] :is(.camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
+body[data-theme-archetype="maker"] :is([data-oss-cam="main"], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
   content: "" !important;
   position: absolute !important;
   bottom: -3px !important;
@@ -526,8 +523,7 @@ body[data-theme-archetype="openstream"] *:not(code):not(pre) {
 }
 
 /* 🌐 Cabeceras y Barras Swiss Broadcast */
-body[data-theme-archetype="openstream"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
-body[data-theme-archetype="openstream"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+body[data-theme-archetype="openstream"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
   border-radius: 12px !important;
   clip-path: none !important;
   background: rgba(15, 23, 42, 0.78) !important;
@@ -538,7 +534,7 @@ body[data-theme-archetype="openstream"] :is(.bottom-project-bar, .daily-goal-pil
 }
 
 /* 🌐 Tarjetas y Paneles Swiss Broadcast */
-body[data-theme-archetype="openstream"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
+body[data-theme-archetype="openstream"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
   border-radius: 12px !important;
   clip-path: none !important;
   background: rgba(15, 23, 42, 0.8) !important;
@@ -549,7 +545,7 @@ body[data-theme-archetype="openstream"] :is(.side-info-panel, .side-panel-box, .
 }
 
 /* 🌐 Marcos de Cámara Swiss Broadcast */
-body[data-theme-archetype="openstream"] :is(.camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
+body[data-theme-archetype="openstream"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
 body[data-pack="openstream"]:not([data-theme-archetype]) .camera-frame {
   box-sizing: border-box !important;
   border-radius: 16px !important;
