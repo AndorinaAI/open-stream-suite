@@ -115,17 +115,37 @@ function onVisualSettingChange() {
   const animEffect = document.getElementById('edit-theme-animation-effect')?.value || 'none';
   const themeId = currentEditingTheme.id;
 
-  let borderRules = '';
+  let frameRad = '8px';
+  let panelRad = '8px';
+  let badgeRad = '4px';
+  let clipPath = 'none';
+  let borderStyleVal = 'solid';
+  let borderWidthVal = '2px';
+
   if (borderStyle === 'pill') {
-    borderRules = `\nbody[data-theme="${themeId}"] .camera-frame,\nbody[data-theme="${themeId}"] .side-info-panel,\nbody[data-theme="${themeId}"] .bottom-project-bar {\n  border-radius: 14px !important;\n}`;
+    frameRad = '28px';
+    panelRad = '24px';
+    badgeRad = '50px';
   } else if (borderStyle === 'square') {
-    borderRules = `\nbody[data-theme="${themeId}"] .camera-frame,\nbody[data-theme="${themeId}"] .side-info-panel,\nbody[data-theme="${themeId}"] .bottom-project-bar {\n  border-radius: 0px !important;\n}`;
+    frameRad = '0px';
+    panelRad = '0px';
+    badgeRad = '0px';
+  } else if (borderStyle === 'chamfer') {
+    frameRad = '0px';
+    panelRad = '0px';
+    badgeRad = '0px';
+    clipPath = 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))';
   } else if (borderStyle === 'double') {
-    borderRules = `\nbody[data-theme="${themeId}"] .camera-frame,\nbody[data-theme="${themeId}"] .side-info-panel {\n  border: 2px solid ${cyan} !important;\n  box-shadow: 0 0 0 2px ${orange}66, 0 0 16px ${cyan}44 !important;\n}`;
-  } else if (borderStyle === 'comic') {
-    borderRules = `\nbody[data-theme="${themeId}"] .camera-frame,\nbody[data-theme="${themeId}"] .side-info-panel,\nbody[data-theme="${themeId}"] .bottom-project-bar {\n  border: 3px solid #111116 !important;\n  box-shadow: 4px 4px 0 #111116 !important;\n  border-radius: 2px !important;\n}`;
+    borderStyleVal = 'double';
+    borderWidthVal = '3px';
+    frameRad = '6px';
   } else if (borderStyle === 'blueprint') {
-    borderRules = `\nbody[data-theme="${themeId}"] .camera-frame,\nbody[data-theme="${themeId}"] .side-info-panel {\n  border: 1.5px dashed ${cyan} !important;\n  box-shadow: inset 0 0 10px ${cyan}22, 0 0 12px ${cyan}44 !important;\n}`;
+    borderStyleVal = 'dashed';
+    borderWidthVal = '1.5px';
+    frameRad = '2px';
+  } else if (borderStyle === 'comic') {
+    borderWidthVal = '3px';
+    frameRad = '4px';
   }
 
   let animRules = '';
@@ -149,7 +169,13 @@ function onVisualSettingChange() {
   --color-border-cyan: ${cyan}66;
   --color-border-cyan-bright: ${cyan};
   --theme-glow: 0 0 ${Math.round(glow * 0.25)}px ${cyan}88;
-}${borderRules}${animRules}`;
+  --frame-radius: ${frameRad};
+  --panel-radius: ${panelRad};
+  --badge-radius: ${badgeRad};
+  --frame-border-style: ${borderStyleVal};
+  --frame-border-width: ${borderWidthVal};
+  --frame-clip-path: ${clipPath};
+}${animRules}`;
 
   const cssArea = document.getElementById('theme-code-css-textarea');
   if (cssArea) cssArea.value = generatedCss;
