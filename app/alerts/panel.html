@@ -1859,6 +1859,12 @@
                     ✨ Aplicar
                   </button>
                 </div>
+                <button type="button" id="btn-toggle-folder-fusion" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="toggleAllInCurrentFolderForFusion()" title="Marcar o desmarcar todos los overlays de esta carpeta para crear o añadir a una Fusión" data-i18n="fusions.btn_select_all_fusion">
+                  ☑️ Marcar todos para Fusión
+                </button>
+                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FFFFFF; border-color: rgba(255, 255, 255, 0.3); font-weight: 800; background: rgba(255, 255, 255, 0.08);" onclick="goToThemeEditorForCurrentPack()" title="Ir al editor CSS y estilos físicos de este pack" data-i18n="fusions.btn_customize_pack_styles">
+                  🎨 Personalizar Estilos de este Pack →
+                </button>
                 <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="restoreCurrentFolderThemes()" title="Restablecer todas las escenas de esta carpeta a sus temas visuales de fábrica" data-i18n="themes.btn_restore_themes">
                   🔄 Restaurar Estilos Originales
                 </button>
@@ -1918,6 +1924,21 @@
           </div>
           <div style="font-size: 12px; color: var(--color-text-dim); margin-top: 6px; margin-bottom: 14px;" data-i18n="themes.pack_desc">
             Un tema es una paleta visual de colores, fuentes, bordes y resplandor neón que se aplica a todas tus overlays y widgets al mismo tiempo. No cambia los textos de tus escenas.
+          </div>
+
+          <!-- Banner Informativo del Editor CSS Base -->
+          <div class="dash-card" style="margin-bottom: 16px; padding: 14px 18px; background: rgba(87, 214, 196, 0.08); border: 1.5px solid rgba(87, 214, 196, 0.35); border-radius: 8px;">
+            <div style="display: flex; align-items: flex-start; gap: 12px;">
+              <span style="font-size: 26px;">ℹ️</span>
+              <div>
+                <div style="font-size: 13px; font-weight: 800; color: var(--color-accent-cyan); margin-bottom: 4px;" data-i18n="fusions.css_library_info_title">
+                  🎨 BIBLIOTECA DE PACKS & EDITOR BASE DE CSS
+                </div>
+                <div style="font-size: 12px; color: var(--color-text-light); line-height: 1.5;" data-i18n-html="fusions.css_library_info_desc">
+                  ¿Qué hace este editor? Aquí se define la <b>apariencia activa</b> de cada estilo (colores, marcos físicos, bordes geométricos, recortes <code>clip-path</code> y fuentes). Lo que modifiques y guardes aquí <b>se convierte en el nuevo diseño en vivo</b> para todas las overlays que usen este tema. El botón <b>'Restablecer Original'</b> siempre te permitirá recuperar el archivo de fábrica original de Open Stream Suite.
+                </div>
+              </div>
+            </div>
           </div>
 
           <div id="themes-packs-grid" class="themes-packs-grid">
@@ -2376,6 +2397,35 @@
         </form>
       </div>
     </div>
+
+    <!-- Modal: Añadir Escenas Seleccionadas a Fusión Existente -->
+    <div id="modal-add-to-existing-fusion" class="media-preview-backdrop" onclick="if(event.target === this) closeAddToExistingFusionModal()" style="display: none;">
+      <div class="media-preview-dialog" style="max-width: 480px; width: 92%; background: #12161C; border: 1.5px solid var(--color-accent-cyan); border-radius: 8px; box-shadow: 0 12px 40px rgba(0,0,0,0.7); overflow: hidden;">
+        <div class="media-preview-header" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: rgba(14, 18, 24, 0.95); border-bottom: 1px solid rgba(87, 214, 196, 0.25);">
+          <div style="font-weight: 800; font-size: 13px; color: #FFFFFF;" data-i18n="fusions.modal_add_title">📥 AÑADIR ESCENAS A FUSIÓN EXISTENTE</div>
+          <button type="button" class="btn-action-test" onclick="closeAddToExistingFusionModal()" style="padding: 4px 10px;">✕</button>
+        </div>
+        <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+          <div id="modal-add-fusion-hint" style="font-size: 12px; color: var(--color-text-dim);" data-i18n="fusions.label_choose_fusion">
+            Elige la Fusión donde añadir las escenas seleccionadas:
+          </div>
+          <div>
+            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;">Fusión Destino:</label>
+            <select id="select-target-fusion" class="form-select" style="width: 100%; padding: 8px; font-size: 12px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
+              <!-- Opciones de fusiones -->
+            </select>
+          </div>
+          <div id="modal-add-fusion-scenes-preview" style="font-size: 11px; color: var(--color-accent-cyan); font-family: var(--font-tech); background: rgba(87, 214, 196, 0.08); padding: 8px 12px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.25); max-height: 120px; overflow-y: auto;">
+            <!-- Lista de escenas -->
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 14px;">
+            <button type="button" class="btn-action-test" onclick="closeAddToExistingFusionModal()" data-i18n="common.cancel">Cancelar</button>
+            <button type="button" class="btn-action-primary" onclick="confirmAddSelectedToFusion()" style="padding: 7px 18px; font-weight: 800;" data-i18n="fusions.btn_confirm_add">📥 Añadir a Fusión</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ============================================================== -->
     <!-- MODAL: EDITOR DE TEXTOS Y AJUSTES DE ESCENA EN OBS              -->
     <!-- ============================================================== -->
@@ -3032,6 +3082,33 @@
 
     <!-- Contenedor dinámico de modales para editores visuales y guías -->
     <div id="miniapp-modal-container"></div>
+
+    <!-- Barra Flotante de Selección para Fusiones -->
+    <div id="fusion-selection-floating-bar" style="display: none; position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 1000; background: rgba(14, 18, 24, 0.96); backdrop-filter: blur(12px); border: 1.5px solid var(--color-accent-cyan); border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(87, 214, 196, 0.25); padding: 8px 18px; align-items: center; gap: 14px; max-width: 95vw; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 18px;">⚡</span>
+        <span id="fusion-floating-count" style="font-family: var(--font-tech); font-weight: 800; font-size: 12px; color: var(--color-accent-cyan); letter-spacing: 0.5px;">0 OVERLAYS SELECCIONADOS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn-action-primary" onclick="openCreateFusionFromSelected()" style="font-size: 11px; padding: 6px 14px; font-weight: 800;" data-i18n="fusions.btn_create_from_selected">
+          ➕ Crear Pack de Fusión
+        </button>
+        <button type="button" class="btn-action-test" onclick="openAddToExistingFusionModal()" style="font-size: 11px; padding: 6px 12px; font-weight: 700; color: #FFFFFF; border-color: rgba(255,255,255,0.25);" data-i18n="fusions.btn_add_to_existing">
+          📥 Añadir a Fusión Existente
+        </button>
+        <div style="display: flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.3);">
+          <select id="floating-batch-theme-select" class="monitor-select" style="font-size: 11px; padding: 3px 6px;">
+            <!-- Opciones de temas -->
+          </select>
+          <button type="button" class="btn-action-test" onclick="applyBatchThemeToSelectedScenes()" style="font-size: 11px; padding: 3px 8px;" title="Aplicar este tema a todos los overlays seleccionados" data-i18n="fusions.btn_batch_style_selected">
+            🎨 Aplicar en Lote
+          </button>
+        </div>
+        <button type="button" class="btn-action-test" onclick="clearFusionSelection()" style="font-size: 11px; padding: 4px 10px; color: #FF783F; border-color: rgba(255, 120, 63, 0.4);" data-i18n="fusions.btn_clear_selection">
+          ✕ Desmarcar
+        </button>
+      </div>
+    </div>
   </main>
 
   <!-- ================================================================ -->

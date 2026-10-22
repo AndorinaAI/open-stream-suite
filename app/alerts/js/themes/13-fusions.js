@@ -318,7 +318,15 @@ function openFusionEditorModal(fusion = null) {
 
   // Renderizar checkboxes de escenas agrupadas por Pack
   if (scenesContainer) {
-    const selectedScenes = new Set(fusion ? (fusion.scenes || []) : ['oss_chatting', 'maker-desk']);
+    let initialScenes = [];
+    if (fusion && fusion.scenes) {
+      initialScenes = fusion.scenes;
+    } else if (window.selectedFusionScenes && window.selectedFusionScenes.size > 0) {
+      initialScenes = Array.from(window.selectedFusionScenes);
+    } else {
+      initialScenes = ['oss_chatting', 'maker-desk'];
+    }
+    const selectedScenes = new Set(initialScenes);
 
     scenesContainer.innerHTML = OVERLAY_FOLDERS.map(folder => {
       const folderScenes = OSS_SCENES.filter(s => folder.keys.includes(s.key));
@@ -449,6 +457,225 @@ function escapeHtml(text) {
     .replace(/'/g, '&#039;');
 }
 
+// ====================================================================
+// GESTOR DE MULTI-SELECCIÓN DE ESCENAS PARA FUSIONES & BARRA FLOTANTE
+// ====================================================================
+
+window.selectedFusionScenes = new Set();
+
+function toggleSceneForFusionSelection(sceneKey, isChecked) {
+  if (isChecked) {
+    window.selectedFusionScenes.add(sceneKey);
+  } else {
+    window.selectedFusionScenes.delete(sceneKey);
+  }
+  updateFolderSelectAllButton();
+  updateFusionFloatingBar();
+}
+
+function updateFolderSelectAllButton() {
+  const btn = document.getElementById('btn-toggle-folder-fusion');
+  if (!btn) return;
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const folder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId);
+  if (!folder) return;
+  const allSelected = folder.keys.length > 0 && folder.keys.every(k => window.selectedFusionScenes.has(k));
+  if (allSelected) {
+    btn.textContent = tr('fusions.btn_deselect_all_fusion', '☐ Desmarcar Fusión');
+    btn.style.color = '#FF783F';
+    btn.style.borderColor = 'rgba(255, 120, 63, 0.5)';
+  } else {
+    btn.textContent = tr('fusions.btn_select_all_fusion', '☑️ Marcar todos para Fusión');
+    btn.style.color = 'var(--color-accent-cyan)';
+    btn.style.borderColor = 'var(--color-accent-cyan)';
+  }
+}
+
+function updateFusionFloatingBar() {
+  const bar = document.getElementById('fusion-selection-floating-bar');
+  const countEl = document.getElementById('fusion-floating-count');
+  const themeSelect = document.getElementById('floating-batch-theme-select');
+  if (!bar) return;
+
+  const count = window.selectedFusionScenes.size;
+  if (count > 0) {
+    bar.style.display = 'flex';
+    if (countEl) {
+      const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+      countEl.textContent = tr('fusions.floating_selected', `${count} OVERLAYS SELECCIONADOS`, { count });
+    }
+    if (themeSelect && themeSelect.children.length === 0) {
+      themeSelect.innerHTML = buildThemeOptionsHtml(currentActiveThemeId || 'maker');
+    }
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+function clearFusionSelection() {
+  window.selectedFusionScenes.clear();
+  document.querySelectorAll('.cb-fusion-scene-picker').forEach(cb => {
+    cb.checked = false;
+  });
+  updateFolderSelectAllButton();
+  updateFusionFloatingBar();
+}
+
+function toggleAllInCurrentFolderForFusion() {
+  const folder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId);
+  if (!folder) return;
+
+  const allSelected = folder.keys.length > 0 && folder.keys.every(k => window.selectedFusionScenes.has(k));
+  if (allSelected) {
+    folder.keys.forEach(k => window.selectedFusionScenes.delete(k));
+  } else {
+    folder.keys.forEach(k => window.selectedFusionScenes.add(k));
+  }
+
+  document.querySelectorAll('.cb-fusion-scene-picker').forEach(cb => {
+    const key = cb.getAttribute('data-key');
+    if (folder.keys.includes(key)) {
+      cb.checked = !allSelected;
+    }
+  });
+
+  updateFolderSelectAllButton();
+  updateFusionFloatingBar();
+}
+
+function openCreateFusionFromSelected() {
+  openFusionEditorModal(null);
+}
+
+function openAddToExistingFusionModal() {
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+
+  if (!cachedFusions || cachedFusions.length === 0) {
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(tr('fusions.empty_title', 'Aún no tienes ninguna Fusión creada. ¡Crea tu primera Fusión!'), 'info');
+    }
+    openCreateFusionFromSelected();
+    return;
+  }
+
+  const modal = document.getElementById('modal-add-to-existing-fusion');
+  const select = document.getElementById('select-target-fusion');
+  const preview = document.getElementById('modal-add-fusion-scenes-preview');
+  const hint = document.getElementById('modal-add-fusion-hint');
+
+  if (hint) {
+    hint.textContent = tr('fusions.label_choose_fusion', `Elige la Fusión donde añadir las ${window.selectedFusionScenes.size} escenas seleccionadas:`, { count: window.selectedFusionScenes.size });
+  }
+
+  if (select) {
+    select.innerHTML = cachedFusions.map(f => {
+      const count = (f.scenes || []).length;
+      return `<option value="${f.id}">${f.icon || '⚡'} ${escapeHtml(f.name)} (${count} overlays)</option>`;
+    }).join('');
+  }
+
+  if (preview) {
+    const names = Array.from(window.selectedFusionScenes).map(k => {
+      const sc = OSS_SCENES.find(s => s.key === k);
+      return sc ? sc.name : k;
+    });
+    preview.innerHTML = `<b>Escenas a añadir (${names.length}):</b><br>` + names.join(' · ');
+  }
+
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeAddToExistingFusionModal() {
+  const modal = document.getElementById('modal-add-to-existing-fusion');
+  if (modal) modal.style.display = 'none';
+}
+
+async function confirmAddSelectedToFusion() {
+  const select = document.getElementById('select-target-fusion');
+  if (!select || !select.value) return;
+  const fusionId = select.value;
+  const fusion = cachedFusions.find(f => f.id === fusionId);
+  if (!fusion) return;
+
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+  const sceneSet = new Set(fusion.scenes || []);
+  let addedCount = 0;
+  window.selectedFusionScenes.forEach(k => {
+    if (!sceneSet.has(k)) {
+      sceneSet.add(k);
+      addedCount++;
+    }
+  });
+
+  fusion.scenes = Array.from(sceneSet);
+
+  try {
+    await API.saveFusion(fusion);
+    closeAddToExistingFusionModal();
+    clearFusionSelection();
+    await loadAndRenderFusions();
+
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(tr('fusions.toast_added_to_fusion', `✓ ${addedCount} escenas añadidas a la fusión "${fusion.name}"`, { count: addedCount, name: fusion.name }), 'success');
+    }
+  } catch (e) {
+    console.error('Error añadiendo escenas a la fusión:', e);
+    alert('Error al añadir escenas: ' + e.message);
+  }
+}
+
+async function applyBatchThemeToSelectedScenes() {
+  const select = document.getElementById('floating-batch-theme-select');
+  if (!select || !select.value) return;
+  const themeId = select.value;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+
+  if (window.selectedFusionScenes.size === 0) return;
+
+  const count = window.selectedFusionScenes.size;
+  for (const sceneKey of window.selectedFusionScenes) {
+    cachedOverlayThemes[sceneKey] = themeId;
+    try {
+      await API.setOverlayTheme(sceneKey, themeId);
+    } catch (e) {
+      console.warn('Error aplicando tema a ' + sceneKey, e);
+    }
+  }
+
+  // Si estamos en la vista de carpeta, re-renderizar tarjetas
+  if (currentOpenOverlayFolderId) {
+    renderOverlayFolders();
+  }
+
+  if (window.OverlayTexts && OverlayTexts.showToast) {
+    OverlayTexts.showToast(tr('fusions.toast_batch_applied_selected', `✓ Estilo "${themeId}" aplicado a ${count} overlays seleccionados`, { theme: themeId, count }), 'success');
+  }
+}
+
+function goToThemeEditorForCurrentPack() {
+  const folder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId);
+  if (!folder) return;
+
+  // Cambiar a la pestaña de Temas
+  if (typeof switchTab === 'function') {
+    switchTab('themes');
+  } else {
+    const tabBtn = document.getElementById('tab-btn-themes');
+    if (tabBtn) tabBtn.click();
+  }
+
+  // Buscar el pack correspondiente en cachedThemePacks
+  const targetPack = cachedThemePacks.find(p => {
+    return p.id.toLowerCase() === folder.id.toLowerCase() ||
+           p.id.toLowerCase() === (folder.packId || '').toLowerCase() ||
+           folder.id.toLowerCase().includes(p.id.toLowerCase());
+  }) || cachedThemePacks[0];
+
+  if (targetPack && typeof openThemePack === 'function') {
+    openThemePack(targetPack.id);
+  }
+}
+
 // Exportación global a window
 window.loadAndRenderFusions = loadAndRenderFusions;
 window.renderFusionsList = renderFusionsList;
@@ -463,3 +690,15 @@ window.closeFusionModal = closeFusionModal;
 window.saveFusionFromModal = saveFusionFromModal;
 window.deleteFusionPrompt = deleteFusionPrompt;
 window.toggleFolderScenesSelection = toggleFolderScenesSelection;
+window.toggleSceneForFusionSelection = toggleSceneForFusionSelection;
+window.updateFusionFloatingBar = updateFusionFloatingBar;
+window.clearFusionSelection = clearFusionSelection;
+window.toggleAllInCurrentFolderForFusion = toggleAllInCurrentFolderForFusion;
+window.openCreateFusionFromSelected = openCreateFusionFromSelected;
+window.openAddToExistingFusionModal = openAddToExistingFusionModal;
+window.closeAddToExistingFusionModal = closeAddToExistingFusionModal;
+window.confirmAddSelectedToFusion = confirmAddSelectedToFusion;
+window.applyBatchThemeToSelectedScenes = applyBatchThemeToSelectedScenes;
+window.goToThemeEditorForCurrentPack = goToThemeEditorForCurrentPack;
+window.updateFolderSelectAllButton = updateFolderSelectAllButton;
+
