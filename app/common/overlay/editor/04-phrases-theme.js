@@ -305,6 +305,47 @@ window.OSSEditor = window.OSSEditor || {};
 
       window.OSSEditor.showHudToast(`🎨 Color cambiado a: ${selected}`);
     });
+
+    // 3. Toggle de Chat Integrado en Escena
+    const btnToggleChat = hud.querySelector('#hud-btn-toggle-chat');
+    const chatStateSpan = hud.querySelector('#hud-chat-state');
+    if (btnToggleChat && chatStateSpan) {
+      const isChatHidden = localStorage.getItem('oss_chat_hidden_' + (sceneKey || 'scene')) === 'true';
+      if (isChatHidden) {
+        document.body.classList.add('hide-scene-chat');
+        chatStateSpan.textContent = 'OFF';
+        chatStateSpan.style.color = '#8B949E';
+      }
+
+      btnToggleChat.addEventListener('click', () => {
+        const currentlyHidden = document.body.classList.toggle('hide-scene-chat');
+        chatStateSpan.textContent = currentlyHidden ? 'OFF' : 'ON';
+        chatStateSpan.style.color = currentlyHidden ? '#8B949E' : '#57D6C4';
+        localStorage.setItem('oss_chat_hidden_' + (sceneKey || 'scene'), currentlyHidden ? 'true' : 'false');
+        window.OSSEditor.showHudToast(
+          currentlyHidden 
+            ? '💬 Chat integrado ocultado (espacio libre para fuente OBS)' 
+            : '💬 Chat integrado visible en la escena'
+        );
+      });
+    }
+
+    // 4. Copiar Enlace Limpio y Reactivo para OBS Studio
+    const btnCopyObsUrl = hud.querySelector('#hud-btn-copy-obs-url');
+    if (btnCopyObsUrl) {
+      btnCopyObsUrl.addEventListener('click', () => {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cleanUrl).then(() => {
+            window.OSSEditor.showHudToast('🔗 ¡Enlace limpio de OBS copiado! Cambia temas por WebSocket sin tocarlo.');
+          }).catch(() => {
+            prompt('Copia este enlace limpio para OBS:', cleanUrl);
+          });
+        } else {
+          prompt('Copia este enlace limpio para OBS:', cleanUrl);
+        }
+      });
+    }
   }
 
   async function activatePhase(targetPi) {
