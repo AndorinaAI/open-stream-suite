@@ -190,110 +190,80 @@ body[data-theme-archetype="maker"] .msg-bubble {
   font-family: var(--skin-font-display, monospace) !important;
 }
 
+body[data-theme-archetype="openstream"] .chat-message,
+body[data-theme-archetype="openstream"] .msg-bubble {
+  border-radius: 8px !important;
+  clip-path: none !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
 /* ====================================================================
-   ARQUETIPOS GEOMÉTRICOS Y FORMAS FÍSICAS INTRÍNSECAS POR PACK
+   MOTOR UNIVERSAL DE ARQUETIPOS GEOMÉTRICOS Y FORMAS FÍSICAS (CROSS-PACK)
+   Garantiza que CUALQUIER escena de CUALQUIER pack adopte fielmente
+   el estilo, tipografía, siluetas y accesorios característicos del arquetipo.
    ==================================================================== */
 
-/* --- 1. ARQUETIPO COZY: ESTILO CÁLIDO, POLAROID, PASTEL Y SOFT --- */
+/* ====================================================================
+   1. ARQUETIPO COZY (Cálido, Polaroid Vintage, Papel, Soft Pill)
+   ==================================================================== */
 body[data-theme-archetype="cozy"],
 body[data-pack="cozy"]:not([data-theme-archetype]) {
-  font-family: 'Outfit', 'Comfortaa', -apple-system, sans-serif !important;
+  font-family: 'Comfortaa', 'Outfit', 'Quicksand', -apple-system, sans-serif !important;
 }
 
 body[data-theme-archetype="cozy"] *:not(code):not(pre) {
-  font-family: 'Outfit', 'Comfortaa', -apple-system, sans-serif !important;
+  font-family: 'Comfortaa', 'Outfit', 'Quicksand', -apple-system, sans-serif !important;
 }
 
-/* Cabeceras, Barras y Píldoras Cozy */
-body[data-theme-archetype="cozy"] .scene-header,
-body[data-theme-archetype="cozy"] .bottom-project-bar,
-body[data-theme-archetype="cozy"] .header-bar,
-body[data-theme-archetype="cozy"] .lofi-player-bar,
-body[data-theme-archetype="cozy"] .tools-palette-bar {
+/* 🏷️ Cabeceras, Barras y Píldoras Cozy (Todas las 27 escenas) */
+body[data-theme-archetype="cozy"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
+body[data-theme-archetype="cozy"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
   border-radius: 50px !important;
-  border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
-  background: rgba(28, 25, 23, 0.82) !important;
+  clip-path: none !important;
+  background: var(--color-panel-bg, rgba(28, 25, 23, 0.85)) !important;
   backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
-body[data-theme-archetype="cozy"] .header-subtitle {
+body[data-theme-archetype="cozy"] :is(.header-subtitle, .track-author, .episode-tag) {
   font-weight: 600 !important;
   color: rgba(245, 235, 225, 0.75) !important;
   text-transform: none !important;
   letter-spacing: 0.5px !important;
 }
 
-body[data-theme-archetype="cozy"] .project-phases .phase-item,
-body[data-theme-archetype="cozy"] .phase-step {
+/* 🏷️ Insignias, Badges y Etiquetas en Modo Cozy */
+body[data-theme-archetype="cozy"] :is(.mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label) {
   border-radius: 50px !important;
-  padding: 4px 14px !important;
+  clip-path: none !important;
+  font-family: 'Comfortaa', 'Outfit', sans-serif !important;
   font-weight: 700 !important;
   letter-spacing: 0.5px !important;
   text-transform: none !important;
 }
 
-body[data-theme-archetype="cozy"] .mode-badge,
-body[data-theme-archetype="cozy"] .frame-label,
-body[data-theme-archetype="cozy"] .brand-badge,
-body[data-theme-archetype="cozy"] .live-indicator,
-body[data-theme-archetype="cozy"] .pomo-badge,
-body[data-theme-archetype="cozy"] .ambient-pill,
-body[data-theme-archetype="cozy"] .daily-goal-pill {
-  border-radius: 50px !important;
-  font-family: 'Outfit', sans-serif !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.5px !important;
-  text-transform: none !important;
-}
-
-/* Paneles Laterales Cozy (Aspecto Tarjeta Suave / Libreta) */
-body[data-theme-archetype="cozy"] .side-info-panel,
-body[data-theme-archetype="cozy"] .side-panel-box,
-body[data-theme-archetype="cozy"] .panel-card,
-body[data-theme-archetype="cozy"] .pomodoro-card,
-body[data-theme-archetype="cozy"] .tasks-card,
-body[data-theme-archetype="cozy"] .cam-polaroid,
-body[data-theme-archetype="cozy"] .face-polaroid,
-body[data-theme-archetype="cozy"] .canvas-card,
-body[data-theme-archetype="cozy"] .chat-card,
-body[data-theme-archetype="cozy"] .ending-farewell-card,
-body[data-theme-archetype="cozy"] .match-hero-card,
-body[data-theme-archetype="cozy"] .agenda-card,
-body[data-theme-archetype="cozy"] .project-card {
+/* 📄 Tarjetas, Paneles de Chat y Widgets Cozy */
+body[data-theme-archetype="cozy"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
   border-radius: 24px !important;
-  background: rgba(28, 25, 23, 0.85) !important;
+  clip-path: none !important;
+  background: var(--color-panel-bg, rgba(28, 25, 23, 0.88)) !important;
   backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35) !important;
-  clip-path: none !important;
 }
 
-body[data-theme-archetype="cozy"] .panel-header {
+body[data-theme-archetype="cozy"] :is(.panel-header, .chat-panel-header, .chat-header) {
   border-radius: 24px 24px 0 0 !important;
-  font-family: 'Outfit', sans-serif !important;
+  font-family: 'Comfortaa', 'Outfit', sans-serif !important;
   font-weight: 800 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-body[data-theme-archetype="cozy"] .info-row {
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.08) !important;
-}
-
-/* 📷 MARCOS DE CÁMARA COZY: TRANSFORMACIÓN AUTÉNTICA EN POLAROID */
-body[data-theme-archetype="cozy"] .camera-frame,
-body[data-theme-archetype="cozy"] .cam-frame,
-body[data-theme-archetype="cozy"] .camera-main,
-body[data-theme-archetype="cozy"] .cam-box,
-body[data-theme-archetype="cozy"] .hud-cam-box,
-body[data-theme-archetype="cozy"] .stream-frame,
-body[data-theme-archetype="cozy"] .polaroid-frame,
-body[data-theme-archetype="cozy"] .canvas-frame,
-body[data-theme-archetype="cozy"] .face-frame,
-body[data-theme-archetype="cozy"] .desktop-main-viewport,
-body[data-theme-archetype="cozy"] .game-box,
-body[data-theme-archetype="cozy"] .gameplay-box,
-body[data-theme-archetype="cozy"] [data-cutout="true"],
+/* 📷 MARCOS DE CÁMARA COZY: TRANSFORMACIÓN AUTÉNTICA EN POLAROID VINTAGE */
+body[data-theme-archetype="cozy"] :is(.camera-frame, .cam-frame, .camera-main, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .stream-cam-card, [data-cutout="true"]),
 body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame {
   box-sizing: border-box !important;
   background: #181412 !important;
@@ -305,30 +275,25 @@ body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame {
   outline: 1.5px solid rgba(220, 200, 185, 0.6) !important;
   outline-offset: -1px !important;
   overflow: visible !important;
+  position: relative !important;
 }
 
-/* Cámaras secundarias más pequeñas (Polaroids compactas) */
-body[data-theme-archetype="cozy"] .camera-face,
-body[data-theme-archetype="cozy"] .camera-aux,
-body[data-theme-archetype="cozy"] .floating-cam,
-body[data-theme-archetype="cozy"] .pip-cam-box {
-  border-width: 10px !important;
-  border-bottom-width: 38px !important;
+/* Cámaras secundarias compactas */
+body[data-theme-archetype="cozy"] :is(.camera-face, .camera-aux, .floating-cam, .pip-cam-box, .runner-cam-box, .host-cam-frame, .guest-cam-frame) {
+  box-sizing: border-box !important;
+  background: #181412 !important;
+  border: 10px solid #FDFBF7 !important;
+  border-bottom: 38px solid #FDFBF7 !important;
   border-radius: 22px !important;
-}
-
-/* En modo navegador, no tapar el marco de papel polaroid con el outline de depuración */
-body[data-theme-archetype="cozy"].browser-preview-mode .camera-frame,
-body[data-theme-archetype="cozy"].browser-preview-mode .cam-frame,
-body[data-theme-archetype="cozy"].browser-preview-mode .canvas-frame,
-body[data-theme-archetype="cozy"].browser-preview-mode .stream-frame {
+  clip-path: none !important;
+  box-shadow: 0 14px 35px rgba(35, 25, 20, 0.22) !important;
   outline: 1.5px solid rgba(220, 200, 185, 0.6) !important;
+  overflow: visible !important;
+  position: relative !important;
 }
 
 /* Etiquetas manuscritas en la barbilla blanca del Polaroid */
-body[data-theme-archetype="cozy"] .camera-frame .frame-label,
-body[data-theme-archetype="cozy"] .cam-frame .frame-label,
-body[data-theme-archetype="cozy"] .canvas-tag {
+body[data-theme-archetype="cozy"] :is(.camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is(.frame-label, .canvas-tag, .cam-label) {
   position: absolute !important;
   bottom: -40px !important;
   left: 18px !important;
@@ -350,40 +315,15 @@ body[data-theme-archetype="cozy"] .canvas-tag {
   padding: 0 !important;
 }
 
-body[data-theme-archetype="cozy"] .camera-face .frame-label,
-body[data-theme-archetype="cozy"] .camera-aux .frame-label {
+body[data-theme-archetype="cozy"] :is(.camera-face, .camera-aux, .pip-cam-box, .runner-cam-box) :is(.frame-label, .cam-label) {
   bottom: -32px !important;
   font-size: 13px !important;
   left: 12px !important;
 }
 
-body[data-theme-archetype="cozy"] .frame-label [data-icon="chip"] {
-  display: none !important;
-}
-
-body[data-theme-archetype="cozy"] .camera-frame .frame-label::before,
-body[data-theme-archetype="cozy"] .canvas-tag::before {
-  content: "☕ " !important;
-  font-size: 15px !important;
-}
-
-/* Desactivar elementos técnicos de Maker en Cozy */
-body[data-theme-archetype="cozy"] .frame-corner-tr,
-body[data-theme-archetype="cozy"] .frame-corner-bl,
-body[data-theme-archetype="cozy"] .reg-mark,
-body[data-theme-archetype="cozy"] .camera-frame::after {
-  display: none !important;
-}
-
-/* 🏷️ CINTA ADHESIVA WASHI TAPE EN CADA MARCO POLAROID */
-body[data-theme-archetype="cozy"] .camera-frame::before,
-body[data-theme-archetype="cozy"] .cam-frame::before,
-body[data-theme-archetype="cozy"] .hud-cam-box::before,
-body[data-theme-archetype="cozy"] .stream-frame::before,
-body[data-theme-archetype="cozy"] .canvas-frame::before,
-body[data-theme-archetype="cozy"] .polaroid-frame::before,
-body[data-theme-archetype="cozy"] .gameplay-box::before,
-body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame::before {
+/* 🏷️ CINTA ADHESIVA WASHI TAPE COZY (Visible solo bajo Cozy) */
+body[data-theme-archetype="cozy"] :is(.camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card):not(:has(.washi-tape))::before,
+body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame:not(:has(.washi-tape))::before {
   content: "" !important;
   position: absolute !important;
   top: -20px !important;
@@ -401,140 +341,78 @@ body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame::before {
   display: block !important;
 }
 
-body[data-theme-archetype="cozy"] .camera-face::before,
-body[data-theme-archetype="cozy"] .camera-aux::before {
+body[data-theme-archetype="cozy"] :is(.camera-face, .camera-aux, .pip-cam-box, .runner-cam-box):not(:has(.washi-tape))::before {
   width: 90px !important;
   height: 22px !important;
   top: -16px !important;
   transform: translateX(-50%) rotate(1.5deg) !important;
 }
 
+/* Evitar cinta duplicada si el HTML ya contiene .washi-tape */
+body[data-theme-archetype="cozy"] .polaroid-frame:has(.washi-tape)::before {
+  display: none !important;
+}
+
+body[data-theme-archetype="cozy"] .washi-tape {
+  display: block !important;
+}
+
 /* ====================================================================
-   RESETEOS Y NORMALIZACIÓN CRUZADA ENTRE PACKS (CROSS-PACK RESETS)
-   Garantiza que al cambiar entre estéticas no queden residuos visuales
-   IMPORTANTE: Jamás deben afectar al estado Original nativo de la escena.
+   2. ARQUETIPO GAMER PRO (Esports, Biselados 45°, Retículas Sci-Fi HUD)
    ==================================================================== */
-
-/* Si se fuerza explícitamente Gamer, Maker u OpenStream sobre una escena Polaroid */
-body[data-theme-archetype="gamer"] .polaroid-frame,
-body[data-theme-archetype="maker"] .polaroid-frame,
-body[data-theme-archetype="openstream"] .polaroid-frame {
-  background: transparent !important;
-  padding: 0 !important;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  outline: none !important;
-}
-
-body[data-theme-archetype="gamer"] .polaroid-footer,
-body[data-theme-archetype="maker"] .polaroid-footer,
-body[data-theme-archetype="openstream"] .polaroid-footer,
-body[data-theme-archetype="gamer"] .washi-tape,
-body[data-theme-archetype="maker"] .washi-tape,
-body[data-theme-archetype="openstream"] .washi-tape,
-body[data-theme-archetype="gamer"] .steam-dot,
-body[data-theme-archetype="maker"] .steam-dot,
-body[data-theme-archetype="openstream"] .steam-dot,
-body[data-theme-archetype="gamer"] .polaroid-handwritten,
-body[data-theme-archetype="maker"] .polaroid-handwritten,
-body[data-theme-archetype="openstream"] .polaroid-handwritten,
-body[data-theme-archetype="gamer"] .polaroid-channel,
-body[data-theme-archetype="maker"] .polaroid-channel,
-body[data-theme-archetype="openstream"] .polaroid-channel {
-  display: none !important;
-}
-
-/* Ocultar retículas gamer solo si se fuerza explícitamente otro arquetipo */
-body[data-theme-archetype="cozy"] .reticle-tl,
-body[data-theme-archetype="cozy"] .reticle-br,
-body[data-theme-archetype="cozy"] .cam-header-tag,
-body[data-theme-archetype="cozy"] .cam-footer-tag,
-body[data-theme-archetype="cozy"] .live-match-chip,
-body[data-theme-archetype="maker"] .reticle-tl,
-body[data-theme-archetype="maker"] .reticle-br,
-body[data-theme-archetype="openstream"] .reticle-tl,
-body[data-theme-archetype="openstream"] .reticle-br {
-  display: none !important;
-}
-
-/* Ocultar esquinas técnicas solo si se fuerza explícitamente otro arquetipo */
-body[data-theme-archetype="cozy"] .frame-corner-tr,
-body[data-theme-archetype="cozy"] .frame-corner-bl,
-body[data-theme-archetype="cozy"] .reg-mark,
-body[data-theme-archetype="gamer"] .frame-corner-tr,
-body[data-theme-archetype="gamer"] .frame-corner-bl,
-body[data-theme-archetype="gamer"] .reg-mark,
-body[data-theme-archetype="openstream"] .frame-corner-tr,
-body[data-theme-archetype="openstream"] .frame-corner-bl,
-body[data-theme-archetype="openstream"] .reg-mark {
-  display: none !important;
-}
-
-/* Ocultar badges de estudio solo si se fuerza otro arquetipo */
-body[data-theme-archetype="cozy"] .cam-badge-studio,
-body[data-theme-archetype="gamer"] .cam-badge-studio,
-body[data-theme-archetype="maker"] .cam-badge-studio {
-  display: none !important;
-}
-
-/* --- 2. ARQUETIPO GAMER PRO: MECHA TOURNAMENT, CORTES 45° Y HUD SCI-FI --- */
 body[data-theme-archetype="gamer"],
 body[data-pack="gamer"]:not([data-theme-archetype]) {
-  font-family: 'Share Tech Mono', 'Rajdhani', monospace !important;
+  font-family: 'Share Tech Mono', 'Rajdhani', 'Orbitron', monospace !important;
 }
 
-body[data-theme-archetype="gamer"] .camera-frame,
-body[data-theme-archetype="gamer"] .camera-main,
-body[data-theme-archetype="gamer"] .camera-face,
-body[data-theme-archetype="gamer"] .camera-aux,
-body[data-theme-archetype="gamer"] .cam-frame,
-body[data-theme-archetype="gamer"] .cam-box,
-body[data-theme-archetype="gamer"] .hud-cam-box,
-body[data-theme-archetype="gamer"] .stream-frame,
-body[data-theme-archetype="gamer"] .canvas-frame,
-body[data-theme-archetype="gamer"] .face-frame,
-body[data-theme-archetype="gamer"] .polaroid-frame,
-body[data-theme-archetype="gamer"] .desktop-main-viewport,
-body[data-theme-archetype="gamer"] .gameplay-box,
-body[data-theme-archetype="gamer"] .game-box,
-body[data-theme-archetype="gamer"] .cam-inner-viewport,
-body[data-theme-archetype="gamer"] [data-cutout="true"],
-body[data-pack="gamer"]:not([data-theme-archetype]) .camera-frame,
-body[data-pack="gamer"]:not([data-theme-archetype]) .camera-main {
+body[data-theme-archetype="gamer"] *:not(code):not(pre) {
+  font-family: 'Share Tech Mono', 'Rajdhani', 'Orbitron', monospace !important;
+}
+
+/* 🎯 Cabeceras y Barras Gamer (Cortes angulares a 45°) */
+body[data-theme-archetype="gamer"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
+body[data-theme-archetype="gamer"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px)) !important;
+  border-radius: 0px !important;
+  background: rgba(14, 16, 20, 0.92) !important;
+  border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), inset 0 0 16px rgba(0, 240, 255, 0.12) !important;
+}
+
+/* 🎯 Insignias y Chips Angulares Gamer */
+body[data-theme-archetype="gamer"] :is(.mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label) {
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%) !important;
+  border-radius: 0px !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+}
+
+/* 🎯 Tarjetas y Paneles Gamer (Cortes tácticos) */
+body[data-theme-archetype="gamer"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
+  border-radius: 0px !important;
+  background: rgba(14, 18, 24, 0.95) !important;
+  border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.6) !important;
+}
+
+/* 🎯 Marcos de Cámara Gamer: Silueta Mecha a 45° con brillo láser */
+body[data-theme-archetype="gamer"] :is(.camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
+body[data-pack="gamer"]:not([data-theme-archetype]) .camera-frame {
+  box-sizing: border-box !important;
   clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px)) !important;
   border-radius: 0px !important;
   border: 2px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.25), inset 0 0 16px rgba(0, 240, 255, 0.12) !important;
   background: rgba(10, 14, 18, 0.6) !important;
+  padding: 0 !important;
+  outline: none !important;
   overflow: visible !important;
+  position: relative !important;
 }
 
-body[data-theme-archetype="gamer"] .camera-frame .frame-label,
-body[data-theme-archetype="gamer"] .cam-frame .frame-label,
-body[data-theme-archetype="gamer"] .canvas-tag {
-  top: -14px !important;
-  left: 20px !important;
-  bottom: auto !important;
-  background: #0E1216 !important;
-  border: 1px solid var(--color-accent-cyan, #00F0FF) !important;
-  color: var(--color-accent-cyan, #00F0FF) !important;
-  font-family: 'Share Tech Mono', monospace !important;
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  padding: 2px 12px !important;
-  letter-spacing: 1px !important;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%) !important;
-  border-radius: 0px !important;
-}
-
-/* Retículas tácticas Gamer en las esquinas del marco */
-body[data-theme-archetype="gamer"] .camera-frame::before,
-body[data-theme-archetype="gamer"] .cam-frame::before,
-body[data-theme-archetype="gamer"] .hud-cam-box::before,
-body[data-theme-archetype="gamer"] .stream-frame::before,
-body[data-theme-archetype="gamer"] .canvas-frame::before,
-body[data-theme-archetype="gamer"] .polaroid-frame::before {
+/* Retículas tácticas Gamer en las esquinas */
+body[data-theme-archetype="gamer"] :is(.camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::before {
   content: "" !important;
   position: absolute !important;
   top: 6px !important;
@@ -551,12 +429,7 @@ body[data-theme-archetype="gamer"] .polaroid-frame::before {
   pointer-events: none !important;
 }
 
-body[data-theme-archetype="gamer"] .camera-frame::after,
-body[data-theme-archetype="gamer"] .cam-frame::after,
-body[data-theme-archetype="gamer"] .hud-cam-box::after,
-body[data-theme-archetype="gamer"] .stream-frame::after,
-body[data-theme-archetype="gamer"] .canvas-frame::after,
-body[data-theme-archetype="gamer"] .polaroid-frame::after {
+body[data-theme-archetype="gamer"] :is(.camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
   content: "" !important;
   position: absolute !important;
   bottom: 6px !important;
@@ -573,103 +446,149 @@ body[data-theme-archetype="gamer"] .polaroid-frame::after {
   pointer-events: none !important;
 }
 
-body[data-theme-archetype="gamer"] .side-panel-box,
-body[data-theme-archetype="gamer"] .side-info-panel,
-body[data-theme-archetype="gamer"] .match-hero-card,
-body[data-theme-archetype="gamer"] .pomodoro-card,
-body[data-theme-archetype="gamer"] .tasks-card,
-body[data-theme-archetype="gamer"] .canvas-card,
-body[data-theme-archetype="gamer"] .agenda-card,
-body[data-pack="gamer"]:not([data-theme-archetype]) .side-panel-box,
-body[data-pack="gamer"]:not([data-theme-archetype]) .match-hero-card {
-  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
-  border-radius: 0px !important;
-  border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
+/* ====================================================================
+   3. ARQUETIPO MAKER & PRINT (Taller Técnico, CAD Blueprint, Brackets)
+   ==================================================================== */
+body[data-theme-archetype="maker"],
+body[data-pack="maker"]:not([data-theme-archetype]) {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace !important;
 }
 
-body[data-theme-archetype="gamer"] .scene-header,
-body[data-theme-archetype="gamer"] .bottom-project-bar {
-  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px)) !important;
-  border-radius: 0px !important;
-  border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
+body[data-theme-archetype="maker"] *:not(code):not(pre) {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace !important;
 }
 
-body[data-theme-archetype="gamer"] .frame-corner-tr,
-body[data-theme-archetype="gamer"] .frame-corner-bl,
-body[data-theme-archetype="gamer"] .reg-mark {
-  display: none !important;
+/* 🛠️ Cabeceras y Barras Maker (Precisión técnica) */
+body[data-theme-archetype="maker"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
+body[data-theme-archetype="maker"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+  border-radius: 6px !important;
+  clip-path: none !important;
+  background: rgba(19, 23, 29, 0.92) !important;
+  border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.4)) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
 }
 
-/* 🛠️ ARQUETIPO MAKER & PRINT: Blueprint, precisión CAD y esquinas técnicas */
-body[data-theme-archetype="maker"] .frame-corner-tr,
-body[data-theme-archetype="maker"] .frame-corner-bl,
-body[data-theme-archetype="maker"] .reg-mark,
-body[data-pack="maker"]:not([data-theme-archetype]) .frame-corner-tr,
-body[data-pack="maker"]:not([data-theme-archetype]) .frame-corner-bl,
-body[data-pack="maker"]:not([data-theme-archetype]) .reg-mark {
+/* 🛠️ Tarjetas y Paneles Maker */
+body[data-theme-archetype="maker"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
+  border-radius: 6px !important;
+  clip-path: none !important;
+  background: rgba(19, 23, 29, 0.94) !important;
+  border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.35)) !important;
+}
+
+/* 🛠️ Marcos de Cámara Maker (Brackets técnicos CAD) */
+body[data-theme-archetype="maker"] :is(.camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
+body[data-pack="maker"]:not([data-theme-archetype]) .camera-frame {
+  box-sizing: border-box !important;
+  border: 1.5px solid var(--color-border-cyan, rgba(87, 214, 196, 0.5)) !important;
+  border-radius: 4px !important;
+  clip-path: none !important;
+  box-shadow: inset 0 0 14px rgba(87, 214, 196, 0.05), 0 8px 24px rgba(0,0,0,0.5) !important;
+  background: rgba(16, 20, 26, 0.6) !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Escuadra angular Maker de taller en la esquina inferior derecha */
+body[data-theme-archetype="maker"] :is(.camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -3px !important;
+  right: -3px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-right: 3px solid var(--color-accent-cyan, #57D6C4) !important;
+  border-bottom: 3px solid var(--color-accent-cyan, #57D6C4) !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: block !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+body[data-theme-archetype="maker"] :is(.frame-corner-tr, .frame-corner-bl, .reg-mark) {
   display: block !important;
 }
 
-body[data-theme-archetype="maker"] .cam-frame,
-body[data-theme-archetype="maker"] .camera-frame,
-body[data-theme-archetype="maker"] .camera-main,
-body[data-theme-archetype="maker"] .cam-box,
-body[data-theme-archetype="maker"] .hud-cam-box,
-body[data-theme-archetype="maker"] .stream-frame,
-body[data-theme-archetype="maker"] .canvas-frame,
-body[data-theme-archetype="maker"] .face-frame,
-body[data-theme-archetype="maker"] .polaroid-frame,
-body[data-theme-archetype="maker"] .desktop-main-viewport,
-body[data-theme-archetype="maker"] [data-cutout="true"],
-body[data-pack="maker"]:not([data-theme-archetype]) .camera-frame {
-  border: 1px solid var(--color-border-cyan) !important;
-  border-radius: 4px !important;
+/* ====================================================================
+   4. ARQUETIPO OPEN STREAM (Swiss Broadcast, Cristal Esmerilado, Neo-Glass)
+   ==================================================================== */
+body[data-theme-archetype="openstream"],
+body[data-pack="openstream"]:not([data-theme-archetype]) {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+body[data-theme-archetype="openstream"] *:not(code):not(pre) {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* 🌐 Cabeceras y Barras Swiss Broadcast */
+body[data-theme-archetype="openstream"] :is(.scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar),
+body[data-theme-archetype="openstream"] :is(.bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+  border-radius: 12px !important;
   clip-path: none !important;
-  box-shadow: inset 0 0 12px rgba(87, 214, 196, 0.04) !important;
+  background: rgba(15, 23, 42, 0.78) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* 🛠️ Adorno característico Maker: Escuadra angular de taller en esquinas */
-body[data-theme-archetype="maker"] .camera-main::after,
-body[data-theme-archetype="maker"] .camera-frame:not(:has(.frame-corner-tr))::after {
-  content: "";
-  position: absolute;
-  bottom: -3px;
-  right: -3px;
-  width: 18px;
-  height: 18px;
-  border-right: 3px solid var(--color-accent, #57D6C4);
-  border-bottom: 3px solid var(--color-accent, #57D6C4);
-  pointer-events: none;
-  z-index: 10;
+/* 🌐 Tarjetas y Paneles Swiss Broadcast */
+body[data-theme-archetype="openstream"] :is(.side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card) {
+  border-radius: 12px !important;
+  clip-path: none !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
 }
 
-/* 🌐 ARQUETIPO OPEN STREAM: Broadcast moderno con esquinas suavemente curvadas y cristal */
-body[data-theme-archetype="openstream"] .camera-frame,
-body[data-theme-archetype="openstream"] .camera-main,
-body[data-theme-archetype="openstream"] .camera-face,
-body[data-theme-archetype="openstream"] .camera-aux,
-body[data-theme-archetype="openstream"] .cam-frame,
-body[data-theme-archetype="openstream"] .cam-box,
-body[data-theme-archetype="openstream"] .hud-cam-box,
-body[data-theme-archetype="openstream"] .stream-frame,
-body[data-theme-archetype="openstream"] .canvas-frame,
-body[data-theme-archetype="openstream"] .face-frame,
-body[data-theme-archetype="openstream"] .polaroid-frame,
-body[data-theme-archetype="openstream"] .desktop-main-viewport,
-body[data-theme-archetype="openstream"] .pod-cam-box,
-body[data-theme-archetype="openstream"] .agenda-card,
-body[data-theme-archetype="openstream"] [data-cutout="true"],
+/* 🌐 Marcos de Cámara Swiss Broadcast */
+body[data-theme-archetype="openstream"] :is(.camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]),
 body[data-pack="openstream"]:not([data-theme-archetype]) .camera-frame {
+  box-sizing: border-box !important;
   border-radius: 16px !important;
   border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
   backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
   clip-path: none !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+  position: relative !important;
 }
 
-body[data-theme-archetype="openstream"] .frame-corner-tr,
-body[data-theme-archetype="openstream"] .frame-corner-bl,
-body[data-theme-archetype="openstream"] .reg-mark {
+/* ====================================================================
+   5. RESIDUALES Y AISLAMIENTO CRUZADO ENTRE PACKS (CLEANUP & NORMALIZATION)
+   ==================================================================== */
+/* Ocultar elementos Cozy si NO es Cozy */
+body:not([data-theme-archetype="cozy"]) .washi-tape,
+body:not([data-theme-archetype="cozy"]) .polaroid-footer,
+body:not([data-theme-archetype="cozy"]) .polaroid-handwritten,
+body:not([data-theme-archetype="cozy"]) .steam-dot,
+body:not([data-theme-archetype="cozy"]) .steam-vapor {
+  display: none !important;
+}
+
+/* Ocultar retículas Gamer si NO es Gamer */
+body:not([data-theme-archetype="gamer"]) .reticle-tl,
+body:not([data-theme-archetype="gamer"]) .reticle-br,
+body:not([data-theme-archetype="gamer"]) .cam-header-tag,
+body:not([data-theme-archetype="gamer"]) .cam-footer-tag {
+  display: none !important;
+}
+
+/* Ocultar esquinas técnicas Maker si NO es Maker */
+body:not([data-theme-archetype="maker"]) .frame-corner-tr,
+body:not([data-theme-archetype="maker"]) .frame-corner-bl,
+body:not([data-theme-archetype="maker"]) .reg-mark {
   display: none !important;
 }
 
