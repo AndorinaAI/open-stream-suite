@@ -152,20 +152,31 @@
       return 'openstream';
     }
 
+    function resolveArchetypeToApply(theme, shape) {
+      if (shape && shape !== 'original') {
+        return shape;
+      }
+      if (shape === 'original') {
+        return currentPack;
+      }
+      // Si no se especifica forma explícita, se deriva de forma natural del arquetipo del tema activo
+      return getThemeArchetype(theme) || currentPack;
+    }
+
     function adaptAtmosphereForArchetype(arch) {
       if (!arch) return;
-      const modeBadge = document.querySelector('.mode-badge span:last-child');
-      const headerSub = document.querySelector('.header-subtitle');
-      const mainCamLabel = document.querySelector('.camera-main .frame-label span:last-child');
+      const modeBadge = document.querySelector('.mode-badge span:last-child, .live-match-chip, .live-badge');
+      const headerSub = document.querySelector('.header-subtitle, .track-author, .episode-tag');
+      const mainCamLabel = document.querySelector('.camera-main .frame-label span:last-child, .cam-label');
       
       if (arch === 'cozy') {
-        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('GAMER') || modeBadge.textContent.includes('MODE'))) {
+        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('GAMER') || modeBadge.textContent.includes('MODE') || modeBadge.textContent.includes('LIVE'))) {
           modeBadge.textContent = 'COZY CHILL';
         }
-        if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('ELECTRÓNICA') || headerSub.textContent.includes('MATCH'))) {
+        if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('ELECTRÓNICA') || headerSub.textContent.includes('MATCH') || headerSub.textContent.includes('COMPETITIVE'))) {
           headerSub.textContent = 'Música Lo-Fi · Charla Relajada · Café';
         }
-        if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('OVERVIEW'))) {
+        if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('OVERVIEW') || mainCamLabel.textContent.includes('RUNNER'))) {
           mainCamLabel.textContent = 'Cámara Principal';
         }
       } else if (arch === 'gamer') {
@@ -179,37 +190,35 @@
           mainCamLabel.textContent = 'CAM 01 // OVERVIEW';
         }
       } else if (arch === 'maker') {
-        if (modeBadge && (modeBadge.textContent.includes('ESPORTS') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL'))) {
+        if (modeBadge && (modeBadge.textContent.includes('ESPORTS') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL') || modeBadge.textContent.includes('HUD'))) {
           modeBadge.textContent = 'MAKER MODE';
         }
-        if (headerSub && (headerSub.textContent.includes('LIVE MATCH') || headerSub.textContent.includes('Música'))) {
+        if (headerSub && (headerSub.textContent.includes('LIVE MATCH') || headerSub.textContent.includes('Música') || headerSub.textContent.includes('Café'))) {
           headerSub.textContent = 'RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN';
         }
-        if (mainCamLabel && mainCamLabel.textContent.includes('OVERVIEW')) {
+        if (mainCamLabel && (mainCamLabel.textContent.includes('OVERVIEW') || mainCamLabel.textContent.includes('Principal'))) {
           mainCamLabel.textContent = 'CÁMARA CENITAL · BANCO DE TRABAJO';
+        }
+      } else if (arch === 'openstream') {
+        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('ESPORTS'))) {
+          modeBadge.textContent = 'BROADCAST';
         }
       }
     }
 
     function applyActiveShapeToBody(shapeName) {
-      if (!shapeName || shapeName === 'original') {
-        document.body.removeAttribute('data-theme-archetype');
-        adaptAtmosphereForArchetype(null);
-        return;
-      }
+      if (!shapeName) return;
       document.body.setAttribute('data-theme-archetype', shapeName);
       adaptAtmosphereForArchetype(shapeName);
     }
     window.applyActiveShapeToBody = applyActiveShapeToBody;
 
-    function applyActiveThemeToBody(themeName, updateShape = false) {
+    function applyActiveThemeToBody(themeName, updateShape = true) {
       if (!themeName) return;
       document.body.setAttribute('data-theme', themeName);
-      if (updateShape) {
-        const arch = getThemeArchetype(themeName);
-        if (arch) {
-          applyActiveShapeToBody(arch);
-        }
+      if (updateShape && (!activeShape || activeShape === 'original')) {
+        const arch = resolveArchetypeToApply(themeName, activeShape);
+        applyActiveShapeToBody(arch);
       }
     }
     window.applyActiveThemeToBody = applyActiveThemeToBody;
@@ -244,14 +253,20 @@
     if (!activeShape && config.overlayShapes && currentSceneKey && config.overlayShapes[currentSceneKey]) {
       activeShape = config.overlayShapes[currentSceneKey];
     }
-    if (!activeShape) {
-      activeShape = 'original';
+
+    function updateOverlayThemeAndShape(newTheme, newShape) {
+      if (newTheme) {
+        activeTheme = newTheme;
+        document.body.setAttribute('data-theme', newTheme);
+      }
+      if (newShape !== undefined && newShape !== null) {
+        activeShape = newShape;
+      }
+      const arch = resolveArchetypeToApply(activeTheme, activeShape);
+      applyActiveShapeToBody(arch);
     }
 
-    if (activeTheme) {
-      applyActiveThemeToBody(activeTheme, false);
-    }
-    applyActiveShapeToBody(activeShape);
+    updateOverlayThemeAndShape(activeTheme, activeShape);
 
     // Consultar mapeo de temas y formas por escena desde el servidor local
     function syncThemeFromServer() {
@@ -267,11 +282,18 @@
               });
             });
           }
+          let th = null;
+          let sh = null;
           if (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey] && !themeFromUrl) {
-            applyActiveThemeToBody(data.overlayThemes[currentSceneKey], false);
+            th = data.overlayThemes[currentSceneKey];
           }
           if (data.overlayShapes && currentSceneKey && data.overlayShapes[currentSceneKey] && !shapeFromUrl) {
-            applyActiveShapeToBody(data.overlayShapes[currentSceneKey]);
+            sh = data.overlayShapes[currentSceneKey];
+          }
+          if (th || sh) {
+            updateOverlayThemeAndShape(th, sh);
+          } else if (activeTheme) {
+            updateOverlayThemeAndShape(activeTheme, activeShape);
           }
         })
         .catch(() => {});
@@ -316,8 +338,9 @@
           const msg = JSON.parse(e.data);
           if (msg.type === 'overlay_theme_change') {
             if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
-              if (msg.theme && !themeFromUrl) applyActiveThemeToBody(msg.theme, false);
-              if (msg.shape && !shapeFromUrl) applyActiveShapeToBody(msg.shape);
+              const th = (!themeFromUrl && msg.theme) ? msg.theme : null;
+              const sh = (!shapeFromUrl && msg.shape !== undefined) ? msg.shape : null;
+              updateOverlayThemeAndShape(th, sh);
             }
           } else if (msg.type === 'theme_change') {
             syncThemeFromServer();
