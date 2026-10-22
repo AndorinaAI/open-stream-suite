@@ -8,8 +8,6 @@ let currentEditingTheme = null;
 let currentEditingPackId = null;
 let currentActiveThemeId = 'maker';
 let currentActivePackId = 'Maker_Theme_Pack';
-let currentOpenOverlayFolderId = null;
-let currentFolderSubFilter = 'all';
 window.selectedFusionScenes = window.selectedFusionScenes || new Set();
 const DEFAULT_OVERLAY_THEMES = {
   // Maker_Theme_Pack

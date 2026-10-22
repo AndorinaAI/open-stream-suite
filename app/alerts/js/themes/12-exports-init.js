@@ -35,6 +35,10 @@ window.openThemeEditor = openThemeEditor;
 window.closeThemeEditor = closeThemeEditor;
 
 // Inicialización al cargar la sección de temas
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    loadThemePacks();
+  });
+} else {
   loadThemePacks();
-});
+}

@@ -109,6 +109,14 @@ function switchThemesMainTab(tab) {
 
   if (tab === 'overlays') {
     renderThemeScenes();
+  } else if (tab === 'themes') {
+    if (typeof renderThemePacks === 'function') {
+      if (currentOpenPackId) {
+        openThemePack(currentOpenPackId);
+      } else {
+        renderThemePacks();
+      }
+    }
   } else if (tab === 'fusions') {
     if (typeof loadAndRenderFusions === 'function') {
       loadAndRenderFusions();
