@@ -2,42 +2,128 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Overlay — Victoria & Clutch</title>
+  <title>Overlay — Victoria & Clutch Showcase (Esports)</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Teko:wght@600;700&display=swap" rel="stylesheet">
   <style>
     body {
       width: 1920px;
       height: 1080px;
       margin: 0;
-      background: transparent;
+      padding: 0;
+      background: radial-gradient(circle at center, rgba(245, 158, 11, 0.15) 0%, rgba(10, 12, 16, 0.95) 75%);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: var(--font-tech);
+      font-family: 'Share Tech Mono', var(--font-tech), monospace;
       overflow: hidden;
     }
+
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.6)); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 45px rgba(245, 158, 11, 0.9)); transform: scale(1.02); }
+    }
+
+    .victory-podium {
+      text-align: center;
+      background: rgba(14, 18, 24, 0.94);
+      border: 2px solid #F59E0B;
+      clip-path: polygon(0 0, calc(100% - 32px) 0, 100% 32px, 100% 100%, 32px 100%, 0 calc(100% - 32px));
+      padding: 48px 80px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.8);
+      animation: pulseGlow 3s infinite ease-in-out;
+      min-width: 740px;
+    }
+
+    .trophy-icon {
+      font-size: 64px;
+      margin-bottom: 12px;
+    }
+
     .victory-banner {
-      background: var(--color-panel-bg);
-      border: 3px solid var(--color-accent-cyan);
-      padding: 30px 60px;
-      clip-path: polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
-      box-shadow: var(--theme-glow);
+      font-family: 'Teko', sans-serif;
+      font-size: 78px;
+      font-weight: 700;
+      color: #F59E0B;
+      letter-spacing: 4px;
+      margin: 0;
+      line-height: 1;
+      text-transform: uppercase;
+      text-shadow: 0 4px 18px rgba(245, 158, 11, 0.5);
+    }
+
+    .clutch-badge {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid #F59E0B;
+      color: #FFF;
+      font-size: 14px;
+      font-weight: 800;
+      padding: 6px 24px;
+      letter-spacing: 2px;
+      margin: 16px 0 24px 0;
+      clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    }
+
+    .match-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .stat-box {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 14px 10px;
       text-align: center;
     }
-    h1 {
-      font-size: 64px;
-      font-weight: 900;
-      color: var(--color-accent-cyan);
-      margin: 0;
-      letter-spacing: 4px;
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--color-text-dim, #8B96A0);
+      margin-bottom: 4px;
+    }
+
+    .stat-number {
+      font-size: 26px;
+      font-weight: 800;
+      color: #FFF;
+      font-family: 'Teko', sans-serif;
     }
   </style>
 </head>
-<body data-theme="crimson_esport">
-  <div class="victory-banner">
-    <h1>VICTORY // CLUTCH</h1>
+<body data-theme="golden_glory">
+
+  <div class="victory-podium">
+    <div class="trophy-icon">🏆</div>
+    <h1 class="victory-banner">VICTORIA & CLUTCH CHAMPION</h1>
+    <div class="clutch-badge">⚡ 1v4 CLUTCH CONQUERED · MATCH MVP</div>
+
+    <div class="match-stats-grid">
+      <div class="stat-box">
+        <div class="stat-label">ELIMINACIONES</div>
+        <div class="stat-number" style="color: #F59E0B;">18 KILLS</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">DAÑO TOTAL</div>
+        <div class="stat-number">4,920 DMG</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">HEADSHOTS</div>
+        <div class="stat-number" style="color: #10B981;">68% ACC</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">PUNTOS RANGO</div>
+        <div class="stat-number" style="color: #38BDF8;">+350 RP</div>
+      </div>
+    </div>
   </div>
+
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
 </body>

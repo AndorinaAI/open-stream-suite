@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Overlay — Podcast & Entrevista (Dual Cam)</title>
+  <title>Open Stream Suite — Swiss Broadcast Podcast & Debate</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
   <style>
@@ -10,72 +10,259 @@
       width: 1920px;
       height: 1080px;
       margin: 0;
-      padding: 40px;
+      padding: 30px 40px;
       box-sizing: border-box;
       background: transparent;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
-      font-family: var(--font-primary);
+      font-family: var(--font-primary, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif);
+      color: #f8fafc;
     }
-    .header-bar {
-      background: var(--color-panel-bg-trans);
-      border: 1px solid var(--color-border-cyan);
-      border-radius: var(--radius-md);
-      padding: 14px 28px;
+
+    /* Swiss Broadcast Header */
+    .broadcast-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 12px 28px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+    .broadcast-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .live-badge {
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      animation: pulse-dot 1.4s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.7); }
     }
     .podcast-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 800;
-      color: var(--color-accent-cyan);
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
-    .cam-grid {
+    .episode-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+
+    /* Dual Cam Stage */
+    .cam-stage {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 32px;
       flex: 1;
-      margin: 28px 0;
+      margin: 24px 0;
+      min-height: 0;
     }
-    .guest-cam {
-      border: 2px solid var(--color-border-cyan-bright); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
-      background: rgba(0,0,0,0.3);
+    .stream-frame {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
       position: relative;
-      box-shadow: var(--theme-glow);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
     }
-    .guest-nameplate {
-      position: absolute;
-      bottom: 16px;
-      left: 16px;
-      background: var(--color-panel-bg);
-      border: 1px solid var(--color-border-cyan);
-      border-left: 4px solid var(--color-accent-cyan);
-      padding: 6px 16px;
-      border-radius: var(--radius-sm);
-      color: var(--color-text-light);
+
+    /* Presenter Lower Third Nameplate */
+    .nameplate {
+      margin: 18px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      padding: 10px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .nameplate-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mic-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+    .person-name {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .person-role {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    .person-social {
+      font-size: 12px;
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    /* Broadcast Discussion Agenda Bar */
+    .agenda-bar {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    }
+    .agenda-label {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .agenda-items {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex: 1;
+    }
+    .agenda-pill {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .agenda-pill.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
       font-weight: 700;
-      font-size: 14px;
+    }
+    .agenda-pill .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
     }
   </style>
 </head>
 <body data-theme="neon_streamer">
-  <div class="header-bar">
-    <div class="podcast-title">🎙️ PODCAST // EN DIRECTO</div>
-    <div style="font-size:13px; color:var(--color-accent-orange); font-weight:700;">EPISODIO ESPECIAL</div>
-  </div>
-  <div class="cam-grid">
-    <div class="guest-cam">
-      <div class="guest-nameplate">HOST PRINCIPAL</div>
+  <!-- Swiss Broadcast Header -->
+  <header class="broadcast-header">
+    <div class="broadcast-brand">
+      <div class="live-badge">
+        <span class="live-dot"></span>
+        <span>BROADCAST LIVE</span>
+      </div>
+      <div class="podcast-title">MESA DE DEBATE // ESTUDIO CENTRAL</div>
+      <div class="episode-tag">EPISODIO EN DIRECTO</div>
     </div>
-    <div class="guest-cam">
-      <div class="guest-nameplate" style="border-left-color: var(--color-accent-orange);">INVITADO ESPECIAL</div>
+    <div style="font-size:13px; font-weight:600; color:#cbd5e1; font-family:monospace;">
+      AUDIO MASTER: DUAL MONO · STEREO
     </div>
-  </div>
+  </header>
+
+  <!-- Dual Cam Stage -->
+  <main class="cam-stage">
+    <!-- Host Frame -->
+    <div class="stream-frame">
+      <div class="nameplate">
+        <div class="nameplate-left">
+          <div class="mic-indicator" title="Microphone Active"></div>
+          <div>
+            <div class="person-name">HOST PRINCIPAL</div>
+            <div class="person-role">MODERADOR DEL STREAM</div>
+          </div>
+        </div>
+        <div class="person-social">@HostDirecto</div>
+      </div>
+    </div>
+
+    <!-- Guest Frame -->
+    <div class="stream-frame">
+      <div class="nameplate">
+        <div class="nameplate-left">
+          <div class="mic-indicator" style="background:#38bdf8; box-shadow:0 0 8px rgba(56,189,248,0.6);" title="Guest Mic Active"></div>
+          <div>
+            <div class="person-name">INVITADO ESPECIAL</div>
+            <div class="person-role">ANALISTA INVITADO</div>
+          </div>
+        </div>
+        <div class="person-social" style="color:#f59e0b;">@InvitadoTalk</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Discussion Agenda Bar -->
+  <footer class="agenda-bar">
+    <div class="agenda-label">TEMARIO:</div>
+    <div class="agenda-items">
+      <div class="agenda-pill active">
+        <span class="dot"></span>
+        <span>1. Apertura y Contexto</span>
+      </div>
+      <div class="agenda-pill">
+        <span class="dot"></span>
+        <span>2. Debate y Puntos Clave</span>
+      </div>
+      <div class="agenda-pill">
+        <span class="dot"></span>
+        <span>3. Preguntas de la Comunidad</span>
+      </div>
+    </div>
+    <div style="font-size:12px; color:#64748b; font-weight:600;">
+      OPEN STREAM STUDIO
+    </div>
+  </footer>
+
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
 </body>
