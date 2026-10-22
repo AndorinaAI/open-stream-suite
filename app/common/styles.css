@@ -68,69 +68,136 @@ body.pack-cozy,
   --cozy-pill-radius: 50px;
 }
 
-body[data-pack="cozy"] .cam-frame,
-body[data-pack="cozy"] .camera-frame,
-body[data-pack="cozy"] .cam-inner-viewport {
+/* 🌿 ARQUETIPO COZY: Marcos suaves, polaroid y cápsulas píldora */
+body[data-theme-archetype="cozy"] .cam-frame,
+body[data-theme-archetype="cozy"] .camera-frame,
+body[data-theme-archetype="cozy"] .camera-main,
+body[data-theme-archetype="cozy"] .cam-box,
+body[data-theme-archetype="cozy"] .cam-inner-viewport,
+body[data-theme-archetype="cozy"] .pod-cam-box,
+body[data-pack="cozy"]:not([data-theme-archetype]) .cam-frame,
+body[data-pack="cozy"]:not([data-theme-archetype]) .camera-frame,
+body[data-pack="cozy"]:not([data-theme-archetype]) .cam-inner-viewport {
   border-radius: 28px !important;
   clip-path: none !important;
 }
 
-body[data-pack="cozy"] .pomodoro-card,
-body[data-pack="cozy"] .tasks-card,
-body[data-pack="cozy"] .cam-polaroid,
-body[data-pack="cozy"] .face-polaroid,
-body[data-pack="cozy"] .canvas-card,
-body[data-pack="cozy"] .chat-card,
-body[data-pack="cozy"] .side-panel-box,
-body[data-pack="cozy"] .ending-farewell-card {
+body[data-theme-archetype="cozy"] .pomodoro-card,
+body[data-theme-archetype="cozy"] .tasks-card,
+body[data-theme-archetype="cozy"] .cam-polaroid,
+body[data-theme-archetype="cozy"] .face-polaroid,
+body[data-theme-archetype="cozy"] .canvas-card,
+body[data-theme-archetype="cozy"] .chat-card,
+body[data-theme-archetype="cozy"] .side-panel-box,
+body[data-theme-archetype="cozy"] .ending-farewell-card,
+body[data-theme-archetype="cozy"] .match-hero-card,
+body[data-theme-archetype="cozy"] .agenda-card,
+body[data-theme-archetype="cozy"] .project-card,
+body[data-theme-archetype="cozy"] .panel-card,
+body[data-pack="cozy"]:not([data-theme-archetype]) .pomodoro-card,
+body[data-pack="cozy"]:not([data-theme-archetype]) .tasks-card,
+body[data-pack="cozy"]:not([data-theme-archetype]) .cam-polaroid,
+body[data-pack="cozy"]:not([data-theme-archetype]) .face-polaroid,
+body[data-pack="cozy"]:not([data-theme-archetype]) .canvas-card,
+body[data-pack="cozy"]:not([data-theme-archetype]) .chat-card,
+body[data-pack="cozy"]:not([data-theme-archetype]) .side-panel-box,
+body[data-pack="cozy"]:not([data-theme-archetype]) .ending-farewell-card {
   border-radius: 24px !important;
   clip-path: none !important;
 }
 
-body[data-pack="cozy"] .header-bar,
-body[data-pack="cozy"] .scene-header,
-body[data-pack="cozy"] .ambient-pill,
-body[data-pack="cozy"] .lofi-player-bar,
-body[data-pack="cozy"] .tools-palette-bar,
-body[data-pack="cozy"] .daily-goal-pill,
-body[data-pack="cozy"] .pomo-badge,
-body[data-pack="cozy"] .pomo-bar,
-body[data-pack="cozy"] .pomo-progress,
-body[data-pack="cozy"] .brand-badge {
+body[data-theme-archetype="cozy"] .header-bar,
+body[data-theme-archetype="cozy"] .scene-header,
+body[data-theme-archetype="cozy"] .ambient-pill,
+body[data-theme-archetype="cozy"] .lofi-player-bar,
+body[data-theme-archetype="cozy"] .tools-palette-bar,
+body[data-theme-archetype="cozy"] .daily-goal-pill,
+body[data-theme-archetype="cozy"] .pomo-badge,
+body[data-theme-archetype="cozy"] .pomo-bar,
+body[data-theme-archetype="cozy"] .pomo-progress,
+body[data-theme-archetype="cozy"] .brand-badge,
+body[data-theme-archetype="cozy"] .badge-pill,
+body[data-theme-archetype="cozy"] .badge,
+body[data-theme-archetype="cozy"] .phase-step,
+body[data-pack="cozy"]:not([data-theme-archetype]) .header-bar,
+body[data-pack="cozy"]:not([data-theme-archetype]) .scene-header,
+body[data-pack="cozy"]:not([data-theme-archetype]) .ambient-pill,
+body[data-pack="cozy"]:not([data-theme-archetype]) .lofi-player-bar,
+body[data-pack="cozy"]:not([data-theme-archetype]) .tools-palette-bar,
+body[data-pack="cozy"]:not([data-theme-archetype]) .daily-goal-pill,
+body[data-pack="cozy"]:not([data-theme-archetype]) .pomo-badge,
+body[data-pack="cozy"]:not([data-theme-archetype]) .pomo-bar,
+body[data-pack="cozy"]:not([data-theme-archetype]) .pomo-progress,
+body[data-pack="cozy"]:not([data-theme-archetype]) .brand-badge {
   border-radius: 50px !important;
   clip-path: none !important;
 }
 
-body[data-pack="cozy"] .frame-corner-tr,
-body[data-pack="cozy"] .frame-corner-bl,
-body[data-pack="cozy"] .reg-mark {
+body[data-theme-archetype="cozy"] .frame-corner-tr,
+body[data-theme-archetype="cozy"] .frame-corner-bl,
+body[data-theme-archetype="cozy"] .reg-mark,
+body[data-pack="cozy"]:not([data-theme-archetype]) .frame-corner-tr,
+body[data-pack="cozy"]:not([data-theme-archetype]) .frame-corner-bl,
+body[data-pack="cozy"]:not([data-theme-archetype]) .reg-mark {
   display: none !important;
 }
 
-/* ⚡ PACK GAMER PRO: Mecha tournament, cortes 45° y telemetría */
-body[data-pack="gamer"] .camera-frame,
-body[data-pack="gamer"] .camera-main {
+/* ⚡ ARQUETIPO GAMER PRO: Mecha tournament, cortes 45° y telemetría */
+body[data-theme-archetype="gamer"] .camera-frame,
+body[data-theme-archetype="gamer"] .camera-main,
+body[data-theme-archetype="gamer"] .cam-frame,
+body[data-theme-archetype="gamer"] .cam-box,
+body[data-theme-archetype="gamer"] .cam-inner-viewport,
+body[data-pack="gamer"]:not([data-theme-archetype]) .camera-frame,
+body[data-pack="gamer"]:not([data-theme-archetype]) .camera-main {
   clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px)) !important;
   border-radius: 0px !important;
 }
 
-body[data-pack="gamer"] .side-panel-box,
-body[data-pack="gamer"] .match-hero-card {
+body[data-theme-archetype="gamer"] .side-panel-box,
+body[data-theme-archetype="gamer"] .match-hero-card,
+body[data-theme-archetype="gamer"] .pomodoro-card,
+body[data-theme-archetype="gamer"] .tasks-card,
+body[data-theme-archetype="gamer"] .canvas-card,
+body[data-theme-archetype="gamer"] .agenda-card,
+body[data-pack="gamer"]:not([data-theme-archetype]) .side-panel-box,
+body[data-pack="gamer"]:not([data-theme-archetype]) .match-hero-card {
   clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
   border-radius: 0px !important;
 }
 
-/* 🛠️ PACK MAKER & PRINT: Blueprint, precisión CAD y esquinas técnicas */
-body[data-pack="maker"] .frame-corner-tr,
-body[data-pack="maker"] .frame-corner-bl,
-body[data-pack="maker"] .reg-mark {
+body[data-theme-archetype="gamer"] .frame-corner-tr,
+body[data-theme-archetype="gamer"] .frame-corner-bl,
+body[data-theme-archetype="gamer"] .reg-mark {
+  display: none !important;
+}
+
+/* 🛠️ ARQUETIPO MAKER & PRINT: Blueprint, precisión CAD y esquinas técnicas */
+body[data-theme-archetype="maker"] .frame-corner-tr,
+body[data-theme-archetype="maker"] .frame-corner-bl,
+body[data-theme-archetype="maker"] .reg-mark,
+body[data-pack="maker"]:not([data-theme-archetype]) .frame-corner-tr,
+body[data-pack="maker"]:not([data-theme-archetype]) .frame-corner-bl,
+body[data-pack="maker"]:not([data-theme-archetype]) .reg-mark {
   display: block !important;
 }
 
-/* 🌐 PACK OPEN STREAM: Broadcast moderno con esquinas suavemente curvadas */
-body[data-pack="openstream"] .camera-frame,
-body[data-pack="openstream"] .pod-cam-box,
-body[data-pack="openstream"] .agenda-card {
+body[data-theme-archetype="maker"] .cam-frame,
+body[data-theme-archetype="maker"] .camera-frame,
+body[data-theme-archetype="maker"] .camera-main,
+body[data-theme-archetype="maker"] .cam-box {
+  border-radius: 0px !important;
+  clip-path: none !important;
+}
+
+/* 🌐 ARQUETIPO OPEN STREAM: Broadcast moderno con esquinas suavemente curvadas */
+body[data-theme-archetype="openstream"] .camera-frame,
+body[data-theme-archetype="openstream"] .cam-frame,
+body[data-theme-archetype="openstream"] .pod-cam-box,
+body[data-theme-archetype="openstream"] .agenda-card,
+body[data-pack="openstream"]:not([data-theme-archetype]) .camera-frame,
+body[data-pack="openstream"]:not([data-theme-archetype]) .pod-cam-box,
+body[data-pack="openstream"]:not([data-theme-archetype]) .agenda-card {
   border-radius: 12px !important;
   clip-path: none !important;
 }

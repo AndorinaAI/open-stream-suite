@@ -129,6 +129,33 @@
       return document.body.dataset.pack || 'maker';
     }
 
+    function getThemeArchetype(themeName) {
+      if (!themeName) return null;
+      const t = themeName.toLowerCase();
+      if (t.includes('cozy') || t.includes('latte') || t.includes('matcha') || t.includes('sakura') || t.includes('lavender') || t.includes('nordic') || t.includes('kawaii') || t.includes('chill') || t.includes('warm') || t.includes('lofi')) {
+        return 'cozy';
+      }
+      if (t.includes('gamer') || t.includes('cyber') || t.includes('toxic') || t.includes('glory') || t.includes('esport') || t.includes('stealth') || t.includes('arcade') || t.includes('matrix')) {
+        return 'gamer';
+      }
+      if (t.includes('maker') || t.includes('terminal') || t.includes('print') || t.includes('blueprint') || t.includes('circuit')) {
+        return 'maker';
+      }
+      if (t.includes('openstream') || t.includes('clean') || t.includes('streamer') || t.includes('sunset') || t.includes('pulse') || t.includes('synthwave') || t.includes('candy')) {
+        return 'openstream';
+      }
+      return null;
+    }
+
+    function applyActiveThemeToBody(themeName) {
+      if (!themeName) return;
+      document.body.setAttribute('data-theme', themeName);
+      const arch = getThemeArchetype(themeName);
+      if (arch) {
+        document.body.setAttribute('data-theme-archetype', arch);
+      }
+    }
+
     const currentSceneKey = detectCurrentSceneKey();
     const currentPack = detectCurrentPack();
     document.body.setAttribute('data-pack', currentPack);
@@ -152,7 +179,7 @@
       else activeTheme = config.activeTheme || config.themeName || 'maker';
     }
     if (activeTheme) {
-      document.body.setAttribute('data-theme', activeTheme);
+      applyActiveThemeToBody(activeTheme);
     }
 
     // Consultar mapeo de temas por escena desde el servidor local
@@ -164,7 +191,7 @@
           if (!data) return;
           const fallbackByPack = (currentPack === 'cozy' ? 'latte_caramel' : (currentPack === 'gamer' ? 'cyber_glitch' : (currentPack === 'openstream' ? 'neon_streamer' : data.activeTheme)));
           const t = (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) || fallbackByPack;
-          if (t) document.body.setAttribute('data-theme', t);
+          if (t) applyActiveThemeToBody(t);
         })
         .catch(() => {});
     }
@@ -208,7 +235,7 @@
           const msg = JSON.parse(e.data);
           if (msg.type === 'overlay_theme_change' && msg.theme) {
             if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
-              if (!themeFromUrl) document.body.setAttribute('data-theme', msg.theme);
+              if (!themeFromUrl) applyActiveThemeToBody(msg.theme);
             }
           } else if (msg.type === 'theme_change') {
             syncThemeFromServer();
