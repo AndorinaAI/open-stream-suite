@@ -192,7 +192,11 @@
     }
 
     function applyActiveShapeToBody(shapeName) {
-      if (!shapeName) shapeName = 'original';
+      if (!shapeName || shapeName === 'original') {
+        document.body.removeAttribute('data-theme-archetype');
+        adaptAtmosphereForArchetype(null);
+        return;
+      }
       document.body.setAttribute('data-theme-archetype', shapeName);
       adaptAtmosphereForArchetype(shapeName);
     }
