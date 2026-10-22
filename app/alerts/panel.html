@@ -1797,21 +1797,21 @@
             </div>
           </div>
 
-          <div class="media-toolbar-group" style="align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div id="overlays-global-actions-toolbar" class="media-toolbar-group" style="align-items: center; flex-wrap: wrap; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.4); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.3);">
-              <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="themes.style_all_label">🎨 Estilo a todos:</span>
+              <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="themes.style_global_suite_label">🎨 Estilo Global (Toda la Suite):</span>
               <select id="select-global-theme-all" class="monitor-select" style="font-size: 11px; padding: 4px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
                 <!-- Opciones cargadas dinámicamente -->
               </select>
-              <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="applyThemeToAllScenesFromBar()" data-i18n="themes.btn_apply_all">
-                ✨ Aplicar
+              <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="applyThemeToAllScenesFromBar()" title="Aplica este tema visual a absolutamente todas las escenas de todos los packs en OBS Studio" data-i18n="themes.btn_apply_global_suite">
+                ✨ Aplicar a Toda la Suite
               </button>
             </div>
-            <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.12);" onclick="restoreAllOverlaysToDefaultThemes()" title="Restablecer todas las 9 escenas a sus estilos visuales originales de fábrica" data-i18n="themes.btn_restore_themes">
-              🔄 Restaurar Estilos Originales
+            <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.12);" onclick="restoreAllOverlaysToDefaultThemes()" title="Restablecer todas las escenas de la suite a sus estilos visuales originales de fábrica" data-i18n="themes.btn_restore_all_suite_themes">
+              🔄 Restaurar Estilos Suite
             </button>
-            <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.6); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreAllOverlaysTexts()" title="Restaurar todos los textos de las 9 escenas a sus valores originales de fábrica" data-i18n="themes.btn_restore_texts">
-              📝 Restaurar Textos
+            <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.6); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreAllOverlaysTexts()" title="Restaurar todos los textos de la suite a sus valores originales de fábrica" data-i18n="themes.btn_restore_all_suite_texts">
+              📝 Restaurar Textos Suite
             </button>
           </div>
         </div>
@@ -1851,12 +1851,12 @@
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                 <div style="display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.45); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(87, 214, 196, 0.35);">
-                  <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="themes.style_all_label">🎨 Estilo para todos:</span>
+                  <span style="font-size: 11px; color: #FFFFFF; font-weight: 700;" data-i18n="themes.style_pack_label">🎨 Estilo de este Pack:</span>
                   <select id="folder-inside-theme-select" class="monitor-select" style="font-size: 11px; padding: 4px 8px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
                     <!-- Opciones de tema -->
                   </select>
-                  <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="applyThemeToAllFromInside()" data-i18n="themes.btn_apply_all">
-                    ✨ Aplicar
+                  <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="applyThemeToAllFromInside()" title="Aplica este tema visual a todos los overlays de este pack en OBS Studio" data-i18n="themes.btn_apply_pack">
+                    ✨ Aplicar a este Pack
                   </button>
                 </div>
                 <button type="button" id="btn-toggle-folder-fusion" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="toggleAllInCurrentFolderForFusion()" title="Marcar o desmarcar todos los overlays de esta carpeta para crear o añadir a una Fusión" data-i18n="fusions.btn_select_all_fusion">
@@ -1865,11 +1865,11 @@
                 <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FFFFFF; border-color: rgba(255, 255, 255, 0.3); font-weight: 800; background: rgba(255, 255, 255, 0.08);" onclick="goToThemeEditorForCurrentPack()" title="Ir al editor CSS y estilos físicos de este pack" data-i18n="fusions.btn_customize_pack_styles">
                   🎨 Personalizar Estilos de este Pack →
                 </button>
-                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="restoreCurrentFolderThemes()" title="Restablecer todas las escenas de esta carpeta a sus temas visuales de fábrica" data-i18n="themes.btn_restore_themes">
-                  🔄 Restaurar Estilos Originales
+                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: var(--color-accent-cyan); border-color: var(--color-accent-cyan); font-weight: 800; background: rgba(87, 214, 196, 0.15);" onclick="restoreCurrentFolderThemes()" title="Restablecer todas las escenas de esta carpeta a sus temas visuales de fábrica" data-i18n="themes.btn_restore_pack_themes">
+                  🔄 Restaurar Estilos del Pack
                 </button>
-                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.5); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreCurrentFolderTexts()" title="Restablecer todos los textos de fábrica" data-i18n="themes.btn_restore_factory_texts">
-                  📝 Restaurar Textos de Fábrica
+                <button type="button" class="btn-action-test" style="font-size: 11px; padding: 6px 12px; color: #FF783F; border-color: rgba(255, 120, 63, 0.5); font-weight: 800; background: rgba(255, 120, 63, 0.12);" onclick="restoreCurrentFolderTexts()" title="Restablecer todos los textos de fábrica" data-i18n="themes.btn_restore_pack_texts">
+                  📝 Restaurar Textos del Pack
                 </button>
               </div>
             </div>

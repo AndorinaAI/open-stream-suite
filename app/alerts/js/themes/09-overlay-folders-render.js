@@ -9,6 +9,7 @@ function renderOverlayFolders() {
   const foldersGrid = document.getElementById('overlays-folders-grid');
   const scenesGrid = document.getElementById('overlays-scenes-in-folder-grid');
   const subfilterContainer = document.getElementById('folder-subfilter-container');
+  const globalToolbar = document.getElementById('overlays-global-actions-toolbar');
 
   if (currentOpenOverlayFolderId) {
     const rawFolder = OVERLAY_FOLDERS.find(f => f.id === currentOpenOverlayFolderId) || OVERLAY_FOLDERS[0];
@@ -16,6 +17,7 @@ function renderOverlayFolders() {
 
     if (foldersView) foldersView.style.display = 'none';
     if (detailsView) detailsView.style.display = 'block';
+    if (globalToolbar) globalToolbar.style.display = 'none';
 
     const crumbRoot = (window.i18n && window.i18n.tr('themes.folder_crumb_root')) || '📁 Carpetas de Overlays';
     if (breadcrumbs) {
@@ -78,6 +80,7 @@ function renderOverlayFolders() {
     if (foldersView) foldersView.style.display = 'block';
     if (detailsView) detailsView.style.display = 'none';
     if (btnBack) btnBack.style.display = 'none';
+    if (globalToolbar) globalToolbar.style.display = 'flex';
 
     const crumbTitle = (window.i18n && window.i18n.tr('themes.folder_crumb_title')) || '📁 Carpetas de Actividades del Stream';
     if (breadcrumbs) {
