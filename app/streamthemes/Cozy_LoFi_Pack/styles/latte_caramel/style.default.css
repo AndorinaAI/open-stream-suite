@@ -1,12 +1,26 @@
 body[data-theme="latte_caramel"],
 [data-theme="latte_caramel"] {
-  --color-bg-dark: #181411;
-  --color-text-light: #FFFBEB;
-  --color-accent-cyan: #F59E0B;
-  --color-accent-orange: #B45309;
-  --color-panel-bg: #2A211B;
-  --color-text-dim: #A8988C;
-  --color-border-cyan: rgba(245, 158, 11, 0.35);
-  --color-border-cyan-bright: #F59E0B;
-  --theme-glow: 0 0 14px rgba(245, 158, 11, 0.4);
+  --color-bg-dark: #221B16;
+  --color-text-light: #FDFBF7;
+  --color-accent-cyan: #C48243;
+  --color-accent-orange: #E0C097;
+  --color-panel-bg: rgba(48, 38, 30, 0.88);
+  --color-text-dim: #B3A091;
+  --color-border-cyan: rgba(196, 130, 67, 0.28);
+  --color-border-cyan-bright: #C48243;
+  --theme-glow: none;
+  --frame-radius: 28px;
+  --frame-border-width: 2.5px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 16px 36px rgba(30, 20, 15, 0.16), 0 3px 10px rgba(30, 20, 15, 0.08);
+  --frame-corner-display: none;
+  --panel-radius: 24px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 12px 30px rgba(30, 20, 15, 0.12);
+  --badge-radius: 50px;
+  --badge-clip-path: none;
+  --header-radius: 20px;
+  --header-clip-path: none;
 }

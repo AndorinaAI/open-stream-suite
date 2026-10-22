@@ -1,26 +1,26 @@
 body[data-theme="nordic_twilight"],
 [data-theme="nordic_twilight"] {
-  --color-bg-dark: #0F141C;
-  --color-text-light: #F8FAFC;
-  --color-accent-cyan: #38BDF8;
-  --color-accent-orange: #94A3B8;
-  --color-panel-bg: #1C2433;
-  --color-text-dim: #8290A3;
-  --color-border-cyan: rgba(56, 189, 248, 0.3);
-  --color-border-cyan-bright: #38BDF8;
-  --theme-glow: 0 0 12px rgba(56, 189, 248, 0.35);
-  --frame-radius: 20px;
-  --frame-border-width: 1.5px;
+  --color-bg-dark: #1A1E22;
+  --color-text-light: #F6F8FA;
+  --color-accent-cyan: #8C9DA8;
+  --color-accent-orange: #D6C7B2;
+  --color-panel-bg: rgba(38, 44, 50, 0.88);
+  --color-text-dim: #9FAAB2;
+  --color-border-cyan: rgba(140, 157, 168, 0.28);
+  --color-border-cyan-bright: #8C9DA8;
+  --theme-glow: none;
+  --frame-radius: 28px;
+  --frame-border-width: 2.5px;
   --frame-border-style: solid;
   --frame-clip-path: none;
-  --frame-shadow: 0 12px 32px rgba(15, 20, 28, 0.6);
+  --frame-shadow: 0 16px 36px rgba(20, 26, 30, 0.16), 0 3px 10px rgba(20, 26, 30, 0.08);
   --frame-corner-display: none;
-  --panel-radius: 16px;
+  --panel-radius: 24px;
   --panel-clip-path: none;
-  --panel-backdrop: blur(18px);
-  --panel-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+  --panel-backdrop: blur(16px);
+  --panel-shadow: 0 12px 30px rgba(20, 26, 30, 0.12);
   --badge-radius: 50px;
   --badge-clip-path: none;
-  --header-radius: 16px;
+  --header-radius: 20px;
   --header-clip-path: none;
 }

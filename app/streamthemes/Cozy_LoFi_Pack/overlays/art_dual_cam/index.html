@@ -5,57 +5,232 @@
   <title>Overlay — Arte & Proceso Creativo</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       width: 1920px;
       height: 1080px;
       margin: 0;
-      padding: 30px;
+      padding: 36px 42px;
       box-sizing: border-box;
       background: transparent;
       display: flex;
-      gap: 24px;
-      font-family: var(--font-primary);
+      gap: 32px;
+      font-family: 'Quicksand', 'Comfortaa', var(--font-primary), sans-serif;
       overflow: hidden;
     }
-    .canvas-cam {
+
+    /* Cámara Principal: Lienzo de Arte */
+    .canvas-column {
       flex: 3;
-      border: 2px solid var(--color-border-cyan); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
-      background: rgba(0,0,0,0.25);
-      position: relative;
-    }
-    .side-stack {
-      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
-    .face-cam {
-      height: 260px;
-      border: 2px solid var(--color-border-cyan); border-radius: var(--frame-radius, 4px); clip-path: var(--frame-clip-path, none); box-shadow: var(--frame-shadow, var(--theme-glow));
-      background: rgba(0,0,0,0.25);
-    }
-    .palette-box {
+
+    .canvas-frame {
       flex: 1;
-      background: var(--color-panel-bg-trans);
-      border: 1px solid var(--color-border-cyan);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
+      background: #181411;
+      border: var(--frame-border-width, 2.5px) solid var(--color-border-cyan, rgba(196, 130, 67, 0.35));
+      border-radius: var(--frame-radius, 28px);
+      box-shadow: var(--frame-shadow, 0 16px 36px rgba(30, 20, 15, 0.16));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .canvas-tag {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      background: rgba(34, 27, 22, 0.85);
+      backdrop-filter: blur(12px);
+      color: var(--color-accent-orange, #E0C097);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 50px;
+      border: 1px solid var(--color-border-cyan, rgba(196, 130, 67, 0.25));
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Barra Inferior de Paleta de Colores y Herramientas */
+    .tools-palette-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--color-panel-bg, rgba(48, 38, 30, 0.9));
+      backdrop-filter: var(--panel-backdrop, blur(16px));
+      border: 1px solid var(--color-border-cyan, rgba(196, 130, 67, 0.25));
+      border-radius: var(--badge-radius, 50px);
+      padding: 10px 24px;
+      box-shadow: var(--panel-shadow, 0 8px 24px rgba(0,0,0,0.15));
+    }
+
+    .palette-swatches {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    /* Columna Derecha: Facecam Polaroid y Tarjeta del Proyecto */
+    .side-stack {
+      flex: 1.15;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .face-polaroid {
+      height: 280px;
+      background: #FDFBF7;
+      border-radius: 24px;
+      padding: 12px 12px 36px 12px;
+      box-shadow: 0 16px 36px rgba(35, 25, 20, 0.16);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid rgba(220, 200, 185, 0.45);
+    }
+
+    .washi-tape-small {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%) rotate(1.5deg);
+      width: 100px;
+      height: 26px;
+      background: rgba(230, 215, 195, 0.75);
+      border-left: 2px dashed rgba(180, 150, 120, 0.4);
+      border-right: 2px dashed rgba(180, 150, 120, 0.4);
+      z-index: 5;
+    }
+
+    .face-viewport {
+      flex: 1;
+      background: #181411;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .face-footer {
+      font-family: 'Comfortaa', cursive, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #4A3B32;
+      text-align: center;
+      padding-top: 10px;
+    }
+
+    /* Ficha de Proyecto */
+    .project-card {
+      flex: 1;
+      background: var(--color-panel-bg, rgba(48, 38, 30, 0.9));
+      backdrop-filter: var(--panel-backdrop, blur(16px));
+      border: 1px solid var(--color-border-cyan, rgba(196, 130, 67, 0.25));
+      border-radius: var(--panel-radius, 24px);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--panel-shadow, 0 12px 28px rgba(0,0,0,0.15));
+    }
+
+    .project-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-accent-cyan, #C48243);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .project-field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .field-label {
+      font-size: 10px;
+      color: var(--color-text-dim, #B3A091);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-light, #FDFBF7);
     }
   </style>
 </head>
 <body data-theme="latte_caramel">
-  <div class="canvas-cam">
-    <div style="position:absolute; top:16px; left:16px; background:var(--color-bg-dark); color:var(--color-accent-cyan); font-size:12px; font-weight:700; padding:4px 12px; border-radius:6px; border:1px solid var(--color-border-cyan);">🎨 LIENZO // TRABAJO EN CURSO</div>
-  </div>
-  <div class="side-stack">
-    <div class="face-cam"></div>
-    <div class="palette-box">
-      <div style="font-weight:700; font-size:13px; color:var(--color-accent-cyan); margin-bottom:10px;">NOTAS & PROYECTO</div>
-      <div style="font-size:12px; color:var(--color-text-dim);">Ilustración digital & acuarelas</div>
+
+  <!-- Columna Izquierda: Lienzo y Paleta -->
+  <div class="canvas-column">
+    <div class="canvas-frame">
+      <div class="canvas-tag">
+        <span>🎨</span>
+        <span>LIENZO // CÁMARA CENITAL DE DIBUJO</span>
+      </div>
+    </div>
+
+    <!-- Barra de Herramientas y Paleta -->
+    <div class="tools-palette-bar">
+      <div class="palette-swatches">
+        <span style="font-size: 12px; color: var(--color-text-dim); margin-right: 4px;">Paleta activa:</span>
+        <span class="swatch" style="background: #FDFBF7;" title="#FDFBF7"></span>
+        <span class="swatch" style="background: #E5989B;" title="#E5989B"></span>
+        <span class="swatch" style="background: #C48243;" title="#C48243"></span>
+        <span class="swatch" style="background: #6D8B74;" title="#6D8B74"></span>
+        <span class="swatch" style="background: #3A2B24;" title="#3A2B24"></span>
+      </div>
+      <div style="font-size: 12px; color: var(--color-text-dim);">
+        🖌️ <b style="color: var(--color-text-light);">Clip Studio Paint</b> · Pincel Gouache Suave
+      </div>
     </div>
   </div>
+
+  <!-- Columna Derecha: Facecam Polaroid y Tarjeta del Proyecto -->
+  <div class="side-stack">
+    <div class="face-polaroid">
+      <div class="washi-tape-small"></div>
+      <div class="face-viewport"></div>
+      <div class="face-footer">✨ Hola & Bienvenidos ✨</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-card-title">
+        <span>📁</span>
+        <span>DETALLES DE LA ILUSTRACIÓN</span>
+      </div>
+      <div class="project-field">
+        <span class="field-label">Obra en proceso:</span>
+        <span class="field-value">Ilustración Manga — "Tarde de Té"</span>
+      </div>
+      <div class="project-field">
+        <span class="field-label">Lienzo & Resolución:</span>
+        <span class="field-value">4000 × 2500 px · 300 DPI</span>
+      </div>
+      <div class="project-field">
+        <span class="field-label">Fase del dibujo:</span>
+        <span class="field-value" style="color: var(--color-accent-orange);">Lineart final & coloreado base</span>
+      </div>
+    </div>
+  </div>
+
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
 </body>

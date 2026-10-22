@@ -2,37 +2,130 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Pantalla — Hasta Pronto</title>
+  <title>Pantalla — Despedida y Buenas Noches (Cozy)</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       width: 1920px;
       height: 1080px;
       margin: 0;
-      background: var(--color-bg-dark);
+      background: radial-gradient(circle at center, #231C24 0%, var(--color-bg-dark, #151218) 100%);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-family: var(--font-primary);
+      font-family: 'Quicksand', 'Comfortaa', var(--font-primary), sans-serif;
+      overflow: hidden;
     }
-    .card {
+
+    .ending-card {
       text-align: center;
-      background: var(--color-panel-bg-trans);
-      border: 1px solid var(--color-border-cyan);
-      border-radius: 20px;
-      padding: 48px 80px;
-      box-shadow: var(--theme-glow);
+      background: var(--color-panel-bg, rgba(48, 38, 30, 0.9));
+      backdrop-filter: var(--panel-backdrop, blur(20px));
+      border: 1.5px solid var(--color-border-cyan, rgba(196, 130, 67, 0.28));
+      border-radius: 36px;
+      padding: 54px 84px;
+      box-shadow: 0 24px 60px rgba(15, 10, 20, 0.4);
+      min-width: 700px;
     }
-    h1 { font-size: 48px; color: var(--color-accent-cyan); margin: 0 0 10px 0; }
+
+    .moon-icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-family: 'Comfortaa', cursive, sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--color-text-light, #FDFBF7);
+      margin: 6px 0 10px 0;
+    }
+
+    p {
+      font-size: 16px;
+      color: var(--color-text-dim, #B3A091);
+      margin: 0 0 26px 0;
+      line-height: 1.6;
+    }
+
+    .credits-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .credit-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      padding: 14px 18px;
+      text-align: left;
+    }
+
+    .credit-label {
+      font-size: 11px;
+      color: var(--color-accent-orange, #E0C097);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .credit-names {
+      font-size: 13px;
+      color: var(--color-text-light, #FDFBF7);
+      font-weight: 600;
+    }
+
+    .social-pills-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .social-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 13px;
+      color: var(--color-text-light, #FDFBF7);
+    }
   </style>
 </head>
 <body data-theme="latte_caramel">
-  <div class="card">
-    <div style="font-size:36px; margin-bottom:8px;">🌙</div>
-    <h1 class="main-stream-title">¡HASTA LA PRÓXIMA!</h1>
-    <p class="stream-subtitle" style="color:var(--color-text-dim); font-size:18px;">Muchas gracias por compartir este ratito con nosotros.</p>
+
+  <div class="ending-card">
+    <div class="moon-icon">🌙 ✨</div>
+
+    <h1 class="main-stream-title">HASTA LA PRÓXIMA</h1>
+    <p class="stream-subtitle">Gracias infinitas por pasar tu tiempo aquí con nosotros. ¡Que descanses!</p>
+
+    <div class="credits-grid">
+      <div class="credit-box">
+        <div class="credit-label">⭐ Comunidad & Subs</div>
+        <div class="credit-names">¡Gracias a todos los que apoyáis el canal!</div>
+      </div>
+      <div class="credit-box">
+        <div class="credit-label">💬 Próximo Stream</div>
+        <div class="credit-names">Martes & Jueves a las 18:00h CEST</div>
+      </div>
+    </div>
+
+    <div class="social-pills-row">
+      <span class="social-pill">🟣 twitch.tv/tu_canal</span>
+      <span class="social-pill">💬 discord.gg/comunidad</span>
+      <span class="social-pill">📷 @tu_canal</span>
+    </div>
   </div>
+
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
 </body>
