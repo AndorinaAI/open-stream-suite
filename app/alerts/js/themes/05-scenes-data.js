@@ -1,5 +1,5 @@
 
-const OSS_SCENES = [
+var OSS_SCENES = window.OSS_SCENES || [
   // ==========================================
   // PACK 1: MAKER & TALLER (Maker_Theme_Pack)
   // ==========================================
@@ -313,3 +313,4 @@ const OSS_SCENES = [
     obsSource: 'http://localhost:8080/streamthemes/Cozy_LoFi_Pack/overlays/screens/ending/index.html'
   }
 ];
+window.OSS_SCENES = OSS_SCENES;
