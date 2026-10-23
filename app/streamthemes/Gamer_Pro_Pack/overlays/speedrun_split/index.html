@@ -31,6 +31,15 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 16px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cam-viewport {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
     }
 
     .game-tag-bar {
@@ -45,6 +54,7 @@
       font-weight: 800;
       letter-spacing: 1px;
       clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+      z-index: 10;
     }
 
     /* Columna Lateral de Splits */
@@ -62,17 +72,21 @@
       border: 2px solid var(--color-accent-cyan, #10B981);
       clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
 
     .cam-label {
       position: absolute;
       bottom: 8px;
       right: 12px;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.8);
       color: #FFF;
       font-size: 10px;
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 10;
     }
 
     /* Panel Completo de Splits */
@@ -177,25 +191,27 @@
     }
   </style>
 </head>
-<body data-theme="toxic_rad">
+<body data-pack="Gamer_Pro_Pack" data-scene="gamer_speedrun" data-theme="toxic_rad">
 
   <!-- Pantalla de Juego -->
-  <div class="game-viewport-box">
+  <div class="camera-frame game-viewport-box" data-oss-cam="true">
+    <div class="cam-viewport" data-oss-viewport="true"></div>
     <div class="game-tag-bar">GAMEPLAY CAPTURE // 1080p 60FPS</div>
   </div>
 
   <!-- Barra de Splits y Cámara del Speedrunner -->
   <div class="splits-sidebar">
-    <div class="runner-cam-box">
-      <div class="cam-label">RUNNER CAM</div>
+    <div class="camera-frame runner-cam-box camera-face" data-oss-cam="true">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label" data-oss-cam-label="true" data-text-key="speedrun.runnerCam">RUNNER CAM</div>
     </div>
 
     <!-- Tablero de Splits -->
-    <div class="splits-board">
+    <div class="panel-card splits-board" data-oss-panel="true">
       <div>
         <div class="splits-header">
-          <div class="game-title">ELDEN SPEED / SOULS ANY%</div>
-          <div class="category-title">GLITCHLESS · CURRENT RECORD ATTEMPT</div>
+          <div class="game-title" data-text-key="speedrun.game">ELDEN SPEED / SOULS ANY%</div>
+          <div class="category-title" data-text-key="speedrun.category">GLITCHLESS · CURRENT RECORD ATTEMPT</div>
         </div>
 
         <div class="split-row">
@@ -241,7 +257,7 @@
 
       <!-- Cronómetro Grande -->
       <div class="live-timer-container">
-        <div class="live-timer-digits">18:42.38</div>
+        <div class="live-timer-digits" id="speedrunTimer">18:42.38</div>
         <div class="compare-row">
           <span>PB: 18:45.50 (-00:03.1)</span>
           <span>WR: 17:58.20</span>
@@ -252,5 +268,19 @@
 
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
+  <script>
+    // Cronómetro de speedrun con milisegundos en tiempo real
+    (function() {
+      let startTime = Date.now() - (18 * 60 + 42) * 1000 - 380;
+      const timerEl = document.getElementById('speedrunTimer');
+      setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const m = String(Math.floor(elapsed / 60000)).padStart(2, '0');
+        const s = String(Math.floor((elapsed % 60000) / 1000)).padStart(2, '0');
+        const ms = String(Math.floor((elapsed % 1000) / 10)).padStart(2, '0');
+        if (timerEl) timerEl.textContent = `${m}:${s}.${ms}`;
+      }, 33);
+    })();
+  </script>
 </body>
 </html>

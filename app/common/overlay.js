@@ -117,16 +117,30 @@
       if (p.includes('/starting-soon/')) return 'startingSoon';
       if (p.includes('/be-right-back/')) return 'beRightBack';
       if (p.includes('/ending/')) return 'ending';
-      return document.body.dataset.scene || document.body.dataset.mode || null;
+      if (document.body.dataset.scene) return document.body.dataset.scene;
+      if (document.body.dataset.mode) return document.body.dataset.mode;
+      const m = p.match(/\/overlays\/(?:screens\/)?([^/]+)/);
+      if (m && m[1]) return m[1];
+      return null;
     }
 
     function detectCurrentPack() {
-      const p = window.location.pathname;
-      if (p.includes('/Cozy_LoFi_Pack/')) return 'cozy';
-      if (p.includes('/Gamer_Pro_Pack/')) return 'gamer';
-      if (p.includes('/Open_stream_Pack/')) return 'openstream';
-      if (p.includes('/Maker_Theme_Pack/') || p.includes('/maker/') || p.includes('/print/') || p.includes('/game/') || p.includes('/chill/')) return 'maker';
-      return document.body.dataset.pack || 'maker';
+      const raw = (document.body.dataset.pack || '').toLowerCase();
+      const p = (window.location.pathname || '').toLowerCase();
+      const combined = raw + ' ' + p;
+      if (combined.includes('cozy')) return 'cozy';
+      if (combined.includes('gamer')) return 'gamer';
+      if (combined.includes('openstream') || combined.includes('open_stream')) return 'openstream';
+      if (combined.includes('maker') || combined.includes('print') || combined.includes('taller')) return 'maker';
+      const m = p.match(/\/streamthemes\/([^/]+)/);
+      if (m && m[1]) {
+        const sl = m[1].toLowerCase();
+        if (sl.includes('cozy')) return 'cozy';
+        if (sl.includes('gamer')) return 'gamer';
+        if (sl.includes('openstream')) return 'openstream';
+        if (sl.includes('maker')) return 'maker';
+      }
+      return 'maker';
     }
 
     window.__THEME_ARCHETYPES = window.__THEME_ARCHETYPES || {};
@@ -195,19 +209,120 @@
       document.querySelectorAll('.mode-badge, .frame-label, .live-match-chip, .cam-header-tag, .cam-footer-tag, .on-air-pill, .live-badge, .chat-live-badge, .pomo-badge, .ambient-pill, .canvas-tag, .phase-item, .phase-step, .brand-badge, .live-indicator, .prep-pill, .screen-pill, .clutch-badge, .match-badge, .sponsor-badge, .cam-label').forEach(el => {
         if (!el.hasAttribute('data-oss-badge')) el.setAttribute('data-oss-badge', 'true');
       });
+
+      // 5. Visores interiores de cámara (transparent cutouts)
+      const viewportSelectors = [
+        '.cam-inner-viewport', '.cam-viewport', '.cam-inner-box',
+        '.face-viewport', '.desk-viewport', '.desk-cam',
+        '.cam-screen-area', '.viewport-window', '.camera-feed'
+      ];
+      document.querySelectorAll(viewportSelectors.join(',')).forEach(el => {
+        if (!el.hasAttribute('data-oss-viewport')) el.setAttribute('data-oss-viewport', 'true');
+      });
+
+      // 6. Etiquetas y títulos de cámara (adaptables a chinchetas, polaroid, etc.)
+      const camLabelSelectors = [
+        '.cam-header-tag', '.cam-footer-tag', '.polaroid-handwritten',
+        '.canvas-tag', '.cam-label', '.camera-main .frame-label',
+        '.camera-frame .frame-label', '.stream-cam-card .frame-label'
+      ];
+      document.querySelectorAll(camLabelSelectors.join(',')).forEach(el => {
+        if (!el.hasAttribute('data-oss-cam-label')) el.setAttribute('data-oss-cam-label', 'true');
+      });
+
+      // 7. Detección y etiquetado automático de orientación (horizontal vs vertical)
+      document.querySelectorAll('[data-oss-cam], [data-oss-panel], [data-oss-bar]').forEach(el => {
+        if (!el.hasAttribute('data-oss-orientation')) {
+          const barType = el.getAttribute('data-oss-bar');
+          if (barType === 'left' || barType === 'right') {
+            el.setAttribute('data-oss-orientation', 'vertical');
+          } else if (barType === 'top' || barType === 'bottom') {
+            el.setAttribute('data-oss-orientation', 'horizontal');
+          } else {
+            const rect = el.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+              const isVertical = rect.height > rect.width * 1.05;
+              el.setAttribute('data-oss-orientation', isVertical ? 'vertical' : 'horizontal');
+            }
+          }
+        }
+      });
     }
 
-    function resolveArchetypeToApply(theme, shape) {
+    const SHAPE_ARCHETYPE_MAP = {
+      cozy_polaroid: 'cozy',
+      cozy_canvas: 'cozy',
+      cozy_soft: 'cozy',
+      cozy: 'cozy',
+      gamer_mecha: 'gamer',
+      gamer_tactical_hud: 'gamer',
+      gamer_stealth: 'gamer',
+      gamer_hex_shield: 'gamer',
+      gamer_cyber_glitch: 'gamer',
+      gamer_arcade_retro: 'gamer',
+      gamer: 'gamer',
+      maker_blueprint: 'maker',
+      maker_workbench: 'maker',
+      maker_circuit_pcb: 'maker',
+      maker: 'maker',
+      openstream_glass: 'openstream',
+      openstream_studio: 'openstream',
+      openstream: 'openstream',
+      fantasy_parchment: 'cozy',
+      fantasy_runic_stone: 'gamer',
+      gothic_vampire: 'gamer',
+      comic_manga_action: 'openstream',
+      pop_synth_neon: 'openstream',
+      vintage_crt_monitor: 'cozy',
+    };
+
+    const ARCHETYPE_DEFAULT_SHAPE_MAP = {
+      cozy: 'cozy_polaroid',
+      gamer: 'gamer_mecha',
+      maker: 'maker_blueprint',
+      openstream: 'openstream_glass',
+    };
+
+    function resolveArchetypeAndShape(theme, shape) {
+      const normPack = detectCurrentPack();
       if (shape === 'original') {
-        return currentPack;
+        return {
+          archetype: normPack,
+          shape: 'original',
+          mode: 'original',
+          effectiveShape: 'original'
+        };
       }
-      if (shape && shape !== 'auto' && shape !== '__auto__') {
-        return shape;
+      if (shape && shape !== 'auto' && shape !== '__auto__' && shape !== 'none' && shape !== 'null') {
+        const arch = SHAPE_ARCHETYPE_MAP[shape] || getThemeArchetype(theme) || normPack;
+        return {
+          archetype: arch,
+          shape: shape,
+          mode: 'manual',
+          effectiveShape: shape
+        };
       }
-      return getThemeArchetype(theme) || currentPack;
+      // Modo auto: Si el tema corresponde al pack nativo de la escena, mantener la forma original nativa
+      const themeArch = getThemeArchetype(theme) || normPack;
+      if (themeArch === normPack) {
+        return {
+          archetype: normPack,
+          shape: 'auto',
+          mode: 'auto',
+          effectiveShape: 'original'
+        };
+      }
+      // Si el tema es de un pack diferente (fusión / crossover), aplicar la forma del arquetipo
+      const effectiveShape = ARCHETYPE_DEFAULT_SHAPE_MAP[themeArch] || 'openstream_glass';
+      return {
+        archetype: themeArch,
+        shape: 'auto',
+        mode: 'auto',
+        effectiveShape: effectiveShape
+      };
     }
 
-    function adaptAtmosphereForArchetype(arch) {
+    function adaptAtmosphereForArchetype(arch, effectiveShape) {
       if (!arch) return;
       tagSemanticElements();
       const modeBadge = document.querySelector('.mode-badge span:last-child, .live-match-chip, .live-badge');
@@ -252,19 +367,21 @@
     }
 
     function applyActiveShapeToBody(shapeName) {
-      if (!shapeName) return;
-      document.body.setAttribute('data-theme-archetype', shapeName);
-      adaptAtmosphereForArchetype(shapeName);
+      if (typeof updateOverlayThemeAndShape === 'function') {
+        updateOverlayThemeAndShape(activeTheme, shapeName);
+      }
     }
     window.applyActiveShapeToBody = applyActiveShapeToBody;
 
     function applyActiveThemeToBody(themeName, updateShape = true) {
       if (!themeName) return;
       activeTheme = themeName;
-      document.body.setAttribute('data-theme', themeName);
-      if (updateShape && (!activeShape || activeShape === 'auto' || activeShape === '__auto__')) {
-        const arch = resolveArchetypeToApply(themeName, activeShape);
-        applyActiveShapeToBody(arch);
+      if (updateShape) {
+        if (typeof updateOverlayThemeAndShape === 'function') {
+          updateOverlayThemeAndShape(themeName, activeShape);
+        }
+      } else {
+        document.body.setAttribute('data-theme', themeName);
       }
     }
     window.applyActiveThemeToBody = applyActiveThemeToBody;
@@ -274,6 +391,7 @@
     document.body.setAttribute('data-pack', currentPack);
     if (currentSceneKey) {
       document.body.setAttribute('data-scene', currentSceneKey);
+      window.__CURRENT_SCENE_KEY__ = currentSceneKey;
     }
 
     // 1.2 Resolución inicial y control de bloqueo por URL
@@ -300,27 +418,91 @@
       activeShape = config.overlayShapes[currentSceneKey];
     }
 
+    const DEFAULT_OVERLAY_THEMES = {
+      'game': 'cyberpunk',
+      'maker': 'maker',
+      'maker-desk': 'maker',
+      'maker-pc': 'terminal',
+      'print': 'print',
+      'print-machine': 'print',
+      'print-design': 'print',
+      'chill': 'chill',
+      'startingSoon': 'synthwave',
+      'beRightBack': 'synthwave',
+      'ending': 'synthwave',
+      'oss_chatting': 'neon_streamer',
+      'oss_desktop': 'clean_minimal',
+      'oss_podcast': 'sunset_glow',
+      'oss_starting': 'crimson_pulse',
+      'oss_brb': 'emerald_matrix',
+      'oss_ending': 'neon_streamer',
+      'gamer_gameplay': 'cyber_glitch',
+      'gamer_speedrun': 'toxic_rad',
+      'gamer_victory': 'golden_glory',
+      'gamer_starting': 'crimson_esport',
+      'gamer_brb': 'stealth_mono',
+      'gamer_ending': 'golden_glory',
+      'cozy_pomodoro': 'latte_caramel',
+      'cozy_art': 'sakura_sunset',
+      'cozy_cafe': 'matcha_bamboo',
+      'cozy_starting': 'lavender_dream',
+      'cozy_brb': 'latte_caramel',
+      'cozy_ending': 'nordic_twilight'
+    };
+    window.__DEFAULT_OVERLAY_THEMES = DEFAULT_OVERLAY_THEMES;
+
     function updateOverlayThemeAndShape(newTheme, newShape) {
       if (newTheme) {
         activeTheme = newTheme;
         document.body.setAttribute('data-theme', newTheme);
       }
-      if (newShape !== undefined && newShape !== null) {
-        activeShape = newShape;
+      if (newShape !== undefined) {
+        activeShape = (newShape === null || newShape === '' || newShape === 'none') ? 'original' : newShape;
       }
-      const arch = resolveArchetypeToApply(activeTheme, activeShape);
-      applyActiveShapeToBody(arch);
+      const res = resolveArchetypeAndShape(activeTheme, activeShape);
+      document.body.setAttribute('data-theme-archetype', res.archetype);
+      document.body.setAttribute('data-theme-shape-mode', res.mode);
+      document.body.setAttribute('data-theme-shape', res.effectiveShape);
+
+      adaptAtmosphereForArchetype(res.archetype, res.effectiveShape);
       tagSemanticElements();
+
+      // Recalcular aperturas SVG para cámaras/fondos
+      if (window.OSSAperture && typeof window.OSSAperture.recalculateApertures === 'function') {
+        window.OSSAperture.recalculateApertures();
+      }
+
       try {
         window.dispatchEvent(new CustomEvent('oss:themechange', {
-          detail: { theme: activeTheme, shape: activeShape, archetype: arch }
+          detail: {
+            theme: activeTheme,
+            shape: activeShape,
+            effectiveShape: res.effectiveShape,
+            mode: res.mode,
+            archetype: res.archetype
+          }
         }));
       } catch (e) {}
     }
+    window.updateOverlayThemeAndShape = updateOverlayThemeAndShape;
 
     // Inicializar semántica y tema activo
     tagSemanticElements();
     updateOverlayThemeAndShape(activeTheme, activeShape);
+
+    // Observador para etiquetar elementos dinámicos automáticamente
+    let tagDebounce = null;
+    try {
+      const observer = new MutationObserver(() => {
+        if (tagDebounce) clearTimeout(tagDebounce);
+        tagDebounce = setTimeout(() => {
+          tagSemanticElements();
+        }, 80);
+      });
+      if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+    } catch (e) {}
 
     // Consultar mapeo de temas y formas por escena desde el servidor local
     function syncThemeFromServer() {
@@ -356,6 +538,9 @@
           } else if (activeTheme) {
             updateOverlayThemeAndShape(activeTheme, activeShape);
           }
+          if (data.backdrops && currentSceneKey && data.backdrops[currentSceneKey] && window.OSSAperture) {
+            window.OSSAperture.setBackdrop(data.backdrops[currentSceneKey]);
+          }
         })
         .catch(() => {});
     }
@@ -383,13 +568,14 @@
     });
 
     // 4. Escuchar cambios de temas y textos en vivo vía WebSocket local (con reconexión)
+    const wsProto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsHost = window.location.hostname || 'localhost';
-    const wsPort = window.location.port || '8080';
+    const wsPort = window.location.port ? `:${window.location.port}` : '';
     let wsRetry = 0;
     function connectLiveSocket() {
       let ws;
       try {
-        ws = new WebSocket(`ws://${wsHost}:${wsPort}/ws`);
+        ws = new WebSocket(`${wsProto}//${wsHost}${wsPort}/ws`);
       } catch (e) { return; }
       ws.onopen = () => {
         if (wsRetry > 0) { syncThemeFromServer(); syncTextsFromServer(); }
@@ -401,21 +587,25 @@
           if (msg.type === 'overlay_theme_change') {
             if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
               if (!isLocked) {
-                updateOverlayThemeAndShape(msg.theme, msg.shape || msg.archetype);
+                const nextShape = (msg.shape !== undefined && msg.shape !== null) ? msg.shape : activeShape;
+                updateOverlayThemeAndShape(msg.theme, nextShape);
               }
             }
           } else if (msg.type === 'theme_change') {
             if (!isLocked) {
-              updateOverlayThemeAndShape(msg.theme, msg.archetype);
+              const nextShape = (msg.shape !== undefined && msg.shape !== null) ? msg.shape : activeShape;
+              updateOverlayThemeAndShape(msg.theme, nextShape);
             }
           } else if (msg.type === 'global_shape_change') {
             if (!isLocked) {
               updateOverlayThemeAndShape(null, msg.shape);
             }
-          } else if (msg.type === 'overlay_texts_update' && msg.texts) {
+          } else if ((msg.type === 'overlay_texts_update' || msg.type === 'overlay_texts_updated') && msg.texts) {
             applyConfigToDOM(msg.texts);
           } else if (msg.type === 'overlay_backdrop_change' && msg.backdrop) {
-            if (window.OSSAperture) window.OSSAperture.setBackdrop(msg.backdrop);
+            if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
+              if (window.OSSAperture) window.OSSAperture.setBackdrop(msg.backdrop);
+            }
           }
         } catch (err) {}
       };

@@ -128,26 +128,48 @@ async function saveOverlayThemeFromCard(sceneKey) {
 
 async function restoreOverlayTheme(sceneKey) {
   const defaultThemeId = DEFAULT_OVERLAY_THEMES[sceneKey] || 'maker';
-  await onOverlayThemeChange(sceneKey, defaultThemeId);
-  const info = getThemeDisplayNameById(defaultThemeId);
-  if (window.OverlayTexts && OverlayTexts.showToast) {
-    OverlayTexts.showToast(`↺ Estilo original "${info.name}" restaurado para esta overlay`, 'success');
+  if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
+  delete window.cachedOverlayShapes[sceneKey];
+  cachedOverlayThemes[sceneKey] = defaultThemeId;
+  const themeObj = getThemeObjectById(defaultThemeId);
+
+  // Actualizar la miniatura visual en la tarjeta inmediatamente
+  const mockupEl = document.getElementById(`scene-card-preview-${sceneKey}`);
+  if (mockupEl) {
+    mockupEl.outerHTML = buildSceneMiniMockupHtml(sceneKey, themeObj);
+  }
+
+  // Actualizar selectores en la interfaz si existen
+  const sel = document.getElementById(`scene-theme-select-${sceneKey}`);
+  if (sel) sel.value = defaultThemeId;
+  const shapeSel = document.getElementById(`scene-shape-select-${sceneKey}`);
+  if (shapeSel) shapeSel.value = 'auto';
+
+  try {
+    await API.setOverlayTheme(sceneKey, defaultThemeId, 'auto');
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(`↺ Estilo original "${themeObj.name}" y forma física restaurados`, 'success');
+    }
+  } catch (err) {
+    console.error('Error restaurando estilo de overlay:', err);
   }
 }
 
 async function restoreAllOverlaysToDefaultThemes() {
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  if (!confirm(tr('themes.confirm_restore_all_scenes_themes', '¿Deseas restaurar todas las 9 overlays a sus estilos visuales originales de fábrica?'))) return;
+  if (!confirm(tr('themes.confirm_restore_all_scenes_themes', '¿Deseas restaurar todas las overlays a sus estilos visuales y formas originales de fábrica?'))) return;
+  if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
   for (const [key, defaultThemeId] of Object.entries(DEFAULT_OVERLAY_THEMES)) {
     cachedOverlayThemes[key] = defaultThemeId;
+    delete window.cachedOverlayShapes[key];
     try {
-      await API.setOverlayTheme(key, defaultThemeId);
+      await API.setOverlayTheme(key, defaultThemeId, 'auto');
     } catch (e) {}
   }
   renderThemeScenes();
+  if (typeof renderOverlayFolders === 'function') renderOverlayFolders();
   if (window.OverlayTexts && OverlayTexts.showToast) {
-    const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  OverlayTexts.showToast(tr('themes.toast_all_themes_restored', '↺ Todas las overlays han sido restauradas a sus estilos originales de fábrica'), 'success');
+    OverlayTexts.showToast(tr('themes.toast_all_themes_restored', '↺ Todas las overlays han sido restauradas a sus estilos y formas originales de fábrica'), 'success');
   }
 }
 

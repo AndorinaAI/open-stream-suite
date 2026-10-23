@@ -297,14 +297,17 @@ async function applyFusionThemeAction(fusionId, themeId) {
   }
 }
 
-function buildShapeOptionsHtml(selectedShape = 'original') {
-  let html = `<option value="original" ${selectedShape === 'original' ? 'selected' : ''}>📐 Forma: Original</option>`;
+function buildShapeOptionsHtml(selectedShape = 'auto') {
+  let html = `
+    <option value="auto" ${selectedShape === 'auto' ? 'selected' : ''}>⚡ Forma: Automática (según estilo)</option>
+    <option value="original" ${selectedShape === 'original' ? 'selected' : ''}>📐 Forma: Original del Pack</option>
+  `;
   if (window.cachedThemePacks && window.cachedThemePacks.length > 0) {
     window.cachedThemePacks.forEach(p => {
       if (p.shapes && p.shapes.length > 0) {
         html += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
         p.shapes.forEach(s => {
-          const val = s.archetype || s.id;
+          const val = s.id;
           const isSel = (val === selectedShape || s.id === selectedShape);
           html += `<option value="${val}" ${isSel ? 'selected' : ''}>${s.icon || '📐'} ${s.name}</option>`;
         });
@@ -313,10 +316,38 @@ function buildShapeOptionsHtml(selectedShape = 'original') {
     });
   } else {
     html += `
-      <option value="cozy" ${selectedShape === 'cozy' ? 'selected' : ''}>☕ Cozy Polaroid</option>
-      <option value="gamer" ${selectedShape === 'gamer' ? 'selected' : ''}>🎮 Gamer 45° HUD</option>
-      <option value="maker" ${selectedShape === 'maker' ? 'selected' : ''}>🛠️ Maker CAD</option>
-      <option value="openstream" ${selectedShape === 'openstream' ? 'selected' : ''}>⚡ OpenStream Glass</option>
+      <optgroup label="☕ Cozy Lo-Fi & Arte">
+        <option value="cozy_polaroid" ${selectedShape === 'cozy_polaroid' ? 'selected' : ''}>☕ Polaroid Vintage con Cinta</option>
+        <option value="cozy_canvas" ${selectedShape === 'cozy_canvas' ? 'selected' : ''}>🎨 Lienzo de Arte con Chinchetas</option>
+        <option value="cozy_soft" ${selectedShape === 'cozy_soft' ? 'selected' : ''}>☁️ Píldora Soft Minimal</option>
+      </optgroup>
+      <optgroup label="🎮 Gamer Pro & Esports">
+        <option value="gamer_mecha" ${selectedShape === 'gamer_mecha' ? 'selected' : ''}>🎮 Mecha Tournament 45°</option>
+        <option value="gamer_tactical_hud" ${selectedShape === 'gamer_tactical_hud' ? 'selected' : ''}>🎯 Tactical FPS HUD</option>
+        <option value="gamer_stealth" ${selectedShape === 'gamer_stealth' ? 'selected' : ''}>🕶️ Stealth Dark Cyber</option>
+        <option value="gamer_hex_shield" ${selectedShape === 'gamer_hex_shield' ? 'selected' : ''}>🛡️ Hex Shield Blindaje</option>
+        <option value="gamer_cyber_glitch" ${selectedShape === 'gamer_cyber_glitch' ? 'selected' : ''}>⚡ Cyber Glitch Neón</option>
+        <option value="gamer_arcade_retro" ${selectedShape === 'gamer_arcade_retro' ? 'selected' : ''}>👾 Arcade 8-Bit Pixel</option>
+      </optgroup>
+      <optgroup label="🛠️ Maker & Taller">
+        <option value="maker_blueprint" ${selectedShape === 'maker_blueprint' ? 'selected' : ''}>🛠️ Blueprint Técnico CAD</option>
+        <option value="maker_workbench" ${selectedShape === 'maker_workbench' ? 'selected' : ''}>📐 Banco de Trabajo Studio</option>
+        <option value="maker_circuit_pcb" ${selectedShape === 'maker_circuit_pcb' ? 'selected' : ''}>📟 Placa de Circuito PCB</option>
+      </optgroup>
+      <optgroup label="⚡ Open Stream Suite">
+        <option value="openstream_glass" ${selectedShape === 'openstream_glass' ? 'selected' : ''}>⚡ Swiss Frosted Glass</option>
+        <option value="openstream_studio" ${selectedShape === 'openstream_studio' ? 'selected' : ''}>🎙️ Broadcast Pro Studio</option>
+      </optgroup>
+      <optgroup label="📜 Fantasía, Rol & Terror">
+        <option value="fantasy_parchment" ${selectedShape === 'fantasy_parchment' ? 'selected' : ''}>📜 Pergamino Rol & Sello Cera</option>
+        <option value="fantasy_runic_stone" ${selectedShape === 'fantasy_runic_stone' ? 'selected' : ''}>🗿 Piedra Rúnica Mística</option>
+        <option value="gothic_vampire" ${selectedShape === 'gothic_vampire' ? 'selected' : ''}>🦇 Gótico Victoriano Dark</option>
+      </optgroup>
+      <optgroup label="💥 Cómic, Pop Art & Retro TV">
+        <option value="comic_manga_action" ${selectedShape === 'comic_manga_action' ? 'selected' : ''}>💥 Manga / Shonen Comic</option>
+        <option value="pop_synth_neon" ${selectedShape === 'pop_synth_neon' ? 'selected' : ''}>🌆 Synthwave 80s Grid</option>
+        <option value="vintage_crt_monitor" ${selectedShape === 'vintage_crt_monitor' ? 'selected' : ''}>📺 Monitor CRT Retro 90s</option>
+      </optgroup>
     `;
   }
   return html;
@@ -382,6 +413,7 @@ function openFusionEditorModal(fusion = null) {
   const iconInput = document.getElementById('fusion-modal-icon');
   const descInput = document.getElementById('fusion-modal-desc');
   const themeSelect = document.getElementById('fusion-modal-theme');
+  const shapeSelect = document.getElementById('fusion-modal-shape');
   const scenesContainer = document.getElementById('fusion-modal-scenes-list');
 
   const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
@@ -395,6 +427,7 @@ function openFusionEditorModal(fusion = null) {
   if (iconInput) iconInput.value = (fusion && fusion.icon) ? fusion.icon : '⚡';
   if (descInput) descInput.value = (fusion && fusion.description) ? fusion.description : '';
   if (themeSelect) themeSelect.innerHTML = buildThemeOptionsHtml((fusion && fusion.defaultTheme) ? fusion.defaultTheme : 'maker');
+  if (shapeSelect) shapeSelect.innerHTML = buildShapeOptionsHtml((fusion && fusion.defaultShape) ? fusion.defaultShape : 'original');
 
   // Renderizar checkboxes de escenas agrupadas por Pack
   if (scenesContainer) {
@@ -463,6 +496,7 @@ async function saveFusionFromModal(event) {
   const iconInput = document.getElementById('fusion-modal-icon');
   const descInput = document.getElementById('fusion-modal-desc');
   const themeSelect = document.getElementById('fusion-modal-theme');
+  const shapeSelect = document.getElementById('fusion-modal-shape');
 
   const name = nameInput ? nameInput.value.trim() : '';
   if (!name) {
@@ -481,6 +515,7 @@ async function saveFusionFromModal(event) {
     icon: iconInput ? iconInput.value.trim() : '⚡',
     description: descInput ? descInput.value.trim() : '',
     defaultTheme: themeSelect ? themeSelect.value : 'maker',
+    defaultShape: shapeSelect ? shapeSelect.value : 'original',
     scenes: selectedScenes
   };
 

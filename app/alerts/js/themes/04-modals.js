@@ -67,7 +67,7 @@ async function submitCreateTheme() {
     return;
   }
 
-  const targetPack = currentOpenPackId || 'pack_open_stream_suite';
+  const targetPack = currentOpenPackId || 'Maker_Theme_Pack';
 
   try {
     const res = await API.createTheme({

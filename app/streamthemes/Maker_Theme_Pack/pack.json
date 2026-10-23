@@ -21,6 +21,13 @@
       "icon": "📐",
       "archetype": "maker",
       "description": "Cabecera de taller con fases de proyecto y paneles técnicos de herramientas."
+    },
+    {
+      "id": "maker_circuit_pcb",
+      "name": "Placa de Circuito PCB",
+      "icon": "📟",
+      "archetype": "maker",
+      "description": "Pistas de cobre dorado, vías de tierra GND, componentes SMD y serigrafía técnica."
     }
   ]
 }

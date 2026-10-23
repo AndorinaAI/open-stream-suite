@@ -21,6 +21,20 @@
       "icon": "🎙️",
       "archetype": "openstream",
       "description": "Líneas de retransmisión con vúmetros de audio estéreo en vivo y lower-third ticker."
+    },
+    {
+      "id": "comic_manga_action",
+      "name": "Manga / Shonen Comic",
+      "icon": "💥",
+      "archetype": "openstream",
+      "description": "Trazos de tinta negra gruesa (5px), viñetas de cómic y badges de impacto 💥 GO!!."
+    },
+    {
+      "id": "pop_synth_neon",
+      "name": "Synthwave 80s Grid",
+      "icon": "🌆",
+      "archetype": "openstream",
+      "description": "Bisel flúor neón magenta/cian, horizonte en alambre y sol retro ☀."
     }
   ]
 }

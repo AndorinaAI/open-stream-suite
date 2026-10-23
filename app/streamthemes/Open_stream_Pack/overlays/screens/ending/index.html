@@ -87,7 +87,7 @@
     .credit-box .role {
       font-size: 10px;
       font-weight: 800;
-      color: #38bdf8;
+      color: var(--color-accent-cyan, #38bdf8);
       letter-spacing: 1px;
       text-transform: uppercase;
       margin-bottom: 4px;
@@ -141,11 +141,11 @@
     }
   </style>
 </head>
-<body data-theme="neon_streamer">
+<body data-pack="Open_stream_Pack" data-scene="oss_ending" data-theme="neon_streamer">
   <!-- Swiss Broadcast Header -->
-  <header class="broadcast-header">
+  <header class="header-bar broadcast-header" data-oss-bar="top">
     <div style="display:flex; align-items:center; gap:14px;">
-      <div class="signoff-pill">CIERRE DE EMISIÓN</div>
+      <div class="mode-badge signoff-pill" data-oss-badge="true" data-text-key="ending.badgeText">CIERRE DE EMISIÓN</div>
       <div style="font-size:15px; font-weight:800;">OPEN STREAM STUDIO // GRACIAS POR SINTONIZAR</div>
     </div>
     <div style="font-size:12px; font-weight:600; color:#94a3b8; font-family:monospace;">
@@ -155,23 +155,23 @@
 
   <!-- Center Stage -->
   <main class="signoff-center-stage">
-    <div class="signoff-hero-card">
-      <div style="font-size:12px; font-weight:800; letter-spacing:1.5px; color:#38bdf8; text-transform:uppercase; margin-bottom:8px;">
+    <div class="panel-card signoff-hero-card" data-oss-panel="true">
+      <div style="font-size:12px; font-weight:800; letter-spacing:1.5px; color:var(--color-accent-cyan, #38bdf8); text-transform:uppercase; margin-bottom:8px;">
         FINAL DEL PROGRAMA
       </div>
-      <h1 class="main-stream-title">¡GRACIAS POR ACOMPAÑARNOS!</h1>
-      <p class="stream-subtitle">
+      <h1 class="main-stream-title" data-text-key="ending.title">¡GRACIAS POR ACOMPAÑARNOS!</h1>
+      <p class="stream-subtitle" data-text-key="ending.subtitle">
         El directo ha concluido. Puedes consultar la repetición en vídeo y resúmenes en nuestras plataformas.
       </p>
 
       <div class="credits-grid">
         <div class="credit-box">
           <div class="role">DIRECCIÓN & HOST</div>
-          <div class="val">@TuCanal</div>
+          <div class="val" data-text-key="channel.name">@andorina</div>
         </div>
         <div class="credit-box">
           <div class="role">COMUNIDAD</div>
-          <div class="val">Moderadores & Chat</div>
+          <div class="val" data-text-key="ending.credits.0">Moderadores & Chat</div>
         </div>
         <div class="credit-box">
           <div class="role">REPETICIONES</div>
@@ -181,10 +181,10 @@
     </div>
 
     <!-- Side Schedule Card -->
-    <aside class="signoff-side-card">
+    <aside class="panel-card signoff-side-card" data-oss-panel="true">
       <div class="side-title">PRÓXIMAS EMISIONES EN DIRECTO</div>
       <div class="schedule-row">
-        <span>MARTES: CHARLA Y DEBATE</span>
+        <span data-text-key="ending.credits.1">MARTES: CHARLA Y DEBATE</span>
         <strong style="color:#f1f5f9;">19:00 CEST</strong>
       </div>
       <div class="schedule-row">
@@ -199,9 +199,9 @@
   </main>
 
   <!-- Lower Third -->
-  <footer class="broadcast-lower-third">
+  <footer class="footer-bar broadcast-lower-third" data-oss-bar="bottom">
     <div style="font-size:13px; font-weight:600; color:#cbd5e1;">
-      SÍGUENOS EN REDES SOCIALES PARA NO PERDERTE EL PRÓXIMO DIRECTO: <strong style="color:#38bdf8;">@TuCanal</strong>
+      SÍGUENOS EN REDES SOCIALES PARA NO PERDERTE EL PRÓXIMO DIRECTO: <strong style="color:var(--color-accent-cyan, #38bdf8);" data-text-key="channel.name">@andorina</strong>
     </div>
     <div style="font-size:12px; color:#64748b;">
       FIN DE LA SEÑAL · OPEN STREAM SUITE

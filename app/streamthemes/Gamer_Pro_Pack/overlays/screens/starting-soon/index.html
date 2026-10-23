@@ -209,11 +209,11 @@
     }
   </style>
 </head>
-<body data-theme="crimson_esport">
+<body data-pack="Gamer_Pro_Pack" data-scene="gamer_starting" data-theme="crimson_esport">
   <!-- Top Tournament Telemetry Bar -->
-  <header class="arena-top-bar">
+  <header class="header-bar arena-top-bar" data-oss-bar="top">
     <div class="match-status-group">
-      <div class="match-badge">
+      <div class="mode-badge match-badge" data-oss-badge="true" data-text-key="game.badgeText">
         <span class="dot"></span>
         <span>LOBBY EN VIVO</span>
       </div>
@@ -228,21 +228,21 @@
 
   <!-- Center Stage -->
   <main class="arena-center-stage">
-    <div class="match-hero-card">
+    <div class="panel-card match-hero-card" data-oss-panel="true">
       <div class="corner-reticle" style="top:12px; left:14px;">[+]</div>
       <div class="corner-reticle" style="bottom:12px; right:14px;">[+]</div>
       <div class="hero-tag">// CALENTAMIENTO Y ESTRATEGIA</div>
-      <h1 class="main-stream-title">MATCH INCOMING</h1>
-      <p class="stream-subtitle">SINCRONIZANDO COMUNICACIONES Y CONFIGURACIÓN DE EQUIPO...</p>
-      <div class="starting-countdown">05:00</div>
+      <h1 class="main-stream-title" data-text-key="startingSoon.title">MATCH INCOMING</h1>
+      <p class="stream-subtitle" data-text-key="startingSoon.subtitle">SINCRONIZANDO COMUNICACIONES Y CONFIGURACIÓN DE EQUIPO...</p>
+      <div class="starting-countdown" id="gamerCountdown">05:00</div>
       <div class="tech-progress-bar">
-        <div class="tech-progress-fill"></div>
+        <div class="tech-progress-fill" id="gamerProgress"></div>
       </div>
     </div>
 
     <!-- Side Match Lobby Card -->
     <aside class="match-side-card">
-      <div class="side-panel-box">
+      <div class="panel-card side-panel-box" data-oss-panel="true">
         <div class="side-panel-title">POZO DE MAPAS // SELECCIONADOS</div>
         <div class="map-veto-grid">
           <div class="map-pill picked">
@@ -264,7 +264,7 @@
         </div>
       </div>
 
-      <div class="side-panel-box" style="border-left-color: var(--color-accent-cyan, #57d6c4);">
+      <div class="panel-card side-panel-box" data-oss-panel="true" style="border-left-color: var(--color-accent-cyan, #57d6c4);">
         <div class="side-panel-title" style="color:var(--color-accent-cyan, #57d6c4);">OBJETIVOS DE LA SESIÓN</div>
         <div style="font-size:13px; line-height:1.6; color:#cbd5e1;">
           <div>⚡ Racha actual: <strong style="color:#f1f5f9;">+5 Victorias</strong></div>
@@ -275,16 +275,33 @@
   </main>
 
   <!-- Bottom Ticker -->
-  <footer class="arena-bottom-bar">
-    <div>TORNEO EN DIRECTO // CANAL OFICIAL</div>
+  <footer class="footer-bar arena-bottom-bar" data-oss-bar="bottom">
+    <div data-text-key="channel.tagline">TORNEO EN DIRECTO // CANAL OFICIAL</div>
     <div class="social-links">
       <div>DISCORD: <span>/EsportsTeam</span></div>
-      <div>TWITTER: <span>@ProGamerLive</span></div>
+      <div>TWITTER: <span data-text-key="channel.name">@andorina</span></div>
       <div>COMANDOS: <span>!sens !crosshair !mouse</span></div>
     </div>
   </footer>
 
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
+  <script>
+    (function() {
+      let totalSeconds = 300;
+      let remaining = totalSeconds;
+      const countEl = document.getElementById('gamerCountdown');
+      const barEl = document.getElementById('gamerProgress');
+      setInterval(() => {
+        if (remaining > 0) {
+          remaining--;
+          const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+          const s = String(remaining % 60).padStart(2, '0');
+          if (countEl) countEl.textContent = `${m}:${s}`;
+          if (barEl) barEl.style.width = `${((totalSeconds - remaining) / totalSeconds) * 100}%`;
+        }
+      }, 1000);
+    })();
+  </script>
 </body>
 </html>

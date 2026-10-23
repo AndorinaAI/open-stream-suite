@@ -634,42 +634,82 @@ Por ello, todo panel flotante (`#open-stream-suite-screen-hud`, `#oss-countdown-
 3. **Persistencia y Difusión WebSocket**:
    - Al pulsar `💾 Guardar` en el HUD, se extraen los valores modificados del DOM y se envían a:
      `POST /api/overlays/texts`
-   - El backend actualiza `overlay_texts_config.json` y emite el evento WebSocket `overlay_texts_updated` a todas las ventanas abiertas en OBS Studio en tiempo real.
+   - El backend actualiza `overlay_texts_config.json` y emite el evento WebSocket `overlay_texts_update` a todas las ventanas abiertas en OBS Studio en tiempo real.
 
 ---
 
 ### 8.5. Paso a Paso: Cómo Crear un Nuevo Overlay con Lógica Interactiva
 
-1. **Estructura HTML básica**:
-   Añade tu contenedor principal y las etiquetas semánticas con identificadores o clases descriptivas.
+1. **Estructura HTML con Contrato Semántico Universal**:
+   Añade tu contenedor principal y los atributos semánticos `data-oss-*` para que el motor aplique automáticamente bordes, formas y áreas de transparencia:
    ```html
    <link rel="stylesheet" href="../../../common/themes.css">
    <link rel="stylesheet" href="style.css">
    ...
-   <div class="interactive-card" id="my-custom-widget">
+   <!-- Marco de cámara compatible con cualquier forma -->
+   <div class="camera-frame" data-oss-cam="true">
+     <div class="cam-viewport" data-oss-viewport="true"></div>
+     <div class="cam-label" data-oss-cam-label="true">
+       <span data-text-key="my_scene.camLabel">CÁMARA PRINCIPAL</span>
+     </div>
+   </div>
+
+   <!-- Tarjeta interactiva con texto editable aislado -->
+   <div class="interactive-card" data-oss-panel="true" id="my-custom-widget">
      <div class="widget-header">
-       <span class="widget-title">ESTADO DE SESIÓN</span>
-       <span class="badge" id="session-badge">EN CURSO</span>
+       <span class="widget-title" data-text-key="my_scene.title">ESTADO DE SESIÓN</span>
+       <span class="badge" data-text-key="my_scene.badge">EN CURSO</span>
      </div>
      <div class="counter-display" id="session-counter">00:00</div>
    </div>
+   <script src="../../../config.js"></script>
    <script src="../../../common/overlay.js"></script>
    ```
 
-2. **Registro de Selectores Editables**:
-   En `common/overlay.js`, añade las clases de tu nuevo overlay al array `editableSelectors`:
-   ```javascript
-   '.widget-title', '#session-badge', '#session-counter'
-   ```
+2. **Aislamiento de Claves de Texto (`data-text-key`)**:
+   - Asigna siempre un prefijo único a las claves de tu escena (ej. `my_scene.title`, `my_scene.camLabel`).
+   - El motor `dom-injector.js` y `05a-extract-texts.js` detecta automáticamente cualquier elemento con `[data-text-key]` para inyección, edición en caliente y guardado en `POST /api/overlays/texts`.
 
 3. **Inclusión de Menú Draggable (si procede)**:
-   Si tu overlay requiere un panel de configuración o control flotante, constrúyelo con una cabecera `.hud-drag-handle` y llama a:
+   Si tu overlay requiere un panel de configuración o control flotante, constrúyelo con una cabecera `.hud-drag-handle`, arráncalo oculto (`display: none;`) y llama a:
    ```javascript
    makeDraggable(document.getElementById('my-custom-control'), '.hud-drag-handle');
    ```
 
 4. **Sincronización de Estado en `overlay_texts_config.json`**:
-   Define la clave de tu escena en `overlay_texts_config.json` para que guarde y restaure tanto los textos como los estados funcionales (índice activo, contadores, flags).
+   Define la clave de tu escena en `overlay_texts_config.json` y `overlay_texts_config.en.json` para que guarde y restaure tanto los textos como los estados funcionales (índice activo, contadores, flags).
+
+---
+
+### 8.6. Contrato Universal de Compatibilidad Semántica (`data-oss-*`) y Adaptabilidad de Relación de Aspecto
+
+Para garantizar el desacoplamiento total entre escenas y estilos:
+
+1. **Tabla de Atributos Semánticos Obligatorios**:
+   - `data-oss-cam="true"`: Contenedor principal de la cámara o captura.
+   - `data-oss-viewport="true"`: Ventana interior transparente para la fuente de OBS y el motor de aperturas SVG.
+   - `data-oss-cam-label="true"`: Rótulo identificador de la cámara.
+   - `data-oss-panel="true"`: Paneles de chat, stats, podios o listas.
+   - `data-oss-bar="top|bottom"`: Barras de cabecera superior o noticias/faldones inferiores.
+
+2. **Fluidez en Cualquier Relación de Aspecto y Catálogo de 20 Formas Físicas**:
+   - El motor soporta 20 formas físicas universales (`data-theme-shape`), agrupadas en 6 familias:
+     - **☕ Cozy Lo-Fi & Arte**: `cozy_polaroid`, `cozy_canvas`, `cozy_soft`.
+     - **🎮 Gamer Pro & Esports**: `gamer_mecha`, `gamer_tactical_hud`, `gamer_stealth`, `gamer_hex_shield`, `gamer_cyber_glitch`, `gamer_arcade_retro`.
+     - **🛠️ Maker & Taller**: `maker_blueprint`, `maker_workbench`, `maker_circuit_pcb`.
+     - **⚡ Open Stream Suite**: `openstream_glass`, `openstream_studio`.
+     - **📜 Fantasía, Rol & Terror**: `fantasy_parchment`, `fantasy_runic_stone`, `gothic_vampire`.
+     - **💥 Cómic, Pop Art & Retro TV**: `comic_manga_action`, `pop_synth_neon`, `vintage_crt_monitor`.
+   - Las formas físicas operan mediante dimensiones relativas (`calc(100% - 24px)`) y pseudo-elementos anclados (`top: 6px; left: 6px;`).
+   - Soportan de manera fluida cámaras panorámicas 16:9, formatos clásicos 4:3, monitores ultra-panorámicos 21:9 y transmisiones verticales 9:16 (TikTok / YouTube Shorts) sin distorsionar chaflanes ni desplazar los brackets de esquina.
+
+3. **Regla de Geometría Segura contra `clip-path`**:
+   - Cuando un marco usa recortes poliédricos (`gamer_mecha`, `gamer_tactical_hud`), los elementos hijos nunca deben colocarse en coordenadas negativas (`top: -12px;`, `bottom: -36px;`).
+   - Se deben usar siempre insets interiores positivos (`top: 10px; left: 14px;`) o padding para garantizar visibilidad total.
+
+4. **Paneles Flotantes Bajo Demanda (No Invasivos)**:
+   - Los paneles interactivos flotantes (`oss-countdown-control`, `oss-speedrun-control`, `oss-brb-phrases-control`) arrancan ocultos (`display: none;`) para no tapar componentes laterales (splits, notas, tareas).
+   - Se activan y cierran desde los botones contextuales de la barra HUD (`⏱️ Temporizador`, `⚡ Splits`, `🔄 Frases BRB`) o con el botón `✕` de la ventana flotante.
 
 ---
 
@@ -704,5 +744,20 @@ Contiene copias recursivas de `Cozy_LoFi_Pack`, `Gamer_Pro_Pack`, `Maker_Theme_P
 Para complementar la unificación visual de escenas, el widget de chat dispone de su propio gestor de perfiles en la pestaña **🔗 Enlaces OBS por Estilo**:
 - Cada escena en OBS puede llevar su propia fuente de navegador de chat con el parámetro `?profile=<id>` (ej. `?profile=cozy_lofi`, `?profile=gamer_pro`, `?profile=maker_glass`).
 - Cualquier ajuste realizado en el editor visual se sincroniza de forma reactiva a OBS sin necesidad de recargar la fuente.
+
+### 9.5. Motor Universal de Apertura de Fondos y Recortes (Backdrop Aperture)
+El archivo `common/overlay/backdrop-aperture.js` (`window.OSSAperture`) permite vestir las escenas de OBS con fondos decorativos ricos (patrones textiles, mallas tácticas, degradados o imágenes personalizadas) **sin tapar el contenido de las capturas de OBS** que se sitúan detrás de la capa del navegador:
+- **Máscara SVG Dinámica**: Mediante un `<mask id="oss-aperture-mask">`, el motor calcula en tiempo real las coordenadas exactas (`getBoundingClientRect`), radios de borde (`border-radius`) y recortes poligonales (`clip-path`) de todos los contenedores de cámara y juego (`[data-cutout="true"]`, `[data-oss-cam]`).
+- **Persistencia por Escena**: La selección de fondo se guarda a través de `POST /api/themes/backdrop` y se persiste en `themes_state.json` bajo la clave `"backdrops"`.
+- **Sincronización en Caliente**: Al cambiar o restaurar un fondo desde el HUD flotante, el backend emite el evento WebSocket `overlay_backdrop_change`, actualizando instantáneamente la vista en OBS Studio.
+
+### 9.6. Modo Auto Inteligente y Aislamiento de Textos (`customScenes`)
+1. **Modo `auto` en Formas Físicas**:
+   - **Escena Nativa**: Si el tema seleccionado pertenece al pack nativo de la escena (ej. tema Maker en escena Maker Desk), el modo `auto` respeta la geometría original (`effectiveShape = 'original'`) diseñada específicamente a mano para esa escena.
+   - **Crossover Cross-Pack**: Si se aplica un tema de un pack diferente (ej. tema Gamer Pro sobre escena Maker Desk), el modo `auto` adopta la insignia física emblemática del nuevo arquetipo (`cozy_polaroid`, `gamer_mecha`, `maker_blueprint`, `openstream_glass`).
+2. **Aislamiento Quirúrgico de Textos (`customScenes`)**:
+   - Para evitar que la edición de rótulos con claves comunes (como `beRightBack.title` o `startingSoon.title`) sobrescriba las pantallas de otros packs, el editor en caliente guarda los cambios de escenas personalizadas dentro de `texts.customScenes[sceneKey][key]` en `overlay_texts_config.json`.
+   - `dom-injector.js` resuelve con prioridad los textos específicos de la escena activa, garantizando aislamiento total y permitiendo restaurar los textos de una única escena sin reiniciar el stream completo.
+
 
 

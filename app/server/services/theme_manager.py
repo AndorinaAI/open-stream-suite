@@ -43,8 +43,18 @@ def load_theme_state():
 
 def save_theme_state(state):
     try:
+        existing = {}
+        if THEMES_STATE_FILE.exists():
+            try:
+                with open(THEMES_STATE_FILE, "r", encoding="utf-8") as f:
+                    existing = json.load(f)
+            except Exception:
+                existing = {}
+        merged = dict(existing)
+        for k, v in state.items():
+            merged[k] = v
         with open(THEMES_STATE_FILE, "w", encoding="utf-8") as f:
-            json.dump(state, f, indent=2, ensure_ascii=False)
+            json.dump(merged, f, indent=2, ensure_ascii=False)
     except Exception as e:
         logger.warning(f"Error guardando themes_state.json: {e}")
 
@@ -254,7 +264,9 @@ def get_all_packs_and_themes():
         "activeTheme": active_theme,
         "activeShape": state.get("activeShape", "original"),
         "overlayThemes": state.get("overlayThemes", dict(DEFAULT_OVERLAY_THEMES)),
-        "overlayShapes": state.get("overlayShapes", {})
+        "defaultOverlayThemes": dict(DEFAULT_OVERLAY_THEMES),
+        "overlayShapes": state.get("overlayShapes", {}),
+        "backdrops": state.get("backdrops", {})
     }
 
 # ====================================================================

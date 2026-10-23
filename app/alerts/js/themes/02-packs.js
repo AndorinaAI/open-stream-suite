@@ -5,9 +5,12 @@ async function loadThemePacks() {
     const data = await API.getThemePacks();
     cachedThemePacks = data.packs || [];
     currentActiveThemeId = data.activeTheme || 'maker';
-    currentActivePackId = data.activePack || 'pack_open_stream_suite';
+    currentActivePackId = data.activePack || 'Maker_Theme_Pack';
     if (data.overlayThemes) {
       cachedOverlayThemes = Object.assign({}, cachedOverlayThemes, data.overlayThemes);
+    }
+    if (data.overlayShapes) {
+      window.cachedOverlayShapes = Object.assign({}, window.cachedOverlayShapes || {}, data.overlayShapes);
     }
 
     updateActiveThemeBadge();
@@ -363,7 +366,7 @@ async function assignThemeToScene(sceneKey, themeId) {
 async function applyThemeToAllScenes(themeId, packId) {
   const info = getThemeDisplayNameById(themeId);
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  if (!confirm(tr('themes.confirm_apply_all', `¿Deseas aplicar el estilo "${info.name}" a todas las 9 escenas de OBS Studio?`, { name: info.name }))) return;
+  if (!confirm(tr('themes.confirm_apply_all', `¿Deseas aplicar el estilo "${info.name}" a todas las 27 escenas de OBS Studio?`, { name: info.name }))) return;
   for (const sc of OSS_SCENES) {
     cachedOverlayThemes[sc.key] = themeId;
     try {

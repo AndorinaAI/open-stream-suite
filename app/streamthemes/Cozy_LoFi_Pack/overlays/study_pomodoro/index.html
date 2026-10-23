@@ -58,7 +58,7 @@
       display: flex;
       gap: 32px;
       flex: 1;
-      margin: 24px 0;
+      margin: 24px 0 0 0;
     }
 
     .cam-frame {
@@ -69,6 +69,32 @@
       box-shadow: var(--frame-shadow, 0 16px 36px rgba(30, 20, 15, 0.16));
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cam-viewport {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .cam-label {
+      position: absolute;
+      bottom: 16px;
+      left: 18px;
+      background: rgba(30, 24, 20, 0.85);
+      backdrop-filter: blur(8px);
+      color: var(--color-text-light, #FFF);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     /* Columna Derecha: Pomodoro y Tareas */
@@ -126,6 +152,7 @@
 
     .cycle-dot.active {
       background: var(--color-accent-cyan, #C48243);
+      box-shadow: 0 0 8px var(--color-accent-cyan, #C48243);
     }
 
     .pomo-bar {
@@ -190,32 +217,38 @@
     }
   </style>
 </head>
-<body data-theme="latte_caramel">
+<body data-pack="Cozy_LoFi_Pack" data-scene="cozy_pomodoro" data-theme="latte_caramel">
 
   <!-- Barra Superior -->
-  <div class="header-bar">
+  <header class="header-bar" data-oss-bar="top">
     <div class="header-title">
       <span>📖</span>
-      <span>STUDY WITH ME · ESPACIO DE ENFOQUE & LECTURA</span>
+      <span data-text-key="pomodoro.taskName">STUDY WITH ME · ESPACIO DE ENFOQUE & LECTURA</span>
     </div>
-    <div class="ambient-pill">
+    <div class="ambient-pill" data-text-key="chill.subtitle">
       <span>🌧️ Lluvia suave: 45%</span>
       <span>•</span>
       <span>☕ Café caliente listo</span>
       <span>•</span>
       <span>🎧 Lo-Fi 432Hz</span>
     </div>
-  </div>
+  </header>
 
   <!-- Contenido Principal -->
   <div class="main-grid">
-    <div class="cam-frame"></div>
+    <div class="camera-frame cam-frame" data-oss-cam="true">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label" data-oss-cam-label="true" data-text-key="cozy.studyCamLabel">
+        <span>📖</span>
+        <span>MESA DE ESTUDIO · STREAM</span>
+      </div>
+    </div>
 
     <div class="side-column">
       <!-- Reloj Pomodoro -->
-      <div class="pomodoro-card">
-        <span class="pomo-badge">SESIÓN DE CONCENTRACIÓN</span>
-        <div class="pomo-time">25:00</div>
+      <div class="panel-card pomodoro-card" data-oss-panel="true">
+        <span class="mode-badge pomo-badge" data-oss-badge="true" data-text-key="channel.liveText">SESIÓN DE CONCENTRACIÓN</span>
+        <div class="pomo-time" id="pomodoroTimer">25:00</div>
         <div style="font-size: 11px; color: var(--color-text-dim);">Ciclo 2 de 4 antes del descanso largo</div>
         <div class="pomo-cycles">
           <span class="cycle-dot active"></span>
@@ -229,10 +262,10 @@
       </div>
 
       <!-- Cuaderno de Tareas -->
-      <div class="tasks-card">
+      <div class="panel-card tasks-card" data-oss-panel="true">
         <div class="tasks-header">
           <span>📋</span>
-          <span>OBJETIVOS DE LA SESIÓN</span>
+          <span data-text-key="pomodoro.panelTitle">OBJETIVOS DE LA SESIÓN</span>
         </div>
         <div class="task-item done">
           <span class="task-check">✓</span>
@@ -256,5 +289,20 @@
 
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
+  <script>
+    // Temporizador Pomodoro sutil
+    (function() {
+      let seconds = 25 * 60;
+      const timerEl = document.getElementById('pomodoroTimer');
+      setInterval(() => {
+        if (seconds > 0) {
+          seconds--;
+          const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+          const s = String(seconds % 60).padStart(2, '0');
+          if (timerEl) timerEl.textContent = `${m}:${s}`;
+        }
+      }, 1000);
+    })();
+  </script>
 </body>
 </html>

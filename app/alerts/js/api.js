@@ -405,3 +405,77 @@ const API = {
 if (!window.__LOCAL_AUTH_TOKEN__) {
   API.fetchLocalToken();
 }
+
+// ====================================================================
+// FUNCIONES GLOBALES DE ACCIÓN RÁPIDA PARA EL PANEL (SIMULADOR & METAS)
+// ====================================================================
+window.sendAlertTest = async function(type) {
+  const defaultExtras = {
+    follow: { user: 'AndorinaDev', message: '¡Gracias por seguir el canal!' },
+    sub: { user: 'AndorinaDev', tier: '1000', months: 1, message: '¡Suscripción de nivel 1!' },
+    bits: { user: 'AndorinaDev', bits: 100, message: '¡100 bits para el stream!' },
+    raid: { user: 'StreamerAmigo', viewers: 25, message: '¡Raid con 25 espectadores!' }
+  };
+  const extra = defaultExtras[type] || { user: 'AndorinaDev' };
+  try {
+    const res = await fetch('/api/alerts/test', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        alertType: type,
+        ...extra
+      })
+    });
+    const d = await res.json();
+    if (d.status === 'ok') {
+      const msg = `🚀 Alerta de prueba [${type.toUpperCase()}] emitida a OBS`;
+      if (window.OverlayTexts && OverlayTexts.showToast) OverlayTexts.showToast(msg, 'success');
+      else if (window.AlertsStudio && AlertsStudio.showToast) AlertsStudio.showToast(msg);
+    }
+  } catch (e) {
+    console.error('Error enviando alerta de prueba:', e);
+  }
+};
+
+window.sendCustomAlertTest = async function() {
+  const user = document.getElementById('sim-user-input')?.value?.trim() || 'AndorinaDev';
+  const msg = document.getElementById('sim-msg-input')?.value?.trim() || '¡Un saludo!';
+  try {
+    const res = await fetch('/api/alerts/test', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({
+        alertType: 'custom',
+        user: user,
+        message: msg
+      })
+    });
+    const d = await res.json();
+    if (d.status === 'ok') {
+      const toastMsg = `🚀 Alerta personalizada enviada para ${user}`;
+      if (window.OverlayTexts && OverlayTexts.showToast) OverlayTexts.showToast(toastMsg, 'success');
+      else if (window.AlertsStudio && AlertsStudio.showToast) AlertsStudio.showToast(toastMsg);
+    }
+  } catch (e) {
+    console.error('Error enviando alerta personalizada:', e);
+  }
+};
+
+window.syncGoalWithTwitch = async function() {
+  try {
+    const res = await fetch('/api/twitch/channel');
+    if (res.ok) {
+      if (window.OverlayTexts && OverlayTexts.showToast) {
+        OverlayTexts.showToast('✓ Metas sincronizadas con datos de Twitch', 'success');
+      }
+    } else {
+      if (window.OverlayTexts && OverlayTexts.showToast) {
+        OverlayTexts.showToast('ℹ️ Conecta Twitch en Ajustes para sincronizar metas automáticamente', 'info');
+      }
+    }
+  } catch (e) {
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast('ℹ️ Conecta Twitch en Ajustes para sincronizar metas automáticamente', 'info');
+    }
+  }
+};

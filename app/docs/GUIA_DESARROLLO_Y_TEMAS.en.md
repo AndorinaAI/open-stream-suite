@@ -232,7 +232,82 @@ Every floating control (`#open-stream-suite-screen-hud`, `#oss-countdown-control
    - Click listeners on dynamic rows (`.split-row`, `.phase-item`) are attached via `document.addEventListener('click', e => e.target.closest(...))` to persist across DOM updates.
 3. **Persistence & OBS Studio WebSocket Broadcast**:
    - Clicking `💾 Guardar` posts modified texts and active states to `POST /api/overlays/texts` (authenticated via `X-Local-Token`).
-   - The backend updates `overlay_texts_config.json` and broadcasts the WebSocket event `overlay_texts_updated` to all open browser sources in OBS Studio.
+   - The backend updates `overlay_texts_config.json` and broadcasts the WebSocket event `overlay_texts_update` to all open browser sources in OBS Studio.
+
+---
+
+### 8.5. Step-by-Step: Creating a New Overlay with Interactive Logic
+
+1. **HTML Structure with Universal Semantic Contract**:
+   Include standard stylesheets and apply semantic `data-oss-*` attributes so the engine automatically manages borders, shapes, and cutouts:
+   ```html
+   <link rel="stylesheet" href="../../../common/themes.css">
+   <link rel="stylesheet" href="style.css">
+   ...
+   <!-- Camera frame compatible with all physical shapes -->
+   <div class="camera-frame" data-oss-cam="true">
+     <div class="cam-viewport" data-oss-viewport="true"></div>
+     <div class="cam-label" data-oss-cam-label="true">
+       <span data-text-key="my_scene.camLabel">PRIMARY CAMERA</span>
+     </div>
+   </div>
+
+   <!-- Interactive card with isolated editable text -->
+   <div class="interactive-card" data-oss-panel="true" id="my-custom-widget">
+     <div class="widget-header">
+       <span class="widget-title" data-text-key="my_scene.title">SESSION STATUS</span>
+       <span class="badge" data-text-key="my_scene.badge">ACTIVE</span>
+     </div>
+     <div class="counter-display" id="session-counter">00:00</div>
+   </div>
+   <script src="../../../config.js"></script>
+   <script src="../../../common/overlay.js"></script>
+   ```
+
+2. **Text Key Isolation (`data-text-key`)**:
+   - Always prefix keys with a unique scene namespace (e.g., `my_scene.title`, `my_scene.camLabel`).
+   - `dom-injector.js` and `05a-extract-texts.js` automatically parse all `[data-text-key]` elements for live on-canvas editing and persistent synchronization with `POST /api/overlays/texts`.
+
+3. **Draggable Control Menus**:
+   If your overlay includes an interactive floating HUD, build it with a `.hud-drag-handle` header, initialize it hidden (`display: none;`), and invoke:
+   ```javascript
+   makeDraggable(document.getElementById('my-custom-control'), '.hud-drag-handle');
+   ```
+
+4. **Configuration Synchronization**:
+   Define keys in `overlay_texts_config.json` and `overlay_texts_config.en.json` to persist texts, active states, and custom flags.
+
+---
+
+### 8.6. Universal Semantic Compatibility Contract (`data-oss-*`) & Aspect Ratio Fluidity
+
+To ensure total decoupling between scenes and themes:
+
+1. **Mandatory Semantic Attribute Specifications**:
+   - `data-oss-cam="true"`: Primary camera or video capture container.
+   - `data-oss-viewport="true"`: Transparent inner window for OBS video sources and SVG mask cutout engine.
+   - `data-oss-cam-label="true"`: Camera label or badge element.
+   - `data-oss-panel="true"`: Content cards, chat boxes, stats, or split lists.
+   - `data-oss-bar="top|bottom"`: Top headers or bottom news/status tickers.
+
+2. **Fluid Adaptability across Camera Aspect Ratios and Catalog of 20 Physical Shapes**:
+   - The engine provides 20 universal physical shape archetypes (`data-theme-shape`), grouped into 6 families:
+     - **☕ Cozy Lo-Fi & Art**: `cozy_polaroid`, `cozy_canvas`, `cozy_soft`.
+     - **🎮 Gamer Pro & Esports**: `gamer_mecha`, `gamer_tactical_hud`, `gamer_stealth`, `gamer_hex_shield`, `gamer_cyber_glitch`, `gamer_arcade_retro`.
+     - **🛠️ Maker & Technical Workshop**: `maker_blueprint`, `maker_workbench`, `maker_circuit_pcb`.
+     - **⚡ Open Stream Suite Official**: `openstream_glass`, `openstream_studio`.
+     - **📜 Fantasy, RPG & Gothic**: `fantasy_parchment`, `fantasy_runic_stone`, `gothic_vampire`.
+     - **💥 Comic, Pop Art & Retro TV**: `comic_manga_action`, `pop_synth_neon`, `vintage_crt_monitor`.
+   - Physical shapes rely on relative `calc(100% - 24px)` coordinates and corner-pinned pseudo-elements (`top: 6px; left: 6px;`).
+   - They fluidly accommodate 16:9 widescreen, 4:3 retro, 21:9 ultrawide, and 9:16 vertical mobile layouts (TikTok / Shorts) without distorted chamfers or displaced brackets.
+
+3. **Polygonal Geometry Safety against `clip-path`**:
+   - When using angular polygonal shapes (`gamer_mecha`, `gamer_tactical_hud`), child elements must never use negative positioning (`top: -12px;`, `bottom: -36px;`).
+   - Always use inward positive insets (`top: 10px; left: 14px;`) or layout padding to guarantee full visibility.
+
+4. **On-Demand Non-Obtrusive Floating Panels**:
+   - Auxiliary floating panels (`oss-countdown-control`, `oss-speedrun-control`, `oss-brb-phrases-control`) start hidden (`display: none;`) to prevent obscuring side widgets (splits, pomodoro, notes).
+   - They toggle open and closed via HUD toolbar buttons (`⏱️ Timer`, `⚡ Splits`, `🔄 BRB Phrases`) or the top-right `✕` close button.
 
 ---
 
@@ -267,5 +342,20 @@ Including snapshots of `Cozy_LoFi_Pack`, `Gamer_Pro_Pack`, `Maker_Theme_Pack`, `
 The chat widget provides a dedicated profile manager under **🔗 Enlaces OBS por Estilo**:
 - Add separate Browser Source URLs in OBS Studio for different scenes using `?profile=<id>` (e.g. `?profile=cozy_lofi`, `?profile=gamer_pro`, `?profile=maker_glass`).
 - Any updates made in the visual editor synchronize reactively to OBS in real time.
+
+### 9.5. Universal Backdrop Aperture & Cutout Engine
+The `common/overlay/backdrop-aperture.js` module (`window.OSSAperture`) allows streaming scenes to display rich decorative backdrops (carbon fiber, botanical textures, gradient patterns, custom images) **without obscuring OBS capture layers** (facecams, game capture, screen shares):
+- **Dynamic SVG Mask**: Using `<mask id="oss-aperture-mask">`, the engine calculates in real time the bounding rects (`getBoundingClientRect`), corner radii (`border-radius`), and polygonal cutouts (`clip-path`) of all camera/game containers (`[data-cutout="true"]`, `[data-oss-cam]`).
+- **Per-Scene Persistence**: Backdrop selections are saved via `POST /api/themes/backdrop` and persisted in `themes_state.json` under `"backdrops"`.
+- **Live WebSocket Broadcast**: Selecting or resetting a backdrop in the floating HUD immediately broadcasts `overlay_backdrop_change` to all connected OBS Studio sources.
+
+### 9.6. Smart Auto Mode and Per-Scene Text Isolation (`customScenes`)
+1. **Smart `auto` Mode for Physical Shapes**:
+   - **Native Scene**: When an active theme belongs to the scene's native pack (e.g. Maker theme on Maker Desk), `auto` preserves the handcrafted original frame (`effectiveShape = 'original'`).
+   - **Cross-Pack Crossover**: When a cross-pack theme is applied (e.g. Gamer Pro theme on Maker Desk), `auto` adopts the signature archetype shape (`cozy_polaroid`, `gamer_mecha`, `maker_blueprint`, `openstream_glass`).
+2. **Surgical Per-Scene Text Isolation (`customScenes`)**:
+   - To prevent editing shared text keys (like `beRightBack.title` or `startingSoon.title`) from unintentionally modifying other packs, hot-edited texts from non-maker scenes are saved under `texts.customScenes[sceneKey][key]` in `overlay_texts_config.json`.
+   - `dom-injector.js` prioritizes scene-specific overrides before falling back to generic keys, providing complete text isolation and allowing individual scene text resets.
+
 
 

@@ -117,31 +117,48 @@
     }
   </style>
 </head>
-<body data-theme="latte_caramel">
+<body data-pack="Cozy_LoFi_Pack" data-scene="cozy_starting" data-theme="lavender_dream">
 
-  <div class="warm-card">
+  <div class="panel-card warm-card" data-oss-panel="true">
     <div class="steam-container">
       <span class="steam-vapor">♨️</span>
       <span>☕</span>
     </div>
 
-    <h1 class="main-stream-title">EMPEZAMOS EN BREVE</h1>
-    <p class="stream-subtitle">Preparando una taza caliente y encendiendo luces. Ponte cómodo ✨</p>
+    <h1 class="main-stream-title" data-text-key="startingSoon.title">EL STREAM EMPIEZA PRONTO</h1>
+    <p class="stream-subtitle" data-text-key="startingSoon.subtitle">Preparando una taza caliente y encendiendo luces. Ponte cómodo ✨</p>
 
-    <div class="starting-countdown">05:00</div>
+    <div class="starting-countdown" id="startingCountdown">05:00</div>
 
     <div class="cozy-progress-bar">
       <div class="cozy-progress-fill starting-progress-bar" id="startingProgressBar"></div>
     </div>
 
     <div class="social-pills-row">
-      <span class="social-pill">🟣 twitch.tv/tu_canal</span>
+      <span class="social-pill" data-text-key="channel.name">🟣 twitch.tv/andorina</span>
       <span class="social-pill">💬 discord.gg/comunidad</span>
-      <span class="social-pill">📷 @tu_canal</span>
+      <span class="social-pill" data-text-key="channel.tagline">✨ relax & chill</span>
     </div>
   </div>
 
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
+  <script>
+    (function() {
+      let totalSeconds = 300;
+      let remaining = totalSeconds;
+      const countEl = document.getElementById('startingCountdown');
+      const barEl = document.getElementById('startingProgressBar');
+      setInterval(() => {
+        if (remaining > 0) {
+          remaining--;
+          const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+          const s = String(remaining % 60).padStart(2, '0');
+          if (countEl) countEl.textContent = `${m}:${s}`;
+          if (barEl) barEl.style.width = `${((totalSeconds - remaining) / totalSeconds) * 100}%`;
+        }
+      }, 1000);
+    })();
+  </script>
 </body>
 </html>

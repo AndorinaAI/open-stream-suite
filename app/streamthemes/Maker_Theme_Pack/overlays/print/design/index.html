@@ -7,36 +7,37 @@
   <link rel="stylesheet" href="/common/themes.css">
   <link rel="stylesheet" href="/common/components.css">
 </head>
-<body data-mode="print">
+<body data-pack="Maker_Theme_Pack" data-scene="print-design" data-theme="print" data-mode="print">
   <div class="overlay-canvas">
 
     <!-- 1. Cabecera superior (Acento Naranja) -->
-    <header class="scene-header theme-orange">
+    <header class="header-bar scene-header theme-orange" data-oss-bar="top">
       <div class="header-left">
-        <div class="mode-badge badge-orange">
+        <div class="mode-badge badge-orange" data-oss-badge="true">
           <span data-icon="cutter"></span>
           <span>PRINT MODE</span>
         </div>
-        <div class="header-subtitle">DISEÑO VECTORIAL / INKSCAPE / PREPARACIÓN DE CORTE</div>
+        <div class="header-subtitle" data-text-key="print.material">DISEÑO VECTORIAL / INKSCAPE / PREPARACIÓN DE CORTE</div>
       </div>
       <div class="header-right">
         <div class="brand-badge">
           <div class="brand-icon-svg" data-icon="logo"></div>
           <div class="brand-info">
-            <span class="brand-name">ANDORINA</span>
-            <span class="brand-tagline">JUGAR · CREAR · TRASTEAR</span>
+            <span class="brand-name" data-text-key="channel.name">ANDORINA</span>
+            <span class="brand-tagline" data-text-key="channel.tagline">JUGAR · CREAR · TRASTEAR</span>
           </div>
         </div>
         <div class="live-indicator">
           <span class="live-dot"></span>
-          <span data-i18n="themes.live_indicator">EN DIRECTO</span>
+          <span data-i18n="themes.live_indicator" data-text-key="channel.liveText">EN DIRECTO</span>
         </div>
       </div>
     </header>
 
     <!-- 2. Vista Principal de Pantalla / Inkscape / Diseño (1376 x 774) -->
-    <div class="camera-frame camera-main theme-orange" style="top: 112px; left: 32px; width: 1376px; height: 774px;">
-      <div class="frame-label">
+    <div class="camera-frame camera-main theme-orange" data-oss-cam="true" style="top: 112px; left: 32px; width: 1376px; height: 774px;">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label frame-label" data-oss-cam-label="true" data-text-key="print.frames.aux">
         <span data-icon="cutter" style="width:12px;height:12px;display:flex;"></span>
         <span>CAPTURA DE DISEÑO VECTORIAL</span>
       </div>
@@ -46,8 +47,9 @@
     </div>
 
     <!-- 3. Vista de Rostro (456 x 257) -->
-    <div class="camera-frame camera-face theme-orange" style="top: 112px; left: 1432px; width: 456px; height: 257px;">
-      <div class="frame-label">
+    <div class="camera-frame camera-face theme-orange" data-oss-cam="true" style="top: 112px; left: 1432px; width: 456px; height: 257px;">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label frame-label" data-oss-cam-label="true" data-text-key="print.frames.face">
         <span data-i18n="themes.placeholder_cam_face">STREAMER</span>
       </div>
       <div class="frame-corner-tr"></div>
@@ -55,8 +57,9 @@
     </div>
 
     <!-- 4. Vista Auxiliar de Máquina / Plotter (456 x 257) -->
-    <div class="camera-frame camera-aux theme-orange" style="top: 389px; left: 1432px; width: 456px; height: 257px;">
-      <div class="frame-label">
+    <div class="camera-frame camera-aux theme-orange" data-oss-cam="true" style="top: 389px; left: 1432px; width: 456px; height: 257px;">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label frame-label" data-oss-cam-label="true" data-text-key="print.frames.main">
         <span>PLOTTER / ESTADO</span>
       </div>
       <div class="frame-corner-tr"></div>
@@ -64,32 +67,32 @@
     </div>
 
     <!-- 5. Panel Informativo Lateral -->
-    <aside class="side-info-panel" style="top: 666px; left: 1432px; width: 456px; height: 220px; border-left: 3px solid var(--color-accent-orange);">
+    <aside class="panel-card side-info-panel" data-oss-panel="true" style="top: 666px; left: 1432px; width: 456px; height: 220px; border-left: 3px solid var(--color-accent-orange);">
       <div class="panel-header">
-        <span class="panel-title">DISEÑO Y PREPARACIÓN</span>
+        <span class="panel-title" data-text-key="print.panelTitle">DISEÑO Y PREPARACIÓN</span>
         <span style="font-family: var(--font-tech); font-size: 10px; color: var(--color-accent-orange);">VECTOR SVG</span>
       </div>
       <div class="panel-body">
         <div class="info-row">
           <span class="info-label">PROYECTO DE DISEÑO</span>
-          <span class="info-value highlight-orange panel-project-name">PEGATINAS PERSONALIZADAS</span>
+          <span class="info-value highlight-orange panel-project-name" data-text-key="print.projectName">PEGATINAS PERSONALIZADAS</span>
         </div>
         <div class="info-row">
           <span class="info-label">FASE ACTUAL</span>
-          <span class="info-value panel-project-phase">01 DISEÑO</span>
+          <span class="info-value panel-project-phase" data-text-key="print.currentPhase">01 DISEÑO</span>
         </div>
         <div class="info-row">
           <span class="info-label">SOFTWARE / TIPO</span>
-          <span class="info-value panel-project-detail" style="font-size: 11px; color: var(--color-text-dim);">Inkscape · Trazado vectorial & Marcas de corte</span>
+          <span class="info-value panel-project-detail" style="font-size: 11px; color: var(--color-text-dim);" data-text-key="print.material">Inkscape · Trazado vectorial & Marcas de corte</span>
         </div>
       </div>
     </aside>
 
     <!-- 6. Banda de Proyecto Inferior -->
-    <footer class="bottom-project-bar theme-orange" style="top: 906px; left: 32px; width: 1376px; height: 54px;">
+    <footer class="footer-bar bottom-project-bar theme-orange" data-oss-bar="bottom" style="top: 906px; left: 32px; width: 1376px; height: 54px;">
       <div class="project-title-group">
-        <span class="project-prefix">DISEÑO:</span>
-        <span class="project-name-value">PEGATINAS PERSONALIZADAS</span>
+        <span class="project-prefix" data-text-key="print.projectPrefix">DISEÑO:</span>
+        <span class="project-name-value" data-text-key="print.projectName">PEGATINAS PERSONALIZADAS</span>
       </div>
       <div class="project-phases">
         <div class="phase-item active">01 DISEÑO</div>

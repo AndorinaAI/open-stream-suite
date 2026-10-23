@@ -5,7 +5,7 @@ y aplicar estilos en lote (batch styling) a los overlays de cada fusión.
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from server.config import BASE_DIR, logger
 from server.services.theme_service import set_overlay_theme_service
@@ -79,7 +79,7 @@ def create_or_update_fusion(data: dict) -> dict:
 
     if not fusion_id:
         # Generar un ID único basado en timestamp
-        timestamp = int(datetime.utcnow().timestamp())
+        timestamp = int(datetime.now(timezone.utc).timestamp())
         slug = "".join(c if c.isalnum() else "_" for c in name.lower())[:20].strip("_")
         fusion_id = f"fusion_{slug}_{timestamp}"
 
@@ -96,7 +96,8 @@ def create_or_update_fusion(data: dict) -> dict:
         "description": str(data.get("description", "")).strip() or "Fusión personalizada de overlays para streaming.",
         "scenes": clean_scenes,
         "defaultTheme": str(data.get("defaultTheme", "maker")).strip() or "maker",
-        "updatedAt": datetime.utcnow().isoformat() + "Z"
+        "defaultShape": str(data.get("defaultShape", "original")).strip() or "original",
+        "updatedAt": datetime.now(timezone.utc).isoformat()
     }
 
     existing_idx = None

@@ -30,11 +30,12 @@
     "cozy_cafe": "matcha_bamboo",
     "cozy_starting": "lavender_dream",
     "cozy_brb": "latte_caramel",
-    "cozy_ending": "nordic_twilight"
+    "cozy_ending": "nordic_twilight",
+    "starting": "ambient"
   },
   "overlayShapes": {
-    "oss_chatting": "cozy",
-    "cozy_brb": "cozy",
-    "gamer_victory": "cozy"
-  }
+    "starting": "fantasy_parchment",
+    "game": "gamer_mecha"
+  },
+  "backdrops": {}
 }

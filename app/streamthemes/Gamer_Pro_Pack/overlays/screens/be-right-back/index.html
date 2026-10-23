@@ -121,11 +121,11 @@
     }
   </style>
 </head>
-<body data-theme="crimson_esport">
+<body data-pack="Gamer_Pro_Pack" data-scene="gamer_brb" data-theme="stealth_mono">
   <!-- Top Bar -->
-  <header class="timeout-top-bar">
+  <header class="header-bar timeout-top-bar" data-oss-bar="top">
     <div style="display:flex; align-items:center; gap:14px;">
-      <div class="timeout-badge">TACTICAL TIMEOUT</div>
+      <div class="mode-badge timeout-badge" data-oss-badge="true" data-text-key="beRightBack.badgeText">TACTICAL TIMEOUT</div>
       <div style="font-size:12px; font-weight:700; color:#cbd5e1;">HALFTIME // PAUSA TÁCTICA DEL EQUIPO</div>
     </div>
     <div style="font-size:12px; font-weight:700; color:var(--color-accent-cyan, #57d6c4);">
@@ -135,12 +135,12 @@
 
   <!-- Main Stage -->
   <main class="timeout-center-stage">
-    <div class="timeout-card">
+    <div class="panel-card timeout-card" data-oss-panel="true">
       <div class="corner-reticle" style="top:12px; left:14px;">[+]</div>
       <div class="corner-reticle" style="bottom:12px; right:14px;">[+]</div>
       <div class="timeout-header-tag">// TIEMPO MUERTO SOLICITADO</div>
-      <h1 class="main-stream-title">PAUSA TÁCTICA</h1>
-      <p class="stream-subtitle brb-status-phrase">RECARGANDO ENERGÍA Y AJUSTANDO LA ESTRATEGIA...</p>
+      <h1 class="main-stream-title" data-text-key="beRightBack.title">PAUSA TÁCTICA</h1>
+      <p class="stream-subtitle brb-status-phrase" data-text-key="beRightBack.subtitle">RECARGANDO ENERGÍA Y AJUSTANDO LA ESTRATEGIA...</p>
 
       <div class="halftime-scoreboard">
         <div>
@@ -157,9 +157,9 @@
   </main>
 
   <!-- Bottom Bar -->
-  <footer class="timeout-bottom-bar">
-    <div>SISTEMA DE PARTIDA COMPETITIVA // SPRINT FINAL</div>
-    <div>SÍGUENOS: <strong style="color:#f1f5f9;">@ProGamerLive</strong> · CHAT ACTIVO</div>
+  <footer class="footer-bar timeout-bottom-bar" data-oss-bar="bottom">
+    <div data-text-key="channel.tagline">SISTEMA DE PARTIDA COMPETITIVA // SPRINT FINAL</div>
+    <div>SÍGUENOS: <strong style="color:#f1f5f9;" data-text-key="channel.name">@andorina</strong> · CHAT ACTIVO</div>
   </footer>
 
   <script src="/config.js"></script>

@@ -87,7 +87,7 @@
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 1.5px;
-      color: #38bdf8;
+      color: var(--color-accent-cyan, #38bdf8);
       text-transform: uppercase;
       margin-bottom: 10px;
     }
@@ -108,7 +108,7 @@
       font-size: 72px;
       font-weight: 900;
       font-family: monospace;
-      color: #38bdf8;
+      color: var(--color-accent-cyan, #38bdf8);
       letter-spacing: 4px;
       margin-bottom: 14px;
     }
@@ -122,7 +122,7 @@
     .broadcast-progress-fill {
       height: 100%;
       width: 60%;
-      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      background: linear-gradient(90deg, #0284c7, var(--color-accent-cyan, #38bdf8));
       border-radius: 4px;
       transition: width 1s linear;
     }
@@ -157,7 +157,7 @@
     }
     .agenda-num {
       background: rgba(56, 189, 248, 0.15);
-      color: #38bdf8;
+      color: var(--color-accent-cyan, #38bdf8);
       border: 1px solid rgba(56, 189, 248, 0.3);
       padding: 2px 8px;
       border-radius: 4px;
@@ -178,7 +178,7 @@
       gap: 20px;
     }
     .ticker-tag {
-      background: #0284c7;
+      background: var(--color-accent-cyan, #0284c7);
       color: #fff;
       font-size: 11px;
       font-weight: 900;
@@ -194,15 +194,15 @@
     }
   </style>
 </head>
-<body data-theme="neon_streamer">
+<body data-pack="Open_stream_Pack" data-scene="oss_starting" data-theme="crimson_pulse">
   <!-- Swiss Broadcast Header -->
-  <header class="broadcast-header">
+  <header class="header-bar broadcast-header" data-oss-bar="top">
     <div class="broadcast-brand">
-      <div class="prep-pill">
+      <div class="mode-badge prep-pill" data-oss-badge="true">
         <span class="prep-dot"></span>
-        <span>STANDBY // CONTROL DE EMISIÓN</span>
+        <span data-text-key="startingSoon.liveStatusText">STANDBY // CONTROL DE EMISIÓN</span>
       </div>
-      <div class="channel-title">OPEN STREAM STUDIO CENTRAL</div>
+      <div class="channel-title" data-text-key="channel.name">OPEN STREAM STUDIO CENTRAL</div>
     </div>
     <div style="font-size:12px; font-weight:600; color:#94a3b8; font-family:monospace;">
       FEED: STUDIO MASTER 1080p60 · SEÑAL TEST OK
@@ -211,18 +211,18 @@
 
   <!-- Studio Stage -->
   <main class="studio-stage">
-    <div class="studio-hero-card">
-      <div class="tagline-pill">PROGRAMACIÓN EN DIRECTO</div>
-      <h1 class="main-stream-title">EMPEZAMOS EN BREVE</h1>
-      <p class="stream-subtitle">Ajustando niveles de audio y enlaces de emisión con los invitados.</p>
-      <div class="starting-countdown">05:00</div>
+    <div class="panel-card studio-hero-card" data-oss-panel="true">
+      <div class="tagline-pill" data-text-key="startingSoon.badgeText">PROGRAMACIÓN EN DIRECTO</div>
+      <h1 class="main-stream-title" data-text-key="startingSoon.title">EMPEZAMOS EN BREVE</h1>
+      <p class="stream-subtitle" data-text-key="startingSoon.subtitle">Ajustando niveles de audio y enlaces de emisión con los invitados.</p>
+      <div class="starting-countdown" id="ossCountdown">05:00</div>
       <div class="broadcast-progress-bar">
-        <div class="broadcast-progress-fill"></div>
+        <div class="broadcast-progress-fill" id="ossProgressBar"></div>
       </div>
     </div>
 
     <!-- Agenda Preview Card -->
-    <aside class="studio-side-card">
+    <aside class="panel-card studio-side-card" data-oss-panel="true">
       <div class="side-card-title">ÍNDICE DE LA TRANSMISIÓN</div>
       <div class="agenda-row">
         <span class="agenda-num">01</span>
@@ -240,17 +240,34 @@
   </main>
 
   <!-- Broadcast Lower-Third Ticker -->
-  <footer class="broadcast-lower-third">
+  <footer class="footer-bar broadcast-lower-third" data-oss-bar="bottom">
     <div class="ticker-tag">AVISO</div>
-    <div class="ticker-text">
+    <div class="ticker-text" data-text-key="channel.tagline">
       Comprueba el volumen de tus auriculares · El chat ya se encuentra activo para los espectadores
     </div>
     <div style="font-size:13px; font-weight:600; color:#94a3b8;">
-      CANAL: <strong style="color:#f8fafc;">@CanalOficial</strong>
+      CANAL: <strong style="color:#f8fafc;" data-text-key="channel.name">@andorina</strong>
     </div>
   </footer>
 
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
+  <script>
+    (function() {
+      let totalSeconds = 300;
+      let remaining = totalSeconds;
+      const countEl = document.getElementById('ossCountdown');
+      const barEl = document.getElementById('ossProgressBar');
+      setInterval(() => {
+        if (remaining > 0) {
+          remaining--;
+          const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+          const s = String(remaining % 60).padStart(2, '0');
+          if (countEl) countEl.textContent = `${m}:${s}`;
+          if (barEl) barEl.style.width = `${((totalSeconds - remaining) / totalSeconds) * 100}%`;
+        }
+      }, 1000);
+    })();
+  </script>
 </body>
 </html>

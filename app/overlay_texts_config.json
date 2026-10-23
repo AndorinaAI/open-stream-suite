@@ -53,7 +53,7 @@
   },
   "maker": {
     "projectName": "SUPER ESTACION MAKER 2026",
-    "currentPhase": "04 PRUEBAS",
+    "currentPhase": "02 MONTAJE",
     "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "panelTitle": "ESTADO DEL PROYECTO",
     "projectPrefix": "PROYECTO:",
@@ -155,9 +155,40 @@
   },
   "pomodoro": {
     "taskName": "SESIÓN DE CONCENTRACIÓN & ESTUDIO",
+    "panelTitle": "OBJETIVOS DE LA SESIÓN",
     "focusSeconds": 1500,
     "shortBreakSeconds": 300,
     "longBreakSeconds": 900
+  },
+  "victory": {
+    "title": "VICTORIA & CLUTCH CHAMPION",
+    "subtitle": "⚡ 1v4 CLUTCH CONQUERED · MATCH MVP",
+    "camLabel": "CHAMPION // REACTION FEED"
+  },
+  "art": {
+    "canvasLabel": "🎨 LIENZO CREATIVO · ILUSTRACIÓN",
+    "faceLabel": "✨ CREADOR // STREAM ✨",
+    "panelTitle": "DETALLES DE LA ILUSTRACIÓN",
+    "projectName": "Ilustración Digital — 'Tarde de Té'",
+    "currentPhase": "Lineart final & coloreado base",
+    "detail": "Tableta Gráfica · Pincel Óleo 4K · Paleta Pastel"
+  },
+  "speedrun": {
+    "game": "ELDEN RING // ANY% GLITCHLESS",
+    "category": "GLITCHLESS · CURRENT RECORD ATTEMPT",
+    "runnerCam": "RUNNER CAM // LIVE"
+  },
+  "oss": {
+    "mainCamLabel": "CÁMARA PRINCIPAL // HOST",
+    "newsHeadline": "Abriendo debate en directo con el chat · Opiniones, actualidad y reflexiones",
+    "podcastHost": "HOST // PRESENTADOR",
+    "podcastGuest": "INVITADO // CO-HOST",
+    "desktopCam": "STREAMER // PRESENTADOR"
+  },
+  "cozy": {
+    "cafeCamLabel": "☕ Café & Charla Tranquila",
+    "chatTitle": "💬 Rincón del Café",
+    "studyCamLabel": "📖 MESA DE ESTUDIO · STREAM"
   },
   "performance": {
     "enableAnimations": true

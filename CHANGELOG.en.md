@@ -6,7 +6,27 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] — 2026-10-21
+## [1.0.1-alpha] — 2026-10-23
+
+### Fixed — Architectural Audit and Critical Fixes
+- **Server WebSocket (NameError)**: Resolved critical error caused by uninitialized `data` variable in `app/server/routes/ws_routes.py`. Incoming WebSocket text messages are now safely parsed without breaking the connection.
+- **Theme State & Scene Assignment Persistence**: `save_theme_state()` now safely merges the existing state in `themes_state.json`, preventing accidental wipeouts of scene assignments (`overlayThemes`, `overlayShapes`, and `backdrops`) when applying global packs or shapes.
+- **Overlay HUD Local Authentication**: Added missing `X-Local-Token` header in all POST requests for theme and shape assignments and text resets from the HUD (`04-phrases-theme.js` and `05-inline-editor.js`), resolving silent 403 Forbidden errors.
+- **Quick Test Buttons in Control Panel**: Implemented and globally exposed in `api.js` the functions `sendAlertTest`, `sendCustomAlertTest`, and `syncGoalWithTwitch`, eliminating console `ReferenceError`s.
+- **Physical Shapes in Fusions**: Added persistence in backend (`fusions_service.py`) for `defaultShape`, and integrated the shape selector into the Fusion editor modal in `panel.html` and `13-fusions.js`.
+- **Live Shape Preservation**: `overlay.js` preserves active physical shapes (`activeShape`) upon receiving WebSocket events `theme_change` and `overlay_theme_change`, preventing global theme color changes from resetting shapes back to `original`.
+- **Persistent Backdrop Aperture Engine**: Created endpoint `POST /api/themes/backdrop` and persistence service for the SVG cutout backdrop engine `window.OSSAperture`, with real-time WebSocket sync via `overlay_backdrop_change`.
+- **Per-Scene Text Isolation**: `collectSceneTexts` and `dom-injector.js` isolate non-maker custom scene text modifications under `customScenes[sceneKey]`, preventing cross-pack collisions on shared keys (`beRightBack.title`, etc.).
+- **Surgical Text Restoration**: Updated `restoreSceneTexts` and `OverlayTexts.reset` to forward `sceneKey`, resetting only the chosen scene's texts without wiping the entire stream.
+- **Active Design Tokens**: Connected `--theme-glow`, `--panel-radius`, and `--panel-clip-path` in `common/styles.css` for active rendering on camera frames and panels in OBS.
+- **Synchronization of overlay_texts_config.en.json**: Filled the 18 missing English keys and added support for serving localized texts via `?lang=en`.
+- **Cozy Lo-Fi Pack Palette Synchronization**: Synchronized all 6 color values (`accentCyan`, `accentOrange`, `bgDark`, `panelBg`, `textDim`, `textLight`) in `theme.json` and `theme.default.json` for all 5 Cozy themes to match their actual CSS.
+- **Cleaned Legacy Ghost Defaults & Orphan Keys**: Replaced ghost defaults (`pack_open_stream_suite`, `maker_electronico`) with canonical IDs (`Maker_Theme_Pack`, `maker`), and cleaned orphan entries in `themes_state.json`.
+- **Scene Modal Shape Selector**: Added physical frame shape selector to the scene editor modal in `panel.html` and wired it in `11-scene-editor.js`.
+- **Internationalization & UI Texts**: Updated prompts to reflect the full catalog of 27 scenes, and added missing i18n keys in `es.json` and `en.json`.
+- **Python 3.12 Compatibility**: Replaced deprecated `datetime.utcnow()` with `datetime.now(timezone.utc)`.
+
+## [1.0.0-alpha] — 2026-10-21
 
 ### Changed — Comprehensive Modular Architecture Refactor
 - **Modular Backend (`app/server/`)**: Routes completely decoupled into `server/routes/` and business logic into `server/services/`, with transparent backward-compatibility re-exports in `server/*.py`.

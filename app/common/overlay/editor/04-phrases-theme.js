@@ -9,8 +9,7 @@ window.OSSEditor = window.OSSEditor || {};
   function isBrbScene(sceneKey) {
     return ['beRightBack', 'oss_brb', 'gamer_brb', 'cozy_brb'].includes(sceneKey)
       || window.location.pathname.includes('/be-right-back/')
-      || window.location.pathname.includes('/coffee-break/')
-      || document.querySelector('.brb-status-phrase') !== null;
+      || document.querySelector('.brb-status-phrase, .brb-container, [data-brb="true"]') !== null;
   }
 
   function setupPhrases(sceneKey) {
@@ -25,14 +24,15 @@ window.OSSEditor = window.OSSEditor || {};
       border: 1px solid rgba(87,214,196,0.45); border-radius: 8px;
       padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
       font-size: 11px; color: #F0F6FC; box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(87,214,196,0.15);
-      display: flex; flex-direction: column; gap: 10px; width: 260px;
+      display: none; flex-direction: column; gap: 10px; width: 260px;
     `;
     phrasesControl.innerHTML = `
       <div class="hud-drag-handle" style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center; cursor:grab;" title="Arrastra desde aquí para mover este menú">
         <span>🔄 FRASES EN ROTACIÓN</span>
-        <span style="display:flex; align-items:center; gap:4px;">
+        <span style="display:flex; align-items:center; gap:6px;">
           <span id="oss-brb-phrase-counter" style="font-size:10px; color:#8B949E;">1 / 1</span>
           <span style="color:#6E7681; font-size:11px;">⋮⋮</span>
+          <button type="button" id="oss-brb-close" style="background:none; border:none; color:#8B949E; cursor:pointer; font-size:12px; padding:0 2px; line-height:1;" title="Cerrar panel">✕</button>
         </span>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
@@ -171,6 +171,10 @@ window.OSSEditor = window.OSSEditor || {};
       }
     });
 
+    document.getElementById('oss-brb-close')?.addEventListener('click', () => {
+      phrasesControl.style.display = 'none';
+    });
+
     if (window.OSSEditor.makeDraggable) {
       window.OSSEditor.makeDraggable(phrasesControl, '.hud-drag-handle');
     }
@@ -183,12 +187,81 @@ window.OSSEditor = window.OSSEditor || {};
     const themeSelect = hud.querySelector('#hud-theme-select');
     if (!themeSelect) return;
 
-    function getDefaultThemeForScene() {
+    const DEFAULT_OVERLAY_THEMES = window.__DEFAULT_OVERLAY_THEMES || {
+      'game': 'cyberpunk',
+      'maker': 'maker',
+      'maker-desk': 'maker',
+      'maker-pc': 'terminal',
+      'print': 'print',
+      'print-machine': 'print',
+      'print-design': 'print',
+      'chill': 'chill',
+      'startingSoon': 'synthwave',
+      'beRightBack': 'synthwave',
+      'ending': 'synthwave',
+      'oss_chatting': 'neon_streamer',
+      'oss_desktop': 'clean_minimal',
+      'oss_podcast': 'sunset_glow',
+      'oss_starting': 'crimson_pulse',
+      'oss_brb': 'emerald_matrix',
+      'oss_ending': 'neon_streamer',
+      'gamer_gameplay': 'cyber_glitch',
+      'gamer_speedrun': 'toxic_rad',
+      'gamer_victory': 'golden_glory',
+      'gamer_starting': 'crimson_esport',
+      'gamer_brb': 'stealth_mono',
+      'gamer_ending': 'golden_glory',
+      'cozy_pomodoro': 'latte_caramel',
+      'cozy_art': 'sakura_sunset',
+      'cozy_cafe': 'matcha_bamboo',
+      'cozy_starting': 'lavender_dream',
+      'cozy_brb': 'latte_caramel',
+      'cozy_ending': 'nordic_twilight'
+    };
+
+    function getDefaultThemeForScene(k) {
+      const sk = k || sceneKey || (typeof detectCurrentSceneKey === 'function' ? detectCurrentSceneKey() : null) || document.body.dataset.scene;
+      if (sk && DEFAULT_OVERLAY_THEMES[sk]) return DEFAULT_OVERLAY_THEMES[sk];
       const p = (document.body.dataset.pack || '').toLowerCase();
       if (p.includes('cozy')) return 'latte_caramel';
       if (p.includes('gamer')) return 'cyber_glitch';
       if (p.includes('openstream') || p.includes('open_stream')) return 'neon_streamer';
       return 'maker';
+    }
+
+    async function getLocalToken() {
+      if (window.__LOCAL_AUTH_TOKEN__) return window.__LOCAL_AUTH_TOKEN__;
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('local_auth_token')) {
+        return localStorage.getItem('local_auth_token');
+      }
+      try {
+        const r = await fetch('/api/local-token');
+        if (r.ok) {
+          const d = await r.json();
+          if (d.token) {
+            window.__LOCAL_AUTH_TOKEN__ = d.token;
+            if (typeof localStorage !== 'undefined') localStorage.setItem('local_auth_token', d.token);
+            return d.token;
+          }
+        }
+      } catch (e) {}
+      return '';
+    }
+    if (window.OSSEditor) window.OSSEditor.getLocalToken = getLocalToken;
+
+    async function postOverlayAssignment(payload) {
+      try {
+        const token = await getLocalToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['X-Local-Token'] = token;
+        return await fetch('/api/themes/overlay-assignment', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(payload)
+        });
+      } catch (e) {
+        console.warn('Error en postOverlayAssignment:', e);
+      }
     }
 
     const currentUrl = new URL(window.location.href);
@@ -206,16 +279,15 @@ window.OSSEditor = window.OSSEditor || {};
         if (selectedShape === 'auto') {
           url.searchParams.delete('shape');
           window.history.replaceState({}, '', url.toString());
-          const curTheme = themeSelect ? themeSelect.value : document.body.getAttribute('data-theme');
-          if (typeof window.applyActiveThemeToBody === 'function') {
-            window.applyActiveThemeToBody(curTheme, true);
+          let curTheme = themeSelect ? themeSelect.value : document.body.getAttribute('data-theme');
+          if (curTheme === '__default__') curTheme = getDefaultThemeForScene(sceneKey);
+          if (typeof window.updateOverlayThemeAndShape === 'function') {
+            window.updateOverlayThemeAndShape(curTheme, 'auto');
+          } else if (typeof window.applyActiveShapeToBody === 'function') {
+            window.applyActiveShapeToBody('auto');
           }
           if (sceneKey) {
-            fetch('/api/themes/overlay-assignment', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ overlayKey: sceneKey, shapeId: null })
-            }).catch(() => {});
+            postOverlayAssignment({ overlayKey: sceneKey, shapeId: 'auto' });
           }
           window.OSSEditor.showHudToast(`⚡ Forma sincronizada automáticamente con el tema`);
           return;
@@ -228,18 +300,16 @@ window.OSSEditor = window.OSSEditor || {};
         }
         window.history.replaceState({}, '', url.toString());
 
-        if (typeof window.applyActiveShapeToBody === 'function') {
+        let curTheme = themeSelect ? themeSelect.value : document.body.getAttribute('data-theme');
+        if (curTheme === '__default__') curTheme = getDefaultThemeForScene(sceneKey);
+        if (typeof window.updateOverlayThemeAndShape === 'function') {
+          window.updateOverlayThemeAndShape(curTheme, selectedShape);
+        } else if (typeof window.applyActiveShapeToBody === 'function') {
           window.applyActiveShapeToBody(selectedShape);
-        } else {
-          document.body.setAttribute('data-theme-archetype', selectedShape);
         }
 
         if (sceneKey) {
-          fetch('/api/themes/overlay-assignment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ overlayKey: sceneKey, shapeId: selectedShape })
-          }).catch(() => {});
+          postOverlayAssignment({ overlayKey: sceneKey, shapeId: selectedShape });
         }
 
         window.OSSEditor.showHudToast(`📐 Forma de escena cambiada a: ${selectedShape}`);
@@ -272,18 +342,95 @@ window.OSSEditor = window.OSSEditor || {};
           const url = new URL(window.location.href);
           const currentShape = url.searchParams.get('shape') || (data.overlayShapes && sceneKey && data.overlayShapes[sceneKey]) || 'auto';
 
-          let shapeHtml = `<option value="auto">⚡ Forma: Automática (según estilo)</option><option value="original">📐 Forma: Original del Pack</option>`;
-          data.packs.forEach(p => {
-            if (p.shapes && p.shapes.length > 0) {
-              shapeHtml += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
-              p.shapes.forEach(s => {
-                const shapeVal = s.archetype || s.id;
-                const isSel = (shapeVal === currentShape || s.id === currentShape);
-                shapeHtml += `<option value="${shapeVal}" ${isSel ? 'selected' : ''}>${s.icon || '📐'} ${s.name}</option>`;
-              });
-              shapeHtml += `</optgroup>`;
+          const STANDARD_SHAPE_GROUPS = [
+            {
+              name: '☕ Cozy Lo-Fi & Arte',
+              shapes: [
+                { id: 'cozy_polaroid', name: 'Polaroid Clásica Cálida', icon: '📸' },
+                { id: 'cozy_canvas', name: 'Lienzo Artístico & Washitape', icon: '🎨' },
+                { id: 'cozy_soft', name: 'Píldora Soft Minimal', icon: '☁️' }
+              ]
+            },
+            {
+              name: '🎮 Gamer Pro & Esports',
+              shapes: [
+                { id: 'gamer_mecha', name: 'Mecha Tournament 45°', icon: '🎮' },
+                { id: 'gamer_tactical_hud', name: 'Tactical FPS HUD', icon: '🎯' },
+                { id: 'gamer_stealth', name: 'Stealth Dark Cyber', icon: '🕶️' },
+                { id: 'gamer_hex_shield', name: 'Hex Shield Blindaje', icon: '🛡️' },
+                { id: 'gamer_cyber_glitch', name: 'Cyber Glitch Neón', icon: '⚡' },
+                { id: 'gamer_arcade_retro', name: 'Arcade 8-Bit Pixel', icon: '👾' }
+              ]
+            },
+            {
+              name: '🛠️ Maker & Taller',
+              shapes: [
+                { id: 'maker_blueprint', name: 'Blueprint Técnico CAD', icon: '🛠️' },
+                { id: 'maker_workbench', name: 'Banco de Trabajo Studio', icon: '📐' },
+                { id: 'maker_circuit_pcb', name: 'Placa de Circuito PCB', icon: '📟' }
+              ]
+            },
+            {
+              name: '⚡ Open Stream Suite',
+              shapes: [
+                { id: 'openstream_glass', name: 'Swiss Frosted Glass', icon: '⚡' },
+                { id: 'openstream_studio', name: 'Broadcast Pro Studio', icon: '🎙️' }
+              ]
+            },
+            {
+              name: '📜 Fantasía, Rol & Terror',
+              shapes: [
+                { id: 'fantasy_parchment', name: 'Pergamino Rol & Sello Cera', icon: '📜' },
+                { id: 'fantasy_runic_stone', name: 'Piedra Rúnica Mística', icon: '🗿' },
+                { id: 'gothic_vampire', name: 'Gótico Victoriano Dark', icon: '🦇' }
+              ]
+            },
+            {
+              name: '💥 Cómic, Pop Art & Retro TV',
+              shapes: [
+                { id: 'comic_manga_action', name: 'Manga / Shonen Comic', icon: '💥' },
+                { id: 'pop_synth_neon', name: 'Synthwave 80s Grid', icon: '🌆' },
+                { id: 'vintage_crt_monitor', name: 'Monitor CRT Retro 90s', icon: '📺' }
+              ]
             }
+          ];
+
+          // Base estándar completa con las 20 formas físicas de Open Stream Suite
+          const knownShapeIds = new Set();
+          STANDARD_SHAPE_GROUPS.forEach(g => g.shapes.forEach(s => knownShapeIds.add(s.id)));
+
+          const extraPackShapes = [];
+          if (Array.isArray(data.packs)) {
+            data.packs.forEach(p => {
+              if (Array.isArray(p.shapes)) {
+                p.shapes.forEach(s => {
+                  if (!knownShapeIds.has(s.id)) {
+                    extraPackShapes.push(s);
+                    knownShapeIds.add(s.id);
+                  }
+                });
+              }
+            });
+          }
+
+          const groups = [...STANDARD_SHAPE_GROUPS];
+          if (extraPackShapes.length > 0) {
+            groups.push({
+              name: '✨ Formas Personalizadas de Packs',
+              shapes: extraPackShapes
+            });
+          }
+
+          let shapeHtml = `<option value="auto">⚡ Forma: Automática (según estilo)</option><option value="original">📐 Forma: Original del Pack</option>`;
+          groups.forEach(g => {
+            shapeHtml += `<optgroup label="${g.name}">`;
+            g.shapes.forEach(s => {
+              const isSel = (s.id === currentShape);
+              shapeHtml += `<option value="${s.id}" ${isSel ? 'selected' : ''}>${s.icon || '📐'} ${s.name}</option>`;
+            });
+            shapeHtml += `</optgroup>`;
           });
+
           shapeSelect.innerHTML = shapeHtml;
           shapeSelect.value = currentShape;
         }
@@ -308,11 +455,7 @@ window.OSSEditor = window.OSSEditor || {};
         }
 
         if (sceneKey) {
-          fetch('/api/themes/overlay-assignment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ overlayKey: sceneKey, themeId: selected })
-          }).catch(() => {});
+          postOverlayAssignment({ overlayKey: sceneKey, themeId: selected });
         }
 
         themeSelect.value = selected;
@@ -330,11 +473,7 @@ window.OSSEditor = window.OSSEditor || {};
       }
 
       if (sceneKey) {
-        fetch('/api/themes/overlay-assignment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ overlayKey: sceneKey, themeId: selected })
-        }).catch(() => {});
+        postOverlayAssignment({ overlayKey: sceneKey, themeId: selected });
       }
 
       window.OSSEditor.showHudToast(`🎨 Color cambiado a: ${selected}`);
@@ -378,6 +517,49 @@ window.OSSEditor = window.OSSEditor || {};
         } else {
           prompt('Copia este enlace limpio para OBS:', cleanUrl);
         }
+      });
+    }
+
+    // 5. Botón Universal de Restaurar Estilo y Formas Originales
+    const btnResetStyle = hud.querySelector('#hud-btn-reset-style');
+    if (btnResetStyle && !btnResetStyle.dataset.bound) {
+      btnResetStyle.dataset.bound = 'true';
+      btnResetStyle.addEventListener('click', async () => {
+        const defaultTheme = getDefaultThemeForScene(sceneKey);
+
+        // 1. Limpiar query params de la URL para que no fuercen tema o forma
+        const url = new URL(window.location.href);
+        url.searchParams.delete('theme');
+        url.searchParams.delete('shape');
+        window.history.replaceState({}, '', url.toString());
+
+        // 2. Restablecer controles select del HUD
+        if (themeSelect) {
+          themeSelect.value = defaultTheme;
+          if (!themeSelect.value) themeSelect.value = '__default__';
+        }
+        if (shapeSelect) {
+          shapeSelect.value = 'auto';
+          if (!shapeSelect.value) shapeSelect.value = 'original';
+        }
+
+        // 3. Aplicar tema y forma original nativa al DOM de inmediato
+        if (typeof window.updateOverlayThemeAndShape === 'function') {
+          window.updateOverlayThemeAndShape(defaultTheme, 'auto');
+        } else if (typeof window.applyActiveThemeToBody === 'function') {
+          window.applyActiveThemeToBody(defaultTheme, true);
+        }
+
+        // 4. Persistir la restauración en el backend (elimina forma forzada y restaura color)
+        if (sceneKey) {
+          await postOverlayAssignment({
+            overlayKey: sceneKey,
+            themeId: defaultTheme,
+            shapeId: 'auto'
+          });
+        }
+
+        window.OSSEditor.showHudToast(`↺ Estilo original restaurado: Tema "${defaultTheme}" y forma nativa`);
       });
     }
   }
@@ -555,8 +737,16 @@ window.OSSEditor = window.OSSEditor || {};
     }
   }
 
+  function togglePhrases() {
+    const el = document.getElementById('oss-brb-phrases-control');
+    if (!el) return;
+    const isHidden = el.style.display === 'none' || getComputedStyle(el).display === 'none';
+    el.style.display = isHidden ? 'flex' : 'none';
+  }
+
   window.OSSEditor.isBrbScene = isBrbScene;
   window.OSSEditor.setupPhrases = setupPhrases;
+  window.OSSEditor.togglePhrases = togglePhrases;
   window.OSSEditor.setupThemeSelector = setupThemeSelector;
   window.OSSEditor.setupPhasesAndPodcast = setupPhasesAndPodcast;
   window.OSSEditor.activatePhase = activatePhase;

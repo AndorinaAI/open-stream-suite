@@ -345,18 +345,24 @@ Crea la carpeta `scenes/entrevista/` y dentro el archivo `index.html`:
       </div>
     </header>
 
-    <!-- Marcos de las 2 Cámaras -->
+    <!-- Marcos de las 2 Cámaras con Atributos Semánticos Universales -->
     <div class="interview-grid">
       <!-- Marco 1: Streamer -->
-      <div class="camera-frame cam-box">
-        <div class="frame-label"><span>HOST // ANDORINA</span></div>
+      <div class="camera-frame cam-box" data-oss-cam="true">
+        <div class="cam-viewport" data-oss-viewport="true"></div>
+        <div class="frame-label" data-oss-cam-label="true">
+          <span data-text-key="interview.hostLabel">HOST // ANDORINA</span>
+        </div>
         <div class="frame-corner-tr"></div>
         <div class="frame-corner-bl"></div>
       </div>
 
       <!-- Marco 2: Invitado -->
-      <div class="camera-frame cam-box">
-        <div class="frame-label"><span>INVITADO ESPECIAL</span></div>
+      <div class="camera-frame cam-box" data-oss-cam="true">
+        <div class="cam-viewport" data-oss-viewport="true"></div>
+        <div class="frame-label" data-oss-cam-label="true">
+          <span data-text-key="interview.guestLabel">INVITADO ESPECIAL</span>
+        </div>
         <div class="frame-corner-tr"></div>
         <div class="frame-corner-bl"></div>
       </div>
@@ -374,8 +380,100 @@ Crea la carpeta `scenes/entrevista/` y dentro el archivo `index.html`:
 ### ¿Por qué funciona mágicamente?
 - **Iconos automáticos**: Cualquier elemento con `data-icon="logo"` o `data-icon="chat"` inyecta el SVG oficial vectorial optimizado.
 - **Textos sincronizados**: Las clases `.brand-name`, `.brand-tagline` y `.live-indicator` se actualizan automáticamente desde el panel de control.
-- **Temas reactivos**: Responde al tema visual seleccionado globalmente.
+- **Temas reactivos**: Responde al tema visual seleccionado globalmente y al arquetipo del pack.
 - **Detección inteligente de OBS**: En un navegador normal te muestra una marca de agua para pruebas; en OBS se vuelve **100% transparente**.
+
+---
+
+## 5.1. Contrato Universal de Compatibilidad Semántica (`data-oss-*`)
+Para que **cualquier desarrollador o streamer pueda crear un pack desde cero sin necesidad de conocer los nombres de clases de los otros packs**, el motor de Open Stream Suite implementa el **Contrato Semántico Universal**:
+
+| Atributo Semántico | Dónde se coloca | Función en el Motor |
+|---|---|---|
+| `data-oss-cam="true"` | Contenedor principal de la cámara o captura | Recibe las 20 formas físicas (biseles 45°, polaroids, blindajes hex, pergaminos, arcade pixel, etc.), sombras, bordes y recortes. |
+| `data-oss-viewport="true"` | Área interior donde se ve el vídeo | Genera la ventana transparente para la webcam o captura en OBS y el motor de aperturas SVG (`backdrop-aperture.js`). |
+| `data-oss-cam-label="true"` | Rótulo o tarjeta con el nombre de la cámara | Adapta automáticamente su posición y tipografía (chincheta polaroid, píldora neón, tag de cota, sello de lacre). |
+| `data-oss-panel="true"` | Paneles de chat, stats, podios o listas | Recibe fondo glassmorphism, radios curvados o biseles acordes a la forma activa. |
+| `data-oss-bar="top\|bottom"` | Barras de cabecera o faldones inferiores | Estiliza la barra de estado o noticias con los acentos del tema. |
+
+> [!TIP]
+> **Desacoplamiento total**: No importa si tu contenedor se llama `.my-cam`, `.webcam-box` o `.stream-window`. Al añadir `data-oss-cam="true"`, el motor de estilos lo reconoce al instante y le aplica cualquiera de las **20 formas físicas** (Cozy, Gamer, Maker, OpenStream, Fantasía/Rol/Gótico, y Cómic/Synthwave/Retro CRT) sin conflicto alguno.
+
+---
+
+### Catálogo de las 20 Formas Físicas Disponibles
+1. **☕ Cozy Lo-Fi & Arte**: `cozy_polaroid`, `cozy_canvas`, `cozy_soft`.
+2. **🎮 Gamer Pro & Esports**: `gamer_mecha`, `gamer_tactical_hud`, `gamer_stealth`, `gamer_hex_shield`, `gamer_cyber_glitch`, `gamer_arcade_retro`.
+3. **🛠️ Maker & Taller**: `maker_blueprint`, `maker_workbench`, `maker_circuit_pcb`.
+4. **⚡ Open Stream Suite**: `openstream_glass`, `openstream_studio`.
+5. **📜 Fantasía, Rol & Terror**: `fantasy_parchment`, `fantasy_runic_stone`, `gothic_vampire`.
+6. **💥 Cómic, Pop Art & Retro TV**: `comic_manga_action`, `pop_synth_neon`, `vintage_crt_monitor`.
+
+---
+
+## 5.2. Fluidez y Adaptabilidad a Relaciones de Aspecto de Cámara
+Una de las grandes ventajas de este sistema es que **las formas físicas no están restringidas a un tamaño fijo**:
+
+- **Cámaras Horizontales Clásicas (16:9 y 4:3)**: Se adaptan tanto a webcams modernas como a capturas de consolas retro o cámaras compactas.
+- **Cámaras Ultra-Panorámicas (21:9)**: Perfectas para capturas ultrawide de simulación o streaming multi-monitor.
+- **Cámaras Verticales (9:16)**: Esenciales para directos orientados a TikTok Live, YouTube Shorts o transmisiones móviles.
+
+### ¿Cómo se logra que no se deformen los biseles ni los corchetes?
+El motor utiliza coordenadas relativas en CSS combinadas con `calc`:
+```css
+/* Ejemplo: Chaflán octogonal relativo que no se deforma sin importar el ancho o alto */
+clip-path: polygon(
+  24px 0%, calc(100% - 24px) 0%,
+  100% 24px, 100% calc(100% - 24px),
+  calc(100% - 24px) 100%, 24px 100%,
+  0% calc(100% - 24px), 0% 24px
+);
+```
+Los elementos decorativos (cruces `+`, retículas, esquinas) se posicionan con desplazamientos anclados a esquinas (`top: 6px; left: 6px;`, `bottom: 6px; right: 6px;`). Así, tanto una cámara vertical de 400×710 como una panorámica de 1280×720 lucen exactamente con la misma precisión milimétrica.
+
+---
+
+## 5.3. Regla de Oro del Aislamiento de Textos Editables (`data-text-key`)
+Cuando un overlay contiene textos que el streamer puede editar directamente con un clic en el lienzo (títulos, etiquetas de cámara, nombres de juego, deltas de cronómetro), se debe emplear **`data-text-key="seccion.campo"`**:
+
+```html
+<span data-text-key="speedrun.game">SUPER MARIO 64</span>
+<span data-text-key="cozy.cafeCamLabel">CÁMARA CAFÉ</span>
+<h1 data-text-key="victory.title">VICTORY</h1>
+```
+
+### ¿Por qué es vital usar claves únicas por escena?
+- Si dos escenas usasen la misma clave genérica (por ejemplo `game.badgeText` o `cam.title`), modificar el texto en la escena de velocidad (Speedrun) sobreescribiría el podio de victoria (Victory Clutch) o la escena de charla (Chill Chat).
+- Con claves aisladas (`victory.*`, `speedrun.*`, `art.*`, `pomodoro.*`, `cozy.*`, `oss.*`), cada escena conserva su propio contenido de forma 100% independiente.
+- **Persistencia automática**: El motor `dom-injector.js` y `05a-extract-texts.js` escanean automáticamente cualquier elemento con `[data-text-key]`. Al pulsar `💾 Guardar`, se envían al servidor y se sincronizan vía WebSocket con OBS Studio sin necesidad de programar una sola línea de JavaScript.
+
+---
+
+## 5.4. Geometría Segura contra Recortes Poligonales (`clip-path`)
+Al aplicar formas con cortes poliédricos (`gamer_mecha`, `gamer_tactical_hud`):
+
+> [!CAUTION]
+> Si el contenedor de la cámara utiliza `clip-path` o `overflow: hidden`, cualquier elemento hijo colocado en **coordenadas negativas** (como `top: -14px;` o `left: -20px;`) quedará cortado y desaparecerá total o parcialmente.
+
+**La Regla de los Insets Positivos**:
+- Coloca siempre los rótulos y etiquetas con coordenadas positivas hacia el interior:
+  ```css
+  /* CORRECTO: Seguro dentro del área visible */
+  .cam-label {
+    position: absolute;
+    top: 10px;
+    left: 14px;
+  }
+  ```
+- O ubica los rótulos fuera del contenedor con `clip-path`, utilizando un wrapper exterior limpio.
+
+---
+
+## 5.5. Paneles Flotantes Bajo Demanda (No Invasivos)
+Para que los overlays sean cómodos de emitir y no sobrecarguen la pantalla:
+- Los paneles interactivos auxiliares (`#oss-countdown-control`, `#oss-speedrun-control`, `#oss-brb-phrases-control`) arrancan **ocultos por defecto** (`display: none;`).
+- Se abren y cierran mediante los botones contextuales de la barra superior HUD (`⏱️ Temporizador`, `⚡ Splits`, `🔄 Frases BRB`) o con el botón de cierre rápido `✕`.
+- Al ser draggables (`makeDraggable`), el streamer puede colocarlos en cualquier rincón libre del monitor durante las pruebas sin tapar la webcam ni el juego.
 
 ---
 
@@ -394,7 +492,7 @@ En versiones anteriores, la edición de textos requería un modal externo que oc
 3. **HUD Flotante de Control (`#open-stream-suite-screen-hud`)**:
    - En la parte superior de la pantalla completa dispones de un HUD de herramientas con:
      - **`🎯 Ir a Texto...`**: Desplegable exhaustivo que localiza y enfoca instantáneamente cualquier rótulo del lienzo.
-     - **`💾 Guardar Cambios`**: Envía todos los textos modificados al backend vía `POST /api/overlays/texts` y emite el evento WebSocket `overlay_texts_updated` a OBS Studio.
+     - **`💾 Guardar Cambios`**: Envía todos los textos modificados al backend vía `POST /api/overlays/texts` y emite el evento WebSocket `overlay_texts_update` a OBS Studio.
      - **`🔄 Restablecer`**: Devuelve los textos de la escena a sus valores originales de fábrica.
      - **`❌ Cerrar HUD`**: Oculta el panel flotante para comprobar el aspecto limpio de la escena.
      - **`⋮⋮ Tirador Arrastrable`**: Permite mover el HUD a cualquier posición de la pantalla para no tapar elementos.

@@ -3,7 +3,7 @@ from aiohttp import web
 from server.config import logger
 from server.state import system
 from server.routes.widgets_routes import handle_widget_action
-from server.services.theme_manager import save_theme_state, sync_chat_with_theme, THEMES_DIR
+from server.services.theme_manager import save_theme_state, load_theme_state, get_theme_dir, sync_chat_with_theme, THEMES_DIR
 from server.services.deck_service import (
     execute_deck_knob,
     get_deck_actions_catalog,
@@ -53,7 +53,7 @@ async def handle_deck_trigger(request):
 async def handle_deck_theme(request):
     """Aplica una paleta de color / tema a OBS Studio desde el Stream Deck."""
     theme_id = request.query.get("id") or request.query.get("theme")
-    pack_id = request.query.get("pack") or "pack_open_stream_suite"
+    pack_id = request.query.get("pack") or "Maker_Theme_Pack"
     if not theme_id and request.can_read_body:
         try:
             data = await request.json()
@@ -68,9 +68,12 @@ async def handle_deck_theme(request):
             "message": "Falta parámetro 'id'. Ejemplo: /api/deck/theme?id=maker"
         }, status=400)
 
-    save_theme_state({"activePack": pack_id, "activeTheme": theme_id})
+    state = load_theme_state()
+    state["activePack"] = pack_id
+    state["activeTheme"] = theme_id
+    save_theme_state(state)
 
-    theme_file = THEMES_DIR / pack_id / theme_id / "theme.json"
+    theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"
     if theme_file.exists():
         try:
             with open(theme_file, "r", encoding="utf-8") as f:

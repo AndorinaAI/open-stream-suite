@@ -53,18 +53,20 @@ async function restoreFolderThemes(folderId) {
   const folder = OVERLAY_FOLDERS.find(f => f.id === folderId);
   if (!folder) return;
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  if (!confirm(tr('themes.confirm_restore_folder_themes', `¿Restaurar todos los overlays de la carpeta "${folder.name}" a sus estilos originales de fábrica?`, { name: folder.name }))) return;
+  if (!confirm(tr('themes.confirm_restore_folder_themes', `¿Restaurar todos los overlays de la carpeta "${folder.name}" a sus estilos y formas originales de fábrica?`, { name: folder.name }))) return;
+  if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
   for (const k of folder.keys) {
     const def = DEFAULT_OVERLAY_THEMES[k] || 'maker';
     cachedOverlayThemes[k] = def;
+    delete window.cachedOverlayShapes[k];
     try {
-      await API.setOverlayTheme(k, def);
+      await API.setOverlayTheme(k, def, 'auto');
     } catch (e) {}
   }
   renderOverlayFolders();
   if (window.OverlayTexts && OverlayTexts.showToast) {
     const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  OverlayTexts.showToast(tr('themes.toast_folder_themes_restored', `↺ Overlays de "${folder.name}" restauradas a sus estilos originales`, { name: folder.name }), 'success');
+    OverlayTexts.showToast(tr('themes.toast_folder_themes_restored', `↺ Overlays de "${folder.name}" restauradas a sus estilos y formas originales`, { name: folder.name }), 'success');
   }
 }
 

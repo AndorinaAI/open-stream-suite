@@ -19,6 +19,7 @@
       justify-content: space-between;
       padding: 60px 80px;
       z-index: 20;
+      box-sizing: border-box;
     }
 
     .ending-top-bar {
@@ -42,7 +43,7 @@
       border-radius: var(--radius-md);
       padding: 24px 40px;
       max-width: 640px;
-      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
+      backdrop-filter: var(--panel-backdrop, blur(10px));
     }
 
     .ending-footer {
@@ -54,54 +55,54 @@
     }
   </style>
 </head>
-<body class="fullscreen-scene">
+<body class="fullscreen-scene" data-pack="Maker_Theme_Pack" data-scene="ending" data-theme="synthwave">
   <div class="overlay-canvas">
     <div class="tech-grid-overlay"></div>
 
     <div class="ending-container">
       
       <!-- Barra superior -->
-      <div class="ending-top-bar">
+      <header class="header-bar ending-top-bar" data-oss-bar="top">
         <div class="brand-badge" style="transform: scale(1.15); transform-origin: left center;">
           <div class="brand-icon-svg" data-icon="logo" style="width: 32px; height: 32px;"></div>
           <div class="brand-info">
-            <span class="brand-name" style="font-size: 20px;">ANDORINA</span>
-            <span class="brand-tagline" style="font-size: 11px;">JUGAR · CREAR · TRASTEAR</span>
+            <span class="brand-name" style="font-size: 20px;" data-text-key="channel.name">ANDORINA</span>
+            <span class="brand-tagline" style="font-size: 11px;" data-text-key="channel.tagline">JUGAR · CREAR · TRASTEAR</span>
           </div>
         </div>
         <div class="live-indicator" style="background: rgba(139, 150, 156, 0.1); border-color: rgba(139, 150, 156, 0.3); color: var(--color-text-dim);">
           <span style="width: 7px; height: 7px; background: var(--color-text-dim); border-radius: 50%;"></span>
-          <span data-i18n="themes.placeholder_end_status">FIN DE TRANSMISIÓN</span>
+          <span data-i18n="themes.placeholder_end_status" data-text-key="ending.liveStatusText">FIN DE TRANSMISIÓN</span>
         </div>
-      </div>
+      </header>
 
       <!-- Centro de la escena -->
       <div class="ending-center-content">
-        <h1 class="main-stream-title" style="font-size: 76px;" data-i18n="themes.placeholder_end_title">
+        <h1 class="main-stream-title" style="font-size: 76px;" data-text-key="ending.title">
           GRACIAS POR PASARTE
         </h1>
-        <p class="stream-subtitle" style="font-size: 20px; color: var(--color-accent-cyan);" data-i18n="themes.placeholder_end_sub">
+        <p class="stream-subtitle" style="font-size: 20px; color: var(--color-accent-cyan);" data-text-key="ending.subtitle">
           NOS VEMOS EN EL PRÓXIMO DIRECTO
         </p>
 
         <!-- Tarjeta de despedida -->
-        <div class="ending-farewell-card">
-          <p style="font-family: var(--font-primary); font-size: 16px; color: var(--color-text-light); line-height: 1.6;" data-i18n="overlays.thanks_stream">
+        <div class="panel-card ending-farewell-card" data-oss-panel="true">
+          <p style="font-family: var(--font-primary); font-size: 16px; color: var(--color-text-light); line-height: 1.6;" data-text-key="ending.credits.0">
             ¡Gracias por acompañar el stream! Recuerda seguir el canal para no perderte el próximo directo.
           </p>
-          <div style="margin-top: 20px; font-family: var(--font-tech); font-size: 12px; color: var(--color-accent-orange); letter-spacing: 1.5px;" data-i18n="themes.placeholder_end_tag">
+          <div style="margin-top: 20px; font-family: var(--font-tech); font-size: 12px; color: var(--color-accent-orange); letter-spacing: 1.5px;" data-text-key="ending.badgeText">
             // SIGUE TRASTEANDO Y CREANDO
           </div>
         </div>
       </div>
 
       <!-- Barra inferior -->
-      <div class="ending-footer">
-        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);" data-i18n="themes.placeholder_end_footer">
+      <footer class="footer-bar ending-footer" data-oss-bar="bottom">
+        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);" data-text-key="channel.tagline">
           ANDORINA · OPEN STREAM SUITE · TRANSMISIÓN FINALIZADA
         </div>
         <div class="social-links" style="display: none;"></div>
-      </div>
+      </footer>
 
     </div>
   </div>

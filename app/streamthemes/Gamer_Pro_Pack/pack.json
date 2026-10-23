@@ -28,6 +28,41 @@
       "icon": "🕶️",
       "archetype": "gamer",
       "description": "Geometría angular pura sin retículas con acentos minimalistas oscuros."
+    },
+    {
+      "id": "gamer_hex_shield",
+      "name": "Hex Shield Blindaje",
+      "icon": "🛡️",
+      "archetype": "gamer",
+      "description": "Escudo hexagonal Sci-Fi con indicadores de energía y blindaje perimetral."
+    },
+    {
+      "id": "gamer_cyber_glitch",
+      "name": "Cyber Glitch Neón",
+      "icon": "⚡",
+      "archetype": "gamer",
+      "description": "Corte asimétrico con aberración cromática cian/magenta y telemetría glitch."
+    },
+    {
+      "id": "gamer_arcade_retro",
+      "name": "Arcade 8-Bit Pixel",
+      "icon": "👾",
+      "archetype": "gamer",
+      "description": "Esquinas en pixel cabinet, marquesina 1UP y contador de monedas insert coin."
+    },
+    {
+      "id": "fantasy_runic_stone",
+      "name": "Piedra Rúnica Mística",
+      "icon": "🗿",
+      "archetype": "gamer",
+      "description": "Obsidiana con runas nórdicas ancestrales luminosas y bisel tallado."
+    },
+    {
+      "id": "gothic_vampire",
+      "name": "Gótico Victoriano Dark",
+      "icon": "🦇",
+      "archetype": "gamer",
+      "description": "Arcos ojivales victorianos, borde sangriento carmesí y emblema de murciélago."
     }
   ]
 }

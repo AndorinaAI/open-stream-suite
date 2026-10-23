@@ -22,6 +22,35 @@ window.OSSDomInjector = (function() {
       document.body.classList.remove('no-animations');
     }
 
+    // 1.5 Inyección Universal de data-text-key (Contrato estándar para nuevos packs)
+    const activeSceneKey = window.__CURRENT_SCENE_KEY__ || document.body.dataset.scene || null;
+    document.querySelectorAll('[data-text-key]').forEach(el => {
+      const key = el.getAttribute('data-text-key');
+      if (!key) return;
+      let curr = undefined;
+      if (activeSceneKey && config.customScenes && config.customScenes[activeSceneKey] && config.customScenes[activeSceneKey][key] !== undefined) {
+        curr = config.customScenes[activeSceneKey][key];
+      }
+      if (curr === undefined) {
+        const parts = key.split('.');
+        let ptr = config;
+        for (const p of parts) {
+          if (ptr && typeof ptr === 'object' && p in ptr) {
+            ptr = ptr[p];
+          } else {
+            ptr = undefined;
+            break;
+          }
+        }
+        curr = ptr;
+      }
+      if (curr !== undefined && curr !== null && typeof curr !== 'object') {
+        if (el.textContent.trim() !== String(curr)) {
+          el.textContent = String(curr);
+        }
+      }
+    });
+
     // 2. Marca del canal
     document.querySelectorAll('.brand-name').forEach(el => {
       el.textContent = config.channel?.name || "ANDORINA";

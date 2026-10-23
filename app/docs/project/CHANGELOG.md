@@ -1,12 +1,32 @@
 # Historial de cambios
 
 <p align="center">
-  <b>Español</b> | <a href="CHANGELOG.en.md">English</a>
+  <a href="CHANGELOG.en.md"><b>English</b></a> | <b>Español</b>
 </p>
 
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
-## [Sin versión] — 2026-10-21
+## [1.0.1-alpha] — 2026-10-23
+
+### Corregido — Auditoría Arquitectónica y Correcciones Críticas
+- **WebSocket del Servidor (NameError)**: Solucionado error crítico por variable `data` no inicializada en `app/server/routes/ws_routes.py`. Los mensajes recibidos vía WebSocket ahora se parsean de forma segura sin romper la conexión.
+- **Persistencia de Temas y Asignaciones de Escenas**: `save_theme_state()` ahora fusiona de forma segura el estado persistido en `themes_state.json`, evitando el borrado accidental de asignaciones (`overlayThemes`, `overlayShapes` y `backdrops`) al aplicar packs o formas globales.
+- **Autenticación en HUD de Overlays**: Añadida cabecera `X-Local-Token` en todas las peticiones POST de asignación de temas, formas y reseteo de textos desde el HUD (`04-phrases-theme.js` y `05-inline-editor.js`), resolviendo los errores 403 Forbidden silenciosos.
+- **Acciones Rápidas en Panel de Control**: Implementadas y expuestas globalmente en `api.js` las funciones `sendAlertTest`, `sendCustomAlertTest` y `syncGoalWithTwitch`, evitando errores `ReferenceError` en consola.
+- **Formas Físicas en Fusiones**: Guardado y persistencia en backend (`fusions_service.py`) de la forma física `defaultShape`, e incorporación del selector de forma en el modal de creación/edición de fusiones en `panel.html` y `13-fusions.js`.
+- **Preservación de Forma en Vivo**: `overlay.js` preserva la forma física activa (`activeShape`) al recibir eventos WebSocket `theme_change` y `overlay_theme_change`, evitando que un cambio de color devuelva los marcos a `original`.
+- **Apertura de Fondos y Recortes Persistentes (Backdrop)**: Creado endpoint `POST /api/themes/backdrop` y servicio de persistencia para el motor de fondos con apertura SVG `window.OSSAperture`, con sincronización en tiempo real vía WebSocket `overlay_backdrop_change`.
+- **Aislamiento de Textos por Escena**: `collectSceneTexts` y `dom-injector.js` aíslan los textos personalizados no pertenecientes al pack base Maker bajo `customScenes[sceneKey]`, evitando colisiones cross-pack en claves compartidas (`beRightBack.title`, etc.).
+- **Restauración Quirúrgica de Textos**: Corregido `restoreSceneTexts` y `OverlayTexts.reset` para enviar `sceneKey`, limpiando únicamente los textos de la escena elegida sin resetear todo el stream.
+- **Activación de Tokens de Diseño**: Conectados los tokens `--theme-glow`, `--panel-radius` y `--panel-clip-path` en `common/styles.css` para su renderizado activo en cámaras y paneles en OBS.
+- **Sincronización de overlay_texts_config.en.json**: Completadas las 18 claves en inglés ausentes y añadido soporte para servir textos en inglés según el parámetro `?lang=en`.
+- **Corrección de Paletas en Cozy Lo-Fi Pack**: Sincronizados los valores de color (`accentCyan`, `accentOrange`, `bgDark`, `panelBg`, `textDim`, `textLight`) en `theme.json` y `theme.default.json` de los 5 temas de Cozy para reflejar su CSS real.
+- **Limpieza de Defaults Legacy y Entradas Huérfanas**: Reemplazados defaults fantasma (`pack_open_stream_suite`, `maker_electronico`) por los identificadores oficiales (`Maker_Theme_Pack`, `maker`), y eliminadas claves huérfanas en `themes_state.json`.
+- **Selector de Forma en Modal de Escena**: Incorporado selector de forma física en el modal individual de escenas en `panel.html` y enlazado con `11-scene-editor.js`.
+- **Internacionalización y Textos de UI**: Corregidas confirmaciones para reflejar el catálogo completo de 27 escenas e incorporadas claves i18n faltantes en `es.json` y `en.json`.
+- **Soporte Python 3.12**: Reemplazado `datetime.utcnow()` por `datetime.now(timezone.utc)`.
+
+## [1.0.0-alpha] — 2026-10-21
 
 ### Cambiado — Refactorización Completa y Modularización por Dominios
 - **Backend Modular (`app/server/`)**: Rutas desacopladas en `server/routes/` y lógica de negocio en `server/services/`, con shims transparentes de compatibilidad hacia atrás en `server/*.py`.

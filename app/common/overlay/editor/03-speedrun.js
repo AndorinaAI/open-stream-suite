@@ -9,7 +9,7 @@ window.OSSEditor = window.OSSEditor || {};
   function isSpeedrunScene(sceneKey) {
     return ['gamer_speedrun'].includes(sceneKey)
       || window.location.pathname.includes('/speedrun_split/')
-      || document.querySelector('.sidebar-splits') !== null;
+      || document.querySelector('.sidebar-splits, .splits-board, [data-speedrun="true"]') !== null;
   }
 
   function setupSpeedrun(sceneKey) {
@@ -24,15 +24,16 @@ window.OSSEditor = window.OSSEditor || {};
       border: 1px solid rgba(87,214,196,0.45); border-radius: 8px;
       padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
       font-size: 11px; color: #F0F6FC; box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(87,214,196,0.15);
-      display: flex; flex-direction: column; gap: 8px; width: 250px;
+      display: none; flex-direction: column; gap: 8px; width: 250px;
     `;
 
     speedControl.innerHTML = `
       <div class="hud-drag-handle" style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center; cursor:grab;" title="Arrastra desde aquí para mover este menú">
         <span>⚡ SPEEDRUN LIVE</span>
-        <span style="display:flex; align-items:center; gap:4px;">
+        <span style="display:flex; align-items:center; gap:6px;">
           <span id="oss-sr-state" style="font-size:10px; color:#8B949E;">LISTO</span>
           <span style="color:#6E7681; font-size:11px;">⋮⋮</span>
+          <button type="button" id="oss-sr-close" style="background:none; border:none; color:#8B949E; cursor:pointer; font-size:12px; padding:0 2px; line-height:1;" title="Cerrar panel">✕</button>
         </span>
       </div>
       <div style="font-size:26px; font-weight:900; color:#FF783F; text-align:center; padding:6px; background:#161B22; border-radius:4px; border:1px solid rgba(255,120,63,0.3); cursor:pointer;" id="oss-sr-readout" title="Clic para Iniciar / Pausar">
@@ -237,6 +238,10 @@ window.OSSEditor = window.OSSEditor || {};
       window.OSSEditor.showHudToast('🔄 Cronómetro reseteado a 00:00:00 y vuelto al tramo 1');
     });
 
+    document.getElementById('oss-sr-close')?.addEventListener('click', () => {
+      speedControl.style.display = 'none';
+    });
+
     if (window.OSSEditor.makeDraggable) {
       window.OSSEditor.makeDraggable(speedControl, '.hud-drag-handle');
     }
@@ -244,6 +249,14 @@ window.OSSEditor = window.OSSEditor || {};
     return speedControl;
   }
 
+  function toggleSpeedrun() {
+    const el = document.getElementById('oss-speedrun-control');
+    if (!el) return;
+    const isHidden = el.style.display === 'none' || getComputedStyle(el).display === 'none';
+    el.style.display = isHidden ? 'flex' : 'none';
+  }
+
   window.OSSEditor.isSpeedrunScene = isSpeedrunScene;
   window.OSSEditor.setupSpeedrun = setupSpeedrun;
+  window.OSSEditor.toggleSpeedrun = toggleSpeedrun;
 })();

@@ -28,6 +28,20 @@
       "icon": "☁️",
       "archetype": "cozy",
       "description": "Esquinas redondeadas de 28px y cabeceras en píldora sin texturas de papel."
+    },
+    {
+      "id": "fantasy_parchment",
+      "name": "Pergamino Rol & Sello Cera",
+      "icon": "📜",
+      "archetype": "cozy",
+      "description": "Bordes orgánicos de pergamino antiguo, sello carmesí ⚜ y tipografía clásica."
+    },
+    {
+      "id": "vintage_crt_monitor",
+      "name": "Monitor CRT Retro 90s",
+      "icon": "📺",
+      "archetype": "cozy",
+      "description": "Pantalla curvada bulbosa analógica, bisel de carcasa noventera y LED POWER."
     }
   ]
 }

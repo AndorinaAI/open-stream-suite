@@ -16,7 +16,40 @@
   },
   "game": {
     "badgeText": "GAME MODE",
-    "tagline": "GAMEPLAY / GAMING STREAM"
+    "tagline": "GAMEPLAY / GAMING STREAM",
+    "camLabel": "STREAMER // CAM",
+    "fps": 240,
+    "matchType": "COMPETITIVE",
+    "personalBest": "16:15.00",
+    "runCategory": "16 STARS · N64 ORIGINAL",
+    "runTitle": "SUPER MARIO 64",
+    "splits": [
+      {
+        "name": "01 BOB-OMB",
+        "delta": "-00:14",
+        "time": "02:18",
+        "type": "negative"
+      },
+      {
+        "name": "02 WHOMP'S FORT",
+        "delta": "-00:42",
+        "time": "05:30",
+        "type": "negative"
+      },
+      {
+        "name": "03 CCM MOUNTAIN",
+        "delta": "+00:08",
+        "time": "09:15",
+        "type": "positive",
+        "active": true
+      },
+      {
+        "name": "04 BOWSER IN DARK",
+        "delta": "-00:25",
+        "time": "15:40",
+        "type": "negative"
+      }
+    ]
   },
   "maker": {
     "projectName": "MAKER WORKBENCH 2026",
@@ -35,7 +68,8 @@
       "03 CODE",
       "04 TESTING"
     ],
-    "showAuxView": true
+    "showAuxView": true,
+    "panelStatus": "DEV: ACTIVE"
   },
   "print": {
     "projectName": "CUSTOM 3D & VINYL PRINTS",
@@ -61,7 +95,16 @@
     "showChatPanel": true,
     "chatTitle": "LIVE CHAT",
     "topic": "Questions, weekly projects, and community hangouts",
-    "chatPrompt": "Say hello in the chat!"
+    "chatPrompt": "Say hello in the chat!",
+    "chatStatus": "CONNECTED TO TWITCH",
+    "frames": {
+      "face": "STREAMER"
+    },
+    "guestNameplates": [
+      "GUEST 1",
+      "GUEST 2"
+    ],
+    "podcastTitle": "OPEN STREAM PODCAST"
   },
   "startingSoon": {
     "heroTag": "// LIVE BROADCAST",
@@ -77,7 +120,9 @@
       "03 // PRINT",
       "04 // CHILL"
     ],
-    "showModesOverview": true
+    "showModesOverview": true,
+    "badgeText": "STARTING SOON",
+    "countdownSeconds": 300
   },
   "beRightBack": {
     "title": "BE RIGHT BACK",
@@ -90,7 +135,9 @@
     ],
     "phraseIntervalSeconds": 6,
     "footerNote": "THE STREAM WILL RESUME SHORTLY",
-    "liveStatusText": "SHORT BREAK"
+    "liveStatusText": "SHORT BREAK",
+    "badgeText": "SHORT BREAK",
+    "countdownSeconds": 300
   },
   "ending": {
     "title": "THANKS FOR WATCHING",
@@ -98,7 +145,50 @@
     "farewellMessage": "Thank you for hanging out today! Don't forget to follow the channel to catch the next stream.",
     "farewellTag": "// UNTIL NEXT TIME",
     "footerNote": "OPEN STREAM SUITE · STREAM CONCLUDED",
-    "liveStatusText": "STREAM ENDED"
+    "liveStatusText": "STREAM ENDED",
+    "badgeText": "OFFLINE",
+    "credits": [
+      "Thanks to all subscribers and VIPs for your support",
+      "See you on the next stream",
+      "Have a great day!"
+    ]
+  },
+  "pomodoro": {
+    "taskName": "DEEP FOCUS & STUDY SESSION",
+    "panelTitle": "SESSION GOALS",
+    "focusSeconds": 1500,
+    "shortBreakSeconds": 300,
+    "longBreakSeconds": 900
+  },
+  "victory": {
+    "title": "VICTORY & CLUTCH CHAMPION",
+    "subtitle": "⚡ 1v4 CLUTCH CONQUERED · MATCH MVP",
+    "camLabel": "CHAMPION // REACTION FEED"
+  },
+  "art": {
+    "canvasLabel": "🎨 CREATIVE CANVAS · DIGITAL ART",
+    "faceLabel": "✨ CREATOR // STREAM ✨",
+    "panelTitle": "ILLUSTRATION DETAILS",
+    "projectName": "Digital Illustration — 'Tea Afternoon'",
+    "currentPhase": "Final lineart & base coloring",
+    "detail": "Drawing Tablet · 4K Oil Brush · Pastel Palette"
+  },
+  "speedrun": {
+    "game": "ELDEN RING // ANY% GLITCHLESS",
+    "category": "GLITCHLESS · CURRENT RECORD ATTEMPT",
+    "runnerCam": "RUNNER CAM // LIVE"
+  },
+  "oss": {
+    "mainCamLabel": "MAIN CAMERA // HOST",
+    "newsHeadline": "Live community debate with chat · News, highlights and thoughts",
+    "podcastHost": "HOST // PRESENTER",
+    "podcastGuest": "GUEST // CO-HOST",
+    "desktopCam": "STREAMER // PRESENTER"
+  },
+  "cozy": {
+    "cafeCamLabel": "☕ Cozy Cafe & Chat",
+    "chatTitle": "💬 Cafe Corner",
+    "studyCamLabel": "📖 STUDY DESK · STREAM"
   },
   "performance": {
     "enableAnimations": true
