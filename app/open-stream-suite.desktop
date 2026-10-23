@@ -5,8 +5,9 @@ Name=Open Stream Suite
 GenericName=Control de Streaming y OBS
 Comment=Suite modular de overlays, alertas y control para Twitch y OBS Studio
 Exec=bash -c 'DIR="$(dirname "$1")"; cd "$DIR" && "./iniciar_stream.sh"' _ %k
-Icon=video-display
+Icon=open-stream-suite
 Terminal=false
 Categories=AudioVideo;Video;AudioVideoEditing;Network;
 Keywords=stream;twitch;obs;overlays;alerts;deck;
 StartupNotify=true
+StartupWMClass=openstreamsuite

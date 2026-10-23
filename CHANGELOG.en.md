@@ -23,7 +23,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - **Cozy Lo-Fi Pack Palette Synchronization**: Synchronized all 6 color values (`accentCyan`, `accentOrange`, `bgDark`, `panelBg`, `textDim`, `textLight`) in `theme.json` and `theme.default.json` for all 5 Cozy themes to match their actual CSS.
 - **Cleaned Legacy Ghost Defaults & Orphan Keys**: Replaced ghost defaults (`pack_open_stream_suite`, `maker_electronico`) with canonical IDs (`Maker_Theme_Pack`, `maker`), and cleaned orphan entries in `themes_state.json`.
 - **Scene Modal Shape Selector**: Added physical frame shape selector to the scene editor modal in `panel.html` and wired it in `11-scene-editor.js`.
-- **Internationalization & UI Texts**: Updated prompts to reflect the full catalog of 27 scenes, and added missing i18n keys in `es.json` and `en.json`.
+- **Pre-Start Update Check**: When auto-opening the panel on server startup is enabled, the launcher queries for new updates and prompts the user whether to update immediately or start the server and update later.
+- **Native RGBA Transparent Icons**: Re-rendered all PNG icons (32, 64, 128, 256, and 512px) with full alpha channel (`RGBA`), removing solid white background and edge artifacts (JPG effect) across taskbar and tray.
+- **Linux Taskbar Integration (Gear Icon Fix)**: Configured window class `StartupWMClass=openstreamsuite`, initialized Tkinter with `className="openstreamsuite"`, and loaded persistent multi-resolution icon photos, enabling GNOME Shell, Ubuntu Dock, and KDE to display the official logo instead of the fallback gear icon.
+- **Resilient Updater (Git Reset & Config Preservation)**: Re-engineered `apply_update()` in `updater.py` to auto-backup and seamlessly merge user configurations (`themes_state.json`, `fusions.json`, texts, widgets) with clean Git synchronization, resolving dirty tree conflicts.
 - **Python 3.12 Compatibility**: Replaced deprecated `datetime.utcnow()` with `datetime.now(timezone.utc)`.
 
 ## [1.0.0-alpha] — 2026-10-21

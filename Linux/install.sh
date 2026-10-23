@@ -63,6 +63,7 @@ Terminal=false
 Categories=AudioVideo;Video;AudioVideoEditing;Network;
 Keywords=stream;twitch;obs;overlays;alerts;deck;
 StartupNotify=true
+StartupWMClass=openstreamsuite
 EOF
 
 chmod +x "$DESKTOP_FILE"

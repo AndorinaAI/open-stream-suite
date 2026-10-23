@@ -23,7 +23,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 - **Corrección de Paletas en Cozy Lo-Fi Pack**: Sincronizados los valores de color (`accentCyan`, `accentOrange`, `bgDark`, `panelBg`, `textDim`, `textLight`) en `theme.json` y `theme.default.json` de los 5 temas de Cozy para reflejar su CSS real.
 - **Limpieza de Defaults Legacy y Entradas Huérfanas**: Reemplazados defaults fantasma (`pack_open_stream_suite`, `maker_electronico`) por los identificadores oficiales (`Maker_Theme_Pack`, `maker`), y eliminadas claves huérfanas en `themes_state.json`.
 - **Selector de Forma en Modal de Escena**: Incorporado selector de forma física en el modal individual de escenas en `panel.html` y enlazado con `11-scene-editor.js`.
-- **Internacionalización y Textos de UI**: Corregidas confirmaciones para reflejar el catálogo completo de 27 escenas e incorporadas claves i18n faltantes en `es.json` y `en.json`.
+- **Comprobación de Actualizaciones al Iniciar Servidor**: Al tener activa la opción de abrir el panel en el navegador al iniciar, el launcher consulta si existe una versión más reciente y ofrece un diálogo para actualizar en el acto o continuar abriendo el servidor y actualizar más tarde.
+- **Iconos con Transparencia RGBA Nativa**: Re-renderizados todos los iconos PNG (32, 64, 128, 256 y 512px) con canal alfa completo (`RGBA`), eliminando las esquinas y bordes blancos que causaban apariencia de imagen JPG opaca en la bandeja y el sistema.
+- **Integración con Barra de Tareas de Linux (Solución a Icono de Engranaje)**: Configurada la clase de ventana `StartupWMClass=openstreamsuite`, inicialización de Tkinter con `className="openstreamsuite"` y carga de iconos multirresolución persistentes en memoria, permitiendo a GNOME Shell, Ubuntu Dock y KDE mostrar el icono oficial de la app en la barra de tareas en lugar del icono genérico de engranaje.
+- **Actualizador Resiliente (Git Reset & Config Preservation)**: Reescrito `apply_update()` en `updater.py` para respaldar y fusionar automáticamente configuraciones de usuario (`themes_state.json`, `fusions.json`, textos, widgets) y realizar una sincronización limpia con Git sin colisiones por archivos modificados o sin seguimiento.
 - **Soporte Python 3.12**: Reemplazado `datetime.utcnow()` por `datetime.now(timezone.utc)`.
 
 ## [1.0.0-alpha] — 2026-10-21
