@@ -96,3 +96,63 @@ class OverlayTextsTestCase(AioHTTPTestCase):
         """Verifica que guardar textos sin token local sea rechazado"""
         resp = await self.client.post("/api/overlays/texts", json={"texts": {}})
         self.assertEqual(resp.status, 403)
+
+    @unittest_run_loop
+    async def test_04_reset_overlay_texts_section_and_custom_scenes(self):
+        """Verifica la restauración granular por sección y la limpieza de customScenes"""
+        # 1. Guardar textos modificados tanto en sección base como en customScenes
+        r0 = await self.client.get("/api/overlays/texts")
+        texts = (await r0.json())["texts"]
+        texts["beRightBack"]["title"] = "PAUSA MODIFICADA"
+        texts.setdefault("customScenes", {})
+        texts["customScenes"]["cozy_art"] = {"title": "Lienzo de Prueba", "artist": "Andorina"}
+        texts["customScenes"]["gamer_gameplay"] = {"title": "Partida Clasificatoria"}
+
+        await self.client.post("/api/overlays/texts", json={"texts": texts}, headers=self.headers)
+
+        # 2. Resetear únicamente la sección beRightBack
+        r_reset_brb = await self.client.post("/api/overlays/texts/reset", json={"section": "beRightBack"}, headers=self.headers)
+        self.assertEqual(r_reset_brb.status, 200)
+        d_brb = await r_reset_brb.json()
+        self.assertEqual(d_brb["texts"]["beRightBack"]["title"], "YA VUELVO")
+        # customScenes aún deben existir
+        self.assertIn("cozy_art", d_brb["texts"]["customScenes"])
+
+        # 3. Resetear la escena específica cozy_art
+        r_reset_scene = await self.client.post(
+            "/api/overlays/texts/reset",
+            json={"section": "cozy_art", "sceneKey": "cozy_art"},
+            headers=self.headers
+        )
+        self.assertEqual(r_reset_scene.status, 200)
+        d_scene = await r_reset_scene.json()
+        self.assertNotIn("cozy_art", d_scene["texts"].get("customScenes", {}))
+        self.assertIn("gamer_gameplay", d_scene["texts"].get("customScenes", {}))
+
+        # 4. Verificar sincronización en config.js
+        config_js = CONFIG_JS_FILE.read_text(encoding="utf-8")
+        self.assertNotIn("Lienzo de Prueba", config_js)
+        self.assertIn("Partida Clasificatoria", config_js)
+
+    @unittest_run_loop
+    async def test_05_reset_all_texts_to_factory(self):
+        """Verifica la restauración total de fábrica de todos los textos y escenas"""
+        # Modificar varios campos
+        r0 = await self.client.get("/api/overlays/texts")
+        texts = (await r0.json())["texts"]
+        texts["channel"]["name"] = "TEXTO TEMPORAL"
+        texts.setdefault("customScenes", {})["temp_scene"] = {"val": "123"}
+        await self.client.post("/api/overlays/texts", json={"texts": texts}, headers=self.headers)
+
+        # Reset total
+        r_all = await self.client.post("/api/overlays/texts/reset", json={"section": "all"}, headers=self.headers)
+        self.assertEqual(r_all.status, 200)
+        d_all = await r_all.json()
+
+        self.assertEqual(d_all["texts"]["channel"]["name"], "ANDORINA")
+        self.assertNotIn("customScenes", d_all["texts"])
+
+        # Verificar config.js
+        config_js = CONFIG_JS_FILE.read_text(encoding="utf-8")
+        self.assertIn("ANDORINA", config_js)
+        self.assertNotIn("TEXTO TEMPORAL", config_js)

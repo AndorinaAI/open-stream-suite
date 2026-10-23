@@ -70,7 +70,7 @@
     .episode-tag {
       font-size: 12px;
       font-weight: 600;
-      color: #38bdf8;
+      color: var(--color-accent-cyan, #38bdf8);
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid rgba(56, 189, 248, 0.3);
       padding: 3px 10px;
@@ -94,13 +94,22 @@
       box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
       overflow: hidden;
+    }
+
+    .cam-viewport {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
     }
 
     /* Presenter Lower Third Nameplate */
     .nameplate {
-      margin: 18px;
+      position: absolute;
+      bottom: 18px;
+      left: 18px;
+      right: 18px;
       background: rgba(15, 23, 42, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -111,6 +120,7 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      z-index: 10;
     }
     .nameplate-left {
       display: flex;
@@ -137,7 +147,7 @@
     .person-social {
       font-size: 12px;
       font-weight: 600;
-      color: #38bdf8;
+      color: var(--color-accent-cyan, #38bdf8);
     }
 
     /* Broadcast Discussion Agenda Bar */
@@ -183,7 +193,7 @@
     .agenda-pill.active {
       background: rgba(56, 189, 248, 0.15);
       border-color: rgba(56, 189, 248, 0.4);
-      color: #38bdf8;
+      color: var(--color-accent-cyan, #38bdf8);
       font-weight: 700;
     }
     .agenda-pill .dot {
@@ -194,15 +204,15 @@
     }
   </style>
 </head>
-<body data-theme="neon_streamer">
+<body data-pack="Open_stream_Pack" data-scene="oss_podcast" data-theme="sunset_glow">
   <!-- Swiss Broadcast Header -->
-  <header class="broadcast-header">
+  <header class="header-bar broadcast-header" data-oss-bar="top">
     <div class="broadcast-brand">
-      <div class="live-badge">
+      <div class="mode-badge live-badge" data-oss-badge="true">
         <span class="live-dot"></span>
-        <span>BROADCAST LIVE</span>
+        <span data-text-key="channel.liveText">BROADCAST LIVE</span>
       </div>
-      <div class="podcast-title">MESA DE DEBATE // ESTUDIO CENTRAL</div>
+      <div class="podcast-title" data-text-key="chill.podcastTitle">MESA DE DEBATE // ESTUDIO CENTRAL</div>
       <div class="episode-tag">EPISODIO EN DIRECTO</div>
     </div>
     <div style="font-size:13px; font-weight:600; color:#cbd5e1; font-family:monospace;">
@@ -213,36 +223,38 @@
   <!-- Dual Cam Stage -->
   <main class="cam-stage">
     <!-- Host Frame -->
-    <div class="stream-frame">
-      <div class="nameplate">
+    <div class="camera-frame stream-frame camera-main" data-oss-cam="true">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label nameplate" data-oss-cam-label="true">
         <div class="nameplate-left">
           <div class="mic-indicator" title="Microphone Active"></div>
           <div>
-            <div class="person-name">HOST PRINCIPAL</div>
-            <div class="person-role">MODERADOR DEL STREAM</div>
+            <div class="person-name" data-text-key="channel.name">HOST PRINCIPAL</div>
+            <div class="person-role" data-text-key="channel.tagline">MODERADOR DEL STREAM</div>
           </div>
         </div>
-        <div class="person-social">@HostDirecto</div>
+        <div class="person-social" data-text-key="channel.name">@andorina</div>
       </div>
     </div>
 
     <!-- Guest Frame -->
-    <div class="stream-frame">
-      <div class="nameplate">
+    <div class="camera-frame stream-frame camera-face" data-oss-cam="true">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label nameplate" data-oss-cam-label="true">
         <div class="nameplate-left">
           <div class="mic-indicator" style="background:#38bdf8; box-shadow:0 0 8px rgba(56,189,248,0.6);" title="Guest Mic Active"></div>
           <div>
-            <div class="person-name">INVITADO ESPECIAL</div>
+            <div class="person-name" data-text-key="chill.guestNameplates.0">INVITADO ESPECIAL</div>
             <div class="person-role">ANALISTA INVITADO</div>
           </div>
         </div>
-        <div class="person-social" style="color:#f59e0b;">@InvitadoTalk</div>
+        <div class="person-social" style="color:var(--color-accent-orange, #f59e0b);">@InvitadoTalk</div>
       </div>
     </div>
   </main>
 
   <!-- Discussion Agenda Bar -->
-  <footer class="agenda-bar">
+  <footer class="panel-card agenda-bar" data-oss-panel="true" data-oss-bar="bottom">
     <div class="agenda-label">TEMARIO:</div>
     <div class="agenda-items">
       <div class="agenda-pill active">

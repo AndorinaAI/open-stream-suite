@@ -35,7 +35,8 @@ from server.services.theme_service import (
     apply_shape_service,
     toggle_chat_anchor_service,
     restore_theme_service,
-    set_overlay_theme_service
+    set_overlay_theme_service,
+    set_overlay_backdrop_service
 )
 
 
@@ -109,7 +110,7 @@ async def handle_apply_theme(request):
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     theme_id = str(body.get("theme", "")).strip()
-    pack_id = str(body.get("pack", "pack_open_stream_suite")).strip()
+    pack_id = str(body.get("pack", "Maker_Theme_Pack")).strip()
 
     try:
         res = await apply_theme_service(pack_id, theme_id)
@@ -125,7 +126,7 @@ async def handle_chat_anchor_toggle(request):
     except Exception:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
-    pack_id = str(body.get("packId", "pack_open_stream_suite")).strip()
+    pack_id = str(body.get("packId", "Maker_Theme_Pack")).strip()
     theme_id = str(body.get("themeId", "")).strip()
     anchored = bool(body.get("anchored", True))
 
@@ -143,7 +144,7 @@ async def handle_restore_theme(request):
     except Exception:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
-    pack_id = str(body.get("packId", "pack_open_stream_suite")).strip()
+    pack_id = str(body.get("packId", "Maker_Theme_Pack")).strip()
     theme_id = str(body.get("themeId", "")).strip()
 
     try:
@@ -164,7 +165,13 @@ async def handle_set_overlay_theme(request):
 
     overlay_key = str(body.get("overlayKey", "")).strip()
     theme_id = str(body.get("themeId", "")).strip() if body.get("themeId") else None
-    shape_id = str(body.get("shapeId", "")).strip() if body.get("shapeId") else None
+    shape_raw = body.get("shapeId")
+    shape_id = str(shape_raw).strip() if shape_raw is not None else ("__clear__" if "shapeId" in body else None)
+
+    if not overlay_key:
+        return web.json_response({"error": "overlayKey requerido"}, status=400)
+    if theme_id is None and shape_id is None:
+        return web.json_response({"error": "themeId o shapeId requerido"}, status=400)
 
     try:
         res = await set_overlay_theme_service(overlay_key, theme_id=theme_id, shape_id=shape_id)
@@ -188,6 +195,26 @@ async def handle_apply_shape(request):
         return web.json_response({"error": str(e)}, status=400)
 
 
+async def handle_set_overlay_backdrop(request):
+    """Guarda y sincroniza el fondo/apertura decorativo para una escena de OBS"""
+    try:
+        body = await request.json()
+    except Exception:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+
+    overlay_key = str(body.get("overlayKey", "")).strip()
+    backdrop = body.get("backdrop")
+
+    if not overlay_key:
+        return web.json_response({"error": "overlayKey requerido"}, status=400)
+
+    try:
+        res = await set_overlay_backdrop_service(overlay_key, backdrop)
+        return web.json_response({"status": "ok", **res})
+    except ValueError as e:
+        return web.json_response({"error": str(e)}, status=400)
+
+
 def register_themes_routes(app):
     """Registra todas las rutas para la gestión modular de temas y packs"""
     init_themes_directory()
@@ -197,6 +224,8 @@ def register_themes_routes(app):
     app.router.add_post("/api/themes/save", handle_save_theme)
     app.router.add_post("/api/themes/restore", handle_restore_theme)
     app.router.add_post("/api/themes/overlay-assignment", handle_set_overlay_theme)
+    app.router.add_post("/api/themes/backdrop", handle_set_overlay_backdrop)
     app.router.add_post("/api/themes/apply", handle_apply_theme)
     app.router.add_post("/api/themes/apply-shape", handle_apply_shape)
     app.router.add_post("/api/themes/chat-anchor", handle_chat_anchor_toggle)
+

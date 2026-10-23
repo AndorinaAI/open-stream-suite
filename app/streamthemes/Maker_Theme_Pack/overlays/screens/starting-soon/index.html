@@ -19,6 +19,7 @@
       justify-content: space-between;
       padding: 60px 80px;
       z-index: 20;
+      box-sizing: border-box;
     }
 
     .starting-top-bar {
@@ -46,7 +47,7 @@
       border: 1px solid var(--color-border-dim);
       padding: 24px;
       border-radius: var(--radius-md);
-      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
+      backdrop-filter: var(--panel-backdrop, blur(10px));
     }
 
     .starting-footer {
@@ -89,7 +90,7 @@
     }
   </style>
 </head>
-<body class="fullscreen-scene">
+<body class="fullscreen-scene" data-pack="Maker_Theme_Pack" data-scene="startingSoon" data-theme="synthwave">
   <div class="overlay-canvas">
     <!-- Trama técnica de cuadrícula -->
     <div class="tech-grid-overlay"></div>
@@ -99,86 +100,103 @@
     <div class="starting-container">
       
       <!-- Barra superior: Marca e indicador de estado del sistema -->
-      <div class="starting-top-bar">
+      <header class="header-bar starting-top-bar" data-oss-bar="top">
         <div class="brand-badge" style="transform: scale(1.15); transform-origin: left center;">
           <div class="brand-icon-svg" data-icon="logo" style="width: 32px; height: 32px;"></div>
           <div class="brand-info">
-            <span class="brand-name" style="font-size: 20px;">ANDORINA</span>
-            <span class="brand-tagline" style="font-size: 11px;">JUGAR · CREAR · TRASTEAR</span>
+            <span class="brand-name" style="font-size: 20px;" data-text-key="channel.name">ANDORINA</span>
+            <span class="brand-tagline" style="font-size: 11px;" data-text-key="channel.tagline">JUGAR · CREAR · TRASTEAR</span>
           </div>
         </div>
 
         <div style="display: flex; align-items: center; gap: 16px;">
           <div class="live-indicator">
             <span class="live-dot"></span>
-            <span data-i18n="themes.placeholder_ss_status">TRANSMISIÓN INICIANDO</span>
+            <span data-i18n="themes.placeholder_ss_status" data-text-key="startingSoon.liveStatusText">TRANSMISIÓN INICIANDO</span>
           </div>
         </div>
-      </div>
+      </header>
 
       <!-- Zona central: Gran titular y cuadrícula de modos -->
       <div class="starting-center-content">
         
         <div class="starting-hero-text">
-          <div style="font-family: var(--font-tech); font-size: 14px; letter-spacing: 3px; color: var(--color-accent-cyan); text-transform: uppercase;" data-i18n="themes.placeholder_ss_tag">
+          <div style="font-family: var(--font-tech); font-size: 14px; letter-spacing: 3px; color: var(--color-accent-cyan); text-transform: uppercase;" data-text-key="startingSoon.badgeText">
             // STREAM EN DIRECTO
           </div>
-          <h1 class="main-stream-title" style="text-align: left; font-size: 80px;">
+          <h1 class="main-stream-title" style="text-align: left; font-size: 80px;" data-text-key="startingSoon.title">
             ENSEGUIDA<br>
-            <span class="title-cyan-accent" data-i18n="themes.placeholder_ss_highlight">ESTAMOS EN DIRECTO</span>
+            <span class="title-cyan-accent">ESTAMOS EN DIRECTO</span>
           </h1>
-          <p class="stream-subtitle" style="text-align: left; font-size: 18px; margin-top: 14px;" data-i18n="themes.placeholder_ss_sub">
-            PREPARANDO EL DIRECTO...
+          <p class="stream-subtitle" style="text-align: left; font-size: 18px; margin-top: 14px;" data-text-key="startingSoon.subtitle">
+            PREPARANDO EL DIRECTO Y CALIBRANDO EQUIPOS...
           </p>
 
           <!-- Barra de progreso técnica -->
           <div class="tech-progress-bar" style="width: 650px; margin-top: 32px;">
-            <div class="tech-progress-fill" style="width: 45%;"></div>
+            <div class="tech-progress-fill" id="makerProgressBar" style="width: 45%;"></div>
           </div>
-          <div class="countdown-display starting-countdown">05:00</div>
+          <div class="countdown-display starting-countdown" id="makerCountdown">05:00</div>
         </div>
 
         <!-- Tarjetas de Modos del Canal a la derecha -->
-        <div class="starting-side-modes">
+        <div class="panel-card starting-side-modes" data-oss-panel="true">
           <div style="font-family: var(--font-tech); font-size: 11px; letter-spacing: 2px; color: var(--color-text-dim); margin-bottom: 4px; text-transform: uppercase;">
             MODOS DE EMISIÓN:
           </div>
 
           <div class="stream-mode-card active-cyan">
             <span data-icon="gamepad"></span>
-            <span class="ss-mode-label" data-mode-index="0" data-i18n="themes.placeholder_ss_mode_1">01 // GAME</span>
+            <span class="ss-mode-label" data-mode-index="0">01 // GAME</span>
           </div>
 
           <div class="stream-mode-card active-cyan">
             <span data-icon="chip"></span>
-            <span class="ss-mode-label" data-mode-index="1" data-i18n="themes.placeholder_ss_mode_2">02 // MAKER</span>
+            <span class="ss-mode-label" data-mode-index="1">02 // MAKER</span>
           </div>
 
           <div class="stream-mode-card active-orange">
             <span data-icon="cutter"></span>
-            <span class="ss-mode-label" data-mode-index="2" data-i18n="themes.placeholder_ss_mode_3">03 // PRINT</span>
+            <span class="ss-mode-label" data-mode-index="2">03 // PRINT</span>
           </div>
 
           <div class="stream-mode-card">
             <span data-icon="chat"></span>
-            <span class="ss-mode-label" data-mode-index="3" data-i18n="themes.placeholder_ss_mode_4">04 // CHILL</span>
+            <span class="ss-mode-label" data-mode-index="3">04 // CHILL</span>
           </div>
         </div>
 
       </div>
 
       <!-- Pie inferior -->
-      <div class="starting-footer">
-        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);">
+      <footer class="footer-bar starting-footer" data-oss-bar="bottom">
+        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);" data-text-key="channel.tagline">
           ANDORINA · OPEN STREAM SUITE
         </div>
         <div class="social-links" style="display: none;"></div>
-      </div>
+      </footer>
 
     </div>
   </div>
 
   <script src="/config.js"></script>
   <script src="/common/overlay.js"></script>
+  <script>
+    (function() {
+      let totalSeconds = 300;
+      let remaining = totalSeconds;
+      const countEl = document.getElementById('makerCountdown');
+      const barEl = document.getElementById('makerProgressBar');
+      setInterval(() => {
+        if (remaining > 0) {
+          remaining--;
+          const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+          const s = String(remaining % 60).padStart(2, '0');
+          if (countEl) countEl.textContent = `${m}:${s}`;
+          if (barEl) barEl.style.width = `${((totalSeconds - remaining) / totalSeconds) * 100}%`;
+        }
+      }, 1000);
+    })();
+  </script>
 </body>
 </html>

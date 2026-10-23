@@ -20,7 +20,8 @@ load_overlay_texts_from_disk = load_overlay_texts
 
 async def handle_get_overlay_texts(request):
     """Devuelve todos los textos de las escenas y overlays en JSON"""
-    data = load_overlay_texts()
+    lang = request.query.get("lang")
+    data = load_overlay_texts(lang=lang)
     return web.json_response({"status": "ok", "texts": data})
 
 
@@ -50,20 +51,22 @@ async def handle_save_overlay_texts(request):
 async def handle_reset_overlay_texts(request):
     """Restaura todos los textos de overlays o una sección específica a los valores originales de fábrica"""
     section = "all"
+    scene_key = None
     if request.can_read_body:
         try:
             body = await request.json()
             section = body.get("section", "all")
+            scene_key = body.get("sceneKey")
         except Exception:
             pass
 
-    current_texts = reset_overlay_texts(section)
+    current_texts = reset_overlay_texts(section, scene_key=scene_key)
     await system.broadcast({
         "type": "overlay_texts_update",
         "texts": current_texts
     })
-    logger.info(f"↺ Textos de overlays restaurados (sección: {section})")
-    return web.json_response({"status": "ok", "texts": current_texts, "reset_section": section})
+    logger.info(f"↺ Textos de overlays restaurados (sección: {section}, escena: {scene_key})")
+    return web.json_response({"status": "ok", "texts": current_texts, "reset_section": section, "sceneKey": scene_key})
 
 
 def register_overlay_routes(app):

@@ -9,6 +9,7 @@ from pathlib import Path
 from server.config import BASE_DIR, logger
 
 OVERLAY_TEXTS_FILE = BASE_DIR / "overlay_texts_config.json"
+OVERLAY_TEXTS_EN_FILE = BASE_DIR / "overlay_texts_config.en.json"
 CONFIG_JS_FILE = BASE_DIR / "config.js"
 
 DEFAULT_OVERLAY_TEXTS = {
@@ -128,15 +129,16 @@ def deep_merge(base: dict, override: dict) -> dict:
     return result
 
 
-def load_overlay_texts() -> dict:
-    """Carga los textos configurados desde overlay_texts_config.json o devuelve valores por defecto"""
-    if OVERLAY_TEXTS_FILE.exists():
+def load_overlay_texts(lang: str = None) -> dict:
+    """Carga los textos configurados desde overlay_texts_config.json o overlay_texts_config.en.json"""
+    target_file = OVERLAY_TEXTS_EN_FILE if lang == "en" and OVERLAY_TEXTS_EN_FILE.exists() else OVERLAY_TEXTS_FILE
+    if target_file.exists():
         try:
-            with open(OVERLAY_TEXTS_FILE, "r", encoding="utf-8") as f:
+            with open(target_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 return deep_merge(DEFAULT_OVERLAY_TEXTS, data)
         except Exception as e:
-            logger.warning(f"Error leyendo overlay_texts_config.json: {e}")
+            logger.warning(f"Error leyendo {target_file.name}: {e}")
 
     return json.loads(json.dumps(DEFAULT_OVERLAY_TEXTS))
 
@@ -168,13 +170,23 @@ window.TALLER_CONFIG = window.OSS_CONFIG;  // alias de compatibilidad hacia atr�
         logger.warning(f"Error actualizando config.js: {e}")
 
 
-def reset_overlay_texts(section: str = "all") -> dict:
-    """Restaura los textos de overlays globalmente o para una sección específica"""
+def reset_overlay_texts(section: str = "all", scene_key: str = None) -> dict:
+    """Restaura los textos de overlays globalmente o para una sección/escena específica"""
     current_texts = load_overlay_texts()
     if section == "all":
         current_texts = copy.deepcopy(DEFAULT_OVERLAY_TEXTS)
-    elif section in DEFAULT_OVERLAY_TEXTS:
-        current_texts[section] = copy.deepcopy(DEFAULT_OVERLAY_TEXTS[section])
+    else:
+        if section in DEFAULT_OVERLAY_TEXTS:
+            current_texts[section] = copy.deepcopy(DEFAULT_OVERLAY_TEXTS[section])
+        if "customScenes" in current_texts:
+            targets = {section}
+            if scene_key:
+                targets.add(scene_key)
+            for t in targets:
+                current_texts["customScenes"].pop(t, None)
+                for k in list(current_texts["customScenes"].keys()):
+                    if k == t or k.startswith(t) or t.startswith(k):
+                        current_texts["customScenes"].pop(k, None)
 
     save_overlay_texts_to_disk(current_texts)
     return current_texts

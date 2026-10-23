@@ -61,7 +61,7 @@ window.OSS_CONFIG = {
   },
   "maker": {
     "projectName": "SUPER ESTACION MAKER 2026",
-    "currentPhase": "04 PRUEBAS",
+    "currentPhase": "02 MONTAJE",
     "detail": "Armbian OS · PCB v1.2 · Caja a medida",
     "panelTitle": "ESTADO DEL PROYECTO",
     "projectPrefix": "PROYECTO:",

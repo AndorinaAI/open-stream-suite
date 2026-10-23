@@ -348,20 +348,6 @@ body[data-theme="maker"] {
   --color-border-cyan: rgba(87, 214, 196, 0.35);
   --color-border-cyan-bright: #57D6C4;
   --theme-glow: 0 0 16px rgba(87, 214, 196, 0.5);
-  --frame-radius: 2px;
-  --frame-border-width: 2px;
-  --frame-border-style: solid;
-  --frame-clip-path: none;
-  --frame-shadow: 0 0 0 1px rgba(87, 214, 196, 0.25), inset 0 0 14px rgba(87, 214, 196, 0.08);
-  --frame-corner-display: block;
-  --panel-radius: 4px;
-  --panel-clip-path: none;
-  --panel-backdrop: blur(10px);
-  --panel-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --badge-radius: 3px;
-  --badge-clip-path: none;
-  --header-radius: 3px;
-  --header-clip-path: none;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: print */

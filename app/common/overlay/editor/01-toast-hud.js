@@ -220,20 +220,48 @@ window.OSSEditor = window.OSSEditor || {};
 
   let autoFitEnabled = true;
   function applyAutoFit() {
-    if (typeof window.obsstudio !== 'undefined') return;
+    if (typeof window.obsstudio !== 'undefined' || window.location.search.includes('obs=1')) {
+      document.documentElement.classList.remove('browser-preview-fit');
+      document.body.classList.remove('browser-preview-fit');
+      document.body.style.transform = '';
+      document.body.style.transformOrigin = '';
+      document.body.style.position = '';
+      document.body.style.left = '';
+      document.body.style.top = '';
+      const c = document.querySelector('.overlay-canvas');
+      if (c) c.style.transform = '';
+      return;
+    }
+
     const canvas = document.querySelector('.overlay-canvas');
-    if (!canvas) return;
 
     if (autoFitEnabled) {
       document.documentElement.classList.add('browser-preview-fit');
       document.body.classList.add('browser-preview-fit');
-      const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-      canvas.style.transform = `scale(${scale})`;
-      canvas.style.transformOrigin = 'center center';
+      const scaleX = window.innerWidth / 1920;
+      const scaleY = window.innerHeight / 1080;
+      const scale = Math.min(scaleX, scaleY);
+
+      if (canvas) {
+        canvas.style.transform = `scale(${scale})`;
+        canvas.style.transformOrigin = 'center center';
+      } else {
+        document.body.style.transform = `scale(${scale})`;
+        document.body.style.transformOrigin = 'top left';
+        const offsetX = Math.max(0, (window.innerWidth - (1920 * scale)) / 2);
+        const offsetY = Math.max(0, (window.innerHeight - (1080 * scale)) / 2);
+        document.body.style.position = 'absolute';
+        document.body.style.left = `${offsetX}px`;
+        document.body.style.top = `${offsetY}px`;
+      }
     } else {
       document.documentElement.classList.remove('browser-preview-fit');
       document.body.classList.remove('browser-preview-fit');
-      canvas.style.transform = '';
+      if (canvas) canvas.style.transform = '';
+      document.body.style.transform = '';
+      document.body.style.position = '';
+      document.body.style.left = '';
+      document.body.style.top = '';
     }
   }
 
@@ -276,19 +304,48 @@ window.OSSEditor = window.OSSEditor || {};
         <!-- 1. Selector de Forma Física de Escena -->
         <div style="display:flex; align-items:center; gap:3px;" title="Forma física y estética de marcos, paneles y accesorios">
           <span style="color:#8B949E; font-size:10px;">📐</span>
-          <select class="hud-select" id="hud-shape-select" style="max-width:130px; font-size:10px;">
-            <option value="original">📐 Forma: Original</option>
-            <option value="cozy">☕ Forma: Cozy Polaroid</option>
-            <option value="gamer">🎮 Forma: Gamer 45° HUD</option>
-            <option value="maker">🛠️ Forma: Maker CAD</option>
-            <option value="openstream">⚡ Forma: OpenStream Glass</option>
+          <select class="hud-select" id="hud-shape-select" style="max-width:180px; font-size:10px; text-overflow:ellipsis; white-space:nowrap;">
+            <option value="auto">⚡ Forma: Automática (según estilo)</option>
+            <option value="original">📐 Forma: Original del Pack</option>
+            <optgroup label="☕ Cozy Lo-Fi & Arte">
+              <option value="cozy_polaroid">☕ Polaroid Vintage con Cinta</option>
+              <option value="cozy_canvas">🎨 Lienzo de Arte con Chinchetas</option>
+              <option value="cozy_soft">☁️ Píldora Soft Minimal</option>
+            </optgroup>
+            <optgroup label="🎮 Gamer Pro & Esports">
+              <option value="gamer_mecha">🎮 Mecha Tournament 45°</option>
+              <option value="gamer_tactical_hud">🎯 Tactical FPS HUD</option>
+              <option value="gamer_stealth">🕶️ Stealth Dark Cyber</option>
+              <option value="gamer_hex_shield">🛡️ Hex Shield Blindaje</option>
+              <option value="gamer_cyber_glitch">⚡ Cyber Glitch Neón</option>
+              <option value="gamer_arcade_retro">👾 Arcade 8-Bit Pixel</option>
+            </optgroup>
+            <optgroup label="🛠️ Maker & Taller">
+              <option value="maker_blueprint">🛠️ Blueprint Técnico CAD</option>
+              <option value="maker_workbench">📐 Banco de Trabajo Studio</option>
+              <option value="maker_circuit_pcb">📟 Placa de Circuito PCB</option>
+            </optgroup>
+            <optgroup label="⚡ Open Stream Suite">
+              <option value="openstream_glass">⚡ Swiss Frosted Glass</option>
+              <option value="openstream_studio">🎙️ Broadcast Pro Studio</option>
+            </optgroup>
+            <optgroup label="📜 Fantasía, Rol & Terror">
+              <option value="fantasy_parchment">📜 Pergamino Rol & Sello Cera</option>
+              <option value="fantasy_runic_stone">🗿 Piedra Rúnica Mística</option>
+              <option value="gothic_vampire">🦇 Gótico Victoriano Dark</option>
+            </optgroup>
+            <optgroup label="💥 Cómic, Pop Art & Retro TV">
+              <option value="comic_manga_action">💥 Manga / Shonen Comic</option>
+              <option value="pop_synth_neon">🌆 Synthwave 80s Grid</option>
+              <option value="vintage_crt_monitor">📺 Monitor CRT Retro 90s</option>
+            </optgroup>
           </select>
         </div>
 
         <!-- 2. Selector de Paleta de Color -->
         <div style="display:flex; align-items:center; gap:3px;" title="Paleta de colores del tema">
           <span style="color:#8B949E; font-size:10px;">🎨</span>
-          <select class="hud-select" id="hud-theme-select" style="max-width:145px; font-size:10px;">
+          <select class="hud-select" id="hud-theme-select" style="max-width:160px; font-size:10px; text-overflow:ellipsis; white-space:nowrap;">
             <option value="">Cargando colores...</option>
           </select>
         </div>
@@ -302,11 +359,15 @@ window.OSSEditor = window.OSSEditor || {};
         </button>
 
         <button type="button" class="hud-btn btn-save" id="hud-btn-save-texts" title="Guardar cambios de texto y emitirlos a OBS">
-          💾 Guardar
+          💾 Guardar Textos
         </button>
 
-        <button type="button" class="hud-btn" id="hud-btn-reset-texts" style="color:#FF783F; border-color:rgba(255,120,63,0.4);" title="Restaurar textos de esta escena a valores originales">
-          🔄 Restaurar
+        <button type="button" class="hud-btn" id="hud-btn-reset-style" style="color:#57D6C4; border-color:rgba(87,214,196,0.4);" title="Restaurar paleta de color y forma física originales de fábrica para esta escena">
+          ↺ Restaurar Estilo
+        </button>
+
+        <button type="button" class="hud-btn" id="hud-btn-reset-texts" style="color:#FF783F; border-color:rgba(255,120,63,0.4);" title="Restaurar textos editables de esta escena a valores originales de fábrica">
+          ↺ Restaurar Textos
         </button>
 
         <button type="button" class="hud-btn" id="hud-btn-toggle-bg" title="Alternar fondo transparente u oscuro de prueba">
@@ -352,6 +413,16 @@ window.OSSEditor = window.OSSEditor || {};
           <button type="button" class="hud-btn hud-pod-cam-btn" data-cams="3" style="padding:2px 6px; font-size:10px;">3 Cams</button>
           <button type="button" class="hud-btn hud-pod-cam-btn" data-cams="4" style="padding:2px 6px; font-size:10px;">4 Cams</button>
         </div>
+
+        <button type="button" class="hud-btn" id="hud-btn-toggle-countdown" style="display:none; color:#57D6C4; border-color:rgba(87,214,196,0.4);" title="Abrir/Cerrar panel de Temporizador / Cuenta Atrás">
+          ⏱️ Temporizador
+        </button>
+        <button type="button" class="hud-btn" id="hud-btn-toggle-speedrun" style="display:none; color:#FF783F; border-color:rgba(255,120,63,0.4);" title="Abrir/Cerrar panel de Speedrun y Tramos">
+          ⚡ Splits
+        </button>
+        <button type="button" class="hud-btn" id="hud-btn-toggle-brb" style="display:none; color:#57D6C4; border-color:rgba(87,214,196,0.4);" title="Abrir/Cerrar panel de Frases en Rotación">
+          🔄 Frases BRB
+        </button>
       </div>
 
       <button type="button" class="hud-btn" id="hud-btn-toggle-min" style="padding:4px 6px; font-size:10px;" title="Minimizar barra">
@@ -379,6 +450,49 @@ window.OSSEditor = window.OSSEditor || {};
           btnToggleDock.textContent = '↕️ Arriba';
           showHudToast('↕️ Barra fijada abajo');
         }
+      });
+    }
+
+    // Alternadores de paneles flotantes
+    const btnCd = hud.querySelector('#hud-btn-toggle-countdown');
+    if (btnCd) {
+      const checkCd = () => {
+        if (window.OSSEditor.isCountdownScene && window.OSSEditor.isCountdownScene(sceneKey)) {
+          btnCd.style.display = 'inline-flex';
+        }
+      };
+      checkCd();
+      setTimeout(checkCd, 120);
+      btnCd.addEventListener('click', () => {
+        if (window.OSSEditor.toggleCountdown) window.OSSEditor.toggleCountdown();
+      });
+    }
+
+    const btnSr = hud.querySelector('#hud-btn-toggle-speedrun');
+    if (btnSr) {
+      const checkSr = () => {
+        if (window.OSSEditor.isSpeedrunScene && window.OSSEditor.isSpeedrunScene(sceneKey)) {
+          btnSr.style.display = 'inline-flex';
+        }
+      };
+      checkSr();
+      setTimeout(checkSr, 120);
+      btnSr.addEventListener('click', () => {
+        if (window.OSSEditor.toggleSpeedrun) window.OSSEditor.toggleSpeedrun();
+      });
+    }
+
+    const btnBrb = hud.querySelector('#hud-btn-toggle-brb');
+    if (btnBrb) {
+      const checkBrb = () => {
+        if (window.OSSEditor.isBrbScene && window.OSSEditor.isBrbScene(sceneKey)) {
+          btnBrb.style.display = 'inline-flex';
+        }
+      };
+      checkBrb();
+      setTimeout(checkBrb, 120);
+      btnBrb.addEventListener('click', () => {
+        if (window.OSSEditor.togglePhrases) window.OSSEditor.togglePhrases();
       });
     }
 
@@ -411,23 +525,50 @@ window.OSSEditor = window.OSSEditor || {};
     // Selector de fondo decorativo con apertura / recorte de cámaras
     const selApertureBg = hud.querySelector('#hud-aperture-bg-select');
     if (selApertureBg) {
+      if (window.OSSAperture && window.OSSAperture.getConfig) {
+        const currentBg = window.OSSAperture.getConfig();
+        if (currentBg) {
+          if (currentBg.mode === 'none') selApertureBg.value = 'none';
+          else if (currentBg.mode === 'preset' && currentBg.preset) selApertureBg.value = currentBg.preset;
+          else if (currentBg.mode === 'image') selApertureBg.value = 'custom_url';
+        }
+      }
+
+      function persistBackdrop(bgConfig) {
+        const p = new URLSearchParams(window.location.search);
+        const token = p.get('token') || (window.CONFIG && window.CONFIG.localToken) || '';
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['X-Local-Token'] = token;
+        fetch('/api/themes/backdrop', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({ overlayKey: sceneKey, backdrop: bgConfig })
+        }).catch(() => {});
+      }
+
       selApertureBg.addEventListener('change', () => {
         const val = selApertureBg.value;
         if (!window.OSSAperture) return;
 
         if (val === 'none') {
-          window.OSSAperture.setBackdrop({ mode: 'none' });
+          const cfg = { mode: 'none' };
+          window.OSSAperture.setBackdrop(cfg);
+          persistBackdrop(cfg);
           showHudToast('🔳 Fondo transparente restaurado');
         } else if (val === 'custom_url') {
           const url = prompt('Introduce la URL de la imagen de fondo:');
           if (url && url.trim()) {
-            window.OSSAperture.setBackdrop({ mode: 'image', customUrl: url.trim() });
+            const cfg = { mode: 'image', customUrl: url.trim() };
+            window.OSSAperture.setBackdrop(cfg);
+            persistBackdrop(cfg);
             showHudToast('🖼️ Fondo personalizado con recorte de cámaras aplicado');
           } else {
             selApertureBg.value = 'none';
           }
         } else {
-          window.OSSAperture.setBackdrop({ mode: 'preset', preset: val });
+          const cfg = { mode: 'preset', preset: val };
+          window.OSSAperture.setBackdrop(cfg);
+          persistBackdrop(cfg);
           showHudToast(`🖼️ Fondo [${val}] con recorte automático aplicado`);
         }
       });

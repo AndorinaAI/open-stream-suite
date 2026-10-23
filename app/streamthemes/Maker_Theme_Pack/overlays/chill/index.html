@@ -10,6 +10,15 @@
     /* Estilos específicos para la escena de charla */
     .camera-chill-main {
       transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cam-viewport {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
     }
 
     .chat-panel-frame {
@@ -21,7 +30,7 @@
       border: 1px solid var(--color-border-dim);
       border-radius: var(--radius-sm);
       background: rgba(25, 29, 33, 0.4);
-      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
+      backdrop-filter: var(--panel-backdrop, blur(10px));
       box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
@@ -58,7 +67,6 @@
       box-shadow: 0 0 6px #10B981;
     }
 
-    /* El interior del chat es transparente para dejar ver la fuente de chat de OBS */
     .chat-content-viewport {
       flex: 1;
       background: transparent;
@@ -71,7 +79,7 @@
       width: 1280px;
       height: 54px;
       background: var(--color-panel-bg-trans);
-      backdrop-filter: var(--panel-backdrop, blur(10px)); border-radius: var(--panel-radius, 8px); clip-path: var(--panel-clip-path, none); box-shadow: var(--panel-shadow, none);
+      backdrop-filter: var(--panel-backdrop, blur(10px));
       border: 1px solid var(--color-border-dim);
       border-radius: var(--radius-sm);
       display: flex;
@@ -82,36 +90,37 @@
     }
   </style>
 </head>
-<body data-mode="chill">
+<body data-pack="Maker_Theme_Pack" data-scene="chill" data-theme="chill" data-mode="chill">
   <div class="overlay-canvas">
 
     <!-- 1. Cabecera superior -->
-    <header class="scene-header theme-chill">
+    <header class="header-bar scene-header theme-chill" data-oss-bar="top">
       <div class="header-left">
-        <div class="mode-badge badge-chill">
+        <div class="mode-badge badge-chill" data-oss-badge="true">
           <span data-icon="chat"></span>
           <span>CHILL MODE</span>
         </div>
-        <div class="header-subtitle" data-i18n="themes.placeholder_chill_sub">CHARLA / DUDAS / IDEAS / COMUNIDAD</div>
+        <div class="header-subtitle" data-text-key="chill.subtitle">CHARLA / DUDAS / IDEAS / COMUNIDAD</div>
       </div>
       <div class="header-right">
         <div class="brand-badge">
           <div class="brand-icon-svg" data-icon="logo"></div>
           <div class="brand-info">
-            <span class="brand-name">ANDORINA</span>
-            <span class="brand-tagline">JUGAR · CREAR · TRASTEAR</span>
+            <span class="brand-name" data-text-key="channel.name">ANDORINA</span>
+            <span class="brand-tagline" data-text-key="channel.tagline">JUGAR · CREAR · TRASTEAR</span>
           </div>
         </div>
         <div class="live-indicator">
           <span class="live-dot"></span>
-          <span data-i18n="themes.live_indicator">EN DIRECTO</span>
+          <span data-i18n="themes.live_indicator" data-text-key="channel.liveText">EN DIRECTO</span>
         </div>
       </div>
     </header>
 
     <!-- 2. Cámara Principal de Charla (1280 x 720) -->
-    <div class="camera-frame camera-chill-main" style="top: 112px; left: 32px; width: 1280px; height: 720px; border-color: rgba(137, 180, 250, 0.4);">
-      <div class="frame-label" style="border-color: rgba(137, 180, 250, 0.4); color: #89B4FA;">
+    <div class="camera-frame camera-chill-main camera-main" data-oss-cam="true" style="top: 112px; left: 32px; width: 1280px; height: 720px; border-color: rgba(137, 180, 250, 0.4);">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label frame-label" data-oss-cam-label="true" style="border-color: rgba(137, 180, 250, 0.4); color: #89B4FA;" data-text-key="chill.chatTitle">
         <span data-icon="chat" style="width:12px;height:12px;display:flex;"></span>
         <span>JUST CHATTING / CÁMARA PRINCIPAL</span>
       </div>
@@ -120,30 +129,30 @@
       <div class="reg-mark" style="top: 8px; right: 10px; color: #89B4FA;">⌖</div>
     </div>
 
-    <!-- 3. Marco de Chat lateral (544 x 848) - Totalmente transparente por dentro -->
-    <div class="chat-panel-frame">
+    <!-- 3. Marco de Chat lateral (544 x 848) -->
+    <div class="panel-card chat-panel-frame" data-oss-panel="true">
       <div class="chat-panel-header">
         <div class="chat-title">
           <span class="chat-status-dot"></span>
-          <span data-i18n="themes.placeholder_chill_chat">CHAT EN DIRECTO</span>
+          <span data-text-key="chill.chatTitle">CHAT EN DIRECTO</span>
         </div>
         <span style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim);">TWITCH / OBS</span>
       </div>
       <div class="chat-content-viewport">
-        <!-- El contenido real del chat se añade en OBS como fuente de navegador debajo o dentro de este marco -->
+        <!-- Contenido de chat de Twitch -->
       </div>
     </div>
 
     <!-- 4. Banda inferior informativa de la charla -->
-    <div class="chill-footer-topic">
+    <footer class="footer-bar chill-footer-topic" data-oss-bar="bottom">
       <div style="display: flex; align-items: center; gap: 12px;">
         <span style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim); font-weight: 700;">TEMA:</span>
-        <span style="font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--color-text-light);">Cacharreo, proyectos de la semana y preguntas del chat</span>
+        <span style="font-family: var(--font-primary); font-size: 14px; font-weight: 600; color: var(--color-text-light);" data-text-key="chill.podcastTitle">Cacharreo, proyectos de la semana y preguntas del chat</span>
       </div>
-      <div style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="themes.placeholder_chill_prompt">
+      <div style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-text-key="chill.chatStatus">
         ¡Escribe en el chat para participar!
       </div>
-    </div>
+    </footer>
 
   </div>
 

@@ -50,6 +50,7 @@
     .mug-icon {
       font-size: 54px;
       margin-bottom: 14px;
+      display: inline-block;
     }
 
     h1 {
@@ -107,24 +108,24 @@
     }
   </style>
 </head>
-<body data-theme="latte_caramel">
+<body data-pack="Cozy_LoFi_Pack" data-scene="cozy_brb" data-theme="latte_caramel">
 
-  <div class="break-card">
+  <div class="panel-card break-card" data-oss-panel="true">
     <div>
       <span class="steam-vapor">♨️</span>
       <span class="mug-icon">☕</span>
     </div>
 
-    <h1 class="main-stream-title">PAUSA DE CAFÉ</h1>
-    <p class="stream-subtitle brb-status-phrase">Pausa para rellenar la taza y estirar las piernas. ¡Regresamos en unos minutos!</p>
+    <h1 class="main-stream-title" data-text-key="beRightBack.title">PAUSA DE CAFÉ</h1>
+    <p class="stream-subtitle brb-status-phrase" data-text-key="beRightBack.subtitle">Pausa para rellenar la taza y estirar las piernas. ¡Regresamos en unos minutos!</p>
 
-    <div class="relax-pill">
+    <div class="mode-badge relax-pill" data-oss-badge="true">
       <span>🌿</span>
-      <span>Inhala profundo · Exhala lento · Descanso activo</span>
+      <span data-text-key="channel.tagline">Inhala profundo · Exhala lento · Descanso activo</span>
     </div>
 
     <div class="social-pills-row">
-      <span class="social-pill">🟣 twitch.tv/tu_canal</span>
+      <span class="social-pill" data-text-key="channel.name">🟣 twitch.tv/andorina</span>
       <span class="social-pill">💬 discord.gg/comunidad</span>
     </div>
   </div>

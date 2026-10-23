@@ -43,3 +43,19 @@ streamthemes/
    - Especializado en sesiones de relax, estudio ("Study With Me"), arte, música Lo-Fi y café con curvas suaves.
    - Escenas: `study_pomodoro`, `art_dual_cam`, `cafe_chat` y pantallas (`starting-soon`, `coffee-break`, `ending`).
    - Estilos: Latte Caramel, Lavender Dream, Matcha Bamboo, Sakura Bloom y Nordic Twilight.
+
+---
+
+## Contrato Universal de Compatibilidad Semántica (`data-oss-*`)
+
+Todas las escenas de los packs implementan el estándar semántico universal:
+- `data-oss-cam="true"`: Marco contenedor de cámara. Recibe las 20 formas físicas (chaflanes 45°, polaroids, blindajes hex, pergaminos, arcade pixel, blueprint, etc.).
+- `data-oss-viewport="true"`: Área transparente interior para recortar la webcam o captura en OBS.
+- `data-oss-cam-label="true"`: Rótulo identificativo de la cámara.
+- `data-oss-panel="true"`: Tarjetas, bloques de chat, podios o listas de tareas.
+- `data-oss-bar="top|bottom"`: Barras de cabecera superior o noticias/fases inferiores.
+- `data-text-key="seccion.campo"`: Aislamiento estricto de textos para edición en caliente y sincronización WebSocket con OBS.
+
+### Fluidez con Relaciones de Aspecto
+Gracias al uso de coordenadas relativas (`calc(100% - 24px)`), las formas se adaptan automáticamente a cámaras **16:9** (widescreen), **4:3** (retro), **21:9** (ultra-panorámicas) y **9:16** (vertical móvil / TikTok / Shorts) sin deformaciones.
+

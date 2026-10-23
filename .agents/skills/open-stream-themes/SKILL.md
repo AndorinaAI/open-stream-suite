@@ -31,23 +31,41 @@ Token | Description | Typical Values
 
 ---
 
-## 2. Pack Archetypes & Signature Styles
+## 2. Pack Archetypes & The 20 Physical Shapes Catalog
 
-### 🛠️ Maker & Taller Pack (`Maker_Theme_Pack`)
-- **Aesthetic:** Blueprint, engineering, lab calibration, CAD drawings, industrial fab.
-- **Physical Geometry:** Technical corner brackets (`--frame-corner-display: block`), zero or micro-radius (`0px - 2px`), precision crosshair marks, workshop warning accents.
+The engine supports 20 universal physical frame and panel archetypes (`data-theme-shape`), grouped into 6 thematic families:
 
-### 🎮 Gamer Pro & Esports Pack (`Gamer_Pro_Pack`)
-- **Aesthetic:** High-octane tournament, mecha telemetry, HUD overlays, tactical carbon.
-- **Physical Geometry:** 45° chamfered cut corners (`clip-path: polygon(...)`), angled stat bars, segmented energy meters, high-voltage glows or stealth matte.
+### ☕ Cozy Lo-Fi & Art
+- `cozy_polaroid`: Classic vintage Polaroid frame with wide bottom chin, warm paper texture, washi tape, and handwritten photo caption.
+- `cozy_canvas`: Canvas texture with warm wooden trim and brass corner pushpins.
+- `cozy_soft`: Ultra-soft 28px pill curves with frosted glass and minimal styling.
 
-### ☕ Cozy Lo-Fi Pack (`Cozy_LoFi_Pack`)
-- **Aesthetic:** Hygge, warm cafe, pastel anime, relax & study.
-- **Physical Geometry:** Ultra-smooth pill curves (`border-radius: 20px - 26px`), soft frosted glass, warm ambient diffuse shadows (no harsh neon glares or sharp points).
+### 🎮 Gamer Pro & Esports
+- `gamer_mecha`: 45° chamfered polygon cutout with dual corner reticles and neon laser glow.
+- `gamer_tactical_hud`: Military FPS telemetry frame with dash brackets and live ● LIVE REC indicator.
+- `gamer_stealth`: Pure carbon black minimal frame with 8px chamfer and zero reflective glare.
+- `gamer_hex_shield`: Perimeter Sci-Fi hexagonal armor with ⬡ SHIELD: ACTIVE status tag.
+- `gamer_cyber_glitch`: Neon asymmetric polygon cuts with chromatic aberration (cyan/magenta split) and visual glitch telemetry.
+- `gamer_arcade_retro`: 8-bit stepped pixel cabinet bezel with 1UP red marquee and INSERT COIN counter.
 
-### ✨ Open Stream Pack (`Open_stream_Pack`)
-- **Aesthetic:** Sleek modern broadcast, neo-glassmorphism.
-- **Physical Geometry:** Clean curved rectangles (`8px - 12px`), balanced 1px-2px borders, elegant floating cards, broadcast tickers.
+### 🛠️ Maker & Technical Workshop
+- `maker_blueprint`: Precision engineering frame with CAD blueprint grid, angle calipers, and ⌖ CALIB: 1:1 crosshair mark.
+- `maker_workbench`: Heavy industrial studio workbench with ⨁ corner rivets, orange accents, and project phase markers.
+- `maker_circuit_pcb`: Emerald green PCB electronic board with gold traces, GND solder pads, and SMD components.
+
+### ⚡ Open Stream Suite Official
+- `openstream_glass`: Swiss neo-glassmorphism with 16px radius, deep 24px backdrop blur, and subtle specular borders.
+- `openstream_studio`: Professional TV broadcast line with pulsing ● ON AIR tally and lower-third ticker.
+
+### 📜 Fantasy, RPG & Gothic
+- `fantasy_parchment`: Organic hand-torn medieval parchment edges, crimson wax seal ⚜, and antique gold borders.
+- `fantasy_runic_stone`: Obsidian carved stone block with glowing ancient Nordic runes in corners.
+- `gothic_vampire`: Victorian dark gothic arches with blood-red crimson trim and bat emblem 🦇.
+
+### 💥 Comic, Pop Art & Retro TV
+- `comic_manga_action`: Bold 5px ink outlines, solid comic shadows, and action impact badge 💥 GO!!.
+- `pop_synth_neon`: 80s synthwave wireframe grid horizon with fluorescent magenta/cyan borders and retro sun ☀.
+- `vintage_crt_monitor`: 90s curved bubble CRT monitor bezel with grey casing, scanlines, and green ● POWER LED.
 
 ---
 
@@ -73,10 +91,11 @@ A **Fusion** allows streamers to assemble a personalized super-pack by selecting
 - **Backend Service:** `app/server/services/fusions_service.py`
 - **REST Endpoints:** `app/server/routes/fusions_routes.py`
   - `GET /api/fusions`
-  - `POST /api/fusions`
+  - `POST /api/fusions` (Includes `defaultTheme` and `defaultShape`)
   - `GET /api/fusions/{id}`
   - `DELETE /api/fusions/{id}`
   - `POST /api/fusions/{id}/apply-theme` (Batch theme application)
+  - `POST /api/fusions/{id}/apply-shape` (Batch physical shape application)
 - **Frontend Controller:** `app/alerts/js/themes/13-fusions.js`
 
 ---
@@ -87,13 +106,43 @@ Allows applying decorative backgrounds (thematic gradients, textures, wallpapers
 
 - **SVG Mask Architecture:**
   - Injects `#oss-backdrop-aperture-layer` (`z-index: 0`) masked by `<mask id="oss-aperture-mask">`.
-  - Automatically queries all viewport/camera selectors (`.camera-frame`, `.cam-box`, `.cam-inner-viewport`, `.face-viewport`, `.desk-viewport`, `.stream-frame`, `.pip-cam-box`, `.guest-cam`, `[data-cutout="true"]`).
+  - Automatically queries all viewport/camera selectors (`.camera-frame`, `.cam-box`, `.cam-inner-viewport`, `.face-viewport`, `.desk-viewport`, `.stream-frame`, `.pip-cam-box`, `.guest-cam`, `[data-cutout="true"]`, `[data-oss-cam]`).
   - Carves out transparent apertures (`fill="#000000"`) while preserving computed `border-radius` and polygonal 45° chamfers (`clip-path: polygon(...)`).
+- **Persistence & Synchronization:** Saved via `POST /api/themes/backdrop` and persisted in `themes_state.json` under `"backdrops"`. Real-time WebSocket synchronization across all open OBS instances using event `overlay_backdrop_change`.
 - **HUD Controls:** Streamers can select preset backgrounds (Kraft paper, Tatami wood, Carbon mesh, CAD blueprint, Acoustic slate) or paste a custom image URL directly from the floating HUD toolbar.
 
 ---
 
-## 5. Testing & Compilation Procedure
+## 5. Universal Semantic Contract (`data-oss-*`) & Multi-Aspect Ratio Geometry
+
+To decouple pack creation from specific CSS class names and ensure total interchangeability:
+
+1. **Mandatory Semantic Markers**:
+   - `data-oss-cam="true"`: Primary camera container. Receives borders, shapes, chamfers, and shadows.
+   - `data-oss-viewport="true"`: Transparent camera viewport cut out for OBS capture.
+   - `data-oss-cam-label="true"`: Camera label or badge element.
+   - `data-oss-panel="true"`: Chat boxes, task lists, pomodoro or stats cards.
+   - `data-oss-bar="top|bottom"`: Top headers or bottom news/stage tickers.
+
+2. **Aspect Ratio Fluidity (16:9, 4:3, 21:9, 9:16)**:
+   - Physical shapes rely on relative `calc(100% - 24px)` coordinates and corner-pinned accents (`top: 6px; left: 6px;`).
+   - Adapts fluidly to 16:9 widescreen, 4:3 retro, 21:9 ultrawide, and 9:16 vertical layouts (TikTok / Shorts) without distorted angles.
+
+3. **Text Key Isolation (`data-text-key`)**:
+   - All editable labels must carry unique namespace keys (e.g. `victory.title`, `cozy.cafeCamLabel`, `speedrun.game`).
+   - Prevents cross-scene collisions and enables automated bidirectional sync via `POST /api/overlays/texts`.
+
+4. **Polygonal Insets Safety Rule**:
+   - Containers with `clip-path` or `overflow: hidden` must never place badges/labels at negative coordinates.
+   - Always use inward positive offsets (`top: 10px; left: 14px;`) or layout padding.
+
+5. **On-Demand Floating HUD Panels**:
+   - Auxiliary panels (`#oss-countdown-control`, `#oss-speedrun-control`, `#oss-brb-phrases-control`) start hidden (`display: none;`).
+   - Toggled via contextual HUD buttons (`⏱️`, `⚡`, `🔄`) and closed with `✕`.
+
+---
+
+## 6. Testing & Compilation Procedure
 
 1. When updating themes, compile `common/themes.css`:
    ```bash

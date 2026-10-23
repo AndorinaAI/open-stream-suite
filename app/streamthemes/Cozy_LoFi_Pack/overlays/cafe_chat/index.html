@@ -45,6 +45,7 @@
 
     /* Cinta adhesiva washi tape decorativa */
     .washi-tape {
+      display: var(--skin-ornament-tape, block);
       position: absolute;
       top: -12px;
       left: 50%;
@@ -231,36 +232,36 @@
     }
   </style>
 </head>
-<body data-theme="latte_caramel">
+<body data-pack="Cozy_LoFi_Pack" data-scene="cozy_cafe" data-theme="matcha_bamboo">
 
   <!-- Columna Izquierda: Cámara Polaroid y Reproductor Lofi -->
   <div class="cam-polaroid-container">
-    <div class="polaroid-frame">
+    <div class="camera-frame polaroid-frame" data-oss-cam="true">
       <div class="washi-tape"></div>
-      <div class="cam-inner-viewport"></div>
+      <div class="cam-viewport cam-inner-viewport" data-oss-viewport="true"></div>
       <div class="polaroid-footer">
-        <span class="polaroid-handwritten">☕ Café & Charla Tranquila <span class="steam-dot">♨️</span></span>
-        <span style="font-size: 12px; color: #8A7568; font-family: 'Comfortaa';">@tu_canal · stream chill</span>
+        <span class="cam-label polaroid-handwritten" data-oss-cam-label="true" data-text-key="cozy.cafeCamLabel">☕ Café & Charla Tranquila <span class="steam-dot">♨️</span></span>
+        <span style="font-size: 12px; color: #8A7568; font-family: 'Comfortaa';" data-text-key="channel.tagline">@tu_canal · stream chill</span>
       </div>
     </div>
 
     <!-- Mini Reproductor de Música Lofi -->
-    <div class="lofi-player-bar">
+    <div class="panel-card lofi-player-bar" data-oss-panel="true">
       <span class="vinyl-icon">💿</span>
       <div style="flex: 1;">
-        <div class="track-title">Coffee & Rain Session — Lo-Fi Chillhop</div>
-        <div class="track-author">Música relajante para desconectar</div>
+        <div class="track-title" data-text-key="chill.podcastTitle">Coffee & Rain Session — Lo-Fi Chillhop</div>
+        <div class="track-author" data-text-key="chill.subtitle">Música relajante para desconectar</div>
       </div>
-      <span style="font-size: 13px; color: var(--color-accent-cyan);">🎧 432Hz</span>
+      <span class="mode-badge" data-oss-badge="true" style="font-size: 12px; color: var(--color-accent-cyan);">🎧 432Hz</span>
     </div>
   </div>
 
   <!-- Columna Derecha: Chat y Meta Acogedora -->
   <div class="side-card-container">
-    <div class="cozy-chat-card">
+    <div class="panel-card cozy-chat-card" data-oss-panel="true">
       <div class="chat-header">
-        <span class="chat-header-title">💬 Rincón del Café</span>
-        <span class="chat-live-badge">CHAT EN DIRECTO</span>
+        <span class="chat-header-title" data-text-key="cozy.chatTitle">💬 Rincón del Café</span>
+        <span class="mode-badge chat-live-badge" data-oss-badge="true" data-text-key="channel.liveText">CHAT EN DIRECTO</span>
       </div>
 
       <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end;">
@@ -279,7 +280,7 @@
       </div>
     </div>
 
-    <div class="daily-goal-pill">
+    <div class="panel-card daily-goal-pill" data-oss-panel="true">
       <span class="goal-text">☕ Meta de Tazas de Café</span>
       <span class="goal-count">14 / 20 tazas (70%)</span>
     </div>

@@ -236,6 +236,40 @@ Overlays in Open Stream Suite are dynamic broadcast web apps combining high-end 
      - **Maker & Taller**: CAD engineering blueprint and industrial fab lab. Millimeter drafting grid, edge ruler tick marks, registration marks `⌖`, project phases lifecycle bar (`01 PLAN -> 02 BUILD -> 03 TEST`), 3D printing & plotter telemetry.
      - **Open Stream**: Swiss broadcast studio neo-glass. Frosted glassmorphism (`blur(24px)`), stereo audio VU meters (Master L/R), `ON AIR` broadcast indicators, lower-third news ticker, and debate agenda cards.
 
+### H. Universal Semantic Compatibility Contract (`data-oss-*`) & Text Key Isolation
+To guarantee that **any new or existing stream pack is 100% interoperable** without authors needing to know the CSS class names of other packs:
+
+1. **Mandatory Semantic Attributes in HTML**:
+   - `data-oss-cam="true"`: Identifies a camera frame, window capture, or video viewer.
+   - `data-oss-viewport="true"`: The transparent interior cutout area where the OBS video source sits.
+   - `data-oss-cam-label="true"`: The identification badge, tag, or label for the camera.
+   - `data-oss-panel="true"`: Content cards, chat boxes, project panels, victory podiums, or task lists.
+   - `data-oss-bar="top|bottom"`: Top header bars or lower-third news/status tickers.
+
+2. **Fluid Adaptability to Any Camera Aspect Ratio and Catalog of 20 Physical Shapes**:
+   - The engine provides 20 universal physical shape archetypes (`data-theme-shape`), grouped into 6 thematic families:
+     - **☕ Cozy Lo-Fi & Art**: `cozy_polaroid` (vintage Polaroid frame with washi tape & handwritten caption), `cozy_canvas` (canvas texture with brass pushpins), `cozy_soft` (ultra-soft 28px pill minimalism).
+     - **🎮 Gamer Pro & Esports**: `gamer_mecha` (45° chamfered polygon cutout with corner reticles), `gamer_tactical_hud` (military telemetry with LIVE REC badge), `gamer_stealth` (carbon black matte with 8px cut), `gamer_hex_shield` (perimeter Sci-Fi hexagonal armor with ⬡ SHIELD: ACTIVE status), `gamer_cyber_glitch` (asymmetric polygon cuts with cyan/magenta chromatic aberration), `gamer_arcade_retro` (8-bit stepped pixel cabinet with 1UP marquee).
+     - **🛠️ Maker & Technical Workshop**: `maker_blueprint` (CAD blueprint grid, angle calipers & ⌖ CALIB: 1:1 crosshairs), `maker_workbench` (industrial studio workbench with ⨁ corner rivets), `maker_circuit_pcb` (emerald PCB board with gold traces and GND vias).
+     - **⚡ Open Stream Suite Official**: `openstream_glass` (Swiss neo-glassmorphism with 16px radius & 24px blur), `openstream_studio` (pro broadcast frame with flashing ● ON AIR light).
+     - **📜 Fantasy, RPG & Gothic**: `fantasy_parchment` (medieval parchment with crimson wax seal ⚜), `fantasy_runic_stone` (obsidian carved stone with glowing Nordic runes), `gothic_vampire` (Victorian dark gothic arches with blood-red trim & bat emblem 🦇).
+     - **💥 Comic, Pop Art & Retro TV**: `comic_manga_action` (bold 5px ink outlines & 💥 GO!! impact badge), `pop_synth_neon` (80s synthwave wireframe horizon with retro sun ☀), `vintage_crt_monitor` (90s curved bubble CRT monitor bezel with POWER LED).
+   - Physical shapes rely on relative coordinates (`calc(100% - 24px)`) and corner-anchored pseudo-elements (`top: 6px; left: 6px;`).
+   - They automatically support any camera aspect ratio: **16:9** (standard widescreen), **4:3** (retro/classic), **21:9** (ultrawide), or **9:16** (vertical mobile for TikTok, Shorts, and Instagram Reels) without distorted chamfers or displaced corner brackets.
+
+3. **Editable Text Key Isolation (`data-text-key`)**:
+   - Each scene must use dedicated key prefixes (e.g., `victory.title`, `cozy.cafeCamLabel`, `speedrun.game`, `art.projectName`, `oss.mainCamLabel`).
+   - **Never reuse the same key for elements with different semantics** across scenes (preventing a victory clutch podium from displaying `"MODO JUEGO"` or an art camera from renaming itself `"CHAT EN DIRECTO"`).
+   - Keys are synchronized across `overlay_texts_config.json` (Spanish) and `overlay_texts_config.en.json` (English).
+
+4. **Polygonal Geometry Safety Rule against `clip-path`**:
+   - Child elements, badges, and pins must never use negative positioning (`top: -12px;`, `bottom: -36px;`) when their container uses `clip-path` or `overflow: hidden`.
+   - Always use inward positive insets: `top: 10px; left: 14px;` or layout padding/margins to guarantee full visibility.
+
+5. **On-Demand Non-Obtrusive Floating Panels**:
+   - Interactive floating panels (`oss-countdown-control`, `oss-speedrun-control`, `oss-brb-phrases-control`) start hidden by default (`display: none;`) to prevent obscuring side widgets (splits, pomodoro, notes).
+   - They are opened and closed on demand via HUD action buttons (`⏱️ Temporizador / Timer`, `⚡ Splits`, `🔄 Frases BRB / BRB Phrases`) or the top-right `✕` close button.
+
 ---
 
 ## 4. Coding Standards

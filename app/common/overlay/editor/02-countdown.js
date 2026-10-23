@@ -11,9 +11,9 @@ window.OSSEditor = window.OSSEditor || {};
   function isCountdownScene(sceneKey) {
     return ['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting', 'cozy_pomodoro'].includes(sceneKey)
       || window.location.pathname.includes('/starting-soon/')
-      || window.location.pathname.includes('/study_pomodoro/')
       || document.querySelector('.starting-countdown') !== null
-      || document.querySelector('.pomo-time') !== null;
+      || document.querySelector('.pomo-time') !== null
+      || document.querySelector('[data-countdown="true"], .timer-countdown') !== null;
   }
 
   function setupCountdown(sceneKey) {
@@ -32,7 +32,7 @@ window.OSSEditor = window.OSSEditor || {};
       border: 1px solid rgba(87,214,196,0.45); border-radius: 8px;
       padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
       font-size: 11px; color: #F0F6FC; box-shadow: 0 8px 30px rgba(0,0,0,0.7), 0 0 15px rgba(87,214,196,0.15);
-      display: flex; flex-direction: column; gap: 10px; width: 230px;
+      display: none; flex-direction: column; gap: 10px; width: 230px;
     `;
 
     const presets = isPomo
@@ -42,9 +42,10 @@ window.OSSEditor = window.OSSEditor || {};
     countdownControl.innerHTML = `
       <div class="hud-drag-handle" style="font-weight:700; color:#57D6C4; letter-spacing:0.5px; border-bottom:1px solid rgba(87,214,196,0.2); padding-bottom:7px; display:flex; justify-content:space-between; align-items:center; cursor:grab;" title="Arrastra desde aquí para mover este menú">
         <span>${isPomo ? '🍅 POMODORO FOCUS' : '⏱️ CUENTA ATRÁS'}</span>
-        <span style="display:flex; align-items:center; gap:4px;">
+        <span style="display:flex; align-items:center; gap:6px;">
           <span id="oss-cd-status" style="font-size:10px; color:#3FB950;">EN MARCHA</span>
           <span style="color:#6E7681; font-size:11px;">⋮⋮</span>
+          <button type="button" id="oss-cd-close" style="background:none; border:none; color:#8B949E; cursor:pointer; font-size:12px; padding:0 2px; line-height:1;" title="Cerrar panel">✕</button>
         </span>
       </div>
       <div style="display:flex; flex-direction:column; gap:4px;">
@@ -232,6 +233,10 @@ window.OSSEditor = window.OSSEditor || {};
       }
     });
 
+    document.getElementById('oss-cd-close')?.addEventListener('click', () => {
+      countdownControl.style.display = 'none';
+    });
+
     if (window.OSSEditor.makeDraggable) {
       window.OSSEditor.makeDraggable(countdownControl, '.hud-drag-handle');
     }
@@ -239,6 +244,14 @@ window.OSSEditor = window.OSSEditor || {};
     return countdownControl;
   }
 
+  function toggleCountdown() {
+    const el = document.getElementById('oss-countdown-control');
+    if (!el) return;
+    const isHidden = el.style.display === 'none' || getComputedStyle(el).display === 'none';
+    el.style.display = isHidden ? 'flex' : 'none';
+  }
+
   window.OSSEditor.isCountdownScene = isCountdownScene;
   window.OSSEditor.setupCountdown = setupCountdown;
+  window.OSSEditor.toggleCountdown = toggleCountdown;
 })();

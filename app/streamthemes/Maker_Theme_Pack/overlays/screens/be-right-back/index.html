@@ -19,6 +19,7 @@
       justify-content: space-between;
       padding: 60px 80px;
       z-index: 20;
+      box-sizing: border-box;
     }
 
     .brb-top-bar {
@@ -90,34 +91,34 @@
     }
   </style>
 </head>
-<body class="fullscreen-scene">
+<body class="fullscreen-scene" data-pack="Maker_Theme_Pack" data-scene="beRightBack" data-theme="synthwave">
   <div class="overlay-canvas">
     <div class="tech-grid-overlay"></div>
 
     <div class="brb-container">
       
       <!-- Barra superior -->
-      <div class="brb-top-bar">
+      <header class="header-bar brb-top-bar" data-oss-bar="top">
         <div class="brand-badge">
           <div class="brand-icon-svg" data-icon="logo"></div>
           <div class="brand-info">
-            <span class="brand-name">ANDORINA</span>
-            <span class="brand-tagline">JUGAR · CREAR · TRASTEAR</span>
+            <span class="brand-name" data-text-key="channel.name">ANDORINA</span>
+            <span class="brand-tagline" data-text-key="channel.tagline">JUGAR · CREAR · TRASTEAR</span>
           </div>
         </div>
         <div class="live-indicator" style="background: rgba(87, 214, 196, 0.1); border-color: rgba(87, 214, 196, 0.3); color: var(--color-accent-cyan);">
           <span class="live-dot" style="background-color: var(--color-accent-cyan); box-shadow: 0 0 8px var(--color-accent-cyan);"></span>
-          <span data-i18n="themes.placeholder_brb_status">PAUSA TÉCNICA</span>
+          <span data-i18n="themes.placeholder_brb_status" data-text-key="beRightBack.badgeText">PAUSA TÉCNICA</span>
         </div>
-      </div>
+      </header>
 
       <!-- Centro de la escena -->
       <div class="brb-center-content">
-        <h1 class="main-stream-title" style="font-size: 84px;" data-i18n="themes.placeholder_brb_title">
-          AHORA VUELVO
+        <h1 class="main-stream-title" style="font-size: 84px;" data-text-key="beRightBack.title">
+          YA VUELVO
         </h1>
-        <p class="stream-subtitle" style="font-size: 20px; color: var(--color-text-light);" data-i18n="themes.placeholder_brb_sub">
-          UN MOMENTO...
+        <p class="stream-subtitle" style="font-size: 20px; color: var(--color-text-light);" data-text-key="beRightBack.subtitle">
+          UN BREVE DESCANSO · EL STREAM CONTINÚA EN BREVE
         </p>
 
         <!-- Escáner técnico sutil -->
@@ -126,19 +127,19 @@
         </div>
 
         <!-- Frase dinámica rotativa -->
-        <div class="brb-status-box">
+        <div class="panel-card brb-status-box" data-oss-panel="true">
           <span style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim);">ESTADO:</span>
-          <span class="brb-status-phrase">TOMANDO UN CAFÉ...</span>
+          <span class="brb-status-phrase" data-text-key="beRightBack.liveStatusText">TOMANDO UN CAFÉ & CALIBRANDO HERRAMIENTAS...</span>
         </div>
       </div>
 
       <!-- Barra inferior -->
-      <div class="brb-footer">
-        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);" data-i18n="themes.placeholder_brb_footer">
+      <footer class="footer-bar brb-footer" data-oss-bar="bottom">
+        <div style="font-family: var(--font-tech); font-size: 12px; color: var(--color-text-dim);" data-text-key="channel.tagline">
           EL DIRECTO CONTINÚA EN BREVES INSTANTES
         </div>
         <div class="social-links" style="display: none;"></div>
-      </div>
+      </footer>
 
     </div>
   </div>

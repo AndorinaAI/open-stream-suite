@@ -257,27 +257,27 @@ async function restoreCurrentSceneTexts() {
 }
 
 async function restoreSceneTexts(sceneKey) {
-  let section = 'all';
+  let section = sceneKey;
   if (sceneKey.startsWith('maker')) section = 'maker';
   else if (sceneKey.startsWith('print')) section = 'print';
   else if (sceneKey === 'game') section = 'game';
   else if (sceneKey === 'chill') section = 'chill';
-  else if (sceneKey === 'startingSoon') section = 'startingSoon';
-  else if (sceneKey === 'beRightBack') section = 'beRightBack';
-  else if (sceneKey === 'ending') section = 'ending';
+  else if (['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting'].includes(sceneKey)) section = 'startingSoon';
+  else if (['beRightBack', 'oss_brb', 'gamer_brb', 'cozy_brb'].includes(sceneKey)) section = 'beRightBack';
+  else if (['ending', 'oss_ending', 'gamer_ending', 'cozy_ending'].includes(sceneKey)) section = 'ending';
 
   if (!confirm(`¿Restaurar los textos de la escena "${sceneKey}" a los valores originales de fábrica?`)) {
     return;
   }
 
   if (window.OverlayTexts) {
-    await OverlayTexts.reset(section);
+    await OverlayTexts.reset(section, sceneKey);
   }
 }
 
 async function restoreAllOverlaysTexts() {
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  if (!confirm(tr('themes.confirm_restore_all_scenes_texts', '¿Restaurar TODOS los textos de todas las 9 escenas a sus valores originales de fábrica?'))) {
+  if (!confirm(tr('themes.confirm_restore_all_scenes_texts', '¿Restaurar TODOS los textos de todas las 27 escenas a sus valores originales de fábrica?'))) {
     return;
   }
   if (window.OverlayTexts) {

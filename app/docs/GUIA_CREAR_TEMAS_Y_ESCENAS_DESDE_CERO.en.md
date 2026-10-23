@@ -115,13 +115,117 @@ Themes are defined as modular folders in `app/themes/<pack_id>/<theme_id>/`:
    </head>
    <body data-theme="maker">
      <div class="overlay-container">
-       <!-- Custom camera frames and metadata -->
+       <!-- Camera Frame with Universal Semantic Contract -->
+       <div class="camera-frame" data-oss-cam="true">
+         <div class="cam-viewport" data-oss-viewport="true"></div>
+         <div class="cam-label" data-oss-cam-label="true">
+           <span data-text-key="dj.camLabel">DJ SET // LIVE</span>
+         </div>
+       </div>
+
+       <!-- Content Panel -->
+       <div class="track-panel" data-oss-panel="true">
+         <span data-text-key="dj.trackTitle">NOW PLAYING: RETRO SYNTH</span>
+       </div>
      </div>
+     <script src="../../../config.js"></script>
      <script src="../../../common/overlay.js"></script>
    </body>
    </html>
    ```
 3. In OBS Studio, add a Browser Source pointing to `http://localhost:8080/overlays/music/dj/index.html` with size 1920×1080.
+
+---
+
+## 5.1. Universal Semantic Compatibility Contract (`data-oss-*`)
+To allow **any developer or streamer to build a brand new pack without needing to know class names from other packs**, the Open Stream Suite engine implements the **Universal Semantic Contract**:
+
+| Semantic Attribute | Applied To | Engine Functionality |
+|---|---|---|
+| `data-oss-cam="true"` | Primary camera or capture container | Automatically inherits all 20 physical shapes (45° chamfers, polaroids, hex shields, parchments, pixel cabinets, etc.), shadows, borders, and accents. |
+| `data-oss-viewport="true"` | Inner video window area | Generates the transparent cutout for OBS video capture and the SVG aperture engine (`backdrop-aperture.js`). |
+| `data-oss-cam-label="true"` | Camera label or badge | Adapts typography and placement (polaroid pushpin, neon pill, engineering tag, wax seal). |
+| `data-oss-panel="true"` | Chat cards, stats, podiums, task lists | Applies frosted glassmorphism, rounded corners, or angular chamfers matching the active shape. |
+| `data-oss-bar="top\|bottom"` | Header bars or bottom status tickers | Styles status and news tickers with theme accents. |
+
+> [!TIP]
+> **Total Decoupling**: It does not matter whether your class is `.my-cam`, `.webcam-box`, or `.stream-window`. Adding `data-oss-cam="true"` allows the engine to recognize it instantly and apply any of the **20 physical archetypes** (Cozy, Gamer, Maker, OpenStream, Fantasy/RPG/Gothic, and Comic/Synthwave/Retro CRT) seamlessly.
+
+---
+
+### Catalog of the 20 Available Physical Shapes
+1. **☕ Cozy Lo-Fi & Art**: `cozy_polaroid`, `cozy_canvas`, `cozy_soft`.
+2. **🎮 Gamer Pro & Esports**: `gamer_mecha`, `gamer_tactical_hud`, `gamer_stealth`, `gamer_hex_shield`, `gamer_cyber_glitch`, `gamer_arcade_retro`.
+3. **🛠️ Maker & Workshop**: `maker_blueprint`, `maker_workbench`, `maker_circuit_pcb`.
+4. **⚡ Open Stream Suite**: `openstream_glass`, `openstream_studio`.
+5. **📜 Fantasy, RPG & Gothic**: `fantasy_parchment`, `fantasy_runic_stone`, `gothic_vampire`.
+6. **💥 Comic, Pop Art & Retro TV**: `comic_manga_action`, `pop_synth_neon`, `vintage_crt_monitor`.
+
+---
+
+## 5.2. Fluidity & Adaptability to Camera Aspect Ratios
+Physical frame shapes are not locked to static pixel dimensions:
+
+- **Classic Horizontal Cameras (16:9 and 4:3)**: Supports standard modern webcams, retro consoles, and compact cameras.
+- **Ultrawide Cameras (21:9)**: Ideal for cockpit simulators and multi-monitor broadcast captures.
+- **Vertical Cameras (9:16)**: Essential for mobile streaming, TikTok Live, and YouTube Shorts.
+
+### How Chamfers and Brackets Avoid Distortion
+The engine uses relative coordinates calculated via CSS `calc()`:
+```css
+/* Example: Relative octagonal chamfer adapting fluidly to any width or height */
+clip-path: polygon(
+  24px 0%, calc(100% - 24px) 0%,
+  100% 24px, 100% calc(100% - 24px),
+  calc(100% - 24px) 100%, 24px 100%,
+  0% calc(100% - 24px), 0% 24px
+);
+```
+Decorative accents (corner pluses `+`, target reticles, engineering brackets) are anchored to corners (`top: 6px; left: 6px;`, `bottom: 6px; right: 6px;`). Both a 400×710 vertical frame and a 1280×720 widescreen frame display with identical millimeter precision.
+
+---
+
+## 5.3. Golden Rule of Text Isolation (`data-text-key`)
+When an overlay features text that streamers can edit live on canvas (titles, badges, game names, timer deltas), always assign **`data-text-key="section.field"`**:
+
+```html
+<span data-text-key="speedrun.game">SUPER MARIO 64</span>
+<span data-text-key="cozy.cafeCamLabel">COZY CAFE CAM</span>
+<h1 data-text-key="victory.title">VICTORY</h1>
+```
+
+### Why Unique Keys Are Mandatory Across Scenes
+- Reusing generic keys across scenes (e.g., `game.badgeText` or `cam.title`) causes changes in one scene to overwrite another (e.g., a Victory Clutch banner displaying `"MODO JUEGO"` or an art canvas camera displaying `"CHAT EN DIRECTO"`).
+- With isolated keys (`victory.*`, `speedrun.*`, `art.*`, `pomodoro.*`, `cozy.*`, `oss.*`), each scene maintains 100% independent content.
+- **Zero-Code Persistence**: `dom-injector.js` and `05a-extract-texts.js` automatically detect all `[data-text-key]` elements. Clicking `💾 Save Changes` persists them to the backend and broadcasts them across WebSockets to OBS Studio with zero custom JavaScript.
+
+---
+
+## 5.4. Polygonal Geometry Safety Rule against `clip-path`
+When applying angular polygonal archetypes (`gamer_mecha`, `gamer_tactical_hud`):
+
+> [!CAUTION]
+> If a camera container uses `clip-path` or `overflow: hidden`, child elements placed at **negative coordinates** (e.g., `top: -14px;` or `left: -20px;`) will be clipped and disappear.
+
+**The Positive Insets Rule**:
+- Always position labels and tags using positive inward offsets:
+  ```css
+  /* CORRECT: Safely positioned within visible area */
+  .cam-label {
+    position: absolute;
+    top: 10px;
+    left: 14px;
+  }
+  ```
+- Or place labels outside the `clip-path` element using an external wrapper.
+
+---
+
+## 5.5. On-Demand Non-Obtrusive Floating Panels
+To keep broadcast canvases clean and professional:
+- Auxiliary interactive panels (`#oss-countdown-control`, `#oss-speedrun-control`, `#oss-brb-phrases-control`) start **hidden by default** (`display: none;`).
+- They can be toggled on demand via the floating HUD toolbar buttons (`⏱️ Timer`, `⚡ Splits`, `🔄 BRB Phrases`) or closed with `✕`.
+- Powered by `makeDraggable`, streamers can move them anywhere across the viewport without obscuring webcams or chat widgets.
 
 ---
 

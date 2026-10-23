@@ -161,12 +161,15 @@ Object.assign(window.OverlayTexts, {
     }
   },
 
-  async reset(section = 'all') {
+  async reset(section = 'all', sceneKey = null) {
     try {
+      const headers = (typeof getAuthHeaders === 'function') ? getAuthHeaders() : { 'Content-Type': 'application/json' };
+      const bodyPayload = { section };
+      if (sceneKey) bodyPayload.sceneKey = sceneKey;
       const res = await fetch('/api/overlays/texts/reset', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ section })
+        headers: headers,
+        body: JSON.stringify(bodyPayload)
       });
       const data = await res.json();
       if (data && data.status === 'ok') {

@@ -7,6 +7,9 @@ window.OSSEditor = window.OSSEditor || {};
 
 (function() {
   const editableSelectors = [
+    // Selector universal estándar para cualquier escena
+    '[data-text-key]',
+    '.editable-screen-element',
     // Marca del canal y estados de directo
     '.brand-name',
     '.brand-tagline',
@@ -197,7 +200,8 @@ window.OSSEditor = window.OSSEditor || {};
       }
 
       let tag = 'Texto';
-      if (el.matches('.panel-header span:last-child, .chat-panel-header span:last-child, .server-info')) tag = 'Estado DEV/SYS';
+      if (el.hasAttribute('data-text-key')) tag = el.getAttribute('data-text-key');
+      else if (el.matches('.panel-header span:last-child, .chat-panel-header span:last-child, .server-info')) tag = 'Estado DEV/SYS';
       else if (el.matches('.panel-header span, .chat-panel-header span, .window-title, .win-header, .tasks-header, .project-card-title, .side-panel-title')) tag = 'Cabecera Ventana';
       else if (el.matches('.info-label, .field-label')) tag = 'Etiqueta Info';
       else if (el.matches('.info-value, .field-value')) tag = 'Valor Info';
@@ -247,6 +251,13 @@ window.OSSEditor = window.OSSEditor || {};
     const quickJumpSelect = hud.querySelector('#hud-quick-jump-select');
     const btnSave = hud.querySelector('#hud-btn-save-texts');
     const btnResetTexts = hud.querySelector('#hud-btn-reset-texts');
+
+    // Registrar textos originales de fábrica en cada nodo para restauración inmediata
+    document.querySelectorAll(editableSelectors.join(',')).forEach(el => {
+      if (el.dataset.ossOriginalText === undefined && el.textContent) {
+        el.dataset.ossOriginalText = el.textContent;
+      }
+    });
 
     if (btnSave) {
       btnSave.addEventListener('click', saveTexts);
@@ -373,28 +384,51 @@ window.OSSEditor = window.OSSEditor || {};
     // Botón de Restaurar textos a fábrica
     if (btnResetTexts) {
       btnResetTexts.addEventListener('click', async () => {
-        let section = 'all';
+        let section = sceneKey || 'all';
         if (['startingSoon', 'oss_starting', 'gamer_starting', 'cozy_starting'].includes(sceneKey) || window.location.pathname.includes('/starting-soon/')) section = 'startingSoon';
         else if (['beRightBack', 'oss_brb', 'gamer_brb', 'cozy_brb'].includes(sceneKey) || window.location.pathname.includes('/be-right-back/') || window.location.pathname.includes('/coffee-break/')) section = 'beRightBack';
         else if (['ending', 'oss_ending', 'gamer_ending', 'cozy_ending'].includes(sceneKey) || window.location.pathname.includes('/ending/')) section = 'ending';
-        else if (sceneKey?.startsWith('maker') || sceneKey === 'oss_desktop' || sceneKey === 'cozy_pomodoro') section = 'maker';
-        else if (sceneKey?.startsWith('print') || sceneKey === 'cozy_art') section = 'print';
-        else if (sceneKey === 'game' || ['gamer_gameplay', 'gamer_speedrun', 'gamer_victory'].includes(sceneKey)) section = 'game';
-        else if (sceneKey === 'chill' || ['oss_chatting', 'oss_podcast', 'cozy_cafe'].includes(sceneKey)) section = 'chill';
-
-        if (!confirm(`¿Restaurar los textos de esta escena (${section.toUpperCase()}) a sus valores originales de fábrica?`)) {
-          return;
-        }
+        else if (sceneKey === 'maker-desk' || sceneKey === 'maker-pc' || sceneKey === 'maker') section = 'maker';
+        else if (sceneKey === 'print-machine' || sceneKey === 'print-design' || sceneKey === 'print') section = 'print';
+        else if (sceneKey === 'game') section = 'game';
+        else if (sceneKey === 'chill') section = 'chill';
 
         try {
           btnResetTexts.textContent = '⏳...';
+
+          // 1. Restaurar textos originales en el DOM inmediatamente
+          document.querySelectorAll(editableSelectors.join(',')).forEach(el => {
+            if (el.dataset.ossOriginalText !== undefined) {
+              el.textContent = el.dataset.ossOriginalText;
+            }
+          });
+
+          // 2. Persistir en el servidor y limpiar customScenes con token local
+          let localToken = window.__LOCAL_AUTH_TOKEN__ || (typeof localStorage !== 'undefined' ? localStorage.getItem('local_auth_token') : '') || '';
+          if (!localToken) {
+            try {
+              const tokRes = await fetch('/api/local-token');
+              if (tokRes.ok) {
+                const tokData = await tokRes.json();
+                localToken = tokData.token || '';
+                if (localToken && typeof localStorage !== 'undefined') {
+                  localStorage.setItem('local_auth_token', localToken);
+                }
+              }
+            } catch (te) {}
+          }
+
+          const resetHeaders = { 'Content-Type': 'application/json' };
+          if (localToken) resetHeaders['X-Local-Token'] = localToken;
+
           const res = await fetch('/api/overlays/texts/reset', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ section })
+            headers: resetHeaders,
+            body: JSON.stringify({ section, sceneKey })
           });
           const data = await res.json();
           if (data && data.status === 'ok') {
+            window.OSS_CONFIG = data.texts;
             const applyFn = typeof applyConfigToDOM === 'function' ? applyConfigToDOM : (window._oss_applyConfigToDOM || (window.OSSOverlay && window.OSSOverlay.applyConfigToDOM));
             if (typeof applyFn === 'function') {
               applyFn(data.texts);
@@ -402,12 +436,12 @@ window.OSSEditor = window.OSSEditor || {};
             if (isEditing && quickJumpSelect) {
               populateQuickJump(quickJumpSelect);
             }
-            window.OSSEditor.showHudToast(`↺ Textos de "${section}" restaurados a los originales de fábrica`);
+            window.OSSEditor.showHudToast(`↺ Textos restaurados a los originales de fábrica`);
           }
         } catch (e) {
           window.OSSEditor.showHudToast('⚠️ Error al restaurar textos');
         } finally {
-          btnResetTexts.textContent = '🔄 Restaurar';
+          btnResetTexts.textContent = '↺ Restaurar Textos';
         }
       });
     }

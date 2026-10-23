@@ -5,6 +5,7 @@ from server.services.theme_manager import (
     load_theme_state,
     save_theme_state,
     get_all_packs_and_themes,
+    get_theme_dir,
     sync_chat_with_theme,
     THEMES_DIR,
 )
@@ -37,7 +38,7 @@ async def execute_deck_knob(knob: str, action: str, ticks: int, delta_param: int
         if not themes_list:
             return {"status": "error", "message": "No hay temas disponibles", "code": 404}
 
-        current_active = load_theme_state().get("activeTheme", "maker_electronico")
+        current_active = load_theme_state().get("activeTheme", "maker")
         current_idx = 0
         for idx, (p_id, t_id, name) in enumerate(themes_list):
             if t_id == current_active:
@@ -45,14 +46,18 @@ async def execute_deck_knob(knob: str, action: str, ticks: int, delta_param: int
                 break
 
         if action in ("press", "click"):
-            target = next(((p, t, n) for p, t, n in themes_list if t == "maker_electronico"), themes_list[0])
+            target = next(((p, t, n) for p, t, n in themes_list if t == "maker"), themes_list[0])
             new_pack, new_theme, new_name = target
         else:
             new_idx = (current_idx + ticks) % len(themes_list)
             new_pack, new_theme, new_name = themes_list[new_idx]
 
-        save_theme_state({"activePack": new_pack, "activeTheme": new_theme})
-        theme_file = THEMES_DIR / new_pack / new_theme / "theme.json"
+        state = load_theme_state()
+        state["activePack"] = new_pack
+        state["activeTheme"] = new_theme
+        save_theme_state(state)
+
+        theme_file = get_theme_dir(new_pack, new_theme) / "theme.json"
         if theme_file.exists():
             try:
                 with open(theme_file, "r", encoding="utf-8") as f:
@@ -160,8 +165,8 @@ def get_deck_system_status() -> dict:
         "status": "ok",
         "running": True,
         "connectedClients": len(system.connected_clients),
-        "activeTheme": theme_state.get("activeTheme", "maker_electronico"),
-        "activePack": theme_state.get("activePack", "pack_open_stream_suite"),
+        "activeTheme": theme_state.get("activeTheme", "maker"),
+        "activePack": theme_state.get("activePack", "Maker_Theme_Pack"),
         "twitchConnected": bool(system.user_info),
         "user": system.user_info.get("display_name") if system.user_info else None
     }

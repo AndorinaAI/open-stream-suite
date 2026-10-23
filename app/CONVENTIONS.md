@@ -284,6 +284,40 @@ Los overlays en Open Stream Suite no son meras plantillas visuales estáticas; s
      - Al pulsar `💾 Guardar` en el HUD, `saveTexts()` recopila los textos y estados activos específicos del pack (vía detección de `sceneKey` y rutas pathname).
      - Se envían a `POST /api/overlays/texts` (protegido con `X-Local-Token`) y el servidor emite el evento WebSocket `overlay_texts_updated` a todas las instancias conectadas en OBS Studio.
 
+### H. Contrato Universal de Compatibilidad Semántica (`data-oss-*`) y Aislamiento de Textos
+Para garantizar que **cualquier pack nuevo o existente sea 100% interoperable** sin necesidad de conocer los nombres de clases CSS de los otros packs:
+
+1. **Atributos Semánticos Obligatorios en el HTML**:
+   - `data-oss-cam="true"`: Identifica un marco de cámara, captura o visor de vídeo.
+   - `data-oss-viewport="true"`: El área interior transparente donde se sitúa la fuente de OBS.
+   - `data-oss-cam-label="true"`: La insignia o rótulo identificador de la cámara.
+   - `data-oss-panel="true"`: Tarjetas, bloques de chat, fichas de proyecto, podios o listas de tareas.
+   - `data-oss-bar="top|bottom"`: Barras de cabecera superior o cintillos/noticias inferiores.
+
+2. **Adaptabilidad a Cualquier Relación de Aspecto y Catálogo de 20 Formas Físicas**:
+   - El motor cuenta con 20 arquetipos físicos universales (`data-theme-shape`), agrupados en 6 familias:
+     - **☕ Cozy Lo-Fi & Arte**: `cozy_polaroid` (polaroid clásica con washi tape y pie manuscrito), `cozy_canvas` (lienzo con chinchetas metálicas), `cozy_soft` (píldora minimalista de 28px).
+     - **🎮 Gamer Pro & Esports**: `gamer_mecha` (corte a 45° y retículas de esquina), `gamer_tactical_hud` (telemetría y badge LIVE REC), `gamer_stealth` (carbón mate 8px), `gamer_hex_shield` (blindaje hexagonal sci-fi y estado ⬡ SHIELD: ACTIVE), `gamer_cyber_glitch` (corte asimétrico con aberración cian/magenta), `gamer_arcade_retro` (pixel cabinet 8-bit con marquesina 1UP).
+     - **🛠️ Maker & Taller Tecnológico**: `maker_blueprint` (escuadras CAD y retícula técnica), `maker_workbench` (banco de taller y remaches), `maker_circuit_pcb` (placa de circuito PCB con pistas de cobre y vías GND).
+     - **⚡ Open Stream Suite Oficial**: `openstream_glass` (cristal glaseado suizo 16px/24px blur), `openstream_studio` (marco broadcast pro con luz roja ON AIR).
+     - **📜 Fantasía, Rol & Terror**: `fantasy_parchment` (pergamino antiguo con sello de cera ⚜), `fantasy_runic_stone` (piedra obsidiana con runas nórdicas luminosas), `gothic_vampire` (arcos ojivales y borde carmesí vampírico 🦇).
+     - **💥 Cómic, Pop Art & Retro TV**: `comic_manga_action` (tinta gruesa 5px y badge de impacto 💥 GO!!), `pop_synth_neon` (synthwave 80s con rejilla horizonte y sol retro ☀), `vintage_crt_monitor` (pantalla bulbosa curva CRT 90s con LED POWER).
+   - Las formas físicas operan mediante coordenadas relativas (`calc(100% - 24px)`) y pseudo-elementos anclados a esquinas (`top: 6px; left: 6px;`).
+   - Soportan automáticamente cualquier proporción de cámara: **16:9** (estándar), **4:3** (retro), **21:9** (panorámica ultra-ancha) o **9:16** (vertical para TikTok, Shorts e Instagram Reels) sin deformar biseles ni descolocar retículas.
+
+3. **Aislamiento de Textos Editables (`data-text-key`)**:
+   - Cada escena debe utilizar claves con prefijo específico (ej. `victory.title`, `cozy.cafeCamLabel`, `speedrun.game`, `art.projectName`, `oss.mainCamLabel`).
+   - **Prohibido reutilizar la misma clave para elementos con semántica diferente** en distintas escenas (evitar que un trofeo de victoria muestre `"MODO JUEGO"` o que una cámara se renombre como `"CHAT EN DIRECTO"`).
+   - Las claves se definen en `overlay_texts_config.json` (español) y `overlay_texts_config.en.json` (inglés).
+
+4. **Regla de Geometría Segura contra Recortes Poligonales (`clip-path`)**:
+   - Ningún elemento hijo o etiqueta debe posicionarse con coordenadas negativas (`top: -12px`, `bottom: -36px`) si el contenedor tiene `clip-path` o `overflow: hidden`.
+   - Utilizar siempre insets interiores seguros: `top: 10px; left: 14px;` o márgenes explícitos en el layout.
+
+5. **Paneles Flotantes Bajo Demanda (No Invasivos)**:
+   - Los paneles interactivos flotantes (`oss-countdown-control`, `oss-speedrun-control`, `oss-brb-phrases-control`) arrancan siempre ocultos (`display: none;`) para no obstruir componentes laterales (splits, notas, tareas).
+   - Se activan y cierran desde los botones contextuales de la barra HUD (`⏱️ Temporizador`, `⚡ Splits`, `🔄 Frases BRB`) o con el botón `✕` de la ventana flotante.
+
 ---
 
 ## 4. Convenciones de Código y Nomenclatura

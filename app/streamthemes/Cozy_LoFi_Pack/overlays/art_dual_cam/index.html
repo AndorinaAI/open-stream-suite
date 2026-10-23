@@ -38,6 +38,15 @@
       box-shadow: var(--frame-shadow, 0 16px 36px rgba(30, 20, 15, 0.16));
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cam-viewport {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
     }
 
     .canvas-tag {
@@ -55,6 +64,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      z-index: 10;
     }
 
     /* Barra Inferior de Paleta de Colores y Herramientas */
@@ -105,6 +115,7 @@
     }
 
     .washi-tape-small {
+      display: var(--skin-ornament-tape, block);
       position: absolute;
       top: -10px;
       left: 50%;
@@ -122,6 +133,7 @@
       background: #181411;
       border-radius: 16px;
       overflow: hidden;
+      position: relative;
     }
 
     .face-footer {
@@ -176,19 +188,20 @@
     }
   </style>
 </head>
-<body data-theme="latte_caramel">
+<body data-pack="Cozy_LoFi_Pack" data-scene="cozy_art" data-theme="sakura_sunset">
 
   <!-- Columna Izquierda: Lienzo y Paleta -->
   <div class="canvas-column">
-    <div class="canvas-frame">
-      <div class="canvas-tag">
+    <div class="camera-frame canvas-frame" data-oss-cam="true">
+      <div class="cam-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label canvas-tag" data-oss-cam-label="true" data-text-key="art.canvasLabel">
         <span>🎨</span>
         <span>LIENZO // CÁMARA CENITAL DE DIBUJO</span>
       </div>
     </div>
 
     <!-- Barra de Herramientas y Paleta -->
-    <div class="tools-palette-bar">
+    <div class="panel-card tools-palette-bar" data-oss-panel="true">
       <div class="palette-swatches">
         <span style="font-size: 12px; color: var(--color-text-dim); margin-right: 4px;">Paleta activa:</span>
         <span class="swatch" style="background: #FDFBF7;" title="#FDFBF7"></span>
@@ -197,7 +210,7 @@
         <span class="swatch" style="background: #6D8B74;" title="#6D8B74"></span>
         <span class="swatch" style="background: #3A2B24;" title="#3A2B24"></span>
       </div>
-      <div style="font-size: 12px; color: var(--color-text-dim);">
+      <div style="font-size: 12px; color: var(--color-text-dim);" data-text-key="art.detail">
         🖌️ <b style="color: var(--color-text-light);">Clip Studio Paint</b> · Pincel Gouache Suave
       </div>
     </div>
@@ -205,20 +218,20 @@
 
   <!-- Columna Derecha: Facecam Polaroid y Tarjeta del Proyecto -->
   <div class="side-stack">
-    <div class="face-polaroid">
+    <div class="camera-frame face-polaroid camera-face" data-oss-cam="true">
       <div class="washi-tape-small"></div>
-      <div class="face-viewport"></div>
-      <div class="face-footer">✨ Hola & Bienvenidos ✨</div>
+      <div class="cam-viewport face-viewport" data-oss-viewport="true"></div>
+      <div class="cam-label face-footer" data-oss-cam-label="true" data-text-key="art.faceLabel">✨ CREADOR // STREAM ✨</div>
     </div>
 
-    <div class="project-card">
+    <div class="panel-card project-card" data-oss-panel="true">
       <div class="project-card-title">
         <span>📁</span>
-        <span>DETALLES DE LA ILUSTRACIÓN</span>
+        <span data-text-key="art.panelTitle">DETALLES DE LA ILUSTRACIÓN</span>
       </div>
       <div class="project-field">
         <span class="field-label">Obra en proceso:</span>
-        <span class="field-value">Ilustración Manga — "Tarde de Té"</span>
+        <span class="field-value" data-text-key="art.projectName">Ilustración Manga — "Tarde de Té"</span>
       </div>
       <div class="project-field">
         <span class="field-label">Lienzo & Resolución:</span>
@@ -226,7 +239,7 @@
       </div>
       <div class="project-field">
         <span class="field-label">Fase del dibujo:</span>
-        <span class="field-value" style="color: var(--color-accent-orange);">Lineart final & coloreado base</span>
+        <span class="field-value" style="color: var(--color-accent-orange);" data-text-key="art.currentPhase">Lineart final & coloreado base</span>
       </div>
     </div>
   </div>

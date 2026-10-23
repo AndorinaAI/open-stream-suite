@@ -119,9 +119,16 @@ async function openSceneEditor(sceneKey) {
   const isModified = (assignedThemeId !== defaultThemeId);
 
   const themeSelect = document.getElementById('scene-modal-theme-select');
+  const shapeSelect = document.getElementById('scene-modal-shape-select');
   const defaultHintEl = document.getElementById('scene-modal-default-theme-hint');
 
   if (themeSelect) themeSelect.innerHTML = buildThemeOptionsHtml(assignedThemeId, defaultThemeId);
+  const assignedShapeId = (window.cachedOverlayShapes && window.cachedOverlayShapes[sceneKey]) || 'auto';
+  if (shapeSelect) {
+    shapeSelect.innerHTML = (typeof buildShapeOptionsHtml === 'function')
+      ? buildShapeOptionsHtml(assignedShapeId)
+      : '<option value="auto">Auto (Por defecto)</option>';
+  }
   if (defaultHintEl) {
     defaultHintEl.innerHTML = isModified
       ? `⚠️ Personalizado (Original: <b>${defaultInfo.name}</b>) <button type="button" class="btn-action-test" style="font-size: 10px; padding: 2px 7px; margin-left: 6px; color: #FF783F; border-color: #FF783F; cursor: pointer; background: rgba(255,120,63,0.15);" onclick="restoreOverlayThemeFromModal()">🔄 Restaurar Original</button>`
@@ -235,12 +242,48 @@ async function onSceneModalThemeChange(themeId) {
   }
 }
 
+async function onSceneModalShapeChange(shapeId) {
+  if (!currentEditingScene) return;
+  const sceneKey = currentEditingScene.key;
+  if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
+  if (shapeId === 'auto') {
+    delete window.cachedOverlayShapes[sceneKey];
+  } else {
+    window.cachedOverlayShapes[sceneKey] = shapeId;
+  }
+  try {
+    await API.setOverlayTheme(sceneKey, null, shapeId);
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(`✓ Forma física "${shapeId}" aplicada a la escena`, 'success');
+    }
+  } catch (e) {
+    console.error('Error aplicando forma a escena:', e);
+  }
+}
+window.onSceneModalShapeChange = onSceneModalShapeChange;
+
 async function restoreOverlayThemeFromModal() {
   if (!currentEditingScene) return;
   const defaultThemeId = DEFAULT_OVERLAY_THEMES[currentEditingScene.key] || 'maker';
   const themeSelect = document.getElementById('scene-modal-theme-select');
   if (themeSelect) themeSelect.value = defaultThemeId;
-  await onSceneModalThemeChange(defaultThemeId);
+  const shapeSelect = document.getElementById('scene-modal-shape-select');
+  if (shapeSelect) shapeSelect.value = 'auto';
+  if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
+  delete window.cachedOverlayShapes[currentEditingScene.key];
+  cachedOverlayThemes[currentEditingScene.key] = defaultThemeId;
+  try {
+    await API.setOverlayTheme(currentEditingScene.key, defaultThemeId, 'auto');
+  } catch (e) {}
+  const defaultInfo = getThemeDisplayNameById(defaultThemeId);
+  const defaultHintEl = document.getElementById('scene-modal-default-theme-hint');
+  if (defaultHintEl) {
+    defaultHintEl.innerHTML = `⭐ Original de fábrica: <b>${defaultInfo.name}</b>`;
+  }
+  updateModalMiniPreview(defaultThemeId);
+  if (window.OverlayTexts && OverlayTexts.showToast) {
+    OverlayTexts.showToast(`↺ Estilo original "${defaultInfo.name}" y forma física restaurados`, 'success');
+  }
 }
 
 function goToThemeEditorFromModal() {

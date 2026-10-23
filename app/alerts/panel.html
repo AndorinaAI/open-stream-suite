@@ -2405,9 +2405,15 @@
             <input type="text" id="fusion-modal-desc" class="form-input" placeholder="ej. Setups para fin de semana y directos especiales" data-i18n-placeholder="fusions.placeholder_desc">
           </div>
 
-          <div>
-            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_theme">Estilo Predeterminado para el Lote:</label>
-            <select id="fusion-modal-theme" class="monitor-select" style="width: 100%; padding: 6px 10px; font-size: 12px;"></select>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_theme">Estilo Predeterminado:</label>
+              <select id="fusion-modal-theme" class="monitor-select" style="width: 100%; padding: 6px 10px; font-size: 12px;"></select>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_shape">Forma Predeterminada:</label>
+              <select id="fusion-modal-shape" class="monitor-select" style="width: 100%; padding: 6px 10px; font-size: 12px;"></select>
+            </div>
           </div>
 
           <div>
@@ -2609,6 +2615,10 @@
                 <span style="font-size: 12px; color: var(--color-text-dim);">🎨 <b data-i18n="themes.change_style_label">Cambiar Estilo Visual:</b></span>
                 <select id="scene-modal-theme-select" class="monitor-select" style="font-size: 12px; padding: 5px 10px;" onchange="onSceneModalThemeChange(this.value)">
                   <!-- Opciones cargadas dinámicamente -->
+                </select>
+                <span style="font-size: 12px; color: var(--color-text-dim); margin-left: 6px;">📐 <b data-i18n="themes.shape_label">Forma Física:</b></span>
+                <select id="scene-modal-shape-select" class="monitor-select" style="font-size: 12px; padding: 5px 10px;" onchange="onSceneModalShapeChange(this.value)">
+                  <!-- Opciones de formas cargadas dinámicamente -->
                 </select>
                 <button type="button" class="btn-action-test" style="font-size: 11px; padding: 5px 10px;" onclick="goToThemeEditorFromModal()" title="Editar colores y CSS de este tema" data-i18n="themes.btn_customize">
                   🎨 Personalizar Colores ↗

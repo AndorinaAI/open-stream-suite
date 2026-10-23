@@ -21,6 +21,10 @@ async def handle_ws(request):
     try:
         async for msg in ws:
             if msg.type == aiohttp.WSMsgType.TEXT:
+                try:
+                    data = json.loads(msg.data) if msg.data else {}
+                except Exception:
+                    data = {}
                 # Pruebas manuales desde el panel y control desde OpenDeck / Stream Deck
                 action = data.get("action")
                 if action == "test":

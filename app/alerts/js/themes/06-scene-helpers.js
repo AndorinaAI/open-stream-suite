@@ -26,9 +26,9 @@ function getThemeObjectById(themeId) {
   }
   return {
     id: themeId || 'maker',
-    name: 'Maker Electrónico',
-    pack: 'Pack Open Stream Suite',
-    packId: 'pack_open_stream_suite',
+    name: 'Maker',
+    pack: 'Maker Theme Pack',
+    packId: 'Maker_Theme_Pack',
     accentCyan: '#57D6C4',
     accentOrange: '#FF783F',
     bgDark: '#191D21',

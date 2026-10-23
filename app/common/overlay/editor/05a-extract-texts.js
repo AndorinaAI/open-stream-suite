@@ -7,6 +7,29 @@ window.OSSEditor = window.OSSEditor || {};
 
 (function() {
   function collectSceneTexts(sceneKey, texts) {
+    // 0. Extracción Universal de data-text-key (Contrato estándar para nuevos packs)
+    document.querySelectorAll('[data-text-key]').forEach(el => {
+      const key = el.getAttribute('data-text-key');
+      const val = el.textContent.trim();
+      if (!key || val === undefined || val === null) return;
+
+      const isDefaultMakerScene = ['maker-desk', 'maker-pc', 'print-machine', 'print-design', 'game', 'chill', 'startingSoon', 'beRightBack', 'ending'].includes(sceneKey);
+      if (sceneKey && !isDefaultMakerScene) {
+        texts.customScenes = texts.customScenes || {};
+        texts.customScenes[sceneKey] = texts.customScenes[sceneKey] || {};
+        texts.customScenes[sceneKey][key] = val;
+      } else {
+        const parts = key.split('.');
+        let curr = texts;
+        for (let i = 0; i < parts.length - 1; i++) {
+          const p = parts[i];
+          if (!curr[p] || typeof curr[p] !== 'object') curr[p] = {};
+          curr = curr[p];
+        }
+        curr[parts[parts.length - 1]] = val;
+      }
+    });
+
     const brandName = document.querySelector('.brand-name')?.textContent?.trim();
     const brandTagline = document.querySelector('.brand-tagline')?.textContent?.trim();
     const liveText = document.querySelector('.live-indicator span:last-child, .live-status span:last-child, [data-text-key="status"], .live-status')?.textContent?.trim();

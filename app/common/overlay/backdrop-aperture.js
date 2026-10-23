@@ -75,10 +75,14 @@
   };
 
   const CUTOUT_SELECTORS = [
+    '[data-oss-cam]',
+    '[data-oss-viewport]',
     '.camera-frame',
     '.cam-box',
     '.cam-frame',
+    '.cam-viewport',
     '.cam-inner-viewport',
+    '.camera-feed',
     '.face-viewport',
     '.desk-viewport',
     '.desk-cam',
@@ -330,9 +334,12 @@
       updateCutouts();
     }
 
-    // Recalcular ante redimensionamiento de ventana o zoom
+    // Recalcular ante redimensionamiento de ventana o cambio de estilo / tema
     window.addEventListener('resize', () => {
       setTimeout(updateCutouts, 100);
+    });
+    window.addEventListener('oss:themechange', () => {
+      setTimeout(updateCutouts, 50);
     });
 
     // Observar mutaciones en el DOM para reposicionamientos dinámicos
@@ -354,7 +361,7 @@
           updateCutouts();
         }, 150);
       });
-      observer.observe(document.body, { attributes: true, childList: true, subtree: true, attributeFilter: ['style', 'class'] });
+      observer.observe(document.body, { attributes: true, childList: true, subtree: true, attributeFilter: ['style', 'class', 'data-theme', 'data-theme-shape'] });
     }
   }
 
@@ -362,6 +369,7 @@
     init: init,
     setBackdrop: setBackdrop,
     updateCutouts: updateCutouts,
+    recalculateApertures: updateCutouts,
     presets: PRESET_BACKDROPS,
     getConfig: () => currentBgConfig
   };

@@ -156,5 +156,95 @@ class ThemePacksTestCase(AioHTTPTestCase):
         d_get = await r_get.json()
         self.assertEqual(d_get.get("overlayThemes", {}).get("game"), "cyberpunk")
 
+    @unittest_run_loop
+    async def test_05_physical_shapes_catalog_and_assignment(self):
+        """Verifica que las 20 formas físicas universales estén registradas y resuelvan correctamente"""
+        from server.services.theme_service import SHAPE_TO_ARCHETYPE
+
+        EXPECTED_20_SHAPES = [
+            "cozy_polaroid", "cozy_canvas", "cozy_soft",
+            "gamer_mecha", "gamer_tactical_hud", "gamer_stealth",
+            "gamer_hex_shield", "gamer_cyber_glitch", "gamer_arcade_retro",
+            "maker_blueprint", "maker_workbench", "maker_circuit_pcb",
+            "openstream_glass", "openstream_studio",
+            "fantasy_parchment", "fantasy_runic_stone", "gothic_vampire",
+            "comic_manga_action", "pop_synth_neon", "vintage_crt_monitor"
+        ]
+
+        # 1. Comprobar que SHAPE_TO_ARCHETYPE tiene registradas las 20 formas
+        for shape_id in EXPECTED_20_SHAPES:
+            self.assertIn(shape_id, SHAPE_TO_ARCHETYPE)
+            arch = SHAPE_TO_ARCHETYPE[shape_id]
+            self.assertIn(arch, ("cozy", "gamer", "maker", "openstream"))
+
+        # 2. Asignar una forma temática nueva como fantasy_parchment a un overlay
+        payload = {"overlayKey": "starting", "themeId": "ambient", "shapeId": "fantasy_parchment"}
+        r = await self.client.post("/api/themes/overlay-assignment", json=payload, headers=self.headers)
+        self.assertEqual(r.status, 200)
+        d = await r.json()
+        self.assertEqual(d.get("status"), "ok")
+        self.assertEqual(d.get("overlayShapes", {}).get("starting"), "fantasy_parchment")
+
+    @unittest_run_loop
+    async def test_06_overlay_shape_reset_and_edge_cases(self):
+        """Verifica la restauración de estilo a 'original', eliminación con 'auto' y casos borde"""
+        # 1. Asignar forma personalizada
+        r1 = await self.client.post("/api/themes/overlay-assignment", json={
+            "overlayKey": "gamer_victory",
+            "themeId": "golden_glory",
+            "shapeId": "gamer_hex_shield"
+        }, headers=self.headers)
+        self.assertEqual(r1.status, 200)
+        d1 = await r1.json()
+        self.assertEqual(d1["overlayShapes"].get("gamer_victory"), "gamer_hex_shield")
+
+        # 2. Restaurar estilo con shapeId = 'original' (acción del botón '↺ Restaurar Estilo')
+        r2 = await self.client.post("/api/themes/overlay-assignment", json={
+            "overlayKey": "gamer_victory",
+            "themeId": "golden_glory",
+            "shapeId": "original"
+        }, headers=self.headers)
+        self.assertEqual(r2.status, 200)
+        d2 = await r2.json()
+        self.assertEqual(d2["shapeId"], "original")
+        self.assertEqual(d2["overlayShapes"].get("gamer_victory"), "original")
+
+        # 3. Restablecer con shapeId = 'auto' o JSON null (elimina forma forzada)
+        r3 = await self.client.post("/api/themes/overlay-assignment", json={
+            "overlayKey": "gamer_victory",
+            "shapeId": "auto"
+        }, headers=self.headers)
+        self.assertEqual(r3.status, 200)
+        d3 = await r3.json()
+        self.assertNotIn("gamer_victory", d3["overlayShapes"])
+
+        # Probar con JSON null explícito
+        r3b = await self.client.post("/api/themes/overlay-assignment", json={
+            "overlayKey": "gamer_victory",
+            "shapeId": None
+        }, headers=self.headers)
+        self.assertEqual(r3b.status, 200)
+        d3b = await r3b.json()
+        self.assertNotIn("gamer_victory", d3b["overlayShapes"])
+
+        # 4. Validaciones y casos de error
+        # overlayKey vacío -> 400
+        r_err1 = await self.client.post("/api/themes/overlay-assignment", json={
+            "overlayKey": "  ",
+            "themeId": "maker"
+        }, headers=self.headers)
+        self.assertEqual(r_err1.status, 400)
+
+        # ni themeId ni shapeId -> 400
+        r_err2 = await self.client.post("/api/themes/overlay-assignment", json={
+            "overlayKey": "gamer_victory"
+        }, headers=self.headers)
+        self.assertEqual(r_err2.status, 400)
+
+        # JSON inválido -> 400
+        r_err3 = await self.client.post("/api/themes/overlay-assignment", data="bad-json", headers=self.headers)
+        self.assertEqual(r_err3.status, 400)
+
 if __name__ == "__main__":
     unittest.main()
+

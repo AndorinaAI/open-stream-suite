@@ -24,6 +24,34 @@ from server.services.theme_manager import (
     infer_archetype
 )
 
+SHAPE_TO_ARCHETYPE = {
+    "cozy_polaroid": "cozy",
+    "cozy_canvas": "cozy",
+    "cozy_soft": "cozy",
+    "cozy": "cozy",
+    "gamer_mecha": "gamer",
+    "gamer_tactical_hud": "gamer",
+    "gamer_stealth": "gamer",
+    "gamer_hex_shield": "gamer",
+    "gamer_cyber_glitch": "gamer",
+    "gamer_arcade_retro": "gamer",
+    "gamer": "gamer",
+    "maker_blueprint": "maker",
+    "maker_workbench": "maker",
+    "maker_circuit_pcb": "maker",
+    "maker": "maker",
+    "openstream_glass": "openstream",
+    "openstream_studio": "openstream",
+    "openstream": "openstream",
+    "fantasy_parchment": "cozy",
+    "fantasy_runic_stone": "gamer",
+    "gothic_vampire": "gamer",
+    "comic_manga_action": "openstream",
+    "pop_synth_neon": "openstream",
+    "vintage_crt_monitor": "cozy",
+}
+
+
 
 def create_pack_service(name: str, icon: str = "🎨", badge: str = "PACK PERSONALIZADO",
                         description: str = "Colección modular de temas y estilos personalizados.",
@@ -64,7 +92,7 @@ def create_pack_service(name: str, icon: str = "🎨", badge: str = "PACK PERSON
 
 def create_theme_service(body: dict) -> dict:
     """Crea un nuevo tema dentro de un pack específico"""
-    pack_id = str(body.get("packId", "pack_open_stream_suite")).strip()
+    pack_id = str(body.get("packId", "Maker_Theme_Pack")).strip()
     theme_name = str(body.get("name", "")).strip()
     if not theme_name:
         raise ValueError("Nombre del tema requerido")
@@ -136,7 +164,7 @@ def create_theme_service(body: dict) -> dict:
 
 async def save_theme_service(body: dict) -> dict:
     """Guarda las configuraciones y el código CSS modificado de un tema en disco"""
-    pack_id = str(body.get("packId", "pack_open_stream_suite")).strip()
+    pack_id = str(body.get("packId", "Maker_Theme_Pack")).strip()
     theme_id = str(body.get("id", "")).strip()
     if not pack_id or not theme_id:
         raise ValueError("packId e id de tema requeridos")
@@ -182,7 +210,10 @@ async def apply_theme_service(pack_id: str, theme_id: str) -> dict:
     if not theme_id:
         raise ValueError("Tema requerido")
 
-    save_theme_state({"activePack": pack_id, "activeTheme": theme_id})
+    state = load_theme_state()
+    state["activePack"] = pack_id
+    state["activeTheme"] = theme_id
+    save_theme_state(state)
 
     theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"
     if theme_file.exists():
@@ -204,7 +235,9 @@ async def apply_shape_service(shape_id: str) -> dict:
     """Aplica una forma física globalmente a todas las escenas de OBS y panel"""
     if not shape_id:
         shape_id = "original"
-    save_theme_state({"activeShape": shape_id})
+    state = load_theme_state()
+    state["activeShape"] = shape_id
+    save_theme_state(state)
     await system.broadcast({"type": "global_shape_change", "shape": shape_id})
     logger.info(f"📐 Forma física aplicada globalmente a todo el stream: {shape_id}")
     return {"shape": shape_id}
@@ -302,7 +335,7 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
     """Asigna un tema visual (color) o forma física a una overlay o escena determinada"""
     if not overlay_key:
         raise ValueError("overlayKey requerido")
-    if not theme_id and not shape_id:
+    if theme_id is None and shape_id is None:
         raise ValueError("themeId o shapeId requerido")
 
     state = load_theme_state()
@@ -312,16 +345,23 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
     if theme_id:
         overlay_themes[overlay_key] = theme_id
     if shape_id is not None:
-        if shape_id in ("auto", "__clear__", "", "null"):
+        clean_shape = str(shape_id).strip()
+        if clean_shape.lower() in ("auto", "__clear__", "", "null", "none"):
             overlay_shapes.pop(overlay_key, None)
         else:
-            overlay_shapes[overlay_key] = shape_id
+            overlay_shapes[overlay_key] = clean_shape
 
     save_theme_state(state)
 
     assigned_theme = overlay_themes.get(overlay_key, theme_id)
     assigned_shape = overlay_shapes.get(overlay_key)
-    archetype = assigned_shape if (assigned_shape and assigned_shape not in ("original", "auto")) else infer_archetype("", assigned_theme or "")
+
+    if assigned_shape and assigned_shape in SHAPE_TO_ARCHETYPE:
+        archetype = SHAPE_TO_ARCHETYPE[assigned_shape]
+    elif assigned_shape == "original":
+        archetype = "original"
+    else:
+        archetype = infer_archetype("", assigned_theme or "")
 
     await system.broadcast({
         "type": "overlay_theme_change",
@@ -339,3 +379,33 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
         "overlayThemes": overlay_themes,
         "overlayShapes": overlay_shapes
     }
+
+
+async def set_overlay_backdrop_service(overlay_key: str, backdrop: dict = None) -> dict:
+    """Guarda y sincroniza la configuración de fondo con apertura/recortes para una escena"""
+    if not overlay_key:
+        raise ValueError("overlayKey requerido")
+
+    state = load_theme_state()
+    backdrops = state.setdefault("backdrops", {})
+
+    if backdrop is None or (isinstance(backdrop, dict) and backdrop.get("mode") == "none"):
+        backdrops.pop(overlay_key, None)
+    else:
+        backdrops[overlay_key] = backdrop
+
+    save_theme_state(state)
+
+    await system.broadcast({
+        "type": "overlay_backdrop_change",
+        "overlayKey": overlay_key,
+        "backdrop": backdrop
+    })
+
+    logger.info(f"🖼️ Fondo/apertura actualizado para '{overlay_key}': {backdrop}")
+    return {
+        "overlayKey": overlay_key,
+        "backdrop": backdrop,
+        "backdrops": backdrops
+    }
+
