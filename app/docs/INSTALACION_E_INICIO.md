@@ -72,7 +72,7 @@ Al abrir el lanzador verás una ventana de control con tema oscuro y 4 pestañas
 
 ```text
 ┌───────────────────────────────────────────────────────────┐
-│ OPEN STREAM SUITE  v1.0.0-α                               │
+│ OPEN STREAM SUITE  v1.0.1-alpha                               │
 ├───────────────────────────────────────────────────────────┤
 │ [🚀 Servidor]  [🟣 Twitch]  [📖 Guía]  [📜 Registro]      │
 │                                                           │

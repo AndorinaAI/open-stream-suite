@@ -30,7 +30,7 @@ Esta guía te explica de forma clara y directa **cómo conectar tu dispositivo f
 1. **Para cambiar de escena en OBS (Game, Maker, Charla, Pausa):**
    * Se hace a través del **OBS WebSocket oficial** que viene integrado dentro de OBS Studio. Todos los softwares de Decks (Elgato, Ajazz, Companion) disponen de acción nativa para conmutar escenas.
 2. **Para disparar memes, cambiar temas de color del overlay, controlar widgets o el cronómetro:**
-   * La suite expone una **API HTTP de 1-Clic (`/api/deck/...`)**: en tu teclado o macro pad solo tienes que pegar una URL (GET o POST) y se ejecuta al instante con respuesta ultrarrápida en menos de 5 ms.
+   * La suite expone una **API HTTP de 1-Clic (`/api/deck/...`)**: en tu teclado o macro pad solo tienes que pegar una URL (GET o POST) y se ejecuta al instante con respuesta inmediata en red local.
    * Además, el WebSocket local (`ws://localhost:8080/ws`) está siempre activo para feedback bidireccional en las pantallas LCD.
 
 > [!IMPORTANT]
@@ -157,7 +157,7 @@ O para aplicar temas:
 ```json
 {
   "action": "theme",
-  "id": "maker_electronico"
+  "id": "maker"
 }
 ```
 
@@ -180,6 +180,7 @@ Todos los widgets de la suite pueden controlarse desde cualquier Deck usando `/a
 
 | Acción Deseada | URL Local (GET / POST) | Parámetros Opcionales |
 | :--- | :--- | :--- |
+| **Estado del Sistema** | `http://localhost:8080/api/deck/status` | *(Devuelve JSON de salud y estado)* |
 | **Disparar Meme / Trigger** | `http://localhost:8080/api/deck/trigger?id=ID_TRIGGER` | `&user=Nombre` |
 | **Aplicar Tema Visual a OBS** | `http://localhost:8080/api/deck/theme?id=ID_TEMA` | `&pack=pack_id` |
 | **Iniciar Temporizador** | `http://localhost:8080/api/deck/timer?action=start&seconds=300` | `&title=DESCANSO` |
@@ -188,6 +189,7 @@ Todos los widgets de la suite pueden controlarse desde cualquier Deck usando `/a
 | **Lluvia de Confeti** | `http://localhost:8080/api/deck/explode?emoji=🎉&count=40` | `&emoji=❤️` |
 | **Alerta Simulada (Follow)** | `http://localhost:8080/api/deck/alert?type=follow` | `&user=Nombre` |
 | **Alerta Simulada (Sub)** | `http://localhost:8080/api/deck/alert?type=sub` | `&user=Nombre` |
+| **Mandos Giratorios / Knobs** | `http://localhost:8080/api/deck/knob?knob=timer&action=rotate&ticks=1` | `&knob=theme\|goal\|fx`, `&delta=...` |
 | **Control de Widget** | `http://localhost:8080/api/deck/widget?widget=WIDGET&action=ACCION` | `&params...` |
 | **Catálogo Dinámico de URLs** | `http://localhost:8080/api/deck/actions` | *(Devuelve JSON con todos tus triggers listos)* |
 

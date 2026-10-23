@@ -51,10 +51,17 @@ streamthemes/
 Todas las escenas de los packs implementan el estándar semántico universal:
 - `data-oss-cam="true"`: Marco contenedor de cámara. Recibe las 20 formas físicas (chaflanes 45°, polaroids, blindajes hex, pergaminos, arcade pixel, blueprint, etc.).
 - `data-oss-viewport="true"`: Área transparente interior para recortar la webcam o captura en OBS.
-- `data-oss-cam-label="true"`: Rótulo identificativo de la cámara.
+- `data-oss-cam-label="true|bar|bottom"`: Rótulo identificativo de la cámara. Usar `"bar"` o `.cam-bottom-bar` para barras inferiores de ancho completo.
 - `data-oss-panel="true"`: Tarjetas, bloques de chat, podios o listas de tareas.
-- `data-oss-bar="top|bottom"`: Barras de cabecera superior o noticias/fases inferiores.
+- `data-oss-bar="top|bottom|left|right"`: Barras de cabecera superior, noticias/fases inferiores o columnas laterales.
+- `data-oss-orientation="horizontal|vertical"`: Orientación del elemento (autodetectada por relación de aspecto o tipo de barra, o manual).
 - `data-text-key="seccion.campo"`: Aislamiento estricto de textos para edición en caliente y sincronización WebSocket con OBS.
+
+### Parámetros URL de Control
+- `?theme=<id>`: Fuerza un tema de color específico.
+- `?shape=<id>`: Fuerza una de las 20 formas físicas universales (`maker_blueprint`, `openstream_glass`, `gamer_mecha`, etc.).
+- `?lock=1` / `?lockTheme=1`: Bloquea permanentemente la escena a los parámetros URL en OBS Studio, ignorando cambios globales de WebSocket.
+- `?lang=en` / `?lang=es`: Carga los textos traducidos del idioma especificado.
 
 ### Fluidez con Relaciones de Aspecto
 Gracias al uso de coordenadas relativas (`calc(100% - 24px)`), las formas se adaptan automáticamente a cámaras **16:9** (widescreen), **4:3** (retro), **21:9** (ultra-panorámicas) y **9:16** (vertical móvil / TikTok / Shorts) sin deformaciones.

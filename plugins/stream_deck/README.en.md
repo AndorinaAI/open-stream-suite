@@ -35,7 +35,7 @@ Once installed, you will see the **Open Stream Suite** category:
 1. **Trigger Meme / Sound**:
    * Set the meme ID (e.g. `susto`, `applause`, etc.). Tapping the key renders the video/sound in OBS.
 2. **Apply Color Theme**:
-   * Change the global neon palette live (`maker`, `print`, `cyberpunk`, `golden`, `chill`).
+   * Change the global neon palette live (`maker`, `print`, `cyberpunk`, `golden_glory`, `chill`).
    * The LCD button updates dynamically showing the active theme.
 3. **Countdown Timer (LCD Countdown)**:
    * Displays the remaining countdown in real-time on the button display.

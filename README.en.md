@@ -76,17 +76,21 @@ OpenStreamSuite/
     ├── server/             # Modular backend (routes, state, EventSub, IRC)
     ├── alerts/             # Web control panel & OBS alert engine
     ├── widgets/            # Chat, goals, shoutout, ticker, and timer
-    ├── overlays/           # OBS Studio broadcast scenes
-    ├── themes/             # Modular theme packs
-    ├── common/             # Shared CSS, local fonts, and i18n engine
-    └── tests/              # Automated unit tests (49 tests)
+    ├── streamthemes/       # Modular broadcast packs (overlays, themes & factory defaults)
+    │   ├── Maker_Theme_Pack/      # 6 Maker/CAD themes + 9 OBS scenes
+    │   ├── Open_stream_Pack/      # 5 Neo-Glass themes + 6 OBS scenes
+    │   ├── Gamer_Pro_Pack/        # 5 Esports HUD themes + 6 OBS scenes
+    │   └── Cozy_LoFi_Pack/        # 6 Relax/Botanical themes + 6 OBS scenes
+    ├── common/             # Shared CSS, 100% offline local fonts & i18n engine
+    ├── docs/               # Technical documentation & guides
+    └── tests/              # Automated unit tests (67 tests)
 ```
 
 ---
 
 ## 3. Step-by-Step OBS Studio Setup
 
-All overlays are local HTML files loaded into OBS as **Browser Sources**.
+All overlays are loaded into OBS Studio as **Browser Sources** connected to the local server.
 
 ### Step 1: Base Canvas Setup
 1. Open **OBS Studio**.
@@ -110,7 +114,8 @@ In the *Scenes* dock, create a scene for each stream mode:
 2. In the **Sources** dock, click **`+`** and choose **Browser**.
 3. Name it `Overlay - Main Scene`.
 4. In the source properties:
-   - Check **Local file** and browse to `app/overlays/maker/desk/index.html` (or enter `http://localhost:8080/overlays/maker/desk/index.html`).
+   - **Do NOT check «Local file»** (overlays need HTTP/WebSocket connectivity).
+   - **URL**: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html` (or click **«📋 Copiar URL OBS»** on any scene in the web panel).
    - **Width**: `1920`
    - **Height**: `1080`
    - Check **Shutdown source when not visible**.

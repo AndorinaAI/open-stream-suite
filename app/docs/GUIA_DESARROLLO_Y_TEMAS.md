@@ -29,10 +29,10 @@ Históricamente, los streamers diseñaban sus overlays en programas como Photosh
 
 | Característica | Con Photoshop / PNG / Vídeo | Con Nuestro Sistema (HTML5/CSS3/JS) |
 | :--- | :--- | :--- |
-| **Peso y Memoria** | Archivos pesados (10 a 80 MB por escena). | Menos de **50 KB** en total. Carga instantánea. |
-| **Consumo de CPU en OBS** | OBS decodifica bucles de vídeo continuos (5-15% CPU). | Menos de **0.5% CPU**. El renderizado es vectorial GPU nativo. |
+| **Peso y Memoria** | Archivos pesados (10 a 80 MB por bucles de vídeo MP4 o capas PNG). | Paquete común ultraligero (~200 KB cacheados para toda la suite). Carga instantánea. |
+| **Consumo de CPU en OBS** | OBS decodifica bucles de vídeo continuos de fondo. | Cero decodificación de vídeo constante. Renderizado vectorial directo por GPU en Chromium. |
 | **Nitidez y Resolución** | Si escalas un PNG pierde nitidez o se pixela. | Vectores SVG y CSS que se ven ultra nítidos a 1080p, 2K o 4K. |
-| **Dinamismo e Interactividad** | Estático. Para cambiar un texto hay que abrir Photoshop. | **100% dinámico**: cambia el proyecto en `config.js` y se actualiza en todas las escenas sin tocar imágenes. |
+| **Dinamismo e Interactividad** | Estático. Para cambiar un texto hay que abrir Photoshop. | **100% dinámico**: cambia el proyecto en `config.js` o en el HUD y se actualiza en todas las escenas sin tocar imágenes. |
 | **Reacción a Twitch** | No puede reaccionar a nada. | Reacciona en tiempo real a follows, subs, bits, chat y puntos de canal mediante WebSockets. |
 | **Transparencia Nativa** | Fácil que queden halos blancos o recortes sucios. | Transparencia alfa perfecta (`background: transparent !important`). |
 
@@ -93,12 +93,16 @@ app/                           # Carpeta principal del proyecto
 │       ├── js/                # Submódulos OBS (state-data.js, render.js, engine.js, network.js)
 │       └── index.html, style.css, widget.js, panel.js, config.json
 │
-├── scenes/                    # Overlays completos 1920×1080 para OBS Studio
-│   ├── game/, maker-desk/, maker-pc/, print-machine/, print-design/, chill/, starting-soon/, be-right-back/, ending/
+├── streamthemes/              # Packs temáticos modulares de overlays y estilos
+│   ├── Cozy_LoFi_Pack/        # Escenas Lo-Fi, Pomodoro, Art Dual Cam y estilos
+│   ├── Gamer_Pro_Pack/        # Escenas Gameplay HUD, Speedrun, Victory Clutch y estilos
+│   ├── Maker_Theme_Pack/      # Escenas de taller (desk, pc, print, chill, game) y estilos
+│   └── Open_stream_Pack/      # Escenas Just Chatting, Desktop Share, Podcast y estilos
 │
 ├── common/                    # Recursos compartidos y tokens del sistema de diseño
-│   ├── overlay/               # Submódulos de overlay: editor/, dom-injector.js, icons.js
-│   ├── catalog.css, catalog.js, components.css, editor.js, i18n.js, overlay.js, styles.css, themes.css
+│   ├── overlay/               # Submódulos: editor/ (01-05a), dom-injector.js, backdrop-aperture.js, icons.js
+│   ├── fonts/                 # Tipografías locales offline (WOFF2)
+│   ├── catalog.css, catalog.js, components.css, fonts.css, i18n.js, overlay.js, styles.css, themes.css
 │
 ├── launcher/                  # Lanzador de escritorio multiplataforma (Tkinter)
 │   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py
@@ -240,7 +244,7 @@ Crea una carpeta `widgets/mi-widget/` y un archivo `index.html`:
 
 Los temas del sistema se basan en **variables CSS personalizadas**. Cambiar el tema altera instantáneamente la paleta de colores de todos los marcos, paneles, badges y barras.
 
-### Variables Principales de Color
+### 4.1. Variables Principales de Color
 | Variable CSS | Propósito | Ejemplo Maker |
 | :--- | :--- | :--- |
 | `--color-bg-dark` | Fondo general de escenas y paneles | `#191D21` (Grafito oscuro) |
@@ -251,7 +255,7 @@ Los temas del sistema se basan en **variables CSS personalizadas**. Cambiar el t
 | `--color-text-dim` | Texto secundario o etiquetas técnicas | `#8B969C` |
 | `--color-border-cyan` | Color del borde de tarjetas con transparencia | `rgba(87, 214, 196, 0.35)` |
 
-## 4. Arquitectura de Temas Modulares, Restauración y Asignación por Overlay
+### 4.2. Arquitectura de Temas Modulares, Restauración y Asignación por Overlay
 
 A partir de la versión modular, los temas **ya no se editan a mano en un único archivo estático**, sino que se gestionan como carpetas independientes dentro de `themes/<pack_id>/<theme_id>/` con compilación automática en `common/themes.css`.
 
@@ -282,17 +286,17 @@ Cada overlay de OBS Studio tiene elementos gráficos y finalidades distintas:
 * El estado global se almacena en `themes_state.json`:
 ```json
 {
-  "activePack": "pack_open_stream_suite",
+  "activePack": "Maker_Theme_Pack",
   "activeTheme": "maker",
   "overlayThemes": {
-    "game": "arcade_8bit",
+    "game": "cyberpunk",
     "maker-desk": "maker",
     "maker-pc": "terminal",
     "print-machine": "print",
     "print-design": "print",
     "chill": "chill",
     "startingSoon": "synthwave",
-    "beRightBack": "vapor_sunset",
+    "beRightBack": "synthwave",
     "ending": "synthwave"
   }
 }
@@ -311,7 +315,7 @@ Tanto en el backend (`server/routes/themes_routes.py`) como en el frontend (`ale
 
 ```javascript
 const DEFAULT_OVERLAY_THEMES = {
-  'game': 'arcade_8bit',          // Gameplay: 8-Bit Arcade Cabinet
+  'game': 'cyberpunk',            // Gameplay: Cyberpunk Neon
   'maker': 'maker',               // Escena Principal: tema Maker
   'maker-desk': 'maker',          // Escena Principal (cámara + webcam)
   'maker-pc': 'terminal',         // Pantalla PC (captura + webcam)
@@ -320,7 +324,7 @@ const DEFAULT_OVERLAY_THEMES = {
   'print-design': 'print',        // Pantalla Diseño (app full screen)
   'chill': 'chill',               // Charla / Just Chatting: Chill Lavender
   'startingSoon': 'synthwave',    // Pantalla Inicio: Synthwave Retro
-  'beRightBack': 'vapor_sunset',  // Pausa Técnica: Vapor Sunset Glitch
+  'beRightBack': 'synthwave',     // Pausa Técnica: Synthwave Retro
   'ending': 'synthwave'           // Pantalla Despedida: Synthwave Retro
 };
 ```
@@ -329,28 +333,57 @@ Permite que el panel detecte modificaciones con `(assignedThemeId !== defaultThe
 ---
 
 ### Endpoints REST de la API de Temas
-| Método | Ruta | Descripción | Payload |
+| Método | Ruta | Descripción | Payload / Parámetros |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/themes/packs` | Devuelve todos los packs, temas modulares y el mapeo `overlayThemes`. | — |
-| `POST` | `/api/themes/packs/create` | Crea una nueva carpeta de pack en `themes/<pack_id>/`. | `{"name", "icon", "badge", "description"}` |
+| `POST` | `/api/themes/packs/create` | Crea una nueva carpeta de pack en `streamthemes/<pack_id>/`. | `{"name", "icon", "badge", "description"}` |
 | `POST` | `/api/themes/create` | Crea un nuevo tema dentro de un pack. | `{"packId", "name", "accentCyan", ...}` |
 | `POST` | `/api/themes/save` | Guarda cambios visuales y CSS en disco y recompila `common/themes.css`. | `{"packId", "id", "css", ...}` |
 | `POST` | `/api/themes/restore` | ↺ Restaura el tema a su copia original de fábrica (`theme.default.json`). | `{"packId", "themeId"}` |
-| `POST` | `/api/themes/overlay-assignment` | Asigna un estilo visual específico a una overlay. | `{"overlayKey", "themeId"}` |
+| `POST` | `/api/themes/overlay-assignment` | Asigna un estilo visual o forma física a una escena específica. | `{"overlayKey", "themeId", "shapeId"}` |
 | `POST` | `/api/themes/apply` | Activa un estilo visual global para todas las fuentes de OBS. | `{"theme", "pack"}` |
+| `POST` | `/api/themes/apply-shape` | Aplica una de las 20 formas físicas globalmente a todas las escenas. | `{"shape": "maker_blueprint"}` |
+| `POST` | `/api/themes/backdrop` | Guarda y sincroniza el fondo/apertura decorativo para una escena. | `{"overlayKey", "backdrop"}` |
 | `POST` | `/api/themes/chat-anchor` | Alterna el anclaje de chat o activa un tema derivado para chat. | `{"packId", "themeId", "anchored"}` |
 
 ---
 
-### Endpoints REST para Stream Deck / Ajazz / OpenDeck (`/api/deck/*`)
+### Endpoints REST de Fusiones (Fusions API)
 | Método | Ruta | Descripción | Payload / Parámetros |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/deck/status` | Estado del sistema (tema activo, escenas, overlays, timer). | — |
-| `POST` | `/api/deck/trigger` | Dispara un meme o sonido por ID en OBS. | `{"id": "trigger_id"}` |
-| `POST` | `/api/deck/theme` | Cambia el tema visual global o asigna a una escena. | `{"theme": "cyberpunk", "scene": "game"}` |
-| `POST` | `/api/deck/timer/start` | Inicia o reanuda el temporizador del stream. | `{"duration": 1500}` |
-| `POST` | `/api/deck/timer/pause` | Pausa el temporizador activo. | — |
-| `POST` | `/api/deck/timer/reset` | Reinicia el temporizador. | — |
+| `GET` | `/api/fusions` | Lista todas las fusiones configuradas con sus overlays asignados. | — |
+| `POST` | `/api/fusions` | Crea o actualiza una fusión de overlays híbrida. | `{"id", "name", "badge", "overlays", "defaultTheme", "defaultShape"}` |
+| `GET` | `/api/fusions/{id}` | Obtiene los detalles de una fusión concreta. | — |
+| `DELETE` | `/api/fusions/{id}` | Elimina una fusión por su identificador. | — |
+| `POST` | `/api/fusions/{id}/apply-theme` | Aplica en lote un tema visual a todos los overlays de la fusión. | `{"themeId": "cyberpunk"}` |
+| `POST` | `/api/fusions/{id}/apply-shape` | Aplica en lote una forma física a todos los overlays de la fusión. | `{"shapeId": "gamer_mecha"}` |
+
+---
+
+### Endpoints REST de Widgets y Feeds RSS
+| Método | Ruta | Descripción | Payload / Parámetros |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/widgets/config` | Diccionario completo unificado de configuración de widgets. | — |
+| `POST` | `/api/widgets/config` | Guarda la configuración global de widgets. | Objeto JSON con ajustes por widget |
+| `GET` | `/api/widgets/{widget}/config` | Obtiene la configuración de un widget específico (chat, goal, timer, promo, ticker). | — |
+| `POST` | `/api/widgets/{widget}/config` | Guarda la configuración del widget consultado. | Ajustes del widget |
+| `GET/POST` | `/api/widgets/action` | Ejecuta acciones de widget (chat, goal, timer, shoutout/promo, ticker). | `?widget=...&action=...` |
+| `GET` | `/api/rss/feed` | Parsea feeds RSS y Atom para el cintillo de noticias (Ticker). | `?url=https%3A%2F%2F...` |
+
+---
+
+### Endpoints REST para Stream Deck / Ajazz / OpenDeck (`/api/deck/*`)
+| Método | Ruta | Descripción | Parámetros (Query o JSON) |
+| :--- | :--- | :--- | :--- |
+| `GET/POST` | `/api/deck/status` | Estado del sistema (tema activo, escenas, overlays, timer). | — |
+| `GET/POST` | `/api/deck/trigger` | Dispara un meme o sonido por ID en OBS. | `?id=trigger_id` (`&user=Nombre`) |
+| `GET/POST` | `/api/deck/theme` | Cambia el tema visual global o asigna a una escena. | `?id=cyberpunk` (`&pack=Gamer_Pro_Pack`) |
+| `GET/POST` | `/api/deck/timer` | Controla el cronómetro / temporizador del stream. | `?action=start\|pause\|reset` (`&seconds=300`) |
+| `GET/POST` | `/api/deck/alert` | Dispara una alerta de prueba simulada en OBS. | `?type=follow\|sub\|raid\|cheer` (`&user=Nombre&amount=...`) |
+| `GET/POST` | `/api/deck/explode` | Lanza lluvia de confeti y emoticonos en pantalla. | `?emoji=🎉&count=40` |
+| `GET/POST` | `/api/deck/widget` | Ejecuta acciones directas sobre widgets. | `?widget=promo\|goal\|ticker\|chat&action=...` |
+| `GET/POST` | `/api/deck/knob` | Mandos giratorios, diales y encoders de hardware. | `?knob=timer\|theme\|goal\|fx&action=rotate\|next\|prev&ticks=1` |
+| `GET` | `/api/deck/actions` | Catálogo autodescriptivo con todos los triggers y acciones en JSON. | — |
 
 ---
 
@@ -433,10 +466,10 @@ Disparado cuando pulsas **`🎨 Aplicar Estilo en OBS`** en cualquier tema del p
 ```json
 {
   "type": "theme_change",
-  "theme": "golden"
+  "theme": "golden_glory"
 }
 ```
-*Todas las fuentes de OBS que incluyan `common/overlay.js` actualizan el atributo `data-theme="golden"` en vivo y reciben las variables CSS compiladas en `common/themes.css`.*
+*Todas las fuentes de OBS que incluyan `common/overlay.js` actualizan el atributo `data-theme="golden_glory"` en vivo y reciben las variables CSS compiladas en `common/themes.css`.*
 
 #### 8. Actualización de Textos de Escena (`overlay_texts_update`)
 Disparado cuando guardas cambios en los textos de cualquier escena desde el modal del panel:
@@ -688,11 +721,19 @@ Para garantizar el desacoplamiento total entre escenas y estilos:
 1. **Tabla de Atributos Semánticos Obligatorios**:
    - `data-oss-cam="true"`: Contenedor principal de la cámara o captura.
    - `data-oss-viewport="true"`: Ventana interior transparente para la fuente de OBS y el motor de aperturas SVG.
-   - `data-oss-cam-label="true"`: Rótulo identificador de la cámara.
+   - `data-oss-cam-label="true|bar|bottom"`: Rótulo identificador de la cámara. Usar `"bar"` o clase `.cam-bottom-bar` para barras inferiores de ancho completo (chin bars).
    - `data-oss-panel="true"`: Paneles de chat, stats, podios o listas.
-   - `data-oss-bar="top|bottom"`: Barras de cabecera superior o noticias/faldones inferiores.
+   - `data-oss-bar="top|bottom|left|right"`: Barras de cabecera superior, cintillos/noticias inferiores o columnas laterales.
+   - `data-oss-orientation="horizontal|vertical"`: Orientación del elemento. Se autodetecta dinámicamente mediante el aspect-ratio (`height > width * 1.05` -> `vertical`, caso contrario `horizontal`) y el tipo de barra (`top|bottom` -> `horizontal`, `left|right` -> `vertical`), o puede declararse explícitamente en el HTML para orientar adornos y VU meters.
+   - `data-text-key="seccion.campo"`: Clave de texto aislada para edición interactiva y persistencia.
 
-2. **Fluidez en Cualquier Relación de Aspecto y Catálogo de 20 Formas Físicas**:
+2. **Parámetros URL de Control para OBS Studio**:
+   - `?theme=<id>`: Fuerza un estilo cromático específico (ej. `?theme=cyberpunk`).
+   - `?shape=<id>`: Fuerza una de las 20 formas físicas (ej. `?shape=gamer_mecha`).
+   - `?lock=1` o `?lockTheme=1`: Bloquea permanentemente la escena en OBS Studio a los parámetros de la URL, ignorando cualquier cambio global recibido por WebSocket.
+   - `?lang=en` o `?lang=es`: Carga los textos traducidos del idioma especificado.
+
+3. **Fluidez en Cualquier Relación de Aspecto y Catálogo de 20 Formas Físicas**:
    - El motor soporta 20 formas físicas universales (`data-theme-shape`), agrupadas en 6 familias:
      - **☕ Cozy Lo-Fi & Arte**: `cozy_polaroid`, `cozy_canvas`, `cozy_soft`.
      - **🎮 Gamer Pro & Esports**: `gamer_mecha`, `gamer_tactical_hud`, `gamer_stealth`, `gamer_hex_shield`, `gamer_cyber_glitch`, `gamer_arcade_retro`.
@@ -703,11 +744,11 @@ Para garantizar el desacoplamiento total entre escenas y estilos:
    - Las formas físicas operan mediante dimensiones relativas (`calc(100% - 24px)`) y pseudo-elementos anclados (`top: 6px; left: 6px;`).
    - Soportan de manera fluida cámaras panorámicas 16:9, formatos clásicos 4:3, monitores ultra-panorámicos 21:9 y transmisiones verticales 9:16 (TikTok / YouTube Shorts) sin distorsionar chaflanes ni desplazar los brackets de esquina.
 
-3. **Regla de Geometría Segura contra `clip-path`**:
+4. **Regla de Geometría Segura contra `clip-path`**:
    - Cuando un marco usa recortes poliédricos (`gamer_mecha`, `gamer_tactical_hud`), los elementos hijos nunca deben colocarse en coordenadas negativas (`top: -12px;`, `bottom: -36px;`).
    - Se deben usar siempre insets interiores positivos (`top: 10px; left: 14px;`) o padding para garantizar visibilidad total.
 
-4. **Paneles Flotantes Bajo Demanda (No Invasivos)**:
+5. **Paneles Flotantes Bajo Demanda (No Invasivos)**:
    - Los paneles interactivos flotantes (`oss-countdown-control`, `oss-speedrun-control`, `oss-brb-phrases-control`) arrancan ocultos (`display: none;`) para no tapar componentes laterales (splits, notas, tareas).
    - Se activan y cierran desde los botones contextuales de la barra HUD (`⏱️ Temporizador`, `⚡ Splits`, `🔄 Frases BRB`) o con el botón `✕` de la ventana flotante.
 

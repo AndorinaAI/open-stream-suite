@@ -34,8 +34,8 @@
     "starting": "ambient"
   },
   "overlayShapes": {
-    "starting": "fantasy_parchment",
-    "game": "gamer_mecha"
+    "game": "gamer_mecha",
+    "starting": "fantasy_parchment"
   },
   "backdrops": {}
 }

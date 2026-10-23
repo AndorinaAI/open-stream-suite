@@ -30,7 +30,7 @@ This guide explains clearly how to connect your physical macro controllers (**El
 1. **Switching Scenes in OBS (Game, Maker, Chat, BRB):**
    * Handled through the **official OBS WebSocket** built directly into OBS Studio. All deck applications (Elgato, Ajazz, Companion) provide native scene-switching actions.
 2. **Triggering Memes, Color Themes, Widgets, or Timers:**
-   * Open Stream Suite exposes a **1-Click HTTP API (`/api/deck/...`)**: paste a URL (GET or POST) into any button or macro key, responding in under 5 ms.
+   * Open Stream Suite exposes a **1-Click HTTP API (`/api/deck/...`)**: paste a URL (GET or POST) into any button or macro key, executing with instant response over your local network.
    * In addition, the local WebSocket (`ws://localhost:8080/ws`) is always active for real-time bidirectional feedback on LCD screens.
 
 > [!IMPORTANT]
@@ -165,6 +165,7 @@ Control widgets via `/api/deck/widget`:
 
 | Action | Local URL (GET / POST) | Optional Parameters |
 | :--- | :--- | :--- |
+| **System Status** | `http://localhost:8080/api/deck/status` | *(Returns live health & status JSON)* |
 | **Trigger Meme** | `http://localhost:8080/api/deck/trigger?id=TRIGGER_ID` | `&user=Name` |
 | **Apply Theme** | `http://localhost:8080/api/deck/theme?id=THEME_ID` | `&pack=pack_id` |
 | **Start Timer** | `http://localhost:8080/api/deck/timer?action=start&seconds=300` | `&title=BREAK` |
@@ -173,5 +174,6 @@ Control widgets via `/api/deck/widget`:
 | **Confetti Shower** | `http://localhost:8080/api/deck/explode?emoji=🎉&count=40` | `&emoji=❤️` |
 | **Simulate Follow** | `http://localhost:8080/api/deck/alert?type=follow` | `&user=Name` |
 | **Simulate Sub** | `http://localhost:8080/api/deck/alert?type=sub` | `&user=Name` |
-| **Rotary Dial** | `http://localhost:8080/api/deck/knob?knob=theme&action=next` | `knob=timer|volume` |
+| **Rotary Dial / Knob** | `http://localhost:8080/api/deck/knob?knob=timer&action=rotate&ticks=1` | `&knob=theme\|goal\|fx`, `&delta=...` |
+| **Widget Control** | `http://localhost:8080/api/deck/widget?widget=WIDGET&action=ACTION` | `&params...` |
 | **Dynamic Action List** | `http://localhost:8080/api/deck/actions` | *(Returns live JSON with all your actions)* |

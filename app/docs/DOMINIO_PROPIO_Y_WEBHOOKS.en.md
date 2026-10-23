@@ -37,6 +37,17 @@ The suite includes an automated assistant script in `scripts/setup_cloudflare.sh
 
 ---
 
+### 🖥️ Alternative via Your Own VPS Server (`scripts/setup_vps_tunnel.sh`):
+If you operate your own cloud VPS (Hetzner, DigitalOcean, OVH, etc.) and prefer an independent SSH reverse tunnel:
+```bash
+./scripts/setup_vps_tunnel.sh user@vps.yourdomain.com stream.yourdomain.com 8080 8080
+```
+This script automatically generates:
+1. An Nginx reverse proxy configuration block with WebSocket pass-through (`scripts/nginx_stream.yourdomain.com.conf`).
+2. A persistent local `systemd` user service (`~/.config/systemd/user/taller-vps-tunnel.service`) with automatic auto-reconnect.
+
+---
+
 ### Manual Step-by-Step for Linux (Ubuntu / Debian / Mint):
 
 #### 1. Install the Official `cloudflared` Connector

@@ -42,6 +42,17 @@ La suite incluye un script en `scripts/setup_cloudflare.sh` que descarga el cone
 
 ---
 
+### 🖥️ Vía Alternativa con Servidor VPS Propio (`scripts/setup_vps_tunnel.sh`):
+Si ya dispones de tu propio servidor VPS en la nube (Hetzner, DigitalOcean, OVH, etc.) y prefieres no usar Cloudflare:
+```bash
+./scripts/setup_vps_tunnel.sh usuario@vps.tudominio.com stream.tudominio.com 8080 8080
+```
+Este asistente genera automáticamente:
+1. El archivo de configuración de Nginx listo para tu subdominio con WebSockets (`scripts/nginx_stream.tudominio.com.conf`).
+2. Un servicio `systemd` local con reconexión automática (`~/.config/systemd/user/taller-vps-tunnel.service`) para que el túnel inverso SSH se mantenga activo permanentemente sin interrupciones.
+
+---
+
 ### Paso a Paso Manual para Linux (Ubuntu / Debian / Mint):
 
 #### 1. Instalar el conector oficial `cloudflared`

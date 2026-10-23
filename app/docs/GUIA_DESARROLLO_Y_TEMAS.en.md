@@ -29,10 +29,10 @@ Historically, streamers designed overlays in graphic software like Photoshop, ex
 
 | Feature | Photoshop / PNG / Video Loops | Web Code (HTML5 / CSS3 / Vanilla JS) |
 | :--- | :--- | :--- |
-| **Disk Size & Memory** | 10 MB to 80 MB per scene. | Under **50 KB** total. Instant load. |
-| **OBS CPU Usage** | Decoding continuous video loops takes 5-15% CPU. | Under **0.5% CPU**. Native GPU hardware acceleration. |
+| **Disk Size & Memory** | 10 MB to 80 MB per scene (video loops / raster layers). | Lightweight shared bundle (~200 KB cached for entire suite). Instant load. |
+| **OBS CPU Usage** | Continuous video decoding overhead. | Zero background video decoding. Direct GPU-accelerated vector Chromium rendering. |
 | **Sharpness** | Scaling bitmaps causes pixelation or blurring. | Scalable SVG and CSS that render razor sharp at 1080p, 1440p, or 4K. |
-| **Interactivity** | Static. Changing text requires reopening Photoshop. | **100% dynamic**: edit text in panel and all scenes update live. |
+| **Interactivity** | Static. Changing text requires reopening Photoshop. | **100% dynamic**: edit text in HUD/panel and all scenes update live. |
 | **Twitch Integration** | Zero reactive capability. | Real-time reactions to follows, subs, bits, and chat via WebSockets. |
 | **Native Transparency** | Prone to fringing, halo artifacts, or dirty alpha edges. | Pure alpha transparency (`background: transparent !important`). |
 
@@ -87,12 +87,16 @@ app/                           # Core project root directory
 │       ├── js/                # OBS overlay submodules (state-data.js, render.js, engine.js, network.js)
 │       └── index.html, style.css, widget.js, panel.js, config.json
 │
-├── scenes/                    # Full 1920×1080 scene overlays for OBS Studio
-│   ├── game/, maker-desk/, maker-pc/, print-machine/, print-design/, chill/, starting-soon/, be-right-back/, ending/
+├── streamthemes/              # Modular theme packs for overlays and styles
+│   ├── Cozy_LoFi_Pack/        # Lo-Fi scenes, Pomodoro, Art Dual Cam, and styles
+│   ├── Gamer_Pro_Pack/        # Gameplay HUD, Speedrun, Victory Clutch, and styles
+│   ├── Maker_Theme_Pack/      # Workshop scenes (desk, pc, print, chill, game) and styles
+│   └── Open_stream_Pack/      # Just Chatting, Desktop Share, Podcast, and styles
 │
 ├── common/                    # Shared design system tokens & runtime
-│   ├── overlay/               # Overlay submodules: editor/, dom-injector.js, icons.js
-│   ├── catalog.css, catalog.js, components.css, editor.js, i18n.js, overlay.js, styles.css, themes.css
+│   ├── overlay/               # Submodules: editor/ (01-05a), dom-injector.js, backdrop-aperture.js, icons.js
+│   ├── fonts/                 # Local offline webfonts (WOFF2)
+│   ├── catalog.css, catalog.js, components.css, fonts.css, i18n.js, overlay.js, styles.css, themes.css
 │
 ├── launcher/                  # Cross-platform desktop launcher (Tkinter)
 │   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py
@@ -286,11 +290,19 @@ To ensure total decoupling between scenes and themes:
 1. **Mandatory Semantic Attribute Specifications**:
    - `data-oss-cam="true"`: Primary camera or video capture container.
    - `data-oss-viewport="true"`: Transparent inner window for OBS video sources and SVG mask cutout engine.
-   - `data-oss-cam-label="true"`: Camera label or badge element.
+   - `data-oss-cam-label="true|bar|bottom"`: Camera label or badge element. Use `"bar"` or class `.cam-bottom-bar` for full-width bottom chin bars.
    - `data-oss-panel="true"`: Content cards, chat boxes, stats, or split lists.
-   - `data-oss-bar="top|bottom"`: Top headers or bottom news/status tickers.
+   - `data-oss-bar="top|bottom|left|right"`: Top headers, bottom news/status tickers, or side columns.
+   - `data-oss-orientation="horizontal|vertical"`: Element orientation (auto-detected via aspect-ratio or bar position, or explicitly declared in HTML).
+   - `data-text-key="section.field"`: Isolated text key for live on-canvas editing and persistent broadcasting.
 
-2. **Fluid Adaptability across Camera Aspect Ratios and Catalog of 20 Physical Shapes**:
+2. **URL Control Query Parameters for OBS Studio**:
+   - `?theme=<id>`: Force a specific color theme (e.g. `?theme=cyberpunk`).
+   - `?shape=<id>`: Force one of the 20 physical shapes (e.g. `?shape=gamer_mecha`).
+   - `?lock=1` or `?lockTheme=1`: Permanently freezes the scene in OBS Studio to the URL values, ignoring incoming global WebSocket theme changes.
+   - `?lang=en` or `?lang=es`: Load translated overlay texts for the specified language.
+
+3. **Fluid Adaptability across Camera Aspect Ratios and Catalog of 20 Physical Shapes**:
    - The engine provides 20 universal physical shape archetypes (`data-theme-shape`), grouped into 6 families:
      - **☕ Cozy Lo-Fi & Art**: `cozy_polaroid`, `cozy_canvas`, `cozy_soft`.
      - **🎮 Gamer Pro & Esports**: `gamer_mecha`, `gamer_tactical_hud`, `gamer_stealth`, `gamer_hex_shield`, `gamer_cyber_glitch`, `gamer_arcade_retro`.
@@ -301,13 +313,64 @@ To ensure total decoupling between scenes and themes:
    - Physical shapes rely on relative `calc(100% - 24px)` coordinates and corner-pinned pseudo-elements (`top: 6px; left: 6px;`).
    - They fluidly accommodate 16:9 widescreen, 4:3 retro, 21:9 ultrawide, and 9:16 vertical mobile layouts (TikTok / Shorts) without distorted chamfers or displaced brackets.
 
-3. **Polygonal Geometry Safety against `clip-path`**:
+4. **Polygonal Geometry Safety against `clip-path`**:
    - When using angular polygonal shapes (`gamer_mecha`, `gamer_tactical_hud`), child elements must never use negative positioning (`top: -12px;`, `bottom: -36px;`).
    - Always use inward positive insets (`top: 10px; left: 14px;`) or layout padding to guarantee full visibility.
 
-4. **On-Demand Non-Obtrusive Floating Panels**:
+5. **On-Demand Non-Obtrusive Floating Panels**:
    - Auxiliary floating panels (`oss-countdown-control`, `oss-speedrun-control`, `oss-brb-phrases-control`) start hidden (`display: none;`) to prevent obscuring side widgets (splits, pomodoro, notes).
    - They toggle open and closed via HUD toolbar buttons (`⏱️ Timer`, `⚡ Splits`, `🔄 BRB Phrases`) or the top-right `✕` close button.
+
+---
+
+### REST API Endpoints Reference
+
+#### Themes API
+| Method | Route | Description | Payload / Parameters |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/themes/packs` | Returns all packs, modular themes, and `overlayThemes` mapping. | — |
+| `POST` | `/api/themes/packs/create` | Creates a new pack folder in `streamthemes/<pack_id>/`. | `{"name", "icon", "badge", "description"}` |
+| `POST` | `/api/themes/create` | Creates a new modular theme within a pack. | `{"packId", "name", "accentCyan", ...}` |
+| `POST` | `/api/themes/save` | Saves CSS to disk and recompiles `common/themes.css`. | `{"packId", "id", "css", ...}` |
+| `POST` | `/api/themes/restore` | ↺ Restores a theme to factory defaults (`theme.default.json`). | `{"packId", "themeId"}` |
+| `POST` | `/api/themes/overlay-assignment` | Assigns a visual theme or physical shape to a specific overlay. | `{"overlayKey", "themeId", "shapeId"}` |
+| `POST` | `/api/themes/apply` | Globally activates a visual theme for all OBS sources. | `{"theme", "pack"}` |
+| `POST` | `/api/themes/apply-shape` | Globally activates one of 20 physical shapes for all scenes. | `{"shape": "maker_blueprint"}` |
+| `POST` | `/api/themes/backdrop` | Persists and broadcasts decorative backdrop selection. | `{"overlayKey", "backdrop"}` |
+| `POST` | `/api/themes/chat-anchor` | Toggles chat anchoring to active theme or enables custom chat fork. | `{"packId", "themeId", "anchored"}` |
+
+#### Fusions API
+| Method | Route | Description | Payload / Parameters |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/fusions` | Lists all configured overlay fusions. | — |
+| `POST` | `/api/fusions` | Creates or updates a hybrid fusion of scenes. | `{"id", "name", "badge", "overlays", "defaultTheme", "defaultShape"}` |
+| `GET` | `/api/fusions/{id}` | Retrieves a single fusion by ID. | — |
+| `DELETE` | `/api/fusions/{id}` | Deletes a fusion by ID. | — |
+| `POST` | `/api/fusions/{id}/apply-theme` | Batch applies a visual theme to all scenes in the fusion. | `{"themeId": "cyberpunk"}` |
+| `POST` | `/api/fusions/{id}/apply-shape` | Batch applies a physical shape to all scenes in the fusion. | `{"shapeId": "gamer_mecha"}` |
+
+#### Widgets & RSS Feed API
+| Method | Route | Description | Payload / Parameters |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/widgets/config` | Unified dictionary with all widgets configuration. | — |
+| `POST` | `/api/widgets/config` | Saves global widgets configuration. | JSON configuration object |
+| `GET` | `/api/widgets/{widget}/config` | Retrieves config for a specific widget (chat, goal, timer, promo, ticker). | — |
+| `POST` | `/api/widgets/{widget}/config` | Saves config for the specified widget. | Widget settings object |
+| `GET/POST` | `/api/widgets/action` | Executes widget actions (chat, goal, timer, promo/shoutout, ticker). | `?widget=...&action=...` |
+| `GET` | `/api/rss/feed` | Parses RSS (<channel><item>) and Atom (<feed><entry>) feeds. | `?url=https%3A%2F%2F...` |
+
+#### Hardware Decks API (`/api/deck/*`)
+| Method | Route | Description | Parameters (Query or JSON) |
+| :--- | :--- | :--- | :--- |
+| `GET/POST` | `/api/deck/status` | System health check (active theme, pack, timer, overlays). | — |
+| `GET/POST` | `/api/deck/trigger` | Triggers a sound/meme trigger by ID in OBS. | `?id=trigger_id` (`&user=Name`) |
+| `GET/POST` | `/api/deck/theme` | Switches visual theme globally or per scene. | `?id=cyberpunk` (`&pack=Gamer_Pro_Pack`) |
+| `GET/POST` | `/api/deck/timer` | Controls the countdown/stopwatch timer. | `?action=start\|pause\|reset` (`&seconds=300`) |
+| `GET/POST` | `/api/deck/alert` | Triggers a simulated test alert in OBS. | `?type=follow\|sub\|raid\|cheer` (`&user=Name&amount=...`) |
+| `GET/POST` | `/api/deck/explode` | Triggers an emote/confetti screen shower. | `?emoji=🎉&count=40` |
+| `GET/POST` | `/api/deck/widget` | Direct 1-click control over widgets. | `?widget=promo\|goal\|ticker\|chat&action=...` |
+| `GET/POST` | `/api/deck/knob` | Hardware rotary dials, knobs, and encoders. | `?knob=timer\|theme\|goal\|fx&action=rotate\|next\|prev&ticks=1` |
+| `GET` | `/api/deck/actions` | Self-documenting JSON catalog with all triggers and themes. | — |
 
 ---
 

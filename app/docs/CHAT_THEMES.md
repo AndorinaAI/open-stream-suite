@@ -35,10 +35,12 @@ Permite usar estilos visuales completamente diferentes en cada escena de OBS Stu
 #### Parámetros Opcionales de Ajuste Fino en la URL:
 Puedes sobreescribir cualquier propiedad directamente en la URL del navegador en OBS:
 - `&shape=rounded|soft_card|scifi|bubble|pill|arcade|box|tag|slant` (silueta del mensaje)
+- `&bgtype=glass|solid|gradient|transparent` (tipo de fondo)
 - `&opacity=0..100` (opacidad del fondo)
 - `&size=12..24` (tamaño de fuente en px)
-- `&font=outfit|orbitron|poppins|inter|comfortaa|rajdhani|mono` (tipografía)
+- `&font=outfit|orbitron|inter|jetbrains_mono|montserrat|rajdhani|press_start_2p|comfortaa|quicksand|share_tech_mono|teko|poppins|bebas_neue|fira_code` (tipografías locales incluidas sin conexión a internet)
 - `&border=57D6C4` (color hexadecimal de borde)
+- `&borderstyle=none|full|left_neon|double` (estilo de borde del mensaje)
 
 ---
 
@@ -322,8 +324,13 @@ El atributo `class` de `<body>` incluye la clase del tema activo:
 2. **`theme-maker_glass`**: Cristal translúcido con desenfoque de 8px, borde cyan y sombra oscura profunda.
 3. **`theme-ghost`**: Fondo 100% transparente (`rgba(0,0,0,0)`), sin bordes, con texto de alto contraste (`text-shadow`) para emisión directa en pantalla.
 4. **`theme-cyberpunk`**: Terminal retro estilo CRT con tipografía monospace, prefijo `> ` de comando y bordes neón amarillo/magenta.
-5. **`theme-bubble`**: Burbujas de cómic redondeadas con sombra flotante.
-6. **`theme-retro`**: Estilo 8-bit con bordes gruesos y sombras duras estilo arcade.
+5. **`theme-bubble`**: Burbujas de cómic redondeadas con sombra flotante y degradado dual.
+6. **`theme-retro`**: Estilo 8-bit con bordes stepped dobles y sombras duras estilo arcade.
+7. **`theme-cozy_lofi`**: Tarjeta suave polaroid, fondo cálido translúcido al 85%, acento pastel y borde izquierdo neón suave.
+8. **`theme-gamer_pro`**: Biselado sci-fi 45°, brillo neón cian/esmeralda, fuente Orbitron y borde de alta intensidad.
+9. **`theme-matrix`**: Terminal verde fósforo con tipografía mono y borde vertical esmeralda.
+10. **`theme-pill`**: Píldora moderna minimalista con esquinas redondeadas completas (9999px) y tipografía Inter.
+11. **`theme-scifi`**: Geometría angular de polígono recortado a 45° con corte en esquinas opuestas.
 
 ---
 

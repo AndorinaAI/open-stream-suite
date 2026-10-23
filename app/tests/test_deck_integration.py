@@ -41,12 +41,19 @@ class DeckIntegrationTests(unittest.TestCase):
         self.assertEqual(data.get("action"), "timer")
 
     def test_03_deck_theme_get(self):
-        """Verifica que un tema pueda aplicarse por GET desde un macro pad"""
-        r = requests.get(f"{BASE_URL}/api/deck/theme?id=maker_electronico", timeout=5)
+        """Verifica que un tema pueda aplicarse por GET desde un macro pad y rechace inexistentes con 404"""
+        r = requests.get(f"{BASE_URL}/api/deck/theme?id=maker", timeout=5)
         self.assertEqual(r.status_code, 200)
         data = r.json()
         self.assertEqual(data.get("status"), "ok")
-        self.assertEqual(data.get("theme"), "maker_electronico")
+        self.assertEqual(data.get("theme"), "maker")
+
+        # Verificar rechazo 404 para tema fantasma inexistente
+        r_err = requests.get(f"{BASE_URL}/api/deck/theme?id=tema_que_no_existe_404", timeout=5)
+        self.assertEqual(r_err.status_code, 404)
+        err_data = r_err.json()
+        self.assertEqual(err_data.get("status"), "error")
+
 
     def test_04_deck_explode_get(self):
         """Verifica la lluvia de emotes por GET"""
