@@ -41,6 +41,14 @@ class UpdateManager:
         self.app_dir = Path(app_dir)
         self.root_dir = Path(root_dir)
 
+    def get_git_root(self):
+        """Devuelve el directorio raíz del repositorio Git"""
+        if (self.root_dir / ".git").is_dir():
+            return self.root_dir
+        if (self.app_dir / ".git").is_dir():
+            return self.app_dir
+        return self.root_dir
+
     def is_git_repo(self):
         """Verifica si el proyecto está gestionado por Git"""
         return (self.root_dir / ".git").is_dir() or (self.app_dir / ".git").is_dir()
@@ -55,7 +63,7 @@ class UpdateManager:
             try:
                 out = subprocess.check_output(
                     ["git", "remote", "get-url", "origin"],
-                    cwd=str(self.root_dir),
+                    cwd=str(self.get_git_root()),
                     stderr=subprocess.DEVNULL,
                     text=True
                 ).strip()
@@ -74,7 +82,7 @@ class UpdateManager:
         try:
             branch = subprocess.check_output(
                 ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-                cwd=str(self.root_dir),
+                cwd=str(self.get_git_root()),
                 stderr=subprocess.DEVNULL,
                 text=True
             ).strip()
@@ -89,6 +97,7 @@ class UpdateManager:
         """
         repo = self.get_repo_name()
         current_version = VERSION
+        git_root = self.get_git_root()
         result = {
             "update_available": False,
             "current_version": current_version,
@@ -107,7 +116,7 @@ class UpdateManager:
                 # Comprobar si existe el remote origin
                 remotes = subprocess.check_output(
                     ["git", "remote"],
-                    cwd=str(self.root_dir),
+                    cwd=str(git_root),
                     stderr=subprocess.DEVNULL,
                     text=True
                 ).strip()
@@ -115,14 +124,14 @@ class UpdateManager:
                 if "origin" in remotes:
                     subprocess.run(
                         ["git", "fetch", "origin", branch],
-                        cwd=str(self.root_dir),
+                        cwd=str(git_root),
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL,
-                        timeout=5.0
+                        timeout=15.0
                     )
                     count_str = subprocess.check_output(
                         ["git", "rev-list", f"HEAD..origin/{branch}", "--count"],
-                        cwd=str(self.root_dir),
+                        cwd=str(git_root),
                         stderr=subprocess.DEVNULL,
                         text=True
                     ).strip()
@@ -158,7 +167,9 @@ class UpdateManager:
 
     def apply_update(self, branch="main"):
         """
-        Aplica la actualización mediante git pull y pip install si es un repositorio Git.
+        Aplica la actualización mediante Git y pip install.
+        Preserva las configuraciones de usuario (temas, fusiones, textos, widgets)
+        y resuelve de forma no destructiva colisiones de archivos rastreados.
         """
         if not self.is_git_repo():
             return {
@@ -166,47 +177,160 @@ class UpdateManager:
                 "message": _("launcher.update_not_git")
             }
 
+        git_root = self.get_git_root()
+
         try:
-            # 1. Asegurar la rama correcta
+            # 1. Respaldar configuración de usuario para no perderla en la actualización
+            user_configs_to_backup = [
+                "themes_state.json",
+                "fusions.json",
+                "overlay_texts_config.json",
+                "overlay_texts_config.en.json",
+                "widgets_config.json",
+                "widgets/goal/config.json",
+                "roles.json",
+            ]
+            saved_user_data = {}
+            for rel_path in user_configs_to_backup:
+                p = self.app_dir / rel_path
+                if p.is_file():
+                    try:
+                        with open(p, "r", encoding="utf-8") as f:
+                            saved_user_data[rel_path] = json.load(f)
+                    except Exception:
+                        pass
+
+            # 2. Descargar los últimos cambios del repositorio
             subprocess.run(
-                ["git", "checkout", branch],
-                cwd=str(self.root_dir),
+                ["git", "fetch", "origin", branch],
+                cwd=str(git_root),
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True
+                text=True,
+                timeout=60.0
             )
 
-            # 2. git pull
-            pull_res = subprocess.run(
-                ["git", "pull", "origin", branch],
-                cwd=str(self.root_dir),
+            # 3. Asegurar la rama correcta
+            subprocess.run(
+                ["git", "checkout", "-f", branch],
+                cwd=str(git_root),
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                text=True
+                text=True,
+                timeout=30.0
             )
 
-            # 3. Actualizar dependencias si existe el venv
+            # 4. Aplicar actualización (reset --hard a origin/branch para resolver colisiones de archivos modificados/rastreados)
+            reset_res = subprocess.run(
+                ["git", "reset", "--hard", f"origin/{branch}"],
+                cwd=str(git_root),
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=30.0
+            )
+
+            # 5. Restaurar y fusionar configuraciones de usuario de forma no destructiva
+            if "themes_state.json" in saved_user_data and isinstance(saved_user_data["themes_state.json"], dict):
+                p = self.app_dir / "themes_state.json"
+                current_disk = {}
+                if p.is_file():
+                    try:
+                        with open(p, "r", encoding="utf-8") as f:
+                            current_disk = json.load(f)
+                    except Exception:
+                        pass
+                for k in ("activePack", "activeTheme", "overlayThemes", "overlayShapes", "backdrops", "customScenes"):
+                    if k in saved_user_data["themes_state.json"]:
+                        current_disk[k] = saved_user_data["themes_state.json"][k]
+                try:
+                    with open(p, "w", encoding="utf-8") as f:
+                        json.dump(current_disk, f, indent=2, ensure_ascii=False)
+                except Exception:
+                    pass
+
+            if "fusions.json" in saved_user_data:
+                p = self.app_dir / "fusions.json"
+                disk_fusions = []
+                if p.is_file():
+                    try:
+                        with open(p, "r", encoding="utf-8") as f:
+                            data = json.load(f)
+                            if isinstance(data, list):
+                                disk_fusions = data
+                    except Exception:
+                        pass
+                saved_list = saved_user_data["fusions.json"]
+                if isinstance(saved_list, list):
+                    existing_ids = {f["id"]: i for i, f in enumerate(disk_fusions) if isinstance(f, dict) and "id" in f}
+                    for uf in saved_list:
+                        if isinstance(uf, dict) and "id" in uf:
+                            if uf["id"] in existing_ids:
+                                disk_fusions[existing_ids[uf["id"]]] = uf
+                            else:
+                                disk_fusions.append(uf)
+                    try:
+                        with open(p, "w", encoding="utf-8") as f:
+                            json.dump(disk_fusions, f, indent=2, ensure_ascii=False)
+                    except Exception:
+                        pass
+
+            for text_cfg in ("overlay_texts_config.json", "overlay_texts_config.en.json"):
+                if text_cfg in saved_user_data and isinstance(saved_user_data[text_cfg], dict):
+                    p = self.app_dir / text_cfg
+                    disk_texts = {}
+                    if p.is_file():
+                        try:
+                            with open(p, "r", encoding="utf-8") as f:
+                                disk_texts = json.load(f)
+                        except Exception:
+                            pass
+                    user_texts = saved_user_data[text_cfg]
+                    for k, v in user_texts.items():
+                        if k == "customScenes" and isinstance(v, dict):
+                            if "customScenes" not in disk_texts or not isinstance(disk_texts["customScenes"], dict):
+                                disk_texts["customScenes"] = {}
+                            disk_texts["customScenes"].update(v)
+                        else:
+                            disk_texts[k] = v
+                    try:
+                        with open(p, "w", encoding="utf-8") as f:
+                            json.dump(disk_texts, f, indent=2, ensure_ascii=False)
+                    except Exception:
+                        pass
+
+            for other_cfg in ("widgets_config.json", "widgets/goal/config.json", "roles.json"):
+                if other_cfg in saved_user_data:
+                    p = self.app_dir / other_cfg
+                    try:
+                        with open(p, "w", encoding="utf-8") as f:
+                            json.dump(saved_user_data[other_cfg], f, indent=2, ensure_ascii=False)
+                    except Exception:
+                        pass
+
+            # 6. Actualizar dependencias de Python si existe el entorno virtual
             pip_cmd = None
             if (self.app_dir / "venv" / "bin" / "pip").is_file():
                 pip_cmd = str(self.app_dir / "venv" / "bin" / "pip")
             elif (self.app_dir / "venv" / "Scripts" / "pip.exe").is_file():
                 pip_cmd = str(self.app_dir / "venv" / "Scripts" / "pip.exe")
 
-            if pip_cmd:
+            if pip_cmd and (self.app_dir / "requirements.txt").is_file():
                 subprocess.run(
                     [pip_cmd, "install", "-r", str(self.app_dir / "requirements.txt")],
                     cwd=str(self.app_dir),
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
-                    timeout=30.0
+                    timeout=60.0
                 )
 
             return {
                 "status": "ok",
                 "message": _("launcher.update_success_msg", branch=branch),
-                "details": pull_res.stdout
+                "details": reset_res.stdout
             }
         except subprocess.CalledProcessError as e:
             err = e.stderr or str(e)

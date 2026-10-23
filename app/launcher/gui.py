@@ -69,10 +69,37 @@ class LauncherGUI:
         self.root.after(3000, self.on_check_updates)
 
     def _setup_icon(self):
-        if ICON_PATH.exists():
+        try:
+            self.root.wm_class("openstreamsuite", "OpenStreamSuite")
+        except Exception:
+            pass
+        self._icon_photos = []
+        icon_paths = [
+            APP_DIR / "assets" / "imagencorp" / "logos" / "favicon-256.png",
+            APP_DIR / "assets" / "imagencorp" / "logos" / "favicon-128.png",
+            APP_DIR / "assets" / "imagencorp" / "logos" / "favicon-64.png",
+            APP_DIR / "assets" / "imagencorp" / "logos" / "favicon-32.png",
+            APP_DIR / "assets" / "favicon.png",
+        ]
+        loaded_imgs = []
+        for p in icon_paths:
+            if p.is_file():
+                try:
+                    from PIL import Image, ImageTk
+                    pil_img = Image.open(str(p)).convert("RGBA")
+                    photo = ImageTk.PhotoImage(pil_img)
+                    self._icon_photos.append(photo)
+                    loaded_imgs.append(photo)
+                except Exception:
+                    try:
+                        photo = tk.PhotoImage(file=str(p))
+                        self._icon_photos.append(photo)
+                        loaded_imgs.append(photo)
+                    except Exception:
+                        pass
+        if loaded_imgs:
             try:
-                img = tk.PhotoImage(file=str(ICON_PATH))
-                self.root.iconphoto(True, img)
+                self.root.iconphoto(True, *loaded_imgs)
             except Exception:
                 pass
 
@@ -184,15 +211,59 @@ class LauncherGUI:
             self.btn_toggle_server.configure(state="normal")
             still_alive, data = self.server_ctl.is_running()
             self._update_server_ui(still_alive, data)
+            return
+
+        # Si está marcado abrir panel con el inicio del server, verificar actualizaciones antes de nada
+        if self.var_open_browser.get():
+            self._check_update_before_start()
         else:
-            self.btn_toggle_server.configure(text="⏳ Iniciando...", state="disabled")
-            self.root.update_idletasks()
-            ok, msg = self.server_ctl.start()
-            self.btn_toggle_server.configure(state="normal")
-            if not ok:
-                messagebox.showerror(_("server.start_error_title", "Error al iniciar"), msg)
-            else:
-                self.root.after(300, lambda: self._check_after_start(0))
+            self._do_start_server()
+
+    def _check_update_before_start(self):
+        self.btn_toggle_server.configure(text=_("updates.btn_checking_short", "⏳ Comprobando..."), state="disabled")
+        self.root.update_idletasks()
+        branch = self.var_update_branch.get().strip() or "main"
+
+        def _worker():
+            try:
+                info = self.updater.check_updates(branch=branch)
+            except Exception:
+                info = {"update_available": False}
+            self.root.after(0, lambda: self._on_check_update_before_start_done(info, branch))
+
+        threading.Thread(target=_worker, daemon=True).start()
+
+    def _on_check_update_before_start_done(self, info, branch):
+        self._last_update_info = info
+        if info.get("update_available"):
+            self.btn_toggle_server.configure(text=_("server.btn_start", "⚡ Iniciar Servidor"), state="normal")
+            remote_ver = info.get("remote_version", "nueva")
+            ans = messagebox.askyesno(
+                _("updates.prestart_dialog_title", "Actualización disponible"),
+                _("updates.prestart_dialog_msg",
+                  "Se ha detectado una nueva versión de Open Stream Suite ({remote_ver} en la rama '{branch}').\n\n"
+                  "• Pulsa [Sí] para actualizar ahora mismo.\n"
+                  "• Pulsa [No] para abrir el servidor y actualizar más tarde.",
+                  remote_ver=remote_ver, branch=branch),
+                default="yes"
+            )
+            if ans:
+                # Actualizar inmediatamente
+                self.on_apply_update(skip_confirm=True)
+                return
+
+        # Continuar con el inicio del servidor
+        self._do_start_server()
+
+    def _do_start_server(self):
+        self.btn_toggle_server.configure(text="⏳ Iniciando...", state="disabled")
+        self.root.update_idletasks()
+        ok, msg = self.server_ctl.start()
+        self.btn_toggle_server.configure(state="normal")
+        if not ok:
+            messagebox.showerror(_("server.start_error_title", "Error al iniciar"), msg)
+        else:
+            self.root.after(300, lambda: self._check_after_start(0))
 
     def _check_after_start(self, attempts=0):
         alive, data = self.server_ctl.is_running()
@@ -346,9 +417,9 @@ class LauncherGUI:
         url = self._last_update_info.get("release_url") if self._last_update_info else f"https://github.com/{self.updater.get_repo_name()}/releases"
         webbrowser.open(url)
 
-    def on_apply_update(self):
+    def on_apply_update(self, skip_confirm=False):
         branch = self.var_update_branch.get().strip() or "main"
-        if not messagebox.askyesno(
+        if not skip_confirm and not messagebox.askyesno(
             _("updates.confirm_title", "Confirmar actualización"),
             _("updates.confirm_body", branch=branch)
         ):

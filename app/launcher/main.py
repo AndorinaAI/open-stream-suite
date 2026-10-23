@@ -66,7 +66,7 @@ def main():
                 subprocess.Popen(["xdg-open", "http://localhost:8080/alerts/panel.html"])
         return 0
 
-    root = tk.Tk()
+    root = tk.Tk(className="openstreamsuite")
 
     server_ctl = ServerController()
     twitch_ctl = TwitchController(port=server_ctl.port)
