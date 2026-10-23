@@ -753,7 +753,7 @@ body[data-theme-shape="cozy_polaroid"] :is([data-oss-cam], .camera-frame, .cam-f
   display: block !important;
 }
 /* Pie de foto manuscrito en la barbilla polaroid */
-body[data-theme-shape="cozy_polaroid"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="cozy_polaroid"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   bottom: -38px !important;
   left: 18px !important;
@@ -772,7 +772,7 @@ body[data-theme-shape="cozy_polaroid"] :is([data-oss-cam], .camera-frame, .cam-f
   align-items: center !important;
   gap: 6px !important;
 }
-body[data-theme-shape="cozy_polaroid"] :is(.camera-face, .camera-aux, .pip-cam-box, .runner-cam-box, .floating-cam) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="cozy_polaroid"] :is(.camera-face, .camera-aux, .runner-cam-box, .floating-cam) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   bottom: -30px !important;
   font-size: 11px !important;
   left: 12px !important;
@@ -819,7 +819,7 @@ body[data-theme-shape="cozy_canvas"] :is([data-oss-cam], .camera-frame, .cam-fra
   pointer-events: none !important;
   display: block !important;
 }
-body[data-theme-shape="cozy_canvas"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="cozy_canvas"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   bottom: 12px !important;
   left: 14px !important;
@@ -849,7 +849,7 @@ body[data-theme-shape="cozy_soft"] [data-oss-cam]::before,
 body[data-theme-shape="cozy_soft"] [data-oss-cam]::after {
   display: none !important;
 }
-body[data-theme-shape="cozy_soft"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="cozy_soft"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 14px !important;
   left: 16px !important;
@@ -904,8 +904,8 @@ body[data-theme-archetype="gamer"] :is([data-oss-cam], .camera-frame, .cam-frame
   z-index: 10 !important;
   pointer-events: none !important;
 }
-body[data-theme-shape="gamer_mecha"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag),
-body[data-theme-archetype="gamer"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="gamer_mecha"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag),
+body[data-theme-archetype="gamer"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -962,7 +962,7 @@ body[data-theme-shape="gamer_tactical_hud"] :is([data-oss-cam], .camera-frame, .
   z-index: 10 !important;
   display: block !important;
 }
-body[data-theme-shape="gamer_tactical_hud"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="gamer_tactical_hud"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -994,7 +994,7 @@ body[data-theme-shape="gamer_stealth"] [data-oss-cam]::before,
 body[data-theme-shape="gamer_stealth"] [data-oss-cam]::after {
   display: none !important;
 }
-body[data-theme-shape="gamer_stealth"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="gamer_stealth"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1049,8 +1049,8 @@ body[data-theme-shape="maker_blueprint"] :is([data-oss-cam], .camera-frame, .cam
   z-index: 12 !important;
   display: block !important;
 }
-body[data-theme-shape="maker_blueprint"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag),
-body[data-theme-archetype="maker"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="maker_blueprint"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag),
+body[data-theme-archetype="maker"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1100,7 +1100,7 @@ body[data-theme-shape="maker_workbench"] :is([data-oss-cam], .camera-frame, .cam
   z-index: 10 !important;
   display: block !important;
 }
-body[data-theme-shape="maker_workbench"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="maker_workbench"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1135,8 +1135,8 @@ body[data-theme-shape="openstream_glass"] [data-oss-cam]::before,
 body[data-theme-shape="openstream_glass"] [data-oss-cam]::after {
   display: none !important;
 }
-body[data-theme-shape="openstream_glass"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag),
-body[data-theme-archetype="openstream"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="openstream_glass"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag),
+body[data-theme-archetype="openstream"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 12px !important;
   left: 14px !important;
@@ -1181,7 +1181,7 @@ body[data-theme-shape="openstream_studio"] :is([data-oss-cam], .camera-frame, .c
 body[data-theme-shape="openstream_studio"] [data-oss-cam]::after {
   display: none !important;
 }
-body[data-theme-shape="openstream_studio"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="openstream_studio"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 12px !important;
@@ -1232,7 +1232,7 @@ body[data-theme-shape="gamer_hex_shield"] :is([data-oss-cam], .camera-frame, .ca
   z-index: 12 !important;
   display: block !important;
 }
-body[data-theme-shape="gamer_hex_shield"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="gamer_hex_shield"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 16px !important;
@@ -1286,7 +1286,7 @@ body[data-theme-shape="gamer_cyber_glitch"] :is([data-oss-cam], .camera-frame, .
   text-shadow: -1px 0 #FF0055 !important;
   display: block !important;
 }
-body[data-theme-shape="gamer_cyber_glitch"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="gamer_cyber_glitch"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1345,7 +1345,7 @@ body[data-theme-shape="gamer_arcade_retro"] :is([data-oss-cam], .camera-frame, .
   letter-spacing: 1px !important;
   display: block !important;
 }
-body[data-theme-shape="gamer_arcade_retro"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="gamer_arcade_retro"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1407,7 +1407,7 @@ body[data-theme-shape="fantasy_parchment"] :is([data-oss-cam], .camera-frame, .c
   letter-spacing: 1.5px !important;
   display: block !important;
 }
-body[data-theme-shape="fantasy_parchment"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="fantasy_parchment"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   bottom: 12px !important;
   left: 18px !important;
@@ -1465,7 +1465,7 @@ body[data-theme-shape="fantasy_runic_stone"] :is([data-oss-cam], .camera-frame, 
   text-shadow: 0 0 8px #6366F1 !important;
   display: block !important;
 }
-body[data-theme-shape="fantasy_runic_stone"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="fantasy_runic_stone"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1520,7 +1520,7 @@ body[data-theme-shape="gothic_vampire"] :is([data-oss-cam], .camera-frame, .cam-
   font-weight: 900 !important;
   display: block !important;
 }
-body[data-theme-shape="gothic_vampire"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="gothic_vampire"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1582,7 +1582,7 @@ body[data-theme-shape="comic_manga_action"] :is([data-oss-cam], .camera-frame, .
   z-index: 12 !important;
   display: block !important;
 }
-body[data-theme-shape="comic_manga_action"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="comic_manga_action"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1640,7 +1640,7 @@ body[data-theme-shape="pop_synth_neon"] :is([data-oss-cam], .camera-frame, .cam-
   z-index: 12 !important;
   display: block !important;
 }
-body[data-theme-shape="pop_synth_neon"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="pop_synth_neon"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1697,7 +1697,7 @@ body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-cam], .camera-frame, .c
   z-index: 12 !important;
   display: block !important;
 }
-body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   top: 10px !important;
   left: 14px !important;
@@ -1754,7 +1754,7 @@ body[data-theme-shape="vintage_crt_monitor"] :is([data-oss-cam], .camera-frame, 
   text-shadow: 0 0 4px #00F0FF !important;
   display: block !important;
 }
-body[data-theme-shape="vintage_crt_monitor"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label], .frame-label, .canvas-tag, .cam-label, .cam-header-tag) {
+body[data-theme-shape="vintage_crt_monitor"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
   position: absolute !important;
   bottom: -22px !important;
   left: 24px !important;
@@ -1841,6 +1841,51 @@ body[data-theme-shape="openstream_glass"] :is([data-oss-viewport], .cam-inner-vi
 body[data-theme-shape="openstream_studio"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window) {
   border-radius: 6px !important;
   clip-path: none !important;
+}
+
+/* ====================================================================
+   5B. PRESERVACIÓN DE BARRAS DE CÁMARA INFERIORES Y NAMEPLATES
+   (desktop_share pip-label-bar, podcast_talk nameplates, etc.)
+   ==================================================================== */
+:is([data-oss-cam], .camera-frame) :is(.pip-label-bar, .nameplate, [data-oss-cam-label="bar"], [data-oss-cam-label="bottom"], .cam-bottom-bar) {
+  position: absolute !important;
+  top: auto !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+.pip-cam-box :is(.pip-label-bar, [data-oss-cam-label="bar"], .cam-bottom-bar) {
+  position: absolute !important;
+  top: auto !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin: 12px !important;
+  width: auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  z-index: 20 !important;
+}
+
+.camera-frame :is(.nameplate, [data-oss-cam-label="bar"], .cam-bottom-bar) {
+  position: absolute !important;
+  top: auto !important;
+  bottom: 18px !important;
+  left: 18px !important;
+  right: 18px !important;
+  margin: 0 !important;
+  width: auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  z-index: 20 !important;
 }
 
 /* ====================================================================

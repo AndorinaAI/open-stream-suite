@@ -274,7 +274,6 @@ window.OSSEditor = window.OSSEditor || {};
           btnToggleEdit.click();
         }
 
-        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
         targetEl.focus();
 
         try {
@@ -303,12 +302,15 @@ window.OSSEditor = window.OSSEditor || {};
         }
       }
 
-      if (leaf && !leaf.isContentEditable && leaf.textContent && leaf.textContent.trim().length > 0) {
-        leaf.setAttribute('contenteditable', 'true');
-        leaf.setAttribute('spellcheck', 'false');
-        leaf.classList.add('editable-screen-element', 'editing-active');
-        window.__OSS_IS_EDITING__ = true;
-        leaf.focus();
+      // Solo hacer editable si es un elemento hoja o tiene data-text-key (nunca contenedores estructurales)
+      if (leaf && (leaf.children.length === 0 || leaf.hasAttribute('data-text-key')) && !leaf.isContentEditable && leaf.textContent && leaf.textContent.trim().length > 0) {
+        if (!['SCRIPT', 'STYLE', 'SVG', 'PATH', 'MASK', 'DEFS', 'LINK'].includes(leaf.tagName)) {
+          leaf.setAttribute('contenteditable', 'true');
+          leaf.setAttribute('spellcheck', 'false');
+          leaf.classList.add('editable-screen-element', 'editing-active');
+          window.__OSS_IS_EDITING__ = true;
+          leaf.focus();
+        }
       }
     }, true);
 
@@ -325,17 +327,29 @@ window.OSSEditor = window.OSSEditor || {};
           if (isEditing) populateQuickJump(quickJumpSelect);
         }
 
-        // Recolectar candidatos según lista y cualquier elemento con texto directo en el lienzo
-        const allCandidates = new Set(document.querySelectorAll(editableSelectors.join(',')));
+        // Recolectar candidatos: solo elementos hoja con texto o elementos con data-text-key
+        const allCandidates = new Set();
+        document.querySelectorAll('[data-text-key]').forEach(el => {
+          if (el.closest('#open-stream-suite-screen-hud') || el.closest('#oss-countdown-control') || el.closest('.hud-toast')) return;
+          allCandidates.add(el);
+        });
+
+        document.querySelectorAll(editableSelectors.join(',')).forEach(el => {
+          if (el.closest('#open-stream-suite-screen-hud') || el.closest('#oss-countdown-control') || el.closest('.hud-toast')) return;
+          if (el.children.length === 0 && el.textContent.trim().length > 0) {
+            allCandidates.add(el);
+          }
+        });
+
         const canvas = document.querySelector('.overlay-canvas') || document.body;
         canvas.querySelectorAll('*').forEach(el => {
           if (el.closest('#open-stream-suite-screen-hud') || el.closest('#oss-countdown-control') || el.closest('.hud-toast')) return;
           if (['SCRIPT', 'STYLE', 'SVG', 'PATH', 'MASK', 'DEFS', 'LINK'].includes(el.tagName)) return;
-          for (let i = 0; i < el.childNodes.length; i++) {
-            if (el.childNodes[i].nodeType === Node.TEXT_NODE && el.childNodes[i].textContent.trim().length > 0) {
-              allCandidates.add(el);
-              break;
-            }
+          if (el.children.length > 0 && !el.hasAttribute('data-text-key')) return;
+          if (el.classList.contains('icon') || el.classList.contains('live-dot') || el.classList.contains('pip-dot') || el.classList.contains('steam-dot') || el.classList.contains('status-dot')) return;
+          const text = el.textContent.trim();
+          if (text.length > 0 && text !== '|' && text !== '/' && text !== '•' && text !== '●') {
+            allCandidates.add(el);
           }
         });
 

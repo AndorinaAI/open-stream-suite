@@ -106,20 +106,23 @@
 
     /* Presenter Lower Third Nameplate */
     .nameplate {
-      position: absolute;
-      bottom: 18px;
-      left: 18px;
-      right: 18px;
-      background: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 8px;
-      padding: 10px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      position: absolute !important;
+      top: auto !important;
+      bottom: 18px !important;
+      left: 18px !important;
+      right: 18px !important;
+      background: var(--color-panel-bg, rgba(15, 23, 42, 0.88)) !important;
+      backdrop-filter: var(--panel-backdrop, blur(16px)) !important;
+      -webkit-backdrop-filter: var(--panel-backdrop, blur(16px)) !important;
+      border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.14)) !important;
+      border-radius: var(--panel-radius, 8px) !important;
+      padding: 10px 18px !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+      box-sizing: border-box !important;
+      width: auto !important;
       z-index: 10;
     }
     .nameplate-left {
@@ -225,7 +228,7 @@
     <!-- Host Frame -->
     <div class="camera-frame stream-frame camera-main" data-oss-cam="true">
       <div class="cam-viewport" data-oss-viewport="true"></div>
-      <div class="cam-label nameplate" data-oss-cam-label="true">
+      <div class="nameplate cam-bottom-bar" data-oss-cam-label="bar">
         <div class="nameplate-left">
           <div class="mic-indicator" title="Microphone Active"></div>
           <div>
@@ -240,7 +243,7 @@
     <!-- Guest Frame -->
     <div class="camera-frame stream-frame camera-face" data-oss-cam="true">
       <div class="cam-viewport" data-oss-viewport="true"></div>
-      <div class="cam-label nameplate" data-oss-cam-label="true">
+      <div class="nameplate cam-bottom-bar" data-oss-cam-label="bar">
         <div class="nameplate-left">
           <div class="mic-indicator" style="background:#38bdf8; box-shadow:0 0 8px rgba(56,189,248,0.6);" title="Guest Mic Active"></div>
           <div>
