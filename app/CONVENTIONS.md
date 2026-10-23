@@ -51,9 +51,8 @@ app/                           # Carpeta principal del proyecto
 │   │   ├── webhooks_routes.py # /api/webhooks/* (Ko-fi, PayPal, Buy Me a Coffee, Streamlabs)
 │   │   └── widgets_routes.py  # /api/widgets/config (GET, POST, reset)
 │   └── services/              # Capa de servicios y lógica de negocio
-│       ├── actions/           # Submódulos de acciones para Stream Deck y comandos
-│       │   ├── alert_actions.py, deck_actions.py, game_actions.py, media_actions.py...
-│       │   └── promo_actions.py (promoción de creadores y shoutouts por chat)
+│       ├── actions/           # Submódulos de acciones para widgets (Deck, comandos, API)
+│       │   └── chat_actions.py, goal_actions.py, promo_actions.py, ticker_actions.py, timer_actions.py
 │       ├── alerts_service.py      # Motor de alertas y disparadores
 │       ├── bot_timers_service.py  # Mensajes periódicos automáticos del bot en IRC
 │       ├── deck_service.py        # Orquestador de hardware macro pads
@@ -122,15 +121,18 @@ app/                           # Carpeta principal del proyecto
 ├── common/                    # Recursos compartidos y tokens del sistema de diseño
 │   ├── overlay/
 │   │   ├── editor/            # Submódulos del editor flotante HUD (01-05a)
+│   │   ├── editor.js          # Coordinador y cargador del editor flotante in-situ
 │   │   ├── dom-injector.js    # Inyector de configuración visual al DOM de escenas
+│   │   ├── backdrop-aperture.js # Motor de aperturas y máscaras SVG para fondos
 │   │   └── icons.js           # Iconografía SVG compartida
+│   ├── fonts/                 # Tipografías locales offline (WOFF2)
+│   ├── fonts.css              # Declaraciones @font-face locales
 │   ├── catalog.css            # Estilos del catálogo de overlays
 │   ├── catalog.js             # Lógica responsiva del catálogo
 │   ├── components.css         # Componentes comunes de UI
-│   ├── editor.js              # Editor interactivo in-situ para escenas
 │   ├── i18n.js                # Sistema de traducción internacional ES / EN
 │   ├── overlay.js             # Runtime base para OBS Studio
-│   ├── styles.css             # Variables CSS globales, tipografías y reset
+│   ├── styles.css             # Variables CSS globales, 20 formas físicas y reset
 │   └── themes.css             # Estilos de temas sincronizados en tiempo real
 │
 ├── launcher/                  # Lanzador de escritorio multiplataforma (Tkinter)
@@ -192,7 +194,7 @@ Para garantizar que **cualquier hardware o software externo** (Elgato Stream Dec
 2. **Despacho Automático vía WebSocket**:
    - El backend (`server/routes/widgets_routes.py`) valida los parámetros y difunde inmediatamente el evento correspondiente a todos los clientes WebSocket conectados (incluyendo overlays en OBS Studio y paneles abiertos).
 3. **Persistencia Modular y Descentralizada por Widget**:
-   - Cada widget cuenta con su propio archivo de configuración aislado: `widgets/<widget>/config.json` (ej: `widgets/chat/config.json`, `widgets/goal/config.json`, `widgets/timer/config.json`, `widgets/shoutout/config.json`, `widgets/ticker/config.json`).
+   - Cada widget cuenta con su propio archivo de configuración aislado: `widgets/<widget>/config.json` (ej: `widgets/chat/config.json`, `widgets/goal/config.json`, `widgets/timer/config.json`, `widgets/promo/config.json` [Shoutout/Promo], `widgets/ticker/config.json`).
    - El backend (`server/routes/widgets_routes.py`) carga y guarda modularmente en cada carpeta individual. Además, mantiene un snapshot unificado en `widgets_config.json` como respaldo y compatibilidad retroactiva.
    - **Endpoints REST**:
      - `GET /api/widgets/config` y `POST /api/widgets/config`: Diccionario completo unificado para el panel general y sockets.
@@ -239,9 +241,9 @@ Para permitir que cualquier escena incorpore fondos decorativos (texturas, degra
   - `theme.default.json`: Copia de respaldo original de fábrica.
   - `style.default.css`: CSS original de fábrica para restauración.
 - **Restauración (`POST /api/themes/restore`)**: Permite restaurar cualquier tema a sus valores de fábrica con un clic desde el editor visual.
-- **Estilos por Overlay (`themes_state.json`)**: Cada overlay de OBS Studio tiene asignado su propio estilo visual en `overlayThemes` (ej: `game` -> `arcade_8bit`, `maker-desk` -> `maker`, etc.), sincronizándose dinámicamente con OBS vía WebSocket.
+- **Estilos por Overlay (`themes_state.json`)**: Cada overlay de OBS Studio tiene asignado su propio estilo visual en `overlayThemes` (ej: `game` -> `cyberpunk`, `maker-desk` -> `maker`, etc.), sincronizándose dinámicamente con OBS vía WebSocket.
 
-### G. Overlays con Funciones Programadas, Elementos Draggables y Edición en Caliente
+### H. Overlays con Funciones Programadas, Elementos Draggables y Edición en Caliente
 
 Los overlays en Open Stream Suite no son meras plantillas visuales estáticas; son **aplicaciones web de emisión dinámicas** que combinan estética de alta gama con lógica programada nativa:
 
@@ -283,16 +285,20 @@ Los overlays en Open Stream Suite no son meras plantillas visuales estáticas; s
    - **Persistencia Bidireccional y Sincronización OBS**:
      - Al pulsar `💾 Guardar` en el HUD, `saveTexts()` recopila los textos y estados activos específicos del pack (vía detección de `sceneKey` y rutas pathname).
      - Se envían a `POST /api/overlays/texts` (protegido con `X-Local-Token`) y el servidor emite el evento WebSocket `overlay_texts_updated` a todas las instancias conectadas en OBS Studio.
+   - **Bloqueo Fijo de Escena (`?lock=1` o `?lockTheme=1`)**:
+     - Si una fuente de navegador en OBS Studio necesita mantener permanentemente un tema o forma física fija sin responder a los cambios globales del panel o de otras escenas, añade `&lock=1` (o `&lockTheme=1`) a la URL.
+     - El motor congelará la escena a los parámetros de la URL y descartará cualquier evento de cambio de tema o forma entrante por WebSocket.
 
-### H. Contrato Universal de Compatibilidad Semántica (`data-oss-*`) y Aislamiento de Textos
+### I. Contrato Universal de Compatibilidad Semántica (`data-oss-*`) y Aislamiento de Textos
 Para garantizar que **cualquier pack nuevo o existente sea 100% interoperable** sin necesidad de conocer los nombres de clases CSS de los otros packs:
 
 1. **Atributos Semánticos Obligatorios en el HTML**:
    - `data-oss-cam="true"`: Identifica un marco de cámara, captura o visor de vídeo.
    - `data-oss-viewport="true"`: El área interior transparente donde se sitúa la fuente de OBS.
-   - `data-oss-cam-label="true"`: La insignia o rótulo identificador de la cámara.
+   - `data-oss-cam-label="true|bar|bottom"`: Rótulo identificador de la cámara. Utilizar `"bar"` o clase `.cam-bottom-bar` para barras inferiores de ancho completo (chin bars), preservando su alineación frente a badges esquineros flotantes.
    - `data-oss-panel="true"`: Tarjetas, bloques de chat, fichas de proyecto, podios o listas de tareas.
-   - `data-oss-bar="top|bottom"`: Barras de cabecera superior o cintillos/noticias inferiores.
+   - `data-oss-bar="top|bottom|left|right"`: Barras de cabecera superior, cintillos/noticias inferiores o columnas laterales.
+   - `data-oss-orientation="horizontal|vertical"`: Orientación del elemento. Se autodetecta dinámicamente mediante el aspect-ratio (`height > width * 1.05` -> `vertical`, caso contrario `horizontal`) y el tipo de barra (`top|bottom` -> `horizontal`, `left|right` -> `vertical`), o puede declararse explícitamente en el HTML para orientar decoraciones, VU meters o cintillos según el formato.
 
 2. **Adaptabilidad a Cualquier Relación de Aspecto y Catálogo de 20 Formas Físicas**:
    - El motor cuenta con 20 arquetipos físicos universales (`data-theme-shape`), agrupados en 6 familias:

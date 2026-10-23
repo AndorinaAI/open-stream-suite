@@ -79,25 +79,22 @@ OpenStreamSuite/
     ├── server/             # Backend modular (rutas, estado, EventSub, IRC)
     ├── alerts/             # Panel de control web y fuente de alertas para OBS
     ├── widgets/            # Chat, metas, shoutout, ticker y temporizador
-    ├── overlays/           # Paquetes de escenas para OBS Studio
-    ├── themes/             # Packs de temas modulares (theme.json, style.css, copias de fábrica)
-    │   ├── pack_open_stream_suite/   # maker, print, terminal, chill, cyberpunk, synthwave
-    │   ├── pack_personalizado/       # variante personalizable de los 6 estilos base
-    │   ├── pack_retro_arcade/        # arcade_8bit, vapor_sunset
-    │   ├── pack_cozy_lofi/           # cozy_terracotta, nordic_forest
-    │   ├── pack_manga_ink/           # manga_dark_ink, manga_shonen
-    │   └── pack_sci_fi_blueprint/    # blueprint_cad, neon_matrix
-    ├── common/             # Estilos compartidos, fuentes locales y utilidades
+    ├── streamthemes/       # Packs modulares de temas y escenas de OBS Studio
+    │   ├── Maker_Theme_Pack/      # 6 temas Maker/CAD + 9 escenas OBS
+    │   ├── Open_stream_Pack/      # 5 temas Neo-Glass + 6 escenas OBS
+    │   ├── Gamer_Pro_Pack/        # 5 temas Esports HUD + 6 escenas OBS
+    │   └── Cozy_LoFi_Pack/        # 6 temas Relax/Botánico + 6 escenas OBS
+    ├── common/             # Estilos compartidos, fuentes locales 100% offline y utilidades
     ├── docs/               # Guías (OBS, temas, decks, dominio propio)
     ├── scripts/            # Auxiliares (Cloudflare Tunnel, VPS)
-    └── tests/              # Suite de pruebas automatizadas (47 tests)
+    └── tests/              # Suite de pruebas automatizadas (67 tests)
 ```
 
 ---
 
 ## 3. Guía Paso a Paso para Configurar OBS Studio
 
-Las overlays son páginas HTML locales que se añaden a OBS como **Fuentes de Navegador** (*Browser Sources*).
+Las overlays se añaden a OBS Studio como **Fuentes de Navegador** (*Browser Sources*) conectadas al servidor local.
 
 ### Paso 1: Configurar el lienzo base
 1. Abre **OBS Studio**.
@@ -121,8 +118,8 @@ Crea una escena en el panel *Escenas* para cada uno de tus modos habituales de d
 2. En la lista de **Fuentes**, pulsa en el botón **`+`** y selecciona **Navegador** (*Browser*).
 3. Nómbrala `Overlay - Escena Principal`.
 4. En las propiedades de la fuente:
-   - Marca la casilla **Archivo local** (*Local file*).
-   - Pulsa **Examinar** y busca el archivo `app/overlays/maker/desk/index.html` (o usa la URL `http://localhost:8080/overlays/maker/desk/index.html`).
+   - **Desmarca «Archivo local»** (las overlays requieren conexión HTTP y WebSocket con el servidor).
+   - **URL**: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html` (o pulsa **«📋 Copiar URL OBS»** en cualquier escena desde el panel web).
    - **Ancho**: `1920`
    - **Alto**: `1080`
    - Marca **Apagar la fuente cuando no sea visible**.

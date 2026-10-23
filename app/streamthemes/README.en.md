@@ -52,10 +52,17 @@ streamthemes/
 All scenes implement the universal semantic standard:
 - `data-oss-cam="true"`: Primary camera frame container. Automatically receives all 20 physical shapes (45° chamfers, polaroids, hex shields, parchments, pixel cabinets, blueprint brackets, etc.).
 - `data-oss-viewport="true"`: Transparent inner window area for OBS video capture and SVG backdrop aperture masks.
-- `data-oss-cam-label="true"`: Camera title or identification badge.
+- `data-oss-cam-label="true|bar|bottom"`: Camera title or identification badge. Use `"bar"` or `.cam-bottom-bar` for full-width bottom chin bars.
 - `data-oss-panel="true"`: Chat boxes, task cards, stats, or victory podiums.
-- `data-oss-bar="top|bottom"`: Top headers or bottom news/stage ticker bars.
+- `data-oss-bar="top|bottom|left|right"`: Top headers, bottom news/stage ticker bars, or side columns.
+- `data-oss-orientation="horizontal|vertical"`: Element orientation (auto-detected via aspect-ratio or bar position, or explicitly set).
 - `data-text-key="section.field"`: Strict key isolation for live on-canvas editing and persistent WebSocket broadcasting.
+
+### URL Control Query Parameters
+- `?theme=<id>`: Force a specific color theme.
+- `?shape=<id>`: Force one of the 20 universal physical shapes (`maker_blueprint`, `openstream_glass`, `gamer_mecha`, etc.).
+- `?lock=1` / `?lockTheme=1`: Permanently locks the scene in OBS Studio to the URL parameters, ignoring incoming WebSocket changes.
+- `?lang=en` / `?lang=es`: Load translated texts for the specified language.
 
 ### Multi-Aspect Ratio Fluidity
 Using relative CSS coordinates (`calc(100% - 24px)`), physical shapes adapt fluidly across **16:9** (widescreen), **4:3** (retro/classic), **21:9** (ultrawide), and **9:16** (vertical mobile / TikTok / Shorts) camera captures without geometric distortion.

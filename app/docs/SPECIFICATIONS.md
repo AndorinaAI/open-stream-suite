@@ -1,5 +1,15 @@
 # PROYECTO: OPEN STREAM SUITE — SISTEMA COMPLETO DE OVERLAYS PARA TWITCH Y OBS STUDIO
 
+<p align="center">
+  <b>Español</b> | <a href="SPECIFICATIONS.en.md">English</a>
+</p>
+
+> [!NOTE]
+> **DOCUMENTO DE DISEÑO HISTÓRICO (FASE CERO)**  
+> Este documento representa el *brief* y las especificaciones originales iniciales con las que nació el proyecto.  
+> La arquitectura técnica del producto ha evolucionado hacia un backend modular en Python (`aiohttp`), comunicación WebSocket bidireccional, API REST (`/api/*`), integración con Decks y Twitch EventSub/IRC, y un motor universal de 20 formas físicas (`data-theme-shape`).  
+> Para consultar la arquitectura, convenciones y contratos actuales en producción, consulta [CONVENTIONS.md](../CONVENTIONS.md) y [GUIA_DESARROLLO_Y_TEMAS.md](GUIA_DESARROLLO_Y_TEMAS.md).
+
 ## 1. OBJETIVO GENERAL
 
 Quiero que diseñes e implementes un sistema visual completo, profesional y coherente para mi canal de Twitch. El proyecto debe incluir overlays para videojuegos, programación, creación de contenido, charlas y pantallas de transición.

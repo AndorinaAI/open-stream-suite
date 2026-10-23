@@ -51,9 +51,8 @@ app/                           # Core project application
 │   │   ├── webhooks_routes.py # /api/webhooks/* (Ko-fi, PayPal, Buy Me a Coffee, Streamlabs)
 │   │   └── widgets_routes.py  # /api/widgets/config (GET, POST, reset)
 │   └── services/              # Domain services and business logic
-│       ├── actions/           # Dedicated action modules for Stream Deck & commands
-│       │   ├── alert_actions.py, deck_actions.py, game_actions.py, media_actions.py...
-│       │   └── promo_actions.py (chat shoutouts & channel promotion)
+│       ├── actions/           # Widget action dispatchers (Deck, commands, API)
+│       │   └── chat_actions.py, goal_actions.py, promo_actions.py, ticker_actions.py, timer_actions.py
 │       ├── alerts_service.py      # Core alert triggers and broadcast engine
 │       ├── bot_timers_service.py  # Automated periodic chat announcements
 │       ├── deck_service.py        # Macro pad orchestrator & hardware mappings
@@ -122,15 +121,18 @@ app/                           # Core project application
 ├── common/                    # Shared design system tokens and runtime libraries
 │   ├── overlay/
 │   │   ├── editor/            # Floating HUD overlay editor submodules (01-05a)
+│   │   ├── editor.js          # In-situ floating HUD coordinator and loader
 │   │   ├── dom-injector.js    # Visual config DOM injector for scenes
+│   │   ├── backdrop-aperture.js # SVG cutout aperture mask engine for backdrops
 │   │   └── icons.js           # Shared SVG icons
+│   ├── fonts/                 # Local offline webfonts (WOFF2)
+│   ├── fonts.css              # Local @font-face font family declarations
 │   ├── catalog.css            # Overlay catalog styling
 │   ├── catalog.js             # Responsive catalog logic
 │   ├── components.css         # Common UI components
-│   ├── editor.js              # In-situ interactive scene editor
 │   ├── i18n.js                # Internationalization engine (ES / EN)
 │   ├── overlay.js             # Base runtime for OBS Studio scenes
-│   ├── styles.css             # Global CSS variables, fonts, and reset
+│   ├── styles.css             # Global CSS variables, 20 physical shapes, and reset
 │   └── themes.css             # Live synced theme style definitions
 │
 ├── launcher/                  # Cross-platform desktop launcher (Tkinter)
@@ -174,6 +176,8 @@ External hardware and macro tools (Ajazz AKP, Elgato Stream Deck, OpenDeck, Loup
 - `GET /api/deck/trigger?id=<id>`: Fire any alert or video meme.
 - `GET /api/deck/timer?action=start|pause|reset&seconds=300`: Timer control.
 - `GET /api/deck/theme?theme=<name>`: Switch visual theme across overlays.
+- `GET /api/deck/explode?emoji=🎉&count=40`: Screen confetti & emote shower.
+- `GET /api/deck/alert?type=follow|sub|raid|cheer`: Test simulated alerts.
 - `GET /api/deck/knob?knob=theme|timer|volume&action=next|prev`: Rotary dial control.
 - `GET /api/deck/widget?widget=<name>&action=<action>`: One-click widget control.
 
@@ -223,6 +227,9 @@ Overlays in Open Stream Suite are dynamic broadcast web apps combining high-end 
      - Click listeners for active items (`.split-row`, `.phase-item`, `.split-delta`) are attached to `document` via delegation (`e.target.closest(...)`) to survive dynamic re-renders.
    - **Bidirectional Persistence**:
      - Saving collects all modified texts and active states, posting to `POST /api/overlays/texts` with `X-Local-Token` and broadcasting over WebSockets to OBS Studio.
+   - **Scene URL Lock (`?lock=1` or `?lockTheme=1`)**:
+     - When an OBS browser source needs to stay permanently frozen to specific URL parameters without reacting to global theme or shape changes from the panel or other scenes, add `&lock=1` (or `&lockTheme=1`) to the URL.
+     - The overlay engine will freeze the scene to the URL values and safely ignore incoming WebSocket theme/shape switch events.
 
 4. **Backdrop Aperture & Cutouts Engine (`app/common/overlay/backdrop-aperture.js`)**:
    - **OBS Transparency Guarantee**: Allows applying decorative wallpapers, textures, or CSS gradients to overlays without obscuring OBS video capture sources (webcams, gameplay windows, capture cards) underneath.
@@ -242,9 +249,10 @@ To guarantee that **any new or existing stream pack is 100% interoperable** with
 1. **Mandatory Semantic Attributes in HTML**:
    - `data-oss-cam="true"`: Identifies a camera frame, window capture, or video viewer.
    - `data-oss-viewport="true"`: The transparent interior cutout area where the OBS video source sits.
-   - `data-oss-cam-label="true"`: The identification badge, tag, or label for the camera.
+   - `data-oss-cam-label="true|bar|bottom"`: Camera label or badge. Use `"bar"` or class `.cam-bottom-bar` for full-width bottom chin bars, preserving their alignment against floating corner tags.
    - `data-oss-panel="true"`: Content cards, chat boxes, project panels, victory podiums, or task lists.
-   - `data-oss-bar="top|bottom"`: Top header bars or lower-third news/status tickers.
+   - `data-oss-bar="top|bottom|left|right"`: Top header bars, lower-third news/status tickers, or side columns.
+   - `data-oss-orientation="horizontal|vertical"`: Element orientation. Auto-detected via aspect-ratio (`height > width * 1.05` -> `vertical`, otherwise `horizontal`) and bar position (`top|bottom` -> `horizontal`, `left|right` -> `vertical`), or explicitly set in HTML to orient badges, VU meters, or tickers according to the format.
 
 2. **Fluid Adaptability to Any Camera Aspect Ratio and Catalog of 20 Physical Shapes**:
    - The engine provides 20 universal physical shape archetypes (`data-theme-shape`), grouped into 6 thematic families:

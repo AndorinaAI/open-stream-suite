@@ -35,10 +35,12 @@ Allows streamers to assign unique chat aesthetics to different scenes in OBS Stu
 #### Optional Fine-Tuning Query Parameters:
 Any style property can be fine-tuned or overridden on the fly:
 - `&shape=rounded|soft_card|scifi|bubble|pill|arcade|box|tag|slant` (message card shape)
+- `&bgtype=glass|solid|gradient|transparent` (background fill type)
 - `&opacity=0..100` (background opacity percentage)
 - `&size=12..24` (font size in px)
-- `&font=outfit|orbitron|poppins|inter|comfortaa|rajdhani|mono` (typography)
+- `&font=outfit|orbitron|inter|jetbrains_mono|montserrat|rajdhani|press_start_2p|comfortaa|quicksand|share_tech_mono|teko|poppins|bebas_neue|fira_code` (local offline webfonts catalog)
 - `&border=57D6C4` (hex border accent color)
+- `&borderstyle=none|full|left_neon|double` (border outline styling)
 
 ---
 
@@ -80,3 +82,20 @@ The widget dynamically constructs this DOM structure:
   </div>
 </body>
 ```
+
+---
+
+## 3. Built-in Native Presets
+
+The `class` attribute of `<body>` automatically includes the active preset:
+1. **`theme-screen_no_overlay`**: High-legibility floating overlay over gameplay with 28% pill background and cyan accent.
+2. **`theme-maker_glass`**: Translucent glass with 8px blur, cyan border, and deep dark shadow.
+3. **`theme-ghost`**: 100% transparent background (`rgba(0,0,0,0)`), borderless, with crisp drop-shadowed text for clean on-screen broadcast.
+4. **`theme-cyberpunk`**: Retro CRT terminal style with monospace font, `> ` command prefix, and neon yellow/magenta borders.
+5. **`theme-bubble`**: Rounded comic dialogue bubbles with dual gradient.
+6. **`theme-retro`**: 8-bit stepped pixel borders and arcade drop shadows.
+7. **`theme-cozy_lofi`**: Soft Polaroid card, warm 85% translucent background, pastel accents, and subtle neon border.
+8. **`theme-gamer_pro`**: 45° sci-fi chamfers, cyan/emerald glow, Orbitron font, and high-intensity accents.
+9. **`theme-matrix`**: Phosphor-green terminal with monospace typography and emerald vertical borders.
+10. **`theme-pill`**: Ultra-smooth 9999px pill geometry with clean Inter typography.
+11. **`theme-scifi`**: Angular 45° polygon with cut opposite corners.

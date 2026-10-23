@@ -27,9 +27,10 @@ Elemento | Atributo / Clase Estándar | Función en el Motor
 :--- | :--- | :---
 Marco de Cámara | `class="camera-frame"` o `data-oss-cam="true"` | Recibe bordes, chamfers, sombras, chinchetas, retículas o remaches según la forma activa.
 Visor de Cámara | `class="cam-viewport"` o `data-oss-viewport="true"` | Área transparente interior para recortar webcam en OBS.
-Etiqueta de Cámara | `class="cam-label"` o `data-oss-cam-label="true"` | Título de cámara (se adapta a chincheta polaroid, pill neón, tag de cota).
+Etiqueta de Cámara | `class="cam-label"` o `data-oss-cam-label="true|bar|bottom"` | Título de cámara (se adapta a chincheta polaroid, pill neón, tag de cota o barra inferior chin bar).
 Tarjeta / Panel | `class="panel-card"` o `data-oss-panel="true"` | Chat, pomodoro, alertas, stats. Recibe curvatura y desenfoque glassmorphism.
-Barras de Marco | `class="header-bar" / "footer-bar"` o `data-oss-bar="top|bottom"` | Encabezados o pies de pantalla.
+Barras de Marco | `class="header-bar" / "footer-bar"` o `data-oss-bar="top|bottom|left|right"` | Encabezados, cintillos o columnas laterales.
+Orientación | `data-oss-orientation="horizontal|vertical"` | Autodetectado por relación de aspecto o tipo de barra, o manual para adaptar geometría.
 Badges / Chips | `class="mode-badge"` o `data-oss-badge="true"` | Indicadores de estado (LIVE, REC, etc.).
 Textos Editables | `data-text-key="seccion.campo"` | Textos que el streamer puede editar directamente con un clic en el navegador y guardar.
 
@@ -87,6 +88,8 @@ Modos especiales:
    - Emite WebSocket `overlay_theme_change` para actualizar en vivo OBS Studio y el Panel.
 2. **Restaurar Textos (`↺ Restaurar Textos`)**:
    - Reestablece únicamente los campos de texto editables a su contenido de fábrica sin alterar el estilo ni la forma.
+3. **Bloqueo de Escena en OBS (`?lock=1` o `?lockTheme=1`)**:
+   - Congela permanentemente la escena a los valores `theme` y `shape` pasados por URL, ignorando cambios globales de WebSocket. Ideal para Browser Sources fijas.
 
 ---
 

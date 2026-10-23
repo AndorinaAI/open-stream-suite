@@ -241,7 +241,7 @@ En `server/routes/themes_routes.py` y en `alerts/js/themes.js` se define la cons
 
 ```javascript
 const DEFAULT_OVERLAY_THEMES = {
-  'game': 'arcade_8bit',          // Gameplay: 8-Bit Arcade Cabinet
+  'game': 'cyberpunk',            // Gameplay: Cyberpunk Neon
   'maker': 'maker',               // Escena Principal: tema Maker
   'maker-desk': 'maker',          // Escena Principal (cámara + webcam)
   'maker-pc': 'terminal',         // Pantalla PC (captura + webcam)
@@ -250,7 +250,7 @@ const DEFAULT_OVERLAY_THEMES = {
   'print-design': 'print',        // Pantalla Diseño (app full screen)
   'chill': 'chill',               // Charla / Just Chatting: Chill Lavender
   'startingSoon': 'synthwave',    // Pantalla Inicio: Synthwave Retro
-  'beRightBack': 'vapor_sunset',  // Pausa Técnica: Vapor Sunset Glitch
+  'beRightBack': 'synthwave',     // Pausa Técnica: Synthwave Retro
   'ending': 'synthwave'           // Pantalla Despedida: Synthwave Retro
 };
 ```
@@ -273,7 +273,7 @@ Existen tres formas de restablecer los estilos:
 #### 4. Prioridad y Parámetro URL `?theme=...` para OBS Studio
 Para que una escena en OBS Studio o una previsualización a pantalla completa nunca sufra retrasos de red al cargar su estilo:
 - La URL copiada con **"📋 Copiar URL OBS"** y abierta con **"🖥️ Pantalla Completa ↗"** incluye el parámetro query:
-  `http://localhost:8080/scenes/game/index.html?theme=arcade_8bit`
+  `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/game/index.html?theme=cyberpunk`
 - En `common/overlay.js`, el script lee este parámetro de inmediato al arrancar el DOM:
   ```javascript
   const urlParams = new URLSearchParams(window.location.search);

@@ -21,7 +21,7 @@ class ThemePacksTestCase(AioHTTPTestCase):
 
     @unittest_run_loop
     async def test_01_packs_structure_and_base_themes(self):
-        """Verifica que /api/themes/packs devuelva los packs modulares y los 6 temas del pack_open_stream_suite"""
+        """Verifica que /api/themes/packs devuelva los packs modulares y los 6 temas de Maker_Theme_Pack"""
         resp = await self.client.get("/api/themes/packs")
         self.assertEqual(resp.status, 200)
         data = await resp.json()
@@ -29,7 +29,7 @@ class ThemePacksTestCase(AioHTTPTestCase):
         self.assertIn("packs", data)
 
         pack_ids = [p["id"] for p in data["packs"]]
-        self.assertTrue(any(pid.lower() in ("maker_theme_pack", "open_stream_pack", "pack_open_stream_suite") for pid in pack_ids))
+        self.assertTrue(any(pid.lower() in ("maker_theme_pack", "open_stream_pack") for pid in pack_ids))
 
         taller_pack = next(p for p in data["packs"] if p["id"] == "Maker_Theme_Pack")
         theme_ids = [t["id"] for t in taller_pack["themes"]]

@@ -35,7 +35,7 @@ Una vez instalado, verás la categoría **Open Stream Suite** con las siguientes
 1. **Disparar Meme / Trigger**:
    * Asigna el ID del meme (por ejemplo `susto`, `aplausos`, etc.). Al pulsar la tecla, el meme saldrá en pantalla en OBS.
 2. **Aplicar Paleta de Tema**:
-   * Cambia el color neón global en vivo (`maker`, `print`, `cyberpunk`, `golden`, `chill`).
+   * Cambia el color neón global en vivo (`maker`, `print`, `cyberpunk`, `golden_glory`, `chill`).
    * La tecla se actualiza automáticamente mostrando el tema activo.
 3. **Temporizador Open Stream Suite (Feedback en Pantalla LCD)**:
    * Muestra la cuenta atrás en tiempo real en la pantalla del botón.
