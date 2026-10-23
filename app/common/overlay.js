@@ -521,10 +521,10 @@
           if (isLocked) return;
           let th = null;
           let sh = null;
-          if (data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) {
+          if (!rawUrlTheme && data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) {
             th = data.overlayThemes[currentSceneKey];
           }
-          if (data.overlayShapes && currentSceneKey && data.overlayShapes[currentSceneKey]) {
+          if (!rawUrlShape && data.overlayShapes && currentSceneKey && data.overlayShapes[currentSceneKey]) {
             sh = data.overlayShapes[currentSceneKey];
           }
           if (!th && !rawUrlTheme && data.activeTheme) {

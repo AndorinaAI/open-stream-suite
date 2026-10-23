@@ -76,20 +76,25 @@
     }
     .pip-label-bar {
       margin: 12px;
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 6px;
+      background: var(--color-panel-bg, rgba(15, 23, 42, 0.85));
+      backdrop-filter: var(--panel-backdrop, blur(14px));
+      -webkit-backdrop-filter: var(--panel-backdrop, blur(14px));
+      border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.12));
+      border-radius: var(--panel-radius, 6px);
       padding: 6px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
       font-size: 11px;
       font-weight: 700;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      color: var(--color-text-light, #f8fafc);
+      position: absolute !important;
+      top: auto !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: auto !important;
+      box-sizing: border-box !important;
       z-index: 10;
     }
     .pip-status {
@@ -149,7 +154,7 @@
   <!-- Picture in Picture Presenter Webcam -->
   <div class="camera-frame pip-cam-box camera-face" data-oss-cam="true">
     <div class="cam-viewport" data-oss-viewport="true"></div>
-    <div class="cam-label pip-label-bar" data-oss-cam-label="true">
+    <div class="pip-label-bar cam-bottom-bar" data-oss-cam-label="bar">
       <span data-text-key="oss.desktopCam">STREAMER // PRESENTADOR</span>
       <div class="pip-status">
         <span class="pip-dot"></span>

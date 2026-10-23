@@ -119,12 +119,7 @@ window.OSSEditor = window.OSSEditor || {};
         background: rgba(87, 214, 196, 0.14) !important;
         border-radius: 3px;
         cursor: pointer !important;
-        position: relative;
-        z-index: 10;
         outline: none !important;
-        display: inline-block;
-        padding: 1px 4px !important;
-        margin: 1px !important;
         transition: box-shadow 0.15s, background 0.15s;
       }
       .editable-screen-element.editing-active:hover {
