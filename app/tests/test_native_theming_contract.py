@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tests del contrato NATIVO de temas en widgets y alertas.
 Comprueban estructura + que la apariencia por defecto no cambió (backup)."""
+import hashlib
 import json
 import re
 import unittest
@@ -8,7 +9,43 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 APP = ROOT / "app"
-BK = ROOT / ".backups" / "2026-10-23_pre_native_theming"
+# Línea base pre-native-theming (2026-10-23) guardada como **hashes versionados**:
+# `.backups/` está en `.gitignore`, así que comparar contra esa carpeta hacía fallar
+# la suite en cualquier clon limpio y en CI (FileNotFoundError).
+#   * BASELINE_CSS: (longitud, sha256) del prefijo base normalizado -> el CSS
+#     actual debe empezar exactamente por esos bytes (capa de tema añadida al final).
+#   * BASELINE_JS: sha256 del JS base normalizado tras quitar el arranque de tema.
+#   * BASELINE_ALERTS: igual que BASELINE_CSS para las hojas de alertas.
+BASELINE_CSS = {
+    "ticker": (11220, "9d54feae1f5e948ef89244178167f0d9106fe63f11e0dc664b8483a5597a83c9"),
+    "promo": (8094, "df8bb4390bc72fb9efb11b512616fbc66eb13f8d4a82f7c2b83ee850c1077c3b"),
+    "goal": (15346, "f19e6d26e4e11498b461f99bb219aa421d1d7a1a9ff4b710b1d7a7cec3b87311"),
+    "chat": (10084, "543f1fcbea1db7cff4717d2fe02201d6f14387bc4cd335a793cdb4a27f2b48e0"),
+    "timer": (7052, "97bee5b1d5232d5e4dde84fee334902932ea973886f9a46b2da5aa3c83585ccc"),
+    "shoutout": (8094, "df8bb4390bc72fb9efb11b512616fbc66eb13f8d4a82f7c2b83ee850c1077c3b"),
+}
+BASELINE_JS = {
+    "ticker": "3db1567dfe04a75acc56bfb4997dfc9912f9253966b118229a7bf414330f8049",
+    "promo": "0899404da426d9f533a40c50c527d6f8fc86cd4e3f32701afda1aed651e4a93f",
+    "goal": "464010b90af5dfd93ec41f53611ced86fb4762dcf711a23532e6a1527d836890",
+    "chat": "d2d55dbc4588c1d5802bcf442deb9e34123fe5056a82c6c2c01807a37290dc62",
+    "timer": "317eb2bb348ba40a5700d40aa2792a21757cc3014434c333fe38a0f9d50489eb",
+    "shoutout": "0899404da426d9f533a40c50c527d6f8fc86cd4e3f32701afda1aed651e4a93f",
+}
+BASELINE_ALERTS = {
+    "alerts-themes.css": (16309, "32c310c86157bf919093f6097671bfeec8dd65a9f5a2e0543136d9372370cfd0"),
+    "alerts-widget.css": (9893, "ccae115dd60c8e79af188d8b86eb817fdaddc023a071f95ea797620602406aec"),
+}
+
+
+def sha256(text):
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def base_prefix_preserved(text, baseline):
+    """True si `text` empieza exactamente por la línea base (longitud + hash)."""
+    length, digest = baseline
+    return sha256(text[:length]) == digest
 WIDGETS = ["ticker", "promo", "goal", "chat", "timer", "shoutout"]
 BOOT_RE = re.compile(r"\n  (// --- Tema.*?\n  \}\)\(\);|window\.OSSTheme\.init\([^)]*\);)\n", re.S)
 
@@ -57,15 +94,13 @@ class TestWidgetsContract(unittest.TestCase):
             return t.replace("body:not([data-theme]).theme-", "body.theme-")
         for w in WIDGETS:
             cur = norm_colors((APP / "widgets" / w / "style.css").read_text(encoding="utf-8"))
-            old = norm_colors((BK / "widgets" / w / "style.css").read_text(encoding="utf-8"))
-            self.assertTrue(cur.startswith(old.rstrip()), f"{w}: CSS base alterado")
+            self.assertTrue(base_prefix_preserved(cur, BASELINE_CSS[w]), f"{w}: CSS base alterado")
         for w in WIDGETS:
             cur = (APP / "widgets" / w / "widget.js").read_text(encoding="utf-8")
-            old = (BK / "widgets" / w / "widget.js").read_text(encoding="utf-8")
             stripped = BOOT_RE.sub("", cur)
             stripped = re.sub(r"\n  // Modo embebido.*?\n  \}\);\n", "\n", stripped, flags=re.S)
             norm = lambda s: re.sub(r"\n{2,}", "\n", s).strip()
-            self.assertEqual(norm(stripped), norm(old), f"{w}: JS base alterado")
+            self.assertEqual(sha256(norm(stripped)), BASELINE_JS[w], f"{w}: JS base alterado")
 
     def test_6_no_important_in_theme_layer(self):
         for w in WIDGETS:
@@ -180,11 +215,15 @@ class TestAlertsContract(unittest.TestCase):
 
     def test_6_default_banner_css_preserved(self):
         cur = (APP / "alerts" / "css" / "alerts-themes.css").read_text(encoding="utf-8")
-        old = (BK / "alerts" / "css" / "alerts-themes.css").read_text(encoding="utf-8")
-        self.assertTrue(cur.startswith(old.rstrip()), "alerts-themes.css base alterado")
+        self.assertTrue(
+            base_prefix_preserved(cur, BASELINE_ALERTS["alerts-themes.css"]),
+            "alerts-themes.css base alterado",
+        )
         cur2 = (APP / "alerts" / "css" / "alerts-widget.css").read_text(encoding="utf-8")
-        old2 = (BK / "alerts" / "css" / "alerts-widget.css").read_text(encoding="utf-8")
-        self.assertTrue(cur2.startswith(old2.rstrip()), "alerts-widget.css base alterado")
+        self.assertTrue(
+            base_prefix_preserved(cur2, BASELINE_ALERTS["alerts-widget.css"]),
+            "alerts-widget.css base alterado",
+        )
 
 
 if __name__ == "__main__":
