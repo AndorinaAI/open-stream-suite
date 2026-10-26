@@ -134,7 +134,12 @@ Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, na
 - **Resilient Updater (Git Reset & Config Preservation)**: Re-engineered `apply_update()` in `updater.py` to auto-backup and seamlessly merge user configurations (`themes_state.json`, `fusions.json`, texts, widgets) with clean Git synchronization, resolving dirty tree conflicts.
 - **Python 3.12 Compatibility**: Replaced deprecated `datetime.utcnow()` with `datetime.now(timezone.utc)`.
 
+### Licence
+- This version was published under **CC BY-NC-SA 4.0**; **relicensed on 2026-10-26** to **AGPL-3.0-or-later** plus a commercial licence (see `NOTICE.md`).
+
 ## [1.0.0-alpha] — 2026-10-21
+
+Initial public alpha release (closed internally on 2026-10-20).
 
 ### Changed — Comprehensive Modular Architecture Refactor
 - **Modular Backend (`app/server/`)**: Routes completely decoupled into `server/routes/` and business logic into `server/services/`, with transparent backward-compatibility re-exports in `server/*.py`.
@@ -153,10 +158,6 @@ Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, na
 - Desktop launcher: startup guide, dialogs, and status messages now wired to the dictionary (`languages/es.json` / `languages/en.json`) with live refresh on language change.
 - Panel translation dictionary expanded from 378 to over 1,650 Spanish→English pairs, verified against the real DOM (panel, mini-apps, modals, dropdowns, toasts and dialogs).
 - The user's own content (trigger titles, saved theme descriptions, presets) is left untranslated: only the interface is translated.
-
-## [1.0.0-alpha] — 2026-10-20
-
-Initial public alpha release.
 
 ### Highlights
 - OBS Studio broadcast scenes and overlays with modular theme packs (and 1-click factory reset per theme).
@@ -178,4 +179,4 @@ Initial public alpha release.
 
 ### Known Limitations
 - Primary development and testing environment is Linux. Windows and macOS support are **experimental** (developed according to community feedback).
-- The license (CC BY-NC-SA 4.0) restricts commercial monetization and requires ShareAlike reciprocity; applied with retroactive effect across all commits.
+- The licence this version was published under was **CC BY-NC-SA 4.0** (non-commercial use and ShareAlike reciprocity). **Relicensed on 2026-10-26**: the whole project — every version and the entire history — is now **AGPL-3.0-or-later** plus a commercial licence; see `NOTICE.md`.
