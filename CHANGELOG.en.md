@@ -111,6 +111,12 @@ Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, na
 - **Conventions** documented (ES/EN) so new widgets and alerts integrate without knowing the existing ones.
 - **Native contract tests**: `tests/test_native_theming_contract.py` (12 tests; includes proof the base CSS/JS is unchanged).
 
+### Fixed — Pack shapes on alerts and widgets (1.0.2 visual audit)
+- **Picking a physical shape on an alert or a widget now actually renders**: `common/styles.css` only used the 20 pack shapes to toggle scene ornaments (`.washi-tape`, `.reticle-*`), elements that do not exist in the alerts overlay or in widgets, and the alerts CSS consumed no `--frame-*`/`--skin-*` token at all → the shape could be selected in the panel but nothing changed.
+- **New coverage**: every pack shape now declares a radius and/or `clip-path` for `#alert-card`, `#banner-alert-root` and `[data-oss-shape-target]` (a widget-only hook, so the scene archetype engine stays untouched).
+- **Catalogue matches rendering**: widgets now offer the 29 shapes (9 generic + 20 pack) they really draw; `chat` keeps the 9 generic ones because it exposes no shape target (it applies its own via `ChatStyles`).
+- **Regression test** (`tests/test_component_shapes_render.py`): every shape offered by the catalogue must have a render rule for scenes, alerts and widgets, and the 9 generic ones must exist in `oss-shape.js`.
+
 ## [1.0.1-alpha] — 2026-10-23
 
 ### Fixed — Architectural Audit and Critical Fixes

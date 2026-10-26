@@ -111,6 +111,12 @@ Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widget
 - **Convenciones** documentadas (ES/EN) para que nuevos widgets y alertas se integren sin conocer los existentes.
 - **Tests** de contrato nativo: `tests/test_native_theming_contract.py` (12 pruebas; incluye verificación de que el CSS/JS base no cambió).
 
+### Corregido — Formas físicas de pack en alertas y widgets (auditoría visual 1.0.2)
+- **Elegir una forma física en una alerta o en un widget ya se pinta**: `common/styles.css` definía las 20 formas de pack solo como conmutador de adornos de escena (`.washi-tape`, `.reticle-*`), elementos que no existen en el overlay de alertas ni en los widgets, y el CSS de alertas no consumía ningún token `--frame-*`/`--skin-*` → la forma se seleccionaba en el panel pero no cambiaba nada.
+- **Cobertura nueva**: cada forma de pack declara ya radio y/o `clip-path` para `#alert-card`, `#banner-alert-root` y `[data-oss-shape-target]` (diana exclusiva de widgets; las escenas no la usan, así que su motor de arquetipos queda intacto).
+- **Catálogo coherente con el render**: los widgets ofrecen las 29 formas (9 genéricas + 20 de pack) que realmente pintan; `chat` mantiene las 9 genéricas porque no expone diana de forma (aplica las suyas con `ChatStyles`).
+- **Test de regresión** (`tests/test_component_shapes_render.py`): fija que toda forma ofrecida por el catálogo tenga regla de render en escenas, alertas y widgets, y que las 9 genéricas existan en `oss-shape.js`.
+
 ## [1.0.1-alpha] — 2026-10-23
 
 ### Corregido — Auditoría Arquitectónica y Correcciones Críticas

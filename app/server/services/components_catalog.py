@@ -82,6 +82,20 @@ def get_alert_shapes() -> set:
     return set(WIDGET_SHAPE_SET) | get_pack_shape_ids()
 
 
+def widget_shape_set(item_id: str) -> set:
+    """Formas que un widget pinta de verdad.
+
+    Las 9 genéricas las aplica `oss-shape.js` en línea; las 20 físicas de pack
+    las pinta `common/styles.css` sobre `[data-oss-shape-target]` (que las
+    escenas no usan), así que ofrecerlas es real y no una promesa vacía.
+    `chat` no expone diana de forma: aplica las suyas con `ChatStyles`, de modo
+    que se queda con las genéricas.
+    """
+    if item_id == "chat":
+        return set(WIDGET_SHAPE_SET)
+    return set(WIDGET_SHAPE_SET) | get_pack_shape_ids()
+
+
 def supports_shape(kind: str, item_id: str, shape: str) -> bool:
     """Capacidad real de un miembro para una forma concreta.
 
@@ -92,7 +106,7 @@ def supports_shape(kind: str, item_id: str, shape: str) -> bool:
     if shape.lower() in RESET_VALUES:
         return True
     if kind == "widget":
-        return is_valid_component("widget", item_id) and shape in WIDGET_SHAPE_SET
+        return is_valid_component("widget", item_id) and shape in widget_shape_set(item_id)
     if kind == "alert":
         return is_valid_component("alert", item_id) and shape in get_alert_shapes()
     if kind == "scene":
@@ -136,7 +150,7 @@ def is_valid_component(kind: str, cid: str) -> bool:
 
 def shape_ids_for(kind: str, cid: str) -> set:
     if kind == "widget":
-        return set(WIDGET_SHAPE_SET) if cid in widget_ids() else set()
+        return widget_shape_set(cid) if cid in widget_ids() else set()
     if kind == "alert":
         return get_alert_shapes() if cid in alert_ids() else set()
     return set()

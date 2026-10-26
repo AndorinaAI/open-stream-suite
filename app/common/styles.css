@@ -267,6 +267,125 @@ body[data-theme-shape="vintage_crt_monitor"] {
   --skin-ornament-brackets: none !important;
   --skin-ornament-reticle: none !important;
 }
+/* --------------------------------------------------------------------
+   FORMAS FÍSICAS DE PACK EN ALERTAS Y WIDGETS
+   Las 9 genéricas las aplica `oss-shape.js` en línea (inline). Las 20
+   físicas de pack llegan como `body[data-theme-shape="<id>"]`, tanto en
+   el overlay de alertas (`#alert-card`, `#banner-alert-root`) como en los
+   widgets (`[data-oss-shape-target]`, que las escenas no usan). Sin este
+   bloque la forma se seleccionaba en el panel pero no se pintaba.
+   -------------------------------------------------------------------- */
+body[data-theme-shape="cozy_polaroid"] #alert-card,
+body[data-theme-shape="cozy_polaroid"] #banner-alert-root,
+body[data-theme-shape="cozy_polaroid"] [data-oss-shape-target] {
+  border-radius: 2px;
+}
+body[data-theme-shape="cozy_canvas"] #alert-card,
+body[data-theme-shape="cozy_canvas"] #banner-alert-root,
+body[data-theme-shape="cozy_canvas"] [data-oss-shape-target] {
+  border-radius: 18px;
+}
+body[data-theme-shape="cozy_soft"] #alert-card,
+body[data-theme-shape="cozy_soft"] #banner-alert-root,
+body[data-theme-shape="cozy_soft"] [data-oss-shape-target] {
+  border-radius: 28px;
+}
+body[data-theme-shape="fantasy_parchment"] #alert-card,
+body[data-theme-shape="fantasy_parchment"] #banner-alert-root,
+body[data-theme-shape="fantasy_parchment"] [data-oss-shape-target] {
+  clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+}
+body[data-theme-shape="fantasy_runic_stone"] #alert-card,
+body[data-theme-shape="fantasy_runic_stone"] #banner-alert-root,
+body[data-theme-shape="fantasy_runic_stone"] [data-oss-shape-target] {
+  border-radius: 6px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+body[data-theme-shape="gamer_mecha"] #alert-card,
+body[data-theme-shape="gamer_mecha"] #banner-alert-root,
+body[data-theme-shape="gamer_mecha"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+body[data-theme-shape="gamer_tactical_hud"] #alert-card,
+body[data-theme-shape="gamer_tactical_hud"] #banner-alert-root,
+body[data-theme-shape="gamer_tactical_hud"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+body[data-theme-shape="gamer_stealth"] #alert-card,
+body[data-theme-shape="gamer_stealth"] #banner-alert-root,
+body[data-theme-shape="gamer_stealth"] [data-oss-shape-target] {
+  border-radius: 2px;
+}
+body[data-theme-shape="gamer_hex_shield"] #alert-card,
+body[data-theme-shape="gamer_hex_shield"] #banner-alert-root,
+body[data-theme-shape="gamer_hex_shield"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px));
+}
+body[data-theme-shape="gamer_cyber_glitch"] #alert-card,
+body[data-theme-shape="gamer_cyber_glitch"] #banner-alert-root,
+body[data-theme-shape="gamer_cyber_glitch"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+}
+body[data-theme-shape="gamer_arcade_retro"] #alert-card,
+body[data-theme-shape="gamer_arcade_retro"] #banner-alert-root,
+body[data-theme-shape="gamer_arcade_retro"] [data-oss-shape-target] {
+  border-radius: 0;
+}
+body[data-theme-shape="gothic_vampire"] #alert-card,
+body[data-theme-shape="gothic_vampire"] #banner-alert-root,
+body[data-theme-shape="gothic_vampire"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), 82% 100%, 18% 100%, 0 calc(100% - 16px));
+}
+body[data-theme-shape="comic_manga_action"] #alert-card,
+body[data-theme-shape="comic_manga_action"] #banner-alert-root,
+body[data-theme-shape="comic_manga_action"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 94% 90%, 86% 100%, 78% 90%, 70% 100%, 62% 90%, 54% 100%, 46% 90%, 38% 100%, 30% 90%, 22% 100%, 14% 90%, 6% 100%, 0 90%);
+}
+body[data-theme-shape="pop_synth_neon"] #alert-card,
+body[data-theme-shape="pop_synth_neon"] #banner-alert-root,
+body[data-theme-shape="pop_synth_neon"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+body[data-theme-shape="vintage_crt_monitor"] #alert-card,
+body[data-theme-shape="vintage_crt_monitor"] #banner-alert-root,
+body[data-theme-shape="vintage_crt_monitor"] [data-oss-shape-target] {
+  border-radius: 12px;
+}
+body[data-theme-shape="maker_blueprint"] #alert-card,
+body[data-theme-shape="maker_blueprint"] #banner-alert-root,
+body[data-theme-shape="maker_blueprint"] [data-oss-shape-target] {
+  border-radius: 2px;
+}
+body[data-theme-shape="maker_workbench"] #alert-card,
+body[data-theme-shape="maker_workbench"] #banner-alert-root,
+body[data-theme-shape="maker_workbench"] [data-oss-shape-target] {
+  border-radius: 4px;
+}
+body[data-theme-shape="maker_circuit_pcb"] #alert-card,
+body[data-theme-shape="maker_circuit_pcb"] #banner-alert-root,
+body[data-theme-shape="maker_circuit_pcb"] [data-oss-shape-target] {
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+body[data-theme-shape="openstream_glass"] #alert-card,
+body[data-theme-shape="openstream_glass"] #banner-alert-root,
+body[data-theme-shape="openstream_glass"] [data-oss-shape-target] {
+  border-radius: 16px;
+}
+body[data-theme-shape="openstream_studio"] #alert-card,
+body[data-theme-shape="openstream_studio"] #banner-alert-root,
+body[data-theme-shape="openstream_studio"] [data-oss-shape-target] {
+  border-radius: 20px;
+}
+
+
 
 /* ====================================================================
    MOTOR UNIVERSAL DE ARQUETIPOS GEOMÉTRICOS Y FORMAS FÍSICAS (CROSS-PACK)
