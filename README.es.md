@@ -29,7 +29,7 @@
 - **Rendimiento ultra-ligero**: Desarrollado en HTML5 nativo, CSS y Vanilla JS. Sin frameworks pesados ni dependencias npm para el frontend.
 - **Transparencia real**: Las escenas de directo tienen fondo transparente real para que tus juegos, terminales y cámaras se vean debajo sin filtros oscuros molestos.
 - **Configuración centralizada**: Modifica el nombre del canal, los títulos de los proyectos, las fases activas y las redes sociales desde [`app/config.js`](app/config.js).
-- **Temas Modulares y Restauración de Fábrica**: Paletas y trajes visuales en `themes/<pack>/<tema>/` con respaldo `.default.json` / `.default.css` para restaurar con 1 solo clic si modificas algo por error.
+- **Temas Modulares y Restauración de Fábrica**: Paletas y trajes visuales en `app/streamthemes/<pack>/styles/<tema>/` con respaldo `.default.json` / `.default.css` para restaurar con 1 solo clic si modificas algo por error.
 - **Estilos Visuales Independientes por Overlay**: Cada overlay de OBS Studio puede vestir su propio estilo visual (Arcade para Gameplay, Chill para charla, Cyberpunk para tech, etc.).
 - **Sistema de Fondos con Apertura y Recorte Automático (Backdrop Aperture)**: Permite aplicar fondos decorativos, texturas o degradados sin tapar las capturas de OBS (cámaras, gameplays) mediante una máscara SVG inteligente (`<mask id="oss-aperture-mask">`).
 - **Diferenciación Visual Radical entre Packs Temáticos**:
@@ -49,7 +49,10 @@
 OpenStreamSuite/
 ├── README.md               # README principal en inglés
 ├── README.es.md            # README en español (este documento)
-├── LICENSE                 # Licencia (CC BY-NC-SA 4.0 - Atribución-NoComercial-CompartirIgual)
+├── LICENSE                 # Licencia pública (AGPL-3.0-or-later)
+├── LICENSE-COMMERCIAL.md   # Licencia comercial de pago (doble licencia) / .en.md
+├── NOTICE.md               # Avisos de terceros: fuentes OFL y dependencias / .en.md
+├── TRADEMARK.md            # Política de marcas (logo y nombre fuera de licencia) / .en.md
 │
 ├── Linux/                  # Instaladores, lanzador, actualizador e instrucciones (ES/EN)
 ├── Mac/                    # Idem para macOS
@@ -83,10 +86,9 @@ OpenStreamSuite/
     │   ├── Maker_Theme_Pack/      # 6 temas Maker/CAD + 9 escenas OBS
     │   ├── Open_stream_Pack/      # 5 temas Neo-Glass + 6 escenas OBS
     │   ├── Gamer_Pro_Pack/        # 5 temas Esports HUD + 6 escenas OBS
-    │   └── Cozy_LoFi_Pack/        # 6 temas Relax/Botánico + 6 escenas OBS
+    │   └── Cozy_LoFi_Pack/        # 5 temas Relax/Botánico + 6 escenas OBS
     ├── common/             # Estilos compartidos, fuentes locales 100% offline y utilidades
     ├── docs/               # Guías (OBS, temas, decks, dominio propio)
-    ├── scripts/            # Auxiliares (Cloudflare Tunnel, VPS)
     └── tests/              # Suite de pruebas automatizadas (67 tests)
 ```
 
@@ -119,7 +121,7 @@ Crea una escena en el panel *Escenas* para cada uno de tus modos habituales de d
 3. Nómbrala `Overlay - Escena Principal`.
 4. En las propiedades de la fuente:
    - **Desmarca «Archivo local»** (las overlays requieren conexión HTTP y WebSocket con el servidor).
-   - **URL**: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html` (o pulsa **«📋 Copiar URL OBS»** en cualquier escena desde el panel web).
+   - **URL**: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html` (o pulsa **«📋 Copiar URL OBS»** en cualquier escena desde el panel web).
    - **Ancho**: `1920`
    - **Alto**: `1080`
    - Marca **Apagar la fuente cuando no sea visible**.
@@ -167,7 +169,7 @@ Desde la ventana del lanzador podrás **iniciar/detener el servidor**, configura
 ### URLs del Sistema en Vivo:
 - **🎛️ Panel de Control del Streamer**: [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html)
 - **🚨 Fuente de Alertas y Memes para OBS**: [http://localhost:8080/alerts/index.html](http://localhost:8080/alerts/index.html) *(1920×1080)*
-- **📰 Visualizador de Catálogo**: [http://localhost:8080/index.html](http://localhost:8080/index.html)
+- **📰 Visualizador de Catálogo**: integrado en el Panel de Control (`/alerts/panel.html`, vista Escenas)
 
 ---
 
@@ -203,12 +205,18 @@ Puedes añadir estos widgets independientes como fuentes de Navegador en cualqui
 
 ## 7. Licencia y Contribuciones
 
-Open Stream Suite se distribuye bajo la licencia **[Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)](LICENSE)** con pleno efecto retroactivo a todos los commits presentes y pasados:
-- **Uso No Comercial**: Puedes usarlo, estudiarlo, modificarlo y compartirlo libremente para **fines personales no comerciales**, incluido tu streaming en directo. Queda terminantemente prohibida su venta, redistribución de pago o explotación comercial sin permiso explícito por escrito del autor.
-- **CompartirIgual (ShareAlike / Reciprocidad)**: Si modificas el proyecto, transformas el código o creas nuevas funciones, **debes distribuir tus aportaciones bajo esta misma licencia exacta (CC BY-NC-SA 4.0)**. Cualquier función nueva debe ser libre, abierta y sin lucro, garantizando que pueda ser incorporada e integrada libremente en el proyecto original.
+Open Stream Suite usa **doble licencia**:
+
+- **Licencia pública: [GNU AGPL v3.0 o posterior](LICENSE)** — software libre: puedes usar, estudiar, modificar y redistribuir el proyecto gratis **siempre que cumplas la AGPL** (publicar el código de tus modificaciones y no imponer restricciones adicionales).
+- **Licencia comercial de pago:** si eres una **empresa** y quieres usarlo sin publicar tu código (integrarlo en un producto, servicio alojado, marca blanca, redistribución), necesitas la [licencia comercial](LICENSE-COMMERCIAL.md). Contacto: **admin@andorina.dev**.
+- **Marcas:** el nombre, el logo y la identidad visual **no** están cubiertos por ninguna de las dos licencias → [`TRADEMARK.md`](TRADEMARK.md).
+- **Recursos de terceros** (tipografías, iconos, dependencias de Python): tampoco los cubre la licencia del proyecto → [`NOTICE.md`](NOTICE.md).
+
+> [!IMPORTANT]
+> Las versiones publicadas **antes del 2026-10-26** se distribuyeron bajo **CC BY-NC-SA 4.0**. Las copias ya entregadas a terceros conservan esos términos; **las versiones nuevas se rigen por la AGPL-3.0-or-later**.
 
 > [!NOTE]
-> Las contribuciones comunitarias, soluciones a errores y nuevas funciones son bienvenidas: consulta [CONTRIBUTING.md](.github/CONTRIBUTING.md) ([English](.github/CONTRIBUTING.en.md)).
+> Las contribuciones comunitarias, soluciones a errores y nuevas funciones son bienvenidas: consulta [CONTRIBUTING.md](.github/CONTRIBUTING.md) ([English](.github/CONTRIBUTING.en.md)). **Toda contribución requiere firmar el [CLA](.github/CLA.md)** para que el proyecto pueda mantener su modelo de doble licencia.
 
 Las dependencias de terceros mantienen sus propias licencias.
 

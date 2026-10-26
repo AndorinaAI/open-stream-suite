@@ -29,7 +29,7 @@
 - **Ultra-lightweight Performance**: Built with native HTML5, CSS3, and Vanilla JavaScript. Zero heavy web frameworks or npm build steps for the frontend.
 - **True Transparency**: Live broadcast scenes have real transparent backgrounds so games, terminals, and webcams sit seamlessly underneath without muddy dark tint filters.
 - **Centralized Configuration**: Edit streamer channel names, project titles, active development phases, and social links from [`app/config.js`](app/config.js) or via the web control panel.
-- **Modular Themes & Factory Reset**: Complete theme packs in `themes/<pack>/<theme>/` with backup `.default.json` / `.default.css` files allowing 1-click instant factory restoration.
+- **Modular Themes & Factory Reset**: Complete theme packs in `app/streamthemes/<pack>/styles/<theme>/` with backup `.default.json` / `.default.css` files allowing 1-click instant factory restoration.
 - **Independent Visual Themes per Scene**: Each OBS Studio scene overlay can wear its own style (Arcade for Gaming, Chill for Just Chatting, Cyberpunk for coding/tech, etc.).
 - **Programmed Overlay Logic & Floating Draggable Controls**: Overlays are dynamic broadcast web applications rather than passive templates. They feature centisecond speedrun split timers with live deltas (+/-), millisecond-synchronized Pomodoro countdowns, multi-cam grid switchers, click-cycle victory badges, and floating draggable HUD menus designed never to obstruct gameplay or cameras.
 - **Physical Deck Plugins**: Native integrations in [`plugins/`](plugins/README.en.md) for Elgato Stream Deck, Ajazz AKP05 (10 keys + panoramic touch strip + 4 knobs), Ajazz AKP153/03/846, and OpenDeck (Bitfocus Companion).
@@ -43,7 +43,10 @@
 OpenStreamSuite/
 ├── README.md               # English README (primary)
 ├── README.es.md            # Spanish README (Español)
-├── LICENSE                 # License (CC BY-NC-SA 4.0 - Attribution-NonCommercial-ShareAlike)
+├── LICENSE                 # Public licence (AGPL-3.0-or-later)
+├── LICENSE-COMMERCIAL.md   # Paid commercial licence (dual licensing) / .en.md
+├── NOTICE.md               # Third-party notices: OFL fonts & dependencies / .en.md
+├── TRADEMARK.md            # Brand policy (logo and name are not licensed) / .en.md
 │
 ├── Linux/                  # Installer, launcher, updater and instructions (ES/EN)
 ├── Mac/                    # same for macOS
@@ -80,7 +83,7 @@ OpenStreamSuite/
     │   ├── Maker_Theme_Pack/      # 6 Maker/CAD themes + 9 OBS scenes
     │   ├── Open_stream_Pack/      # 5 Neo-Glass themes + 6 OBS scenes
     │   ├── Gamer_Pro_Pack/        # 5 Esports HUD themes + 6 OBS scenes
-    │   └── Cozy_LoFi_Pack/        # 6 Relax/Botanical themes + 6 OBS scenes
+    │   └── Cozy_LoFi_Pack/        # 5 Relax/Botanical themes + 6 OBS scenes
     ├── common/             # Shared CSS, 100% offline local fonts & i18n engine
     ├── docs/               # Technical documentation & guides
     └── tests/              # Automated unit tests (67 tests)
@@ -115,7 +118,7 @@ In the *Scenes* dock, create a scene for each stream mode:
 3. Name it `Overlay - Main Scene`.
 4. In the source properties:
    - **Do NOT check «Local file»** (overlays need HTTP/WebSocket connectivity).
-   - **URL**: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html` (or click **«📋 Copiar URL OBS»** on any scene in the web panel).
+   - **URL**: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html` (or click **«📋 Copiar URL OBS»** on any scene in the web panel).
    - **Width**: `1920`
    - **Height**: `1080`
    - Check **Shutdown source when not visible**.
@@ -163,7 +166,7 @@ From the desktop launcher you can **start/stop the server**, configure Twitch cr
 ### Live URLs:
 - **🎛️ Streamer Control Panel**: [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html)
 - **🚨 OBS Alert Engine**: [http://localhost:8080/alerts/index.html](http://localhost:8080/alerts/index.html) *(1920×1080)*
-- **📰 Interactive Catalog**: [http://localhost:8080/index.html](http://localhost:8080/index.html)
+- **📰 Interactive Catalog**: integrated into the Control Panel (`/alerts/panel.html`, Scenes view)
 
 ---
 
@@ -199,12 +202,18 @@ Each widget can be loaded as an independent Browser Source in any scene:
 
 ## 7. License & Contributions
 
-Open Stream Suite is released under the **[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License](LICENSE)** with retroactive effect across all past and present commits:
-- **Non-Commercial**: You are free to use, modify, study, and share it for **personal, non-commercial streaming**. Selling it, paid redistribution, or commercial exploitation is strictly prohibited without prior written permission.
-- **ShareAlike (Reciprocity)**: If you remix, transform, or build new features upon this project, you **must distribute your contributions under the same CC BY-NC-SA 4.0 license**. Any new features must remain open and free, allowing them to be contributed back and incorporated into the original project.
+Open Stream Suite uses a **dual licence**:
+
+- **Public licence: [GNU AGPL v3.0 or later](LICENSE)** — free software: you may use, study, modify and redistribute the project for free **as long as you comply with the AGPL** (publish the source of your modifications and impose no further restrictions).
+- **Paid commercial licence:** if you are a **company** and want to use it without publishing your code (embedding it in a product, hosted service, white-labelling, redistribution), you need the [commercial licence](LICENSE-COMMERCIAL.en.md). Contact: **admin@andorina.dev**.
+- **Trademarks:** the name, logo and visual identity are covered by **neither** licence → [`TRADEMARK.en.md`](TRADEMARK.en.md).
+- **Third-party assets** (typefaces, icons, Python dependencies) are not covered by the project licence → [`NOTICE.en.md`](NOTICE.en.md).
+
+> [!IMPORTANT]
+> Versions published **before 2026-10-26** were released under **CC BY-NC-SA 4.0**. Copies already delivered to third parties keep those terms; **new versions are governed by AGPL-3.0-or-later**.
 
 > [!NOTE]
-> Contributions, community fixes, and new features are warmly welcome: see [CONTRIBUTING.en.md](.github/CONTRIBUTING.en.md).
+> Contributions, community fixes, and new features are warmly welcome: see [CONTRIBUTING.en.md](.github/CONTRIBUTING.en.md). **Every contribution requires signing the [CLA](.github/CLA.en.md)** so the project can keep its dual-licence model.
 
 Third-party dependencies and assets retain their respective licenses.
 
