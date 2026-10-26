@@ -6,13 +6,27 @@
 
 ¡Gracias por querer mejorar el proyecto! Las contribuciones son muy bienvenidas.
 
-## Licencia
+## Licencia y CLA
 
-El proyecto usa la licencia [Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)](../LICENSE) con efecto retroactivo a todos los commits: uso, modificación y distribución libres **para fines no comerciales**. No se permite venderlo ni lucrarse con él sin permiso del autor.
+El proyecto usa **doble licencia**:
 
-Por la cláusula **CompartirIgual (ShareAlike)**, cualquier fork, modificación o nueva función que desarrolles y publiques **debe estar bajo esta misma licencia exacta (CC BY-NC-SA 4.0)**, asegurando que todas las mejoras permanezcan libres y puedan ser incorporadas legalmente al proyecto original. Te invitamos y animamos a enviar tus mejoras mediante un *Pull Request*.
+- **Licencia pública: [GNU AGPL v3.0 o posterior](../LICENSE)** — software libre: puedes usar, estudiar, modificar y redistribuir el proyecto gratis, **siempre que cumplas la AGPL** (publicar el código de tus modificaciones y no imponer restricciones adicionales).
+- **Licencia comercial de pago:** si eres una **empresa** y quieres usarlo sin publicar tu código (integrarlo en un producto, servicio alojado, marca blanca, redistribución), necesitas la [licencia comercial](../LICENSE-COMMERCIAL.md). Contacto: **admin@andorina.dev**.
+- **Marcas:** el nombre, el logo y la identidad visual **no** están cubiertos por ninguna de las dos licencias → [`TRADEMARK.md`](../TRADEMARK.md).
+- **Recursos de terceros** (tipografías, iconos, dependencias de Python): tampoco los cubre la licencia del proyecto → [`NOTICE.md`](../NOTICE.md).
 
-Al enviar una contribución aceptas que se distribuya bajo esta misma licencia.
+> [!IMPORTANT]
+> Las versiones publicadas **antes del 2026-10-26** se distribuyeron bajo **CC BY-NC-SA 4.0**. Las copias ya entregadas a terceros conservan esos términos; **las versiones nuevas se rigen por la AGPL-3.0-or-later**.
+
+### Firmar el CLA (obligatorio)
+
+Para mantener el modelo de doble licencia, **toda contribución requiere aceptar el [Acuerdo de Licencia de Contribuciones (CLA)](CLA.md)** ([English](CLA.en.md)), que cede al titular derechos suficientes para **relicenciar** el proyecto (incluida su explotación comercial).
+
+1. Escribe en tu Pull Request este comentario **exacto**:
+   `I have read the CLA Document and I hereby sign the CLA`
+2. Si actúas en nombre de una entidad, añade además: `on behalf of <Entidad>, representing <nombre y cargo>`.
+
+Los Pull Requests **sin firma no se revisan ni se fusionan** (se cerrarán con un enlace al CLA). No se acepta código de terceros sin declararlo ni aportaciones con copyleft adicional incompatible con la AGPL y con la licencia comercial del proyecto.
 
 ## Plataformas y Testeo
 El desarrollo y pruebas se realizan **exclusivamente en Linux**. No utilizamos sistemas privativos (Windows ni macOS). Si desarrollas en Windows o macOS, agradecemos enormemente tu feedback, reporte de fallos y *Pull Requests* para que esos sistemas puedan avanzar.
@@ -26,7 +40,7 @@ El desarrollo y pruebas se realizan **exclusivamente en Linux**. No utilizamos s
    ```bash
    ./venv/bin/python3 -m unittest discover tests -v
    ```
-5. Abre el Pull Request explicando qué cambia y por qué.
+5. Abre el Pull Request explicando qué cambia y por qué. **Incluye la firma del CLA**: escribe en el PR el comentario exacto `I have read the CLA Document and I hereby sign the CLA` (ver [CLA.md](CLA.md)). Sin firma, el PR no se revisa.
 
 ## Reglas de seguridad
 
