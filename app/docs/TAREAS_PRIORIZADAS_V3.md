@@ -137,11 +137,21 @@
 
 ## P2 — Limpieza
 
-### T3.08 — Código muerto del botón “Volver a Carpetas” (V3-07) [ ]
+### T3.08 — Código muerto del botón “Volver a Carpetas” (V3-07) [HECHO]
 
-- **Archivos:** `alerts/js/themes/09-overlay-folders-render.js:8`.
-- **Criterio:** eliminar la referencia a `overlays-btn-back-folders` (o añadir el
-  id al botón real). El botón visible ya funciona por su `onclick` inline.
+- **Archivos:** `alerts/js/themes/09-overlay-folders-render.js`,
+  `tests/test_panel_dead_refs.py` (nuevo).
+- **Problema:** se consultaba `overlays-btn-back-folders`, un id que **no existe**
+  en `panel.html`; el botón visible funciona por su `onclick` inline, así que la
+  referencia solo engañaba al leer el código.
+- **Arreglo (opción elegida):** eliminar la referencia muerta y su uso. El botón
+  real («⬅️ Volver a Carpetas», `themes.btn_back_folders`) vive **dentro** de
+  `overlays-folder-details-view`, de modo que se oculta junto con el contenedor y
+  no necesita lógica propia (queda comentado en el módulo). Se descartó añadir el
+  id porque no aportaría comportamiento.
+- **Verificación:** `test_panel_dead_refs.py` 2/2 OK — ninguna **referencia de
+  código** al id muerto (el test ignora comentarios para no dar falsos positivos) y
+  el botón sigue dentro del contenedor de detalles; `node --check` OK.
 
 ---
 
