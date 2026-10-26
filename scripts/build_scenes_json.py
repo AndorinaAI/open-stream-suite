@@ -136,6 +136,15 @@ def build() -> dict:
 
 
 def main() -> int:
+    # En Windows la consola no usa UTF-8 por defecto: imprimir los ✓/✗ lanzaba
+    # UnicodeEncodeError y el script terminaba con returncode 1 (rompía el test
+    # de sincronización del catálogo en CI).
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            try:
+                stream.reconfigure(encoding="utf-8", errors="replace")
+            except (OSError, ValueError):
+                pass
     data = build()
     payload = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
     check = "--check" in sys.argv
@@ -146,7 +155,12 @@ def main() -> int:
             return 1
         print(f"✓ app/scenes.json sincronizado ({data['scene_count']} escenas, {len(data['alias_map'])} alias)")
         return 0
-    OUT.write_text(payload, encoding="utf-8")
+    # newline="\n" explícito: en Windows el modo texto escribiría CRLF y el
+    # fichero dejaría de coincidir con el versionado (LF).
+    try:
+        OUT.write_text(payload, encoding="utf-8", newline="\n")
+    except TypeError:  # Python < 3.10
+        OUT.write_text(payload, encoding="utf-8")
     print(f"✓ escrito {OUT.relative_to(REPO)}: {data['scene_count']} escenas, {len(data['alias_map'])} alias, "
           f"{len(data['default_themes'])} temas por defecto")
     return 0

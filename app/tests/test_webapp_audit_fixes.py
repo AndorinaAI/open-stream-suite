@@ -4,6 +4,7 @@ Se ejecutan contra la app real con el cliente de aiohttp; no usan red externa.
 """
 import asyncio
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -299,10 +300,14 @@ class AuditServicesTestCase(unittest.TestCase):
                 data = json.loads(roles.read_text(encoding="utf-8"))
                 self.assertIn("existente", data["roles"][0]["members"])
                 self.assertIn("nuevoartista", data["roles"][0]["members"])
-                self.assertEqual(roles.stat().st_mode & 0o777, 0o600)
+                # `os.chmod` solo afecta al bit de solo lectura en Windows: los
+                # permisos POSIX (0600) se comprueban donde existen.
+                if os.name != "nt":
+                    self.assertEqual(roles.stat().st_mode & 0o777, 0o600)
                 self.assertTrue(save_triggers_data({"triggers": [{"id": "t1"}]}))
                 self.assertEqual(load_triggers_data()["triggers"][0]["id"], "t1")
-                self.assertEqual(triggers.stat().st_mode & 0o777, 0o600)
+                if os.name != "nt":
+                    self.assertEqual(triggers.stat().st_mode & 0o777, 0o600)
 
     def test_loopback_host_classification(self):
         self.assertTrue(is_loopback_host("127.0.0.1"))

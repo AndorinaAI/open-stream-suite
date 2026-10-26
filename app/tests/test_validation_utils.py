@@ -129,13 +129,20 @@ class TestValidationUtils(unittest.TestCase):
 
     def test_catalogo_generado_y_sincronizado(self):
         """`scenes.json` no puede quedar desincronizado de 05-scenes-data.js."""
+        import os
         import subprocess
         import sys
         script = Path(BASE_DIR).parent / "scripts" / "build_scenes_json.py"
         if not script.is_file():
             self.skipTest("scripts/build_scenes_json.py no disponible")
-        proc = subprocess.run([sys.executable, str(script), "--check"], capture_output=True, text=True)
-        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        # PYTHONIOENCODING + encoding explícito: en Windows el script y su salida
+        # usaban cp1252 y los caracteres Unicode rompían la ejecución.
+        env = dict(os.environ, PYTHONIOENCODING="utf-8")
+        proc = subprocess.run(
+            [sys.executable, str(script), "--check"],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", env=env,
+        )
+        self.assertEqual(proc.returncode, 0, (proc.stdout or "") + (proc.stderr or ""))
 
     def test_normalize_es_idempotente_y_case_insensitive_tolerante(self):
         for form in ("startingSoon", "starting-soon", "starting_soon", "screens/starting-soon"):
