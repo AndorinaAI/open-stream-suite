@@ -575,8 +575,25 @@
         .catch(() => {});
     }
 
+    // Idioma de la escena: manda el parámetro `?lang=` de la URL (lo que se pega
+    // en OBS) y, si no hay, el idioma elegido en el panel (`oss-lang`).
+    function currentLang() {
+      try {
+        const fromUrl = new URLSearchParams(window.location.search).get('lang');
+        if (fromUrl) return String(fromUrl).toLowerCase();
+        if (typeof localStorage === 'undefined') return '';
+        return String(localStorage.getItem('oss-lang') || '').toLowerCase();
+      } catch (e) {
+        return '';
+      }
+    }
+
     function syncTextsFromServer() {
-      fetch('/api/overlays/texts', { cache: 'no-store' })
+      // Antes se pedía `/api/overlays/texts` sin el idioma, así que el `?lang=en`
+      // documentado en las guías nunca llegaba a la escena de OBS.
+      const lang = currentLang();
+      const endpoint = lang ? `/api/overlays/texts?lang=${encodeURIComponent(lang)}` : '/api/overlays/texts';
+      fetch(endpoint, { cache: 'no-store' })
         .then(r => r.ok ? r.json() : null)
         .then(data => { if (data && data.texts) applyConfigToDOM(data.texts); })
         .catch(() => { /* Modo offline o standalone en OBS */ });
@@ -636,7 +653,12 @@
               updateOverlayThemeAndShape(null, msg.shape);
             }
           } else if ((msg.type === 'overlay_texts_update' || msg.type === 'overlay_texts_updated') && msg.texts) {
-            applyConfigToDOM(msg.texts);
+            // Con un idioma distinto al español el evento en vivo trae los textos
+            // guardados (ES): se vuelven a pedir en el idioma de la escena para no
+            // revertir una escena en inglés.
+            const liveLang = currentLang();
+            if (liveLang && liveLang !== 'es') syncTextsFromServer();
+            else applyConfigToDOM(msg.texts);
           } else if (msg.type === 'overlay_backdrop_change' && msg.backdrop) {
             if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
               if (window.OSSAperture) window.OSSAperture.setBackdrop(msg.backdrop);

@@ -8,7 +8,7 @@
 | Cinzel no empaquetada | **Cerrado** | `common/fonts/cinzel_variable.ttf` + `@font-face` local + licencia OFL. |
 | FPS contradictorio en `gameplay_hud` | **Cerrado** | Telemetría y footer a 60 FPS. |
 | `favicon.ico` 404 | **Cerrado** | Responde 200 `image/png`. |
-| `?lang=` inerte | **Reservado** | Solo lo aplica `/api/overlays/texts`; documentado en las guías. |
+| `?lang=` inerte | **Arreglado** (2026-10-26) | `common/overlay.js` ya envía el idioma a `/api/overlays/texts?lang=…` (antes lo pedía **sin** él, así que la escena seguía en español) y lo toma de `?lang=` o de `oss-lang`; el evento `overlay_texts_update` en vivo no revierte una escena en inglés. Suite `tests/test_overlay_lang_param.py`. |
 | `?lock=1` sin `?theme=` | **Documentado** | Conserva el comportamiento actual; no se cambia sin decisión de producto. |
 | Cambios Git | **Pendiente: push** | El árbol ya está commiteado por bloques (ronda legal + 16 commits de la auditoría V3 / WIP acumulado) y `git status` está limpio. Falta **hacer push**: la rama `main` **no tiene upstream** (`git push -u origin main`). Revisar también la rama `dev`, que quedó desactualizada. |
 
