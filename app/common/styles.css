@@ -2213,3 +2213,70 @@ body[data-theme-shape="cozy_soft"] :is([data-oss-panel], .panel-card, .chat-pane
   clip-path: none !important;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32) !important;
 }
+
+/* ====================================================================
+   CONTRASTE GARANTIZADO DE ETIQUETAS (auditoría visual 1.0.2)
+   Medido con el navegador sobre los 21 temas:
+     - tinta oscura sobre una placa del acento del pack -> >=5.1:1 en 21/21
+       temas (el texto blanco solo era legible en 1/21).
+     - --color-accent-cyan como color de texto sobre el panel oscuro ->
+       >=5.1:1 en 21/21 temas (algunos packs tienen un accent-orange muy
+       oscuro, p. ej. #7928CA, y como texto quedaba en 2:1).
+   Se aplica a las etiquetas que bajaban de 3:1 al cambiar de pack. El color
+   de cada pack sigue presente en placas, bordes y acentos; aquí solo se fija
+   el color del TEXTO para que sea legible con cualquier tema.
+   ==================================================================== */
+.ticker-tag {
+  color: #0B1220 !important; /* texto sobre placa maciza del acento */
+}
+.pomo-badge {
+  color: var(--color-text-light, #F7EFE6) !important; /* placa TINTADA (oscura) */
+}
+.timeout-badge,
+.match-badge {
+  color: #0B1220 !important; /* placa MACIZA del acento: tinta oscura (>=5.1:1 en 21/21) */
+}
+.canvas-tag,
+.shoutout-game,
+.score-divider {
+  color: var(--color-accent-cyan, #57D6C4) !important;
+}
+.victory-banner,
+.hero-tag,
+.field-value,
+.person-social,
+.credit-label,
+.ss-mode-label,
+.hud-rank-badge,
+.brb-status-phrase,
+#timer-status {
+  color: var(--color-text-light, #F7EFE6) !important;
+}
+/* La leyenda del polaroid es tinta sobre papel marfil: solo cuando la forma
+   activa NO pinta ese papel (ni es el look original de la escena) se cambia a
+   texto claro, para no quedar marrón sobre panel oscuro. La tagline conserva su
+   color por escena (medido 4.2:1 sobre el papel); su caso oscuro va en la lista
+   de ajuste fino, porque depende del fondo de cada escena. */
+body:not([data-theme-shape="cozy_polaroid"]):not([data-theme-shape="original"]) .polaroid-handwritten {
+  color: var(--color-text-light, #F7EFE6) !important;
+}
+/* Sombra suave de seguridad: legible también sobre degradados y vídeo. */
+[data-text-key="channel.tagline"],
+.ticker-tag,
+.pomo-badge,
+.timeout-badge,
+.match-badge,
+.canvas-tag,
+.shoutout-game,
+.score-divider,
+.victory-banner,
+.hero-tag,
+.field-value,
+.person-social,
+.credit-label,
+.ss-mode-label,
+.hud-rank-badge,
+.brb-status-phrase,
+#timer-status {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55) !important;
+}

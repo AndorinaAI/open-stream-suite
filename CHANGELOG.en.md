@@ -117,6 +117,13 @@ Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, na
 - **Catalogue matches rendering**: widgets now offer the 29 shapes (9 generic + 20 pack) they really draw; `chat` keeps the 9 generic ones because it exposes no shape target (it applies its own via `ChatStyles`).
 - **Regression test** (`tests/test_component_shapes_render.py`): every shape offered by the catalogue must have a render rule for scenes, alerts and widgets, and the 9 generic ones must exist in `oss-shape.js`.
 
+### Fixed — Label contrast when switching packs (1.0.2 visual audit, real browser)
+- **Browser measurement** (headless Chrome, 1920×1080, simulating OBS, 132 loads = 27 scenes + 5 widgets + alerts × 4 packs): all 21 theme combinations resolve **every** token, with no text overflow, no clipping, no failed requests and no rendering errors.
+- **Ink on accent plates**: white text on `--color-accent-cyan` was legible in only **1 of 21** themes (measured). Labels on solid accent plates (`.ticker-tag`, `.timeout-badge`, `.match-badge`) now use dark ink, legible in **21/21** (≥5.1:1).
+- **Dark accents used as text colour**: some packs define a very dark `--color-accent-orange` (e.g. `#7928CA`), so labels using it as text dropped to ~2:1 with that pack active. Those labels now use `--color-accent-cyan` (≥5.1:1 on the dark panel in 21/21) or the light text token.
+- **Polaroid caption**: the brown ink on ivory paper (4.2:1, correct) is kept only while the scene keeps that paper (`cozy_polaroid` or original shape); with other shapes it switches to light text so it never ends up brown on a dark panel.
+- **Remaining fine-tuning list** (recorded in `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectors between 2.0:1 and 4.3:1 (the tagline in some scenes and a couple of inline-styled labels) that depend on per-scene design decisions.
+
 ## [1.0.1-alpha] — 2026-10-23
 
 ### Fixed — Architectural Audit and Critical Fixes

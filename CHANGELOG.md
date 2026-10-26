@@ -117,6 +117,13 @@ Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widget
 - **Catálogo coherente con el render**: los widgets ofrecen las 29 formas (9 genéricas + 20 de pack) que realmente pintan; `chat` mantiene las 9 genéricas porque no expone diana de forma (aplica las suyas con `ChatStyles`).
 - **Test de regresión** (`tests/test_component_shapes_render.py`): fija que toda forma ofrecida por el catálogo tenga regla de render en escenas, alertas y widgets, y que las 9 genéricas existan en `oss-shape.js`.
 
+### Corregido — Contraste de etiquetas al cambiar de pack (auditoría visual 1.0.2, navegador real)
+- **Medición con navegador** (Chrome headless, 1920×1080, simulando OBS, 132 cargas = 27 escenas + 5 widgets + alertas × 4 packs): las 21 combinaciones de tema resuelven **todos** sus tokens, sin desbordes ni recortes de texto, sin peticiones fallidas ni errores de render.
+- **Tinta sobre placas de acento**: el texto blanco sobre `--color-accent-cyan` solo era legible en **1 de 21** temas (medido). Ahora las etiquetas sobre placa maciza (`.ticker-tag`, `.timeout-badge`, `.match-badge`) usan tinta oscura, legible en **21/21** (≥5.1:1).
+- **Acentos oscuros como color de texto**: algunos packs definen `--color-accent-orange` muy oscuro (p. ej. `#7928CA`) y las etiquetas que lo usaban como texto caían a ~2:1 al aplicar ese pack. Las etiquetas afectadas pasan a `--color-accent-cyan` (≥5.1:1 sobre panel oscuro en 21/21) o al token de texto claro.
+- **Leyenda del polaroid**: la tinta marrón sobre papel marfil (4.2:1, correcta) solo se mantiene cuando la escena conserva ese papel (forma `cozy_polaroid` u original); con otras formas pasa a texto claro para no quedar marrón sobre panel oscuro.
+- **Lista de ajuste fino pendiente** (documentada en `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectores entre 2.0:1 y 4.3:1 (tagline en algunas escenas y un par de etiquetas con estilo en línea) que dependen de decisiones de diseño por escena.
+
 ## [1.0.1-alpha] — 2026-10-23
 
 ### Corregido — Auditoría Arquitectónica y Correcciones Críticas
