@@ -72,7 +72,7 @@ Opening the launcher displays the dark-themed control dashboard with 4 tabs:
 
 ```text
 ┌───────────────────────────────────────────────────────────┐
-│ OPEN STREAM SUITE  v1.0.1-alpha                 🌐 [en ▼] │
+│ OPEN STREAM SUITE  v1.0.2-alpha                 🌐 [en ▼] │
 ├───────────────────────────────────────────────────────────┤
 │ [🚀 Server]  [🟣 Twitch]  [📖 Guide]  [📜 Logs]           │
 │                                                           │
