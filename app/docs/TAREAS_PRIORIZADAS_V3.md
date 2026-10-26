@@ -101,19 +101,39 @@
   **3 GET → 0 recompilaciones**, hash y `mtime` de `common/themes.css` intactos
   (antes: 3 recompilaciones); recompilar sigue siendo determinista.
 
-### T3.06 — Fugas de error en respuestas 500 (V3-05) [ ]
+### T3.06 — Fugas de error en respuestas 500 (V3-05) [HECHO]
 
-- **Archivos:** rutas que devuelven `str(e)` (revisar `themes_routes.py`,
-  `webhooks_routes.py`, `rewards_routes.py`, `deck_routes.py`).
-- **Criterio:** log interno + `{"error": "..."} `genérico; solo se mantienen los
-  mensajes de validación controlados (400).
+- **Archivos:** `server/routes/errors.py` (nuevo), `fusions_routes.py`,
+  `rewards_routes.py`, `webhooks_routes.py`, `themes_routes.py`,
+  `tests/test_error_disclosure_contract.py` (nuevo).
+- **Problema:** **12 respuestas 500** devolvían `str(e)` (fusions ×4, rewards ×3,
+  webhooks ×4, themes ×1). En los webhooks públicos el mensaje es visible fuera
+  de la máquina, así que filtraba trazas de aiohttp/Twitch y rutas de disco.
+- **Arreglo:** helper único `internal_error_response()` / `internal_error_text()`
+  (log interno con `logger.exception` + mensaje genérico
+  “Error interno del servidor”, conservando `status: "error"` donde el panel lo
+  consume). La lectura de recompensas sin Twitch también pasa a mensaje genérico.
+- **Verificación:** `test_error_disclosure_contract.py` 3/3 OK (ninguna línea
+  `status=500` con `str(e)` ni `f"Error: {e}"`, helper presente y usado en las 4
+  rutas) + prueba de runtime: excepción interna → 500 con mensaje genérico y **sin**
+  el texto de la excepción en el cuerpo.
 
-### T3.07 — JSON malformado devuelve 500 (V3-08) [ ]
+### T3.07 — JSON malformado devuelve 500 (V3-08) [HECHO]
 
-- **Archivos:** `server/routes/rewards_routes.py:53,161`,
-  `server/routes/webhooks_routes.py:209-211`.
-- **Criterio:** `await request.json()` envuelto en `try`; `tips/simulate` con
-  cuerpo inválido → 400 genérico.
+- **Archivos:** `rewards_routes.py`, `webhooks_routes.py`, `errors.py`,
+  `tests/test_json_payload_errors.py` (nuevo).
+- **Problema:** `await request.json()` sin protección en recompensas (crear/
+  actualizar/borrar) y en los webhooks de Ko-fi/BMC/PayPal, y `webhooks/tip`
+  convertía cualquier fallo en 500 con `str(e)`.
+- **Arreglo:** lectura protegida → **400 “Payload JSON inválido”** (y cuerpo no
+  diccionario → 400), `cost` de recompensa validado (no numérico o `< 1` → 400) y
+  el resto de fallos → 500 genérico. Se conservan los patrones **tolerantes
+  legítimos** de los endpoints de decks/updates (fallback a query params o
+  `body = {}`), que el test AST distingue explícitamente.
+- **Verificación:** `test_json_payload_errors.py` 6/6 OK (400 en `/api/fusions`,
+  `/api/twitch/rewards/create`, `/api/twitch/rewards/delete` y `/api/tips/simulate`;
+  `cost` no numérico → 400; error interno → 500 sin filtrar). Nueva regla AST en el
+  contrato de errores: ninguna lectura de `request.json()` puede acabar en 500.
 
 ## P2 — Limpieza
 

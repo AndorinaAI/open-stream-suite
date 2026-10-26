@@ -8,6 +8,12 @@ import json
 import time
 from aiohttp import web
 from server.config import logger, DONATIONS_CONFIG_FILE
+from server.routes.errors import (
+    INVALID_JSON_MESSAGE,
+    internal_error_response,
+    internal_error_text,
+    invalid_json_response,
+)
 from server.security import is_local_request
 from server.services.donations_service import (
     recent_tips,
@@ -51,9 +57,16 @@ async def handle_kofi_webhook(request):
             post_data = await request.post()
             raw_data = post_data.get("data")
             if raw_data:
-                data_json = json.loads(raw_data)
+                try:
+                    data_json = json.loads(raw_data)
+                except ValueError:
+                    return web.Response(text=INVALID_JSON_MESSAGE, status=400)
         elif request.content_type == "application/json":
-            data_json = await request.json()
+            # V3-08: cuerpo malformado → 400, no 500 genérico.
+            try:
+                data_json = await request.json()
+            except Exception:
+                return web.Response(text=INVALID_JSON_MESSAGE, status=400)
 
         if not data_json:
             return web.Response(text="No data received", status=400)
@@ -86,8 +99,7 @@ async def handle_kofi_webhook(request):
         return web.Response(text="OK", status=200)
 
     except Exception as e:
-        logger.error(f"Error procesando webhook de Ko-fi: {e}")
-        return web.Response(text=f"Error: {e}", status=500)
+        return internal_error_text("procesando el webhook de Ko-fi", e)
 
 
 async def handle_bmc_webhook(request):
@@ -95,8 +107,15 @@ async def handle_bmc_webhook(request):
     Webhook oficial para Buy Me a Coffee (BMC).
     BMC envía un JSON con los detalles del supporter.
     """
+    # V3-08: cuerpo malformado → 400 propio (antes acababa en el 500 genérico).
     try:
         data = await request.json()
+    except Exception:
+        return web.json_response({"status": "error", "error": INVALID_JSON_MESSAGE}, status=400)
+    if not isinstance(data, dict):
+        return web.json_response({"status": "error", "error": INVALID_JSON_MESSAGE}, status=400)
+
+    try:
         if not _public_webhook_authorized(request, "bmc", request.query.get("secret", "")):
             return web.json_response({"status": "error", "error": "Forbidden"}, status=403)
         response_obj = data.get("response", data)
@@ -126,8 +145,7 @@ async def handle_bmc_webhook(request):
         return web.json_response({"status": "ok"})
 
     except Exception as e:
-        logger.error(f"Error procesando webhook de BuyMeACoffee: {e}")
-        return web.json_response({"status": "error", "error": str(e)}, status=500)
+        return internal_error_response("procesando el webhook de BuyMeACoffee", e, with_status_key=True)
 
 
 async def handle_paypal_webhook(request):
@@ -139,7 +157,11 @@ async def handle_paypal_webhook(request):
         if not _public_webhook_authorized(request, "paypal", request.query.get("secret", "")):
             return web.Response(text="Forbidden", status=403)
         if request.content_type == "application/json":
-            data = await request.json()
+            # V3-08: cuerpo malformado → 400, no 500 genérico.
+            try:
+                data = await request.json()
+            except Exception:
+                return web.Response(text=INVALID_JSON_MESSAGE, status=400)
             resource = data.get("resource", {})
             user = (resource.get("payer", {}).get("name", {}).get("given_name") or 
                     resource.get("payer", {}).get("email_address") or "Donante PayPal")
@@ -172,8 +194,7 @@ async def handle_paypal_webhook(request):
         return web.Response(text="OK", status=200)
 
     except Exception as e:
-        logger.error(f"Error procesando webhook de PayPal: {e}")
-        return web.Response(text=f"Error: {e}", status=500)
+        return internal_error_text("procesando el webhook de PayPal", e)
 
 
 async def handle_tip_simulate(request):
@@ -181,8 +202,15 @@ async def handle_tip_simulate(request):
     Endpoint para registrar manualmente o simular donaciones de prueba
     desde el panel de control o Stream Deck.
     """
+    # V3-08: JSON inválido → 400 controlado (antes caía en el 500 genérico).
     try:
         data = await request.json()
+    except Exception:
+        return invalid_json_response(with_status_key=True)
+    if not isinstance(data, dict):
+        return invalid_json_response(with_status_key=True)
+
+    try:
         platform = data.get("platform", "kofi")
         user = data.get("user", "Donante Maker")
         amount = str(data.get("amount", "5.00"))
@@ -207,8 +235,7 @@ async def handle_tip_simulate(request):
         return web.json_response({"status": "ok", "payload": payload, "recent_tips": recent_tips[:10]})
 
     except Exception as e:
-        logger.error(f"Error simulando donación: {e}")
-        return web.json_response({"status": "error", "error": str(e)}, status=500)
+        return internal_error_response("simulando donación", e, with_status_key=True)
 
 
 async def handle_get_recent_tips(request):

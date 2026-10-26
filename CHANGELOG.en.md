@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Fixed — No internal detail leaks and malformed JSON handling (V3-05, V3-08)
+
+- **V3-05 (no leaking internals)**: new `server/routes/errors.py` module with `internal_error_response()` / `internal_error_text()` / `invalid_json_response()`. The **12 500 responses** that returned `str(e)` (fusions ×4, rewards ×3, webhooks ×4, themes ×1) now log the detail internally and reply **"Error interno del servidor"**; for public webhooks the message no longer leaves the machine. The rewards query without Twitch also returns a generic message.
+- **V3-08 (bad payload)**: `await request.json()` is now guarded in rewards (create/update/delete), tip simulation and the Ko-fi/BMC/PayPal webhooks → **400 "Payload JSON inválido"** instead of 500; a reward `cost` is validated (non-numeric or `< 1` → 400). The legitimate **tolerant** patterns of the deck and update endpoints (query-param fallback) are kept and explicitly distinguished by the test.
+- **Regression**: new `tests/test_error_disclosure_contract.py` (3 tests, including an **AST** analysis requiring that no `request.json()` read can end in a 500) and `tests/test_json_payload_errors.py` (6 runtime tests). Full battery: **20 suites green**.
+
 ### Fixed — Component accessibility and read-only theme catalog (V3-02, V3-04)
 
 - **V3-02 (accessibility)**: each component's three `<select>`s (theme, shape and fusion) now carry an `aria-label` with the component name, so do the Apply/Reset/➕ buttons, and a visible **column header** row was added (Component · Theme · Shape · Apply · Reset · Fusion) with the new `widgets.col_*` i18n keys in ES and EN.
