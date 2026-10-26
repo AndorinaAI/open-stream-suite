@@ -26,8 +26,9 @@ def build_server_tab(gui):
     )
     gui.lbl_server_badge.pack(side="right")
 
+    server_base = getattr(getattr(gui, "server_ctl", None), "base_url", "http://127.0.0.1:8080")
     gui.lbl_server_info = tk.Label(
-        card, text=_("server.address_info", "http://127.0.0.1:8080 · WebSocket listo para OBS"),
+        card, text=f"{server_base} · WebSocket listo para OBS",
         font=("Helvetica", 11), fg=C_TEXT, bg=C_PANEL, anchor="w"
     )
     gui.lbl_server_info.pack(fill="x", pady=(10, 4))

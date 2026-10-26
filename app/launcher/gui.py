@@ -457,7 +457,8 @@ class LauncherGUI:
         if hasattr(self, "lbl_server_title"):
             self.lbl_server_title.configure(text=_("server.status_title", "ESTADO DEL SERVIDOR"))
         if hasattr(self, "lbl_server_info"):
-            self.lbl_server_info.configure(text=_("server.address_info", "http://127.0.0.1:8080 · WebSocket listo para OBS"))
+            base = getattr(getattr(self, "server_ctl", None), "base_url", "http://127.0.0.1:8080")
+            self.lbl_server_info.configure(text=f"{base} · WebSocket listo para OBS")
         if hasattr(self, "lbl_opts_title"):
             self.lbl_opts_title.configure(text=_("server.options_title", "OPCIONES DE ARRANQUE"))
         if hasattr(self, "cb_browser"):
