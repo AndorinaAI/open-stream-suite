@@ -8,6 +8,12 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Corregido — Errores internos sin filtrar y JSON malformado (V3-05, V3-08)
+
+- **V3-05 (sin filtrar detalles internos)**: nuevo módulo `server/routes/errors.py` con `internal_error_response()` / `internal_error_text()` / `invalid_json_response()`. Las **12 respuestas 500** que devolvían `str(e)` (fusions ×4, rewards ×3, webhooks ×4, themes ×1) registran ahora el detalle en el log y responden **“Error interno del servidor”**; en los webhooks públicos el mensaje ya no sale de la máquina. La consulta de recompensas sin Twitch también devuelve un mensaje genérico.
+- **V3-08 (payload inválido)**: `await request.json()` protegido en recompensas (crear/actualizar/borrar), simulación de donaciones y webhooks de Ko-fi/BMC/PayPal → **400 “Payload JSON inválido”** en lugar de 500; el `cost` de una recompensa se valida (no numérico o `< 1` → 400). Se mantienen los patrones **tolerantes** legítimos de los endpoints de decks y updates (fallback a query params), que el test distingue explícitamente.
+- **Regresión**: nuevas suites `tests/test_error_disclosure_contract.py` (3 tests, con análisis **AST** que exige que ninguna lectura de `request.json()` pueda acabar en 500) y `tests/test_json_payload_errors.py` (6 tests de runtime). Batería completa: **20 suites en verde**.
+
 ### Corregido — Accesibilidad de componentes y catálogo de temas de solo lectura (V3-02, V3-04)
 
 - **V3-02 (accesibilidad)**: los tres `<select>` de cada componente (tema, forma y fusión) llevan `aria-label` con el nombre del componente, los botones Aplicar/Reset/➕ también, y se añade una **cabecera de columnas** visible (Componente · Tema · Forma · Aplicar · Reset · Fusión) con las nuevas claves i18n `widgets.col_*` en ES y EN.

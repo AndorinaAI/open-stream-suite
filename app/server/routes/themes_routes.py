@@ -4,6 +4,7 @@ Controladores que gestionan packs de temas, guardado, aplicación y anclaje de c
 """
 
 from aiohttp import web
+from server.routes.errors import internal_error_response
 from server.services.theme_defaults import (
     DEFAULT_PACK_TALLER,
     DEFAULT_THEMES_DATA,
@@ -254,4 +255,4 @@ async def handle_reset_assignment(request):
     except ValueError as e:
         return web.json_response({"error": str(e)}, status=400)
     except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+        return internal_error_response("reiniciando la asignación de la overlay", e)

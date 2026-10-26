@@ -4,6 +4,7 @@ Controladores REST para crear, listar, modificar, eliminar y aplicar estilos en 
 """
 
 from aiohttp import web
+from server.routes.errors import internal_error_response
 from server.services.fusions_service import (
     reset_fusion_batch,
     load_fusions,
@@ -43,7 +44,7 @@ async def handle_save_fusion(request):
     except ValueError as e:
         return web.json_response({"error": str(e)}, status=400)
     except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+        return internal_error_response("guardando la fusión", e)
 
 
 async def handle_delete_fusion(request):
@@ -89,7 +90,7 @@ async def handle_apply_fusion_theme(request):
     except ValueError as e:
         return web.json_response({"error": str(e)}, status=_value_error_status(e, fusion_id))
     except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+        return internal_error_response("aplicando tema a la fusión", e)
 
 
 async def handle_apply_fusion_shape(request):
@@ -108,7 +109,7 @@ async def handle_apply_fusion_shape(request):
     except ValueError as e:
         return web.json_response({"error": str(e)}, status=_value_error_status(e, fusion_id))
     except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+        return internal_error_response("aplicando forma a la fusión", e)
 
 
 def register_fusions_routes(app):
@@ -131,4 +132,4 @@ async def handle_reset_fusion(request):
     except ValueError as e:
         return web.json_response({"error": str(e)}, status=_value_error_status(e, fusion_id))
     except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+        return internal_error_response("reiniciando la fusión", e)
