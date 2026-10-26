@@ -134,7 +134,12 @@ Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widget
 - **Actualizador Resiliente (Git Reset & Config Preservation)**: Reescrito `apply_update()` en `updater.py` para respaldar y fusionar automáticamente configuraciones de usuario (`themes_state.json`, `fusions.json`, textos, widgets) y realizar una sincronización limpia con Git sin colisiones por archivos modificados o sin seguimiento.
 - **Soporte Python 3.12**: Reemplazado `datetime.utcnow()` por `datetime.now(timezone.utc)`.
 
+### Licencia
+- Esta versión se publicó bajo **CC BY-NC-SA 4.0**; **relicenciada el 2026-10-26** a **AGPL-3.0-or-later** + licencia comercial (ver `NOTICE.md`).
+
 ## [1.0.0-alpha] — 2026-10-21
+
+Primera versión alpha pública (cerrada internamente el 2026-10-20).
 
 ### Cambiado — Refactorización Completa y Modularización por Dominios
 - **Backend Modular (`app/server/`)**: Rutas desacopladas en `server/routes/` y lógica de negocio en `server/services/`, con shims transparentes de compatibilidad hacia atrás en `server/*.py`.
@@ -153,10 +158,6 @@ Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widget
 - Lanzador de escritorio: guía de inicio, diálogos y mensajes de estado conectados al diccionario (`languages/es.json` / `languages/en.json`), con refresco al cambiar de idioma en caliente.
 - Diccionario de traducción del panel ampliado de 378 a más de 1.650 pares español→inglés, verificado contra el DOM real (panel, mini-apps, modales, desplegables, toasts y diálogos).
 - Los textos propios del usuario (títulos de triggers, descripciones de temas guardadas, presets) se respetan sin traducir: solo se traduce la interfaz.
-
-## [1.0.0-alpha] — 2026-10-20
-
-Primera versión alpha pública.
 
 ### Incluye
 - Overlays y escenas para OBS Studio con temas modulares y packs (restauración de fábrica por tema).
@@ -177,4 +178,4 @@ Primera versión alpha pública.
 
 ### Limitaciones conocidas
 - Probado en Linux. Windows y macOS son **experimentales** (desarrollo según feedback comunitario).
-- La licencia (CC BY-NC-SA 4.0) restringe el uso comercial y exige reciprocidad (ShareAlike); aplica con carácter retroactivo.
+- La licencia con la que se publicó esta versión fue **CC BY-NC-SA 4.0** (uso no comercial y reciprocidad ShareAlike). **Relicenciada el 2026-10-26**: el proyecto completo —todas las versiones y la totalidad del historial— pasa a **AGPL-3.0-or-later** + licencia comercial; ver `NOTICE.md`.

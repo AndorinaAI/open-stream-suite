@@ -4,13 +4,14 @@ Este proyecto incluye recursos y dependencias de terceros. **No están cubiertos
 por la licencia del Proyecto** (AGPL-3.0-or-later) ni por su licencia comercial:
 mantienen sus propias condiciones, que se reproducen o referencian aquí.
 
-## 0. Licencia del proyecto y copyright
+## 0. Licencia, copyright y relicencia
 
-- **Copyright (C) 2026 Jorge García Formoso** — titular de los derechos de explotación.
-- **Licencia pública:** **GNU AGPL v3.0 o posterior** — el fichero `LICENSE` contiene el **texto canónico íntegro e inalterado**, para que lo reconozcan el detector de licencias de GitHub y los escáneres SPDX (`SPDX-License-Identifier: AGPL-3.0-or-later`).
+- **Copyright (C) 2026 Jorge García Formoso** — titular único de los derechos de explotación.
+- **Licencia pública vigente:** **GNU AGPL v3.0 o posterior** — el fichero `LICENSE` contiene el **texto canónico íntegro e inalterado**, para que lo reconozcan el detector de licencias de GitHub y los escáneres SPDX (`SPDX-License-Identifier: AGPL-3.0-or-later`).
+- **Alcance de la relicencia (2026-10-26):** al ser el titular único del copyright, la licencia AGPL/comercial **cubre todo el contenido del repositorio, todas las versiones publicadas y la totalidad del historial**, con independencia de la licencia indicada en commits, ficheros o etiquetas anteriores.
+- **Copias anteriores ya entregadas:** las copias de versiones anteriores al 2026-10-26 que ya estuvieran en manos de terceros conservan los términos con los que se entregaron (**CC BY-NC-SA 4.0**); **cualquier uso o redistribución nuevo**, de esa o de cualquier otra versión, se rige ya por la AGPL-3.0-or-later o por la licencia comercial.
 - **Licencia comercial (excepción):** el titular puede conceder una licencia comercial separada que exime de las obligaciones de la AGPL (integración o embebido sin publicar el código derivado, marca blanca, redistribución, soporte). **No se concede automáticamente**: ver `LICENSE-COMMERCIAL.md` y **admin@andorina.dev**.
-- **Nota histórica:** las versiones publicadas **antes del 2026-10-26** se distribuyeron bajo **CC BY-NC-SA 4.0**. Las copias ya entregadas a terceros conservan esos términos; las versiones nuevas se rigen por la AGPL-3.0-or-later.
-- Este fichero es el lugar donde viven el aviso de copyright y las condiciones adicionales; `LICENSE` se reserva al texto canónico de la licencia.
+- Este fichero es donde viven el aviso de copyright, el alcance de la relicencia y las condiciones adicionales; `LICENSE` se reserva al texto canónico de la licencia.
 
 ---
 
