@@ -6,7 +6,14 @@
 
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
-## [1.0.1-alpha] — 2026-10-23
+## [1.0.2-alpha] — 2026-10-26
+
+Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widgets y alertas, integración nativa de temas, licencia dual AGPL/comercial, arranque sin CDN de Google Fonts e i18n al día. Detalle de los hallazgos cerrados: `app/docs/AUDITORIA_WEBAPP_V3.md` y `app/docs/TAREAS_PRIORIZADAS_V3.md`.
+
+### Corregido — Escenas en inglés (`?lang=`)
+
+- El parámetro `?lang=en` de una escena ya llega de verdad a los textos: `common/overlay.js` pide `/api/overlays/texts?lang=…` (antes lo pedía sin idioma, así que la escena seguía en español) y toma el idioma de `?lang=` o del elegido en el panel (`oss-lang`). Un evento `overlay_texts_update` en vivo ya no revierte una escena en inglés (vuelve a pedir sus textos en su idioma).
+- **Regresión**: nueva suite `tests/test_overlay_lang_param.py` (4 tests: ES/EN por API, idioma desconocido → por defecto, y contrato del cliente).
 
 ### Limpieza — Referencia muerta del panel (V3-07)
 
@@ -103,6 +110,8 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 - **Alertas de panel**: el overlay aplica `?theme=`/`theme_change`; banners y `.alert-box` heredan `--color-accent-cyan`, `--color-panel-bg`, `--color-text-light` de forma nativa.
 - **Convenciones** documentadas (ES/EN) para que nuevos widgets y alertas se integren sin conocer los existentes.
 - **Tests** de contrato nativo: `tests/test_native_theming_contract.py` (12 pruebas; incluye verificación de que el CSS/JS base no cambió).
+
+## [1.0.1-alpha] — 2026-10-23
 
 ### Corregido — Auditoría Arquitectónica y Correcciones Críticas
 - **WebSocket del Servidor (NameError)**: Solucionado error crítico por variable `data` no inicializada en `app/server/routes/ws_routes.py`. Los mensajes recibidos vía WebSocket ahora se parsean de forma segura sin romper la conexión.

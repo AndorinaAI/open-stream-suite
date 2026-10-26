@@ -6,7 +6,14 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.1-alpha] — 2026-10-23
+## [1.0.2-alpha] — 2026-10-26
+
+Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, native theme integration, dual AGPL/commercial licence, no Google Fonts CDN dependency and up-to-date i18n. Closed findings: `app/docs/AUDITORIA_WEBAPP_V3.md` and `app/docs/TAREAS_PRIORIZADAS_V3.md`.
+
+### Fixed — English scenes (`?lang=`)
+
+- A scene's `?lang=en` parameter now really reaches the texts: `common/overlay.js` requests `/api/overlays/texts?lang=…` (it used to request it without a language, so the scene stayed in Spanish) and takes the language from `?lang=` or from the one selected in the panel (`oss-lang`). A live `overlay_texts_update` event no longer reverts an English scene (it re-fetches its own language).
+- **Regression**: new `tests/test_overlay_lang_param.py` suite (4 tests: ES/EN over the API, unknown language → default, and the client contract).
 
 ### Cleanup — Dead panel reference (V3-07)
 
@@ -103,6 +110,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 - **Panel-based alerts**: the overlay applies `?theme=`/`theme_change`; banners and `.alert-box` natively inherit `--color-accent-cyan`, `--color-panel-bg`, `--color-text-light`.
 - **Conventions** documented (ES/EN) so new widgets and alerts integrate without knowing the existing ones.
 - **Native contract tests**: `tests/test_native_theming_contract.py` (12 tests; includes proof the base CSS/JS is unchanged).
+
+## [1.0.1-alpha] — 2026-10-23
 
 ### Fixed — Architectural Audit and Critical Fixes
 - **Server WebSocket (NameError)**: Resolved critical error caused by uninitialized `data` variable in `app/server/routes/ws_routes.py`. Incoming WebSocket text messages are now safely parsed without breaking the connection.
