@@ -5,10 +5,10 @@
 }
 
 :root {
-  --tk-accent: #57D6C4;
+  --tk-accent: var(--color-accent-cyan, #57D6C4);
   --tk-bg: rgba(25, 29, 33, 0.92);
-  --tk-bg-gradient: #0B0D0F;
-  --tk-border: #57D6C4;
+  --tk-bg-gradient: var(--color-bg-dark, #0B0D0F);
+  --tk-border: var(--color-accent-cyan, #57D6C4);
   --tk-glow: 35px;
   --tk-speed: 45s;
   --tk-font: 'Rajdhani', sans-serif;
@@ -28,7 +28,7 @@
   --tk-top-glow: 15px;
   --tk-top-font-size: 12px;
   --tk-top-spacing: 8px;
-  --tk-goal: #57D6C4;
+  --tk-goal: var(--color-accent-cyan, #57D6C4);
   --tk-viewers: #38BDF8;
   --tk-chat: #E2E8F0;
 }
@@ -166,14 +166,14 @@ html, body {
 }
 
 .metric-chip-label {
-  color: #8B969C;
+  color: var(--color-text-dim, #8B969C);
   text-transform: uppercase;
   font-size: calc(var(--tk-top-font-size, var(--tk-font-size)) - 2px);
   font-weight: 700;
 }
 
 .metric-chip-value {
-  color: #F2EEE5;
+  color: var(--color-text-light, #F2EEE5);
   font-weight: 800;
 }
 
@@ -352,7 +352,7 @@ html, body {
 }
 
 .prompter-text {
-  color: #F2EEE5;
+  color: var(--color-text-light, #F2EEE5);
   font-weight: 700;
 }
 
@@ -458,4 +458,14 @@ body.is-preview .metric-chip {
 body.is-preview .ticker-bottom-tier {
   width: 100%;
   max-width: 100%;
+}
+
+/* ===== Capa nativa de temas de pack (OSS) =====
+   Solo actúa cuando el widget recibe data-theme desde el panel;
+   sin data-theme el aspecto por defecto queda intacto. */
+body[data-theme] {
+  --tk-accent: var(--color-accent-cyan, #57D6C4);
+  --tk-border: var(--color-accent-cyan, #57D6C4);
+  --tk-bg: var(--color-panel-bg, rgba(25, 29, 33, 0.92));
+  --tk-bg-gradient: var(--color-bg-dark, #0B0D0F);
 }

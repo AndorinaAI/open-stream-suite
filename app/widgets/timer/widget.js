@@ -1,6 +1,8 @@
 // widgets/timer/widget.js — Coordinador y punto de entrada modular del temporizador
 
 (function() {
+
+  window.OSSTheme.init('timer');
   async function init() {
     if (window.TimerNetwork && window.TimerRenderer) {
       await window.TimerNetwork.fetchInitialConfig();

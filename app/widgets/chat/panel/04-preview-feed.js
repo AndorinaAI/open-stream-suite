@@ -77,29 +77,38 @@ async function refreshChatLiveFeed() {
     }
 
     container.innerHTML = '';
-    // Mostrar del más reciente al más antiguo
+    // Mostrar del más reciente al más antiguo, sin interpolar texto en HTML.
     const reversed = [...messages].reverse();
     reversed.forEach(m => {
       const row = document.createElement('div');
       row.className = 'chat-feed-row';
-      const userColor = m.color || '#57D6C4';
-      const safeUser = (m.user || 'Viewer').replace(/"/g, '&quot;');
-      const safeMsg = (m.message || '').replace(/"/g, '&quot;');
 
-      row.innerHTML = `
-        <div class="chat-feed-user" style="color: ${userColor}; min-width: 120px;">
-          <span>👤</span>
-          <span>${m.user}</span>
-        </div>
-        <div class="chat-feed-text" title="${safeMsg}">
-          ${m.message}
-        </div>
-        <button type="button" class="btn-action-primary" style="white-space: nowrap; font-size: 10px; padding: 3px 8px;" onclick="triggerSpotlightFromFeed('${safeUser}', '${safeMsg}', '${userColor}')">
-          📌 Destacar
-        </button>
-      `;
+      const userBox = document.createElement('div');
+      userBox.className = 'chat-feed-user';
+      userBox.style.color = m.color || '#57D6C4';
+      userBox.style.minWidth = '120px';
+      const icon = document.createElement('span');
+      icon.textContent = '👤';
+      const userName = document.createElement('span');
+      userName.textContent = m.user || 'Viewer';
+      userBox.append(icon, userName);
+
+      const textBox = document.createElement('div');
+      textBox.className = 'chat-feed-text';
+      textBox.title = m.message || '';
+      textBox.textContent = m.message || '';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn-action-primary';
+      button.style.cssText = 'white-space: nowrap; font-size: 10px; padding: 3px 8px;';
+      button.textContent = '📌 Destacar';
+      button.addEventListener('click', () => triggerSpotlightFromFeed(m.user || 'Viewer', m.message || '', m.color || '#57D6C4'));
+
+      row.append(userBox, textBox, button);
       container.appendChild(row);
     });
+
   } catch (err) {
     container.innerHTML = '<div style="font-size: 11px; color: #EF4444; padding: 8px;">Error al cargar mensajes del feed.</div>';
   }
@@ -112,17 +121,26 @@ async function triggerSpotlightFromFeed(user, message, color) {
   }
   const banner = document.getElementById('spotlight-active-banner');
   if (banner) {
+    banner.replaceChildren();
     banner.style.background = 'rgba(87,214,196,0.12)';
     banner.style.borderColor = 'var(--color-accent-cyan)';
-    banner.innerHTML = `
-      <div>
-        <span style="font-size: 11px; font-weight: 700; color: #57D6C4; font-family: var(--font-tech);">
-          🟢 DESTACADO EN OBS AHORA MISMO:
-        </span>
-        <div style="font-size: 13px; color: #fff; margin-top: 2px;"><strong>${user}:</strong> "${message}"</div>
-      </div>
-      <button type="button" class="btn-stage-preset" style="color: #EF4444; border-color: #EF4444; font-size: 11px; padding: 4px 10px;" onclick="triggerSpotlightAction(false)">✕ Quitar de Pantalla</button>
-    `;
+    const info = document.createElement('div');
+    const label = document.createElement('span');
+    label.style.cssText = 'font-size: 11px; font-weight: 700; color: #57D6C4; font-family: var(--font-tech);';
+    label.textContent = '🟢 DESTACADO EN OBS AHORA MISMO:';
+    const line = document.createElement('div');
+    line.style.cssText = 'font-size: 13px; color: #fff; margin-top: 2px;';
+    const strong = document.createElement('strong');
+    strong.textContent = `${user}:`;
+    line.append(strong, document.createTextNode(` "${message}"`));
+    info.append(label, line);
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'btn-stage-preset';
+    remove.style.cssText = 'color: #EF4444; border-color: #EF4444; font-size: 11px; padding: 4px 10px;';
+    remove.textContent = '✕ Quitar de Pantalla';
+    remove.addEventListener('click', () => triggerSpotlightAction(false));
+    banner.append(info, remove);
   }
 }
 

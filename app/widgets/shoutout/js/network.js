@@ -7,18 +7,26 @@ window.ShoutoutNetwork = {
   ws: null,
 
   connectWS() {
-    const wsUrl = `ws://${window.location.hostname || 'localhost'}:8080/ws`;
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
     this.ws = new WebSocket(wsUrl);
 
     this.ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+
+        // Tema nativo de packs
+        if ((data.type === 'theme_change' && data.theme) || (data.type === 'widget_theme_change' && (!data.id || data.id === window.OSS_WIDGET_ID))) {
+          window.OSSTheme.handleMessage(data);
+          return;
+        }
         if (data.type === 'shoutout') {
           if (window.ShoutoutRenderer) {
             window.ShoutoutRenderer.showShoutout(data);
           }
-        } else if (data.type === 'theme_change' && data.theme) {
-          document.body.setAttribute('data-theme', data.theme);
+        } else if ((data.type === 'theme_change' && data.theme) || (data.type === 'widget_theme_change' && (!data.id || data.id === window.OSS_WIDGET_ID))) {
+          window.OSSTheme.handleMessage(data);
+          return;
         }
       } catch (e) {}
     };

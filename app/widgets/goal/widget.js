@@ -1,6 +1,8 @@
 // widgets/goal/widget.js - Coordinador y punto de entrada del widget Goal
 
 (function() {
+
+  window.OSSTheme.init('goal');
   function init() {
     if (window.GoalConfetti) window.GoalConfetti.init();
     if (window.GoalNetwork) {

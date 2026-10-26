@@ -4,7 +4,8 @@
 
 window.TimerNetwork = (function() {
   function connectWS() {
-    const wsUrl = `ws://${window.location.hostname || 'localhost'}:8080/ws`;
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
     let ws;
     try {
       ws = new WebSocket(wsUrl);
@@ -41,8 +42,9 @@ window.TimerNetwork = (function() {
           }
         } else if (data.type === 'timer_config' && data.config) {
           R.applyTimerConfig(data.config);
-        } else if (data.type === 'theme_change' && data.theme) {
-          document.body.setAttribute('data-theme', data.theme);
+        } else if ((data.type === 'theme_change' && data.theme) || (data.type === 'widget_theme_change' && (!data.id || data.id === window.OSS_WIDGET_ID))) {
+          window.OSSTheme.handleMessage(data);
+          return;
         }
       } catch (e) {}
     };
