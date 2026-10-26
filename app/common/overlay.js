@@ -322,49 +322,71 @@
       };
     }
 
+    /**
+     * Escribe un rótulo solo si el texto cabe en su contenedor.
+     *
+     * Los rótulos de ventana (cabeceras de panel, badges, subtítulos) tienen ancho
+     * fijo con `overflow: hidden`, así que sustituir un texto corto por otro largo
+     * (p.ej. 'CAM 01 // OVERVIEW' -> 'CÁMARA CENITAL · BANCO DE TRABAJO') dejaba el
+     * título CORTADO. Si el texto nuevo desborda, se conserva el original.
+     */
+    function setFittedText(el, text) {
+      if (!el || !text) return false;
+      const original = el.textContent;
+      if (original === text) return true;
+      el.textContent = text;
+      const fits = el.scrollWidth <= el.clientWidth + 1 || el.clientWidth === 0;
+      if (!fits) {
+        el.textContent = original;
+        return false;
+      }
+      return true;
+    }
+
     function adaptAtmosphereForArchetype(arch, effectiveShape) {
       if (!arch) return;
       tagSemanticElements();
       const modeBadge = document.querySelector('.mode-badge span:last-child, .live-match-chip, .live-badge');
       const headerSub = document.querySelector('.header-subtitle, .track-author, .episode-tag');
       const mainCamLabel = document.querySelector('.camera-main .frame-label span:last-child, .cam-label');
-      
+
       if (arch === 'cozy') {
         if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('GAMER') || modeBadge.textContent.includes('MODE') || modeBadge.textContent.includes('LIVE'))) {
-          modeBadge.textContent = 'COZY CHILL';
+          setFittedText(modeBadge, 'COZY CHILL');
         }
         if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('ELECTRÓNICA') || headerSub.textContent.includes('MATCH') || headerSub.textContent.includes('COMPETITIVE'))) {
-          headerSub.textContent = 'Música Lo-Fi · Charla Relajada · Café';
+          setFittedText(headerSub, 'Música Lo-Fi · Charla Relajada · Café');
         }
         if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('OVERVIEW') || mainCamLabel.textContent.includes('RUNNER'))) {
-          mainCamLabel.textContent = 'Cámara Principal';
+          setFittedText(mainCamLabel, 'Cámara Principal');
         }
       } else if (arch === 'gamer') {
         if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL'))) {
-          modeBadge.textContent = 'ESPORTS HUD';
+          setFittedText(modeBadge, 'ESPORTS HUD');
         }
         if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('Música') || headerSub.textContent.includes('Café'))) {
-          headerSub.textContent = 'LIVE MATCH // COMPETITIVE TOURNAMENT';
+          setFittedText(headerSub, 'LIVE MATCH // COMPETITIVE TOURNAMENT');
         }
         if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('Principal'))) {
-          mainCamLabel.textContent = 'CAM 01 // OVERVIEW';
+          setFittedText(mainCamLabel, 'CAM 01 // OVERVIEW');
         }
       } else if (arch === 'maker') {
         if (modeBadge && (modeBadge.textContent.includes('ESPORTS') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL') || modeBadge.textContent.includes('HUD'))) {
-          modeBadge.textContent = 'MAKER MODE';
+          setFittedText(modeBadge, 'MAKER MODE');
         }
         if (headerSub && (headerSub.textContent.includes('LIVE MATCH') || headerSub.textContent.includes('Música') || headerSub.textContent.includes('Café'))) {
-          headerSub.textContent = 'RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN';
+          setFittedText(headerSub, 'RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN');
         }
         if (mainCamLabel && (mainCamLabel.textContent.includes('OVERVIEW') || mainCamLabel.textContent.includes('Principal'))) {
-          mainCamLabel.textContent = 'CÁMARA CENITAL · BANCO DE TRABAJO';
+          setFittedText(mainCamLabel, 'CÁMARA CENITAL · BANCO DE TRABAJO');
         }
       } else if (arch === 'openstream') {
         if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('ESPORTS'))) {
-          modeBadge.textContent = 'BROADCAST';
+          setFittedText(modeBadge, 'BROADCAST');
         }
       }
     }
+    window.setFittedText = setFittedText;
 
     function applyActiveShapeToBody(shapeName) {
       if (typeof updateOverlayThemeAndShape === 'function') {
@@ -402,9 +424,19 @@
     // lock=1 o lockTheme=1 congela la escena permanentemente a lo que diga la URL
     const isLocked = urlParams.get('lock') === '1' || urlParams.get('lockTheme') === '1';
 
+    const explicitThemes = config.overlayThemeExplicit || {};
+    let hasExplicitTheme = !!(currentSceneKey && explicitThemes[currentSceneKey]);
+    let activeGlobalTheme = config.globalThemeActive ? (config.activeTheme || null) : null;
     let activeTheme = rawUrlTheme;
-    if (!activeTheme && config.overlayThemes && currentSceneKey && config.overlayThemes[currentSceneKey]) {
-      activeTheme = config.overlayThemes[currentSceneKey];
+    if (!activeTheme && currentSceneKey) {
+      // Asignación explícita > tema global > valor de fábrica de la escena/pack.
+      if (hasExplicitTheme && config.overlayThemes && config.overlayThemes[currentSceneKey]) {
+        activeTheme = config.overlayThemes[currentSceneKey];
+      } else if (config.globalThemeActive && config.activeTheme) {
+        activeTheme = config.activeTheme;
+      } else if (config.overlayThemes && config.overlayThemes[currentSceneKey]) {
+        activeTheme = config.overlayThemes[currentSceneKey];
+      }
     }
     if (!activeTheme) {
       if (currentPack === 'cozy') activeTheme = 'latte_caramel';
@@ -418,37 +450,13 @@
       activeShape = config.overlayShapes[currentSceneKey];
     }
 
-    const DEFAULT_OVERLAY_THEMES = {
-      'game': 'cyberpunk',
-      'maker': 'maker',
-      'maker-desk': 'maker',
-      'maker-pc': 'terminal',
-      'print': 'print',
-      'print-machine': 'print',
-      'print-design': 'print',
-      'chill': 'chill',
-      'startingSoon': 'synthwave',
-      'beRightBack': 'synthwave',
-      'ending': 'synthwave',
-      'oss_chatting': 'neon_streamer',
-      'oss_desktop': 'clean_minimal',
-      'oss_podcast': 'sunset_glow',
-      'oss_starting': 'crimson_pulse',
-      'oss_brb': 'emerald_matrix',
-      'oss_ending': 'neon_streamer',
-      'gamer_gameplay': 'cyber_glitch',
-      'gamer_speedrun': 'toxic_rad',
-      'gamer_victory': 'golden_glory',
-      'gamer_starting': 'crimson_esport',
-      'gamer_brb': 'stealth_mono',
-      'gamer_ending': 'golden_glory',
-      'cozy_pomodoro': 'latte_caramel',
-      'cozy_art': 'sakura_sunset',
-      'cozy_cafe': 'matcha_bamboo',
-      'cozy_starting': 'lavender_dream',
-      'cozy_brb': 'latte_caramel',
-      'cozy_ending': 'nordic_twilight'
-    };
+    // Una sola fuente: el servidor publica los 27 defaults canónicos en
+    // config.defaultOverlayThemes. Si el config es antiguo, overlayThemes ya
+    // contiene los valores de fábrica de cada escena.
+    const DEFAULT_OVERLAY_THEMES = Object.assign(
+      {},
+      config.defaultOverlayThemes || config.overlayThemes || {}
+    );
     window.__DEFAULT_OVERLAY_THEMES = DEFAULT_OVERLAY_THEMES;
 
     function updateOverlayThemeAndShape(newTheme, newShape) {
@@ -460,6 +468,22 @@
         activeShape = (newShape === null || newShape === '' || newShape === 'none') ? 'original' : newShape;
       }
       const res = resolveArchetypeAndShape(activeTheme, activeShape);
+
+      // Idempotencia: si el tema y la forma resueltos no cambian, no se vuelve a
+      // ejecutar el pipeline pesado (rótulos + etiquetado + recálculo de
+      // aperturas). Ese re-pipeline se disparaba SIEMPRE al abrir una escena
+      // (el HTML declara un data-theme y `syncThemeFromServer()` lo re-aplicaba
+      // después del primer pintado) y era la causa de que los elementos
+      // apareciesen descolocados y se "recolocasen" al cambiar de escena.
+      const applied = window.__OSS_APPLIED_THEME__;
+      if (applied && applied.theme === activeTheme && applied.shape === res.effectiveShape
+          && applied.archetype === res.archetype && applied.mode === res.mode) {
+        return;
+      }
+      window.__OSS_APPLIED_THEME__ = {
+        theme: activeTheme, shape: res.effectiveShape, archetype: res.archetype, mode: res.mode
+      };
+
       document.body.setAttribute('data-theme-archetype', res.archetype);
       document.body.setAttribute('data-theme-shape-mode', res.mode);
       document.body.setAttribute('data-theme-shape', res.effectiveShape);
@@ -521,14 +545,20 @@
           if (isLocked) return;
           let th = null;
           let sh = null;
-          if (!rawUrlTheme && data.overlayThemes && currentSceneKey && data.overlayThemes[currentSceneKey]) {
-            th = data.overlayThemes[currentSceneKey];
+          const explicitMap = data.overlayThemeExplicit || {};
+          if (currentSceneKey) hasExplicitTheme = !!explicitMap[currentSceneKey];
+          activeGlobalTheme = data.globalThemeActive ? (data.activeTheme || null) : null;
+          if (!rawUrlTheme && currentSceneKey) {
+            if (hasExplicitTheme && data.overlayThemes && data.overlayThemes[currentSceneKey]) {
+              th = data.overlayThemes[currentSceneKey];
+            } else if (data.globalThemeActive && data.activeTheme) {
+              th = data.activeTheme;
+            } else if (data.overlayThemes && data.overlayThemes[currentSceneKey]) {
+              th = data.overlayThemes[currentSceneKey];
+            }
           }
           if (!rawUrlShape && data.overlayShapes && currentSceneKey && data.overlayShapes[currentSceneKey]) {
             sh = data.overlayShapes[currentSceneKey];
-          }
-          if (!th && !rawUrlTheme && data.activeTheme) {
-            th = data.activeTheme;
           }
           if (!sh && !rawUrlShape && data.activeShape) {
             sh = data.activeShape;
@@ -586,13 +616,18 @@
           const msg = JSON.parse(e.data);
           if (msg.type === 'overlay_theme_change') {
             if (!msg.overlayKey || msg.overlayKey === currentSceneKey) {
+              hasExplicitTheme = !!msg.explicit;
               if (!isLocked) {
                 const nextShape = (msg.shape !== undefined && msg.shape !== null) ? msg.shape : activeShape;
-                updateOverlayThemeAndShape(msg.theme, nextShape);
+                // Tras un reset, si hay tema global activo, se recupera de inmediato.
+                const nextTheme = (!hasExplicitTheme && activeGlobalTheme) ? activeGlobalTheme : msg.theme;
+                updateOverlayThemeAndShape(nextTheme, nextShape);
               }
             }
           } else if (msg.type === 'theme_change') {
-            if (!isLocked) {
+            // Una asignación explícita de esta escena gana al tema global.
+            activeGlobalTheme = msg.theme || null;
+            if (!isLocked && !hasExplicitTheme) {
               const nextShape = (msg.shape !== undefined && msg.shape !== null) ? msg.shape : activeShape;
               updateOverlayThemeAndShape(msg.theme, nextShape);
             }

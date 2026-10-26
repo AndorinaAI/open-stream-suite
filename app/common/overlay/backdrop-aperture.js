@@ -243,40 +243,138 @@
   }
 
   /**
-   * Parsea un clip-path CSS polygon(...) a puntos SVG absolutos
+   * Divide `str` por los separadores de primer nivel (ignora lo que está dentro
+   * de paréntesis, p. ej. `calc(100% - 22px)`).
+   */
+  function splitTopLevel(str, separator) {
+    const out = [];
+    let depth = 0;
+    let current = '';
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      if (ch === '(') depth++;
+      else if (ch === ')') depth = Math.max(0, depth - 1);
+      if (depth === 0 && separator.test(ch)) {
+        if (current.trim()) out.push(current.trim());
+        current = '';
+        continue;
+      }
+      current += ch;
+    }
+    if (current.trim()) out.push(current.trim());
+    return out;
+  }
+
+  /**
+   * Evalúa el cuerpo de un `calc()` con sumas/restas/productos de longitudes.
+   * Devuelve `null` si no se puede resolver con certeza (nunca NaN).
+   */
+  function evaluateCalc(expression, size, depth) {
+    const tokens = [];
+    let current = '';
+    let parens = 0;
+    for (let i = 0; i < expression.length; i++) {
+      const ch = expression[i];
+      if (ch === '(') parens++;
+      else if (ch === ')') parens = Math.max(0, parens - 1);
+      const isOperator = parens === 0 && (ch === '+' || ch === '*' || ch === '/' || (ch === '-' && current.trim() !== ''));
+      if (isOperator) {
+        if (current.trim()) tokens.push(current.trim());
+        tokens.push(ch);
+        current = '';
+        continue;
+      }
+      current += ch;
+    }
+    if (current.trim()) tokens.push(current.trim());
+
+    let acc = null;
+    let operator = null;
+    for (const token of tokens) {
+      if (token === '+' || token === '-' || token === '*' || token === '/') {
+        operator = token;
+        continue;
+      }
+      const value = resolveLength(token, size, depth);
+      if (value === null) return null;
+      if (acc === null) {
+        acc = value;
+      } else if (operator === '+') {
+        acc += value;
+      } else if (operator === '-') {
+        acc -= value;
+      } else if (operator === '*') {
+        acc *= value;
+      } else if (operator === '/') {
+        if (!value) return null;
+        acc /= value;
+      }
+      operator = null;
+    }
+    return acc;
+  }
+
+  /**
+   * Convierte una longitud CSS (`18`, `12px`, `40%`, `calc(100% - 22px)`) a
+   * píxeles relativos a `size` (ancho o alto de la caja). `null` si es inválida.
+   */
+  function resolveLength(token, size, depth) {
+    const level = depth || 0;
+    if (level > 4 || token === null || token === undefined) return null;
+    const text = String(token).trim();
+    if (!text) return null;
+
+    const calcMatch = text.match(/^calc\(([\s\S]*)\)$/i);
+    if (calcMatch) return evaluateCalc(calcMatch[1], size, level + 1);
+
+    if (text.endsWith('%')) {
+      const percent = parseFloat(text);
+      return Number.isFinite(percent) ? (percent / 100) * size : null;
+    }
+    const pxMatch = text.match(/^(-?[\d.]+)px$/i);
+    if (pxMatch) {
+      const px = parseFloat(pxMatch[1]);
+      return Number.isFinite(px) ? px : null;
+    }
+    const bare = parseFloat(text);
+    return Number.isFinite(bare) ? bare : null;
+  }
+
+  /**
+   * Parsea un clip-path CSS `polygon(...)` a puntos SVG absolutos.
+   *
+   * Soporta `%`, `px` y `calc(<longitud> <op> <longitud>)`, con separadores de
+   * coma o de espacio tanto entre puntos como entre coordenadas.
+   *
+   * BUG CORREGIDO (T4): la versión anterior hacía `pair.split(/\s+/)`, que
+   * partía DENTRO de `calc(100% - 22px)` → `['calc(100%', '-', '22px)']`. Como
+   * `'calc(100%'.endsWith('%')` es true, se evaluaba `parseFloat('calc(100%')`
+   * → NaN y el `<polygon>` del bisel quedaba con puntos NaN
+   * (`Expected number, "48,767 NaN,767 408,791 …"`), así que el bisel no se
+   * dibujaba en `game`, `gameplay_hud`, `speedrun_split` y `victory_clutch`.
+   * Además la rama `px.includes('calc(')` era inalcanzable: el `%` la sombreaba.
    */
   function parseClipPathPolygon(cssPolygon, x, y, w, h) {
     try {
-      const inner = cssPolygon.replace(/^polygon\((.*)\)$/, '$1');
-      const pairs = inner.split(',').map(s => s.trim());
-      const pts = pairs.map(pair => {
-        const parts = pair.split(/\s+/);
-        let px = parts[0];
-        let py = parts[1];
-        let posX = x;
-        let posY = y;
+      const match = String(cssPolygon).match(/polygon\(([\s\S]*)\)\s*$/i);
+      if (!match) return null;
 
-        if (px.endsWith('%')) {
-          posX = x + (parseFloat(px) / 100) * w;
-        } else if (px.endsWith('px')) {
-          posX = x + parseFloat(px);
-        } else if (px.includes('calc(')) {
-          const m = px.match(/calc\(100%\s*-\s*([\d.]+)px\)/);
-          if (m) posX = x + w - parseFloat(m[1]);
-        }
+      // Modificador de relleno opcional antes del primer punto: polygon(evenodd, …)
+      const inner = match[1].trim().replace(/^(evenodd|nonzero)\s*,\s*/i, '');
+      const pairs = splitTopLevel(inner, /,/);
+      const points = [];
 
-        if (py.endsWith('%')) {
-          posY = y + (parseFloat(py) / 100) * h;
-        } else if (py.endsWith('px')) {
-          posY = y + parseFloat(py);
-        } else if (py.includes('calc(')) {
-          const m = py.match(/calc\(100%\s*-\s*([\d.]+)px\)/);
-          if (m) posY = y + h - parseFloat(m[1]);
-        }
+      for (const pair of pairs) {
+        const parts = splitTopLevel(pair, /\s/);
+        if (parts.length < 2) continue;
+        const offsetX = resolveLength(parts[0], w, 0);
+        const offsetY = resolveLength(parts[1], h, 0);
+        if (offsetX === null || offsetY === null) return null;
+        points.push(`${Math.round(x + offsetX)},${Math.round(y + offsetY)}`);
+      }
 
-        return `${Math.round(posX)},${Math.round(posY)}`;
-      });
-      return pts.join(' ');
+      if (points.length < 3) return null;
+      return points.join(' ');
     } catch (e) {
       return null;
     }
