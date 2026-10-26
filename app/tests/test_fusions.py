@@ -8,6 +8,7 @@ from aiohttp import web
 from server.app import create_app, LOCAL_AUTH_TOKEN
 from server.services.fusions_service import FUSIONS_FILE, load_fusions, save_fusions
 from server.services.theme_manager import THEMES_STATE_FILE
+from server.config import BASE_DIR
 from server.services.theme_service import load_theme_state, save_theme_state
 
 class FusionsTestCase(AioHTTPTestCase):
@@ -27,6 +28,10 @@ class FusionsTestCase(AioHTTPTestCase):
         self.themes_state_backup = None
         if THEMES_STATE_FILE.exists():
             self.themes_state_backup = THEMES_STATE_FILE.read_text(encoding="utf-8")
+        self.config_backup = None
+        config_file = BASE_DIR / "config.js"
+        if config_file.exists():
+            self.config_backup = config_file.read_text(encoding="utf-8")
 
     def tearDown(self):
         super().tearDown()
@@ -37,6 +42,8 @@ class FusionsTestCase(AioHTTPTestCase):
 
         if self.themes_state_backup is not None:
             THEMES_STATE_FILE.write_text(self.themes_state_backup, encoding="utf-8")
+        if self.config_backup is not None:
+            (BASE_DIR / "config.js").write_text(self.config_backup, encoding="utf-8")
 
     @unittest_run_loop
     async def test_01_get_fusions_list(self):

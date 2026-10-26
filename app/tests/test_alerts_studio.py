@@ -2,6 +2,7 @@ import unittest
 import json
 import os
 import sys
+from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -10,6 +11,22 @@ from server.app import create_app, LOCAL_AUTH_TOKEN
 from server.routes.alerts_routes import format_alert_event, load_alerts_config, save_alerts_config
 
 class TestAlertsStudio(AioHTTPTestCase):
+    APP = Path(__file__).resolve().parent.parent
+
+    def setUp(self):
+        # Los tests de config escriben alerts_config.json; aislar el estado real.
+        super().setUp()
+        self._backups = {}
+        for name in ("alerts_config.json", "alerts_themes_config.json"):
+            path = self.APP / name
+            if path.exists():
+                self._backups[name] = path.read_bytes()
+
+    def tearDown(self):
+        for name, data in self._backups.items():
+            (self.APP / name).write_bytes(data)
+        super().tearDown()
+
     async def get_application(self):
         return create_app()
 
@@ -18,6 +35,14 @@ class TestAlertsStudio(AioHTTPTestCase):
             "X-Local-Token": LOCAL_AUTH_TOKEN,
             "Origin": "http://localhost:8080"
         }
+
+
+    def test_alert_themes_block_is_in_render_template(self):
+        """L7: el bloque de temas debe vivir en renderStudio(), no solo en panel.html."""
+        js = (Path(__file__).resolve().parent.parent / "alerts" / "js" / "alerts-studio" / "02a-layout-dom.js").read_text(encoding="utf-8")
+        self.assertIn('id="alert-themes-panel"', js)
+        self.assertIn("ComponentThemes.load()", js)
+        self.assertIn("TEMAS DE ALERTAS", js)
 
     async def test_get_alerts_config(self):
         resp = await self.client.get("/api/alerts/config")

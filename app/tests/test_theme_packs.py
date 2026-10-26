@@ -1,5 +1,6 @@
 import unittest
 import shutil
+import tempfile
 from pathlib import Path
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 from aiohttp import web
@@ -10,6 +11,39 @@ from server.routes.themes_routes import (
 )
 
 class ThemePacksTestCase(AioHTTPTestCase):
+    # Este suite crea/modifica packs y temas reales (incluido "maker").
+    # Snapshot completo para que un fallo no deje el árbol de temas del usuario sucio.
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls._backup_root = Path(tempfile.mkdtemp(prefix="oss-theme-tests-"))
+        if THEMES_DIR.exists():
+            shutil.copytree(THEMES_DIR, cls._backup_root / "streamthemes")
+        for name in ("themes_state.json", "fusions.json", "config.js"):
+            src = BASE_DIR / name
+            if src.exists():
+                shutil.copy2(src, cls._backup_root / name)
+        if COMMON_THEMES_CSS.exists():
+            shutil.copy2(COMMON_THEMES_CSS, cls._backup_root / "themes.css")
+
+    @classmethod
+    def tearDownClass(cls):
+        try:
+            if THEMES_DIR.exists():
+                shutil.rmtree(THEMES_DIR)
+            backup_tree = getattr(cls, "_backup_root", None) / "streamthemes"
+            if backup_tree.exists():
+                shutil.copytree(backup_tree, THEMES_DIR)
+            for name in ("themes_state.json", "fusions.json", "config.js", "themes.css"):
+                src = getattr(cls, "_backup_root", None) / name
+                if src.exists():
+                    dst = COMMON_THEMES_CSS if name == "themes.css" else BASE_DIR / name
+                    shutil.copy2(src, dst)
+        finally:
+            if getattr(cls, "_backup_root", None):
+                shutil.rmtree(cls._backup_root, ignore_errors=True)
+            super().tearDownClass()
+
     async def get_application(self):
         app = web.Application()
         register_themes_routes(app)
@@ -177,13 +211,24 @@ class ThemePacksTestCase(AioHTTPTestCase):
             arch = SHAPE_TO_ARCHETYPE[shape_id]
             self.assertIn(arch, ("cozy", "gamer", "maker", "openstream"))
 
-        # 2. Asignar una forma temática nueva como fantasy_parchment a un overlay
-        payload = {"overlayKey": "starting", "themeId": "ambient", "shapeId": "fantasy_parchment"}
+        # 2. Asignar una forma temática nueva como fantasy_parchment a un overlay.
+        #    La clave debe ser una escena real: desde T4 el endpoint valida clave
+        #    de escena, tema y forma contra el catálogo, así que una clave que no
+        #    es escena ('starting') o un tema inexistente ('ambient') se rechazan
+        #    en lugar de escribirse en themes_state.json (estado huérfano).
+        payload = {"overlayKey": "cozy_art", "themeId": "sakura_sunset", "shapeId": "fantasy_parchment"}
         r = await self.client.post("/api/themes/overlay-assignment", json=payload, headers=self.headers)
         self.assertEqual(r.status, 200)
         d = await r.json()
         self.assertEqual(d.get("status"), "ok")
-        self.assertEqual(d.get("overlayShapes", {}).get("starting"), "fantasy_parchment")
+        self.assertEqual(d.get("overlayShapes", {}).get("cozy_art"), "fantasy_parchment")
+
+        # 3. Escena inexistente / tema inexistente -> 400 (antes se guardaban)
+        for bad in ({"overlayKey": "starting", "themeId": "ambient"},
+                    {"overlayKey": "escena_fantasma", "themeId": "maker"},
+                    {"overlayKey": "cozy_art", "themeId": "tema_fantasma"}):
+            r_bad = await self.client.post("/api/themes/overlay-assignment", json=bad, headers=self.headers)
+            self.assertEqual(r_bad.status, 400, f"debería rechazar {bad}")
 
     @unittest_run_loop
     async def test_06_overlay_shape_reset_and_edge_cases(self):

@@ -8,18 +8,30 @@ import unittest
 import requests
 import json
 import os
+from pathlib import Path
+from server.config import BASE_DIR
 
 BASE_URL = os.environ.get("TEST_BASE_URL", "http://localhost:8080")
 
 class DeckIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls._backup = {}
+        for name in ("themes_state.json", "config.js", "fusions.json", "widgets_config.json"):
+            src = BASE_DIR / name
+            if src.exists():
+                cls._backup[name] = src.read_text(encoding="utf-8")
         try:
             r = requests.get(f"{BASE_URL}/api/status", timeout=1)
             if r.status_code != 200:
                 raise unittest.SkipTest(f"Servidor en {BASE_URL} devolvió HTTP {r.status_code}")
         except Exception:
             raise unittest.SkipTest(f"Servidor no disponible en {BASE_URL} (tests omitidos)")
+
+    @classmethod
+    def tearDownClass(cls):
+        for name, text in getattr(cls, "_backup", {}).items():
+            (BASE_DIR / name).write_text(text, encoding="utf-8")
 
     def test_01_deck_actions_catalog(self):
         """Verifica que el catálogo de acciones para Stream Deck responda con código 200"""

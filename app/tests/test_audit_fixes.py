@@ -4,6 +4,7 @@ tests/test_audit_fixes.py — Tests automatizados para verificar las correccione
 
 import unittest
 import json
+import shutil
 import asyncio
 from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 from aiohttp import web
@@ -19,6 +20,29 @@ class AuditFixesTestCase(AioHTTPTestCase):
 
     async def get_application(self):
         return create_app()
+
+    # Aislamiento: estos tests escriben en themes_state.json y fusions.json
+    # reales; se restauran al terminar para no dejar datos de prueba.
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        from server.config import BASE_DIR
+        cls._snapshot = {}
+        for name in ("themes_state.json", "fusions.json", "config.js"):
+            src = BASE_DIR / name
+            if src.exists():
+                dst = BASE_DIR / f".test_snapshot_{name}"
+                shutil.copy2(src, dst)
+                cls._snapshot[name] = dst
+
+    @classmethod
+    def tearDownClass(cls):
+        from server.config import BASE_DIR
+        for name, dst in getattr(cls, "_snapshot", {}).items():
+            if dst.exists():
+                shutil.copy2(dst, BASE_DIR / name)
+                dst.unlink()
+        super().tearDownClass()
 
     def setUp(self):
         super().setUp()
@@ -103,7 +127,7 @@ class AuditFixesTestCase(AioHTTPTestCase):
     @unittest_run_loop
     async def test_2_1_ws_json_handling(self):
         """2.1: El websocket no debe lanzar NameError al recibir texto JSON"""
-        ws = await self.client.ws_connect("/ws")
+        ws = await self.client.ws_connect(f"/ws?token={LOCAL_AUTH_TOKEN}")
         test_msg = json.dumps({"action": "test", "alertType": "follow"})
         await ws.send_str(test_msg)
         await asyncio.sleep(0.05)
