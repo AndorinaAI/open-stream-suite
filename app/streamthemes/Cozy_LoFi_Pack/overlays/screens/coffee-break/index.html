@@ -2,6 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+<!-- preload-fonts:T4 (generado por scripts/apply_font_preloads.py) -->
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/comfortaa_normal_600.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/comfortaa_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_600.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/quicksand_normal_500.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/quicksand_normal_600.woff2">
+<!-- /preload-fonts:T4 -->
   <title>Pantalla — Pausa de Café (Coffee Break)</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
@@ -128,6 +138,11 @@
   </div>
 
   <script src="/config.js"></script>
+  <!-- Módulos críticos cargados antes del primer pintado: evita que el DOM se
+       complete después y que los elementos se recoloquen (T4-seguimiento). -->
+  <script src="/common/overlay/icons.js?v=50"></script>
+  <script src="/common/overlay/dom-injector.js?v=50"></script>
+  <script src="/common/overlay/interactive-features.js?v=50"></script>
   <script src="/common/overlay.js"></script>
 </body>
 </html>

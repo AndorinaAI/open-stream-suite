@@ -24,6 +24,8 @@ streamthemes/
 
 ## Catálogo de Packs Oficiales Disponibles
 
+> Nota: las *claves de escena* que usa el panel (p.ej. `maker-desk`, `oss_chatting`) pueden diferir de la *ruta de carpeta* (`maker/desk/`, `just_chatting/`). La URL pública siempre es `/streamthemes/<Pack>/overlays/<ruta>/index.html`.
+
 1. **`Maker_Theme_Pack/`** (6 estilos):
    - Especializado en creadores, talleres, electrónica, CAD e impresión 3D.
    - Escenas: 9 escenas completas de taller (`maker-desk`, `maker-pc`, `print-machine`, `print-design`, `chill`, `game`, `screens/`).
@@ -54,14 +56,15 @@ Todas las escenas de los packs implementan el estándar semántico universal:
 - `data-oss-cam-label="true|bar|bottom"`: Rótulo identificativo de la cámara. Usar `"bar"` o `.cam-bottom-bar` para barras inferiores de ancho completo.
 - `data-oss-panel="true"`: Tarjetas, bloques de chat, podios o listas de tareas.
 - `data-oss-bar="top|bottom|left|right"`: Barras de cabecera superior, noticias/fases inferiores o columnas laterales.
-- `data-oss-orientation="horizontal|vertical"`: Orientación del elemento (autodetectada por relación de aspecto o tipo de barra, o manual).
+- `data-oss-badge="true"`: Insignias, chips y etiquetas de estado (se auto-inyectan en runtime si la escena no las declara).
+- `data-oss-orientation="horizontal|vertical"`: Orientación del elemento (autodetectada en runtime; opcional para forzarla).
 - `data-text-key="seccion.campo"`: Aislamiento estricto de textos para edición en caliente y sincronización WebSocket con OBS.
 
 ### Parámetros URL de Control
 - `?theme=<id>`: Fuerza un tema de color específico.
 - `?shape=<id>`: Fuerza una de las 20 formas físicas universales (`maker_blueprint`, `openstream_glass`, `gamer_mecha`, etc.).
 - `?lock=1` / `?lockTheme=1`: Bloquea permanentemente la escena a los parámetros URL en OBS Studio, ignorando cambios globales de WebSocket.
-- `?lang=en` / `?lang=es`: Carga los textos traducidos del idioma especificado.
+- `?lang=en` / `?lang=es`: Reservado — hoy solo lo honra el endpoint `/api/overlays/texts`; las escenas aún no consumen este parámetro.
 
 ### Fluidez con Relaciones de Aspecto
 Gracias al uso de coordenadas relativas (`calc(100% - 24px)`), las formas se adaptan automáticamente a cámaras **16:9** (widescreen), **4:3** (retro), **21:9** (ultra-panorámicas) y **9:16** (vertical móvil / TikTok / Shorts) sin deformaciones.

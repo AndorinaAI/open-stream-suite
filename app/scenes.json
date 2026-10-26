@@ -1,0 +1,497 @@
+{
+  "_comment": "GENERADO por scripts/build_scenes_json.py — no editar a mano. Fuente: 05-scenes-data.js + 01-state.js",
+  "_canonical_convention": "key = clave de OSS_SCENES; es la ÚNICA que se persiste en themes_state.json/fusions.json",
+  "scene_count": 27,
+  "scenes": [
+    {
+      "key": "maker-desk",
+      "packId": "Maker_Theme_Pack",
+      "category": "maker",
+      "name": "Overlay: Escena Principal (Cámara + Webcam)",
+      "icon": "🛠️",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html",
+      "badge": "ESCENA PRINCIPAL · CÁMARA",
+      "aliases": [
+        "desk",
+        "maker-desk",
+        "maker/desk",
+        "maker_desk"
+      ]
+    },
+    {
+      "key": "maker-pc",
+      "packId": "Maker_Theme_Pack",
+      "category": "maker",
+      "name": "Overlay: Pantalla Compartida (PC + Webcam)",
+      "icon": "💻",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/maker/pc/index.html",
+      "badge": "PANTALLA COMPARTIDA · PC",
+      "aliases": [
+        "maker-pc",
+        "maker/pc",
+        "maker_pc",
+        "pc"
+      ]
+    },
+    {
+      "key": "print-machine",
+      "packId": "Maker_Theme_Pack",
+      "category": "print",
+      "name": "Overlay: Cámara Secundaria (Proceso / Acción)",
+      "icon": "🖨️",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/print/machine/index.html",
+      "badge": "CÁMARA SECUNDARIA · PROCESO",
+      "aliases": [
+        "machine",
+        "print-machine",
+        "print/machine",
+        "print_machine"
+      ]
+    },
+    {
+      "key": "print-design",
+      "packId": "Maker_Theme_Pack",
+      "category": "print",
+      "name": "Overlay: Pantalla Diseño / CAD (Full Screen)",
+      "icon": "📐",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/print/design/index.html",
+      "badge": "PANTALLA COMPLETA · DISEÑO",
+      "aliases": [
+        "design",
+        "print-design",
+        "print/design",
+        "print_design"
+      ]
+    },
+    {
+      "key": "game",
+      "packId": "Maker_Theme_Pack",
+      "category": "stream",
+      "name": "Overlay: Gameplay (Juego + Cámara)",
+      "icon": "🎮",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/game/index.html",
+      "badge": "GAMEPLAY + WEBCAM",
+      "aliases": [
+        "game"
+      ]
+    },
+    {
+      "key": "chill",
+      "packId": "Maker_Theme_Pack",
+      "category": "stream",
+      "name": "Overlay: Charla y Chat (Just Chatting)",
+      "icon": "💬",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/chill/index.html",
+      "badge": "JUST CHATTING",
+      "aliases": [
+        "chill"
+      ]
+    },
+    {
+      "key": "startingSoon",
+      "packId": "Maker_Theme_Pack",
+      "category": "screens",
+      "name": "Pantalla: Inicio de Stream (Starting Soon)",
+      "icon": "⏳",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/screens/starting-soon/index.html",
+      "badge": "INICIO DE EMISIÓN",
+      "aliases": [
+        "maker-starting-soon",
+        "screens/starting-soon",
+        "starting-soon",
+        "startingSoon",
+        "starting_soon"
+      ]
+    },
+    {
+      "key": "beRightBack",
+      "packId": "Maker_Theme_Pack",
+      "category": "screens",
+      "name": "Pantalla: Pausa Técnica (Be Right Back)",
+      "icon": "☕",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/screens/be-right-back/index.html",
+      "badge": "PAUSA TÉCNICA",
+      "aliases": [
+        "be-right-back",
+        "beRightBack",
+        "be_right_back",
+        "brb",
+        "screens/be-right-back"
+      ]
+    },
+    {
+      "key": "ending",
+      "packId": "Maker_Theme_Pack",
+      "category": "screens",
+      "name": "Pantalla: Despedida (Ending)",
+      "icon": "🎬",
+      "path": "/streamthemes/Maker_Theme_Pack/overlays/screens/ending/index.html",
+      "badge": "FIN DE TRANSMISIÓN",
+      "aliases": [
+        "ending",
+        "screens/ending"
+      ]
+    },
+    {
+      "key": "oss_chatting",
+      "packId": "Open_stream_Pack",
+      "category": "chat",
+      "name": "Overlay: Just Chatting & Talk",
+      "icon": "💬",
+      "path": "/streamthemes/Open_stream_Pack/overlays/just_chatting/index.html",
+      "badge": "JUST CHATTING PRO",
+      "aliases": [
+        "just-chatting",
+        "just_chatting",
+        "oss-chatting",
+        "oss_chatting"
+      ]
+    },
+    {
+      "key": "oss_desktop",
+      "packId": "Open_stream_Pack",
+      "category": "screen",
+      "name": "Overlay: Pantalla Compartida (Escritorio + PiP)",
+      "icon": "🖥️",
+      "path": "/streamthemes/Open_stream_Pack/overlays/desktop_share/index.html",
+      "badge": "ESCRITORIO + WEBCAM",
+      "aliases": [
+        "desktop-share",
+        "desktop_share",
+        "oss-desktop",
+        "oss_desktop"
+      ]
+    },
+    {
+      "key": "oss_podcast",
+      "packId": "Open_stream_Pack",
+      "category": "chat",
+      "name": "Overlay: Podcast & Entrevista (Dual Cam)",
+      "icon": "🎙️",
+      "path": "/streamthemes/Open_stream_Pack/overlays/podcast_talk/index.html",
+      "badge": "PODCAST & ENTREVISTA",
+      "aliases": [
+        "oss-podcast",
+        "oss_podcast",
+        "podcast-talk",
+        "podcast_talk"
+      ]
+    },
+    {
+      "key": "oss_starting",
+      "packId": "Open_stream_Pack",
+      "category": "screens",
+      "name": "Pantalla: Inicio de Stream (Starting Soon)",
+      "icon": "⏳",
+      "path": "/streamthemes/Open_stream_Pack/overlays/screens/starting-soon/index.html",
+      "badge": "INICIO DE EMISIÓN",
+      "aliases": [
+        "oss-starting",
+        "oss_starting"
+      ]
+    },
+    {
+      "key": "oss_brb",
+      "packId": "Open_stream_Pack",
+      "category": "screens",
+      "name": "Pantalla: Pausa Técnica (Be Right Back)",
+      "icon": "⏸️",
+      "path": "/streamthemes/Open_stream_Pack/overlays/screens/be-right-back/index.html",
+      "badge": "PAUSA TÉCNICA",
+      "aliases": [
+        "oss-brb",
+        "oss_brb"
+      ]
+    },
+    {
+      "key": "oss_ending",
+      "packId": "Open_stream_Pack",
+      "category": "screens",
+      "name": "Pantalla: Despedida y Créditos (Ending)",
+      "icon": "🎬",
+      "path": "/streamthemes/Open_stream_Pack/overlays/screens/ending/index.html",
+      "badge": "FIN DE TRANSMISIÓN",
+      "aliases": [
+        "oss-ending",
+        "oss_ending"
+      ]
+    },
+    {
+      "key": "gamer_gameplay",
+      "packId": "Gamer_Pro_Pack",
+      "category": "game",
+      "name": "Overlay: Gameplay HUD Táctico",
+      "icon": "🎯",
+      "path": "/streamthemes/Gamer_Pro_Pack/overlays/gameplay_hud/index.html",
+      "badge": "GAMEPLAY HUD ESPORTS",
+      "aliases": [
+        "gameplay_hud",
+        "gamer-gameplay",
+        "gamer_gameplay"
+      ]
+    },
+    {
+      "key": "gamer_speedrun",
+      "packId": "Gamer_Pro_Pack",
+      "category": "game",
+      "name": "Overlay: Speedrun & Splits HUD",
+      "icon": "⏱️",
+      "path": "/streamthemes/Gamer_Pro_Pack/overlays/speedrun_split/index.html",
+      "badge": "SPEEDRUN & SPLITS",
+      "aliases": [
+        "gamer-speedrun",
+        "gamer_speedrun",
+        "speedrun_split"
+      ]
+    },
+    {
+      "key": "gamer_victory",
+      "packId": "Gamer_Pro_Pack",
+      "category": "event",
+      "name": "Overlay: Victoria & Clutch Showcase",
+      "icon": "🏆",
+      "path": "/streamthemes/Gamer_Pro_Pack/overlays/victory_clutch/index.html",
+      "badge": "VICTORIA & CLUTCH",
+      "aliases": [
+        "gamer-victory",
+        "gamer_victory",
+        "victory_clutch"
+      ]
+    },
+    {
+      "key": "gamer_starting",
+      "packId": "Gamer_Pro_Pack",
+      "category": "screens",
+      "name": "Pantalla: Calentamiento & Start (Esports)",
+      "icon": "🚀",
+      "path": "/streamthemes/Gamer_Pro_Pack/overlays/screens/starting-soon/index.html",
+      "badge": "CALENTAMIENTO · START",
+      "aliases": [
+        "gamer-starting",
+        "gamer_starting"
+      ]
+    },
+    {
+      "key": "gamer_brb",
+      "packId": "Gamer_Pro_Pack",
+      "category": "screens",
+      "name": "Pantalla: Intermisión Táctica (Be Right Back)",
+      "icon": "🛑",
+      "path": "/streamthemes/Gamer_Pro_Pack/overlays/screens/be-right-back/index.html",
+      "badge": "INTERMISIÓN TÁCTICA",
+      "aliases": [
+        "gamer-brb",
+        "gamer_brb"
+      ]
+    },
+    {
+      "key": "gamer_ending",
+      "packId": "Gamer_Pro_Pack",
+      "category": "screens",
+      "name": "Pantalla: GG & Fin de Partida (Ending)",
+      "icon": "👾",
+      "path": "/streamthemes/Gamer_Pro_Pack/overlays/screens/ending/index.html",
+      "badge": "GG · FIN DE PARTIDA",
+      "aliases": [
+        "gamer-ending",
+        "gamer_ending"
+      ]
+    },
+    {
+      "key": "cozy_pomodoro",
+      "packId": "Cozy_LoFi_Pack",
+      "category": "study",
+      "name": "Overlay: Study & Pomodoro (25:00)",
+      "icon": "📖",
+      "path": "/streamthemes/Cozy_LoFi_Pack/overlays/study_pomodoro/index.html",
+      "badge": "POMODORO & ESTUDIO",
+      "aliases": [
+        "cozy-pomodoro",
+        "cozy_pomodoro",
+        "study_pomodoro"
+      ]
+    },
+    {
+      "key": "cozy_art",
+      "packId": "Cozy_LoFi_Pack",
+      "category": "creative",
+      "name": "Overlay: Arte & Lienzo Dual Cam",
+      "icon": "🎨",
+      "path": "/streamthemes/Cozy_LoFi_Pack/overlays/art_dual_cam/index.html",
+      "badge": "ARTE & LIENZO DUAL",
+      "aliases": [
+        "art_dual_cam",
+        "cozy-art",
+        "cozy_art"
+      ]
+    },
+    {
+      "key": "cozy_cafe",
+      "packId": "Cozy_LoFi_Pack",
+      "category": "creative",
+      "name": "Overlay: Café & Charla Chill",
+      "icon": "☕",
+      "path": "/streamthemes/Cozy_LoFi_Pack/overlays/cafe_chat/index.html",
+      "badge": "CAFÉ & CHARLA CHILL",
+      "aliases": [
+        "cafe_chat",
+        "cozy-cafe",
+        "cozy_cafe"
+      ]
+    },
+    {
+      "key": "cozy_starting",
+      "packId": "Cozy_LoFi_Pack",
+      "category": "screens",
+      "name": "Pantalla: Bienvenida Acogedora (Starting Soon)",
+      "icon": "🌅",
+      "path": "/streamthemes/Cozy_LoFi_Pack/overlays/screens/starting-soon/index.html",
+      "badge": "BIENVENIDA ACOGEDORA",
+      "aliases": [
+        "cozy-starting",
+        "cozy_starting"
+      ]
+    },
+    {
+      "key": "cozy_brb",
+      "packId": "Cozy_LoFi_Pack",
+      "category": "screens",
+      "name": "Pantalla: Pausa de Café (Coffee Break)",
+      "icon": "🫖",
+      "path": "/streamthemes/Cozy_LoFi_Pack/overlays/screens/coffee-break/index.html",
+      "badge": "PAUSA DE CAFÉ",
+      "aliases": [
+        "coffee-break",
+        "coffee_break",
+        "cozy-brb",
+        "cozy_brb",
+        "screens/coffee-break"
+      ]
+    },
+    {
+      "key": "cozy_ending",
+      "packId": "Cozy_LoFi_Pack",
+      "category": "screens",
+      "name": "Pantalla: Hasta Pronto & Buenas Noches (Ending)",
+      "icon": "🌙",
+      "path": "/streamthemes/Cozy_LoFi_Pack/overlays/screens/ending/index.html",
+      "badge": "HASTA PRONTO · RELAX",
+      "aliases": [
+        "cozy-ending",
+        "cozy_ending"
+      ]
+    }
+  ],
+  "alias_map": {
+    "art_dual_cam": "cozy_art",
+    "be-right-back": "beRightBack",
+    "beRightBack": "beRightBack",
+    "be_right_back": "beRightBack",
+    "brb": "beRightBack",
+    "cafe_chat": "cozy_cafe",
+    "chill": "chill",
+    "coffee-break": "cozy_brb",
+    "coffee_break": "cozy_brb",
+    "cozy-art": "cozy_art",
+    "cozy-brb": "cozy_brb",
+    "cozy-cafe": "cozy_cafe",
+    "cozy-ending": "cozy_ending",
+    "cozy-pomodoro": "cozy_pomodoro",
+    "cozy-starting": "cozy_starting",
+    "cozy_art": "cozy_art",
+    "cozy_brb": "cozy_brb",
+    "cozy_cafe": "cozy_cafe",
+    "cozy_ending": "cozy_ending",
+    "cozy_pomodoro": "cozy_pomodoro",
+    "cozy_starting": "cozy_starting",
+    "design": "print-design",
+    "desk": "maker-desk",
+    "desktop-share": "oss_desktop",
+    "desktop_share": "oss_desktop",
+    "ending": "ending",
+    "game": "game",
+    "gameplay_hud": "gamer_gameplay",
+    "gamer-brb": "gamer_brb",
+    "gamer-ending": "gamer_ending",
+    "gamer-gameplay": "gamer_gameplay",
+    "gamer-speedrun": "gamer_speedrun",
+    "gamer-starting": "gamer_starting",
+    "gamer-victory": "gamer_victory",
+    "gamer_brb": "gamer_brb",
+    "gamer_ending": "gamer_ending",
+    "gamer_gameplay": "gamer_gameplay",
+    "gamer_speedrun": "gamer_speedrun",
+    "gamer_starting": "gamer_starting",
+    "gamer_victory": "gamer_victory",
+    "just-chatting": "oss_chatting",
+    "just_chatting": "oss_chatting",
+    "machine": "print-machine",
+    "maker-desk": "maker-desk",
+    "maker-pc": "maker-pc",
+    "maker-starting-soon": "startingSoon",
+    "maker/desk": "maker-desk",
+    "maker/pc": "maker-pc",
+    "maker_desk": "maker-desk",
+    "maker_pc": "maker-pc",
+    "oss-brb": "oss_brb",
+    "oss-chatting": "oss_chatting",
+    "oss-desktop": "oss_desktop",
+    "oss-ending": "oss_ending",
+    "oss-podcast": "oss_podcast",
+    "oss-starting": "oss_starting",
+    "oss_brb": "oss_brb",
+    "oss_chatting": "oss_chatting",
+    "oss_desktop": "oss_desktop",
+    "oss_ending": "oss_ending",
+    "oss_podcast": "oss_podcast",
+    "oss_starting": "oss_starting",
+    "pc": "maker-pc",
+    "podcast-talk": "oss_podcast",
+    "podcast_talk": "oss_podcast",
+    "print-design": "print-design",
+    "print-machine": "print-machine",
+    "print/design": "print-design",
+    "print/machine": "print-machine",
+    "print_design": "print-design",
+    "print_machine": "print-machine",
+    "screens/be-right-back": "beRightBack",
+    "screens/coffee-break": "cozy_brb",
+    "screens/ending": "ending",
+    "screens/starting-soon": "startingSoon",
+    "speedrun_split": "gamer_speedrun",
+    "starting-soon": "startingSoon",
+    "startingSoon": "startingSoon",
+    "starting_soon": "startingSoon",
+    "study_pomodoro": "cozy_pomodoro",
+    "victory_clutch": "gamer_victory"
+  },
+  "default_themes": {
+    "beRightBack": "synthwave",
+    "chill": "chill",
+    "cozy_art": "sakura_sunset",
+    "cozy_brb": "latte_caramel",
+    "cozy_cafe": "matcha_bamboo",
+    "cozy_ending": "nordic_twilight",
+    "cozy_pomodoro": "latte_caramel",
+    "cozy_starting": "lavender_dream",
+    "ending": "synthwave",
+    "game": "cyberpunk",
+    "gamer_brb": "stealth_mono",
+    "gamer_ending": "golden_glory",
+    "gamer_gameplay": "cyber_glitch",
+    "gamer_speedrun": "toxic_rad",
+    "gamer_starting": "crimson_esport",
+    "gamer_victory": "golden_glory",
+    "maker-desk": "maker",
+    "maker-pc": "terminal",
+    "oss_brb": "emerald_matrix",
+    "oss_chatting": "neon_streamer",
+    "oss_desktop": "clean_minimal",
+    "oss_ending": "neon_streamer",
+    "oss_podcast": "sunset_glow",
+    "oss_starting": "crimson_pulse",
+    "print-design": "print",
+    "print-machine": "print",
+    "startingSoon": "synthwave"
+  }
+}

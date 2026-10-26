@@ -8,4 +8,18 @@ body[data-theme="print"] {
   --color-border-cyan: rgba(255, 120, 63, 0.4);
   --color-border-cyan-bright: #FF783F;
   --theme-glow: 0 0 16px rgba(255, 120, 63, 0.5);
+  --frame-radius: 0px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 0 1px rgba(255, 120, 63, 0.3), inset 0 0 16px rgba(255, 120, 63, 0.1);
+  --frame-corner-display: block;
+  --panel-radius: 2px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(8px);
+  --panel-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  --badge-radius: 2px;
+  --badge-clip-path: none;
+  --header-radius: 2px;
+  --header-clip-path: none;
 }

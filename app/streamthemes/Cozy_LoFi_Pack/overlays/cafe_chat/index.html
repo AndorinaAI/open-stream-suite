@@ -2,6 +2,16 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+<!-- preload-fonts:T4 (generado por scripts/apply_font_preloads.py) -->
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/comfortaa_normal_600.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/comfortaa_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/quicksand_normal_500.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/quicksand_normal_700.woff2">
+<!-- /preload-fonts:T4 -->
   <title>Overlay — Café & Charla Chill</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
@@ -227,6 +237,7 @@
       color: var(--color-accent-cyan, #C48243);
       font-size: 12px;
     }
+      .cozy-chat-card.has-live-chat .cozy-message-pill { display: none; }
   </style>
 </head>
 <body data-pack="Cozy_LoFi_Pack" data-scene="cozy_cafe" data-theme="matcha_bamboo">
@@ -255,13 +266,14 @@
 
   <!-- Columna Derecha: Chat y Meta Acogedora -->
   <div class="side-card-container">
-    <div class="panel-card cozy-chat-card" data-oss-panel="true">
+    <div class="panel-card cozy-chat-card has-live-chat" data-oss-panel="true">
       <div class="chat-header">
         <span class="chat-header-title" data-text-key="cozy.chatTitle">💬 Rincón del Café</span>
         <span class="mode-badge chat-live-badge" data-oss-badge="true" data-text-key="channel.liveText">CHAT EN DIRECTO</span>
       </div>
 
-      <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end;">
+      <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; min-height:0;">
+        <iframe class="scene-chat-embed" src="/widgets/chat/index.html?embed=1" title="Chat en directo" style="width:100%;height:100%;border:0;display:block;background:transparent;"></iframe>
         <div class="cozy-message-pill">
           <span class="cozy-author">🍵 Sofia_reads</span>
           <span class="cozy-text">¡Hola a todos! Qué bonita la música hoy, perfecta para relajarse ✨</span>
@@ -284,6 +296,12 @@
   </div>
 
   <script src="/config.js"></script>
+  <!-- Módulos críticos cargados antes del primer pintado: evita que el DOM se
+       complete después y que los elementos se recoloquen (T4-seguimiento). -->
+  <script src="/common/overlay/icons.js?v=50"></script>
+  <script src="/common/overlay/dom-injector.js?v=50"></script>
+  <script src="/common/overlay/interactive-features.js?v=50"></script>
   <script src="/common/overlay.js"></script>
+  <script src="/common/overlay/scene-chat-embed.js"></script>
 </body>
 </html>

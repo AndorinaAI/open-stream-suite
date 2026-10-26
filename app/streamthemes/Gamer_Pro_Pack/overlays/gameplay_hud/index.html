@@ -2,6 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+<!-- preload-fonts:T4 (generado por scripts/apply_font_preloads.py) -->
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/fira_code_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/fira_code_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/share_tech_mono_normal_400.woff2">
+<!-- /preload-fonts:T4 -->
   <title>Overlay — Gameplay HUD Pro (Esports)</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
@@ -192,7 +199,7 @@
     </div>
 
     <div class="telemetry-items">
-      <span>FPS: <b class="tel-val">240</b></span>
+      <span>FPS: <b class="tel-val">60</b></span>
       <span>PING: <b class="tel-val">14ms</b></span>
       <span>K/D: <b class="tel-highlight">4.82</b></span>
       <span>WIN STREAK: <b class="tel-highlight">5 🔥</b></span>
@@ -201,7 +208,7 @@
   </header>
 
   <!-- Marco de Webcam Táctico -->
-  <div class="camera-frame hud-cam-box camera-face" data-oss-cam="true">
+  <div class="camera-frame hud-cam-box camera-face" data-oss-cam="true" data-oss-panel="true">
     <div class="reticle-tl"></div>
     <div class="reticle-br"></div>
     <div class="cam-viewport" data-oss-viewport="true"></div>
@@ -218,6 +225,11 @@
   </footer>
 
   <script src="/config.js"></script>
+  <!-- Módulos críticos cargados antes del primer pintado: evita que el DOM se
+       complete después y que los elementos se recoloquen (T4-seguimiento). -->
+  <script src="/common/overlay/icons.js?v=50"></script>
+  <script src="/common/overlay/dom-injector.js?v=50"></script>
+  <script src="/common/overlay/interactive-features.js?v=50"></script>
   <script src="/common/overlay.js"></script>
 </body>
 </html>
