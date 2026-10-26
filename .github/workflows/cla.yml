@@ -9,6 +9,10 @@ name: CLA Assistant
 #
 # Las firmas se guardan en la rama `cla-signatures` (que NO debe estar protegida).
 # El fichero de firmas lo crea el propio action: no se crea a mano.
+#
+# Nota Dependabot: sus pull requests reciben un token de solo lectura, así que su
+# check `cla` puede aparecer en error; un comentario «recheck» del titular en ese
+# PR lo reevalúa con permisos completos (y el titular siempre puede fusionar).
 
 on:
   issue_comment:
