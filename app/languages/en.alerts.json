@@ -20,7 +20,7 @@
     "guide_conventions": "📜 Coding Conventions"
   },
   "sidebar": {
-    "obs_active": "OBS STUDIO · 9 ACTIVE SCENES",
+    "obs_active": "OBS STUDIO · ACTIVE SCENES",
     "connected_as": "🟢 Twitch Affiliate",
     "not_connected": "⚪ Disconnected"
   },
@@ -101,7 +101,45 @@
     "copied_toast": "URL copied to clipboard! Paste it into OBS Studio as a Browser Source (1920x1080).",
     "title_banner": "🧩 MODULAR WIDGETS & MINI-APPS FOR OBS",
     "guide_banner_desc": "In OBS Studio, in your <strong>Sources</strong> list, click the <strong>+</strong> button and select <strong>Browser Source</strong>. Click the green button on any widget below and paste it into the <em>URL</em> field of OBS. Set the recommended <strong>Width</strong> and <strong>Height</strong> shown on each card. And you are ready! Background is 100% transparent automatically.",
-    "btn_close_miniapp": "✕ Close Mini-App"
+    "btn_close_miniapp": "✕ Close Mini-App",
+    "component_themes_title": "🎨 COMPONENT THEMES (WIDGETS AND ALERTS)",
+    "component_themes_hint": "Apply a pack theme (and shape, when the widget supports it) without a fusion. Changes apply live.",
+    "theme_none": "unassigned",
+    "select_theme_or_shape": "Select a theme or a shape",
+    "shape_none": "no shape",
+    "shape_unsupported": "This component does not support shapes",
+    "shape_unsupported_short": "n/a",
+    "btn_apply_theme": "Apply",
+    "btn_reset_theme": "↺ Reset",
+    "no_components": "No components available",
+    "components_load_error": "Could not load the component catalog:",
+    "toast_theme_saved": "✓ Theme applied",
+    "theme_apply_error": "Could not apply: ",
+    "toast_theme_reset": "↺ Component restored",
+    "theme_reset_error": "Could not restore: ",
+    "btn_add_to_fusion": "Add to fusion",
+    "already_in_fusion": "Already in that fusion",
+    "toast_added_to_fusion": "✓ Added to the fusion",
+    "add_to_fusion_error": "Could not add to the fusion: ",
+    "alert_card_name": "Alert card",
+    "alert_banner_name": "Alert banner",
+    "widget_themes_title": "🎨 WIDGET THEMES",
+    "widget_themes_hint": "Apply a pack theme and a shape to each widget without a fusion. Changes are live.",
+    "alert_themes_title": "🎨 ALERT THEMES",
+    "alert_themes_hint": "Apply a pack theme and a shape to the card and banner, or add them to a fusion. Changes are live.",
+    "shape_rounded": "Rounded",
+    "shape_box": "Box",
+    "shape_bubble": "Bubble",
+    "shape_scifi": "Sci-Fi bevel",
+    "shape_pill": "Pill",
+    "shape_arcade": "Arcade",
+    "shape_tag": "Tag",
+    "shape_slant": "Slanted",
+    "shape_soft_card": "Soft card",
+    "goal_btn_stacked": "📚 Stacked (All)",
+    "goal_btn_rotative": "🔄 Rotating carousel",
+    "goal_btn_single": "🎯 Single goal",
+    "goal_btn_new": "New Free Goal"
   },
   "scenes": {
     "starting_soon": "Starting Soon",
@@ -524,6 +562,7 @@
   },
   "themes": {
     "section_title": "YOUR OBS STUDIO SCENES AND VISUAL STYLES",
+    "shape_label": "Shape",
     "section_subtitle": "Manage texts, projects, phases and the appearance of each of your 9 broadcast screens for OBS Studio.",
     "tab_overlays": "🎬 Your 9 Scenes in OBS (Texts and Styles)",
     "tab_themes": "📁 Packs Library and CSS Editor",
@@ -536,6 +575,7 @@
     "step3": "3. Dark panel and independent scenes",
     "step3_desc": "This web panel always keeps its dark control interface to work comfortably. Styles dress exclusively your screens on OBS Studio.",
     "btn_apply_all": "✨ Apply",
+    "toast_applied_all_count": "✓ Style \"{name}\" applied to all {count} scenes in OBS Studio",
     "btn_restore_themes": "🔄 Restore Original Styles",
     "btn_restore_texts": "📝 Restore Texts",
     "folders_title": "STREAM ACTIVITY FOLDERS AND OVERLAYS",
@@ -877,7 +917,7 @@
     "folders_hint": "Click on the card to <b>enter the folder</b> and edit all texts and activities of your stream individually. From the outside you can <b>apply a style to all overlays in the pack</b> or restore factory original styles.",
     "badge_folder_suite": "9 OVERLAYS · FULL SUITE",
     "folder_suite_desc": "Manage and edit each overlay and activity of your stream individually.",
-    "badge_scenes_available": "9 AVAILABLE SCENES",
+    "badge_scenes_available": "AVAILABLE SCENES",
     "crumb_theme_packs": "📁 Theme Packs",
     "badge_themes_in_pack": "6 THEMES",
     "theme_compile_hint": "💡 Automatically compiles to <code>style.css</code> so that all OBS Studio scenes receive it.",
@@ -900,7 +940,9 @@
     "toast_style_assigned": "✓ Style \"{name}\" assigned to scene",
     "toast_url_copied": "📋 OBS URL copied: {url}",
     "alert_url_copied": "URL copied to clipboard:\n{url}\n\nPaste it into OBS Studio as a Browser Source (1920×1080).",
-    "tab_fusions": "⚡ Fusions (Custom Packs)"
+    "tab_fusions": "⚡ Fusions (Custom Packs)",
+    "label_cozy_show": "Cozy Café: show chat frame (if unchecked, the camera expands)",
+    "label_oss_show": "Just Chatting: show chat column (if unchecked, the camera takes the full width)"
   },
   "scene_catalog": {
     "maker-desk": {
@@ -1208,7 +1250,8 @@
   "rewards": {
     "twitch_rewards_title": "REWARDS ON YOUR TWITCH (Channel Points):",
     "icon_color": "Icon Color on Twitch:",
-    "twitch_rewards_prefix": "REWARDS ON YOUR TWITCH"
+    "twitch_rewards_prefix": "REWARDS ON YOUR TWITCH",
+    "selected": "✓ Reward selected"
   },
   "roles": {
     "channel_team_title": "CHANNEL ROLES & TEAM (Roles):",
@@ -1357,6 +1400,13 @@
     "btn_fire_obs": "🚀 FIRE ALERT IN OBS NOW"
   },
   "fusions": {
+    "btn_reset": "↺ Reset fusion",
+    "label_widgets": "WIDGETS IN THIS FUSION:",
+    "label_alerts": "PANEL ALERTS IN THIS FUSION:",
+    "badge_members": "{scenes} OVERLAYS · {widgets} WIDGETS · {alerts} ALERTS",
+    "confirm_reset": "Restore factory theme and shape for ALL members of this fusion?",
+    "toast_reset": "↺ Fusion restored to factory values",
+    "error_reset": "Could not reset the fusion: ",
     "tab_title": "⚡ Overlay Fusions (Custom Packs)",
     "crumb_fusions": "⚡ Overlay Fusions (Custom Packs)",
     "btn_new_fusion": "➕ New Fusion",
@@ -1387,11 +1437,23 @@
     "btn_batch_style": "🎨 Batch Style",
     "title_edit": "Edit this fusion",
     "title_delete": "Delete this fusion",
+    "label_default_shape": "Default shape",
     "no_scenes_warning": "This fusion does not have any overlays selected.",
     "btn_select_scenes": "➕ Select Overlays for this Fusion",
-    "toast_theme_applied": "✓ Style applied to entire fusion batch",
+    "toast_theme_applied": "✓ Style applied in batch — {summary}",
+    "toast_theme_partial": "⚠️ Style partially applied — {summary}",
+    "batch_scenes": "{count} scene(s)",
+    "batch_widgets": "{count} widget(s)",
+    "batch_alerts": "{count} alert(s)",
+    "batch_skipped": "{count} skipped",
+    "batch_failed": "{count} failed",
+    "batch_no_changes": "no changes",
     "toast_theme_error": "Error applying batch style",
     "toast_saved": "✓ Fusion saved successfully",
+    "members_ignored_scenes": "Ignored scenes: {list}",
+    "members_ignored_widgets": "Ignored widgets: {list}",
+    "members_ignored_alerts": "Ignored alerts: {list}",
+    "save_error": "Error saving fusion: {error}",
     "confirm_delete": "Are you sure you want to delete the fusion \"{name}\"?",
     "toast_deleted": "🗑️ Fusion \"{name}\" deleted",
     "floating_selected": "{count} OVERLAYS SELECTED",
@@ -1408,6 +1470,13 @@
     "btn_deselect_all_fusion": "☐ Deselect Fusion",
     "btn_customize_pack_styles": "🎨 Customize Styles of this Pack →",
     "css_library_info_title": "🎨 PACKS LIBRARY & BASE CSS EDITOR",
-    "css_library_info_desc": "What does this editor do? This is where the <b>active definition</b> of each visual style is configured (colors, physical frames, geometric borders, clip-path cuts, and typography). Whatever you modify and save here <b>becomes the active live design</b> for all overlays using this theme. The <b>'Restore Original'</b> button will always let you restore the clean factory default version from Open Stream Suite."
+    "css_library_info_desc": "What does this editor do? This is where the <b>active definition</b> of each visual style is configured (colors, physical frames, geometric borders, clip-path cuts, and typography). Whatever you modify and save here <b>becomes the active live design</b> for all overlays using this theme. The <b>'Restore Original'</b> button will always let you restore the clean factory default version from Open Stream Suite.",
+    "members_title": "FUSION MEMBERS",
+    "members_empty": "No members",
+    "remove_member": "Remove from fusion",
+    "toast_member_removed": "✓ Member removed from fusion",
+    "error_remove_member": "Could not remove member: ",
+    "warn_unknown_scenes": "⚠️ This fusion references scenes that no longer exist and were skipped:",
+    "warn_unknown_scenes_fix": "Edit the fusion to remove or replace those keys."
   }
 }

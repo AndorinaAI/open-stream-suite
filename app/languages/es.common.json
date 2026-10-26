@@ -21,7 +21,7 @@
     "guide_install": "🚀 Guía de Instalación y Arranque"
   },
   "sidebar": {
-    "obs_active": "OBS STUDIO · 9 ESCENAS ACTIVAS",
+    "obs_active": "OBS STUDIO · ESCENAS ACTIVAS",
     "connected_as": "🟢 Afiliado Twitch",
     "not_connected": "⚪ No conectado"
   },
@@ -123,6 +123,7 @@
   },
   "common": {
     "save": "Guardar",
+    "refresh": "Actualizar",
     "cancel": "Cancelar",
     "close": "Cerrar",
     "delete": "Eliminar",

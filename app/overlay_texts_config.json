@@ -183,12 +183,14 @@
     "newsHeadline": "Abriendo debate en directo con el chat · Opiniones, actualidad y reflexiones",
     "podcastHost": "HOST // PRESENTADOR",
     "podcastGuest": "INVITADO // CO-HOST",
-    "desktopCam": "STREAMER // PRESENTADOR"
+    "desktopCam": "STREAMER // PRESENTADOR",
+    "showChatPanel": true
   },
   "cozy": {
     "cafeCamLabel": "☕ Café & Charla Tranquila",
     "chatTitle": "💬 Rincón del Café",
-    "studyCamLabel": "📖 MESA DE ESTUDIO · STREAM"
+    "studyCamLabel": "📖 MESA DE ESTUDIO · STREAM",
+    "showChatPanel": true
   },
   "performance": {
     "enableAnimations": true

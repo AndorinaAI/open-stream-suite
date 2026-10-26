@@ -21,7 +21,7 @@
     "guide_install": "🚀 Installation & Startup Guide"
   },
   "sidebar": {
-    "obs_active": "OBS STUDIO · 9 ACTIVE SCENES",
+    "obs_active": "OBS STUDIO · ACTIVE SCENES",
     "connected_as": "🟢 Twitch Affiliate",
     "not_connected": "⚪ Disconnected"
   },
@@ -888,7 +888,7 @@
     "folders_hint": "Click on the card to <b>enter the folder</b> and edit all texts and activities of your stream individually. From the outside you can <b>apply a style to all overlays in the pack</b> or restore factory original styles.",
     "badge_folder_suite": "9 OVERLAYS · FULL SUITE",
     "folder_suite_desc": "Manage and edit each overlay and activity of your stream individually.",
-    "badge_scenes_available": "9 AVAILABLE SCENES",
+    "badge_scenes_available": "AVAILABLE SCENES",
     "crumb_theme_packs": "📁 Theme Packs",
     "badge_themes_in_pack": "6 THEMES",
     "theme_compile_hint": "💡 Automatically compiles to <code>style.css</code> so that all OBS Studio scenes receive it.",
@@ -1421,6 +1421,13 @@
     "btn_deselect_all_fusion": "☐ Deselect Fusion",
     "btn_customize_pack_styles": "🎨 Customize Styles of this Pack →",
     "css_library_info_title": "🎨 PACKS LIBRARY & BASE CSS EDITOR",
-    "css_library_info_desc": "What does this editor do? This is where the <b>active definition</b> of each visual style is configured (colors, physical frames, geometric borders, clip-path cuts, and typography). Whatever you modify and save here <b>becomes the active live design</b> for all overlays using this theme. The <b>'Restore Original'</b> button will always let you restore the clean factory default version from Open Stream Suite."
+    "css_library_info_desc": "What does this editor do? This is where the <b>active definition</b> of each visual style is configured (colors, physical frames, geometric borders, clip-path cuts, and typography). Whatever you modify and save here <b>becomes the active live design</b> for all overlays using this theme. The <b>'Restore Original'</b> button will always let you restore the clean factory default version from Open Stream Suite.",
+    "label_widgets": "WIDGETS IN THIS FUSION:",
+    "label_alerts": "PANEL ALERTS IN THIS FUSION:",
+    "badge_members": "{scenes} OVERLAYS · {widgets} WIDGETS · {alerts} ALERTS",
+    "btn_reset": "↺ Reset fusion",
+    "confirm_reset": "Restore factory theme and shape for ALL members of this fusion?",
+    "toast_reset": "↺ Fusion restored to factory values",
+    "error_reset": "Could not reset the fusion: "
   }
 }
