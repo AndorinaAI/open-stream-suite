@@ -1,4 +1,4 @@
-# Pendientes no bloqueantes — estado 2026-10-24
+# Pendientes no bloqueantes — estado 2026-10-26
 
 | Tema | Estado | Evidencia |
 |---|---|---|
@@ -10,7 +10,7 @@
 | `favicon.ico` 404 | **Cerrado** | Responde 200 `image/png`. |
 | `?lang=` inerte | **Reservado** | Solo lo aplica `/api/overlays/texts`; documentado en las guías. |
 | `?lock=1` sin `?theme=` | **Documentado** | Conserva el comportamiento actual; no se cambia sin decisión de producto. |
-| Cambios Git | **Pendiente operativo** | El árbol sigue sin commit; no se ha hecho commit ni push. |
+| Cambios Git | **Pendiente: push** | El árbol ya está commiteado por bloques (ronda legal + 16 commits de la auditoría V3 / WIP acumulado) y `git status` está limpio. Falta **hacer push**: la rama `main` **no tiene upstream** (`git push -u origin main`). Revisar también la rama `dev`, que quedó desactualizada. |
 
 ## Regla
 
