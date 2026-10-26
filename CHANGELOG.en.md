@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Fixed — Real scene counters (V3-03)
+
+- Panel texts and batch confirmations no longer hardcode a scene count: the section subtitle **drops the "9"** ("each of your broadcast screens") and the confirmations (`confirm_apply_all`, `confirm_restore_all_scenes_texts`, `confirm_restore_all_scenes_themes`) use the **`{count}`** parameter in all four ES/EN dictionaries.
+- The three JS callers now pass `count: window.OSS_SCENES.length`, and the per-folder scene badge no longer starts with a fixed "9". The Maker pack descriptions ("...with 9 ready screens") are kept on purpose: they describe its 9 real scenes.
+- **Regression:** new `tests/test_i18n_scene_count.py` suite (4 tests).
+
 ### Changed — Dual licence (AGPL-3.0 + commercial) and mandatory CLA
 
 - **The public licence moves from CC BY-NC-SA 4.0 to GNU AGPL v3.0 or later**: the project is now **free software** (OSI/FSF recognised), so it can be distributed through repositories and distributions that require free licences, with no ambiguity about internal use, SaaS or embedding.
