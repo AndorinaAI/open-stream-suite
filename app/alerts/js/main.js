@@ -20,6 +20,16 @@ function initObsWidgetUrls() {
 }
 
 // Navegación de secciones (tabs)
+function updateSidebarSceneCount() {
+  const el = document.getElementById('sidebar-obs-active');
+  if (!el) return;
+  const count = Array.isArray(window.OSS_SCENES) ? window.OSS_SCENES.length : 27;
+  const lang = (document.documentElement.lang || 'es').toLowerCase();
+  el.textContent = lang.startsWith('en')
+    ? `OBS STUDIO · ${count} ACTIVE SCENES`
+    : `OBS STUDIO · ${count} ESCENAS ACTIVAS`;
+}
+
 function showSection(secId) {
   document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -129,6 +139,7 @@ window.addEventListener('oss-lang-change', checkUpdates);
 // Arranque de la aplicación
 window.addEventListener('DOMContentLoaded', () => {
   initObsWidgetUrls();
+  updateSidebarSceneCount();
   checkStatus();
   checkUpdates();
   loadTwitchRewards();
@@ -178,6 +189,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
       window.i18n.applyTranslations(document);
     }
+    updateSidebarSceneCount();
   });
 });
 

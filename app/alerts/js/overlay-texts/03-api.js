@@ -115,6 +115,12 @@ Object.assign(window.OverlayTexts, {
         footerNote: elVal('txt-end-footer') || 'ANDORINA · OPEN STREAM SUITE · TRANSMISIÓN FINALIZADA',
         liveStatusText: elVal('txt-end-live-status') || 'FIN DE TRANSMISIÓN'
       },
+      cozy: {
+        showChatPanel: elChecked('txt-cozy-show-chat')
+      },
+      oss: {
+        showChatPanel: elChecked('txt-oss-show-chat')
+      },
       performance: {
         enableAnimations: true
       }

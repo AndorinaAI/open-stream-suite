@@ -1,6 +1,22 @@
 /**
  * alerts-studio/06-preview-test.js — Motor de previsualización en vivo, simulación y guardado
  */
+function previewEscape(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function previewColor(value, fallback) {
+  const s = String(value == null ? '' : value).trim();
+  return /^#[0-9a-fA-F]{6}$/.test(s) ? s : fallback;
+}
+function previewClass(value, fallback) {
+  const s = String(value == null ? '' : value).replace(/[^A-Za-z0-9_-]/g, '');
+  return s || fallback;
+}
+function previewFont(value) {
+  const s = String(value == null ? '' : value).trim();
+  return /^[A-Za-z0-9 ,'()_-]+$/.test(s) ? s : 'var(--font-tech), monospace';
+}
+
 Object.assign(AlertsStudio, {
   updatePreview(animate = false) {
     const box = document.getElementById('preview-alert-box');
@@ -34,9 +50,9 @@ Object.assign(AlertsStudio, {
     let subtitleTpl = c.subtitleTemplate || c.templateMessage || '';
     let effectiveMediaMode = c.mediaMode || 'banner';
     let effectiveMediaUrl = c.mediaUrl || '';
-    let effectiveBannerStyle = c.bannerStyle || 'cyberpunk';
-    let effectiveBorderColor = c.bannerBorderColor || c.borderColor || '#57D6C4';
-    let effectiveTextColor = c.bannerTextColor || '#FFFFFF';
+    let effectiveBannerStyle = previewClass(c.bannerStyle || 'cyberpunk', 'cyberpunk');
+    let effectiveBorderColor = previewColor(c.bannerBorderColor || c.borderColor || '#57D6C4', '#57D6C4');
+    let effectiveTextColor = previewColor(c.bannerTextColor || '#FFFFFF', '#FFFFFF');
     let effectiveBadge = '';
 
     const typeMeta = this.ALERT_TYPES.find(t => t.id === this.currentType) || this.ALERT_TYPES[0];
@@ -52,18 +68,20 @@ Object.assign(AlertsStudio, {
 
       if (p.mediaMode === 'banner') {
         effectiveMediaMode = 'banner';
-        if (p.bannerStyle) effectiveBannerStyle = p.bannerStyle;
-        if (p.bannerBorderColor) effectiveBorderColor = p.bannerBorderColor;
+        if (p.bannerStyle) effectiveBannerStyle = previewClass(p.bannerStyle, 'cyberpunk');
+        if (p.bannerBorderColor) effectiveBorderColor = previewColor(p.bannerBorderColor, '#57D6C4');
       } else if (p.mediaMode === 'media') {
         effectiveMediaMode = 'media';
         if (p.mediaUrl) effectiveMediaUrl = p.mediaUrl;
       }
     }
 
-    const titleText = resolveTpl(titleTpl);
-    const subtitleText = resolveTpl(subtitleTpl);
-    const anim = c.bannerAnimation || 'pop';
-    const font = c.bannerFontFamily || 'var(--font-tech), monospace';
+    const titleText = previewEscape(resolveTpl(titleTpl));
+    const subtitleText = previewEscape(resolveTpl(subtitleTpl));
+    const badgeText = previewEscape(effectiveBadge);
+    const userText = previewEscape(user);
+    const anim = previewClass(c.bannerAnimation || 'pop', 'pop');
+    const font = previewFont(c.bannerFontFamily || 'var(--font-tech), monospace');
 
     if (effectiveMediaMode === 'banner') {
       box.innerHTML = `
@@ -73,13 +91,13 @@ Object.assign(AlertsStudio, {
           </div>
           <div class="banner-text-col" style="margin-left: 14px;">
             <div class="banner-badge-tag" style="color: ${effectiveBorderColor}; border-color: ${effectiveBorderColor}44;">
-              ${effectiveBadge}
+              ${badgeText}
             </div>
             <div class="banner-primary-title" style="color: ${effectiveBorderColor}; font-size: 11px;">
               ${titleText}
             </div>
             <div class="banner-user-display" style="font-size: 22px; color: ${effectiveTextColor};">
-              ${user}
+              ${userText}
             </div>
             ${subtitleText ? `<div class="banner-subtitle-msg" style="font-size: 11px;">${subtitleText}</div>` : ''}
           </div>
@@ -91,16 +109,16 @@ Object.assign(AlertsStudio, {
       box.innerHTML = `
         <div id="preview-alert-element" class="preview-media-container anim-${anim}" style="position: relative; width: 340px; text-align: center;">
           ${effectiveMediaUrl ? (isVideo ? `
-            <video src="${effectiveMediaUrl}" autoplay loop muted playsinline style="max-width: 100%; max-height: 180px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);"></video>
+            <video src="${previewEscape(effectiveMediaUrl)}" autoplay loop muted playsinline style="max-width: 100%; max-height: 180px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);"></video>
           ` : `
-            <img src="${effectiveMediaUrl}" style="max-width: 100%; max-height: 180px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);" alt="Media Preview">
+            <img src="${previewEscape(effectiveMediaUrl)}" style="max-width: 100%; max-height: 180px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);" alt="Media Preview">
           `) : `
             <div style="background: rgba(255,255,255,0.05); border: 2px dashed #475569; border-radius: 8px; padding: 24px; color: var(--color-text-dim); font-size: 11px;">
               [No has seleccionado archivo multimedia]<br>Elige un archivo de vídeo o GIF en el menú.
             </div>
           `}
           <div style="margin-top: 8px; display: inline-block; padding: 6px 14px; background: rgba(18, 22, 26, 0.94); border: 2px solid ${effectiveBorderColor}; border-radius: 6px; font-weight: 800; font-size: 12px; color: #FFF; box-shadow: 0 0 16px rgba(87, 214, 196, 0.3);">
-            ${titleText}: ${user}
+            ${titleText}: ${userText}
           </div>
         </div>
       `;

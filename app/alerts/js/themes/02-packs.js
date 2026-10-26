@@ -8,9 +8,20 @@ async function loadThemePacks() {
     currentActivePackId = data.activePack || 'Maker_Theme_Pack';
     if (data.overlayThemes) {
       cachedOverlayThemes = Object.assign({}, cachedOverlayThemes, data.overlayThemes);
+      window.cachedOverlayThemes = cachedOverlayThemes;
     }
     if (data.overlayShapes) {
       window.cachedOverlayShapes = Object.assign({}, window.cachedOverlayShapes || {}, data.overlayShapes);
+    }
+    // Sincronización de estado escenas<->temas: normaliza alias de clave y
+    // descarta claves que no son escenas (estado huérfano del servidor:
+    // 'starting', 'maker', 'print', ...). Queda constancia para diagnóstico.
+    if (typeof sanitizeOverlayState === 'function') {
+      const clean = sanitizeOverlayState();
+      if (clean.droppedThemes.length || clean.droppedShapes.length || Object.keys(clean.renamedThemes).length) {
+        window.__OSS_STATE_CLEANUP__ = clean;
+        console.info('[OSS] Estado normalizado:', clean);
+      }
     }
 
     updateActiveThemeBadge();
@@ -85,7 +96,7 @@ function renderThemePacks() {
   if (btnBack) btnBack.style.display = 'none';
   if (btnAddTheme) btnAddTheme.style.display = 'none';
   if (breadcrumbs) {
-    breadcrumbs.innerHTML = `<span class="crumb-item active" onclick="showThemePacksView()">${crumbPacks}</span>`;
+    breadcrumbs.innerHTML = `<span class="crumb-item active" onclick="showThemePacksView()">${themeEscapeHtml(crumbPacks)}</span>`;
   }
 
   const badgeTotalPacks = tr('themes.badge_total_theme_packs', `${cachedThemePacks.length} PACKS`).replace('{count}', cachedThemePacks.length);
@@ -93,7 +104,7 @@ function renderThemePacks() {
   if (!container) return;
 
   if (cachedThemePacks.length === 0) {
-    container.innerHTML = `<div style="color: var(--color-text-dim); padding: 24px;">${tr('themes.no_packs', 'No hay packs creados. Haz clic en "+ Nuevo Pack" para crear uno.')}</div>`;
+    container.innerHTML = `<div style="color: var(--color-text-dim); padding: 24px;">${themeEscapeHtml(tr('themes.no_packs', 'No hay packs creados. Haz clic en "+ Nuevo Pack" para crear uno.'))}</div>`;
     return;
   }
 
@@ -105,32 +116,36 @@ function renderThemePacks() {
   container.innerHTML = cachedThemePacks.map(rawPack => {
     const pack = getPackLocalized(rawPack);
     const isPackActive = pack.id === currentActivePackId;
-    const countText = themesLabel.replace('{count}', pack.themesCount || 0);
+    const countText = themesLabel.replace('{count}', Number(pack.themesCount) || 0);
+    const safeIcon = themeEscapeHtml(pack.icon || '📁');
+    const safeName = themeEscapeHtml(pack.name);
+    const safeDesc = themeEscapeHtml(pack.description || 'Pack modular de temas y escenas.');
+    const safeId = themeEscapeHtml(pack.id);
     return `
-      <div class="pack-folder-card ${isPackActive ? 'active-pack' : ''}" onclick="openThemePack('${pack.id}')">
+      <div class="pack-folder-card ${isPackActive ? 'active-pack' : ''}" onclick="openThemePack(${themeJsArg(pack.id)})">
         <div class="pack-folder-header">
           <div class="pack-folder-title">
-            <span style="font-size: 24px;">${pack.icon || '📁'}</span>
+            <span style="font-size: 24px;">${safeIcon}</span>
             <div>
-              <div>${pack.name}</div>
-              <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim);">streamthemes/${pack.id}/</div>
+              <div>${safeName}</div>
+              <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim);">streamthemes/${safeId}/</div>
             </div>
           </div>
           <span class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan);">
-            ${countText}
+            ${themeEscapeHtml(countText)}
           </span>
         </div>
 
         <div style="font-size: 12px; color: var(--color-text-dim); line-height: 1.4;">
-          ${pack.description || 'Pack modular de temas y escenas.'}
+          ${safeDesc}
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.05); font-family: var(--font-tech); font-size: 11px;">
           <span style="color: ${isPackActive ? 'var(--color-accent-cyan)' : 'var(--color-text-dim)'}; font-weight: 700;">
-            ${isPackActive ? activeObs : localCol}
+            ${themeEscapeHtml(isPackActive ? activeObs : localCol)}
           </span>
           <button class="btn-action-test" style="padding: 4px 10px; font-size: 11px;">
-            ${openFolderBtn}
+            ${themeEscapeHtml(openFolderBtn)}
           </button>
         </div>
       </div>
@@ -169,9 +184,9 @@ function openThemePack(packId) {
 
   if (breadcrumbs) {
     breadcrumbs.innerHTML = `
-      <span class="crumb-item" onclick="showThemePacksView()">${crumbPacks}</span>
+      <span class="crumb-item" onclick="showThemePacksView()">${themeEscapeHtml(crumbPacks)}</span>
       <span class="crumb-sep">/</span>
-      <span class="crumb-item active">${pack.icon || '📁'} ${pack.name}</span>
+      <span class="crumb-item active">${themeEscapeHtml(pack.icon || '📁')} ${themeEscapeHtml(pack.name)}</span>
     `;
   }
 
@@ -205,19 +220,22 @@ function openThemePack(packId) {
         shapesGrid.innerHTML = shapes.map(s => {
           const shapeVal = s.archetype || s.id;
           const isLive = (window.cachedActiveShape === shapeVal);
+          const safeIcon = themeEscapeHtml(s.icon || '📐');
+          const safeName = themeEscapeHtml(s.name || '');
+          const safeDesc = themeEscapeHtml(s.description || 'Geometría y ornamentación física de marcos y ventanas.');
           return `
             <div class="dash-card theme-card-rich" style="border-top: 4px solid var(--color-accent-orange); display: flex; flex-direction: column; justify-content: space-between; gap: 12px; padding: 14px;">
               <div>
                 <div class="card-header-bar" style="margin-bottom: 6px;">
-                  <span class="card-header-title" style="font-size: 13px;">${s.icon || '📐'} ${s.name}</span>
+                  <span class="card-header-title" style="font-size: 13px;">${safeIcon} ${safeName}</span>
                   ${isLive ? '<span style="font-size: 10px; color: var(--color-accent-orange); font-family: var(--font-tech); font-weight: 700;">● ACTIVA</span>' : ''}
                 </div>
                 <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.4;">
-                  ${s.description || 'Geometría y ornamentación física de marcos y ventanas.'}
+                  ${safeDesc}
                 </div>
               </div>
               <div>
-                <button type="button" class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 7px; background: #FF783F; border-color: #FF783F; display: inline-flex; justify-content: center; align-items: center; gap: 6px;" onclick="applyShapeToAllScenes('${shapeVal}', '${escapeHtml(s.name)}')">
+                <button type="button" class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 7px; background: #FF783F; border-color: #FF783F; display: inline-flex; justify-content: center; align-items: center; gap: 6px;" onclick="applyShapeToAllScenes(${themeJsArg(shapeVal)}, ${themeJsArg(s.name)})">
                   📐 Aplicar esta forma a TODO el Stream
                 </button>
               </div>
@@ -249,24 +267,31 @@ function openThemePack(packId) {
   container.innerHTML = themes.map(t => {
     const isCurrentActive = t.id === currentActiveThemeId;
     const isChatAnchored = t.chatAnchored !== false;
-    const cyan = t.accentCyan || '#57D6C4';
-    const orange = t.accentOrange || '#FF783F';
-    const bg = t.bgDark || '#191D21';
-    const txt = t.textLight || '#F2EEE5';
+    const cyan = themeColor(t.accentCyan, '#57D6C4');
+    const orange = themeColor(t.accentOrange, '#FF783F');
+    const bg = themeColor(t.bgDark, '#191D21');
+    const txt = themeColor(t.textLight, '#F2EEE5');
+    const glow = Number.isFinite(Number(t.glowIntensity))
+      ? Math.max(0, Math.min(100, Math.round(Number(t.glowIntensity))))
+      : 50;
+    const safeName = themeEscapeHtml(t.name);
+    const safeBadge = themeEscapeHtml(t.badge || t.name);
+    const safeDesc = themeEscapeHtml(t.desc || 'Estilo visual para todas las escenas y overlays.');
+    const linkedCount = OSS_SCENES.filter(sc => (cachedOverlayThemes[sc.key] || currentActiveThemeId) === t.id).length;
 
     return `
       <div class="dash-card theme-card-rich ${isCurrentActive ? 'is-active-theme' : ''}" style="border-top: 4px solid ${cyan};">
         <div class="card-header-bar">
-          <span class="card-header-title">${t.badge || t.name}</span>
+          <span class="card-header-title">${safeBadge}</span>
           ${isCurrentActive ? '<span style="font-size: 10px; color: var(--color-accent-cyan); font-family: var(--font-tech); font-weight: 700;">● EN VIVO</span>' : ''}
         </div>
 
         <div style="font-size: 14px; font-weight: 800; color: var(--color-text-light); margin-top: 4px;">
-          ${t.name}
+          ${safeName}
         </div>
 
         <p style="font-size: 12px; color: var(--color-text-dim); line-height: 1.4; min-height: 36px;">
-          ${t.desc || 'Estilo visual para todas las escenas y overlays.'}
+          ${safeDesc}
         </p>
 
         <!-- Muestrario de Colores (Swatches) -->
@@ -280,32 +305,33 @@ function openThemePack(packId) {
         <!-- Estado de Chat -->
         <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-tech); font-size: 11px; margin-top: 4px;">
           <span style="color: ${isChatAnchored ? 'var(--color-accent-cyan)' : 'var(--color-accent-orange)'};">
-            ${isChatAnchored ? tr('themes.chat_anchored', '🔗 Chat Anclado') : tr('themes.chat_derivative', '✨ Chat Derivado')}
+            ${themeEscapeHtml(isChatAnchored ? tr('themes.chat_anchored', '🔗 Chat Anclado') : tr('themes.chat_derivative', '✨ Chat Derivado'))}
           </span>
           <span style="color: var(--color-text-dim); font-size: 10px;">
-            Glow: ${t.glowIntensity || 50}%
+            Glow: ${glow}%
           </span>
         </div>
 
         <!-- Overlays Vinculadas a este Estilo -->
         <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(255, 120, 63, 0.3); padding: 8px; border-radius: 4px; margin-top: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-bottom: 5px;">
-            <span style="color: var(--color-text-dim);">${tr('themes.overlays_using_style', '🎬 Overlays que usan este estilo:')}</span>
+            <span style="color: var(--color-text-dim);">${themeEscapeHtml(tr('themes.overlays_using_style', '🎬 Overlays que usan este estilo:'))}</span>
             <span style="color: var(--color-accent-orange); font-family: var(--font-tech); font-weight: 700;">
-              ${tr('themes.linked_badge', '{count} ENLAZADAS').replace('{count}', OSS_SCENES.filter(sc => (cachedOverlayThemes[sc.key] || currentActiveThemeId) === t.id).length)}
+              ${themeEscapeHtml(tr('themes.linked_badge', '{count} ENLAZADAS').replace('{count}', linkedCount))}
             </span>
           </div>
           <div style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 52px; overflow-y: auto;">
             ${(() => {
               const linked = OSS_SCENES.filter(sc => (cachedOverlayThemes[sc.key] || currentActiveThemeId) === t.id);
               if (linked.length === 0) {
-                return `<span style="font-size: 10px; color: var(--color-text-dim); font-style: italic;">${tr('themes.no_overlays_linked', 'Sin overlays asignadas (se puede asignar en la pestaña Overlays)')}</span>`;
+                return `<span style="font-size: 10px; color: var(--color-text-dim); font-style: italic;">${themeEscapeHtml(tr('themes.no_overlays_linked', 'Sin overlays asignadas (se puede asignar en la pestaña Overlays)'))}</span>`;
               }
               return linked.map(sc => {
                 const localizedSc = getSceneLocalized(sc);
+                const sceneName = String(localizedSc.name || '');
                 return `
-                <button type="button" class="badge-pill" style="cursor: pointer; border: 1px solid rgba(255, 120, 63, 0.4); background: rgba(255, 120, 63, 0.15); color: #FF783F; font-size: 9px; padding: 2px 6px;" onclick="openOverlayFullscreen('${sc.key}', '${sc.path}')" title="${localizedSc.name}">
-                  ${localizedSc.icon} ${localizedSc.name.split(':')[0]} 🖥️✏️
+                <button type="button" class="badge-pill" style="cursor: pointer; border: 1px solid rgba(255, 120, 63, 0.4); background: rgba(255, 120, 63, 0.15); color: #FF783F; font-size: 9px; padding: 2px 6px;" onclick="openOverlayFullscreen(${themeJsArg(sc.key)}, ${themeJsArg(sc.path)})" title="${themeEscapeHtml(sceneName)}">
+                  ${themeEscapeHtml(localizedSc.icon)} ${themeEscapeHtml(sceneName.split(':')[0])} 🖥️✏️
                 </button>
               `;
               }).join('');
@@ -316,20 +342,21 @@ function openThemePack(packId) {
         <!-- Botones de Acción -->
         <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
           <div style="display: flex; gap: 6px;">
-            <select class="monitor-select" style="flex: 1; font-size: 11px; padding: 6px;" onchange="if(this.value){ assignThemeToScene(this.value, '${t.id}'); this.value=''; }">
-              <option value="">${tr('themes.assign_to_scene', '🎯 Asignar a una Escena...')}</option>
+            <select class="monitor-select" style="flex: 1; font-size: 11px; padding: 6px;" onchange="if(this.value){ assignThemeToScene(this.value, ${themeJsArg(t.id)}); this.value=''; }">
+              <option value="">${themeEscapeHtml(tr('themes.assign_to_scene', '🎯 Asignar a una Escena...'))}</option>
               ${OSS_SCENES.map(sc => {
                 const locSc = getSceneLocalized(sc);
-                return `<option value="${sc.key}">➔ ${locSc.icon} ${locSc.name.split(':')[0]}</option>`;
+                const sceneName = String(locSc.name || '');
+                return `<option value="${themeEscapeHtml(sc.key)}">➔ ${themeEscapeHtml(locSc.icon)} ${themeEscapeHtml(sceneName.split(':')[0])}</option>`;
               }).join('')}
             </select>
-            <button class="btn-action-test" style="font-size: 11px; padding: 6px 12px;" onclick="openThemeEditor('${pack.id}', '${t.id}')">
-              ${tr('themes.btn_edit_theme', '🛠️ Editar')}
+            <button class="btn-action-test" style="font-size: 11px; padding: 6px 12px;" onclick="openThemeEditor(${themeJsArg(pack.id)}, ${themeJsArg(t.id)})">
+              ${themeEscapeHtml(tr('themes.btn_edit_theme', '🛠️ Editar'))}
             </button>
           </div>
 
-          <button class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 6px; display: inline-flex; justify-content: center; align-items: center; gap: 5px;" onclick="applyThemeToAllScenes('${t.id}', '${pack.id}')">
-            ${tr('themes.btn_apply_all_scenes_obs', '🎨 Aplicar a Todas las Escenas en OBS')}
+          <button class="btn-action-primary" style="width: 100%; font-size: 11px; padding: 6px; display: inline-flex; justify-content: center; align-items: center; gap: 5px;" onclick="applyThemeToAllScenes(${themeJsArg(t.id)}, ${themeJsArg(pack.id)})">
+            ${themeEscapeHtml(tr('themes.btn_apply_all_scenes_obs', '🎨 Aplicar a Todas las Escenas en OBS'))}
           </button>
         </div>
       </div>
@@ -360,7 +387,8 @@ async function activateTheme(themeId, packId) {
 }
 
 async function assignThemeToScene(sceneKey, themeId) {
-  await onOverlayThemeChange(sceneKey, themeId);
+  const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(sceneKey)) || sceneKey;
+  await onOverlayThemeChange(canonical, themeId);
 }
 
 async function applyThemeToAllScenes(themeId, packId) {
@@ -368,11 +396,13 @@ async function applyThemeToAllScenes(themeId, packId) {
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
   if (!confirm(tr('themes.confirm_apply_all', `¿Deseas aplicar el estilo "${info.name}" a todas las 27 escenas de OBS Studio?`, { name: info.name }))) return;
   for (const sc of OSS_SCENES) {
-    cachedOverlayThemes[sc.key] = themeId;
+    const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(sc.key)) || sc.key;
+    cachedOverlayThemes[canonical] = themeId;
     try {
-      await API.setOverlayTheme(sc.key, themeId);
+      await API.setOverlayTheme(canonical, themeId);
     } catch (e) {}
   }
+  window.cachedOverlayThemes = cachedOverlayThemes;
   await API.applyThemePack(themeId, packId);
   currentActiveThemeId = themeId;
   currentActivePackId = packId;

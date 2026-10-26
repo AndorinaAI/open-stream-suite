@@ -5,6 +5,7 @@
  */
 
 let cachedFusions = [];
+let cachedComponentCatalog = { widgets: [], alerts: [] };
 let currentOpenFusionId = null;
 
 async function loadAndRenderFusions() {
@@ -16,6 +17,11 @@ async function loadAndRenderFusions() {
   try {
     const res = await API.getFusions();
     cachedFusions = (res && res.fusions) ? res.fusions : [];
+    try {
+      cachedComponentCatalog = await API.getComponentsCatalog();
+    } catch (e) {
+      console.warn('Catálogo de componentes no disponible:', e);
+    }
   } catch (e) {
     console.error('Error cargando fusiones:', e);
     cachedFusions = [];
@@ -75,10 +81,10 @@ function renderFusionsList() {
 
     // Muestreo de procedencia de packs en la fusión
     const scenePackBadges = (fusion.scenes || []).map(scKey => {
-      const sc = OSS_SCENES.find(s => s.key === scKey);
+      const sc = (typeof window.getSceneByKey === 'function') ? window.getSceneByKey(scKey) : OSS_SCENES.find(s => s.key === scKey);
       if (!sc) return '';
       const pack = OVERLAY_FOLDERS.find(f => f.id === sc.packId) || { name: sc.packId, icon: '📁' };
-      return `<span style="font-size: 10px; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.12); color: var(--color-text-light);" title="${sc.name}">${pack.icon} ${sc.name}</span>`;
+      return `<span style="font-size: 10px; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.12); color: var(--color-text-light);" title="${themeEscapeHtml(sc.name)}">${themeEscapeHtml(pack.icon)} ${themeEscapeHtml(sc.name)}</span>`;
     }).join(' ');
 
     return `
@@ -86,7 +92,7 @@ function renderFusionsList() {
         <div>
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 32px;">${fusion.icon || '⚡'}</span>
+              <span style="font-size: 32px;">${escapeHtml(fusion.icon || '⚡')}</span>
               <div>
                 <div style="font-size: 16px; font-weight: 800; color: #FFFFFF;">${escapeHtml(fusion.name)}</div>
                 <span class="badge-pill" style="font-size: 10px; background: rgba(87, 214, 196, 0.15); color: var(--color-accent-cyan); font-weight: 800;">
@@ -95,10 +101,10 @@ function renderFusionsList() {
               </div>
             </div>
             <div style="display: flex; gap: 6px;">
-              <button type="button" class="btn-action-test" onclick="openEditFusionModal('${fusion.id}')" title="${tr('fusions.title_edit', 'Editar esta fusión')}" style="padding: 4px 8px; font-size: 11px;">
+              <button type="button" class="btn-action-test" onclick="openEditFusionModal(${themeJsArg(fusion.id)})" title="${tr('fusions.title_edit', 'Editar esta fusión')}" style="padding: 4px 8px; font-size: 11px;">
                 ✏️
               </button>
-              <button type="button" class="btn-action-danger" onclick="deleteFusionPrompt('${fusion.id}')" title="${tr('fusions.title_delete', 'Eliminar esta fusión')}" style="padding: 4px 8px; font-size: 11px;">
+              <button type="button" class="btn-action-danger" onclick="deleteFusionPrompt(${themeJsArg(fusion.id)})" title="${tr('fusions.title_delete', 'Eliminar esta fusión')}" style="padding: 4px 8px; font-size: 11px;">
                 🗑️
               </button>
             </div>
@@ -114,14 +120,14 @@ function renderFusionsList() {
         </div>
 
         <div style="display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid rgba(87, 214, 196, 0.15); padding-top: 12px;">
-          <button type="button" class="btn-action-primary" onclick="openFusionDetails('${fusion.id}')" style="flex: 2; font-size: 11px; padding: 7px 12px; font-weight: 800;">
+          <button type="button" class="btn-action-primary" onclick="openFusionDetails(${themeJsArg(fusion.id)})" style="flex: 2; font-size: 11px; padding: 7px 12px; font-weight: 800;">
             ${openBtnText}
           </button>
           <div style="display: flex; align-items: center; gap: 4px; flex: 1;">
-            <select id="fusion-quick-theme-${fusion.id}" class="monitor-select" style="font-size: 11px; padding: 4px 8px; width: 100%;">
+            <select id="fusion-quick-theme-${themeEscapeHtml(fusion.id)}" class="monitor-select" style="font-size: 11px; padding: 4px 8px; width: 100%;">
               ${buildThemeOptionsHtml(fusion.defaultTheme || 'maker')}
             </select>
-            <button type="button" class="btn-action-test" onclick="applyQuickFusionTheme('${fusion.id}')" title="${batchBtnText}" style="padding: 5px 8px; font-size: 11px;">
+            <button type="button" class="btn-action-test" onclick="applyQuickFusionTheme(${themeJsArg(fusion.id)})" title="${batchBtnText}" style="padding: 5px 8px; font-size: 11px;">
               ✨
             </button>
           </div>
@@ -161,8 +167,30 @@ function renderFusionDetails(fusionId) {
   if (descEl) descEl.textContent = fusion.description || '';
 
   const sceneCount = (fusion.scenes || []).length;
+  const widgetCount = (fusion.widgets || []).length;
+  const alertCount = (fusion.alerts || []).length;
   if (badgeEl) {
-    badgeEl.textContent = tr('fusions.badge_scenes_in_fusion', `${sceneCount} OVERLAYS EN ESTA FUSIÓN`, { count: sceneCount });
+    badgeEl.textContent = tr('fusions.badge_members',
+      `${sceneCount} OVERLAYS · ${widgetCount} WIDGETS · ${alertCount} ALERTAS`,
+      { scenes: sceneCount, widgets: widgetCount, alerts: alertCount });
+  }
+
+  renderFusionMemberChips(fusion);
+
+  // Reset de fábrica (tema + forma) de todos los miembros de la fusión.
+  let resetBtn = document.getElementById('fusion-reset-btn');
+  if (!resetBtn) {
+    resetBtn = document.createElement('button');
+    resetBtn.id = 'fusion-reset-btn';
+    resetBtn.type = 'button';
+    resetBtn.className = 'btn-action-test';
+    resetBtn.style.cssText = 'font-size: 10px; padding: 4px 10px; margin: 6px 0;';
+    const anchorEl = document.getElementById('fusion-scenes-grid');
+    if (anchorEl && anchorEl.parentElement) anchorEl.parentElement.insertBefore(resetBtn, anchorEl);
+  }
+  if (resetBtn) {
+    resetBtn.textContent = tr('fusions.btn_reset', '↺ Restaurar fusión');
+    resetBtn.onclick = () => resetCurrentFusion(fusionId);
   }
 
   if (themeSelect) {
@@ -176,8 +204,15 @@ function renderFusionDetails(fusionId) {
 
   if (!scenesGrid) return;
 
+  // Normaliza las claves guardadas en la fusión a claves canónicas de escena:
+  // así una fusión con 'maker/desk' o 'starting-soon' sigue resolviendo bien.
+  const unknownSceneKeys = [];
   const scenesInFusion = (fusion.scenes || []).map(scKey => {
-    return OSS_SCENES.find(s => s.key === scKey);
+    const scene = (typeof window.getSceneByKey === 'function')
+      ? window.getSceneByKey(scKey)
+      : OSS_SCENES.find(s => s.key === scKey);
+    if (!scene) unknownSceneKeys.push(scKey);
+    return scene;
   }).filter(Boolean);
 
   if (scenesInFusion.length === 0) {
@@ -185,7 +220,7 @@ function renderFusionDetails(fusionId) {
       <div style="grid-column: 1 / -1; padding: 30px; text-align: center; color: var(--color-text-dim); background: rgba(0,0,0,0.3); border-radius: 8px;">
         ${tr('fusions.no_scenes_warning', 'Esta fusión no tiene ningún overlay seleccionado.')}
         <br><br>
-        <button type="button" class="btn-action-primary" onclick="openEditFusionModal('${fusion.id}')" style="font-size: 11px; padding: 6px 14px;">
+        <button type="button" class="btn-action-primary" onclick="openEditFusionModal(${themeJsArg(fusion.id)})" style="font-size: 11px; padding: 6px 14px;">
           ${tr('fusions.btn_select_scenes', '➕ Seleccionar Overlays para esta Fusión')}
         </button>
       </div>
@@ -195,8 +230,9 @@ function renderFusionDetails(fusionId) {
 
   scenesGrid.innerHTML = scenesInFusion.map(scene => {
     const packObj = OVERLAY_FOLDERS.find(f => f.id === scene.packId) || { name: scene.packId, icon: '📁' };
-    const currentTheme = (cachedOverlayThemes && cachedOverlayThemes[scene.key]) || fusion.defaultTheme || 'maker';
-    const currentShape = (window.cachedOverlayShapes && window.cachedOverlayShapes[scene.key]) || fusion.defaultShape || 'original';
+    const currentTheme = getAssignedThemeForScene(scene.key) || fusion.defaultTheme || 'maker';
+    const assignedShape = getAssignedShapeForScene(scene.key);
+    const currentShape = (assignedShape && assignedShape !== 'auto') ? assignedShape : (fusion.defaultShape || 'original');
 
     return `
       <div class="dash-card scene-card" id="fusion-scene-card-${scene.key}" style="border: 1px solid rgba(87, 214, 196, 0.3); padding: 14px; border-radius: 8px; background: rgba(14, 18, 24, 0.95); display: flex; flex-direction: column; justify-content: space-between; gap: 10px;">
@@ -235,10 +271,10 @@ function renderFusionDetails(fusionId) {
           </div>
 
           <div style="display: flex; gap: 6px;">
-            <button type="button" class="btn-action-primary" onclick="copyOverlaySceneUrl('${scene.key}')" style="flex: 1; font-size: 10px; padding: 5px 8px;" title="Copiar URL para OBS">
+            <button type="button" class="btn-action-primary" onclick="copyOverlaySceneUrl('${scene.key}', '${scene.path}')" style="flex: 1; font-size: 10px; padding: 5px 8px;" title="Copiar URL para OBS">
               📋 Copiar OBS
             </button>
-            <button type="button" class="btn-action-test" onclick="openOverlayFullscreen('${scene.key}')" style="font-size: 10px; padding: 5px 8px;" title="Abrir y probar">
+            <button type="button" class="btn-action-test" onclick="openOverlayFullscreen('${scene.key}', '${scene.path}')" style="font-size: 10px; padding: 5px 8px;" title="Abrir y probar">
               👁️ Probar
             </button>
             <button type="button" class="btn-action-test" onclick="openSceneEditor('${scene.key}')" style="font-size: 10px; padding: 5px 8px;" title="Editar textos">
@@ -249,6 +285,17 @@ function renderFusionDetails(fusionId) {
       </div>
     `;
   }).join('');
+
+  // Avisar (en vez de ocultar) de claves de fusión que ya no existen como escena
+  if (unknownSceneKeys.length) {
+    scenesGrid.insertAdjacentHTML('afterbegin', `
+      <div style="grid-column: 1 / -1; padding: 12px 14px; background: rgba(255, 120, 63, 0.12); border: 1px solid rgba(255, 120, 63, 0.45); border-radius: 6px; color: #FF783F; font-size: 12px;">
+        ${tr('fusions.warn_unknown_scenes', '⚠️ Esta fusión referencia escenas que ya no existen y se han omitido:')}
+        <b>${escapeHtml(unknownSceneKeys.join(', '))}</b>.
+        ${tr('fusions.warn_unknown_scenes_fix', 'Edita la fusión para quitar o sustituir esas claves.')}
+      </div>
+    `);
+  }
 }
 
 async function applyBatchThemeToCurrentFusion() {
@@ -257,6 +304,7 @@ async function applyBatchThemeToCurrentFusion() {
   if (!sel || !sel.value) return;
   const chosenTheme = sel.value;
   await applyFusionThemeAction(currentOpenFusionId, chosenTheme);
+  if (window.ComponentThemes) ComponentThemes.load();
 }
 
 async function applyQuickFusionTheme(fusionId) {
@@ -266,16 +314,47 @@ async function applyQuickFusionTheme(fusionId) {
   await applyFusionThemeAction(fusionId, chosenTheme);
 }
 
+function formatBatchSummary(res) {
+  const count = (v) => Array.isArray(v) ? v.length : 0;
+  const label = (key, fallback, n) =>
+    (window.i18n && window.i18n.tr(key, { count: n })) || fallback.replace('{count}', n);
+  const parts = [];
+  const scenes = count(res.appliedScenes);
+  const widgets = count(res.appliedWidgets);
+  const alerts = count(res.appliedAlerts);
+  const skipped = count(res.skippedScenes) + count(res.skippedWidgets) + count(res.skippedAlerts);
+  const failed = count(res.failedScenes) + count(res.failedWidgets) + count(res.failedAlerts);
+  if (scenes) parts.push(label('fusions.batch_scenes', '{count} escena(s)', scenes));
+  if (widgets) parts.push(label('fusions.batch_widgets', '{count} widget(s)', widgets));
+  if (alerts) parts.push(label('fusions.batch_alerts', '{count} alerta(s)', alerts));
+  if (skipped) parts.push(label('fusions.batch_skipped', '{count} omitido(s)', skipped));
+  if (failed) parts.push(label('fusions.batch_failed', '{count} fallo(s)', failed));
+  return parts.join(' · ') || label('fusions.batch_no_changes', 'sin cambios', 0);
+}
+
 async function applyFusionThemeAction(fusionId, themeId) {
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
   try {
     const res = await API.applyFusionTheme(fusionId, themeId);
-    // Sincronizar estado en frontend
-    if (res.appliedScenes) {
-      res.appliedScenes.forEach(k => {
-        cachedOverlayThemes[k] = themeId;
-      });
+    const applied = Array.isArray(res.appliedScenes) ? res.appliedScenes : [];
+
+    // El servidor informa ahora de `ok`/`status`: un fallo total ya no se disfraza
+    // de "aplicado a 0 escenas" (fallo silencioso corregido en fusions_service).
+    if (res.ok === false || res.status === 'error') {
+      const detail = (res.failedScenes && res.failedScenes[0] && res.failedScenes[0].error) || '';
+      console.error('La fusión no se pudo aplicar:', res);
+      if (window.OverlayTexts && OverlayTexts.showToast) {
+        OverlayTexts.showToast(tr('fusions.toast_theme_error', 'Error aplicando estilo en lote') + (detail ? ` — ${detail}` : ''), 'error');
+      }
+      return;
     }
+
+    // Sincronizar estado en frontend (normalizando cualquier alias recibido)
+    applied.forEach(k => {
+      const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(k)) || k;
+      cachedOverlayThemes[canonical] = themeId;
+    });
+    window.cachedOverlayThemes = cachedOverlayThemes;
 
     const fusion = cachedFusions.find(f => f.id === fusionId);
     if (fusion) fusion.defaultTheme = themeId;
@@ -285,16 +364,44 @@ async function applyFusionThemeAction(fusionId, themeId) {
     } else {
       renderFusionsList();
     }
+    // Mantener sincronizadas las tarjetas de la vista de carpetas abierta
+    if (window.currentOpenOverlayFolderId && typeof renderOverlayFolders === 'function') {
+      renderOverlayFolders();
+    }
 
     if (window.OverlayTexts && OverlayTexts.showToast) {
-      OverlayTexts.showToast(tr('fusions.toast_theme_applied', `✓ Estilo "${themeId}" aplicado en lote a toda la fusión`), 'success');
+      const summary = formatBatchSummary(res);
+      if (res.status === 'partial') {
+        OverlayTexts.showToast(
+          tr('fusions.toast_theme_partial', `⚠️ Estilo "${themeId}" — ${summary}`, { summary }),
+          'error'
+        );
+      } else {
+        OverlayTexts.showToast(
+          tr('fusions.toast_theme_applied', `✓ Estilo "${themeId}" — ${summary}`, { summary }),
+          'success'
+        );
+      }
     }
   } catch (e) {
     console.error('Error aplicando estilo a la fusión:', e);
     if (window.OverlayTexts && OverlayTexts.showToast) {
-      OverlayTexts.showToast(tr('fusions.toast_theme_error', 'Error aplicando estilo en lote'), 'error');
+      OverlayTexts.showToast(tr('fusions.toast_theme_error', 'Error aplicando estilo en lote') + ` — ${e.message || e}`, 'error');
     }
   }
+}
+
+function getThemePacksCache() {
+  // `cachedThemePacks` se declara con `let` en 01-state.js: NO es propiedad de
+  // window, por lo que leer `window.cachedThemePacks` devolvía siempre undefined
+  // y el selector de formas caía al listado hardcoded (sin formas reales de pack).
+  if (typeof cachedThemePacks !== 'undefined' && Array.isArray(cachedThemePacks) && cachedThemePacks.length) {
+    return cachedThemePacks;
+  }
+  if (Array.isArray(window.cachedThemePacks) && window.cachedThemePacks.length) {
+    return window.cachedThemePacks;
+  }
+  return [];
 }
 
 function buildShapeOptionsHtml(selectedShape = 'auto') {
@@ -302,14 +409,15 @@ function buildShapeOptionsHtml(selectedShape = 'auto') {
     <option value="auto" ${selectedShape === 'auto' ? 'selected' : ''}>⚡ Forma: Automática (según estilo)</option>
     <option value="original" ${selectedShape === 'original' ? 'selected' : ''}>📐 Forma: Original del Pack</option>
   `;
-  if (window.cachedThemePacks && window.cachedThemePacks.length > 0) {
-    window.cachedThemePacks.forEach(p => {
+  const packsForShapes = getThemePacksCache();
+  if (packsForShapes.length > 0) {
+    packsForShapes.forEach(p => {
       if (p.shapes && p.shapes.length > 0) {
-        html += `<optgroup label="${p.icon || '📁'} ${p.name}">`;
+        html += `<optgroup label="${themeEscapeHtml(p.icon || '📁')} ${themeEscapeHtml(p.name)}">`;
         p.shapes.forEach(s => {
           const val = s.id;
           const isSel = (val === selectedShape || s.id === selectedShape);
-          html += `<option value="${val}" ${isSel ? 'selected' : ''}>${s.icon || '📐'} ${s.name}</option>`;
+          html += `<option value="${themeEscapeHtml(val)}" ${isSel ? 'selected' : ''}>${themeEscapeHtml(s.icon || '📐')} ${themeEscapeHtml(s.name)}</option>`;
         });
         html += `</optgroup>`;
       }
@@ -354,10 +462,15 @@ function buildShapeOptionsHtml(selectedShape = 'auto') {
 }
 
 async function assignShapeToScene(sceneKey, shapeId) {
+  const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(sceneKey)) || sceneKey;
   if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
-  window.cachedOverlayShapes[sceneKey] = shapeId;
+  if (shapeId === 'auto') {
+    delete window.cachedOverlayShapes[canonical];
+  } else {
+    window.cachedOverlayShapes[canonical] = shapeId;
+  }
   try {
-    await API.setOverlayTheme(sceneKey, null, shapeId);
+    await API.setOverlayTheme(canonical, null, shapeId);
     if (window.OverlayTexts && OverlayTexts.showToast) {
       OverlayTexts.showToast(`📐 Forma "${shapeId}" asignada a ${sceneKey}`, 'success');
     }
@@ -374,24 +487,47 @@ async function applyBatchShapeToCurrentFusion() {
 
   try {
     const res = await API.applyFusionShape(currentOpenFusionId, chosenShape);
-    if (res.appliedScenes) {
-      if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
-      res.appliedScenes.forEach(k => {
-        window.cachedOverlayShapes[k] = chosenShape;
-      });
+    const applied = Array.isArray(res.appliedScenes) ? res.appliedScenes : [];
+
+    // Mismo criterio que en el tema: no dar por bueno un fallo total.
+    if (res.ok === false || res.status === 'error') {
+      const detail = (res.failedScenes && res.failedScenes[0] && res.failedScenes[0].error) || '';
+      console.error('La forma no se pudo aplicar:', res);
+      if (window.OverlayTexts && OverlayTexts.showToast) {
+        OverlayTexts.showToast(`Error aplicando forma en lote${detail ? ' — ' + detail : ''}`, 'error');
+      }
+      return;
     }
+
+    if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
+    applied.forEach(k => {
+      const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(k)) || k;
+      if (chosenShape === 'auto') delete window.cachedOverlayShapes[canonical];
+      else window.cachedOverlayShapes[canonical] = chosenShape;
+    });
 
     const fusion = cachedFusions.find(f => f.id === currentOpenFusionId);
     if (fusion) fusion.defaultShape = chosenShape;
 
     renderFusionDetails(currentOpenFusionId);
+    if (window.currentOpenOverlayFolderId && typeof renderOverlayFolders === 'function') {
+      renderOverlayFolders();
+    }
 
     if (window.OverlayTexts && OverlayTexts.showToast) {
-      OverlayTexts.showToast(`✓ Forma "${chosenShape}" aplicada en lote a toda la fusión`, 'success');
+      if (res.status === 'partial') {
+        OverlayTexts.showToast(`⚠️ Forma "${chosenShape}" — ${formatBatchSummary(res)}`, 'error');
+      } else {
+        OverlayTexts.showToast(`✓ Forma "${chosenShape}" — ${formatBatchSummary(res)}`, 'success');
+      }
     }
   } catch (e) {
     console.error('Error aplicando forma a la fusión:', e);
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(`Error aplicando forma en lote — ${e.message || e}`, 'error');
+    }
   }
+  if (window.ComponentThemes) ComponentThemes.load();
 }
 
 function openNewFusionModal() {
@@ -474,7 +610,33 @@ function openFusionEditorModal(fusion = null) {
     }).join('');
   }
 
+  renderFusionMemberPickers(fusion);
   modal.style.display = 'flex';
+}
+
+function renderFusionMemberPickers(fusion) {
+  const selW = new Set((fusion && fusion.widgets) || []);
+  const selA = new Set((fusion && fusion.alerts) || []);
+  const wBox = document.getElementById('fusion-modal-widgets-list');
+  const aBox = document.getElementById('fusion-modal-alerts-list');
+  const empty = '<div style="font-size: 11px; color: var(--color-text-dim);">Sin miembros disponibles</div>';
+
+  if (wBox) {
+    const widgets = (cachedComponentCatalog && cachedComponentCatalog.widgets) || [];
+    wBox.innerHTML = widgets.length ? widgets.map(w => `
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-text-light); background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 4px; cursor: pointer;">
+        <input type="checkbox" class="fusion-widget-checkbox" value="${escapeHtml(w.id)}" ${selW.has(w.id) ? 'checked' : ''} style="cursor: pointer;">
+        <span>🧩 ${escapeHtml((window.i18n && i18n.tr(`widgets.${w.id}.name`)) || w.id)}</span>
+      </label>`).join('') : empty;
+  }
+  if (aBox) {
+    const alerts = (cachedComponentCatalog && cachedComponentCatalog.alerts) || [];
+    aBox.innerHTML = alerts.length ? alerts.map(a => `
+      <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--color-text-light); background: rgba(255,255,255,0.03); padding: 6px 8px; border-radius: 4px; cursor: pointer;">
+        <input type="checkbox" class="fusion-alert-checkbox" value="${escapeHtml(a.id)}" ${selA.has(a.id) ? 'checked' : ''} style="cursor: pointer;">
+        <span>🔔 ${escapeHtml((window.i18n && i18n.tr(`widgets.alert_${a.id}_name`)) || a.id)}</span>
+      </label>`).join('') : empty;
+  }
 }
 
 function toggleFolderScenesSelection(folderId, selectAll) {
@@ -516,25 +678,41 @@ async function saveFusionFromModal(event) {
     description: descInput ? descInput.value.trim() : '',
     defaultTheme: themeSelect ? themeSelect.value : 'maker',
     defaultShape: shapeSelect ? shapeSelect.value : 'original',
-    scenes: selectedScenes
+    scenes: selectedScenes,
+    widgets: Array.from(document.querySelectorAll('.fusion-widget-checkbox:checked')).map(cb => cb.value),
+    alerts: Array.from(document.querySelectorAll('.fusion-alert-checkbox:checked')).map(cb => cb.value)
   };
 
-  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
   try {
     const res = await API.saveFusion(payload);
+    const saved = (res && res.fusion) || {};
     closeFusionModal();
     await loadAndRenderFusions();
 
-    if (currentOpenFusionId === payload.id) {
-      renderFusionDetails(payload.id);
+    if (currentOpenFusionId === payload.id || currentOpenFusionId === saved.id) {
+      renderFusionDetails(saved.id || payload.id);
     }
 
+    const ignored = [];
+    if (Array.isArray(saved.unknownScenes) && saved.unknownScenes.length) {
+      ignored.push(tr('fusions.members_ignored_scenes', 'Escenas ignoradas: {list}', { list: saved.unknownScenes.join(', ') }));
+    }
+    if (Array.isArray(saved.unknownWidgets) && saved.unknownWidgets.length) {
+      ignored.push(tr('fusions.members_ignored_widgets', 'Widgets ignorados: {list}', { list: saved.unknownWidgets.join(', ') }));
+    }
+    if (Array.isArray(saved.unknownAlerts) && saved.unknownAlerts.length) {
+      ignored.push(tr('fusions.members_ignored_alerts', 'Alertas ignoradas: {list}', { list: saved.unknownAlerts.join(', ') }));
+    }
     if (window.OverlayTexts && OverlayTexts.showToast) {
+      if (ignored.length) {
+        OverlayTexts.showToast('⚠️ ' + ignored.join(' · '), 'warning');
+      }
       OverlayTexts.showToast(tr('fusions.toast_saved', '✓ Fusión guardada correctamente'), 'success');
     }
   } catch (e) {
     console.error('Error guardando fusión:', e);
-    alert('Error al guardar la fusión: ' + e.message);
+    alert(tr('fusions.save_error', 'Error al guardar la fusión: {error}', { error: e.message || e }));
   }
 }
 
@@ -687,7 +865,7 @@ function openAddToExistingFusionModal() {
   if (select) {
     select.innerHTML = cachedFusions.map(f => {
       const count = (f.scenes || []).length;
-      return `<option value="${f.id}">${f.icon || '⚡'} ${escapeHtml(f.name)} (${count} overlays)</option>`;
+      return `<option value="${escapeHtml(f.id)}">${escapeHtml(f.icon || '⚡')} ${escapeHtml(f.name)} (${count} overlays)</option>`;
     }).join('');
   }
 
@@ -751,11 +929,13 @@ async function applyBatchThemeToSelectedScenes() {
 
   const count = window.selectedFusionScenes.size;
   for (const sceneKey of window.selectedFusionScenes) {
-    cachedOverlayThemes[sceneKey] = themeId;
+    const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(sceneKey)) || sceneKey;
+    cachedOverlayThemes[canonical] = themeId;
+    window.cachedOverlayThemes = cachedOverlayThemes;
     try {
-      await API.setOverlayTheme(sceneKey, themeId);
+      await API.setOverlayTheme(canonical, themeId);
     } catch (e) {
-      console.warn('Error aplicando tema a ' + sceneKey, e);
+      console.warn('Error aplicando tema a ' + canonical, e);
     }
   }
 
@@ -818,6 +998,73 @@ window.confirmAddSelectedToFusion = confirmAddSelectedToFusion;
 window.applyBatchThemeToSelectedScenes = applyBatchThemeToSelectedScenes;
 window.goToThemeEditorForCurrentPack = goToThemeEditorForCurrentPack;
 window.updateFolderSelectAllButton = updateFolderSelectAllButton;
+async function resetCurrentFusion(fusionId) {
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  if (!confirm(tr('fusions.confirm_reset', '¿Restaurar tema y forma de fábrica en TODOS los miembros de esta fusión?'))) return;
+  try {
+    await API.resetFusion(fusionId);
+    await loadAndRenderFusions();
+    renderFusionDetails(fusionId);
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(tr('fusions.toast_reset', '↺ Fusión restaurada a sus valores de fábrica'), 'success');
+    }
+  } catch (e) {
+    console.error('Error restaurando fusión:', e);
+    alert(tr('fusions.error_reset', 'No se pudo restaurar la fusión: ') + e.message);
+  }
+  if (window.ComponentThemes) ComponentThemes.load();
+}
+window.resetCurrentFusion = resetCurrentFusion;
+
+function renderFusionMemberChips(fusion) {
+  const box = document.getElementById('fusion-members-list');
+  if (!box) return;
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const scenes = fusion.scenes || [];
+  const widgets = fusion.widgets || [];
+  const alerts = fusion.alerts || [];
+  const sceneName = (key) => {
+    const s = (window.OSS_SCENES || []).find(x => x.key === key);
+    return s ? s.name : key;
+  };
+  const chip = (type, key, label, icon) => `
+    <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);border:1px solid var(--color-border-dim);border-radius:12px;padding:3px 8px;font-size:11px;color:var(--color-text-light);">
+      ${icon} ${escapeHtml(label)}
+      <button type="button" title="${tr('fusions.remove_member', 'Quitar de la fusión')}" onclick="removeFusionMember('${type}','${key}','${fusion.id}')" style="background:none;border:none;color:#F87171;cursor:pointer;font-weight:800;padding:0 2px;">×</button>
+    </span>`;
+  const chips = [
+    ...scenes.map(k => chip('scene', k, sceneName(k), '🎬')),
+    ...widgets.map(k => chip('widget', k, k, '🧩')),
+    ...alerts.map(k => chip('alert', k, k, '🔔'))
+  ];
+  box.innerHTML = `<div style="font-size:10px;font-weight:800;color:var(--color-text-dim);letter-spacing:.6px;margin-bottom:6px;">${tr('fusions.members_title', 'MIEMBROS DE LA FUSIÓN')}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">${chips.join('') || `<span style="font-size:11px;color:var(--color-text-dim);">${tr('fusions.members_empty', 'Sin miembros')}</span>`}</div>`;
+}
+
+async function removeFusionMember(type, key, fusionId) {
+  const targetId = fusionId || currentOpenFusionId;
+  const fusion = cachedFusions.find(f => f.id === targetId);
+  if (!fusion) return;
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  const payload = {
+    id: fusion.id, name: fusion.name, icon: fusion.icon, description: fusion.description,
+    defaultTheme: fusion.defaultTheme || 'maker', defaultShape: fusion.defaultShape || 'original',
+    scenes: [...(fusion.scenes || [])], widgets: [...(fusion.widgets || [])], alerts: [...(fusion.alerts || [])]
+  };
+  const field = type === 'scene' ? 'scenes' : (type === 'widget' ? 'widgets' : 'alerts');
+  payload[field] = payload[field].filter(k => k !== key);
+  try {
+    await API.saveFusion(payload);
+    await loadAndRenderFusions();
+    renderFusionDetails(targetId);
+    if (window.OverlayTexts && OverlayTexts.showToast) OverlayTexts.showToast(tr('fusions.toast_member_removed', '✓ Miembro quitado de la fusión'), 'success');
+  } catch (e) {
+    alert(tr('fusions.error_remove_member', 'No se pudo quitar el miembro: ') + e.message);
+  }
+}
+window.removeFusionMember = removeFusionMember;
+
+
 window.applyBatchShapeToCurrentFusion = applyBatchShapeToCurrentFusion;
 window.assignShapeToScene = assignShapeToScene;
 window.buildShapeOptionsHtml = buildShapeOptionsHtml;

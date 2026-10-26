@@ -367,8 +367,9 @@ const API = {
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(fusionData)
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status} al guardar fusión`);
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al guardar fusión`);
+    return data;
   },
 
   async deleteFusion(id) {
@@ -380,14 +381,18 @@ const API = {
     return res.json();
   },
 
+  // applyFusionTheme / applyFusionShape propagan el mensaje de error REAL del
+  // servidor (`{error: "Tema desconocido: x"}`). Antes se lanzaba un genérico
+  // "HTTP 404" y el panel no podía explicar por qué no se había aplicado nada.
   async applyFusionTheme(id, themeId) {
     const res = await fetch(`/api/fusions/${encodeURIComponent(id)}/apply-theme`, {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ themeId })
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status} al aplicar tema a la fusión`);
-    return res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al aplicar tema a la fusión`);
+    return data;
   },
 
   async applyFusionShape(id, shapeId) {
@@ -396,8 +401,48 @@ const API = {
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ shapeId })
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status} al aplicar forma a la fusión`);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al aplicar forma a la fusión`);
+    return data;
+  },
+
+  async resetFusion(id) {
+    const res = await fetch(`/api/fusions/${encodeURIComponent(id)}/reset`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: '{}'
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al restaurar la fusión`);
+    return data;
+  },
+
+  async getComponentsCatalog() {
+    const res = await fetch('/api/components/catalog');
+    if (!res.ok) throw new Error(`HTTP ${res.status} al cargar el catálogo de componentes`);
     return res.json();
+  },
+
+  async assignComponent(overlayKey, payload) {
+    const res = await fetch('/api/themes/overlay-assignment', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ overlayKey, ...payload })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al asignar`);
+    return data;
+  },
+
+  async resetComponent(overlayKey) {
+    const res = await fetch('/api/themes/reset-assignment', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ overlayKey })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al restaurar`);
+    return data;
   }
 };
 

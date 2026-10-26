@@ -28,7 +28,7 @@ Object.assign(AlertsStudio, {
             <button class="btn-action-test" onclick="AlertsStudio.triggerCurrentTest()" style="border-color: #57D6C4; color: #57D6C4; display: flex; align-items: center; gap: 6px;" data-i18n="alerts.btn_trigger_obs">
               🚀 Disparar en OBS
             </button>
-            <button class="btn-action-copy" onclick="copyText('http://localhost:8080/alerts/index.html')" data-i18n="alerts.btn_copy_url">
+            <button class="btn-action-copy" onclick="copyText(window.location.origin + '/alerts/index.html')" data-i18n="alerts.btn_copy_url">
               📋 Copiar URL para OBS
             </button>
           </div>
@@ -50,6 +50,18 @@ Object.assign(AlertsStudio, {
             <span data-i18n="alerts.type_${t.id}">${locName}</span>
           </button>
         `}).join('')}
+      </div>
+
+      <!-- TEMAS DE ALERTAS (card y banner) -->
+      <div class="dash-card" style="margin-bottom: 18px; padding: 16px 20px; background: rgba(14,18,24,0.95); border: 1.5px solid rgba(255,120,63,0.35); border-radius: var(--radius-sm);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+          <div>
+            <div style="font-family:var(--font-tech); font-size:13px; font-weight:800; color:var(--color-accent-orange); letter-spacing:.5px;" data-i18n="widgets.alert_themes_title">🎨 TEMAS DE ALERTAS</div>
+            <div style="font-size:11px; color:var(--color-text-dim); margin-top:2px;" data-i18n="widgets.alert_themes_hint">Aplica un tema de pack y una forma a la tarjeta y al banner, o añádelos a una fusión. El cambio se ve en vivo.</div>
+          </div>
+          <button type="button" class="btn-action-test" style="font-size:10px; padding:3px 8px;" onclick="ComponentThemes.load()" data-i18n="common.refresh">↻ Actualizar</button>
+        </div>
+        <div id="alert-themes-panel" style="display:flex; flex-direction:column; gap:8px;"></div>
       </div>
 
       <!-- Grid Principal: Configuración a la izquierda, Vista Previa Interactiva y Simulador a la derecha -->
@@ -563,6 +575,9 @@ Object.assign(AlertsStudio, {
     if (typeof this.renderThemesGallery === 'function') {
       this.renderThemesGallery();
     }
+
+    // El bloque de temas se recrea con la sección: refrescarlo aquí.
+    if (window.ComponentThemes) setTimeout(() => ComponentThemes.load(), 0);
 
     if (window.i18n && typeof window.i18n.applyTranslations === 'function') {
       window.i18n.applyTranslations(container);

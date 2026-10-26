@@ -105,7 +105,7 @@ function renderOverlayFolders() {
         const f = getFolderLocalized(rawF);
         const openBtnLabel = (window.i18n && window.i18n.tr('themes.folder_open_scenes', { count: f.keys.length })) || `📂 Entrar a la Carpeta de Overlays y Editar (${f.keys.length} Escenas) →`;
         return `
-          <div class="dash-card theme-pack-card pack-folder-card" style="padding: 22px; border: 1.5px solid rgba(87, 214, 196, 0.35); border-radius: 10px; background: rgba(14, 18, 24, 0.95); box-shadow: 0 8px 24px rgba(0,0,0,0.45); cursor: pointer; transition: all 0.2s;" onclick="openOverlayFolder('${f.id}')" onmouseover="this.style.borderColor='var(--color-accent-cyan)'" onmouseout="this.style.borderColor='rgba(87, 214, 196, 0.35)'">
+          <div class="dash-card theme-pack-card pack-folder-card" style="padding: 22px; border: 1.5px solid rgba(87, 214, 196, 0.35); border-radius: 10px; background: rgba(14, 18, 24, 0.95); box-shadow: 0 8px 24px rgba(0,0,0,0.45); cursor: pointer; transition: all 0.2s;" onclick="openOverlayFolder(${themeJsArg(f.id)})" onmouseover="this.style.borderColor='var(--color-accent-cyan)'" onmouseout="this.style.borderColor='rgba(87, 214, 196, 0.35)'">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
               <div style="display: flex; align-items: center; gap: 12px;">
                 <span style="font-size: 38px;">${f.icon}</span>
@@ -143,7 +143,7 @@ function renderOverlayFolders() {
                 <select id="folder-theme-select-${f.id}" class="form-select" style="flex: 1; min-width: 200px; font-size: 12px; padding: 7px 10px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.5); border-radius: 4px;">
                   ${buildThemeOptionsHtml(currentActiveThemeId)}
                 </select>
-                <button type="button" class="btn-action-primary" style="font-size: 12px; padding: 7px 16px; font-weight: 800;" onclick="applyThemeToAllOverlaysFromFolderCard('${f.id}')">
+                <button type="button" class="btn-action-primary" style="font-size: 12px; padding: 7px 16px; font-weight: 800;" onclick="applyThemeToAllOverlaysFromFolderCard(${themeJsArg(f.id)})">
                   ${applyBtnLabel}
                 </button>
               </div>
@@ -155,12 +155,12 @@ function renderOverlayFolders() {
             <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;">
               ${(f.activities || []).map(act => `
                 <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: #FFFFFF;">
-                  <span>${act.icon}</span> <b>${act.name}</b>
+                  <span>${themeEscapeHtml(act.icon)}</span> <b>${themeEscapeHtml(act.name)}</b>
                 </span>
               `).join('')}
             </div>
 
-            <button type="button" class="btn-action-primary" style="width: 100%; font-size: 13px; font-weight: 800; padding: 11px; display: inline-flex; justify-content: center; align-items: center; gap: 8px;" onclick="openOverlayFolder('${f.id}')">
+            <button type="button" class="btn-action-primary" style="width: 100%; font-size: 13px; font-weight: 800; padding: 11px; display: inline-flex; justify-content: center; align-items: center; gap: 8px;" onclick="openOverlayFolder(${themeJsArg(f.id)})">
               ${openBtnLabel}
             </button>
           </div>

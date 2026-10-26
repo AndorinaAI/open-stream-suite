@@ -4,6 +4,17 @@
 
 window.AlertsStudio = window.AlertsStudio || {};
 
+function galleryEscape(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function galleryJsArg(value) {
+  return galleryEscape(JSON.stringify(String(value == null ? '' : value)));
+}
+function galleryColor(value, fallback) {
+  const s = String(value == null ? '' : value).trim();
+  return /^#[0-9a-fA-F]{6}$/.test(s) ? s : fallback;
+}
+
 Object.assign(AlertsStudio, {
   renderThemesGallery() {
     const gallery = document.getElementById('themes-preset-gallery');
@@ -13,15 +24,20 @@ Object.assign(AlertsStudio, {
     const themesList = Object.values(this.themesConfig.themes);
 
     gallery.innerHTML = themesList.map(t => {
-      const isSelected = (currentThemeId === t.id);
-      const isCustom = t.id.startsWith('custom_') || t.badge === 'CUSTOM';
+      const themeId = String(t.id || '');
+      const isSelected = (currentThemeId === themeId);
+      const isCustom = themeId.startsWith('custom_') || t.badge === 'CUSTOM';
+      const safeId = galleryEscape(themeId);
+      const safeName = galleryEscape(t.name);
+      const safeDesc = galleryEscape(t.desc || 'Tema para alertas.');
+      const safeColor = galleryColor(t.accentColor, '#57D6C4');
       return `
-        <div class="banner-style-card" id="card-theme-${t.id}" onclick="AlertsStudio.selectAndApplyTheme('${t.id}')" style="cursor: pointer; padding: 10px; border-radius: 6px; border: ${isSelected ? '2px solid #57D6C4' : '1px solid var(--color-border-dim)'}; background: ${isSelected ? 'rgba(87, 214, 196, 0.15)' : 'rgba(255,255,255,0.03)'}; transition: all 0.2s ease; position: relative;">
+        <div class="banner-style-card" id="card-theme-${safeId}" onclick="AlertsStudio.selectAndApplyTheme(${galleryJsArg(themeId)})" style="cursor: pointer; padding: 10px; border-radius: 6px; border: ${isSelected ? '2px solid #57D6C4' : '1px solid var(--color-border-dim)'}; background: ${isSelected ? 'rgba(87, 214, 196, 0.15)' : 'rgba(255,255,255,0.03)'}; transition: all 0.2s ease; position: relative;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-            <span style="font-weight: 800; font-size: 11px; color: ${t.accentColor || '#57D6C4'};">${t.name}</span>
-            <span style="width: 10px; height: 10px; border-radius: 50%; background: ${t.accentColor || '#57D6C4'}; box-shadow: 0 0 6px ${t.accentColor || '#57D6C4'};"></span>
+            <span style="font-weight: 800; font-size: 11px; color: ${safeColor};">${safeName}</span>
+            <span style="width: 10px; height: 10px; border-radius: 50%; background: ${safeColor}; box-shadow: 0 0 6px ${safeColor};"></span>
           </div>
-          <div style="font-size: 9px; color: var(--color-text-dim); line-height: 1.25;">${t.desc || 'Tema para alertas.'}</div>
+          <div style="font-size: 9px; color: var(--color-text-dim); line-height: 1.25;">${safeDesc}</div>
           ${isCustom ? `<span style="position: absolute; bottom: 4px; right: 6px; font-size: 8px; font-weight: 700; color: #F59E0B;">PERSONALIZADO</span>` : ''}
         </div>
       `;

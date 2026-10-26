@@ -377,3 +377,9 @@ body.preview-mode {
   70% { transform: translateX(-50%) scale(0.95); }
   100% { opacity: 1; transform: translateX(-50%) scale(1); }
 }
+
+/* ===== Capa nativa: fondo del alert-box con tema de pack =====
+   Sin data-theme se conserva el fondo original exacto. */
+body[data-theme] .alert-box {
+  background: var(--color-panel-bg, rgba(25, 29, 33, 0.94));
+}

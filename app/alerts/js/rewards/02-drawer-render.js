@@ -1,3 +1,7 @@
+function escapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
 // ====================================================================
 // REWARDS - CARGA Y RENDERIZADO DEL CAJÓN LATERAL
 // ====================================================================
@@ -15,7 +19,7 @@ async function loadTwitchRewards() {
       data.rewards.forEach(r => {
         const opt = document.createElement('option');
         opt.value = r.title;
-        opt.textContent = `🪙 ${r.title} (${r.cost} pts)`;
+        opt.textContent = `🪙 ${escapeHtml(r.title)} (${r.cost} pts)`;
         sel.appendChild(opt);
       });
     } else {
@@ -94,14 +98,14 @@ function renderTwitchRewardsInDrawer() {
         <div style="min-width: 0;">
           <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
             <span style="font-family: var(--font-tech); font-weight: 800; font-size: 13px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-              ${r.title}
+              ${escapeHtml(r.title)}
             </span>
             <span class="badge-pill" style="font-size: 10px; padding: 1px 6px; background: rgba(87, 214, 196, 0.15); color: #57D6C4; border: 1px solid rgba(87, 214, 196, 0.3);">
               ${r.cost} pts
             </span>
             ${isEnabled ? '<span style="font-size: 10px; color: #10B981;">✓ Activa</span>' : '<span style="font-size: 10px; color: #EF4444;">⏸️ Pausada</span>'}
           </div>
-          ${r.prompt ? `<div style="font-size: 10px; color: var(--color-text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${safePrompt}">📝 ${r.prompt}</div>` : ''}
+          ${r.prompt ? `<div style="font-size: 10px; color: var(--color-text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${safePrompt}">📝 ${escapeHtml(r.prompt)}</div>` : ''}
         </div>
       </div>
       <div style="display: flex; gap: 5px; flex-shrink: 0;">
@@ -126,7 +130,7 @@ function useTwitchRewardInTrigger(title, color) {
   const toast = document.createElement('div');
   toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: #10B981; color: #000; font-family: var(--font-tech); font-weight: 800; font-size: 12px; padding: 10px 18px; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); z-index: 9999;';
   toast.textContent = (window.i18n && typeof window.i18n.tr === 'function'
-    ? window.i18n.tr('✓ Seleccionada recompensa')
+    ? window.i18n.tr('rewards.selected')
     : '✓ Seleccionada recompensa') + ': "' + title + '"';
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2500);

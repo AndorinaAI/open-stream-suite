@@ -53,12 +53,12 @@ function getActiveThemeDisplayName() {
 function buildThemeOptionsHtml(selectedThemeId, defaultThemeId) {
   let optionsHtml = '';
   cachedThemePacks.forEach(p => {
-    optionsHtml += `<optgroup label="${p.name}">`;
+    optionsHtml += `<optgroup label="${themeEscapeHtml(p.name)}">`;
     (p.themes || []).forEach(t => {
       const isSel = (t.id === selectedThemeId) ? 'selected' : '';
       const isDefault = (defaultThemeId && t.id === defaultThemeId);
       const defaultTag = isDefault ? ' ⭐ (Original de fábrica)' : '';
-      optionsHtml += `<option value="${t.id}" data-pack="${p.id}" ${isSel}>${t.name}${defaultTag}</option>`;
+      optionsHtml += `<option value="${themeEscapeHtml(t.id)}" data-pack="${themeEscapeHtml(p.id)}" ${isSel}>${themeEscapeHtml(t.name)}${defaultTag}</option>`;
     });
     optionsHtml += `</optgroup>`;
   });
@@ -67,13 +67,15 @@ function buildThemeOptionsHtml(selectedThemeId, defaultThemeId) {
 
 function buildSceneMiniMockupHtml(sceneKey, rawTheme) {
   const theme = rawTheme || getThemeObjectById('maker') || {};
-  const glow = Math.round((typeof theme.glowIntensity === 'number' ? theme.glowIntensity : 50) * 0.25);
-  const accentCyan = theme.accentCyan || '#57D6C4';
-  const accentOrange = theme.accentOrange || '#FF783F';
-  const bgDark = theme.bgDark || '#191D21';
-  const textLight = theme.textLight || '#FFFFFF';
-  const textDim = theme.textDim || '#8B969C';
-  const themeName = theme.name || 'Maker';
+  const rawGlow = Number(theme.glowIntensity);
+  const glow = Math.round((Number.isFinite(rawGlow) ? Math.max(0, Math.min(100, rawGlow)) : 50) * 0.25);
+  const accentCyan = themeColor(theme.accentCyan, '#57D6C4');
+  const accentOrange = themeColor(theme.accentOrange, '#FF783F');
+  const bgDark = themeColor(theme.bgDark, '#191D21');
+  const textLight = themeColor(theme.textLight, '#FFFFFF');
+  const textDim = themeColor(theme.textDim, '#8B969C');
+  const themeName = themeEscapeHtml(theme.name || 'Maker');
+  const safeSceneKey = themeEscapeHtml(sceneKey);
 
   let bRadius = '6px';
   let bStyle = `2px solid ${accentCyan}`;
@@ -100,7 +102,7 @@ function buildSceneMiniMockupHtml(sceneKey, rawTheme) {
   }
 
   return `
-    <div id="scene-card-preview-${sceneKey}" style="
+    <div id="scene-card-preview-${safeSceneKey}" style="
       background: ${bgDark};
       border: ${bStyle};
       box-shadow: ${bShadow};
@@ -164,6 +166,13 @@ async function applyThemeToAllScenesFromBar() {
   renderThemeScenes();
 
   if (window.OverlayTexts && OverlayTexts.showToast) {
-    OverlayTexts.showToast(`✓ Estilo "${themeObj.name}" aplicado a todas las 9 escenas en OBS Studio`, 'success');
+    const sceneCount = Array.isArray(OSS_SCENES) ? OSS_SCENES.length : Object.keys(OSS_SCENES || {}).length;
+    const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
+    OverlayTexts.showToast(
+      tr('themes.toast_applied_all_count',
+         `✓ Estilo "${themeObj.name}" aplicado a las ${sceneCount} escenas en OBS Studio`,
+         { name: themeObj.name, count: sceneCount }),
+      'success'
+    );
   }
 }

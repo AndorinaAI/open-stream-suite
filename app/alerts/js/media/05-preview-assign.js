@@ -28,17 +28,37 @@ function openMediaPreview(relPath) {
   }
 
   if (stage) {
+    // Construir con DOM: item.name/item.url proceden de archivos y no deben
+    // interpretarse como HTML.
+    stage.replaceChildren();
     if (item.type === 'video') {
-      stage.innerHTML = `<video src="${item.url}" controls autoplay loop style="max-height: 420px;"></video>`;
+      const video = document.createElement('video');
+      video.src = item.url;
+      video.controls = true;
+      video.autoplay = true;
+      video.loop = true;
+      video.style.maxHeight = '420px';
+      stage.appendChild(video);
     } else if (item.type === 'image') {
-      stage.innerHTML = `<img src="${item.url}" alt="${item.name}" style="max-height: 420px; object-fit: contain;">`;
+      const img = document.createElement('img');
+      img.src = item.url;
+      img.alt = item.name;
+      img.style.maxHeight = '420px';
+      img.style.objectFit = 'contain';
+      stage.appendChild(img);
     } else {
-      stage.innerHTML = `
-        <div style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
-          <span style="font-size: 54px;">🎵</span>
-          <audio src="${item.url}" controls autoplay style="width: 380px;"></audio>
-        </div>
-      `;
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:16px;';
+      const icon = document.createElement('span');
+      icon.style.fontSize = '54px';
+      icon.textContent = '🎵';
+      const audio = document.createElement('audio');
+      audio.src = item.url;
+      audio.controls = true;
+      audio.autoplay = true;
+      audio.style.width = '380px';
+      wrapper.append(icon, audio);
+      stage.appendChild(wrapper);
     }
   }
 

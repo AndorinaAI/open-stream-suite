@@ -130,9 +130,10 @@ async function openSceneEditor(sceneKey) {
       : '<option value="auto">Auto (Por defecto)</option>';
   }
   if (defaultHintEl) {
+    // V3-01: `defaultInfo.name` viene de theme.json (disco) y va a innerHTML.
     defaultHintEl.innerHTML = isModified
-      ? `⚠️ Personalizado (Original: <b>${defaultInfo.name}</b>) <button type="button" class="btn-action-test" style="font-size: 10px; padding: 2px 7px; margin-left: 6px; color: #FF783F; border-color: #FF783F; cursor: pointer; background: rgba(255,120,63,0.15);" onclick="restoreOverlayThemeFromModal()">🔄 Restaurar Original</button>`
-      : `⭐ Original de fábrica: <b>${defaultInfo.name}</b>`;
+      ? `⚠️ Personalizado (Original: <b>${themeEscapeHtml(defaultInfo.name)}</b>) <button type="button" class="btn-action-test" style="font-size: 10px; padding: 2px 7px; margin-left: 6px; color: #FF783F; border-color: #FF783F; cursor: pointer; background: rgba(255,120,63,0.15);" onclick="restoreOverlayThemeFromModal()">🔄 Restaurar Original</button>`
+      : `⭐ Original de fábrica: <b>${themeEscapeHtml(defaultInfo.name)}</b>`;
   }
 
   // 4. Mostrar únicamente el panel de textos correspondiente a esta escena
@@ -234,8 +235,8 @@ async function onSceneModalThemeChange(themeId) {
     const defaultHintEl = document.getElementById('scene-modal-default-theme-hint');
     if (defaultHintEl) {
       defaultHintEl.innerHTML = isModified
-        ? `⚠️ Personalizado (Original: <b>${defaultInfo.name}</b>) <button type="button" class="btn-action-test" style="font-size: 10px; padding: 2px 7px; margin-left: 6px; color: #FF783F; border-color: #FF783F; cursor: pointer; background: rgba(255,120,63,0.15);" onclick="restoreOverlayThemeFromModal()">🔄 Restaurar Original</button>`
-        : `⭐ Original de fábrica: <b>${defaultInfo.name}</b>`;
+        ? `⚠️ Personalizado (Original: <b>${themeEscapeHtml(defaultInfo.name)}</b>) <button type="button" class="btn-action-test" style="font-size: 10px; padding: 2px 7px; margin-left: 6px; color: #FF783F; border-color: #FF783F; cursor: pointer; background: rgba(255,120,63,0.15);" onclick="restoreOverlayThemeFromModal()">🔄 Restaurar Original</button>`
+        : `⭐ Original de fábrica: <b>${themeEscapeHtml(defaultInfo.name)}</b>`;
     }
 
     updateModalMiniPreview(themeId);
@@ -246,18 +247,23 @@ async function onSceneModalShapeChange(shapeId) {
   if (!currentEditingScene) return;
   const sceneKey = currentEditingScene.key;
   if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
-  if (shapeId === 'auto') {
-    delete window.cachedOverlayShapes[sceneKey];
-  } else {
-    window.cachedOverlayShapes[sceneKey] = shapeId;
-  }
+  const previousShape = window.cachedOverlayShapes[sceneKey];
   try {
     await API.setOverlayTheme(sceneKey, null, shapeId);
+    if (shapeId === 'auto') delete window.cachedOverlayShapes[sceneKey];
+    else window.cachedOverlayShapes[sceneKey] = shapeId;
     if (window.OverlayTexts && OverlayTexts.showToast) {
       OverlayTexts.showToast(`✓ Forma física "${shapeId}" aplicada a la escena`, 'success');
     }
   } catch (e) {
     console.error('Error aplicando forma a escena:', e);
+    if (previousShape === undefined) delete window.cachedOverlayShapes[sceneKey];
+    else window.cachedOverlayShapes[sceneKey] = previousShape;
+    const sel = document.getElementById('scene-modal-shape-select');
+    if (sel) sel.value = previousShape || 'auto';
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(`✗ No se pudo guardar la forma en el servidor (${e.message})`, 'error');
+    }
   }
 }
 window.onSceneModalShapeChange = onSceneModalShapeChange;
@@ -278,7 +284,7 @@ async function restoreOverlayThemeFromModal() {
   const defaultInfo = getThemeDisplayNameById(defaultThemeId);
   const defaultHintEl = document.getElementById('scene-modal-default-theme-hint');
   if (defaultHintEl) {
-    defaultHintEl.innerHTML = `⭐ Original de fábrica: <b>${defaultInfo.name}</b>`;
+    defaultHintEl.innerHTML = `⭐ Original de fábrica: <b>${themeEscapeHtml(defaultInfo.name)}</b>`;
   }
   updateModalMiniPreview(defaultThemeId);
   if (window.OverlayTexts && OverlayTexts.showToast) {
