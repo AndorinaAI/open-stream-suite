@@ -1,0 +1,57 @@
+name: CLA Assistant
+
+# Cada persona que aporte un pull request debe firmar el Acuerdo de Licencia de
+# Contribuciones (.github/CLA.md). Es lo que sostiene el modelo de doble licencia
+# (AGPL pública + licencia comercial) y lo que permite relicenciar las aportaciones.
+#
+# Si el CLA cambia de forma sustancial, sube la versión de `path-to-signatures`
+# (p. ej. 'signatures/cla-v2.json') para exigir la firma de nuevo.
+#
+# Las firmas se guardan en la rama `cla-signatures` (que NO debe estar protegida).
+# El fichero de firmas lo crea el propio action: no se crea a mano.
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_target:
+    types: [opened, closed, synchronize]
+
+permissions:
+  actions: write
+  contents: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  cla:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CLA Assistant
+        if: (github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA') || github.event_name == 'pull_request_target'
+        uses: contributor-assistant/github-action@v2.6.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path-to-signatures: 'signatures/cla.json'
+          path-to-document: 'https://github.com/AndorinaAI/open-stream-suite/blob/main/.github/CLA.md'
+          # Rama donde se almacenan las firmas (no protegida a propósito)
+          branch: 'cla-signatures'
+          # Exentos de firmar: el titular (AndorinaAI) y las automatizaciones
+          allowlist: 'AndorinaAI,dependabot[bot],github-actions[bot]'
+          create-file-commit-message: 'chore(cla): crear el registro de firmas del CLA'
+          signed-commit-message: '$contributorName firma el CLA en $owner/$repo#$pullRequestNo'
+          custom-notsigned-prcomment: |
+            ¡Gracias por tu aportación! / Thank you for your contribution!
+
+            Para poder revisarla necesitamos que firmes el **Acuerdo de Licencia de Contribuciones (CLA)**: $pathToCLADocument
+            · [English version](https://github.com/AndorinaAI/open-stream-suite/blob/main/.github/CLA.en.md)
+
+            Responde en este pull request con este comentario **exacto** / Reply to this pull request with this **exact** comment:
+
+            ```
+            I have read the CLA Document and I hereby sign the CLA
+            ```
+
+            Firmas una sola vez y vale para todos tus pull requests futuros. / You sign once and it covers all your future pull requests.
+          custom-allsigned-prcomment: '✅ Todas las personas firmantes han firmado el CLA. / All contributors have signed the CLA.'
+          lock-pullrequest-aftermerge: true
