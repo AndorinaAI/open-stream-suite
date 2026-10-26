@@ -17,10 +17,15 @@ class DeckIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._backup = {}
-        for name in ("themes_state.json", "config.js", "fusions.json", "widgets_config.json"):
-            src = BASE_DIR / name
+        # Estado global y, además, la config de CADA widget: los endpoints de decks
+        # escriben ahí (p. ej. `widgets/goal/config.json` al sumar +1 a la meta), así
+        # que sin snapshots la suite dejaba tu meta de seguidores incrementada.
+        targets = [BASE_DIR / name for name in
+                   ("themes_state.json", "config.js", "fusions.json", "widgets_config.json")]
+        targets += sorted((BASE_DIR / "widgets").glob("*/config.json"))
+        for src in targets:
             if src.exists():
-                cls._backup[name] = src.read_text(encoding="utf-8")
+                cls._backup[src] = src.read_text(encoding="utf-8")
         try:
             r = requests.get(f"{BASE_URL}/api/status", timeout=1)
             if r.status_code != 200:
@@ -30,8 +35,11 @@ class DeckIntegrationTests(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        for name, text in getattr(cls, "_backup", {}).items():
-            (BASE_DIR / name).write_text(text, encoding="utf-8")
+        for path, text in getattr(cls, "_backup", {}).items():
+            try:
+                path.write_text(text, encoding="utf-8")
+            except OSError:
+                pass
 
     def test_01_deck_actions_catalog(self):
         """Verifica que el catálogo de acciones para Stream Deck responda con código 200"""
