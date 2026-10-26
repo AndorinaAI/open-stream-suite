@@ -2,6 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+<!-- preload-fonts:T4 (generado por scripts/apply_font_preloads.py) -->
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_600.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_700.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/inter_normal_800.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/common/fonts/jetbrains_mono_normal_700.woff2">
+<!-- /preload-fonts:T4 -->
   <title>Open Stream Suite — Swiss Broadcast Just Chatting</title>
   <link rel="stylesheet" href="/common/styles.css">
   <link rel="stylesheet" href="/common/themes.css">
@@ -312,7 +320,7 @@
         <span data-text-key="chill.chatTitle">Chat de la Comunidad</span>
         <span class="mode-badge chat-room-badge" data-oss-badge="true" data-text-key="channel.liveText">EN VIVO</span>
       </div>
-      <div style="flex:1;"></div>
+      <div style="flex:1; min-height:0;"><iframe class="scene-chat-embed" src="/widgets/chat/index.html?embed=1" title="Chat en directo" style="width:100%;height:100%;border:0;display:block;background:transparent;"></iframe></div>
     </aside>
   </main>
 
@@ -330,7 +338,13 @@
   </footer>
 
   <script src="/config.js"></script>
+  <!-- Módulos críticos cargados antes del primer pintado: evita que el DOM se
+       complete después y que los elementos se recoloquen (T4-seguimiento). -->
+  <script src="/common/overlay/icons.js?v=50"></script>
+  <script src="/common/overlay/dom-injector.js?v=50"></script>
+  <script src="/common/overlay/interactive-features.js?v=50"></script>
   <script src="/common/overlay.js"></script>
+  <script src="/common/overlay/scene-chat-embed.js"></script>
   <script>
     // Live studio audio VU meter gentle pulse animation
     setInterval(() => {

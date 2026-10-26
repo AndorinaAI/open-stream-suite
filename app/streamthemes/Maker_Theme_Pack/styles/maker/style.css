@@ -8,4 +8,18 @@ body[data-theme="maker"] {
   --color-border-cyan: rgba(87, 214, 196, 0.35);
   --color-border-cyan-bright: #57D6C4;
   --theme-glow: 0 0 16px rgba(87, 214, 196, 0.5);
+  --frame-radius: 4px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 18px rgba(87, 214, 196, 0.18), inset 0 0 12px rgba(87, 214, 196, 0.06);
+  --frame-corner-display: block;
+  --panel-radius: 8px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --badge-radius: 4px;
+  --badge-clip-path: none;
+  --header-radius: 6px;
+  --header-clip-path: none;
 }

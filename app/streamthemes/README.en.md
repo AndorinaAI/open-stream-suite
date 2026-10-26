@@ -25,6 +25,8 @@ streamthemes/
 
 ## Official Available Packs Catalog
 
+> Note: the *scene keys* used by the control panel (e.g. `maker-desk`, `oss_chatting`) can differ from the *folder path* (`maker/desk/`, `just_chatting/`). The public URL is always `/streamthemes/<Pack>/overlays/<path>/index.html`.
+
 1. **`Maker_Theme_Pack/`** (6 styles):
    - Specialized in makers, hardware workshops, electronics, CAD, and 3D printing.
    - Scenes: 9 workshop broadcast scenes (`maker-desk`, `maker-pc`, `print-machine`, `print-design`, `chill`, `game`, `screens/`).
@@ -55,14 +57,15 @@ All scenes implement the universal semantic standard:
 - `data-oss-cam-label="true|bar|bottom"`: Camera title or identification badge. Use `"bar"` or `.cam-bottom-bar` for full-width bottom chin bars.
 - `data-oss-panel="true"`: Chat boxes, task cards, stats, or victory podiums.
 - `data-oss-bar="top|bottom|left|right"`: Top headers, bottom news/stage ticker bars, or side columns.
-- `data-oss-orientation="horizontal|vertical"`: Element orientation (auto-detected via aspect-ratio or bar position, or explicitly set).
+- `data-oss-badge="true"`: Badges, chips and status labels (auto-injected at runtime when a scene does not declare them).
+- `data-oss-orientation="horizontal|vertical"`: Element orientation (auto-detected at runtime; optional override).
 - `data-text-key="section.field"`: Strict key isolation for live on-canvas editing and persistent WebSocket broadcasting.
 
 ### URL Control Query Parameters
 - `?theme=<id>`: Force a specific color theme.
 - `?shape=<id>`: Force one of the 20 universal physical shapes (`maker_blueprint`, `openstream_glass`, `gamer_mecha`, etc.).
 - `?lock=1` / `?lockTheme=1`: Permanently locks the scene in OBS Studio to the URL parameters, ignoring incoming WebSocket changes.
-- `?lang=en` / `?lang=es`: Load translated texts for the specified language.
+- `?lang=en` / `?lang=es`: Reserved — currently only the `/api/overlays/texts` endpoint honours it; scenes do not consume this parameter yet.
 
 ### Multi-Aspect Ratio Fluidity
 Using relative CSS coordinates (`calc(100% - 24px)`), physical shapes adapt fluidly across **16:9** (widescreen), **4:3** (retro/classic), **21:9** (ultrawide), and **9:16** (vertical mobile / TikTok / Shorts) camera captures without geometric distortion.
