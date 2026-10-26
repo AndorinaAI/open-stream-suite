@@ -3,9 +3,41 @@
  * Conexión WebSocket al servidor local y despacho de eventos en tiempo real para OBS.
  */
 
+/**
+ * Tema nativo de packs (OSS): ?theme=<id> aplica el tema al overlay de alertas.
+ * El WebSocket (theme_change) lo actualiza en vivo.
+ */
+(function () {
+  try {
+    var t = new URLSearchParams(window.location.search).get('theme');
+    if (t) document.body.setAttribute('data-theme', t);
+  } catch (e) {}
+})();
+
 function jsonParse(str) {
   try { return JSON.parse(str); } catch (e) { return null; }
 }
+
+// Asignación de fábrica/fusión para las alertas de panel (themes_state.json -> config.js)
+(function () {
+  try {
+    var cfg = window.OSS_CONFIG || {};
+    // Formas: genéricas (OSSShape) o físicas de pack (body[data-theme-shape])
+    var shapes = cfg.overlayShapes || {};
+    if (window.AlertShapes) {
+      AlertShapes.configure(cfg);
+      AlertShapes.set('card', shapes['alert:card']);
+      AlertShapes.set('banner', shapes['alert:banner']);
+      // El tipo que se muestre aplicará su propio tema/forma en la cola.
+      AlertShapes.applyAll('card');
+    } else {
+      [['alert:card', 'alert-card'], ['alert:banner', 'banner-alert-root']].forEach(function (pair) {
+        var el = document.getElementById(pair[1]);
+        if (el && window.OSSShape) window.OSSShape.apply(el, shapes[pair[0]] || null);
+      });
+    }
+  } catch (e) {}
+})();
 
 function connectWS() {
   const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -26,7 +58,32 @@ function connectWS() {
       if (!data || data.type === 'system_status') return;
 
       if (data.type === 'theme_change' && data.theme) {
-        document.body.setAttribute('data-theme', data.theme);
+        if (window.AlertShapes) AlertShapes.setGlobalTheme(data.theme);
+        // El tema global sólo aplica si el tipo visible no tiene tema explícito.
+        var visible = window.AlertShapes ? AlertShapes.visibleType() : null;
+        if (!window.AlertShapes || !visible || !AlertShapes.isExplicit(visible)) {
+          document.body.setAttribute('data-theme', data.theme);
+        }
+        return;
+      }
+
+      if (data.type === 'alert_theme_change') {
+        var shapeType = data.id === 'banner' ? 'banner' : 'card';
+        if (window.AlertShapes) {
+          AlertShapes.setTheme(shapeType, data.theme, data.explicit);
+          AlertShapes.set(shapeType, data.shape);
+          var visibleNow = AlertShapes.visibleType();
+          if (!visibleNow || visibleNow === shapeType) {
+            AlertShapes.applyAll(shapeType);
+          } else {
+            AlertShapes.apply(shapeType, data.shape);
+          }
+        } else if (window.OSSShape) {
+          var targetId = data.id === 'banner' ? 'banner-alert-root' : 'alert-card';
+          var el = document.getElementById(targetId);
+          if (data.shape) window.OSSShape.apply(el, data.shape);
+          else window.OSSShape.clear(el);
+        }
         return;
       }
 

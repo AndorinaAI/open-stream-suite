@@ -1,3 +1,7 @@
+function escapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
 // ====================================================================
 // ROLES - RENDERIZADO VISUAL Y SELECTOR DE PERMISOS
 // ====================================================================
@@ -43,8 +47,8 @@ function renderRoles() {
     const membersHtml = members.length > 0 
       ? members.map(m => `
           <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.5); border: 1px solid ${color}60; border-radius: 12px; padding: 2px 8px; font-family: var(--font-tech); font-size: 11px; color: #fff;">
-            @${m}
-            <button type="button" onclick="removeMemberFromRole('${role.id}', '${m}')" style="background: none; border: none; color: #EF4444; font-size: 10px; cursor: pointer; padding: 0 2px;" title="${tr('roles.btn_remove_user', 'Quitar')}">✕</button>
+            @${escapeHtml(m)}
+            <button type="button" onclick="removeMemberFromRole('${escapeHtml(role.id)}', '${String(m).replace(/'/g, "\\'")}')" style="background: none; border: none; color: #EF4444; font-size: 10px; cursor: pointer; padding: 0 2px;" title="${tr('roles.btn_remove_user', 'Quitar')}">✕</button>
           </span>
         `).join('')
       : `<span style="font-size: 11px; color: var(--color-text-dim); font-style: italic;">${tr('roles.no_users_assigned', 'Sin usuarios asignados aún')}</span>`;
@@ -56,13 +60,13 @@ function renderRoles() {
     item.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
         <div style="display: flex; align-items: center; gap: 8px;">
-          <span style="font-size: 20px;">${role.badge || '⭐'}</span>
+          <span style="font-size: 20px;">${escapeHtml(role.badge || "⭐")}</span>
           <div>
             <div style="font-family: var(--font-tech); font-weight: 800; font-size: 14px; color: #fff; letter-spacing: 0.5px;">
-              ${role.name}
+              ${escapeHtml(role.name)}
             </div>
             <div style="font-size: 10px; color: ${color}; font-weight: 600;">
-              ${memText}
+              ${escapeHtml(memText)}
             </div>
           </div>
         </div>

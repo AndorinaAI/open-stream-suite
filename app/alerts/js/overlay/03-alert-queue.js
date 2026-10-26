@@ -115,23 +115,34 @@ window.AlertQueue = {
     // Aplicar estilos del tema seleccionado
     const theme = item.bannerStyle || 'cyberpunk';
     root.className = `banner-alert-root banner-theme-${theme} anim-${item.bannerAnimation || 'pop'}`;
+    if (window.AlertShapes) window.AlertShapes.applyAll('banner');
 
-    if (item.bannerBgColor) root.style.background = item.bannerBgColor;
-    else root.style.background = '';
-
-    if (item.bannerBorderColor) {
-      root.style.setProperty('--banner-border', item.bannerBorderColor);
-      root.style.setProperty('--banner-accent', item.bannerAccentColor || item.bannerBorderColor);
-    } else {
+    // Con un tema de pack activo, los colores (incluido el degradado) vienen del tema.
+    const packThemeActive = document.body.hasAttribute('data-theme');
+    if (packThemeActive) {
+      root.style.background = '';
       root.style.removeProperty('--banner-border');
       root.style.removeProperty('--banner-accent');
-    }
-
-    if (item.bannerTextColor) {
-      root.style.setProperty('--banner-text', item.bannerTextColor);
-      if (user) user.style.color = item.bannerTextColor;
-    } else {
+      root.style.removeProperty('--banner-text');
       if (user) user.style.color = '';
+    } else {
+      if (item.bannerBgColor) root.style.background = item.bannerBgColor;
+      else root.style.background = '';
+
+      if (item.bannerBorderColor) {
+        root.style.setProperty('--banner-border', item.bannerBorderColor);
+        root.style.setProperty('--banner-accent', item.bannerAccentColor || item.bannerBorderColor);
+      } else {
+        root.style.removeProperty('--banner-border');
+        root.style.removeProperty('--banner-accent');
+      }
+
+      if (item.bannerTextColor) {
+        root.style.setProperty('--banner-text', item.bannerTextColor);
+        if (user) user.style.color = item.bannerTextColor;
+      } else {
+        if (user) user.style.color = '';
+      }
     }
 
     if (item.bannerFontFamily) {
@@ -279,6 +290,7 @@ window.AlertQueue = {
       }
     }
 
+    if (window.AlertShapes) window.AlertShapes.applyAll('card');
     card.classList.add('visible');
 
     setTimeout(() => {

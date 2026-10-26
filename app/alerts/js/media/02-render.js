@@ -1,3 +1,22 @@
+function escapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
+// Valor seguro para un atributo HTML (incluye comillas).
+function escapeAttr(value) {
+  return escapeHtml(value);
+}
+
+// Argumento seguro para un handler inline: JSON.stringify conserva los
+// caracteres especiales de JS y escapeHtml evita romper el atributo.
+function inlineArg(value) {
+  return escapeAttr(JSON.stringify(String(value == null ? "" : value)));
+}
+
+function safeMediaType(value) {
+  return ["video", "sound", "image"].includes(value) ? value : "other";
+}
+
 
 // ====================================================================
 // ÁRBOL DE CARPETAS (SIDEBAR) CON SOPORTE DRAG & DROP
@@ -16,8 +35,8 @@ function renderFolderTree() {
          ondragleave="onFolderDragLeave(event)"
          ondrop="onFolderDrop(event, '')"
          data-folder="">
-      <span class="tree-node-name">📁 ${tr('media.root_library', 'Biblioteca Raíz')}</span>
-      <span class="tree-node-badge">${cachedMedia.length}</span>
+      <span class="tree-node-name">📁 ${escapeHtml(tr('media.root_library', 'Biblioteca Raíz'))}</span>
+      <span class="tree-node-badge">${Number(cachedMedia.length) || 0}</span>
     </div>
   `;
 
@@ -33,17 +52,17 @@ function renderFolderTree() {
 
     html += `
       <div class="tree-node ${isActive ? 'active' : ''}" 
-           style="padding-left: ${indentPx}px;"
-           onclick="navigateMediaFolder('${fPath}')"
+           style="padding-left: ${Number(indentPx) || 0}px;"
+           onclick="navigateMediaFolder(${inlineArg(fPath)})"
            ondragover="onFolderDragOver(event)"
            ondragleave="onFolderDragLeave(event)"
-           ondrop="onFolderDrop(event, '${fPath}')"
-           data-folder="${fPath}">
+           ondrop="onFolderDrop(event, ${inlineArg(fPath)})"
+           data-folder="${escapeAttr(fPath)}">
         <span class="tree-node-name">
-          <span>${getFolderIcon(folderName)}</span>
-          <span>${folderName}</span>
+          <span>${escapeHtml(getFolderIcon(folderName))}</span>
+          <span>${escapeHtml(folderName)}</span>
         </span>
-        <span class="tree-node-badge">${count}</span>
+        <span class="tree-node-badge">${Number(count) || 0}</span>
       </div>
     `;
   });
@@ -87,16 +106,16 @@ function renderMediaExplorer() {
         const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
         return `
           <div class="folder-card" 
-               onclick="navigateMediaFolder('${sf}')"
+               onclick="navigateMediaFolder(${inlineArg(sf)})"
                ondragover="onFolderDragOver(event)"
                ondragleave="onFolderDragLeave(event)"
-               ondrop="onFolderDrop(event, '${sf}')"
-               title="${tr('media.folder_card_tooltip', 'Doble clic para entrar o arrastra archivos aquí para moverlos')}">
+               ondrop="onFolderDrop(event, ${inlineArg(sf)})"
+               title="${escapeAttr(tr('media.folder_card_tooltip', 'Doble clic para entrar o arrastra archivos aquí para moverlos'))}">
             <span style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 12px;">
-              <span style="font-size: 16px;">${getFolderIcon(sfName)}</span>
-              <span>${sfName}</span>
+              <span style="font-size: 16px;">${escapeHtml(getFolderIcon(sfName))}</span>
+              <span>${escapeHtml(sfName)}</span>
             </span>
-            <span class="tree-node-badge">${count}</span>
+            <span class="tree-node-badge">${Number(count) || 0}</span>
           </div>
         `;
       }).join('');
@@ -154,8 +173,8 @@ function renderMediaExplorer() {
       gridContainer.innerHTML = `
         <div style="grid-column: 1 / -1; padding: 36px 16px; text-align: center; color: var(--color-text-dim); font-size: 13px;">
           <div style="font-size: 32px; margin-bottom: 8px;">📂</div>
-          <b data-i18n="media.empty_folder_title">${emptyTitle}</b><br>
-          <span style="font-size: 11px;" data-i18n="media.empty_folder_desc">${emptyDesc}</span>
+          <b data-i18n="media.empty_folder_title">${escapeHtml(emptyTitle)}</b><br>
+          <span style="font-size: 11px;" data-i18n="media.empty_folder_desc">${escapeHtml(emptyDesc)}</span>
         </div>
       `;
       return;
@@ -193,19 +212,23 @@ function renderMediaExplorer() {
 // ====================================================================
 
 function createMediaCardHTML(f) {
+  const type = safeMediaType(f.type);
   const isSelected = selectedMediaPaths.has(f.rel_path);
   const isCut = mediaClipboard.mode === 'cut' && mediaClipboard.paths.includes(f.rel_path);
   const sizeText = f.size_kb > 1024 ? `${(f.size_kb / 1024).toFixed(1)} MB` : `${f.size_kb} KB`;
   const mdate = f.mtime ? new Date(f.mtime).toLocaleDateString() : '';
+  const safeUrl = escapeAttr(f.url);
+  const safeName = escapeHtml(f.name);
+  const safeRelPath = escapeAttr(f.rel_path);
 
   // Miniatura según tipo
   let thumbHTML = '';
-  if (f.type === 'video') {
+  if (type === 'video') {
     thumbHTML = `
-      <video src="${f.url}" preload="metadata" muted onmouseover="this.play()" onmouseout="this.pause();this.currentTime=0;"></video>
+      <video src="${safeUrl}" preload="metadata" muted onmouseover="this.play()" onmouseout="this.pause();this.currentTime=0;"></video>
     `;
-  } else if (f.type === 'image') {
-    thumbHTML = `<img src="${f.url}" alt="${f.name}" loading="lazy">`;
+  } else if (type === 'image') {
+    thumbHTML = `<img src="${safeUrl}" alt="${safeName}" loading="lazy">`;
   } else {
     thumbHTML = `
       <div class="media-audio-preview-visual">
@@ -216,28 +239,28 @@ function createMediaCardHTML(f) {
   }
 
   const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
-  const typeClass = f.type === 'video' ? 'type-video' : (f.type === 'sound' ? 'type-sound' : 'type-image');
-  const typeLabel = f.type === 'video' ? tr('media.type_video', '🎬 VÍDEO') : (f.type === 'sound' ? tr('media.type_sound', '🎵 AUDIO') : tr('media.type_image', '🖼️ IMAGEN'));
+  const typeClass = type === 'video' ? 'type-video' : (type === 'sound' ? 'type-sound' : 'type-image');
+  const typeLabel = type === 'video' ? tr('media.type_video', '🎬 VÍDEO') : (type === 'sound' ? tr('media.type_sound', '🎵 AUDIO') : tr('media.type_image', '🖼️ IMAGEN'));
 
   return `
     <div class="media-card ${isSelected ? 'selected' : ''} ${isCut ? 'is-cut' : ''}" 
          draggable="true" 
-         ondragstart="onMediaDragStart(event, '${f.rel_path}')"
-         ondblclick="openMediaPreview('${f.rel_path}')"
-         data-path="${f.rel_path}">
+         ondragstart="onMediaDragStart(event, ${inlineArg(f.rel_path)})"
+         ondblclick="openMediaPreview(${inlineArg(f.rel_path)})"
+         data-path="${safeRelPath}">
       
       <input type="checkbox" class="media-select-checkbox" 
              ${isSelected ? 'checked' : ''} 
-             onclick="toggleMediaSelection(event, '${f.rel_path}')">
+             onclick="toggleMediaSelection(event, ${inlineArg(f.rel_path)})">
       
-      <span class="media-type-badge ${typeClass}">${typeLabel}</span>
+      <span class="media-type-badge ${typeClass}">${escapeHtml(typeLabel)}</span>
 
-      <div class="media-thumb-box" onclick="openMediaPreview('${f.rel_path}')">
+      <div class="media-thumb-box" onclick="openMediaPreview(${inlineArg(f.rel_path)})">
         ${thumbHTML}
       </div>
 
       <div class="media-card-info">
-        <div class="media-card-title" title="${f.name}">${f.name}</div>
+        <div class="media-card-title" title="${safeName}">${safeName}</div>
         <div class="media-card-meta">
           <span>${sizeText}</span>
           <span>${mdate}</span>
@@ -245,16 +268,16 @@ function createMediaCardHTML(f) {
       </div>
 
       <div class="media-card-actions">
-        <button class="btn-action-test" style="flex: 1; padding: 4px;" onclick="openMediaPreview('${f.rel_path}')" title="${tr('media.btn_view_tooltip', 'Vista Previa y Reproductor')}">
-          ▶️ ${tr('media.btn_view_short', 'Ver')}
+        <button class="btn-action-test" style="flex: 1; padding: 4px;" onclick="openMediaPreview(${inlineArg(f.rel_path)})" title="${escapeAttr(tr('media.btn_view_tooltip', 'Vista Previa y Reproductor'))}">
+          ▶️ ${escapeHtml(tr('media.btn_view_short', 'Ver'))}
         </button>
-        <button class="btn-action-test" style="padding: 4px 6px;" onclick="copyText('${f.url}')" title="${tr('media.btn_copy_url_tooltip', 'Copiar URL relativa para OBS')}">
-          📋 ${tr('media.btn_copy_url_short', 'URL')}
+        <button class="btn-action-test" style="padding: 4px 6px;" onclick="copyText(${inlineArg(f.url)})" title="${escapeAttr(tr('media.btn_copy_url_tooltip', 'Copiar URL relativa para OBS'))}">
+          📋 ${escapeHtml(tr('media.btn_copy_url_short', 'URL'))}
         </button>
-        <button class="btn-action-test" style="padding: 4px 6px;" onclick="assignPathToCurrentTrigger('${f.url}', '${f.type}')" title="${tr('media.btn_trigger_tooltip', 'Asignar al Trigger actual')}">
-          ⚡ ${tr('media.btn_trigger_short', 'Trigger')}
+        <button class="btn-action-test" style="padding: 4px 6px;" onclick="assignPathToCurrentTrigger(${inlineArg(f.url)}, ${inlineArg(type)})" title="${escapeAttr(tr('media.btn_trigger_tooltip', 'Asignar al Trigger actual'))}">
+          ⚡ ${escapeHtml(tr('media.btn_trigger_short', 'Trigger'))}
         </button>
-        <button class="btn-action-danger" style="padding: 4px 6px;" onclick="deleteMediaSingle('${f.rel_path}')" title="${tr('media.btn_delete_tooltip', 'Eliminar archivo')}">
+        <button class="btn-action-danger" style="padding: 4px 6px;" onclick="deleteMediaSingle(${inlineArg(f.rel_path)})" title="${escapeAttr(tr('media.btn_delete_tooltip', 'Eliminar archivo'))}">
           🗑️
         </button>
       </div>
@@ -263,35 +286,36 @@ function createMediaCardHTML(f) {
 }
 
 function createMediaTableRowHTML(f) {
+  const type = safeMediaType(f.type);
   const isSelected = selectedMediaPaths.has(f.rel_path);
   const isCut = mediaClipboard.mode === 'cut' && mediaClipboard.paths.includes(f.rel_path);
   const sizeText = f.size_kb > 1024 ? `${(f.size_kb / 1024).toFixed(1)} MB` : `${f.size_kb} KB`;
   const mdate = f.mtime ? new Date(f.mtime).toLocaleString() : '';
-  const icon = f.type === 'video' ? '🎬' : (f.type === 'sound' ? '🎵' : '🖼️');
+  const icon = type === 'video' ? '🎬' : (type === 'sound' ? '🎵' : '🖼️');
 
   return `
     <tr class="${isSelected ? 'selected' : ''} ${isCut ? 'is-cut' : ''}" 
         draggable="true" 
-        ondragstart="onMediaDragStart(event, '${f.rel_path}')"
-        ondblclick="openMediaPreview('${f.rel_path}')"
-        data-path="${f.rel_path}">
+        ondragstart="onMediaDragStart(event, ${inlineArg(f.rel_path)})"
+        ondblclick="openMediaPreview(${inlineArg(f.rel_path)})"
+        data-path="${escapeAttr(f.rel_path)}">
       <td>
-        <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="toggleMediaSelection(event, '${f.rel_path}')" style="accent-color: var(--color-accent-cyan);">
+        <input type="checkbox" ${isSelected ? 'checked' : ''} onclick="toggleMediaSelection(event, ${inlineArg(f.rel_path)})" style="accent-color: var(--color-accent-cyan);">
       </td>
-      <td style="font-weight: 700; cursor: pointer;" onclick="openMediaPreview('${f.rel_path}')">
-        <span>${icon}</span> ${f.name}
+      <td style="font-weight: 700; cursor: pointer;" onclick="openMediaPreview(${inlineArg(f.rel_path)})">
+        <span>${icon}</span> ${escapeHtml(f.name)}
       </td>
-      <td style="color: var(--color-text-dim);">${f.folder || 'raíz'}</td>
+      <td style="color: var(--color-text-dim);">${escapeHtml(f.folder || "raíz")}</td>
       <td>
-        <span class="media-type-badge type-${f.type}" style="position: static; font-size: 9px;">${f.type.toUpperCase()}</span>
+        <span class="media-type-badge type-${type}" style="position: static; font-size: 9px;">${escapeHtml(type.toUpperCase())}</span>
       </td>
       <td>${sizeText}</td>
       <td style="color: var(--color-text-dim); font-size: 11px;">${mdate}</td>
       <td style="text-align: right; white-space: nowrap;">
-        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openMediaPreview('${f.rel_path}')">▶️</button>
-        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="copyText('${f.url}')">📋</button>
-        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openRenameModal('${f.rel_path}', '${f.name}')">✏️</button>
-        <button class="btn-action-danger" style="padding: 3px 6px; font-size: 10px;" onclick="deleteMediaSingle('${f.rel_path}')">🗑️</button>
+        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openMediaPreview(${inlineArg(f.rel_path)})">▶️</button>
+        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="copyText(${inlineArg(f.url)})">📋</button>
+        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openRenameModal(${inlineArg(f.rel_path)}, ${inlineArg(f.name)})">✏️</button>
+        <button class="btn-action-danger" style="padding: 3px 6px; font-size: 10px;" onclick="deleteMediaSingle(${inlineArg(f.rel_path)})">🗑️</button>
       </td>
     </tr>
   `;

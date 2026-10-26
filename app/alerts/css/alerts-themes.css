@@ -437,3 +437,35 @@
 .banner-alert-root.ambient-pulse { animation: ambientPulse 2.5s infinite ease-in-out; }
 .banner-alert-root.ambient-float { animation: ambientFloat 3s infinite ease-in-out; }
 
+/* ===== Capa nativa de temas de pack (OSS) =====
+   Cuando el overlay de alertas recibe data-theme (por ?theme= o por
+   theme_change del WebSocket), los banners heredan los tokens del pack.
+   Sin data-theme, los presets banner-theme-* siguen intactos. */
+body[data-theme] {
+  --banner-accent: var(--color-accent-cyan, #57D6C4);
+  --banner-border: var(--color-accent-cyan, #57D6C4);
+  --banner-text: var(--color-text-light, #F2EEE5);
+}
+
+/* ===== Banner gobernado por el tema de pack (incluye degradado) =====
+   Sin data-theme se conservan los presets banner-theme-*; con tema, el pack manda. */
+body[data-theme] #banner-alert-root {
+  background: linear-gradient(135deg,
+    var(--color-panel-bg, #191D21) 0%,
+    var(--color-bg-dark, #0B0D0F) 100%);
+  border: 2px solid var(--color-accent-cyan, #57D6C4);
+  border-left: 6px solid var(--color-accent-cyan, #57D6C4);
+  box-shadow: 0 0 28px var(--color-accent-cyan, #57D6C4);
+  color: var(--color-text-light, #F2EEE5);
+}
+body[data-theme] #banner-alert-root .banner-user-display {
+  color: var(--color-accent-cyan, #57D6C4);
+  text-shadow: 0 0 14px var(--color-accent-cyan, #57D6C4);
+}
+body[data-theme] #banner-alert-root .banner-primary-title {
+  color: var(--color-text-light, #F2EEE5);
+}
+body[data-theme] #banner-alert-root .banner-subtitle-msg,
+body[data-theme] #banner-alert-root .banner-badge-tag {
+  color: var(--color-text-dim, #9AA4AF);
+}

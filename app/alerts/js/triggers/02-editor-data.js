@@ -1,3 +1,7 @@
+function escapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
 
 function getEditorTriggerData() {
   const id = document.getElementById('trig-editing-id').value || ('trig_' + Date.now());
@@ -122,6 +126,7 @@ function renderTriggers() {
         triggerColor = match.color;
       }
     }
+    if (!/^#[0-9a-fA-F]{6}$/.test(String(triggerColor))) triggerColor = '#57D6C4';
     item.style.borderLeft = `3px solid ${triggerColor}`;
 
     // Badges con color real
@@ -131,18 +136,18 @@ function renderTriggers() {
     const pointsBadgeStyle = `background: ${triggerColor}20; border: 1px solid ${triggerColor}80; color: ${triggerColor}; font-weight: 700; box-shadow: 0 0 8px ${triggerColor}25;`;
 
     if (actMode === 'points_only') {
-      actBadge = `<span class="badge-pill" style="${pointsBadgeStyle}">${dotHtml}🪙 Solo Puntos: ${trig.reward_title || 'Twitch'}</span>`;
+      actBadge = `<span class="badge-pill" style="${pointsBadgeStyle}">${dotHtml}🪙 Solo Puntos: ${escapeHtml(trig.reward_title || 'Twitch')}</span>`;
     } else if (actMode === 'command_only') {
-      actBadge = `<span class="badge-pill badge-command">💬 ${trig.chat_command} [${trig.command_permissions || 'Todos'}]</span>`;
+      actBadge = `<span class="badge-pill badge-command">💬 ${escapeHtml(trig.chat_command)} [${escapeHtml(trig.command_permissions || 'Todos')}]</span>`;
     } else {
-      actBadge = `<span class="badge-pill" style="${pointsBadgeStyle}">${dotHtml}🪙 ${trig.reward_title || 'Puntos'}</span> <span class="badge-pill badge-command">💬 ${trig.chat_command || '!cmd'}</span>`;
+      actBadge = `<span class="badge-pill" style="${pointsBadgeStyle}">${dotHtml}🪙 ${escapeHtml(trig.reward_title || 'Puntos')}</span> <span class="badge-pill badge-command">💬 ${escapeHtml(trig.chat_command || '!cmd')}</span>`;
     }
 
     // Badge de Acción Especial
     let specialActionBadge = '';
     if (trig.special_action && trig.special_action !== 'none') {
       if (trig.special_action === 'twitch_emote_only') {
-        specialActionBadge = `<span class="badge-pill" style="background: rgba(139, 92, 246, 0.2); border: 1px solid #8B5CF6; color: #C4B5FD;">💬 Modo Emotes (${trig.special_action_param || 60}s)</span>`;
+        specialActionBadge = `<span class="badge-pill" style="background: rgba(139, 92, 246, 0.2); border: 1px solid #8B5CF6; color: #C4B5FD;">💬 Modo Emotes (${escapeHtml(trig.special_action_param || 60)}s)</span>`;
       } else if (trig.special_action === 'twitch_slow_mode') {
         specialActionBadge = `<span class="badge-pill" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #F59E0B; color: #FBBF24;">🐢 Modo Lento</span>`;
       } else if (trig.special_action === 'twitch_sub_only') {
@@ -152,18 +157,20 @@ function renderTriggers() {
       } else if (trig.special_action === 'overlay_explode_emotes') {
         specialActionBadge = `<span class="badge-pill" style="background: rgba(236, 72, 153, 0.2); border: 1px solid #EC4899; color: #F472B6;">🎆 Explosión Emojis</span>`;
       } else if (trig.special_action === 'overlay_timer_add') {
-        specialActionBadge = `<span class="badge-pill" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3B82F6; color: #93C5FD;">⏱️ +${trig.special_action_param || 60}s Timer</span>`;
+        specialActionBadge = `<span class="badge-pill" style="background: rgba(59, 130, 246, 0.2); border: 1px solid #3B82F6; color: #93C5FD;">⏱️ +${escapeHtml(trig.special_action_param || 60)}s Timer</span>`;
       }
     }
 
     const mediaType = trig.video_url ? '🎬 Vídeo' : (trig.image_url ? '🖼️ GIF' : '🎵 Solo Audio');
-    const posText = trig.position_mode === 'random' ? '🎲 Aleatorio' : `📍 X:${trig.custom_x || 50}% Y:${trig.custom_y || 50}%`;
+    const posX = Number.isFinite(Number(trig.custom_x)) ? Number(trig.custom_x) : 50;
+    const posY = Number.isFinite(Number(trig.custom_y)) ? Number(trig.custom_y) : 50;
+    const posText = trig.position_mode === 'random' ? '🎲 Aleatorio' : `📍 X:${posX}% Y:${posY}%`;
 
     item.innerHTML = `
       <div class="trigger-item-info">
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: ${triggerColor}; box-shadow: 0 0 8px ${triggerColor};"></span>
-          <span class="trigger-name-title">${trig.title || 'Trigger'}</span>
+          <span class="trigger-name-title">${escapeHtml(trig.title || "Trigger")}</span>
         </div>
         <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px;">
           ${actBadge}

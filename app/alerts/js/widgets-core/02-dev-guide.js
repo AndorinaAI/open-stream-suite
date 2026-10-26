@@ -194,14 +194,14 @@ function openWidgetDevGuideModal(widgetId) {
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
               <div style="background: #0B0D0F; border: 1px solid rgba(87,214,196,0.3); border-radius: 4px; padding: 8px; font-family: monospace; font-size: 10px; color: #A78BFA;">
                 <b style="color: #57D6C4;">POST (Payload JSON completo):</b><br>
-                POST http://localhost:8080/api/widgets/action<br>
+                POST ${window.location.origin}/api/widgets/action<br>
                 Content-Type: application/json
               </div>
               <div style="background: #0B0D0F; border: 1px solid rgba(87,214,196,0.3); border-radius: 4px; padding: 8px; font-family: monospace; font-size: 10px; color: #38BDF8;">
                 <b style="color: #57D6C4;">GET (1 Clic para Decks / Teclas):</b><br>
-                GET http://localhost:8080/api/deck/widget?widget=${wKey}&action=...<br>
+                GET ${window.location.origin}/api/deck/widget?widget=${wKey}&action=...<br>
                 <b style="color: #F59E0B;">Knobs / Perillas (Ajazz AKP05):</b><br>
-                GET http://localhost:8080/api/deck/knob?knob=1&direction=up
+                GET ${window.location.origin}/api/deck/knob?knob=1&direction=up
               </div>
             </div>
 
@@ -214,7 +214,7 @@ function openWidgetDevGuideModal(widgetId) {
                   </div>
                   <pre style="margin: 0; background: #070809; padding: 6px; border-radius: 4px; font-size: 10px; color: #CBD5E1; overflow-x: auto;">${JSON.stringify(act.payload, null, 2)}</pre>
                   <div style="margin-top: 4px; font-size: 9px; font-family: monospace; color: #94A3B8;">
-                    URL 1-clic: <span style="color: #38BDF8;">http://localhost:8080/api/deck/widget?widget=${wKey}&action=${act.action}</span>
+                    URL 1-clic: <span style="color: #38BDF8;">${window.location.origin}/api/deck/widget?widget=${wKey}&action=${act.action}</span>
                   </div>
                 </div>
               `).join('')}
@@ -227,7 +227,7 @@ function openWidgetDevGuideModal(widgetId) {
               ⚡ 3. Sincronización WebSocket en Tiempo Real
             </h4>
             <div style="font-size: 11px; color: var(--color-text-dim);">
-              ${g.wsInfo} Dirección: <code>ws://localhost:8080/ws</code>. Sin latencia ni necesidad de recargar la fuente de navegador en OBS Studio.
+              ${g.wsInfo} Dirección: <code>${window.location.protocol === "https:" ? "wss:" : "ws:"}//${window.location.host}/ws</code>. Sin latencia ni necesidad de recargar la fuente de navegador en OBS Studio.
             </div>
           </div>
 

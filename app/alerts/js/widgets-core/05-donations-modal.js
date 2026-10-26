@@ -6,9 +6,7 @@ async function openDonationsModal() {
   const modalContainer = document.getElementById('miniapp-modal-container');
   if (!modalContainer) return;
 
-  const currentHost = window.location.hostname || 'localhost';
-  const currentPort = window.location.port || '8080';
-  const localBaseUrl = `http://${currentHost}:${currentPort}`;
+  const localBaseUrl = window.location.origin;
 
   // Cargar configuración guardada del backend
   let savedCfg = { tunnelUrl: '', streamlabsToken: '', streamlabsConnected: false };
@@ -23,7 +21,8 @@ async function openDonationsModal() {
   window._donationsModalState = {
     localBaseUrl,
     tunnelUrl: savedCfg.tunnelUrl || '',
-    streamlabsToken: savedCfg.streamlabsToken || '',
+    streamlabsToken: savedCfg.streamlabsTokenSet ? '' : (savedCfg.streamlabsToken || ''),
+    streamlabsTokenSet: !!savedCfg.streamlabsTokenSet,
     streamlabsConnected: savedCfg.streamlabsConnected || false,
     activeTab: activeDonationWizardTab || 'streamlabs'
   };
@@ -110,7 +109,7 @@ function renderDonationsModalContent() {
               </ol>
 
               <div style="display: flex; gap: 8px; align-items: center;">
-                <input type="password" id="input-streamlabs-token" class="form-input" style="flex: 1; font-family: monospace; font-size: 11px; background: #0B0D0F; color: #57D6C4;" placeholder="Pega aquí tu Socket API Token (comienza por eyJ...)" value="${st.streamlabsToken || ''}">
+                <input type="password" id="input-streamlabs-token" class="form-input" style="flex: 1; font-family: monospace; font-size: 11px; background: #0B0D0F; color: #57D6C4;" placeholder="${st.streamlabsTokenSet ? 'Token guardado (deja vacío para conservarlo)' : 'Pega aquí tu Socket API Token (comienza por eyJ...)'}" value="${st.streamlabsToken || ''}">
                 <button type="button" class="btn-stage-preset" onclick="togglePasswordVisibility('input-streamlabs-token')" style="font-size: 11px; padding: 6px 10px;">👁️</button>
                 <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 6px 14px; background: #10B981; color: #061A12; font-weight: 700;" onclick="saveStreamlabsToken()">
                   🟢 Conectar Streamlabs
