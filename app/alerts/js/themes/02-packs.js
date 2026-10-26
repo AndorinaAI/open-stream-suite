@@ -394,7 +394,9 @@ async function assignThemeToScene(sceneKey, themeId) {
 async function applyThemeToAllScenes(themeId, packId) {
   const info = getThemeDisplayNameById(themeId);
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  if (!confirm(tr('themes.confirm_apply_all', `¿Deseas aplicar el estilo "${info.name}" a todas las 27 escenas de OBS Studio?`, { name: info.name }))) return;
+  // V3-03: el contador sale del catálogo real (antes literal "27"/"9" hardcodeado).
+  const sceneCount = (window.OSS_SCENES && window.OSS_SCENES.length) || 0;
+  if (!confirm(tr('themes.confirm_apply_all', `¿Deseas aplicar el estilo "${info.name}" a las ${sceneCount} escenas de OBS Studio?`, { name: info.name, count: sceneCount }))) return;
   for (const sc of OSS_SCENES) {
     const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(sc.key)) || sc.key;
     cachedOverlayThemes[canonical] = themeId;

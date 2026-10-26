@@ -179,7 +179,9 @@ async function restoreOverlayTheme(sceneKey) {
 
 async function restoreAllOverlaysToDefaultThemes() {
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  if (!confirm(tr('themes.confirm_restore_all_scenes_themes', '¿Deseas restaurar todas las overlays a sus estilos visuales y formas originales de fábrica?'))) return;
+  // V3-03: contador real del catálogo, no un literal.
+  const sceneCount = (window.OSS_SCENES && window.OSS_SCENES.length) || 0;
+  if (!confirm(tr('themes.confirm_restore_all_scenes_themes', `¿Deseas restaurar las ${sceneCount} overlays a sus estilos visuales y formas originales de fábrica?`, { count: sceneCount }))) return;
   if (typeof window.cachedOverlayShapes === 'undefined') window.cachedOverlayShapes = {};
   // Solo claves canónicas de escena presentes en OSS_SCENES: iterar el diccionario
   // de fábrica tal cual incluía secciones de textos ('maker', 'print') que no son

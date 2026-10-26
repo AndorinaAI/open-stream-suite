@@ -8,6 +8,12 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Corregido — Contadores de escenas reales (V3-03)
+
+- Los textos del panel y las confirmaciones de lote ya no fijan un número de escenas: el subtítulo de la sección **pierde el “9”** (“cada una de tus pantallas de transmisión”) y las confirmaciones (`confirm_apply_all`, `confirm_restore_all_scenes_texts`, `confirm_restore_all_scenes_themes`) usan el parámetro **`{count}`** en los 4 diccionarios ES/EN.
+- Los tres llamadores JS pasan `count: window.OSS_SCENES.length`, y el badge de escenas por carpeta ya no arranca con un “9” fijo. Se conservan (correctamente) las descripciones del pack Maker (“…con 9 pantallas listas”), que describen sus 9 escenas reales.
+- **Regresión:** nueva suite `tests/test_i18n_scene_count.py` (4 tests).
+
 ### Cambiado — Licencia dual (AGPL-3.0 + comercial) y CLA obligatorio
 
 - **La licencia pública pasa de CC BY-NC-SA 4.0 a GNU AGPL v3.0 o posterior**: el proyecto es ahora **software libre** (reconocido por OSI/FSF), por lo que puede distribuirse en repositorios y distribuciones que exigen licencias libres, sin ambigüedad sobre uso interno, SaaS o embebido.

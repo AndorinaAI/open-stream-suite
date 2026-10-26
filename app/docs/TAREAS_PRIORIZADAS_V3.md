@@ -45,13 +45,31 @@
 
 ## P1 — UI, accesibilidad e i18n
 
-### T3.03 — “9 escenas” en una app de 27 (V3-03) [ ]
+### T3.03 — “9 escenas” en una app de 27 (V3-03) [HECHO]
 
-- **Archivos:** `alerts/panel.html:1762`, `languages/es.json`, `languages/en.json`,
-  `languages/es.alerts.json`, `languages/en.alerts.json`.
-- **Criterio:** ningún texto de UI dice “9 escenas/9 pantallas”; donde aplique se
-  interpola `OSS_SCENES.length`; test de que no queda el literal.
-- **Evidencia de partida:** el panel muestra literalmente “cada una de tus 9 pantallas”.
+- **Archivos:** `alerts/panel.html`, `languages/{es,en}.json`,
+  `languages/{es,en}.alerts.json`, `alerts/js/themes/02-packs.js`,
+  `alerts/js/themes/09-overlay-folders-render.js`,
+  `alerts/js/themes/10-overlay-actions.js`, `tests/test_i18n_scene_count.py` (nuevo).
+- **Problema:** el panel decía “cada una de tus **9** pantallas” y las
+  confirmaciones fijaban 9 (parcialmente 27) escenas cuando el catálogo tiene 27.
+- **Arreglo:**
+  - Los **textos estáticos** (`panel.html` + `themes.section_subtitle` en los 4
+    diccionarios) pierden el número: “cada una de tus pantallas de transmisión”.
+  - Las **confirmaciones** (`themes.confirm_apply_all`,
+    `confirm_restore_all_scenes_texts`, `confirm_restore_all_scenes_themes`) usan
+    el parámetro `{count}` en los 4 diccionarios.
+  - Los **tres llamadores JS** pasan `count: window.OSS_SCENES.length` y su texto
+    de reserva también interpola el contador.
+  - El badge `overlays-count-in-folder-badge` deja de tener un “9” fijo (lo
+    rellena el JS con el contador de la carpeta).
+- **No se toca (correcto):** las descripciones del pack Maker (“…con 9 pantallas
+  listas”) porque ese pack tiene **9** escenas de verdad.
+- **Criterio:** ningún texto de UI que hable del total fija un número; el valor
+  sale del catálogo.
+- **Verificación:** `test_i18n_scene_count.py` 4/4 OK (subtítulos sin dígitos,
+  confirmaciones con `{count}`, estáticos de `panel.html` limpios y los 3
+  llamadores usando `OSS_SCENES.length`); `node --check` OK; los 4 JSON parsean.
 
 ### T3.04 — Selects sin etiqueta ni `aria-label` (V3-02) [ ]
 

@@ -277,7 +277,9 @@ async function restoreSceneTexts(sceneKey) {
 
 async function restoreAllOverlaysTexts() {
   const tr = (k, fb, params) => (window.i18n && window.i18n.tr(k, params)) || fb;
-  if (!confirm(tr('themes.confirm_restore_all_scenes_texts', '¿Restaurar TODOS los textos de todas las 27 escenas a sus valores originales de fábrica?'))) {
+  // V3-03: contador real del catálogo, no un literal.
+  const sceneCount = (window.OSS_SCENES && window.OSS_SCENES.length) || 0;
+  if (!confirm(tr('themes.confirm_restore_all_scenes_texts', `¿Restaurar TODOS los textos de las ${sceneCount} escenas a sus valores originales de fábrica?`, { count: sceneCount }))) {
     return;
   }
   if (window.OverlayTexts) {
