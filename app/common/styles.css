@@ -2063,3 +2063,34 @@ body.fullscreen-scene {
   animation: none !important;
   transition: none !important;
 }
+
+/* ====================================================================
+   PANELES PARA LAS 3 FORMAS COZY QUE SOLO TENÍAN CÁMARA
+   (así las alertas y cualquier [data-oss-panel] adoptan la forma completa)
+   ==================================================================== */
+body[data-theme-shape="cozy_polaroid"] :is([data-oss-panel], .panel-card, .chat-panel-frame, .cozy-chat-card, .chat-column) {
+  box-sizing: border-box !important;
+  background: #181412 !important;
+  border: 10px solid #FDFBF7 !important;
+  border-bottom: 34px solid #FDFBF7 !important;
+  border-radius: 22px !important;
+  clip-path: none !important;
+  box-shadow: 0 16px 38px rgba(35, 25, 20, 0.28), inset 0 0 0 1px rgba(210, 190, 175, 0.35) !important;
+}
+body[data-theme-shape="cozy_canvas"] :is([data-oss-panel], .panel-card, .chat-panel-frame, .cozy-chat-card, .chat-column) {
+  box-sizing: border-box !important;
+  background: #F4EDE1 !important;
+  border: 3px solid #D6C2A8 !important;
+  border-radius: 10px !important;
+  clip-path: none !important;
+  box-shadow: 0 14px 32px rgba(35, 25, 20, 0.25), inset 0 0 24px rgba(180, 150, 120, 0.18) !important;
+  color: #3A2E24 !important;
+}
+body[data-theme-shape="cozy_soft"] :is([data-oss-panel], .panel-card, .chat-panel-frame, .cozy-chat-card, .chat-column) {
+  box-sizing: border-box !important;
+  background: rgba(28, 25, 23, 0.92) !important;
+  border: 2px solid var(--color-border-cyan, rgba(255, 255, 255, 0.22)) !important;
+  border-radius: 28px !important;
+  clip-path: none !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32) !important;
+}

@@ -3,6 +3,9 @@
  */
 
 window.OSSDomInjector = (function() {
+  function escapeHtml(value) {
+    return String(value == null ? "" : value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+  }
   let brbInterval = null;
   let countdownInterval = null;
 
@@ -105,7 +108,7 @@ window.OSSDomInjector = (function() {
         let html = '';
         ['twitch', 'youtube', 'twitter', 'instagram', 'github'].forEach(net => {
           if (socials[net]) {
-            html += `<div class="social-item">${icons[net] || ''} <span>${socials[net]}</span></div>`;
+            html += `<div class="social-item">${icons[net] || ''} <span>${escapeHtml(socials[net])}</span></div>`;
           }
         });
         socialContainer.innerHTML = html;
@@ -149,10 +152,10 @@ window.OSSDomInjector = (function() {
             row.className = 'split-row' + (sp.active ? ' active' : '');
             const deltaClass = sp.type === 'positive' ? 'positive' : 'negative';
             row.innerHTML = `
-              <span class="split-name">${sp.name || 'Tramo'}</span>
+              <span class="split-name">${escapeHtml(sp.name || "Tramo")}</span>
               <div class="split-times">
-                <span class="split-delta ${deltaClass}">${sp.delta || '±00:00'}</span>
-                <span class="split-time">${sp.time || '--:--'}</span>
+                <span class="split-delta ${deltaClass}">${escapeHtml(sp.delta || "±00:00")}</span>
+                <span class="split-time">${escapeHtml(sp.time || "--:--")}</span>
               </div>
             `;
             splitsContainer.appendChild(row);
@@ -290,22 +293,35 @@ window.OSSDomInjector = (function() {
         }
       }
 
-      const chatPanel = document.querySelector('.chat-panel-frame');
-      const mainCam = document.querySelector('.camera-chill-main');
+      // El marco del chat SIEMPRE permanece; solo se ocultan los mensajes.
+      const chillEmbed = document.querySelector('.chat-panel-frame .scene-chat-embed');
+      const chillBody = document.querySelector('.chat-content-viewport');
       if (config.chill.showChatPanel === false) {
-        if (chatPanel) chatPanel.style.display = 'none';
-        if (mainCam) {
-          mainCam.style.left = '160px';
-          mainCam.style.width = '1600px';
-          mainCam.style.height = '900px';
-        }
+        if (chillEmbed) chillEmbed.style.display = 'none';
+        else if (chillBody) chillBody.style.display = 'none';
       } else {
-        if (chatPanel) chatPanel.style.display = '';
-        if (mainCam) {
-          mainCam.style.left = '32px';
-          mainCam.style.width = '1280px';
-          mainCam.style.height = '720px';
-        }
+        if (chillEmbed) chillEmbed.style.display = 'block';
+        else if (chillBody) chillBody.style.display = '';
+      }
+    }
+
+    // 7b. Marcos de chat por escena (café y just chatting)
+    if (window.location.pathname.includes('/cafe_chat/') && config.cozy) {
+      const cozyEmbed = document.querySelector('.cozy-chat-card .scene-chat-embed');
+      const hide = config.cozy.showChatPanel === false;
+      if (cozyEmbed) cozyEmbed.style.display = hide ? 'none' : 'block';
+      else {
+        const list = document.querySelector('.cozy-chat-card .cozy-message-pill')?.parentElement;
+        if (list) list.style.display = hide ? 'none' : '';
+      }
+    }
+    if (window.location.pathname.includes('/just_chatting/') && config.oss) {
+      const ossEmbed = document.querySelector('.chat-column .scene-chat-embed');
+      const hide = config.oss.showChatPanel === false;
+      if (ossEmbed) ossEmbed.style.display = hide ? 'none' : 'block';
+      else {
+        const body = document.querySelector('.chat-column > div:nth-child(2)');
+        if (body) body.style.display = hide ? 'none' : '';
       }
     }
 
