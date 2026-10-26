@@ -1,3 +1,5 @@
+> **Puerto:** las URLs de esta guía usan `8080`, el valor por defecto. Si cambias `SERVER_PORT` en `.env`, sustituye `8080` por ese puerto.
+
 # 🎬 GUÍA COMPLETA: CÓMO CREAR TEMAS, ESCENAS Y OVERLAYS DESDE CERO
 ### Open Stream Suite — Sistema Modular de Streaming para OBS Studio
 
@@ -27,9 +29,9 @@ Para no perderte nunca en la suite, ten clara esta distinción fundamental:
 
 | Concepto | ¿Qué es? | ¿Dónde vive? | Ejemplo |
 | :--- | :--- | :--- | :--- |
-| **Escena (Scene)** | Una pantalla completa de 1920×1080 en OBS con sus marcos de cámara, etiquetas y distribución de capas. | En OBS Studio (lista de Escenas) y en la carpeta `/scenes/`. | Escena Game, Escena Maker Mesa, Escena Be Right Back. |
-| **Tema (Theme)** | El **estilo visual** (colores neón, resplandores, fuentes y fondos) que "visten" a tus escenas y widgets. | En `/themes/<pack>/<tema>/` y compilado en `/common/themes.css`. | Maker (Turquesa), Print (Naranja), Cyberpunk (Amarillo neón). |
-| **Pack de Temas** | Una **carpeta contenedora** que agrupa varios temas con un estilo o temática común. | En la carpeta `/themes/<pack_id>/`. | `pack_open_stream_suite` (los 6 temas oficiales). |
+| **Escena (Scene)** | Una pantalla completa de 1920×1080 en OBS con sus marcos de cámara, etiquetas y distribución de capas. | En OBS Studio (lista de Escenas) y en la carpeta `app/streamthemes/<Pack>/overlays/`. | Escena Game, Escena Maker Mesa, Escena Be Right Back. |
+| **Tema (Theme)** | El **estilo visual** (colores neón, resplandores, fuentes y fondos) que "visten" a tus escenas y widgets. | En `app/streamthemes/<pack>/styles/<tema>/` y compilado en `/common/themes.css`. | Maker (Turquesa), Print (Naranja), Cyberpunk (Amarillo neón). |
+| **Pack de Temas** | Una **carpeta contenedora** que agrupa varios temas con un estilo o temática común. | En la carpeta `app/streamthemes/<pack_id>/`. | `Open_stream_Pack`, `Maker_Theme_Pack`, etc. (21 temas oficiales en total). |
 | **Widget** | Un elemento gráfico independiente superpuesto (caja de chat, ruleta, meta de subs, ticker, temporizador). | En `/widgets/<nombre>/`. | Widget de Chat, Widget de Timer Pomodoro. |
 
 > [!TIP]
@@ -57,9 +59,9 @@ En OBS Studio **NO** se instalan plugins raros: cada escena u overlay es una fue
 4. En la ventana de propiedades:
    - **URL**: Introduce la URL de la escena servida por tu panel local:
      ```
-     http://localhost:8080/scenes/game/index.html
+     http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/game/index.html
      ```
-     *(O marca "Archivo local" y busca el archivo `index.html` en tu disco duro).*
+     *(No uses «Archivo local»: las escenas cargan CSS/JS por HTTP y se sincronizan por WebSocket; usa siempre la URL del servidor).*
    - **Ancho (*Width*)**: `1920`
    - **Alto (*Height*)**: `1080`
    - **Opciones recomendadas (imprescindibles):**
@@ -84,7 +86,7 @@ Puedes copiar cualquiera de estas URLs directamente desde el panel:
 
 | Escena | URL para Fuente Navegador en OBS | Uso Principal |
 | :--- | :--- | :--- |
-| **Game** | `http://localhost:8080/scenes/game/index.html` | Videojuegos con webcam en esquina y badge. |
+| **Game** | `http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/game/index.html` | Videojuegos con webcam en esquina y badge. |
 | **Escena Principal** | `http://localhost:8080/scenes/maker-desk/index.html` | Cámara principal con toma auxiliar y barra de fases. |
 | **Pantalla PC** | `http://localhost:8080/scenes/maker-pc/index.html` | Captura de pantalla con cámara y barra de fases activas. |
 | **Cámara Secundaria** | `http://localhost:8080/scenes/print-machine/index.html` | Cámara directa sobre proceso o acción en curso. |
@@ -104,7 +106,7 @@ Una de las dudas más frecuentes es: *«Si las escenas las cambio yo en OBS, ¿p
 ### 1. El Cambio de Escena se Hace en OBS Studio
 * **Tú eres el director en directo**: El cambio entre escenas (por ejemplo, pasar de *Charla* a *Gameplay* o a *Pausa BRB*) se hace **dentro de OBS Studio** mediante atajos de teclado, el ratón o un Stream Deck.
 * **Cada escena de OBS tiene su propia URL fija**:
-  * Escena *Gameplay* ➜ `http://localhost:8080/scenes/game/index.html`
+  * Escena *Gameplay* ➜ `http://localhost:8080/streamthemes/Maker_Theme_Pack/overlays/game/index.html`
   * Escena *Pantalla PC* ➜ `http://localhost:8080/scenes/maker-pc/index.html`
   * Escena *Chill* ➜ `http://localhost:8080/scenes/chill/index.html`
   * Escena *Pausa* ➜ `http://localhost:8080/scenes/be-right-back/index.html`
@@ -129,10 +131,10 @@ Tienes 3 accesos directos sin marcos pequeños ni recortes:
 Un tema visual es un conjunto de **variables CSS, paleta de colores y ajustes de resplandor** empaquetados en un directorio modular.
 
 ### Estructura de Archivos de un Tema Modular
-Dentro de cualquier pack (por ejemplo `themes/pack_open_stream_suite/` o en un pack nuevo `themes/pack_retro_arcade/`), cada tema se almacena en su propia carpeta con **4 archivos clave**:
+Dentro de cualquier pack (por ejemplo `app/streamthemes/Open_stream_Pack/` o en un pack nuevo `app/streamthemes/pack_retro_arcade/`), cada tema se almacena en su propia carpeta con **4 archivos clave**:
 
 ```
-themes/<pack_id>/<theme_id>/
+app/streamthemes/<pack_id>/styles/<theme_id>/
 ├── theme.json           # Ajustes activos actuales (nombre, badge, colores hex, tipografías)
 ├── style.css            # Código CSS activo aplicado a body[data-theme="..."]
 ├── theme.default.json   # 🛡️ Copia de seguridad original de fábrica (ajustes base)
@@ -237,7 +239,7 @@ Cada overlay de OBS Studio tiene elementos y finalidades diferentes (la pantalla
 Para que un streamer pueda cambiar estilos libremente y siempre volver con seguridad a la estética original de cada pantalla, el sistema implementa una arquitectura de **Estilos de Fábrica Predeterminados** tanto en el backend como en el frontend:
 
 #### 1. Definición del Mapeo de Fábrica (`DEFAULT_OVERLAY_THEMES`)
-En `server/routes/themes_routes.py` y en `alerts/js/themes.js` se define la constante canónica de estilos nativos:
+En `server/services/theme_defaults.py` y en `alerts/js/themes/01-state.js` se define la constante canónica de estilos nativos:
 
 ```javascript
 const DEFAULT_OVERLAY_THEMES = {
@@ -268,7 +270,7 @@ const isModified = (assignedThemeId !== defaultThemeId);
 Existen tres formas de restablecer los estilos:
 - **Botón individual en la tarjeta del overlay**: Llama a `restoreOverlayTheme(sceneKey)` restableciendo solo ese overlay.
 - **Botón individual dentro del modal de edición de textos**: Llama a `restoreOverlayThemeFromModal()`.
-- **Botón global en la cabecera**: El botón **`🔄 Restaurar Todas al Original`** ejecuta `restoreAllOverlaysToDefaultThemes()` iterando las 9 escenas y sincronizándolas con el backend en lote.
+- **Botón global en la cabecera**: El botón **`🔄 Restaurar Todas al Original`** ejecuta `restoreAllOverlaysToDefaultThemes()` iterando las 29 asignaciones de escena de los 4 packs y sincronizándolas con el backend en lote.
 
 #### 4. Prioridad y Parámetro URL `?theme=...` para OBS Studio
 Para que una escena en OBS Studio o una previsualización a pantalla completa nunca sufra retrasos de red al cargar su estilo:
@@ -278,16 +280,20 @@ Para que una escena en OBS Studio o una previsualización a pantalla completa nu
   ```javascript
   const urlParams = new URLSearchParams(window.location.search);
   const themeFromUrl = urlParams.get('theme');
-  let activeTheme = themeFromUrl || config.overlayThemes?.[currentSceneKey] || config.activeTheme;
+  const explicit = config.overlayThemeExplicit?.[currentSceneKey];
+  let activeTheme = themeFromUrl
+    || (explicit ? config.overlayThemes?.[currentSceneKey] : null)
+    || (config.globalThemeActive ? config.activeTheme : null)
+    || config.overlayThemes?.[currentSceneKey];
   if (activeTheme) {
     document.body.setAttribute('data-theme', activeTheme);
   }
   ```
 - **Jerarquía de Prioridad del Tema**:
   1. `?theme=nombre` (Parámetro explícito en la URL de OBS — prioridad máxima).
-  2. `overlayThemes[sceneKey]` (Asignación específica guardada en `themes_state.json`).
-  3. `activeTheme` (Tema activo global seleccionado en el panel).
-  4. Tema de fábrica predeterminado.
+  2. `overlayThemes[sceneKey]` **sólo si `overlayThemeExplicit[sceneKey]`** (asignación específica guardada).
+  3. `activeTheme` **sólo si `globalThemeActive`** (tema global aplicado desde el panel).
+  4. Tema de fábrica predeterminado (`DEFAULT_OVERLAY_THEMES`).
 
 ---
 
@@ -296,7 +302,7 @@ Para que una escena en OBS Studio o una previsualización a pantalla completa nu
 Supongamos que quieres una nueva escena especial llamada **«Modo Pizarra»** o **«Modo Entrevista»**.
 
 ### Paso 1: Crear la Carpeta y Archivo HTML
-Crea la carpeta `scenes/entrevista/` y dentro el archivo `index.html`:
+Crea la carpeta `app/streamthemes/<Pack>/overlays/entrevista/` y dentro el archivo `index.html`:
 
 ```html
 <!DOCTYPE html>

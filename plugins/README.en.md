@@ -28,7 +28,7 @@ This directory contains pre-configured plugins and profiles to control **Open St
 | **Ajazz AKP153 / AKP03 / AKP846** | [`ajazz/`](./ajazz/) | Profile `akp_profile_15keys.json` + `ajazz_live_bridge.py` CLI bridge script. |
 | **Elgato Stream Deck** (Mini, Standard, XL, +) | [`stream_deck/`](./stream_deck/) | Copy the `com.openstreamsuite.deck.sdPlugin` directory into the Elgato plugins folder. |
 | **Bitfocus Companion or OpenDeck** (any macro controller) | [`opendeck_companion/`](./opendeck_companion/) | Import `open_stream_suite_companion_page.json`. |
-| Key LCD Icons | [`assets/`](./assets/) | Ready-to-use SVG icons formatted for 72×72 and 144×144 px LCD keys. |
+| Key LCD Icons | [`assets/`](./assets/) | Ready-to-use SVG icons formatted for 144×144 px LCD keys. |
 
 Each folder has its own detailed `README.md` with step-by-step instructions.
 

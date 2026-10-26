@@ -108,15 +108,10 @@ app/                           # Core project application
 │       ├── panel/             # Mini-App submodules (01-04)
 │       ├── index.html, style.css, widget.js, panel.html
 │
-├── scenes/                    # Full OBS Studio scene overlays (1920×1080)
-│   ├── game/                  # Gameplay with camera HUD & stats
-│   ├── maker/                 # Workshop with overhead camera & project banner
-│   ├── podcast/               # Podcast / discussion with guest nameplates
-│   ├── coffee-break/          # Relaxed break
-│   ├── starting-soon/         # Starting soon with live countdown
-│   ├── be-right-back/         # Technical pause
-│   ├── ending/                # Stream outro with rolling credits
-│   └── study_pomodoro/        # Dedicated study pomodoro session
+├── streamthemes/              # Theme packs & OBS overlays (1920×1080)
+│   └── <Pack>/                # pack.json + styles/<theme>/ + overlays/<scene>/
+│       ├── overlays/          # Pack scenes (e.g. game/, chill/, screens/, maker/desk/)
+│       └── styles/            # Pack themes (style.css + theme.json + .default.*)
 │
 ├── common/                    # Shared design system tokens and runtime libraries
 │   ├── overlay/
@@ -182,7 +177,7 @@ External hardware and macro tools (Ajazz AKP, Elgato Stream Deck, OpenDeck, Loup
 - `GET /api/deck/widget?widget=<name>&action=<action>`: One-click widget control.
 
 ### C. Modular Themes & Factory Restoration
-Themes live in `themes/<pack>/<theme>/`:
+Themes live in `app/streamthemes/<pack>/styles/<theme>/`:
 - `theme.json` & `style.css`: Active theme variables and stylesheet.
 - `theme.default.json` & `style.default.css`: Clean factory backups.
 - `POST /api/themes/restore`: Reverts user modifications back to original factory defaults with 1 click.

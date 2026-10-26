@@ -1,3 +1,7 @@
+> **Abridged translation.** This English version is a summary. The canonical, complete guide is [Español](GUIA_CREAR_TEMAS_Y_ESCENAS_DESDE_CERO.md).
+
+> **Port:** URLs in this guide use `8080`, the default. If you change `SERVER_PORT` in `.env`, replace `8080` with that port.
+
 # 🎬 COMPLETE GUIDE: CREATING THEMES, SCENES & OVERLAYS FROM SCRATCH
 ### Open Stream Suite — Modular Streaming System for OBS Studio
 
@@ -27,9 +31,9 @@ To understand how the suite is structured:
 
 | Concept | What is it? | Where does it live? | Example |
 | :--- | :--- | :--- | :--- |
-| **Scene (Overlay)** | A full 1920×1080 canvas in OBS with camera frames, labels, and layer layouts. | In OBS Studio (Scenes dock) and in the `/overlays/` folder. | Game Scene, Maker Desk Scene, Be Right Back Scene. |
-| **Theme** | The **visual styling** (neon colors, glow effects, typography, and backgrounds) that dresses your scenes and widgets. | In `/themes/<pack>/<theme>/` and loaded dynamically via `/common/themes.css`. | Maker (Cyan), Print (Orange), Cyberpunk (Neon Yellow). |
-| **Theme Pack** | A **container directory** bundling several related themes sharing a common aesthetic. | In `/themes/<pack_id>/`. | `pack_open_stream_suite` (official themes). |
+| **Scene (Overlay)** | A full 1920×1080 canvas in OBS with camera frames, labels, and layer layouts. | In OBS Studio (Scenes dock) and in the `app/streamthemes/<Pack>/overlays/` folder. | Game Scene, Maker Desk Scene, Be Right Back Scene. |
+| **Theme** | The **visual styling** (neon colors, glow effects, typography, and backgrounds) that dresses your scenes and widgets. | In `app/streamthemes/<pack>/styles/<theme>/` and loaded via `/common/themes.css`. | Maker (Cyan), Print (Orange), Cyberpunk (Neon Yellow). |
+| **Theme Pack** | A **container directory** bundling several related themes sharing a common aesthetic. | In `app/streamthemes/<pack_id>/`. | `Open_stream_Pack`, `Maker_Theme_Pack`, etc. (21 official themes). |
 | **Widget** | An independent modular element (chat box, goal bar, ticker ribbon, countdown timer). | In `/widgets/<name>/`. | Chat Widget, Pomodoro Timer. |
 
 > [!TIP]
@@ -74,7 +78,7 @@ The Mode selector in the Theme Studio preview allows you to test how each indivi
 
 ## 4. Creating a New Visual Theme from Scratch
 
-Themes are defined as modular folders in `app/themes/<pack_id>/<theme_id>/`:
+Themes are defined as modular folders in `app/streamthemes/<pack_id>/styles/<theme_id>/`:
 
 1. Create a new directory, for example: `app/themes/pack_custom/matrix_green/`
 2. Add `theme.json`:

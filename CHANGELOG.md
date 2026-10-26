@@ -8,6 +8,79 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Cambiado — Licencia dual (AGPL-3.0 + comercial) y CLA obligatorio
+
+- **La licencia pública pasa de CC BY-NC-SA 4.0 a GNU AGPL v3.0 o posterior**: el proyecto es ahora **software libre** (reconocido por OSI/FSF), por lo que puede distribuirse en repositorios y distribuciones que exigen licencias libres, sin ambigüedad sobre uso interno, SaaS o embebido.
+- **Nueva licencia comercial de pago** (`LICENSE-COMMERCIAL.md`, ES/EN): permite a empresas y agencias usar, integrar o embeber el software **sin publicar su código** (marca blanca, servicio alojado, redistribución, soporte). Contacto: **admin@andorina.dev**.
+- **CLA obligatorio para contribuciones** (`.github/CLA.md`, ES/EN): toda aportación cede al titular derechos suficientes para **relicenciar** el proyecto (base legal del modelo de doble licencia). Plantilla añadida a la plantilla de PR; un PR sin firma no se fusiona.
+- **Política de marcas** (`TRADEMARK.md`): el nombre, el logo y la identidad visual no están cubiertos por ninguna de las dos licencias; la marca blanca requiere autorización.
+- **Avisos de terceros** (`NOTICE.md`): las **15 familias tipográficas OFL** con su copyright y sus nombres reservados (Comfortaa, Orbitron, Press Start 2P, Quicksand, Share Tech Mono), los textos íntegros en `app/common/fonts/LICENSES/`, y las licencias de las dependencias de Python (incluidas `pystray` y `python-xlib`, LGPL).
+- **Nota histórica:** las versiones publicadas antes del **2026-10-26** se distribuyeron bajo CC BY-NC-SA 4.0; las copias ya entregadas a terceros conservan esos términos.
+
+### Corregido — Auditoría WebApp V3 (V3-01, V3-06)
+
+- **XSS real en metadatos de temas, packs y fusiones (V3-01)**: `name`, `badge`, `desc` e `icon` se guardaban sin validar y se renderizaban con `innerHTML`, permitiendo ejecutar JavaScript en el mismo origen que `/api/local-token` (reproducido en la auditoría). Nuevo saneador `sanitize_metadata_text()` en `server/services/validation_utils.py` (rechaza `<`/`>`, elimina caracteres de control, colapsa espacios y limita longitud) aplicado en `create_pack_service`, `create_theme_service`, `save_theme_service` y `create_or_update_fusion` **antes** de escribir en disco; más escapado de todos los sinks del panel (`esc`, `themeEscapeHtml`, `themeJsArg`, `escapeHtml`).
+- **Ids de fusión saneados (V3-06)**: el `id` recibido se valida con `_is_safe_fusion_id()` (bloquea comillas, paréntesis, `;`, `<`, `>` y espacios), los ids nuevos se generan como slug ASCII (antes podían contener acentos) y se serializan en el panel con `themeJsArg`/`themeEscapeHtml` (cinco `onclick` y un `id`).
+- **Regresión**: nueva suite `tests/test_metadata_sanitization.py` (16 tests: saneador, integridad del catálogo de fábrica, rechazo en los tres servicios y contrato estático de escapado). Las 6 suites relacionadas (84 tests) en verde y hashes de `themes_state.json`, `fusions.json`, `config.js`, `overlay_texts_config.json` y `common/themes.css` idénticos.
+
+### Corregido — Backlog de temas M1–M13 / L1–L8 (fases 1–5)
+- **Fase 1:** catálogo de formas dinámico por pack; defaults de fusión validados; miembros desconocidos devuelven `warnings`/`unknown*`; `apply-shape` aplica por capacidad y reporta `skipped*`.
+- **Fase 2:** contador real de 27 escenas, resumen de lote completo, caché solo tras confirmación de API, i18n de avisos y «selecciona tema o forma» sin llamada vacía.
+- **Fase 3:** escrituras atómicas con locks, normalización persistente de estado huérfano, fuente única de `defaultOverlayThemes`, `activeShape: original` y esquema completo de fusiones.
+- **Fase 4:** 14 tokens estructurales para `maker`, destino de formas en `gameplay_hud` y etiquetas legibles de las 9 formas genéricas.
+- **Fase 5:** test del bloque de alertas en `renderStudio()` y E2E de un comando (`tests/e2e_theme_backlog.py` + `scripts/run_theme_e2e.sh`) con snapshot/restauración.
+
+### Corregido — Auditoría de temas H1–H10
+- Tema global persistente y coherente: `globalThemeActive` + `overlayThemeExplicit`; se aplica al arrancar en escenas/widgets/alertas sin asignación explícita.
+- Las escenas explícitas ya no son pisadas por el tema global; el reset libera el global.
+- El cambio global conserva la forma de los widgets; ya no la borra.
+- Alertas `card`/`banner` aplican su propio tema al mostrarse (antes compartían el primero).
+- `original` en widgets/alertas se normaliza a “sin forma”; API estricta para escenas desconocidas y formas globales.
+- Temas nuevos generan `theme.default.json`/`style.default.css`; create/save validan pack y tema contra path traversal.
+
+### Añadido — Alertas con formas físicas de todos los packs
+- Las alertas `card`/`banner` aceptan las **20 formas físicas** de los packs además de las 9 genéricas (29 opciones en el panel).
+- Se aplican de forma nativa reutilizando el CSS de escenas (`[data-oss-panel]` + `body[data-theme-shape]`), con reglas de panel añadidas para `cozy_polaroid`, `cozy_canvas` y `cozy_soft`.
+- Funciona también desde fusiones (`apply-shape` aplica la forma física a las alertas miembro).
+
+### Corregido — Chat integrado en escenas
+- El chat de escena ahora embebe el widget real (`?embed=1`) dentro del panel y sincroniza su tema con el de la escena por `postMessage`.
+- El interruptor **solo oculta los mensajes**: el marco, su tamaño y la cámara se mantienen; el hueco queda libre para el widget de OBS.
+
+### Mejorado — Opciones de tema/forma en Alertas y Fusiones
+- Pestaña **Alertas**: nuevo bloque «Temas de alertas» (card y banner) con tema, forma, aplicar, reset y añadir a fusión, dentro del layout real del Estudio de Alertas.
+- Pestaña **Widgets**: el bloque queda como «Temas de widgets» (5 filas), separado del de alertas.
+- **Fusiones**: modal con 21 estilos, 22 formas, 27 escenas, 5 widgets y 2 alertas; nombres legibles en los selectores de miembros.
+
+### Corregido — Chat de escena y guardado de textos
+- Interruptor de marco de chat ampliado a `cozy_cafe` y `oss_chatting` (ya existía en `chill`), con layout propio por escena y guardado en vivo.
+- **Bug crítico**: guardar textos reemplazaba el archivo y borraba las secciones `cozy`, `oss`, `pomodoro`, `victory`, `art` y `speedrun`; ahora se hace merge profundo.
+
+### Añadido — Formas para todos los widgets/alertas y banners tematizados
+- Motor nativo `common/oss-shape.js`: 9 formas aplicables a cualquier widget y a `alert:card`/`alert:banner`, en vivo y con reset exacto.
+- Catálogo y fusiones: `widgets/*` y `alerts/*` declaran las 9 formas; `apply-shape` en lote las aplica a escenas, widgets y alertas.
+- Banners: con tema de pack se gobiernan por tokens (degradado, borde, sombra y textos); sin tema se mantienen los presets.
+
+### Corregido — Integración nativa de temas en widgets y alertas
+- **Forma en vivo**: `widget_theme_change` aplica tema y forma sin recargar; el reset limpia `data-theme-shape`.
+- **Precedencia**: la asignación explícita de un widget/alerta ya no es pisada por el tema global.
+- **UI**: bloque «Temas de componentes» (tema/forma/reset/añadir a fusión) y miembros de fusión con quitado.
+- **Reset individual**: nuevo `POST /api/themes/reset-assignment`.
+- **Convenciones**: boot único en `common/widget-theme.js`; presets de chat ceden ante temas de pack; más colores de texto/fondo tokenizados.
+
+### Añadido — Fusiones con widgets y alertas de panel (integral nativo)
+- Las fusiones agrupan **escenas + widgets + alertas**: `widgets[]` y `alerts[]` en `fusions.json`, validados contra `GET /api/components/catalog`.
+- **Tema y forma** se aplican en lote a todos los miembros; las formas sólo van a widgets que las soportan (`chat`) y a escenas de pack.
+- **Resets**: `POST /api/fusions/{id}/reset` (fusión completa) y `reset_overlay_assignment_service` (miembro suelto).
+- **Consumo nativo**: `config.js` publica `overlayThemes`/`overlayShapes`; widgets y alertas los leen al arrancar y escuchan eventos dirigidos (`widget_theme_change` / `alert_theme_change`).
+- **UI**: selección de widgets/alertas en el modal de fusión, contador de miembros y botón «Restaurar fusión».
+
+### Añadido — Integración nativa de temas de pack en widgets y alertas
+- **Widgets (6/6)**: aceptan `?theme=<id>` y `theme_change` por WebSocket; aplican `data-theme` en `<body>` y sus CSS consumen los tokens de `common/themes.css` con *fallback*, sin alterar el aspecto por defecto.
+- **Alertas de panel**: el overlay aplica `?theme=`/`theme_change`; banners y `.alert-box` heredan `--color-accent-cyan`, `--color-panel-bg`, `--color-text-light` de forma nativa.
+- **Convenciones** documentadas (ES/EN) para que nuevos widgets y alertas se integren sin conocer los existentes.
+- **Tests** de contrato nativo: `tests/test_native_theming_contract.py` (12 pruebas; incluye verificación de que el CSS/JS base no cambió).
+
 ### Corregido — Auditoría Arquitectónica y Correcciones Críticas
 - **WebSocket del Servidor (NameError)**: Solucionado error crítico por variable `data` no inicializada en `app/server/routes/ws_routes.py`. Los mensajes recibidos vía WebSocket ahora se parsean de forma segura sin romper la conexión.
 - **Persistencia de Temas y Asignaciones de Escenas**: `save_theme_state()` ahora fusiona de forma segura el estado persistido en `themes_state.json`, evitando el borrado accidental de asignaciones (`overlayThemes`, `overlayShapes` y `backdrops`) al aplicar packs o formas globales.

@@ -110,7 +110,7 @@ Todas las escenas y widgets son páginas web locales que se añaden a OBS como *
    - ✅ *Actualizar el navegador cuando la escena se active*.
 
 > [!NOTE]
-> Para ver todas las plantillas interactivas disponibles, abre el catálogo local en [http://localhost:8080/index.html](http://localhost:8080/index.html).
+> Para ver todas las plantillas interactivas disponibles, abre el Panel de Control en [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html) (vista Escenas).
 
 ---
 

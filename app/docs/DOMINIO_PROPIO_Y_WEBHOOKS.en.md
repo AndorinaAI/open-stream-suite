@@ -1,4 +1,6 @@
 # 🌐 COMPLETE GUIDE: CONNECTING YOUR CUSTOM DOMAIN TO OPEN STREAM SUITE
+> **Abridged translation.** This English version is a summary. The canonical, complete guide is [Español](DOMINIO_PROPIO_Y_WEBHOOKS.md).
+
 ## How to Receive Ko-fi, PayPal & Buy Me a Coffee Webhooks on Your Local PC with Permanent HTTPS
 
 <p align="center">

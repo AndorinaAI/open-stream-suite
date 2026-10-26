@@ -1,4 +1,6 @@
 # PROJECT: OPEN STREAM SUITE — COMPLETE OVERLAY SYSTEM FOR TWITCH & OBS STUDIO
+> **Abridged translation.** This English version is a summary. The canonical, complete guide is [Español](SPECIFICATIONS.md).
+
 
 <p align="center">
   <a href="SPECIFICATIONS.md">Español</a> | <b>English</b>

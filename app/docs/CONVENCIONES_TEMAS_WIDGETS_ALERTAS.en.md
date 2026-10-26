@@ -1,0 +1,150 @@
+# Conventions — Pack Themes in Widgets and Alerts
+
+> **Native** contract (CSS + `data-theme` attribute). No bespoke scripts:
+> widgets and alerts consume the tokens already defined in `app/common/themes.css`.
+
+## 1. Contract
+
+`app/common/themes.css` defines, per pack theme:
+
+```css
+body[data-theme="<themeId>"] {
+  --color-bg-dark; --color-text-light; --color-accent-cyan; --color-accent-orange;
+  --color-panel-bg; --color-text-dim; --color-border-cyan; --color-border-cyan-bright;
+  --theme-glow;
+}
+```
+
+A widget/alert "supports themes" when:
+
+1. It loads `/common/themes.css` in its `index.html`.
+2. It receives `data-theme` on `<body>` via:
+   - `?theme=<themeId>` in the URL (widget boot), or
+   - WebSocket message `{ type: "theme_change", theme }` (live update).
+3. Its CSS resolves colours with `var(--color-…, <fallback>)`, never literals alone.
+4. Its default look (no `data-theme`) stays intact: theme layers are declared
+   under `body[data-theme]` or through the `var()` fallback.
+
+## 2. New widget template
+
+```html
+<link rel="stylesheet" href="../../common/themes.css">
+```
+
+```js
+(function () {
+  var t = new URLSearchParams(location.search).get('theme');
+  if (t) document.body.setAttribute('data-theme', t);
+})();
+// in the existing WS handler:
+if (d.type === 'theme_change' && d.theme) document.body.setAttribute('data-theme', d.theme);
+```
+
+```css
+:root { --my-accent: #57D6C4; }
+body[data-theme] {
+  --my-accent: var(--color-accent-cyan, #57D6C4);
+  --my-bg: var(--color-panel-bg, rgba(25,29,33,0.92));
+}
+```
+
+## 3. New panel-based alert template
+
+- `app/alerts/index.html` already loads `themes.css`.
+- `alerts/js/overlay/04-ws-client.js` maps `theme_change` → `data-theme`.
+- Banners use `--banner-accent`, `--banner-border`, `--banner-text`; the
+  `body[data-theme]` layer in `alerts-themes.css` binds them to pack tokens.
+- Media-based alerts are out of scope (they do not use panels).
+
+## 4. Rules
+
+- No per-widget stylesheets: use the shared tokens.
+- No `!important` to force themes: resolve by specificity.
+- Every new colour must be a variable with a fallback.
+- New UI strings go in the **modules** loaded by `common/i18n.js`:
+  `app/languages/es.alerts.json` / `en.alerts.json` (section `fusions`), or the
+  matching module (`widgets`, `overlays`, `common`). The runtime does NOT read the
+  `es.json`/`en.json` monolith.
+- Automated validation: `tests/test_native_theming_contract.py`.
+
+## 5. Mixed-member fusions (scenes + widgets + alerts)
+
+A fusion can group three member kinds sharing ONE source of truth (`themes_state.json`):
+
+| Member | Assignment key | Theme | Shape |
+|---|---|---|---|
+| Pack scene | `maker-desk` (canonical) | yes | yes (pack shapes) |
+| Widget | `widget:chat` | yes | yes, only if the widget supports it (`chat`) |
+| Panel alert | `alert:card`, `alert:banner` | yes | no (banners keep their presets) |
+
+API:
+
+- `GET /api/components/catalog` — available members and per-widget shapes.
+- `POST /api/fusions` with `{scenes:[], widgets:[], alerts:[]}` — save.
+- `POST /api/fusions/{id}/apply-theme|apply-shape` — applies to all members and returns
+  `appliedScenes/Widgets/Alerts`, `failed…` and `skipped…`.
+- `POST /api/fusions/{id}/reset` — restores factory theme and shape on every member.
+- `POST /api/themes/overlay-assignment` — single assignment (accepts `widget:<id>` /
+  `alert:<id>` keys).
+
+Native consumption: `config.js` carries `overlayThemes`/`overlayShapes`; each widget
+reads its `widget:<id>` key at boot and listens for `widget_theme_change` on its
+WebSocket. The alerts overlay reads `alert:card` and listens for `alert_theme_change`.
+
+**Resets** drop the component key (own look returns) and restore scenes to
+`DEFAULT_OVERLAY_THEMES` with no shape.
+
+## 6. Native integration: rules and current state
+
+- **Widget boot**: `common/widget-theme.js` (`OSSTheme.init(id)`) reads `?theme` → `OSS_CONFIG.overlayThemes['widget:<id>']`.
+- **Live change**: `widget_theme_change` / `alert_theme_change` apply **theme and shape** without reload
+  (chat reuses `ChatStyles.applyChatConfig()`).
+- **Precedence**: an explicit assignment beats the global theme (`theme_change`) in scenes, widgets and
+  alerts. `overlayThemeExplicit` marks explicit assignments and `globalThemeActive` says whether the user
+  activated a global theme; both travel in `config.js`. The module remembers the live WS assignment
+  because `config.js` is static until reload, and reset releases the global immediately.
+- **Single reset**: `POST /api/themes/reset-assignment {overlayKey}` restores factory theme and shape.
+- **UI**:
+  - **Widgets → "Widget themes"** tab: 5 rows (chat, goal, promo/shoutout, ticker, timer) with theme
+    dropdown (21 styles + "unassigned"), shape (9 + "no shape"), **Apply**, **↺ Reset** and fusion
+    selector + **➕**.
+  - **Alerts → "Alert themes"** tab: for `card` and `banner`, theme (21 + "unassigned") and
+    **29 shapes**: the 9 generic ones + the 20 physical shapes from every pack (block generated by
+    `AlertsStudio.renderStudio`, refreshed when the tab opens). The overlay applies the theme of the
+    type being shown (`playCardAlert`/`playBannerAlert`); the physical shape remains one per page
+    (`body[data-theme-shape]`).
+  - **Fusions**: the modal offers theme (21), shape (22 options), 27 scenes, 5 widgets and 2 alerts with
+    readable names; the detail view applies theme/shape in bulk and offers **↺ Restore fusion**.
+- **Shapes**:
+  - Widgets: the 9 generic shapes (`rounded, box, bubble, scifi, pill, arcade, tag, slant, soft_card`)
+    through `common/oss-shape.js`, per element and live.
+  - Alerts: those 9 generic shapes **plus the 20 physical pack shapes** (`cozy_polaroid`,
+    `gamer_mecha`, `comic_manga_action`, …). Physical shapes mark the alert as `[data-oss-panel]`
+    and set `body[data-theme-shape="<id>"]`, reusing the native scene CSS (including panel rules
+    added for the 3 cozy shapes).
+  - For `widget:`/`alert:`, `original` is normalized to "no shape" and never persisted; in scenes
+    `original` remains a valid shape.
+  - Generic shapes show a readable ES/EN label (`Pill`, `Box`, `Sci-Fi bevel`…); `gameplay_hud`
+    marks `.camera-frame` as `[data-oss-panel]` so panel shapes have a target in that scene.
+  - `card` and `banner` store their shape separately; each one activates its own when shown
+    (only one physical shape can be active at a time on the alerts page).
+- **Banners**: with a pack theme active, background (gradient), border, shadow and text come from
+  tokens (`--color-panel-bg`, `--color-bg-dark`, `--color-accent-cyan`, `--color-text-*`).
+  Without a theme the `banner-theme-*` presets remain.
+- **Role colours and decorative shadows** are not tokenised (they must stay stable).
+
+## 7. Scene chat (embedded widget and OBS mode)
+
+Chat scenes (`chill`, `cozy_cafe`, `oss_chatting`) embed the real widget in an iframe
+(`/widgets/chat/index.html?embed=1`) inside the frame. The frame **never disappears** and the camera
+does not move: only the messages are hidden when the switch is off.
+
+- **On** (`showChatPanel: true`): the iframe shows live chat inside the panel, themed with the scene
+  theme (synced via `postMessage`, updated live when the theme changes).
+- **Off** (`showChatPanel: false`): the panel, header, background and size stay; only the iframe is
+  hidden. That space is free for the chat widget as an OBS browser source using its URL.
+- Embedded mode: `?embed=1` fits the widget container to 100% of the panel (no absolute position or
+  440px fixed width) and hides the spotlight.
+- State is stored in `overlay_texts_config.json` (`chill/cozy/oss.showChatPanel`) and applied live.
+- Saving texts **deep-merges**: sending one section no longer deletes `cozy`, `oss`, `pomodoro`,
+  `victory`, `art` or `speedrun`.

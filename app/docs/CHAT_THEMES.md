@@ -330,7 +330,7 @@ El atributo `class` de `<body>` incluye la clase del tema activo:
 8. **`theme-gamer_pro`**: Biselado sci-fi 45°, brillo neón cian/esmeralda, fuente Orbitron y borde de alta intensidad.
 9. **`theme-matrix`**: Terminal verde fósforo con tipografía mono y borde vertical esmeralda.
 10. **`theme-pill`**: Píldora moderna minimalista con esquinas redondeadas completas (9999px) y tipografía Inter.
-11. **`theme-scifi`**: Geometría angular de polígono recortado a 45° con corte en esquinas opuestas.
+11. **`theme-synthwave`**, **`theme-ticket`**, **`theme-esports`**, **`theme-kawaii`** y **`theme-candy`**: presets adicionales de la lista completa (15 en total, definidos en `app/widgets/chat/config.json`).
 
 ---
 

@@ -36,8 +36,8 @@ El modelo **AKP05 / AKP05E** es la controladora más completa del mercado maker,
 | **03** | `MAKER PC` | OBS Studio | Conmuta a monitor de programación y terminal. |
 | **04** | `CHARLA CHILL`| OBS Studio | Conmuta a Just Chatting con marco de chat. |
 | **05** | `PAUSA BRB` | OBS Studio | Conmuta a pantalla de pausa animada. |
-| **06** | `TEMA MAKER` | HTTP GET | Viste los overlays de Turquesa Neón (`/api/deck/theme?id=maker_electronico`). |
-| **07** | `TEMA CYBER` | HTTP GET | Viste los overlays de Cyberpunk Neón (`/api/deck/theme?id=cyberpunk_neon`). |
+| **06** | `TEMA MAKER` | HTTP GET | Viste los overlays de Turquesa Neón (`/api/deck/theme?id=maker`). |
+| **07** | `TEMA CYBER` | HTTP GET | Viste los overlays de Cyberpunk Neón (`/api/deck/theme?id=cyberpunk`). |
 | **08** | `MEME SUSTO` | HTTP GET | Dispara el vídeo/meme de susto en OBS (`/api/deck/trigger?id=susto`). |
 | **09** | `CONFETI FX` | HTTP GET | Lluvia de confeti de celebración (`/api/deck/explode?emoji=🎉&count=40`). |
 | **10** | `SHOUTOUT` | HTTP GET | Lanza tarjeta de recomendación de streamer (`/api/deck/widget?widget=promo&action=trigger`). |
@@ -67,7 +67,7 @@ Cada dial permite giro bidireccional continuo y pulsación hacia dentro:
 ### Knob 2 — Selector de Temas Neón
 * ↺ **Giro Izquierda:** Aplica el tema visual anterior en vivo (`/api/deck/knob?knob=theme&action=prev`).
 * ↻ **Giro Derecha:** Aplica el siguiente tema neón en vivo (`/api/deck/knob?knob=theme&action=next`).
-* 🔘 **Pulsación (Click):** Vuelve al tema predeterminado de tu stream (`/api/deck/theme?id=maker_electronico`).
+* 🔘 **Pulsación (Click):** Vuelve al tema predeterminado de tu stream (`/api/deck/theme?id=maker`).
 
 ### Knob 3 — Contador de Metas (Goals)
 * ↺ **Giro Izquierda:** Resta 1 unidad a la meta activa (`/api/deck/knob?knob=goal&ticks=-1`).
