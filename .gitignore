@@ -38,3 +38,6 @@ Thumbs.db
 
 # Copias de seguridad locales (no versionar)
 .backups/
+
+# Configuración local de donaciones: URL de túnel propia y tokens de plataformas
+app/donations_config.json
