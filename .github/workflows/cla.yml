@@ -36,8 +36,12 @@ jobs:
           path-to-document: 'https://github.com/AndorinaAI/open-stream-suite/blob/main/.github/CLA.md'
           # Rama donde se almacenan las firmas (no protegida a propósito)
           branch: 'cla-signatures'
-          # Exentos de firmar: el titular (AndorinaAI) y las automatizaciones
-          allowlist: 'AndorinaAI,dependabot[bot],github-actions[bot]'
+          # Exentos de firmar:
+          #   *AndorinaAI* -> el titular, en cualquiera de sus identidades
+          #                   (login, nombre de git o email noreply)
+          #   *[bot]       -> todas las automatizaciones (Dependabot, Actions…),
+          #                   que no pueden firmar un CLA
+          allowlist: '*AndorinaAI*,*[bot]'
           create-file-commit-message: 'chore(cla): crear el registro de firmas del CLA'
           signed-commit-message: '$contributorName firma el CLA en $owner/$repo#$pullRequestNo'
           custom-notsigned-prcomment: |
