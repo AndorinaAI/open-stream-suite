@@ -20,7 +20,7 @@
     "guide_conventions": "📜 Convenciones de Programación"
   },
   "sidebar": {
-    "obs_active": "OBS STUDIO · 9 ESCENAS ACTIVAS",
+    "obs_active": "OBS STUDIO · ESCENAS ACTIVAS",
     "connected_as": "🟢 Afiliado Twitch",
     "not_connected": "⚪ No conectado"
   },
@@ -101,7 +101,45 @@
     "copied_toast": "¡URL copiada al portapapeles! Pégala en OBS Studio como Fuente de Navegador (1920x1080).",
     "title_banner": "🧩 WIDGETS MODULARES & MINI-APPS PARA OBS",
     "guide_banner_desc": "En OBS Studio, en tu lista de <strong>Fuentes</strong>, pulsa el botón <strong>+</strong> y selecciona <strong>Navegador</strong> (<em>Browser</em>). Pulsa el botón verde en cualquiera de los widgets de abajo y pégala en la casilla <em>URL</em> de OBS. Escribe el <strong>Ancho</strong> y <strong>Alto</strong> recomendados que te indicamos en cada tarjeta. ¡Y listo! El fondo es 100% transparente de forma automática.",
-    "btn_close_miniapp": "✕ Cerrar Mini-App"
+    "btn_close_miniapp": "✕ Cerrar Mini-App",
+    "component_themes_title": "🎨 TEMAS DE COMPONENTES (WIDGETS Y ALERTAS)",
+    "component_themes_hint": "Aplica un tema de pack (y forma, si el widget la soporta) sin pasar por una fusión. El cambio se ve en vivo.",
+    "theme_none": "sin asignar",
+    "select_theme_or_shape": "Selecciona un tema o una forma",
+    "shape_none": "sin forma",
+    "shape_unsupported": "Este componente no admite formas",
+    "shape_unsupported_short": "no aplica",
+    "btn_apply_theme": "Aplicar",
+    "btn_reset_theme": "↺ Reset",
+    "no_components": "Sin componentes disponibles",
+    "components_load_error": "No se pudo cargar el catálogo de componentes:",
+    "toast_theme_saved": "✓ Tema aplicado",
+    "theme_apply_error": "No se pudo aplicar: ",
+    "toast_theme_reset": "↺ Componente restaurado",
+    "theme_reset_error": "No se pudo restaurar: ",
+    "btn_add_to_fusion": "Añadir a fusión",
+    "already_in_fusion": "Ya pertenece a esa fusión",
+    "toast_added_to_fusion": "✓ Añadido a la fusión",
+    "add_to_fusion_error": "No se pudo añadir a la fusión: ",
+    "alert_card_name": "Tarjeta de alerta",
+    "alert_banner_name": "Banner de alerta",
+    "widget_themes_title": "🎨 TEMAS DE WIDGETS",
+    "widget_themes_hint": "Aplica un tema de pack y una forma a cada widget sin pasar por una fusión. El cambio se ve en vivo.",
+    "alert_themes_title": "🎨 TEMAS DE ALERTAS",
+    "alert_themes_hint": "Aplica un tema de pack y una forma a la tarjeta y al banner, o añádelos a una fusión. El cambio se ve en vivo.",
+    "shape_rounded": "Redondeada",
+    "shape_box": "Caja",
+    "shape_bubble": "Burbuja",
+    "shape_scifi": "Sci-Fi bisel",
+    "shape_pill": "Píldora",
+    "shape_arcade": "Arcade",
+    "shape_tag": "Etiqueta",
+    "shape_slant": "Inclinada",
+    "shape_soft_card": "Tarjeta suave",
+    "goal_btn_stacked": "📚 Apiladas (Todas)",
+    "goal_btn_rotative": "🔄 Carrusel Rotativo",
+    "goal_btn_single": "🎯 Meta Única",
+    "goal_btn_new": "Nueva Meta Libre"
   },
   "scenes": {
     "starting_soon": "Empezamos Pronto",
@@ -524,6 +562,7 @@
   },
   "themes": {
     "section_title": "TUS ESCENAS DE OBS STUDIO Y ESTILOS VISUALES",
+    "shape_label": "Forma",
     "section_subtitle": "Gestiona los textos, proyectos, fases y la apariencia de cada una de tus 9 pantallas de transmisión para OBS Studio.",
     "tab_overlays": "🎬 Tus 9 Escenas en OBS (Textos y Estilos)",
     "tab_themes": "📁 Biblioteca de Packs y Editor CSS",
@@ -536,6 +575,7 @@
     "step3": "3. Panel oscuro y escenas independientes",
     "step3_desc": "Este panel web siempre mantiene su interfaz oscura de control para trabajar cómodo. Los estilos visten exclusivamente a tus pantallas en OBS Studio.",
     "btn_apply_all": "✨ Aplicar",
+    "toast_applied_all_count": "✓ Estilo \"{name}\" aplicado a las {count} escenas en OBS Studio",
     "btn_restore_themes": "🔄 Restaurar Estilos Originales",
     "btn_restore_texts": "📝 Restaurar Textos",
     "folders_title": "CARPETAS DE ACTIVIDADES DEL STREAM Y OVERLAYS",
@@ -877,7 +917,7 @@
     "folders_hint": "Haz clic en el cuadro para <b>entrar en la carpeta</b> y editar individualmente todos los textos y actividades de tu stream. Desde fuera puedes <b>aplicar un estilo a todos los overlays del pack</b> o restaurar los estilos originales de fábrica.",
     "badge_folder_suite": "9 OVERLAYS · SUITE COMPLETA",
     "folder_suite_desc": "Gestiona y edita individualmente cada overlay y actividad de tu stream.",
-    "badge_scenes_available": "9 ESCENAS DISPONIBLES",
+    "badge_scenes_available": "ESCENAS DISPONIBLES",
     "crumb_theme_packs": "📁 Packs de Temas",
     "badge_themes_in_pack": "6 TEMAS",
     "theme_compile_hint": "💡 Se compila automáticamente en <code>style.css</code> para que todas las escenas de OBS Studio lo reciban.",
@@ -900,7 +940,9 @@
     "toast_style_assigned": "✓ Estilo \"{name}\" asignado a la escena",
     "toast_url_copied": "📋 URL copiada para OBS: {url}",
     "alert_url_copied": "URL copiada al portapapeles:\n{url}\n\nPégala en OBS Studio como Fuente Navegador (1920×1080).",
-    "tab_fusions": "⚡ Fusiones (Packs Personalizados)"
+    "tab_fusions": "⚡ Fusiones (Packs Personalizados)",
+    "label_cozy_show": "Café Cozy: mostrar marco de chat (si se desmarca, la cámara se expande)",
+    "label_oss_show": "Just Chatting: mostrar columna de chat (si se desmarca, la cámara ocupa todo)"
   },
   "scene_catalog": {
     "maker-desk": {
@@ -1208,7 +1250,8 @@
   "rewards": {
     "twitch_rewards_title": "RECOMPENSAS EN TU TWITCH (Puntos de Canal):",
     "icon_color": "Color del Icono en Twitch:",
-    "twitch_rewards_prefix": "RECOMPENSAS EN TU TWITCH"
+    "twitch_rewards_prefix": "RECOMPENSAS EN TU TWITCH",
+    "selected": "✓ Seleccionada recompensa"
   },
   "roles": {
     "channel_team_title": "FUNCIONES Y EQUIPO DEL CANAL (Roles):",
@@ -1357,6 +1400,13 @@
     "btn_fire_obs": "🚀 DISPARAR ALERTA EN OBS AHORA"
   },
   "fusions": {
+    "btn_reset": "↺ Restaurar fusión",
+    "label_widgets": "WIDGETS QUE PERTENECEN A LA FUSIÓN:",
+    "label_alerts": "ALERTAS DE PANEL QUE PERTENECEN A LA FUSIÓN:",
+    "badge_members": "{scenes} OVERLAYS · {widgets} WIDGETS · {alerts} ALERTAS",
+    "confirm_reset": "¿Restaurar tema y forma de fábrica en TODOS los miembros de esta fusión?",
+    "toast_reset": "↺ Fusión restaurada a sus valores de fábrica",
+    "error_reset": "No se pudo restaurar la fusión: ",
     "tab_title": "⚡ Fusiones de Overlays (Packs Personalizados)",
     "crumb_fusions": "⚡ Fusiones de Overlays (Packs Personalizados)",
     "btn_new_fusion": "➕ Nueva Fusión",
@@ -1387,11 +1437,23 @@
     "btn_batch_style": "🎨 Estilo en Lote",
     "title_edit": "Editar esta fusión",
     "title_delete": "Eliminar esta fusión",
+    "label_default_shape": "Forma predeterminada",
     "no_scenes_warning": "Esta fusión no tiene ningún overlay seleccionado.",
     "btn_select_scenes": "➕ Seleccionar Overlays para esta Fusión",
-    "toast_theme_applied": "✓ Estilo aplicado en lote a toda la fusión",
+    "toast_theme_applied": "✓ Estilo aplicado en lote — {summary}",
+    "toast_theme_partial": "⚠️ Estilo aplicado parcialmente — {summary}",
+    "batch_scenes": "{count} escena(s)",
+    "batch_widgets": "{count} widget(s)",
+    "batch_alerts": "{count} alerta(s)",
+    "batch_skipped": "{count} omitido(s)",
+    "batch_failed": "{count} fallo(s)",
+    "batch_no_changes": "sin cambios",
     "toast_theme_error": "Error aplicando estilo en lote",
     "toast_saved": "✓ Fusión guardada correctamente",
+    "members_ignored_scenes": "Escenas ignoradas: {list}",
+    "members_ignored_widgets": "Widgets ignorados: {list}",
+    "members_ignored_alerts": "Alertas ignoradas: {list}",
+    "save_error": "Error al guardar la fusión: {error}",
     "confirm_delete": "¿Seguro que deseas eliminar la fusión \"{name}\"?",
     "toast_deleted": "🗑️ Fusión \"{name}\" eliminada",
     "floating_selected": "{count} OVERLAYS SELECCIONADOS",
@@ -1408,6 +1470,13 @@
     "btn_deselect_all_fusion": "☐ Desmarcar Fusión",
     "btn_customize_pack_styles": "🎨 Personalizar Estilos de este Pack →",
     "css_library_info_title": "🎨 BIBLIOTECA DE PACKS & EDITOR BASE DE CSS",
-    "css_library_info_desc": "¿Qué hace este editor? Aquí se define la <b>apariencia activa</b> de cada estilo (colores, marcos físicos, bordes geométricos, recortes clip-path y fuentes). Lo que modifiques y guardes aquí <b>se convierte en el nuevo diseño en vivo</b> para todas las overlays que usen este tema. El botón <b>'Restablecer Original'</b> siempre te permitirá recuperar el archivo de fábrica original de Open Stream Suite."
+    "css_library_info_desc": "¿Qué hace este editor? Aquí se define la <b>apariencia activa</b> de cada estilo (colores, marcos físicos, bordes geométricos, recortes clip-path y fuentes). Lo que modifiques y guardes aquí <b>se convierte en el nuevo diseño en vivo</b> para todas las overlays que usen este tema. El botón <b>'Restablecer Original'</b> siempre te permitirá recuperar el archivo de fábrica original de Open Stream Suite.",
+    "members_title": "MIEMBROS DE LA FUSIÓN",
+    "members_empty": "Sin miembros",
+    "remove_member": "Quitar de la fusión",
+    "toast_member_removed": "✓ Miembro quitado de la fusión",
+    "error_remove_member": "No se pudo quitar el miembro: ",
+    "warn_unknown_scenes": "⚠️ Esta fusión referencia escenas que ya no existen y se han omitido:",
+    "warn_unknown_scenes_fix": "Edita la fusión para quitar o sustituir esas claves."
   }
 }

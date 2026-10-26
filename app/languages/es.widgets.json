@@ -19,7 +19,7 @@
     "guide_plugins": "🔌 Plugins de Decks & Macros"
   },
   "sidebar": {
-    "obs_active": "OBS STUDIO · 9 ESCENAS ACTIVAS",
+    "obs_active": "OBS STUDIO · ESCENAS ACTIVAS",
     "connected_as": "🟢 Afiliado Twitch",
     "not_connected": "⚪ No conectado"
   },
@@ -461,14 +461,6 @@
       "sc_goal_minus1": "➖ -1",
       "sc_goal_reset": "🔄 Reset"
     },
-    "timer_pause": "⏸️ Pausar",
-    "ticker_pause": "⏯️ Pausa",
-    "ticker_pause_title": "Pausar o reanudar marquesina",
-    "goal_mode_stacked": "📚 Apiladas",
-    "goal_mode_rotative": "🔄 Carrusel",
-    "goal_mode_single": "🎯 Única",
-    "goal_overlay_mode": "Overlay",
-    "goal_pinned_count": "Metas fijadas",
     "goal_active_word": "Activas",
     "promo_btn_launch_obs": "🚀 ¡LANZAR A PANTALLA (OBS)!"
   }

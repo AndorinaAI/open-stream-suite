@@ -183,12 +183,14 @@
     "newsHeadline": "Live community debate with chat · News, highlights and thoughts",
     "podcastHost": "HOST // PRESENTER",
     "podcastGuest": "GUEST // CO-HOST",
-    "desktopCam": "STREAMER // PRESENTER"
+    "desktopCam": "STREAMER // PRESENTER",
+    "showChatPanel": true
   },
   "cozy": {
     "cafeCamLabel": "☕ Cozy Cafe & Chat",
     "chatTitle": "💬 Cafe Corner",
-    "studyCamLabel": "📖 STUDY DESK · STREAM"
+    "studyCamLabel": "📖 STUDY DESK · STREAM",
+    "showChatPanel": true
   },
   "performance": {
     "enableAnimations": true

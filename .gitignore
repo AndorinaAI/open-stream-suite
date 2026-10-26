@@ -36,3 +36,5 @@ releases/
 .DS_Store
 Thumbs.db
 
+# Copias de seguridad locales (no versionar)
+.backups/

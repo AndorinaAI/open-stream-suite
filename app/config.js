@@ -165,10 +165,108 @@ window.OSS_CONFIG = {
     "taskName": "SESIÓN DE CONCENTRACIÓN & ESTUDIO",
     "focusSeconds": 1500,
     "shortBreakSeconds": 300,
-    "longBreakSeconds": 900
+    "longBreakSeconds": 900,
+    "panelTitle": "OBJETIVOS DE LA SESIÓN"
   },
   "performance": {
     "enableAnimations": true
-  }
+  },
+  "victory": {
+    "title": "VICTORIA & CLUTCH CHAMPION",
+    "subtitle": "⚡ 1v4 CLUTCH CONQUERED · MATCH MVP",
+    "camLabel": "CHAMPION // REACTION FEED"
+  },
+  "art": {
+    "canvasLabel": "🎨 LIENZO CREATIVO · ILUSTRACIÓN",
+    "faceLabel": "✨ CREADOR // STREAM ✨",
+    "panelTitle": "DETALLES DE LA ILUSTRACIÓN",
+    "projectName": "Ilustración Digital — 'Tarde de Té'",
+    "currentPhase": "Lineart final & coloreado base",
+    "detail": "Tableta Gráfica · Pincel Óleo 4K · Paleta Pastel"
+  },
+  "speedrun": {
+    "game": "ELDEN RING // ANY% GLITCHLESS",
+    "category": "GLITCHLESS · CURRENT RECORD ATTEMPT",
+    "runnerCam": "RUNNER CAM // LIVE"
+  },
+  "oss": {
+    "mainCamLabel": "CÁMARA PRINCIPAL // HOST",
+    "newsHeadline": "Abriendo debate en directo con el chat · Opiniones, actualidad y reflexiones",
+    "podcastHost": "HOST // PRESENTADOR",
+    "podcastGuest": "INVITADO // CO-HOST",
+    "desktopCam": "STREAMER // PRESENTADOR",
+    "showChatPanel": true
+  },
+  "cozy": {
+    "cafeCamLabel": "☕ Café & Charla Tranquila",
+    "chatTitle": "💬 Rincón del Café",
+    "studyCamLabel": "📖 MESA DE ESTUDIO · STREAM",
+    "showChatPanel": true
+  },
+  "activePack": "Maker_Theme_Pack",
+  "activeTheme": "maker",
+  "activeShape": "original",
+  "globalThemeActive": false,
+  "overlayThemes": {
+    "game": "cyberpunk",
+    "maker-desk": "maker",
+    "maker-pc": "terminal",
+    "print-machine": "print",
+    "print-design": "print",
+    "chill": "chill",
+    "startingSoon": "synthwave",
+    "beRightBack": "synthwave",
+    "ending": "synthwave",
+    "oss_chatting": "neon_streamer",
+    "oss_desktop": "clean_minimal",
+    "oss_podcast": "sunset_glow",
+    "oss_starting": "crimson_pulse",
+    "oss_brb": "emerald_matrix",
+    "oss_ending": "neon_streamer",
+    "gamer_gameplay": "cyber_glitch",
+    "gamer_speedrun": "toxic_rad",
+    "gamer_victory": "golden_glory",
+    "gamer_starting": "crimson_esport",
+    "gamer_brb": "stealth_mono",
+    "gamer_ending": "golden_glory",
+    "cozy_pomodoro": "latte_caramel",
+    "cozy_art": "sakura_sunset",
+    "cozy_cafe": "matcha_bamboo",
+    "cozy_starting": "lavender_dream",
+    "cozy_brb": "latte_caramel",
+    "cozy_ending": "nordic_twilight"
+  },
+  "overlayShapes": {},
+  "overlayThemeExplicit": {},
+  "defaultOverlayThemes": {
+    "game": "cyberpunk",
+    "maker-desk": "maker",
+    "maker-pc": "terminal",
+    "print-machine": "print",
+    "print-design": "print",
+    "chill": "chill",
+    "startingSoon": "synthwave",
+    "beRightBack": "synthwave",
+    "ending": "synthwave",
+    "oss_chatting": "neon_streamer",
+    "oss_desktop": "clean_minimal",
+    "oss_podcast": "sunset_glow",
+    "oss_starting": "crimson_pulse",
+    "oss_brb": "emerald_matrix",
+    "oss_ending": "neon_streamer",
+    "gamer_gameplay": "cyber_glitch",
+    "gamer_speedrun": "toxic_rad",
+    "gamer_victory": "golden_glory",
+    "gamer_starting": "crimson_esport",
+    "gamer_brb": "stealth_mono",
+    "gamer_ending": "golden_glory",
+    "cozy_pomodoro": "latte_caramel",
+    "cozy_art": "sakura_sunset",
+    "cozy_cafe": "matcha_bamboo",
+    "cozy_starting": "lavender_dream",
+    "cozy_brb": "latte_caramel",
+    "cozy_ending": "nordic_twilight"
+  },
+  "backdrops": {}
 };
 window.TALLER_CONFIG = window.OSS_CONFIG;  // alias de compatibilidad hacia atrás

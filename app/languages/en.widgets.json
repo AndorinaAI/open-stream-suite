@@ -19,7 +19,7 @@
     "guide_plugins": "🔌 Deck Plugins & Macros"
   },
   "sidebar": {
-    "obs_active": "OBS STUDIO · 9 ACTIVE SCENES",
+    "obs_active": "OBS STUDIO · ACTIVE SCENES",
     "connected_as": "🟢 Twitch Affiliate",
     "not_connected": "⚪ Disconnected"
   },
@@ -397,7 +397,7 @@
     "particles_word": "particles",
     "launch_promo": "Launch promo",
     "ticker_pause": "⏯️ Pause",
-    "ticker_pause_title": "Pause or resume marquee",
+    "ticker_pause_title": "Pause or resume ticker",
     "goal_overlay_mode": "Overlay",
     "goal_pinned_count": "Pinned goals",
     "goal_mode_stacked": "📚 Stacked",
@@ -461,14 +461,6 @@
       "sc_goal_minus1": "➖ -1",
       "sc_goal_reset": "🔄 Reset"
     },
-    "timer_pause": "⏸️ Pause",
-    "ticker_pause": "⏯️ Pause",
-    "ticker_pause_title": "Pause or resume ticker",
-    "goal_mode_stacked": "📚 Stacked",
-    "goal_mode_rotative": "🔄 Carousel",
-    "goal_mode_single": "🎯 Single",
-    "goal_overlay_mode": "Overlay",
-    "goal_pinned_count": "Pinned goals",
     "goal_active_word": "Active",
     "promo_btn_launch_obs": "🚀 LAUNCH TO SCREEN (OBS)!"
   }
