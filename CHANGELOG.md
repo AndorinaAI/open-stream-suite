@@ -8,6 +8,12 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y e
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Corregido — Accesibilidad de componentes y catálogo de temas de solo lectura (V3-02, V3-04)
+
+- **V3-02 (accesibilidad)**: los tres `<select>` de cada componente (tema, forma y fusión) llevan `aria-label` con el nombre del componente, los botones Aplicar/Reset/➕ también, y se añade una **cabecera de columnas** visible (Componente · Tema · Forma · Aplicar · Reset · Fusión) con las nuevas claves i18n `widgets.col_*` en ES y EN.
+- **V3-04 (lecturas sin escritura)**: `GET /api/themes/packs` ya **no reescribe** `common/themes.css`. El bootstrap de `streamthemes/` es idempotente (una vez por proceso) y la recompilación del CSS se decide por frescura (`themes_css_is_stale()`), así que añadir un tema a mano se sigue detectando sin escribir en cada petición. Medido: **3 GET → 0 recompilaciones** y `mtime` intacto (antes: 3 recompilaciones).
+- **Regresión**: nuevas suites `tests/test_component_a11y.py` (4 tests) y `tests/test_themes_read_only.py` (5 tests).
+
 ### Corregido — Contadores de escenas reales (V3-03)
 
 - Los textos del panel y las confirmaciones de lote ya no fijan un número de escenas: el subtítulo de la sección **pierde el “9”** (“cada una de tus pantallas de transmisión”) y las confirmaciones (`confirm_apply_all`, `confirm_restore_all_scenes_texts`, `confirm_restore_all_scenes_themes`) usan el parámetro **`{count}`** en los 4 diccionarios ES/EN.
