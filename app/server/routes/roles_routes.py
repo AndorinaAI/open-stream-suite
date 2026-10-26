@@ -3,6 +3,7 @@ import aiohttp
 from aiohttp import web
 from server.config import ROLES_FILE, CLIENT_ID, logger
 from server.state import system
+from server.services.fs_utils import atomic_write_json, ensure_private_file, lock_for
 
 async def handle_get_roles(request):
     """Devuelve los roles y funciones oficiales del canal definidos en roles.json"""
@@ -59,21 +60,29 @@ async def handle_get_roles(request):
                 }
             ]
         }
-        with open(ROLES_FILE, "w", encoding="utf-8") as f:
-            json.dump(default_roles, f, indent=2, ensure_ascii=False)
+        with lock_for(ROLES_FILE):
+            atomic_write_json(ROLES_FILE, default_roles)
+            ensure_private_file(ROLES_FILE)
         return web.json_response(default_roles)
 
     try:
-        with open(ROLES_FILE, "r", encoding="utf-8") as f:
-            return web.json_response(json.load(f))
-    except Exception as e:
-        return web.json_response({"roles": [], "error": str(e)})
+        with lock_for(ROLES_FILE):
+            with open(ROLES_FILE, "r", encoding="utf-8") as f:
+                return web.json_response(json.load(f))
+    except Exception:
+        return web.json_response({"roles": [], "error": "roles.json no se pudo leer o está corrupto"}, status=500)
 
 async def handle_save_roles(request):
-    """Guarda nuevos roles personalizados en roles.json"""
-    data = await request.json()
-    with open(ROLES_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    """Guarda nuevos roles personalizados en roles.json."""
+    try:
+        data = await request.json()
+    except Exception:
+        return web.json_response({"status": "error", "error": "Payload JSON inválido"}, status=400)
+    if not isinstance(data, dict) or not isinstance(data.get("roles", []), list):
+        return web.json_response({"status": "error", "error": "Estructura de roles no válida"}, status=400)
+    with lock_for(ROLES_FILE):
+        atomic_write_json(ROLES_FILE, data)
+        ensure_private_file(ROLES_FILE)
     logger.info("✓ Roles personalizados guardados en roles.json")
     return web.json_response({"status": "ok", "saved": True})
 

@@ -1,6 +1,8 @@
+import secrets
 from pathlib import Path
 from aiohttp import web
-from server.config import MEDIA_DIR, logger
+from server.config import MEDIA_DIR, MAX_UPLOAD_BYTES, logger
+from server.security import is_local_request
 from server.services.media_service import (
     ALLOWED_MEDIA_EXTENSIONS,
     VIDEO_EXTENSIONS,
@@ -19,12 +21,19 @@ from server.services.media_service import (
 
 async def handle_list_media(request):
     """Lista todos los archivos, árbol de carpetas y estadísticas para el explorador."""
+    if not is_local_request(request):
+        return web.json_response({"error": "Solo disponible en local"}, status=403)
     data = list_media_library()
     return web.json_response(data)
 
 async def handle_upload_media(request):
-    """Sube archivos con soporte para auto-clasificación por tipo o destino en carpeta."""
-    reader = await request.multipart()
+    """Sube archivos con límite, escritura atómica por archivo y clasificación segura."""
+    if request.content_length and request.content_length > MAX_UPLOAD_BYTES:
+        return web.json_response({"error": f"La petición supera el límite de {MAX_UPLOAD_BYTES // (1024 * 1024)} MB"}, status=413)
+    try:
+        reader = await request.multipart()
+    except Exception:
+        return web.json_response({"error": "Se esperaba multipart/form-data"}, status=400)
     saved = []
     destinations = []
     media_root = MEDIA_DIR.resolve()
@@ -65,7 +74,7 @@ async def handle_upload_media(request):
             target_dir = media_root / subfolder
         elif target_folder_param:
             resolved_folder = resolve_safe_media_path(target_folder_param, allow_root=True)
-            if not resolved_folder:
+            if not resolved_folder or not resolved_folder.is_dir():
                 return web.json_response({"error": "Carpeta de destino no válida o no autorizada"}, status=400)
             target_dir = resolved_folder
         else:
@@ -74,7 +83,6 @@ async def handle_upload_media(request):
 
         target_dir.mkdir(parents=True, exist_ok=True)
         target_path = (target_dir / raw_fn).resolve()
-
         try:
             if not target_path.is_relative_to(media_root) or target_path == media_root:
                 return web.json_response({"error": "Intento de path traversal detectado"}, status=400)
@@ -82,12 +90,29 @@ async def handle_upload_media(request):
             if not str(target_path).startswith(str(media_root) + "/"):
                 return web.json_response({"error": "Intento de path traversal detectado"}, status=400)
 
-        with open(target_path, "wb") as f:
-            while True:
-                chunk = await part.read_chunk()
-                if not chunk:
-                    break
-                f.write(chunk)
+        temp_path = target_path.with_name(f".{target_path.name}.part-{secrets.token_hex(8)}")
+        written = 0
+        try:
+            with open(temp_path, "wb") as f:
+                while True:
+                    chunk = await part.read_chunk(1024 * 1024)
+                    if not chunk:
+                        break
+                    written += len(chunk)
+                    if written > MAX_UPLOAD_BYTES:
+                        raise ValueError(f"El archivo supera el límite de {MAX_UPLOAD_BYTES // (1024 * 1024)} MB")
+                    # Comprobar también el límite global del multipart cuando aiohttp lo expone.
+                    if request.content_length and request.content_length > MAX_UPLOAD_BYTES and written == 0:
+                        raise ValueError("La petición supera el límite de subida")
+                    f.write(chunk)
+            temp_path.replace(target_path)
+        except ValueError as e:
+            temp_path.unlink(missing_ok=True)
+            return web.json_response({"error": str(e)}, status=413)
+        except Exception as e:
+            temp_path.unlink(missing_ok=True)
+            logger.error(f"Error subiendo {raw_fn}: {e}")
+            return web.json_response({"error": "No se pudo guardar el archivo"}, status=500)
 
         rel_saved = target_path.relative_to(media_root).as_posix()
         saved.append(raw_fn)

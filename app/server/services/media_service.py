@@ -2,15 +2,18 @@ import shutil
 from pathlib import Path
 from server.config import MEDIA_DIR, logger
 
+# SVG no se acepta en la biblioteca: es un documento activo y, servido desde
+# el mismo origen que /api/local-token, puede ejecutar JavaScript. Los SVG de
+# la interfaz (assets/) no pasan por esta lista.
 ALLOWED_MEDIA_EXTENSIONS = {
     ".webm", ".mp4", ".mov", ".mkv",
     ".mp3", ".wav", ".ogg", ".aac", ".m4a",
-    ".gif", ".png", ".jpg", ".jpeg", ".webp", ".svg"
+    ".gif", ".png", ".jpg", ".jpeg", ".webp"
 }
 
 VIDEO_EXTENSIONS = {".webm", ".mp4", ".mov", ".mkv"}
 SOUND_EXTENSIONS = {".mp3", ".wav", ".ogg", ".aac", ".m4a"}
-IMAGE_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".webp", ".svg"}
+IMAGE_EXTENSIONS = {".gif", ".png", ".jpg", ".jpeg", ".webp"}
 
 def get_media_type(suffix: str) -> str:
     """Retorna la categoría de medio ('video', 'sound', 'image', 'other') según su extensión."""

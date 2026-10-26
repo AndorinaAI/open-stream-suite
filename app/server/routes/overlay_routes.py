@@ -55,10 +55,12 @@ async def handle_reset_overlay_texts(request):
     if request.can_read_body:
         try:
             body = await request.json()
-            section = body.get("section", "all")
-            scene_key = body.get("sceneKey")
         except Exception:
-            pass
+            return web.json_response({"error": "Payload JSON inválido"}, status=400)
+        if not isinstance(body, dict):
+            return web.json_response({"error": "Payload JSON inválido"}, status=400)
+        section = body.get("section", "all")
+        scene_key = body.get("sceneKey")
 
     current_texts = reset_overlay_texts(section, scene_key=scene_key)
     await system.broadcast({

@@ -11,6 +11,8 @@ from server.services.theme_manager import (
     THEMES_DIR,
     STREAMTHEMES_DIR,
 )
+from server.services.theme_service import apply_theme_service
+from server.services.validation_utils import is_valid_pack_id, is_valid_theme_id
 from server.services.deck_service import (
     execute_deck_knob,
     get_deck_actions_catalog,
@@ -58,78 +60,51 @@ async def handle_deck_trigger(request):
     })
 
 async def handle_deck_theme(request):
-    """Aplica una paleta de color / tema a OBS Studio desde el Stream Deck."""
+    """Aplica un tema desde el Stream Deck usando la misma validación que la API web."""
     theme_id = request.query.get("id") or request.query.get("theme")
     explicit_pack = request.query.get("pack")
-    pack_id = explicit_pack
     if not theme_id and request.can_read_body:
         try:
             data = await request.json()
             theme_id = data.get("id") or data.get("theme")
-            if "pack" in data:
+            if data.get("pack"):
                 explicit_pack = data.get("pack")
-                pack_id = explicit_pack
         except Exception:
             pass
 
+    theme_id = str(theme_id or "").strip()
     if not theme_id:
         return web.json_response({
             "status": "error",
             "message": "Falta parámetro 'id'. Ejemplo: /api/deck/theme?id=maker"
         }, status=400)
 
-    # Validar existencia física del tema
-    if pack_id:
-        theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"
-        if not theme_file.exists():
+    if explicit_pack:
+        pack_id = str(explicit_pack).strip()
+        if not is_valid_pack_id(pack_id) or not is_valid_theme_id(pack_id, theme_id):
             return web.json_response({
                 "status": "error",
                 "message": f"El tema '{theme_id}' no existe en el pack '{pack_id}'"
             }, status=404)
-        resolved_pack = pack_id
     else:
-        resolved_pack = "Maker_Theme_Pack"
-        theme_file = get_theme_dir(resolved_pack, theme_id) / "theme.json"
-        if not theme_file.exists():
-            found = False
-            for p in STREAMTHEMES_DIR.iterdir():
-                if p.is_dir() and p.name != resolved_pack:
-                    cand = get_theme_dir(p.name, theme_id) / "theme.json"
-                    if cand.exists():
-                        resolved_pack = p.name
-                        theme_file = cand
-                        found = True
-                        break
-            if not found:
-                return web.json_response({
-                    "status": "error",
-                    "message": f"El tema '{theme_id}' no existe en ningún pack de temas"
-                }, status=404)
+        pack_id = None
+        for candidate in sorted(STREAMTHEMES_DIR.iterdir()):
+            if candidate.is_dir() and is_valid_theme_id(candidate.name, theme_id):
+                pack_id = candidate.name
+                break
+        if not pack_id:
+            return web.json_response({
+                "status": "error",
+                "message": f"El tema '{theme_id}' no existe en ningún pack de temas"
+            }, status=404)
 
-    state = load_theme_state()
-    state["activePack"] = resolved_pack
-    state["activeTheme"] = theme_id
-    save_theme_state(state)
-
-    try:
-        with open(theme_file, "r", encoding="utf-8") as f:
-            t_data = json.load(f)
-        if t_data.get("chatAnchored", True):
-            sync_chat_with_theme(t_data)
-    except Exception:
-        pass
-
-    await system.broadcast({
-        "type": "theme_change",
-        "theme": theme_id,
-        "pack": resolved_pack
-    })
-    logger.info(f"🎨 [StreamDeck] Tema aplicado a OBS: {theme_id} ({resolved_pack})")
+    result = await apply_theme_service(pack_id, theme_id)
     return web.json_response({
         "status": "ok",
         "action": "theme_applied",
         "theme": theme_id,
-        "pack": resolved_pack
+        "pack": pack_id,
+        "archetype": result.get("archetype"),
     })
 
 async def handle_deck_timer(request):

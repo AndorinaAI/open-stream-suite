@@ -7,6 +7,7 @@ import copy
 import json
 from pathlib import Path
 from server.config import BASE_DIR, logger
+from server.services.fs_utils import atomic_write_json, atomic_write_text
 
 OVERLAY_TEXTS_FILE = BASE_DIR / "overlay_texts_config.json"
 OVERLAY_TEXTS_EN_FILE = BASE_DIR / "overlay_texts_config.en.json"
@@ -143,14 +144,51 @@ def load_overlay_texts(lang: str = None) -> dict:
     return json.loads(json.dumps(DEFAULT_OVERLAY_TEXTS))
 
 
-def save_overlay_texts_to_disk(texts: dict):
-    """Guarda la configuración en overlay_texts_config.json y actualiza config.js para soporte offline"""
-    # 1. Guardar JSON
-    with open(OVERLAY_TEXTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(texts, f, indent=2, ensure_ascii=False)
+def build_config_payload(texts: dict) -> dict:
+    """Textos + estado de escenas/temas, tal y como lo consume `config.js`.
 
-    # 2. Generar config.js para overlays sin servidor o modo offline
-    json_str = json.dumps(texts, indent=2, ensure_ascii=False)
+    Sincronización escena↔tema (T4): `overlay.js` decide el tema y la forma de la
+    escena de forma SÍNCRONA a partir de `config.overlayThemes` /
+    `config.overlayShapes` / `config.activeTheme` y sólo después lo corrige
+    consultando `/api/themes/packs`. Como `config.js` sólo llevaba los textos, el
+    estado real llegaba tarde y la escena se pintaba con el tema por defecto y se
+    re-maquetaba al responder el fetch ("los elementos aparecen descolocados y se
+    recolocan al abrir o cambiar de escena"). Incrustar el estado aquí hace que el
+    primer pintado ya sea el definitivo.
+    """
+    payload = dict(texts)
+    try:
+        from server.services.theme_manager import load_theme_state
+        state = load_theme_state() or {}
+    except Exception as e:  # nunca debe romper el guardado de textos
+        logger.warning(f"No se pudo leer themes_state.json para config.js: {e}")
+        return payload
+
+    for key in ("activePack", "activeTheme", "activeShape", "globalThemeActive"):
+        if state.get(key) is not None:
+            payload[key] = state[key]
+    if payload.get("activeShape") is None:
+        payload["activeShape"] = "original"
+    for key in ("overlayThemes", "overlayShapes", "overlayThemeExplicit", "defaultOverlayThemes", "backdrops"):
+        # Se publican SIEMPRE (aunque estén vacíos): el contrato de config.js es
+        # que las claves existen, y así `sync_config_js_state` no reescribe el
+        # fichero en cada arranque.
+        value = state.get(key)
+        payload[key] = value if isinstance(value, dict) else {}
+    # Fuente única de defaults para overlay.js/01-state.js (27 escenas reales).
+    try:
+        from server.services.theme_manager import DEFAULT_OVERLAY_THEMES
+        payload["defaultOverlayThemes"] = dict(DEFAULT_OVERLAY_THEMES)
+    except Exception:
+        payload.setdefault("defaultOverlayThemes", {})
+    return payload
+
+
+def write_config_js(texts: "dict | None" = None) -> None:
+    """(Re)genera `config.js` con los textos y el estado actual de escenas/temas."""
+    if texts is None:
+        texts = load_overlay_texts()
+    json_str = json.dumps(build_config_payload(texts), indent=2, ensure_ascii=False)
     js_content = f"""/**
  * ====================================================================
  * OPEN STREAM SUITE — CONFIGURACIÓN CENTRALIZADA DE OVERLAYS Y ESCENAS
@@ -163,11 +201,59 @@ window.OSS_CONFIG = {json_str};
 window.TALLER_CONFIG = window.OSS_CONFIG;  // alias de compatibilidad hacia atrás
 """
     try:
-        with open(CONFIG_JS_FILE, "w", encoding="utf-8") as f:
-            f.write(js_content)
+        atomic_write_text(CONFIG_JS_FILE, js_content)
         logger.info("✓ config.js regenerado con los textos actualizados")
     except Exception as e:
         logger.warning(f"Error actualizando config.js: {e}")
+
+
+def _deep_merge_texts(base: dict, incoming: dict) -> dict:
+    """Mezcla los textos del panel sobre los existentes sin borrar secciones.
+
+    El formulario del panel sólo envía las secciones que edita; antes el guardado
+    reemplazaba el archivo completo y eliminaba `cozy`, `oss`, `pomodoro`,
+    `victory`, `art` y `speedrun`.
+    """
+    out = dict(base or {})
+    for key, value in (incoming or {}).items():
+        if isinstance(value, dict) and isinstance(out.get(key), dict):
+            out[key] = _deep_merge_texts(out[key], value)
+        else:
+            out[key] = value
+    return out
+
+
+def save_overlay_texts_to_disk(texts: dict, replace: bool = False):
+    """Guarda los textos en overlay_texts_config.json y regenera config.js.
+
+    `config.js` lleva ahora también el estado de escenas/temas (ver
+    `build_config_payload`), así que cualquier escritura de textos mantiene ambas
+    cosas sincronizadas.
+    """
+    merged = texts
+    try:
+        existing = {}
+        if OVERLAY_TEXTS_FILE.exists():
+            existing = json.loads(OVERLAY_TEXTS_FILE.read_text(encoding="utf-8"))
+        # En un reset hay que reemplazar, no volver a fusionar: el merge
+        # conservaba las claves customScenes que el reset acababa de eliminar.
+        merged = texts if replace else _deep_merge_texts(existing, texts)
+        atomic_write_json(OVERLAY_TEXTS_FILE, merged)
+    except Exception as e:
+        logger.warning(f"Error guardando overlay_texts_config.json: {e}")
+    write_config_js(merged)
+
+
+def sync_config_js_state() -> None:
+    """Regenera config.js si le falta el estado de escenas/temas (arranque del servidor)."""
+    try:
+        current = CONFIG_JS_FILE.read_text(encoding="utf-8") if CONFIG_JS_FILE.exists() else ""
+    except Exception:
+        current = ""
+    needed = ("overlayThemes", "overlayShapes", "overlayThemeExplicit", "globalThemeActive", "defaultOverlayThemes")
+    if all(k in current for k in needed):
+        return
+    write_config_js()
 
 
 def reset_overlay_texts(section: str = "all", scene_key: str = None) -> dict:
@@ -188,5 +274,5 @@ def reset_overlay_texts(section: str = "all", scene_key: str = None) -> dict:
                     if k == t or k.startswith(t) or t.startswith(k):
                         current_texts["customScenes"].pop(k, None)
 
-    save_overlay_texts_to_disk(current_texts)
+    save_overlay_texts_to_disk(current_texts, replace=True)
     return current_texts

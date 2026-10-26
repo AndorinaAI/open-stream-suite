@@ -3,6 +3,19 @@ import aiohttp
 from aiohttp import web
 from server.config import CLIENT_ID, logger
 from server.state import system
+from server.services.theme_manager import STREAMTHEMES_DIR
+from server.services.validation_utils import is_valid_theme_id
+from server.services.theme_service import apply_theme_service
+
+
+async def _json_body(request):
+    """Devuelve un dict JSON o None sin lanzar un 500 HTML."""
+    try:
+        data = await request.json()
+    except Exception:
+        return None
+    return data if isinstance(data, dict) else None
+
 
 async def handle_status(request):
     """Devuelve el estado de conexión del sistema en JSON"""
@@ -15,7 +28,9 @@ async def handle_status(request):
 
 async def handle_test_alert(request):
     """Endpoint REST para lanzar alertas de prueba"""
-    data = await request.json()
+    data = await _json_body(request)
+    if data is None:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
     spec_act = data.get("special_action", "none")
     if spec_act and spec_act != "none":
         asyncio.create_task(system.execute_special_action(spec_act, data.get("special_action_param", ""), data.get("user", "Streamer")))
@@ -24,7 +39,9 @@ async def handle_test_alert(request):
 
 async def handle_explode_emotes(request):
     """Lanza una explosión de emoticonos en OBS"""
-    data = await request.json()
+    data = await _json_body(request)
+    if data is None:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
     emoji = data.get("emoji", "🎉")
     count = data.get("count", 40)
     await system.broadcast({"type": "explode_emotes", "emoji": emoji, "count": count})
@@ -32,7 +49,9 @@ async def handle_explode_emotes(request):
 
 async def handle_timer_control(request):
     """Controla el temporizador del stream en OBS (start, pause, reset, set)"""
-    data = await request.json()
+    data = await _json_body(request)
+    if data is None:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
     action = data.get("action", "start")
     seconds = data.get("seconds", 300)
     title = data.get("title", "TEMPORIZADOR STREAM")
@@ -47,7 +66,9 @@ async def handle_timer_control(request):
 
 async def handle_shoutout(request):
     """Lanza una tarjeta holográfica de shoutout para otro streamer"""
-    data = await request.json()
+    data = await _json_body(request)
+    if data is None:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
     streamer = data.get("streamer", "").strip().lower()
     display_name = data.get("display_name", streamer)
     game = data.get("game", "")
@@ -90,18 +111,36 @@ async def handle_shoutout(request):
     return web.json_response({"status": "ok", "shoutout": payload})
 
 async def handle_theme_switch(request):
-    """Cambia el tema visual en vivo para todas las escenas y widgets conectados en OBS"""
-    data = await request.json()
-    theme = data.get("theme", "maker")
-    await system.broadcast({"type": "theme_change", "theme": theme})
-    logger.info(f"🎨 Tema cambiado a: {theme}")
-    return web.json_response({"status": "ok", "theme": theme})
+    """Compatibilidad legacy: aplica un tema validado, no un broadcast ciego."""
+    data = await _json_body(request)
+    if data is None:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    theme = str(data.get("theme", "maker")).strip()
+    pack = None
+    if theme:
+        for candidate in sorted(STREAMTHEMES_DIR.iterdir()):
+            if candidate.is_dir() and is_valid_theme_id(candidate.name, theme):
+                pack = candidate.name
+                break
+    if not pack:
+        return web.json_response({"error": f"Tema desconocido: {theme}"}, status=400)
+    result = await apply_theme_service(pack, theme)
+    logger.info(f"🎨 Tema cambiado a: {theme} ({pack})")
+    return web.json_response({"status": "ok", "theme": theme, "pack": pack, **result})
 
 async def handle_play_sound(request):
-    """Reproduce un efecto de sonido directamente en OBS"""
-    data = await request.json()
-    sound_url = data.get("sound_url", "")
-    volume = data.get("volume", 0.8)
+    """Reproduce un efecto de sonido directamente en OBS."""
+    data = await _json_body(request)
+    if data is None:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    sound_url = str(data.get("sound_url", "")).strip()
+    if len(sound_url) > 500 or (sound_url and not sound_url.startswith(("/media/", "/assets/", "http://", "https://"))):
+        return web.json_response({"error": "sound_url no válida"}, status=400)
+    try:
+        volume = float(data.get("volume", 0.8))
+    except (TypeError, ValueError):
+        volume = 0.8
+    volume = max(0.0, min(1.0, volume))
     await system.broadcast({"type": "sound", "sound_url": sound_url, "volume": volume})
     return web.json_response({"status": "ok", "sound": sound_url})
 

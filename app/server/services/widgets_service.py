@@ -5,6 +5,7 @@ Gestiona la lectura/escritura modular de widgets/<widget>/config.json y sincroni
 
 import json
 import time
+from pathlib import Path
 import aiohttp
 from server.config import (
     WIDGETS_DIR,
@@ -14,6 +15,26 @@ from server.config import (
     logger
 )
 from server.state import system
+from server.services.fs_utils import atomic_write_json, lock_for
+
+
+def is_valid_widget_key(widget_key) -> bool:
+    """Solo claves de un widget real: mapping oficial, alias o carpeta existente."""
+    key = str(widget_key or "").strip()
+    if not key or key in (".", "..") or "/" in key or "\\" in key:
+        return False
+    try:
+        if Path(key).is_absolute():
+            return False
+    except (OSError, ValueError):
+        return False
+    if key in WIDGET_CONFIG_MAPPING or key == "shoutout":
+        return True
+    candidate = WIDGETS_DIR / key
+    try:
+        return candidate.is_dir() and candidate.resolve().is_relative_to(WIDGETS_DIR.resolve())
+    except (OSError, ValueError):
+        return False
 
 def load_widgets_config():
     """Carga la configuración persistente modular de cada widget desde widgets/<widget>/config.json"""
@@ -57,36 +78,58 @@ def load_widgets_config():
     return cfg
 
 def save_widgets_config(cfg):
-    """Guarda la configuración persistente en los archivos modulares widgets/<widget>/config.json y respalda widgets_config.json"""
+    """Guarda configuración de widgets de forma atómica y bajo lock.
+
+    Solo acepta claves de widgets reales; antes una clave ``../x`` escribía
+    fuera de ``widgets/``.
+    """
     if not isinstance(cfg, dict):
         return False
-    success = True
-    try:
-        # 1. Guardar cada sección en su carpeta modular correspondiente
-        for widget_key, val in cfg.items():
-            target_path = WIDGET_CONFIG_MAPPING.get(widget_key)
-            if not target_path:
-                target_path = WIDGETS_DIR / widget_key / "config.json"
-
-            try:
-                target_path.parent.mkdir(parents=True, exist_ok=True)
-                with open(target_path, "w", encoding="utf-8") as f:
-                    json.dump(val, f, indent=2, ensure_ascii=False)
-            except Exception as e:
-                logger.error(f"Error guardando config modular para {widget_key} en {target_path}: {e}")
-                success = False
-
-        # 2. Respaldar el archivo unificado widgets_config.json para compatibilidad total
-        try:
-            with open(WIDGETS_CONFIG_FILE, "w", encoding="utf-8") as f:
-                json.dump(cfg, f, indent=2, ensure_ascii=False)
-        except Exception as e:
-            logger.error(f"Error guardando copia unificada widgets_config.json: {e}")
-
-        return success
-    except Exception as e:
-        logger.error(f"Error general en save_widgets_config: {e}")
+    invalid_keys = [key for key in cfg if not is_valid_widget_key(key)]
+    if invalid_keys:
+        logger.error(f"Configuración de widgets rechazada; claves no válidas: {invalid_keys!r}")
         return False
+    success = True
+    all_valid = True
+    with lock_for(WIDGETS_CONFIG_FILE):
+        try:
+            # 1. Guardar cada sección en su carpeta modular correspondiente.
+            for widget_key, val in cfg.items():
+                if not is_valid_widget_key(widget_key):
+                    logger.error(f"Clave de widget no válida rechazada: {widget_key!r}")
+                    success = False
+                    all_valid = False
+                    continue
+                target_path = WIDGET_CONFIG_MAPPING.get(widget_key)
+                if not target_path:
+                    target_path = WIDGETS_DIR / str(widget_key).strip() / "config.json"
+
+                try:
+                    target_path.parent.mkdir(parents=True, exist_ok=True)
+                    target_path = target_path.resolve()
+                    if not target_path.is_relative_to(WIDGETS_DIR.resolve()):
+                        logger.error(f"Ruta de widget fuera de widgets/: {target_path}")
+                        success = False
+                        continue
+                    atomic_write_json(target_path, val)
+                except Exception as e:
+                    logger.error(f"Error guardando config modular para {widget_key} en {target_path}: {e}")
+                    success = False
+
+            # 2. Copia unificada de compatibilidad, también atómica.
+            # Si alguna clave era inválida no se toca el archivo global: evita
+            # que un payload de ataque vacíe la configuración del usuario.
+            if all_valid:
+                try:
+                    atomic_write_json(WIDGETS_CONFIG_FILE, cfg)
+                except Exception as e:
+                    logger.error(f"Error guardando copia unificada widgets_config.json: {e}")
+                    success = False
+
+            return success
+        except Exception as e:
+            logger.error(f"Error general en save_widgets_config: {e}")
+            return False
 
 async def auto_sync_twitch_goals(cfg):
     """Sincroniza automáticamente las metas oficiales reales de Twitch vía Helix sin botones manuales"""

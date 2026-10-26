@@ -12,5 +12,5 @@ async def handle_timer_action(action, params):
         **params
     }
     await system.broadcast(payload)
-    return web.json_response({"status": "ok", "action": action, "widget": widget, "payload": payload})
+    return web.json_response({"status": "ok", "action": action, "widget": "timer", "payload": payload})
 

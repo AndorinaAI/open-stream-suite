@@ -3,9 +3,13 @@ import aiohttp
 from aiohttp import web
 from server.config import logger
 from server.state import system
+from server.security import is_websocket_allowed
 
 async def handle_ws(request):
-    """Punto de conexión WebSocket para la fuente de OBS y el panel"""
+    """Punto de conexión WebSocket para la fuente de OBS y el panel."""
+    if not is_websocket_allowed(request):
+        logger.warning(f"🚫 WebSocket rechazado (Origin: {request.headers.get('Origin', '')})")
+        return web.json_response({"status": "error", "error": "Origen o token no autorizado"}, status=403)
     ws = web.WebSocketResponse()
     await ws.prepare(request)
     system.connected_clients.add(ws)

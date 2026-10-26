@@ -43,6 +43,15 @@ async def handle_widget_action(request):
 
     logger.info(f"🕹️ Widget Action recibida: {widget} -> {action} ({params})")
 
+    # GET es para lecturas o para el camino de decks (que ya valida Origin).
+    # Una acción con efectos desde /api/widgets/action debe ir por POST con token.
+    read_only = {("chat", "get_recent"), ("promo", "get_history")}
+    if request.method == "GET" and not request.path.startswith("/api/deck/") and (widget, action) not in read_only:
+        return web.json_response({
+            "status": "error",
+            "error": "Las acciones de widget requieren POST con X-Local-Token",
+        }, status=403)
+
     if widget == "timer":
         return await handle_timer_action(action, params)
     elif widget in ("promo", "shoutout"):

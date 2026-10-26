@@ -196,13 +196,11 @@ DEFAULT_THEMES_DATA = [
     }
 ]
 
-DEFAULT_OVERLAY_THEMES = {
+_FALLBACK_OVERLAY_THEMES = {
     # Maker_Theme_Pack
     "game": "cyberpunk",
-    "maker": "maker",
     "maker-desk": "maker",
     "maker-pc": "terminal",
-    "print": "print",
     "print-machine": "print",
     "print-design": "print",
     "chill": "chill",
@@ -236,3 +234,12 @@ DEFAULT_OVERLAY_THEMES = {
 }
 
 
+
+
+# Fuente única: los temas por defecto de cada escena viven en el catálogo
+# (app/scenes.json, generado desde 05-scenes-data.js). El literal anterior era
+# otro punto de verdad desincronizado e incluía claves que no son escenas
+# ("maker", "print"), que acababan escritas en themes_state.json.
+# Fuente única canónica: este mapa. `scenes.json` se genera a partir de él y el
+# frontend lo recibe en config.defaultOverlayThemes; no hay una segunda tabla JS.
+DEFAULT_OVERLAY_THEMES = dict(_FALLBACK_OVERLAY_THEMES)

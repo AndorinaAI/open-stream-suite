@@ -8,6 +8,21 @@ import re
 from pathlib import Path
 from server.config import BASE_DIR, logger
 from server.state import system
+from server.services.fs_utils import atomic_write_json, atomic_write_text
+from . import components_catalog
+from .validation_utils import (
+    is_valid_pack_id,
+    is_valid_theme_id,
+    is_valid_scene_key,
+    is_valid_shape_id,
+    normalize_scene_key,
+    sanitize_metadata_text,
+    METADATA_NAME_MAX,
+    METADATA_BADGE_MAX,
+    METADATA_DESC_MAX,
+    METADATA_ICON_MAX,
+    METADATA_AUTHOR_MAX,
+)
 from server.services.theme_defaults import (
     DEFAULT_PACK_TALLER,
     DEFAULT_THEMES_DATA,
@@ -15,6 +30,7 @@ from server.services.theme_defaults import (
 )
 from server.services.theme_manager import (
     STREAMTHEMES_DIR,
+    derive_explicit_theme_map,
     get_pack_styles_dir,
     get_theme_dir,
     load_theme_state,
@@ -23,6 +39,83 @@ from server.services.theme_manager import (
     sync_chat_with_theme,
     infer_archetype
 )
+
+def _with_structural_tokens(css: str, theme_id: str) -> str:
+    """Garantiza el contrato visual mínimo también en CSS enviado por la UI."""
+    required = ("--frame-radius", "--panel-radius", "--badge-radius", "--header-radius")
+    if css and all(token in css for token in required):
+        return css
+    return (css or "") + f"\nbody[data-theme=\"{theme_id}\"] {{\n{STRUCTURAL_THEME_TOKENS}}}\n"
+
+
+def _validate_theme_css(css) -> str:
+    """CSS de tema acotado y sin imports externos/bytes nulos."""
+    text = str(css or "")
+    if len(text) > 512 * 1024:
+        raise ValueError("El CSS del tema supera el límite de 512 KB")
+    if "\x00" in text:
+        raise ValueError("El CSS contiene bytes nulos")
+    if re.search(r"@import\b", text, re.IGNORECASE):
+        raise ValueError("El CSS del tema no puede usar @import externos")
+    return text
+
+
+_HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
+
+
+def _valid_theme_color(value, field: str, default: str) -> str:
+    """Colores solo en #RRGGBB: el frontend los concatena y los inyecta en CSS."""
+    text = str(value if value is not None else default).strip()
+    if not _HEX_COLOR_RE.fullmatch(text):
+        raise ValueError(f"Color {field} inválido: usa el formato #RRGGBB")
+    return text
+
+
+def _valid_glow(value, default: int = 50) -> int:
+    try:
+        glow = int(value if value is not None else default)
+    except (TypeError, ValueError):
+        raise ValueError("glowIntensity debe ser un número entre 0 y 100")
+    if not 0 <= glow <= 100:
+        raise ValueError("glowIntensity debe estar entre 0 y 100")
+    return glow
+
+
+def _normalize_theme_colors(meta: dict) -> dict:
+    """Valida las claves visuales que acaban en style/HTML del panel."""
+    for field, default in (
+        ("accentCyan", "#57D6C4"),
+        ("accentOrange", "#FF783F"),
+        ("bgDark", "#191D21"),
+        ("textLight", "#F2EEE5"),
+        ("panelBg", "#2E363B"),
+        ("textDim", "#8B969C"),
+    ):
+        meta[field] = _valid_theme_color(meta.get(field), field, default)
+    meta["glowIntensity"] = _valid_glow(meta.get("glowIntensity", 50))
+    derivative = meta.get("chatDerivative")
+    if isinstance(derivative, dict):
+        for field in ("borderColor", "bgColor"):
+            if field in derivative:
+                derivative[field] = _valid_theme_color(derivative[field], f"chatDerivative.{field}", "#57D6C4")
+    return meta
+
+
+STRUCTURAL_THEME_TOKENS = """  --frame-radius: 4px;
+  --frame-border-width: 2px;
+  --frame-border-style: solid;
+  --frame-clip-path: none;
+  --frame-shadow: 0 0 18px rgba(87, 214, 196, 0.18), inset 0 0 12px rgba(87, 214, 196, 0.06);
+  --frame-corner-display: block;
+  --panel-radius: 8px;
+  --panel-clip-path: none;
+  --panel-backdrop: blur(10px);
+  --panel-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --badge-radius: 4px;
+  --badge-clip-path: none;
+  --header-radius: 6px;
+  --header-clip-path: none;
+"""
 
 SHAPE_TO_ARCHETYPE = {
     "cozy_polaroid": "cozy",
@@ -57,9 +150,21 @@ def create_pack_service(name: str, icon: str = "🎨", badge: str = "PACK PERSON
                         description: str = "Colección modular de temas y estilos personalizados.",
                         author: str = "Usuario") -> dict:
     """Crea una nueva carpeta de pack en streamthemes/<pack_id>/ con sus subcarpetas styles/ y overlays/"""
-    name = str(name).strip()
-    if not name:
-        raise ValueError("Nombre del pack requerido")
+    # V3-01: los metadatos se pintan con innerHTML en el panel → se sanean ANTES
+    # de crear nada en disco (si no son válidos, la API responde 400 y no hay
+    # pack a medias).
+    name = sanitize_metadata_text(name, "Nombre del pack", max_length=METADATA_NAME_MAX, required=True)
+    icon = sanitize_metadata_text(icon, "Icono del pack", max_length=METADATA_ICON_MAX, default="🎨") or "🎨"
+    badge = sanitize_metadata_text(
+        badge, "Badge del pack", max_length=METADATA_BADGE_MAX, default="PACK PERSONALIZADO"
+    ) or "PACK PERSONALIZADO"
+    description = sanitize_metadata_text(
+        description, "Descripción del pack", max_length=METADATA_DESC_MAX,
+        default="Colección modular de temas y estilos personalizados."
+    ) or "Colección modular de temas y estilos personalizados."
+    author = sanitize_metadata_text(
+        author, "Autor del pack", max_length=METADATA_AUTHOR_MAX, default="Usuario"
+    ) or "Usuario"
 
     pack_id = re.sub(r'[^a-zA-Z0-9_-]', '_', name.lower().replace(' ', '_'))
     if not pack_id.startswith("pack_"):
@@ -83,8 +188,7 @@ def create_pack_service(name: str, icon: str = "🎨", badge: str = "PACK PERSON
         "author": author
     }
 
-    with open(pack_dir / "pack.json", "w", encoding="utf-8") as f:
-        json.dump(meta, f, indent=2, ensure_ascii=False)
+    atomic_write_json(pack_dir / "pack.json", meta)
 
     logger.info(f"📁 Nuevo pack de temas creado: {pack_id}")
     return meta
@@ -93,14 +197,67 @@ def create_pack_service(name: str, icon: str = "🎨", badge: str = "PACK PERSON
 def create_theme_service(body: dict) -> dict:
     """Crea un nuevo tema dentro de un pack específico"""
     pack_id = str(body.get("packId", "Maker_Theme_Pack")).strip()
-    theme_name = str(body.get("name", "")).strip()
-    if not theme_name:
-        raise ValueError("Nombre del tema requerido")
+    # V3-01: nombre/badge/descripción se renderizan con innerHTML en el panel.
+    theme_name = sanitize_metadata_text(
+        body.get("name", ""), "Nombre del tema", max_length=METADATA_NAME_MAX, required=True
+    )
 
     theme_id = re.sub(r'[^a-zA-Z0-9_-]', '_', theme_name.lower().replace(' ', '_'))
+    if not theme_id:
+        raise ValueError("Nombre de tema inválido")
+    if not is_valid_pack_id(pack_id):
+        raise ValueError(f"Pack ID inválido: {pack_id}")
     pack_dir = STREAMTHEMES_DIR / pack_id
-    if not pack_dir.exists():
-        raise FileNotFoundError("Pack de temas no encontrado")
+
+    accent_cyan = _valid_theme_color(body.get("accentCyan"), "accentCyan", "#57D6C4")
+    accent_orange = _valid_theme_color(body.get("accentOrange"), "accentOrange", "#FF783F")
+    bg_dark = _valid_theme_color(body.get("bgDark"), "bgDark", "#191D21")
+    text_light = _valid_theme_color(body.get("textLight"), "textLight", "#F2EEE5")
+    panel_bg = _valid_theme_color(body.get("panelBg"), "panelBg", "#2E363B")
+    text_dim = _valid_theme_color(body.get("textDim"), "textDim", "#8B969C")
+    glow = _valid_glow(body.get("glowIntensity", 50))
+
+    theme_badge = sanitize_metadata_text(
+        body.get("badge") or theme_name.upper(), "Badge del tema",
+        max_length=METADATA_BADGE_MAX, default=theme_name.upper()
+    ) or theme_name.upper()
+    theme_desc = sanitize_metadata_text(
+        body.get("desc") or f"Tema {theme_name} en pack {pack_id}.", "Descripción del tema",
+        max_length=METADATA_DESC_MAX, default=f"Tema {theme_name} en pack {pack_id}."
+    ) or f"Tema {theme_name} en pack {pack_id}."
+
+    theme_meta = {
+        "id": theme_id,
+        "packId": pack_id,
+        "name": theme_name,
+        "badge": theme_badge,
+        "accentCyan": accent_cyan,
+        "accentOrange": accent_orange,
+        "bgDark": bg_dark,
+        "textLight": text_light,
+        "panelBg": panel_bg,
+        "textDim": text_dim,
+        "fontPrimary": body.get("fontPrimary", "var(--font-primary)"),
+        "fontTech": body.get("fontTech", "var(--font-tech)"),
+        "glowIntensity": glow,
+        "borderStyle": body.get("borderStyle", "rounded"),
+        "desc": theme_desc,
+        "chatAnchored": True,
+        "chatDerivative": None
+    }
+    _normalize_theme_colors(theme_meta)
+
+    css_content = _with_structural_tokens(_validate_theme_css(body.get("css", f"""body[data-theme="{theme_id}"] {{
+  --color-bg-dark: {bg_dark};
+  --color-text-light: {text_light};
+  --color-accent-cyan: {accent_cyan};
+  --color-accent-orange: {accent_orange};
+  --color-panel-bg: {panel_bg};
+  --color-text-dim: {text_dim};
+  --color-border-cyan: {accent_cyan}66;
+  --color-border-cyan-bright: {accent_cyan};
+  --theme-glow: 0 0 16px {accent_cyan}88;
+{STRUCTURAL_THEME_TOKENS}}}""")), theme_id)
 
     styles_dir = get_pack_styles_dir(pack_dir)
     styles_dir.mkdir(parents=True, exist_ok=True)
@@ -115,47 +272,11 @@ def create_theme_service(body: dict) -> dict:
         except Exception:
             pass
 
-    accent_cyan = body.get("accentCyan", "#57D6C4")
-    accent_orange = body.get("accentOrange", "#FF783F")
-    bg_dark = body.get("bgDark", "#191D21")
-    text_light = body.get("textLight", "#F2EEE5")
-
-    theme_meta = {
-        "id": theme_id,
-        "packId": pack_id,
-        "name": theme_name,
-        "badge": body.get("badge", theme_name.upper()),
-        "accentCyan": accent_cyan,
-        "accentOrange": accent_orange,
-        "bgDark": bg_dark,
-        "textLight": text_light,
-        "panelBg": body.get("panelBg", "#2E363B"),
-        "textDim": body.get("textDim", "#8B969C"),
-        "fontPrimary": body.get("fontPrimary", "var(--font-primary)"),
-        "fontTech": body.get("fontTech", "var(--font-tech)"),
-        "glowIntensity": body.get("glowIntensity", 50),
-        "borderStyle": body.get("borderStyle", "rounded"),
-        "desc": body.get("desc", f"Tema {theme_name} en pack {pack_id}."),
-        "chatAnchored": True,
-        "chatDerivative": None
-    }
-
-    css_content = body.get("css", f"""body[data-theme="{theme_id}"] {{
-  --color-bg-dark: {bg_dark};
-  --color-text-light: {text_light};
-  --color-accent-cyan: {accent_cyan};
-  --color-accent-orange: {accent_orange};
-  --color-panel-bg: {theme_meta['panelBg']};
-  --color-text-dim: {theme_meta['textDim']};
-  --color-border-cyan: {accent_cyan}66;
-  --color-border-cyan-bright: {accent_cyan};
-  --theme-glow: 0 0 16px {accent_cyan}88;
-}}""")
-
-    with open(theme_dir / "theme.json", "w", encoding="utf-8") as f:
-        json.dump(theme_meta, f, indent=2, ensure_ascii=False)
-    with open(theme_dir / "style.css", "w", encoding="utf-8") as f:
-        f.write(css_content)
+    atomic_write_json(theme_dir / "theme.json", theme_meta)
+    atomic_write_text(theme_dir / "style.css", css_content)
+    # Copia de fábrica: permite que "Restaurar" funcione también en temas nuevos.
+    atomic_write_json(theme_dir / "theme.default.json", theme_meta)
+    atomic_write_text(theme_dir / "style.default.css", css_content)
 
     sync_common_themes_css()
     logger.info(f"🎨 Nuevo tema creado: {pack_id}/{theme_id}")
@@ -168,6 +289,10 @@ async def save_theme_service(body: dict) -> dict:
     theme_id = str(body.get("id", "")).strip()
     if not pack_id or not theme_id:
         raise ValueError("packId e id de tema requeridos")
+    if not is_valid_pack_id(pack_id):
+        raise ValueError(f"Pack ID inválido: {pack_id}")
+    if not is_valid_theme_id(pack_id, theme_id):
+        raise ValueError(f"Theme ID inválido: {theme_id}")
 
     theme_dir = get_theme_dir(pack_id, theme_id)
     if not theme_dir.exists():
@@ -182,18 +307,52 @@ async def save_theme_service(body: dict) -> dict:
         except Exception:
             pass
 
+    updates = {}
     for k in ("name", "badge", "accentCyan", "accentOrange", "bgDark", "textLight",
               "panelBg", "textDim", "fontPrimary", "fontTech", "glowIntensity",
               "borderStyle", "desc", "chatAnchored", "chatDerivative"):
         if k in body:
-            current_meta[k] = body[k]
+            updates[k] = body[k]
 
-    with open(t_json_file, "w", encoding="utf-8") as f:
-        json.dump(current_meta, f, indent=2, ensure_ascii=False)
+    # V3-01: saneado de textos antes de persistir (mismo vector que en create).
+    # Si llega vacío se conserva el valor anterior en vez de romper el guardado.
+    for field, label, max_len in (
+        ("name", "Nombre del tema", METADATA_NAME_MAX),
+        ("badge", "Badge del tema", METADATA_BADGE_MAX),
+        ("desc", "Descripción del tema", METADATA_DESC_MAX),
+    ):
+        if field in updates:
+            fallback = str(current_meta.get(field) or "")
+            updates[field] = sanitize_metadata_text(
+                updates[field], label, max_length=max_len, default=fallback
+            ) or fallback
+
+    for field, fallback in (
+        ("accentCyan", "#57D6C4"),
+        ("accentOrange", "#FF783F"),
+        ("bgDark", "#191D21"),
+        ("textLight", "#F2EEE5"),
+        ("panelBg", "#2E363B"),
+        ("textDim", "#8B969C"),
+    ):
+        if field in updates:
+            updates[field] = _valid_theme_color(updates[field], field, current_meta.get(field, fallback))
+    if "glowIntensity" in updates:
+        updates["glowIntensity"] = _valid_glow(updates["glowIntensity"])
+    if isinstance(updates.get("chatDerivative"), dict):
+        for field in ("borderColor", "bgColor"):
+            if field in updates["chatDerivative"]:
+                updates["chatDerivative"][field] = _valid_theme_color(
+                    updates["chatDerivative"][field], f"chatDerivative.{field}", "#57D6C4"
+                )
+
+    current_meta.update(updates)
+    _normalize_theme_colors(current_meta)
+
+    atomic_write_json(t_json_file, current_meta)
 
     if "css" in body:
-        with open(theme_dir / "style.css", "w", encoding="utf-8") as f:
-            f.write(str(body["css"]))
+        atomic_write_text(theme_dir / "style.css", _with_structural_tokens(_validate_theme_css(body["css"]), theme_id))
 
     sync_common_themes_css()
 
@@ -207,12 +366,18 @@ async def save_theme_service(body: dict) -> dict:
 
 async def apply_theme_service(pack_id: str, theme_id: str) -> dict:
     """Aplica y activa un tema en vivo para todas las escenas de OBS y el panel"""
-    if not theme_id:
-        raise ValueError("Tema requerido")
+    # Validar que el pack_id sea válido
+    if not is_valid_pack_id(pack_id):
+        raise ValueError(f"Pack ID inválido: {pack_id}")
+
+    # Validar que el theme_id sea válido
+    if not is_valid_theme_id(pack_id, theme_id):
+        raise ValueError(f"Theme ID inválido: {theme_id}")
 
     state = load_theme_state()
     state["activePack"] = pack_id
     state["activeTheme"] = theme_id
+    state["globalThemeActive"] = True
     save_theme_state(state)
 
     theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"
@@ -235,6 +400,10 @@ async def apply_shape_service(shape_id: str) -> dict:
     """Aplica una forma física globalmente a todas las escenas de OBS y panel"""
     if not shape_id:
         shape_id = "original"
+    clean = str(shape_id).strip()
+    if not is_valid_shape_id(clean):
+        raise ValueError(f"Forma física desconocida: {shape_id}")
+    shape_id = clean
     state = load_theme_state()
     state["activeShape"] = shape_id
     save_theme_state(state)
@@ -244,7 +413,9 @@ async def apply_shape_service(shape_id: str) -> dict:
 
 
 def toggle_chat_anchor_service(pack_id: str, theme_id: str, anchored: bool) -> dict:
-    """Alterna el anclaje del chat al tema activo o activa un derivado personalizado"""
+    """Alterna el anclaje del chat al tema activo o activa un derivado personalizado."""
+    if not is_valid_pack_id(pack_id) or not is_valid_theme_id(pack_id, theme_id):
+        raise FileNotFoundError("Tema no encontrado")
     theme_file = get_theme_dir(pack_id, theme_id) / "theme.json"
     if not theme_file.exists():
         raise FileNotFoundError("Tema no encontrado")
@@ -266,8 +437,7 @@ def toggle_chat_anchor_service(pack_id: str, theme_id: str, anchored: bool) -> d
             "customCSS": "/* CSS exclusivo para el chat de este tema */\n.chat-message-bubble {\n  border-left: 3px solid var(--color-accent-orange);\n}"
         }
 
-    with open(theme_file, "w", encoding="utf-8") as f:
-        json.dump(t_data, f, indent=2, ensure_ascii=False)
+    atomic_write_json(theme_file, t_data)
 
     if anchored:
         sync_chat_with_theme(t_data)
@@ -281,8 +451,13 @@ def toggle_chat_anchor_service(pack_id: str, theme_id: str, anchored: bool) -> d
 
 async def restore_theme_service(pack_id: str, theme_id: str) -> dict:
     """Restaura un tema modificado a su configuración y CSS original de fábrica"""
-    if not pack_id or not theme_id:
-        raise ValueError("packId y themeId requeridos")
+    # Validar que el pack_id sea válido
+    if not is_valid_pack_id(pack_id):
+        raise ValueError(f"Pack ID inválido: {pack_id}")
+
+    # Validar que el theme_id sea válido
+    if not is_valid_theme_id(pack_id, theme_id):
+        raise ValueError(f"Theme ID inválido: {theme_id}")
 
     theme_dir = get_theme_dir(pack_id, theme_id)
     if not theme_dir.exists():
@@ -315,11 +490,8 @@ async def restore_theme_service(pack_id: str, theme_id: str) -> dict:
     if not default_meta:
         raise ValueError("No se encontraron valores originales para este tema")
 
-    with open(theme_dir / "theme.json", "w", encoding="utf-8") as f:
-        json.dump(default_meta, f, indent=2, ensure_ascii=False)
-
-    with open(theme_dir / "style.css", "w", encoding="utf-8") as f:
-        f.write(default_css or "")
+    atomic_write_json(theme_dir / "theme.json", default_meta)
+    atomic_write_text(theme_dir / "style.css", default_css or "")
 
     sync_common_themes_css()
 
@@ -338,15 +510,59 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
     if theme_id is None and shape_id is None:
         raise ValueError("themeId o shapeId requerido")
 
+    # Normalizar/validar la clave de escena contra el catálogo único: se acepta
+    # cualquier forma conocida (camelCase, kebab, snake o ruta de carpeta) y se
+    # persiste SIEMPRE la clave canónica. Antes entraba cualquier cadena, lo que
+    # dejó claves huérfanas en themes_state.json ("starting", "maker", "print")
+    # que rompían la sincronización escena<->tema.
+    raw_key = str(overlay_key).strip()
+    comp = components_catalog.parse_key(raw_key)
+    if comp:
+        kind, comp_id = comp
+        if not components_catalog.is_valid_component(kind, comp_id):
+            raise ValueError(f"Componente desconocido: {raw_key}")
+        overlay_key = f"{kind}:{comp_id}"
+    else:
+        canonical_key = is_valid_scene_key(raw_key) and normalize_scene_key(raw_key)
+        if canonical_key:
+            overlay_key = canonical_key
+        else:
+            # Nunca aceptar claves que no son escena ni componente: antes una
+            # asignación sólo de forma devolvía 200 y se descartaba al guardar.
+            raise ValueError(f"Escena desconocida: {overlay_key}")
+
+    if theme_id:
+        if not is_valid_theme_id(None, theme_id):
+            raise ValueError(f"Tema desconocido: {theme_id}")
+    if shape_id is not None:
+        clean = str(shape_id).strip()
+        if clean and clean.lower() not in ("auto", "original", "__clear__", "none", "null"):
+            if comp:
+                if not components_catalog.is_valid_component_shape(comp[0], comp[1], clean):
+                    raise ValueError(f"Forma no soportada por {overlay_key}: {shape_id}")
+            elif not is_valid_shape_id(clean):
+                raise ValueError(f"Forma física desconocida: {shape_id}")
+
     state = load_theme_state()
     overlay_themes = state.setdefault("overlayThemes", dict(DEFAULT_OVERLAY_THEMES))
     overlay_shapes = state.setdefault("overlayShapes", {})
 
+    overlay_explicit = state.setdefault(
+        "overlayThemeExplicit", derive_explicit_theme_map(state)
+    )
+
     if theme_id:
         overlay_themes[overlay_key] = theme_id
+        overlay_explicit[overlay_key] = True
     if shape_id is not None:
         clean_shape = str(shape_id).strip()
-        if clean_shape.lower() in ("auto", "__clear__", "", "null", "none"):
+        if comp:
+            # En componentes "original" no es una forma física: equivale a quitar la forma.
+            reset_shape = clean_shape.lower() in ("auto", "original", "__clear__", "", "null", "none")
+        else:
+            # En escenas "original" es una forma válida del pack; sólo "auto"/clear la quitan.
+            reset_shape = clean_shape.lower() in ("auto", "__clear__", "", "null", "none")
+        if reset_shape:
             overlay_shapes.pop(overlay_key, None)
         else:
             overlay_shapes[overlay_key] = clean_shape
@@ -363,13 +579,27 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
     else:
         archetype = infer_archetype("", assigned_theme or "")
 
+    is_explicit = bool(overlay_explicit.get(overlay_key))
     await system.broadcast({
         "type": "overlay_theme_change",
         "overlayKey": overlay_key,
         "theme": assigned_theme,
         "shape": assigned_shape,
-        "archetype": archetype
+        "archetype": archetype,
+        "explicit": is_explicit
     })
+
+    # Evento dirigido para widgets/alertas: se aplican a sí mismos y no a todos.
+    if comp:
+        await system.broadcast({
+            "type": "widget_theme_change" if comp[0] == "widget" else "alert_theme_change",
+            "id": comp[1],
+            "key": overlay_key,
+            "theme": assigned_theme,
+            "shape": assigned_shape,
+            "archetype": archetype,
+            "explicit": is_explicit,
+        })
 
     logger.info(f"🎨 Asignación para '{overlay_key}': tema='{assigned_theme}', forma='{assigned_shape}', arquetipo='{archetype}'")
     return {
@@ -377,7 +607,8 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
         "themeId": overlay_themes.get(overlay_key),
         "shapeId": overlay_shapes.get(overlay_key),
         "overlayThemes": overlay_themes,
-        "overlayShapes": overlay_shapes
+        "overlayShapes": overlay_shapes,
+        "overlayThemeExplicit": overlay_explicit
     }
 
 
@@ -409,3 +640,63 @@ async def set_overlay_backdrop_service(overlay_key: str, backdrop: dict = None) 
         "backdrops": backdrops
     }
 
+
+
+async def reset_overlay_assignment_service(overlay_key: str) -> dict:
+    """Restaura la asignación de fábrica de una escena, widget o alerta.
+
+    - Escena: vuelve al tema de `DEFAULT_OVERLAY_THEMES` y sin forma propia.
+    - Widget/alerta: se elimina la clave y el componente recupera su aspecto propio.
+    """
+    raw_key = str(overlay_key or "").strip()
+    if not raw_key:
+        raise ValueError("overlayKey requerido")
+
+    comp = components_catalog.parse_key(raw_key)
+    if comp:
+        if not components_catalog.is_valid_component(comp[0], comp[1]):
+            raise ValueError(f"Componente desconocido: {raw_key}")
+        key = f"{comp[0]}:{comp[1]}"
+    else:
+        key = (is_valid_scene_key(raw_key) and normalize_scene_key(raw_key)) or ""
+        if not key:
+            raise ValueError(f"Escena desconocida: {raw_key}")
+
+    state = load_theme_state()
+    overlay_themes = state.setdefault("overlayThemes", dict(DEFAULT_OVERLAY_THEMES))
+    overlay_shapes = state.setdefault("overlayShapes", {})
+
+    if comp:
+        overlay_themes.pop(key, None)
+        theme_value = None
+    else:
+        factory_theme = DEFAULT_OVERLAY_THEMES.get(key)
+        if factory_theme:
+            overlay_themes[key] = factory_theme
+        else:
+            overlay_themes.pop(key, None)
+        theme_value = factory_theme
+    overlay_shapes.pop(key, None)
+    overlay_explicit = state.setdefault("overlayThemeExplicit", {})
+    overlay_explicit.pop(key, None)
+
+    save_theme_state(state)
+
+    await system.broadcast({
+        "type": "overlay_theme_change",
+        "overlayKey": key,
+        "theme": theme_value,
+        "shape": None,
+        "archetype": "original" if not comp else infer_archetype("", theme_value or ""),
+        "explicit": False,
+    })
+    if comp:
+        await system.broadcast({
+            "type": "widget_theme_change" if comp[0] == "widget" else "alert_theme_change",
+            "id": comp[1], "key": key, "theme": None, "shape": None,
+            "explicit": False, "reset": True,
+        })
+
+    logger.info(f"↺ Asignación restaurada: {key}")
+    return {"overlayKey": key, "themeId": theme_value, "shapeId": None,
+            "overlayThemes": overlay_themes, "overlayShapes": overlay_shapes}

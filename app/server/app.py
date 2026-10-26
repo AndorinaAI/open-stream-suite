@@ -30,6 +30,7 @@ from server.routes.deck_routes import register_deck_routes
 from server.routes.updates_routes import register_updates_routes
 from server.routes.static_routes import register_static_routes
 
+
 async def start_background_tasks(app):
     system.eventsub_task = asyncio.create_task(run_eventsub(system))
     system.irc_task = asyncio.create_task(run_twitch_irc(system))
@@ -44,21 +45,13 @@ async def cleanup_background_tasks(app):
     if system.bot_timers_task:
         system.bot_timers_task.cancel()
 
-from server.config import LOCAL_AUTH_TOKEN, DECK_TOKEN, PORT, logger
-
-def is_local_request(request) -> bool:
-    """True si la petición procede del propio equipo (loopback) y no de un túnel/proxy."""
-    if any(h in request.headers for h in ("CF-Connecting-IP", "X-Forwarded-For", "X-Real-IP", "Forwarded")):
-        return False
-    return request.remote in ("127.0.0.1", "::1", None)
+from server.config import HOST, LOCAL_AUTH_TOKEN, DECK_TOKEN, PORT, logger
+from server.security import is_local_request, is_loopback_host, is_origin_allowed
 
 PUBLIC_POST_PATHS = {
     "/api/webhooks/kofi",
     "/api/webhooks/buymeacoffee",
     "/api/webhooks/paypal",
-    "/api/donations/kofi",
-    "/api/donations/buymeacoffee",
-    "/api/donations/paypal",
     "/api/deck/trigger",
     "/api/deck/theme",
     "/api/deck/timer",
@@ -66,32 +59,28 @@ PUBLIC_POST_PATHS = {
     "/api/deck/explode",
 }
 
-def is_origin_allowed(origin: str) -> bool:
-    if not origin:
-        return True
-    origin_lower = origin.lower()
-    # Permitir localhost y 127.0.0.1 con cualquier puerto
-    if origin_lower.startswith("http://localhost") or origin_lower.startswith("http://127.0.0.1"):
-        return True
-    if origin_lower.startswith("https://localhost") or origin_lower.startswith("https://127.0.0.1"):
-        return True
-    # Comprobar tunnelUrl configurado (dominio propio o túnel público)
-    import os
-    from server.config import DONATIONS_CONFIG_FILE
-    if os.path.exists(DONATIONS_CONFIG_FILE):
-        try:
-            import json
-            with open(DONATIONS_CONFIG_FILE, "r", encoding="utf-8") as f:
-                d = json.load(f)
-                t_url = d.get("tunnelUrl", "").strip().rstrip("/").lower()
-                if t_url and (origin_lower == t_url or origin_lower.startswith(t_url)):
-                    return True
-        except Exception:
-            pass
-    return False
+# Webhooks que pueden venir de un proveedor externo. `/api/webhooks/tip` no
+# está aquí: es una simulación local y exige X-Local-Token.
+PUBLIC_WEBHOOK_PATHS = {
+    "/api/webhooks/kofi",
+    "/api/webhooks/buymeacoffee",
+    "/api/webhooks/paypal",
+}
+
 
 @web.middleware
 async def cors_and_auth_middleware(request, handler):
+    # La biblioteca de medios no puede servir documentos activos. Aunque un SVG
+    # antiguo siga en disco, /media/...svg responde 404; la subida ya lo rechaza.
+    media_path = request.path.lower()
+    if (request.path == "/media" or media_path.startswith("/media/")):
+        # La biblioteca solo se sirve a OBS/panel locales. El túnel se reserva
+        # para webhooks externos, no para listar ni descargar medios.
+        if not is_local_request(request):
+            return web.Response(status=404, text="Not Found")
+        if media_path.rstrip("/").endswith(".svg"):
+            return web.Response(status=404, text="Not Found")
+
     origin = request.headers.get("Origin", "")
     allowed = is_origin_allowed(origin)
 
@@ -119,6 +108,14 @@ async def cors_and_auth_middleware(request, handler):
                     "status": "error",
                     "error": "Acceso denegado: falta X-Deck-Token (o ?deck_token=) válido"
                 }, status=401)
+        elif not is_loopback_host(HOST) or not is_local_request(request):
+            # Sin token, los decks solo pueden operar desde loopback. Si el
+            # servidor escucha en 0.0.0.0 o la petición viene por proxy/túnel,
+            # se exige DECK_TOKEN explícitamente.
+            return web.json_response({
+                "status": "error",
+                "error": "DECK_TOKEN no configurado: los decks requieren token cuando el servidor no es solo local"
+            }, status=403)
 
     # Protección de endpoints POST contra llamadas externas maliciosas (CSRF / Cross-Site Scripting)
     if request.method == "POST":
@@ -128,9 +125,9 @@ async def cors_and_auth_middleware(request, handler):
         else:
             # Los webhooks públicos de donaciones y las peticiones de Decks (Elgato, Ajazz, OpenDeck)
             is_public_webhook = (
-                request.path in PUBLIC_POST_PATHS or 
-                request.path.startswith("/api/webhooks/") or
-                request.path.startswith("/api/deck/")
+                request.path in PUBLIC_POST_PATHS
+                or request.path in PUBLIC_WEBHOOK_PATHS
+                or request.path.startswith("/api/deck/")
             )
             if not is_public_webhook:
                 client_token = request.headers.get("X-Local-Token") or request.query.get("token")
@@ -173,6 +170,11 @@ async def handle_local_token_script(request):
     return web.Response(text=content, content_type="application/javascript")
 
 def create_app():
+    if not DECK_TOKEN and not is_loopback_host(HOST):
+        logger.warning(
+            "🔒 DECK_TOKEN no configurado con SERVER_HOST=%s: /api/deck/* rechazará "
+            "peticiones hasta definir DECK_TOKEN en .env", HOST
+        )
     app = web.Application(middlewares=[cors_and_auth_middleware])
 
     # Endpoints de token local seguro
@@ -251,5 +253,14 @@ def create_app():
     # Tareas en segundo plano (EventSub e IRC)
     app.on_startup.append(start_background_tasks)
     app.on_cleanup.append(cleanup_background_tasks)
+
+    # Sincronización escena↔tema (T4): `config.js` debe llevar el estado de temas
+    # por escena para que la escena lo aplique en el primer pintado. Se regenera
+    # aquí si falta (primer arranque o config.js antiguo).
+    try:
+        from server.services.overlay_service import sync_config_js_state
+        sync_config_js_state()
+    except Exception as e:  # nunca debe impedir el arranque del servidor
+        logger.warning(f"No se pudo sincronizar config.js al arrancar: {e}")
 
     return app

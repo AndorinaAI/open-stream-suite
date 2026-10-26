@@ -2,6 +2,7 @@
 import time
 from aiohttp import web
 from server.state import system
+from server.services.widgets_service import load_widgets_config, save_widgets_config
 
 async def handle_chat_action(action, params):
     if action == "explode":
@@ -77,3 +78,4 @@ async def handle_chat_action(action, params):
         await system.broadcast(payload)
         return web.json_response({"status": "ok", "action": "clear", "widget": "chat", "payload": payload})
 
+    return web.json_response({"status": "error", "error": f"Acción de chat desconocida: {action}"}, status=400)

@@ -1,4 +1,5 @@
 """Acciones de metas, progreso, incremento y celebraciones."""
+import time
 from aiohttp import web
 from server.state import system
 from server.services.widgets_service import load_widgets_config, save_widgets_config
@@ -9,7 +10,7 @@ async def handle_goal_action(action, params):
     goals_list = goal_cfg.get("goals", [])
 
     # 1. Protección de metas oficiales de Twitch contra manipulación manual
-    if action in ["increment", "add", "set", "reset"]:
+    if action in ["increment", "add", "quick_adjust", "set", "reset"]:
         target_id = params.get("goal_id") or goal_cfg.get("activeGoalId")
         target_goal = None
         for g in goals_list:
@@ -27,7 +28,7 @@ async def handle_goal_action(action, params):
 
         # Para metas personalizadas libres
         if target_goal:
-            if action in ["increment", "add"]:
+            if action in ["increment", "add", "quick_adjust"]:
                 delta = int(params.get("amount", 1))
                 cur = int(target_goal.get("current", 0))
                 target_goal["current"] = max(0, cur + delta)
