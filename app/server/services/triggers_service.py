@@ -5,6 +5,29 @@ Servicio para búsqueda, validación y disparo de triggers multimedia y roles.
 import json
 from pathlib import Path
 from server.config import TRIGGERS_FILE, ROLES_FILE, logger
+from server.services.fs_utils import atomic_write_json, ensure_private_file, lock_for
+
+
+def load_triggers_data() -> dict:
+    """Lectura robusta y bloqueada de triggers.json."""
+    with lock_for(TRIGGERS_FILE):
+        with open(TRIGGERS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    if not isinstance(data, dict) or not isinstance(data.get("triggers", []), list):
+        raise ValueError("triggers.json no tiene el esquema esperado")
+    return data
+
+
+def save_triggers_data(data: dict) -> bool:
+    """Escritura atómica y bloqueada; devuelve False sin romper la API."""
+    try:
+        with lock_for(TRIGGERS_FILE):
+            atomic_write_json(TRIGGERS_FILE, data)
+            ensure_private_file(TRIGGERS_FILE)
+        return True
+    except Exception as e:
+        logger.error(f"No se pudo guardar triggers.json: {e}")
+        return False
 
 
 def find_trigger_by_reward(reward_title: str):
@@ -132,24 +155,25 @@ def auto_register_artist(username: str, broadcast_cb=None):
     if not ROLES_FILE.exists():
         return
     try:
-        with open(ROLES_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        u_clean = username.lower().strip().lstrip("@")
-        updated = False
-        for r in data.get("roles", []):
-            if r.get("id") in ("role_artista", "role_artistas"):
-                members = [m.lower().strip().lstrip("@") for m in r.get("members", [])]
-                if u_clean not in members:
-                    r.setdefault("members", []).append(u_clean)
-                    updated = True
-                    logger.info(f"🎨 Artista oficial de Twitch detectado en chat y registrado: @{u_clean}")
-        if updated:
-            with open(ROLES_FILE, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-            if broadcast_cb:
-                try:
-                    broadcast_cb({"type": "roles_updated", "roles": data.get("roles", [])})
-                except Exception:
-                    pass
+        with lock_for(ROLES_FILE):
+            with open(ROLES_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            u_clean = username.lower().strip().lstrip("@")
+            updated = False
+            for r in data.get("roles", []):
+                if r.get("id") in ("role_artista", "role_artistas"):
+                    members = [m.lower().strip().lstrip("@") for m in r.get("members", [])]
+                    if u_clean not in members:
+                        r.setdefault("members", []).append(u_clean)
+                        updated = True
+                        logger.info(f"🎨 Artista oficial de Twitch detectado en chat y registrado: @{u_clean}")
+            if updated:
+                atomic_write_json(ROLES_FILE, data)
+                ensure_private_file(ROLES_FILE)
+        if updated and broadcast_cb:
+            try:
+                broadcast_cb({"type": "roles_updated", "roles": data.get("roles", [])})
+            except Exception:
+                pass
     except Exception as e:
         logger.warning(f"Aviso auto-registrando artista: {e}")

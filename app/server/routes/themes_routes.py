@@ -9,6 +9,7 @@ from server.services.theme_defaults import (
     DEFAULT_THEMES_DATA,
     DEFAULT_OVERLAY_THEMES
 )
+from server.services.validation_utils import is_valid_pack_id, is_valid_theme_id
 from server.services.theme_manager import (
     STREAMTHEMES_DIR,
     THEMES_DIR,
@@ -130,6 +131,9 @@ async def handle_chat_anchor_toggle(request):
     theme_id = str(body.get("themeId", "")).strip()
     anchored = bool(body.get("anchored", True))
 
+    if not is_valid_pack_id(pack_id) or not is_valid_theme_id(pack_id, theme_id):
+        return web.json_response({"error": "Pack o tema no válido"}, status=400)
+
     try:
         res = toggle_chat_anchor_service(pack_id, theme_id, anchored)
         return web.json_response({"status": "ok", **res})
@@ -185,7 +189,9 @@ async def handle_apply_shape(request):
     try:
         body = await request.json()
     except Exception:
-        body = {}
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    if not isinstance(body, dict):
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     shape_id = str(body.get("shape", "original")).strip()
     try:
@@ -223,9 +229,29 @@ def register_themes_routes(app):
     app.router.add_post("/api/themes/create", handle_create_theme)
     app.router.add_post("/api/themes/save", handle_save_theme)
     app.router.add_post("/api/themes/restore", handle_restore_theme)
+    app.router.add_post("/api/themes/reset-assignment", handle_reset_assignment)
     app.router.add_post("/api/themes/overlay-assignment", handle_set_overlay_theme)
     app.router.add_post("/api/themes/backdrop", handle_set_overlay_backdrop)
     app.router.add_post("/api/themes/apply", handle_apply_theme)
     app.router.add_post("/api/themes/apply-shape", handle_apply_shape)
     app.router.add_post("/api/themes/chat-anchor", handle_chat_anchor_toggle)
 
+
+
+async def handle_reset_assignment(request):
+    """Restaura la asignación de fábrica de una escena, widget o alerta."""
+    try:
+        body = await request.json()
+    except Exception:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    key = str(body.get("overlayKey", "")).strip()
+    if not key:
+        return web.json_response({"error": "overlayKey requerido"}, status=400)
+    try:
+        from server.services.theme_service import reset_overlay_assignment_service
+        res = await reset_overlay_assignment_service(key)
+        return web.json_response({"status": "ok", **res})
+    except ValueError as e:
+        return web.json_response({"error": str(e)}, status=400)
+    except Exception as e:
+        return web.json_response({"error": str(e)}, status=500)

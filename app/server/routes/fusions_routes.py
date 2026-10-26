@@ -5,6 +5,7 @@ Controladores REST para crear, listar, modificar, eliminar y aplicar estilos en 
 
 from aiohttp import web
 from server.services.fusions_service import (
+    reset_fusion_batch,
     load_fusions,
     get_fusion_by_id,
     create_or_update_fusion,
@@ -57,6 +58,19 @@ async def handle_delete_fusion(request):
     return web.json_response({"status": "ok", "deletedId": fusion_id})
 
 
+def _value_error_status(error: Exception, fusion_id: str) -> int:
+    """404 si lo que no existe es la fusión; 400 si el dato enviado es inválido.
+
+    Antes TODO ValueError devolvía 404, así que un `themeId`/`shapeId` inexistente
+    se reportaba como "no encontrado" (y con el fallo silencioso del servicio ni
+    siquiera eso: ver `fusions_service._batch_result`).
+    """
+    message = str(error)
+    if "no encontrada" in message and fusion_id in message:
+        return 404
+    return 400
+
+
 async def handle_apply_fusion_theme(request):
     """Aplica un tema visual a todos los overlays pertenecientes a una fusión"""
     fusion_id = request.match_info.get("id", "").strip()
@@ -73,7 +87,7 @@ async def handle_apply_fusion_theme(request):
         res = await apply_fusion_theme_batch(fusion_id, theme_id)
         return web.json_response(res)
     except ValueError as e:
-        return web.json_response({"error": str(e)}, status=404)
+        return web.json_response({"error": str(e)}, status=_value_error_status(e, fusion_id))
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
@@ -92,7 +106,7 @@ async def handle_apply_fusion_shape(request):
         res = await apply_fusion_shape_batch(fusion_id, shape_id)
         return web.json_response(res)
     except ValueError as e:
-        return web.json_response({"error": str(e)}, status=404)
+        return web.json_response({"error": str(e)}, status=_value_error_status(e, fusion_id))
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
@@ -105,3 +119,16 @@ def register_fusions_routes(app):
     app.router.add_delete("/api/fusions/{id}", handle_delete_fusion)
     app.router.add_post("/api/fusions/{id}/apply-theme", handle_apply_fusion_theme)
     app.router.add_post("/api/fusions/{id}/apply-shape", handle_apply_fusion_shape)
+    app.router.add_post("/api/fusions/{id}/reset", handle_reset_fusion)
+
+
+async def handle_reset_fusion(request):
+    """Restaura tema y forma de fábrica en todos los miembros de la fusión."""
+    fusion_id = request.match_info.get("id", "").strip()
+    try:
+        res = await reset_fusion_batch(fusion_id)
+        return web.json_response(res)
+    except ValueError as e:
+        return web.json_response({"error": str(e)}, status=_value_error_status(e, fusion_id))
+    except Exception as e:
+        return web.json_response({"error": str(e)}, status=500)

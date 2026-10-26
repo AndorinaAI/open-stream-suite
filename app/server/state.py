@@ -1,9 +1,11 @@
 import asyncio
 import json
+import os
 import time
 from pathlib import Path
 from server.config import TOKEN_FILE, logger
 from server.services import triggers_service, twitch_service
+from server.services.fs_utils import atomic_write_json
 
 class TwitchAlertSystem:
     def __init__(self):
@@ -31,8 +33,11 @@ class TwitchAlertSystem:
 
     def save_token(self, token_data):
         self.token_data = token_data
-        with open(TOKEN_FILE, "w", encoding="utf-8") as f:
-            json.dump(token_data, f, indent=2)
+        atomic_write_json(TOKEN_FILE, token_data)
+        try:
+            os.chmod(TOKEN_FILE, 0o600)
+        except OSError:
+            pass
         logger.info("✓ Token guardado correctamente en token.json")
 
     def clear_token(self):

@@ -7,6 +7,8 @@ import re
 from pathlib import Path
 from server.config import BASE_DIR, logger
 from server.state import system
+from server.services import scenes_catalog
+from server.services.fs_utils import atomic_write_json, atomic_write_text, lock_for
 from server.services.theme_defaults import (
     DEFAULT_PACK_TALLER,
     DEFAULT_THEMES_DATA,
@@ -20,41 +22,259 @@ CHAT_CONFIG_FILE = BASE_DIR / "widgets" / "chat" / "config.json"
 THEMES_STATE_FILE = BASE_DIR / "themes_state.json"
 RESERVED_PACK_DIRS = {"overlays", "common", "config.js", "__pycache__"}
 
+def _normalize_scene_state_map(raw_map):
+    """Migra un mapa {claveEscena: valor} al espacio de claves canónicas.
+
+    - Traduce alias heredados (camelCase/kebab/snake/ruta de carpeta) a la clave
+      canónica de la escena.
+    - Descarta claves que no son escenas (estado huérfano real detectado en
+      `themes_state.json`: "starting", "maker", "print"), que además rompían la
+      sincronización escena<->tema porque el overlay nunca las consulta.
+    """
+    if not isinstance(raw_map, dict):
+        return {}, [], {}
+    out, dropped, renamed = {}, [], {}
+    for raw_key, value in raw_map.items():
+        canonical = scenes_catalog.normalize_scene_key(raw_key)
+        if not canonical:
+            dropped.append(raw_key)
+            continue
+        if canonical != raw_key:
+            renamed[raw_key] = canonical
+        out[canonical] = value
+    return out, dropped, renamed
+
+
+def _split_component_keys(mapping):
+    """Separa asignaciones de componentes (`widget:` / `alert:`) de las de escena."""
+    comp, scenes = {}, {}
+    for k, v in (mapping or {}).items():
+        if str(k).startswith(("widget:", "alert:")):
+            comp[k] = v
+        else:
+            scenes[k] = v
+    return comp, scenes
+
+
+def migrate_theme_state(state):
+    """Sanea el estado de escenas/temas (idempotente). Devuelve un informe.
+
+    Las claves de componente (`widget:<id>` / `alert:<id>`) NO son escenas y se
+    preservan intactas; sólo se normalizan las claves de escena.
+    """
+    report = {"dropped_themes": [], "dropped_shapes": [], "renamed": {}}
+    comp_ov, scene_ov = _split_component_keys(state.get("overlayThemes", {}))
+    ov, dropped, renamed = _normalize_scene_state_map(scene_ov)
+    ov.update(comp_ov)
+    report["dropped_themes"] = dropped
+    report["renamed"].update(renamed)
+    state["overlayThemes"] = ov
+
+    comp_sh, scene_sh = _split_component_keys(state.get("overlayShapes", {}))
+    # "original" sólo tiene sentido en escenas; en componentes equivale a sin forma.
+    comp_sh = {k: v for k, v in comp_sh.items()
+               if str(v).strip().lower() not in ("original", "auto", "__clear__", "none", "null", "")}
+    shapes, dropped_sh, renamed_sh = _normalize_scene_state_map(scene_sh)
+    shapes.update(comp_sh)
+    report["dropped_shapes"] = dropped_sh
+    report["renamed"].update(renamed_sh)
+    state["overlayShapes"] = shapes
+
+    comp_bd, scene_bd = _split_component_keys(state.get("backdrops", {}))
+    backdrops, dropped_bd, _ = _normalize_scene_state_map(scene_bd)
+    backdrops.update(comp_bd)
+    report["dropped_backdrops"] = dropped_bd
+    state["backdrops"] = backdrops
+    return report
+
+
+def normalize_theme_assignments(state: dict) -> dict:
+    """Descarta temas/formas que ya no existen y normaliza activeTheme/activeShape.
+
+    Es la red de seguridad de M12: `migrate_theme_state` sólo normaliza claves de
+    escena; si se borra un pack/tema/forma, el estado no debe publicar IDs muertos.
+    """
+    report = {"dropped_themes": [], "dropped_shapes": [], "restored": []}
+    try:
+        from server.services.validation_utils import is_valid_shape_id, is_valid_theme_id
+        from server.services import components_catalog
+    except Exception as e:  # nunca romper la carga por un import circular
+        logger.warning(f"No se pudo validar el estado de temas: {e}")
+        return report
+
+    overlay = state.get("overlayThemes", {})
+    if not isinstance(overlay, dict):
+        overlay = {}
+    explicit = state.get("overlayThemeExplicit")
+    if not isinstance(explicit, dict):
+        explicit = {}
+
+    for key, theme_id in list(overlay.items()):
+        key = str(key)
+        if key.startswith(("widget:", "alert:")):
+            kind, _, cid = key.partition(":")
+            if not components_catalog.is_valid_component(kind, cid) or not is_valid_theme_id(theme_id=theme_id):
+                overlay.pop(key, None)
+                explicit.pop(key, None)
+                report["dropped_themes"].append(key)
+            continue
+        if not is_valid_theme_id(theme_id=theme_id):
+            default = DEFAULT_OVERLAY_THEMES.get(key)
+            if default and is_valid_theme_id(theme_id=default):
+                overlay[key] = default
+                explicit.pop(key, None)
+                report["restored"].append(key)
+            else:
+                overlay.pop(key, None)
+                explicit.pop(key, None)
+                report["dropped_themes"].append(key)
+
+    shapes = state.get("overlayShapes", {})
+    if not isinstance(shapes, dict):
+        shapes = {}
+    for key, shape_id in list(shapes.items()):
+        key = str(key)
+        clean = str(shape_id or "").strip()
+        if key.startswith(("widget:", "alert:")):
+            kind, _, cid = key.partition(":")
+            if clean.lower() in ("original", "auto", "__clear__", "none", "null", ""):
+                shapes.pop(key, None)
+                report["dropped_shapes"].append(key)
+                continue
+            if not components_catalog.is_valid_component_shape(kind, cid, clean):
+                shapes.pop(key, None)
+                report["dropped_shapes"].append(key)
+            continue
+        if clean.lower() in ("auto", "__clear__", "none", "null", ""):
+            shapes.pop(key, None)
+            report["dropped_shapes"].append(key)
+        elif clean.lower() != "original" and not is_valid_shape_id(clean):
+            shapes.pop(key, None)
+            report["dropped_shapes"].append(key)
+
+    state["overlayThemes"] = overlay
+    state["overlayShapes"] = shapes
+    state["overlayThemeExplicit"] = explicit
+
+    active_shape = str(state.get("activeShape") or "").strip()
+    if not active_shape or active_shape.lower() in ("none", "null", "__clear__"):
+        state["activeShape"] = "original"
+    elif active_shape.lower() != "original" and not is_valid_shape_id(active_shape):
+        state["activeShape"] = "original"
+        report["dropped_shapes"].append("activeShape")
+
+    active_theme = str(state.get("activeTheme") or "").strip()
+    if not is_valid_theme_id(theme_id=active_theme):
+        state["activeTheme"] = "maker"
+        report["restored"].append("activeTheme")
+    return report
+
+
+def derive_explicit_theme_map(state: dict) -> dict:
+    """Claves con tema asignado explícitamente (no simple valor de fábrica).
+
+    Para escenas, un valor igual a `DEFAULT_OVERLAY_THEMES` se considera no explícito:
+    así el tema global (`activeTheme`) puede aplicar al arrancar sin perder los
+    estilos personalizados. Widgets/alertas sólo existen en el mapa si se asignaron.
+    """
+    overlay = state.get("overlayThemes", {}) if isinstance(state, dict) else {}
+    explicit = state.get("overlayThemeExplicit") if isinstance(state, dict) else None
+    if not isinstance(explicit, dict):
+        explicit = {}
+        for key, value in overlay.items():
+            if str(key).startswith(("widget:", "alert:")):
+                explicit[key] = True
+            else:
+                explicit[key] = value != DEFAULT_OVERLAY_THEMES.get(key)
+    # Normalizar alias de escena (maker/desk, startingSoon...) a clave canónica.
+    normalized = {}
+    for key, value in explicit.items():
+        key = str(key)
+        if key not in overlay:
+            continue
+        if key.startswith(("widget:", "alert:")):
+            normalized[key] = normalized.get(key, False) or bool(value)
+            continue
+        canonical = scenes_catalog.normalize_scene_key(key)
+        if canonical:
+            normalized[canonical] = normalized.get(canonical, False) or bool(value)
+    return {k: v for k, v in normalized.items() if v}
+
+
 def load_theme_state():
     state = {
         "activePack": "Maker_Theme_Pack",
         "activeTheme": "maker",
+        "globalThemeActive": False,
+        "activeShape": "original",
         "overlayThemes": dict(DEFAULT_OVERLAY_THEMES)
     }
-    if THEMES_STATE_FILE.exists():
-        try:
+    if not THEMES_STATE_FILE.exists():
+        return state
+    try:
+        # Lectura + normalización + escritura bajo el mismo lock que save_theme_state:
+        # una normalización no puede pisar una asignación concurrente.
+        with lock_for(THEMES_STATE_FILE):
             with open(THEMES_STATE_FILE, "r", encoding="utf-8") as f:
                 loaded = json.load(f)
-                state.update(loaded)
-                current_ov = state.get("overlayThemes", {})
-                for k, v in DEFAULT_OVERLAY_THEMES.items():
-                    if k not in current_ov:
-                        current_ov[k] = v
-                state["overlayThemes"] = current_ov
-                return state
-        except Exception as e:
-            logger.warning(f"Error leyendo themes_state.json: {e}")
+            state.update(loaded)
+            current_ov = state.get("overlayThemes", {})
+            for k, v in DEFAULT_OVERLAY_THEMES.items():
+                if k not in current_ov:
+                    current_ov[k] = v
+            state["overlayThemes"] = current_ov
+            before_active_shape = state.get("activeShape")
+            report = migrate_theme_state(state)
+            report_norm = normalize_theme_assignments(state)
+            state["overlayThemeExplicit"] = derive_explicit_theme_map(state)
+            changed = (
+                report["dropped_themes"] or report["dropped_shapes"] or report["renamed"]
+                or report_norm["dropped_themes"] or report_norm["dropped_shapes"] or report_norm["restored"]
+                or state.get("activeShape") != before_active_shape
+                or "overlayThemeExplicit" not in loaded
+            )
+            if changed:
+                logger.info(
+                    "🧹 Estado normalizado: escenas=%s formas=%s restauradas=%s renombradas=%s",
+                    report["dropped_themes"] + report_norm["dropped_themes"],
+                    report["dropped_shapes"] + report_norm["dropped_shapes"],
+                    report_norm["restored"], report["renamed"],
+                )
+                try:
+                    atomic_write_json(THEMES_STATE_FILE, state)
+                except Exception as write_err:
+                    logger.warning(f"No se pudo persistir estado normalizado: {write_err}")
+            return state
+    except Exception as e:
+        logger.warning(f"Error leyendo themes_state.json: {e}")
     return state
 
 def save_theme_state(state):
     try:
-        existing = {}
-        if THEMES_STATE_FILE.exists():
-            try:
-                with open(THEMES_STATE_FILE, "r", encoding="utf-8") as f:
-                    existing = json.load(f)
-            except Exception:
-                existing = {}
-        merged = dict(existing)
-        for k, v in state.items():
-            merged[k] = v
-        with open(THEMES_STATE_FILE, "w", encoding="utf-8") as f:
-            json.dump(merged, f, indent=2, ensure_ascii=False)
+        # El lock cubre lectura + merge + escritura: dos POST concurrentes no
+        # pueden perder la asignación del otro entre el load y el save.
+        with lock_for(THEMES_STATE_FILE):
+            existing = {}
+            if THEMES_STATE_FILE.exists():
+                try:
+                    with open(THEMES_STATE_FILE, "r", encoding="utf-8") as f:
+                        existing = json.load(f)
+                except Exception:
+                    existing = {}
+            merged = dict(existing)
+            for k, v in state.items():
+                merged[k] = v
+            # Persistir SIEMPRE el estado saneado.
+            migrate_theme_state(merged)
+            normalize_theme_assignments(merged)
+            atomic_write_json(THEMES_STATE_FILE, merged)
+        # Sincronización escena↔tema: config.js se lee de forma síncrona al
+        # arrancar; debe reflejar el estado recién guardado.
+        try:
+            from server.services.overlay_service import write_config_js
+            write_config_js()
+        except Exception as e:
+            logger.warning(f"No se pudo sincronizar config.js con themes_state.json: {e}")
     except Exception as e:
         logger.warning(f"Error guardando themes_state.json: {e}")
 
@@ -72,8 +292,13 @@ def get_pack_overlays_dir(pack_dir: Path) -> Path:
 
 def find_pack_dir(pack_id: str) -> Path:
     """Busca la carpeta física del pack admitiendo mayúsculas/minúsculas y alias históricos"""
+    if not _safe_component(pack_id):
+        return _INVALID_THEME_DIR.parent / "__invalid_pack__"
     exact = STREAMTHEMES_DIR / pack_id
-    if exact.exists():
+    try:
+        if exact.exists() and exact.resolve().is_relative_to(STREAMTHEMES_DIR.resolve()):
+            return exact
+    except (OSError, ValueError):
         return exact
     clean_id = pack_id.lower().replace("pack_", "").replace("_suite", "").replace("_pack", "")
     for d in STREAMTHEMES_DIR.iterdir():
@@ -84,18 +309,55 @@ def find_pack_dir(pack_id: str) -> Path:
             return d
     return exact
 
+_INVALID_THEME_DIR = STREAMTHEMES_DIR / "__invalid_theme__"
+
+
+def _safe_component(value) -> bool:
+    """Un único segmento de ruta, sin traversal, separadores ni rutas absolutas."""
+    text = str(value or "").strip()
+    if not text or text in (".", ".."):
+        return False
+    if "/" in text or "\\" in text:
+        return False
+    try:
+        return not Path(text).is_absolute()
+    except (OSError, ValueError):
+        return False
+
+
 def get_theme_dir(pack_id: str, theme_id: str) -> Path:
-    """Resuelve la ruta física del tema dentro de un pack, buscando en styles/ o en la raíz del pack"""
-    pack_dir = find_pack_dir(pack_id)
-    if (pack_dir / "styles" / theme_id).exists():
-        return pack_dir / "styles" / theme_id
-    if (pack_dir / "themes" / theme_id).exists():
-        return pack_dir / "themes" / theme_id
-    if (pack_dir / theme_id).exists() and theme_id not in RESERVED_PACK_DIRS:
-        return pack_dir / theme_id
-    if (pack_dir / "styles").is_dir() or not pack_dir.exists():
-        return pack_dir / "styles" / theme_id
-    return pack_dir / theme_id
+    """Resuelve un tema sin permitir abandonar ``streamthemes/``.
+
+    Es la función que usan el editor, el deck y el ancla de chat. La validación
+    se hace aquí, no solo en la ruta, para que cualquier llamada interna quede
+    protegida. Si el pack o el tema no son un único componente seguro, devuelve
+    una ruta inexistente (los handlers responden 404 sin tocar disco).
+    """
+    if not _safe_component(pack_id) or not _safe_component(theme_id):
+        return _INVALID_THEME_DIR
+
+    pack_dir = find_pack_dir(str(pack_id).strip())
+    if not _safe_component(pack_dir.name):
+        return _INVALID_THEME_DIR
+
+    candidates = [
+        pack_dir / "styles" / str(theme_id).strip(),
+        pack_dir / "themes" / str(theme_id).strip(),
+        pack_dir / str(theme_id).strip(),
+        pack_dir / "styles" / str(theme_id).strip(),
+        pack_dir / str(theme_id).strip(),
+    ]
+    root = STREAMTHEMES_DIR.resolve()
+    for candidate in candidates:
+        try:
+            resolved = candidate.resolve()
+            if not resolved.is_relative_to(root):
+                return _INVALID_THEME_DIR
+        except (OSError, ValueError):
+            return _INVALID_THEME_DIR
+        if candidate.exists():
+            return candidate
+    return candidates[-1]
 
 def init_themes_directory():
     """Inicializa la estructura modular de streamthemes/Open_stream_pack/ si no existe"""
@@ -168,7 +430,7 @@ def sync_common_themes_css():
                     css_blocks.append("")
 
         COMMON_THEMES_CSS.parent.mkdir(parents=True, exist_ok=True)
-        COMMON_THEMES_CSS.write_text("\n".join(css_blocks), encoding="utf-8")
+        atomic_write_text(COMMON_THEMES_CSS, "\n".join(css_blocks))
         logger.info("✓ common/themes.css sincronizado correctamente")
     except Exception as e:
         logger.warning(f"Error sincronizando common/themes.css: {e}")
@@ -245,7 +507,7 @@ def get_all_packs_and_themes():
             for ov_entry in sorted(overlays_dir.rglob("index.html")):
                 rel_path = ov_entry.relative_to(overlays_dir)
                 overlays.append({
-                    "path": f"/streamthemes/{pack_dir.name}/overlays/{rel_path}",
+                    "path": f"/streamthemes/{pack_dir.name}/overlays/{rel_path.as_posix()}",
                     "relPath": str(rel_path),
                     "name": rel_path.parent.name if rel_path.parent != Path(".") else rel_path.stem
                 })
@@ -263,9 +525,11 @@ def get_all_packs_and_themes():
         "activePack": active_pack,
         "activeTheme": active_theme,
         "activeShape": state.get("activeShape", "original"),
+        "globalThemeActive": bool(state.get("globalThemeActive")),
         "overlayThemes": state.get("overlayThemes", dict(DEFAULT_OVERLAY_THEMES)),
         "defaultOverlayThemes": dict(DEFAULT_OVERLAY_THEMES),
         "overlayShapes": state.get("overlayShapes", {}),
+        "overlayThemeExplicit": derive_explicit_theme_map(state),
         "backdrops": state.get("backdrops", {})
     }
 
@@ -288,8 +552,7 @@ def sync_chat_with_theme(theme_data):
         styles["bgColor"] = theme_data.get("bgDark", "#191D21")
         styles["glowIntensity"] = theme_data.get("glowIntensity", 50)
 
-        with open(CHAT_CONFIG_FILE, "w", encoding="utf-8") as f:
-            json.dump(cfg, f, indent=2, ensure_ascii=False)
+        atomic_write_json(CHAT_CONFIG_FILE, cfg)
         logger.info(f"🔗 Estilo de chat anclado sincronizado con tema: {theme_data.get('id')}")
     except Exception as e:
         logger.warning(f"Error en sync_chat_with_theme: {e}")

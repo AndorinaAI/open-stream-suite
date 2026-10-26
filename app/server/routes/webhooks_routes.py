@@ -3,10 +3,12 @@ server/routes/webhooks_routes.py — Rutas HTTP de Webhooks de donaciones extern
 Recibe webhooks de Ko-fi, PayPal, Buy Me a Coffee y Streamlabs Socket API.
 """
 
+import hmac
 import json
 import time
 from aiohttp import web
 from server.config import logger, DONATIONS_CONFIG_FILE
+from server.security import is_local_request
 from server.services.donations_service import (
     recent_tips,
     broadcast_tip_and_alert,
@@ -15,6 +17,27 @@ from server.services.donations_service import (
     is_streamlabs_connected,
     update_streamlabs_connection
 )
+
+
+def _webhook_secret() -> dict:
+    cfg = load_donations_config()
+    return {
+        "kofi": str(cfg.get("kofiVerificationToken", "")),
+        "bmc": str(cfg.get("bmcWebhookSecret", "")),
+        "paypal": str(cfg.get("paypalWebhookSecret", "")),
+    }
+
+
+def _secret_matches(supplied: str, expected: str) -> bool:
+    return bool(expected) and hmac.compare_digest(str(supplied or ""), expected)
+
+
+def _public_webhook_authorized(request, provider: str, supplied: str = "") -> bool:
+    """Firma/secreto por proveedor; sin secreto solo se acepta loopback para pruebas."""
+    expected = _webhook_secret().get(provider, "")
+    if expected:
+        return _secret_matches(supplied, expected)
+    return is_local_request(request)
 
 
 async def handle_kofi_webhook(request):
@@ -34,6 +57,8 @@ async def handle_kofi_webhook(request):
 
         if not data_json:
             return web.Response(text="No data received", status=400)
+        if not _public_webhook_authorized(request, "kofi", str(data_json.get("verification_token", ""))):
+            return web.Response(text="Forbidden", status=403)
 
         user = data_json.get("from_name") or "Anónimo"
         amount = str(data_json.get("amount") or "0")
@@ -72,6 +97,8 @@ async def handle_bmc_webhook(request):
     """
     try:
         data = await request.json()
+        if not _public_webhook_authorized(request, "bmc", request.query.get("secret", "")):
+            return web.json_response({"status": "error", "error": "Forbidden"}, status=403)
         response_obj = data.get("response", data)
 
         user = response_obj.get("supporter_name") or response_obj.get("payer_name") or "Anónimo"
@@ -109,6 +136,8 @@ async def handle_paypal_webhook(request):
     Compatible con IPN form-urlencoded y Webhooks REST de PayPal en JSON.
     """
     try:
+        if not _public_webhook_authorized(request, "paypal", request.query.get("secret", "")):
+            return web.Response(text="Forbidden", status=403)
         if request.content_type == "application/json":
             data = await request.json()
             resource = data.get("resource", {})
@@ -183,38 +212,65 @@ async def handle_tip_simulate(request):
 
 
 async def handle_get_recent_tips(request):
-    """Devuelve las últimas donaciones registradas en la sesión"""
+    """Devuelve las últimas donaciones registradas en la sesión (solo local)."""
+    if not is_local_request(request):
+        return web.json_response({"error": "Solo disponible en local"}, status=403)
     return web.json_response({"status": "ok", "tips": recent_tips})
 
 
+def _public_donations_config(cfg: dict) -> dict:
+    """Copia para respuesta HTTP: secretos enmascarados, metadatos de presencia."""
+    public = dict(cfg)
+    raw_token = str(public.get("streamlabsToken", ""))
+    public["streamlabsConnected"] = is_streamlabs_connected()
+    public["streamlabsToken"] = "••••••••" if raw_token else ""
+    public["streamlabsTokenSet"] = bool(raw_token)
+    for key in ("kofiVerificationToken", "bmcWebhookSecret", "paypalWebhookSecret"):
+        public[f"{key}Set"] = bool(str(public.get(key, "")))
+        public[key] = "••••••••" if public.get(key) else ""
+    return public
+
+
 async def handle_get_donations_config(request):
-    """Devuelve la configuración guardada de donaciones y túnel"""
-    cfg = load_donations_config()
-    cfg["streamlabsConnected"] = is_streamlabs_connected()
-    return web.json_response({"status": "ok", "config": cfg})
+    """Devuelve la configuración guardada de donaciones y túnel (solo local)."""
+    if not is_local_request(request):
+        return web.json_response({"error": "Solo disponible en local"}, status=403)
+    return web.json_response({"status": "ok", "config": _public_donations_config(load_donations_config())})
 
 
 async def handle_save_donations_config(request):
     """Guarda la configuración de donaciones (token Streamlabs, túnel) y gestiona el socket"""
     try:
         data = await request.json()
+    except Exception:
+        return web.json_response({"status": "error", "error": "Payload JSON inválido"}, status=400)
+    if not isinstance(data, dict):
+        return web.json_response({"status": "error", "error": "Payload JSON inválido"}, status=400)
+
+    try:
         cfg = load_donations_config()
 
         if "tunnelUrl" in data:
             cfg["tunnelUrl"] = str(data["tunnelUrl"]).strip()
 
+        for key in ("kofiVerificationToken", "bmcWebhookSecret", "paypalWebhookSecret"):
+            if key in data:
+                cfg[key] = str(data[key]).strip()
+
         token = data.get("streamlabsToken")
         if token is not None:
             token = token.strip()
-            cfg["streamlabsToken"] = token
-            update_streamlabs_connection(token)
+            if token not in ("", "••••••••"):
+                cfg["streamlabsToken"] = token
+                update_streamlabs_connection(token)
 
-        save_donations_config(cfg)
-        cfg["streamlabsConnected"] = is_streamlabs_connected()
-        return web.json_response({"status": "ok", "config": cfg})
+        if not save_donations_config(cfg):
+            logger.error("No se pudo persistir la configuración de donaciones")
+            return web.json_response({"status": "error", "error": "No se pudo guardar la configuración de donaciones"}, status=500)
+        return web.json_response({"status": "ok", "config": _public_donations_config(cfg)})
     except Exception as e:
         logger.error(f"Error guardando configuración de donaciones: {e}")
-        return web.json_response({"status": "error", "error": str(e)}, status=500)
+        return web.json_response({"status": "error", "error": "No se pudo guardar la configuración de donaciones"}, status=500)
 
 
 def register_webhooks_routes(app):

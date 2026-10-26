@@ -25,7 +25,7 @@ async def handle_ticker_action(action, params):
         })
         return web.json_response({"status": "ok", "action": action, "widget": "ticker", "payload": payload})
 
-    elif action == "flash_news":
+    elif action in ("flash_news", "flash"):
         news = params.get("message", "🚨 ÚLTIMA HORA EN DIRECTO")
         duration = int(params.get("duration", 12))
         payload = {
@@ -39,6 +39,7 @@ async def handle_ticker_action(action, params):
     elif action == "simulate":
         event_type = params.get("event", "follow")
         user = params.get("user", "ViewerPro")
+        amount = params.get("amount", 1)
         payload = {
             "type": event_type,
             "platform": params.get("platform", "kofi"),
@@ -82,3 +83,4 @@ async def handle_ticker_action(action, params):
         })
         return web.json_response({"status": "ok", "action": action, "widget": "ticker", "payload": payload})
 
+    return web.json_response({"status": "error", "error": f"Acción de ticker desconocida: {action}"}, status=400)

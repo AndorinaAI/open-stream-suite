@@ -5,11 +5,13 @@ Gestiona el historial de propinas, parsers para Ko-fi, PayPal, Buy Me a Coffee y
 
 import asyncio
 import json
+import os
 import time
 import aiohttp
 from server.config import BASE_DIR, logger
 from server.state import system
 from server.services.alerts_service import format_alert_event
+from server.services.fs_utils import atomic_write_json, lock_for
 
 DONATIONS_CONFIG_FILE = BASE_DIR / "donations_config.json"
 
@@ -53,17 +55,26 @@ def load_donations_config():
     return {
         "tunnelUrl": "",
         "streamlabsToken": "",
-        "streamlabsConnected": False
+        "streamlabsConnected": False,
+        "kofiVerificationToken": "",
+        "bmcWebhookSecret": "",
+        "paypalWebhookSecret": "",
     }
 
 
-def save_donations_config(cfg):
-    """Guarda configuración persistente de donaciones"""
+def save_donations_config(cfg) -> bool:
+    """Guarda configuración persistente de donaciones; False si no pudo."""
     try:
-        with open(DONATIONS_CONFIG_FILE, "w", encoding="utf-8") as f:
-            json.dump(cfg, f, indent=2, ensure_ascii=False)
+        with lock_for(DONATIONS_CONFIG_FILE):
+            atomic_write_json(DONATIONS_CONFIG_FILE, cfg)
+            try:
+                os.chmod(DONATIONS_CONFIG_FILE, 0o600)
+            except OSError:
+                pass
+        return True
     except Exception as e:
         logger.error(f"Error guardando {DONATIONS_CONFIG_FILE}: {e}")
+        return False
 
 
 def is_streamlabs_connected() -> bool:

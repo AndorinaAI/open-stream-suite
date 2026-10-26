@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from server.config import BASE_DIR, logger
 from server.state import system
+from server.services.fs_utils import atomic_write_json, lock_for
 
 ALERTS_CONFIG_FILE = BASE_DIR / "alerts_config.json"
 THEMES_CONFIG_FILE = BASE_DIR / "alerts_themes_config.json"
@@ -26,8 +27,8 @@ def load_alerts_config():
 def save_alerts_config(cfg):
     """Guarda la configuración persistente de alertas en vivo"""
     try:
-        with open(ALERTS_CONFIG_FILE, "w", encoding="utf-8") as f:
-            json.dump(cfg, f, indent=2, ensure_ascii=False)
+        with lock_for(ALERTS_CONFIG_FILE):
+            atomic_write_json(ALERTS_CONFIG_FILE, cfg)
         return True
     except Exception as e:
         logger.error(f"Error guardando alerts_config.json: {e}")
@@ -48,8 +49,8 @@ def load_alert_themes_config():
 def save_alert_themes_config(cfg):
     """Guarda temas predefinidos y personalizados para alertas"""
     try:
-        with open(THEMES_CONFIG_FILE, "w", encoding="utf-8") as f:
-            json.dump(cfg, f, indent=2, ensure_ascii=False)
+        with lock_for(THEMES_CONFIG_FILE):
+            atomic_write_json(THEMES_CONFIG_FILE, cfg)
         return True
     except Exception as e:
         logger.error(f"Error guardando {THEMES_CONFIG_FILE}: {e}")

@@ -18,6 +18,16 @@ from server.app import create_app
 from server.config import PORT, HOST, LOOPBACK_HOSTS, DECK_TOKEN, CLIENT_ID, CLIENT_SECRET
 
 if __name__ == "__main__":
+    # Ensure UTF-8 encoding for stdout to prevent UnicodeEncodeError on Windows
+    import sys
+    import os
+    if hasattr(sys.stdout, 'reconfigure') and sys.stdout.encoding != 'utf-8':
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    elif os.name == 'nt':  # Windows
+        # For Windows, ensure proper encoding
+        import io
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    
     if not CLIENT_ID or not CLIENT_SECRET:
         print("❌ ERROR: TWITCH_CLIENT_ID o TWITCH_CLIENT_SECRET no configurados en .env")
         sys.exit(1)

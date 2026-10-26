@@ -44,7 +44,7 @@ async def handle_save_alerts_config(request):
             return web.json_response({"status": "ok", "config": {"alerts": new_cfg}, "alerts": new_cfg})
         return web.json_response({"error": "No se pudo guardar alerts_config.json"}, status=500)
     except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+        return web.json_response({"error": "Payload de alerta no válido"}, status=400)
 
 
 async def handle_get_alert_themes(request):
@@ -56,6 +56,12 @@ async def handle_save_alert_themes(request):
     """Guarda nuevos temas o actualiza temas existentes"""
     try:
         data = await request.json()
+    except Exception:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    if not isinstance(data, dict):
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+
+    try:
         cfg = load_alert_themes_config()
         if "deleteThemeId" in data:
             del_id = data["deleteThemeId"]
@@ -72,28 +78,40 @@ async def handle_save_alert_themes(request):
             cfg["activeTheme"] = data["activeTheme"]
         save_alert_themes_config(cfg)
         return web.json_response({"status": "ok", "themesConfig": cfg})
-    except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+    except Exception:
+        return web.json_response({"error": "No se pudieron guardar los temas de alertas"}, status=500)
 
 
 async def handle_apply_alert_theme(request):
     """Aplica un tema predefinido o personalizado a una o todas las alertas"""
     try:
         data = await request.json()
+    except Exception:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    if not isinstance(data, dict):
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+
+    try:
         theme_id = data.get("themeId")
         target = data.get("target", "all")
         result = await apply_alert_theme_service(theme_id, target)
         return web.json_response({"status": "ok", **result})
     except ValueError as e:
         return web.json_response({"error": str(e)}, status=404 if "no encontrado" in str(e) else 400)
-    except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+    except Exception:
+        return web.json_response({"error": "No se pudo aplicar el tema de alertas"}, status=500)
 
 
 async def handle_test_alert_advanced(request):
     """Dispara una alerta de prueba avanzada para cualquier evento"""
     try:
         data = await request.json()
+    except Exception:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    if not isinstance(data, dict):
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+
+    try:
         alert_type = data.get("alertType", "follow")
         event_data = data.get("eventData", data)
 
@@ -101,8 +119,8 @@ async def handle_test_alert_advanced(request):
         if payload:
             return web.json_response({"status": "ok", "alert": payload})
         return web.json_response({"error": "No se pudo generar la alerta"}, status=400)
-    except Exception as e:
-        return web.json_response({"error": str(e)}, status=500)
+    except Exception:
+        return web.json_response({"error": "No se pudo generar la alerta"}, status=500)
 
 
 def register_alerts_routes(app):
