@@ -5,7 +5,6 @@ function renderOverlayFolders() {
   const foldersView = document.getElementById('overlays-folders-view');
   const detailsView = document.getElementById('overlays-folder-details-view');
   const breadcrumbs = document.getElementById('overlays-breadcrumbs');
-  const btnBack = document.getElementById('overlays-btn-back-folders');
   const foldersGrid = document.getElementById('overlays-folders-grid');
   const scenesGrid = document.getElementById('overlays-scenes-in-folder-grid');
   const subfilterContainer = document.getElementById('folder-subfilter-container');
@@ -86,7 +85,9 @@ function renderOverlayFolders() {
   } else {
     if (foldersView) foldersView.style.display = 'block';
     if (detailsView) detailsView.style.display = 'none';
-    if (btnBack) btnBack.style.display = 'none';
+    // V3-07: no hay que ocultar el botón "Volver a Carpetas" a mano: vive dentro
+    // de `overlays-folder-details-view` y se oculta con él. Antes se consultaba un
+    // id inexistente (`overlays-btn-back-folders`).
     if (globalToolbar) globalToolbar.style.display = 'flex';
 
     const crumbTitle = (window.i18n && window.i18n.tr('themes.folder_crumb_title')) || '📁 Carpetas de Actividades del Stream';

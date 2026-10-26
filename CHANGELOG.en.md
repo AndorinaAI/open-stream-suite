@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Cleanup — Dead panel reference (V3-07)
+
+- Removed the `overlays-btn-back-folders` lookup in `09-overlay-folders-render.js`: the id does not exist and the real "⬅️ Back to folders" button lives inside `overlays-folder-details-view`, so it is hidden along with the container without extra logic.
+- **Regression**: new `tests/test_panel_dead_refs.py` suite (2 tests: no **code** reference to the dead id — comments are ignored — and the button kept inside the details container).
+
 ### Fixed — No internal detail leaks and malformed JSON handling (V3-05, V3-08)
 
 - **V3-05 (no leaking internals)**: new `server/routes/errors.py` module with `internal_error_response()` / `internal_error_text()` / `invalid_json_response()`. The **12 500 responses** that returned `str(e)` (fusions ×4, rewards ×3, webhooks ×4, themes ×1) now log the detail internally and reply **"Error interno del servidor"**; for public webhooks the message no longer leaves the machine. The rewards query without Twitch also returns a generic message.
