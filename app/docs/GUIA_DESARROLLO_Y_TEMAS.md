@@ -1,3 +1,5 @@
+> **Puerto:** las URLs de ejemplo usan `8080`; sustitúyelo si cambias `SERVER_PORT`.
+
 # 🛠️ GUÍA DE DESARROLLO, TEMAS Y WIDGETS
 ### Open Stream Suite — Overlays, Alertas y Triggers Modulares con Código
 
@@ -257,11 +259,11 @@ Los temas del sistema se basan en **variables CSS personalizadas**. Cambiar el t
 
 ### 4.2. Arquitectura de Temas Modulares, Restauración y Asignación por Overlay
 
-A partir de la versión modular, los temas **ya no se editan a mano en un único archivo estático**, sino que se gestionan como carpetas independientes dentro de `themes/<pack_id>/<theme_id>/` con compilación automática en `common/themes.css`.
+A partir de la versión modular, los temas **ya no se editan a mano en un único archivo estático**, sino que se gestionan como carpetas independientes dentro de `app/streamthemes/<pack_id>/styles/<theme_id>/` con compilación automática en `common/themes.css`.
 
 ### Estructura en Disco de un Tema
 ```
-themes/<pack_id>/<theme_id>/
+app/streamthemes/<pack_id>/styles/<theme_id>/
 ├── theme.json           # Ajustes activos (nombre, badge, colores hex, tipografías, anclaje de chat)
 ├── style.css            # Código CSS activo aplicado a body[data-theme="..."]
 ├── theme.default.json   # 🛡️ Copia de seguridad original de fábrica (ajustes iniciales)
@@ -304,14 +306,14 @@ Cada overlay de OBS Studio tiene elementos gráficos y finalidades distintas:
 * Cada overlay carga su tema asignado mediante `common/overlay.js`:
   1. Detecta su escena automáticamente a partir de la ruta URL (`/game/`, `/chill/`, `/maker/desk/...`).
   2. Comprueba en primer lugar si la URL tiene un parámetro prioritario `?theme=...`. Si existe, lo aplica síncronamente al `<body>` para evitar cualquier parpadeo en OBS.
-  3. Si no hay parámetro en la URL, consulta su estilo en `overlayThemes` desde el servidor local o `themes_state.json`.
-  4. Si no tiene asignación, recurre al tema global activo o a su tema nativo de fábrica (`DEFAULT_OVERLAY_THEMES`).
+  3. Si no hay parámetro en la URL, consulta su estilo en `overlayThemes` **sólo si `overlayThemeExplicit`** lo marca como asignación explícita.
+  4. Si no tiene asignación explícita y `globalThemeActive` está activo, usa `activeTheme`; si no, su tema nativo de fábrica (`DEFAULT_OVERLAY_THEMES`).
   5. Escucha eventos WebSocket dedicados `overlay_theme_change` para actualizarse en caliente si el streamer cambia el selector de esa escena en el panel.
 
 ---
 
 ### Mapeo Canónico de Estilos de Fábrica (`DEFAULT_OVERLAY_THEMES`)
-Tanto en el backend (`server/routes/themes_routes.py`) como en el frontend (`alerts/js/themes.js`):
+Tanto en el backend (`server/services/theme_defaults.py`) como en el frontend (`alerts/js/themes/01-state.js`):
 
 ```javascript
 const DEFAULT_OVERLAY_THEMES = {
@@ -352,11 +354,13 @@ Permite que el panel detecte modificaciones con `(assignedThemeId !== defaultThe
 | Método | Ruta | Descripción | Payload / Parámetros |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/fusions` | Lista todas las fusiones configuradas con sus overlays asignados. | — |
-| `POST` | `/api/fusions` | Crea o actualiza una fusión de overlays híbrida. | `{"id", "name", "badge", "overlays", "defaultTheme", "defaultShape"}` |
+| `POST` | `/api/fusions` | Crea o actualiza una fusión de overlays híbrida. | `{"id", "name", "icon", "description", "scenes", "defaultTheme", "defaultShape"}` |
 | `GET` | `/api/fusions/{id}` | Obtiene los detalles de una fusión concreta. | — |
 | `DELETE` | `/api/fusions/{id}` | Elimina una fusión por su identificador. | — |
 | `POST` | `/api/fusions/{id}/apply-theme` | Aplica en lote un tema visual a todos los overlays de la fusión. | `{"themeId": "cyberpunk"}` |
 | `POST` | `/api/fusions/{id}/apply-shape` | Aplica en lote una forma física a todos los overlays de la fusión. | `{"shapeId": "gamer_mecha"}` |
+
+> Los datos de fusiones se persisten en `app/fusions.json` (lista con `scenes`, `defaultTheme` y `defaultShape` por fusión).
 
 ---
 
@@ -641,10 +645,10 @@ Por ello, todo panel flotante (`#open-stream-suite-screen-hud`, `#oss-countdown-
 
 | Pack / Escena | Función Programada | Controles / HUD Interactivo |
 |---|---|---|
-| **Gamer Pro (`speedrun_splits`)** | Cronómetro con milisegundos, tiempos de vuelta (Splits), registro dinámico de tramo, cálculo de deltas (`+` / `-`) y atajo `Espacio`. | `#oss-speedrun-control` flotante con `[▶/⏸ Iniciar]`, `[⚡ Split]`, `[⏮ Prev]`, `[🔄 Reset]`. |
-| **Lo-Fi / Synthwave (`starting_soon`, `countdown`)** | Temporizador regresivo sincronizado milisegundo a milisegundo con barra SVG/CSS (`.tech-progress-fill`). Pausa con clic en el reloj gigante. | `#oss-countdown-control` con presets (25m Pomodoro, 50m, 5m descanso, 10m) y micro-ajustes `+1m` / `-1m`. |
-| **Maker Desk (`fases_proyecto`)** | Selector de fase de taller interactivo. Al hacer clic sobre cualquier fase (`01 PLAN`, `02 MONTAJE`, etc.) se activa en el lienzo y actualiza la ficha técnica. | HUD con conmutación dinámica de fase, botón `➕ Añadir Fase` y `🗑️ Eliminar Fase`. |
-| **Open Stream (`podcast_talk`)** | Conmutador dinámico de rejilla multicámara (2, 3 o 4 invitados) con re-distribución CSS Grid automática y rótulos editables. | Botones de distribución en HUD: `[👥 2 Cams]`, `[👥 3 Cams]`, `[👥 4 Cams]`. |
+| **Gamer Pro (`gamer_speedrun`, dir `speedrun_split/`)** | Cronómetro con milisegundos, tiempos de vuelta (Splits), registro dinámico de tramo, cálculo de deltas (`+` / `-`) y atajo `Espacio`. | `#oss-speedrun-control` flotante con `[▶/⏸ Iniciar]`, `[⚡ Split]`, `[⏮ Prev]`, `[🔄 Reset]`. |
+| **Lo-Fi / Synthwave (`cozy_starting`, `oss_starting`, `gamer_starting`)** | Temporizador regresivo sincronizado milisegundo a milisegundo con barra SVG/CSS (`.tech-progress-fill`). Pausa con clic en el reloj gigante. | `#oss-countdown-control` con presets (25m Pomodoro, 50m, 5m descanso, 10m) y micro-ajustes `+1m` / `-1m`. |
+| **Maker Desk (`maker-desk`)** | Selector de fase de taller interactivo. Al hacer clic sobre cualquier fase (`01 PLAN`, `02 MONTAJE`, etc.) se activa en el lienzo y actualiza la ficha técnica. | HUD con conmutación dinámica de fase, botón `➕ Añadir Fase` y `🗑️ Eliminar Fase`. |
+| **Open Stream (`oss_podcast`, dir `podcast_talk/`)** | Conmutador dinámico de rejilla multicámara (2, 3 o 4 invitados) con re-distribución CSS Grid automática y rótulos editables. | Botones de distribución en HUD: `[👥 2 Cams]`, `[👥 3 Cams]`, `[👥 4 Cams]`. |
 | **Gameplay HUD & Victory Clutch** | Clic directo en el banner para alternar estados (`VICTORY`, `DEFEAT`, `ACE`, `MATCH POINT`) y en badges de estadísticas (`COMPETITIVE`, `RANKED`, FPS). | Eventos clic directos sobre los elementos en pantalla con persistencia de estado. |
 
 ---
@@ -731,7 +735,7 @@ Para garantizar el desacoplamiento total entre escenas y estilos:
    - `?theme=<id>`: Fuerza un estilo cromático específico (ej. `?theme=cyberpunk`).
    - `?shape=<id>`: Fuerza una de las 20 formas físicas (ej. `?shape=gamer_mecha`).
    - `?lock=1` o `?lockTheme=1`: Bloquea permanentemente la escena en OBS Studio a los parámetros de la URL, ignorando cualquier cambio global recibido por WebSocket.
-   - `?lang=en` o `?lang=es`: Carga los textos traducidos del idioma especificado.
+   - `?lang=en` o `?lang=es`: Reservado — solo lo honra el endpoint `/api/overlays/texts`; las escenas aún no lo aplican.
 
 3. **Fluidez en Cualquier Relación de Aspecto y Catálogo de 20 Formas Físicas**:
    - El motor soporta 20 formas físicas universales (`data-theme-shape`), agrupadas en 6 familias:

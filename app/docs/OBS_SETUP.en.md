@@ -22,7 +22,7 @@ This guide details the correct integration method, local server URLs, viewport d
    - **Common FPS Values**: `60`
 3. In your scene's **Sources** dock, click **`+`** → **Browser**.
 4. **Uncheck** the «Local file» checkbox if enabled.
-5. Paste the scene's corresponding **URL** (example: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html`).
+5. Paste the scene's corresponding **URL** (example: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html`).
    > [!TIP]
    > From the web control panel (`http://127.0.0.1:8080`), every scene card includes a **«📋 Copiar URL OBS»** button that automatically copies the ready-to-use URL with assigned theme and lock parameters (`?theme=...&lock=1`).
 6. Configure Browser Source properties:
@@ -47,10 +47,10 @@ This guide details the correct integration method, local server URLs, viewport d
 | Scene | OBS Source URL | Camera & Capture Coordinates / Size |
 | :--- | :--- | :--- |
 | **1. Game** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/game/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 360×203 (x: 48, y: 767)<br>• **Game Capture**: 1920×1080 (x:0, y:0) |
-| **2. Maker Desk** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Aux PC Capture**: 456×257 (x: 1432, y: 389)<br>• **Desk Overhead Cam**: 1376×774 (x: 32, y: 112) |
-| **3. Maker PC** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_pc/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Aux Desk Cam**: 456×257 (x: 1432, y: 389)<br>• **Main PC Display**: 1376×774 (x: 32, y: 112) |
-| **4. Print Machine** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print_machine/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Detail / Macro Cam**: 456×257 (x: 1432, y: 389)<br>• **Machine Action Cam**: 1376×774 (x: 32, y: 112) |
-| **5. Print Design** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print_design/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Process Aux Cam**: 456×257 (x: 1432, y: 389)<br>• **CAD App Capture**: 1376×774 (x: 32, y: 112) |
+| **2. Maker Desk** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Aux PC Capture**: 456×257 (x: 1432, y: 389)<br>• **Desk Overhead Cam**: 1376×774 (x: 32, y: 112) |
+| **3. Maker PC** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/pc/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Aux Desk Cam**: 456×257 (x: 1432, y: 389)<br>• **Main PC Display**: 1376×774 (x: 32, y: 112) |
+| **4. Print Machine** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print/machine/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Detail / Macro Cam**: 456×257 (x: 1432, y: 389)<br>• **Machine Action Cam**: 1376×774 (x: 32, y: 112) |
+| **5. Print Design** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print/design/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 456×257 (x: 1432, y: 112)<br>• **Process Aux Cam**: 456×257 (x: 1432, y: 389)<br>• **CAD App Capture**: 1376×774 (x: 32, y: 112) |
 | **6. Chill** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/chill/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Main Wide Cam**: 1280×720 (x: 32, y: 112)<br>• **Chat Box Dock**: 544×800 (x: 1344, y: 154) |
 | **7. Starting Soon** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/screens/starting-soon/index.html` | • **Full Canvas Overlay**: 1920×1080 (x:0, y:0) |
 | **8. Coffee Break** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/screens/coffee-break/index.html` | • **Full Canvas Overlay**: 1920×1080 (x:0, y:0) |

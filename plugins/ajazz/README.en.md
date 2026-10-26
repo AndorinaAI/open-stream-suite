@@ -36,8 +36,8 @@ The **AKP05 / AKP05E** model provides three layers of physical control:
 | **03** | `MAKER PC` | OBS Studio | Switches to programming / terminal screen. |
 | **04** | `CHILL CHAT`| OBS Studio | Switches to Just Chatting scene with chat frame. |
 | **05** | `PAUSE BRB` | OBS Studio | Switches to animated holding / break screen. |
-| **06** | `THEME MAKER` | HTTP GET | Sets Cyan Neon theme (`/api/deck/theme?id=maker_electronico`). |
-| **07** | `THEME CYBER` | HTTP GET | Sets Cyberpunk Neon theme (`/api/deck/theme?id=cyberpunk_neon`). |
+| **06** | `THEME MAKER` | HTTP GET | Sets Cyan Neon theme (`/api/deck/theme?id=maker`). |
+| **07** | `THEME CYBER` | HTTP GET | Sets Cyberpunk Neon theme (`/api/deck/theme?id=cyberpunk`). |
 | **08** | `MEME JUMPSCARE` | HTTP GET | Triggers jumpscare meme video in OBS (`/api/deck/trigger?id=susto`). |
 | **09** | `CONFETTI FX` | HTTP GET | Triggers celebratory confetti shower (`/api/deck/explode?emoji=🎉&count=40`). |
 | **10** | `SHOUTOUT` | HTTP GET | Launches spotlight promo card for streamer (`/api/deck/widget?widget=promo&action=trigger`). |
@@ -65,7 +65,7 @@ The **AKP05 / AKP05E** model provides three layers of physical control:
 ### Knob 2 — Neon Theme Selector
 * ↺ **Turn Left:** Switches to previous color theme (`/api/deck/knob?knob=theme&action=prev`).
 * ↻ **Turn Right:** Switches to next color theme (`/api/deck/knob?knob=theme&action=next`).
-* 🔘 **Press:** Resets to default channel theme (`/api/deck/theme?id=maker_electronico`).
+* 🔘 **Press:** Resets to default channel theme (`/api/deck/theme?id=maker`).
 
 ### Knob 3 — Stream Goals Counter
 * ↺ **Turn Left:** Decrements active goal count by 1 (`/api/deck/knob?knob=goal&ticks=-1`).

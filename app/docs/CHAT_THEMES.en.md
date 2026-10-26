@@ -1,4 +1,6 @@
 # 🎨 On-Screen Chat Theme Development Guide
+> **Abridged translation.** This English version is a summary. The canonical, complete guide is [Español](CHAT_THEMES.md).
+
 
 <p align="center">
   <a href="CHAT_THEMES.md">Español</a> | <b>English</b>
@@ -98,4 +100,4 @@ The `class` attribute of `<body>` automatically includes the active preset:
 8. **`theme-gamer_pro`**: 45° sci-fi chamfers, cyan/emerald glow, Orbitron font, and high-intensity accents.
 9. **`theme-matrix`**: Phosphor-green terminal with monospace typography and emerald vertical borders.
 10. **`theme-pill`**: Ultra-smooth 9999px pill geometry with clean Inter typography.
-11. **`theme-scifi`**: Angular 45° polygon with cut opposite corners.
+11. **`theme-synthwave`**, **`theme-ticket`**, **`theme-esports`**, **`theme-kawaii`** and **`theme-candy`**: additional presets from the full list (15 total, defined in `app/widgets/chat/config.json`).

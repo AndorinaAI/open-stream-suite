@@ -1,3 +1,7 @@
+> **Abridged translation.** This English version is a summary. The canonical, complete guide is [Español](GUIA_DESARROLLO_Y_TEMAS.md).
+
+> **Port:** example URLs use `8080`; replace it if you change `SERVER_PORT`.
+
 # 🛠️ DEVELOPMENT, THEMES & WIDGETS ARCHITECTURE GUIDE
 ### Open Stream Suite — Modular Overlays, Alerts & Triggers with Web Code
 
@@ -219,9 +223,9 @@ Every floating control (`#open-stream-suite-screen-hud`, `#oss-countdown-control
 
 | Pack / Scene | Programmed Function | Floating Controls / HUD |
 |---|---|---|
-| **Gamer Pro (`speedrun_splits`)** | Interactive stopwatch with milliseconds, split recording, delta tracking (`+` / `-`), keyboard `Space` toggle. | Draggable `#oss-speedrun-control` with `[▶/⏸ Start]`, `[⚡ Split]`, `[⏮ Prev]`, `[🔄 Reset]`. |
-| **Lo-Fi / Synthwave (`starting_soon`, `countdown`)** | Countdown timer synced with `.tech-progress-fill`. Direct clock click to pause/resume. | Draggable `#oss-countdown-control` with Pomodoro/Coffee presets (25m, 50m, 5m, 10m) and `±1m` steps. |
-| **Maker Desk (`fases_proyecto`)** | Interactive workshop stage manager. Clicking `01 PLAN`, `02 MONTAJE`, etc. highlights phase and updates active status. | HUD with dynamic phase switching, `➕ Add Phase` and `🗑️ Delete Phase`. |
+| **Gamer Pro (`gamer_speedrun`, dir `speedrun_split/`)** | Interactive stopwatch with milliseconds, split recording, delta tracking (`+` / `-`), keyboard `Space` toggle. | Draggable `#oss-speedrun-control` with `[▶/⏸ Start]`, `[⚡ Split]`, `[⏮ Prev]`, `[🔄 Reset]`. |
+| **Lo-Fi / Synthwave (`cozy_starting`, `oss_starting`, `gamer_starting`)** | Countdown timer synced with `.tech-progress-fill`. Direct clock click to pause/resume. | Draggable `#oss-countdown-control` with Pomodoro/Coffee presets (25m, 50m, 5m, 10m) and `±1m` steps. |
+| **Maker Desk (`maker-desk`)** | Interactive workshop stage manager. Clicking `01 PLAN`, `02 MONTAJE`, etc. highlights phase and updates active status. | HUD with dynamic phase switching, `➕ Add Phase` and `🗑️ Delete Phase`. |
 | **Open Stream (`podcast_talk`)** | Dynamic camera grid switcher (2, 3, or 4 participants) with automated CSS Grid reflow and editable guest lower-thirds. | HUD layout buttons: `[👥 2 Cams]`, `[👥 3 Cams]`, `[👥 4 Cams]`. |
 | **Gameplay HUD & Victory Clutch** | Direct click to cycle status (`VICTORY`, `DEFEAT`, `ACE`, `MATCH POINT`) and toggle modes (`COMPETITIVE`, `RANKED`, FPS). | Direct canvas interaction with persistent state. |
 
@@ -300,7 +304,7 @@ To ensure total decoupling between scenes and themes:
    - `?theme=<id>`: Force a specific color theme (e.g. `?theme=cyberpunk`).
    - `?shape=<id>`: Force one of the 20 physical shapes (e.g. `?shape=gamer_mecha`).
    - `?lock=1` or `?lockTheme=1`: Permanently freezes the scene in OBS Studio to the URL values, ignoring incoming global WebSocket theme changes.
-   - `?lang=en` or `?lang=es`: Load translated overlay texts for the specified language.
+   - `?lang=en` or `?lang=es`: Reserved — only the `/api/overlays/texts` endpoint honours it; scenes do not apply it yet.
 
 3. **Fluid Adaptability across Camera Aspect Ratios and Catalog of 20 Physical Shapes**:
    - The engine provides 20 universal physical shape archetypes (`data-theme-shape`), grouped into 6 families:

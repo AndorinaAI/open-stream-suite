@@ -39,7 +39,7 @@ Esta guía te explica de forma clara y directa **cómo conectar tu dispositivo f
 > SERVER_HOST=0.0.0.0
 > DECK_TOKEN=una_clave_larga_y_aleatoria
 > ```
-> y envía esa clave en cada petición, con la cabecera `X-Deck-Token` o con `?deck_token=...`. Las peticiones que llegan desde una página web externa (otros orígenes del navegador) se rechazan siempre. Guía de instalación de los plugins: [`plugins/README.md`](../../plugins/README.md) ([English](../../plugins/README.en.md)).
+> y envía esa clave en cada petición, con la cabecera `X-Deck-Token` o con `?deck_token=...`. Si `DECK_TOKEN` está vacío y el servidor escucha en `0.0.0.0` o llega por túnel/proxy, `/api/deck/*` se rechaza: no hay modo deck sin token fuera de loopback. Las peticiones que llegan desde una página web externa (otros orígenes del navegador) se rechazan siempre. Guía de instalación de los plugins: [`plugins/README.md`](../../plugins/README.md) ([English](../../plugins/README.en.md)).
 
 ---
 
@@ -85,7 +85,7 @@ Si tienes el modelo **Ajazz AKP05 / AKP05E** (10 teclas cuadradas LCD, pantalla 
    * **T4 (FX):** Toca para hacer sonar el timbre chime en directo.
 3. **4 Knobs Giratorios con Pulsación:**
    * **Knob 1 (Cronómetro):** Gira a la derecha para +1 min, a la izquierda para -1 min, pulsa para pausar/reanudar.
-   * **Knob 2 (Selector de Temas Neón):** Gira a la derecha/izquierda para navegar entre los 20 temas de color en vivo, pulsa para tema base.
+   * **Knob 2 (Selector de Temas Neón):** Gira a la derecha/izquierda para navegar entre los 21 temas de color en vivo (todos los packs), pulsa para tema base.
    * **Knob 3 (Metas de Twitch):** Gira para sumar (+1) o restar (-1) unidades a la meta del stream, pulsa para confeti.
    * **Knob 4 (Efectos FX):** Gira a la derecha para confeti 🎉, a la izquierda para corazones ❤️, pulsa para ding chime 🔊.
 

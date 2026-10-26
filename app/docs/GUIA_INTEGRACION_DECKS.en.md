@@ -39,7 +39,7 @@ This guide explains clearly how to connect your physical macro controllers (**El
 > SERVER_HOST=0.0.0.0
 > DECK_TOKEN=choose_a_long_random_secret_passphrase
 > ```
-> and send this token in every request (header `X-Deck-Token: ...` or `?deck_token=...`). Requests from external web browsers are blocked. Plugin setup guide: [`plugins/README.en.md`](../../plugins/README.en.md) ([Español](../../plugins/README.md)).
+> and send this token in every request (header `X-Deck-Token: ...` or `?deck_token=...`). If `DECK_TOKEN` is empty and the server listens on `0.0.0.0` or receives requests through a tunnel/proxy, `/api/deck/*` is rejected: there is no tokenless deck mode outside loopback. Requests from external web browsers are blocked. Plugin setup guide: [`plugins/README.en.md`](../../plugins/README.en.md) ([Español](../../plugins/README.md)).
 
 ---
 

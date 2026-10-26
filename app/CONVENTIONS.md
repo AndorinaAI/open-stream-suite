@@ -48,8 +48,10 @@ app/                           # Carpeta principal del proyecto
 │   │   ├── overlay_routes.py  # /api/overlays/texts (GET, POST, reset)
 │   │   ├── rewards_routes.py  # /api/twitch/rewards (Twitch Helix CRUD)
 │   │   ├── themes_routes.py   # /api/themes/* (packs, creación, restauración, chat-anchor)
+│   │   ├── fusions_routes.py  # /api/fusions (fusiones híbridas de overlays)
 │   │   ├── webhooks_routes.py # /api/webhooks/* (Ko-fi, PayPal, Buy Me a Coffee, Streamlabs)
-│   │   └── widgets_routes.py  # /api/widgets/config (GET, POST, reset)
+│   │   ├── widgets_routes.py  # /api/widgets/config (GET, POST, reset)
+│   │   └── actions / alerts / auth / roles / triggers / updates / ws  # Resto de dominios (un módulo por dominio)
 │   └── services/              # Capa de servicios y lógica de negocio
 │       ├── actions/           # Submódulos de acciones para widgets (Deck, comandos, API)
 │       │   └── chat_actions.py, goal_actions.py, promo_actions.py, ticker_actions.py, timer_actions.py
@@ -60,7 +62,9 @@ app/                           # Carpeta principal del proyecto
 │       ├── media_service.py       # Gestión física de archivos multimedia
 │       ├── overlay_service.py     # Persistencia y sincronización de textos de escenas
 │       ├── theme_manager.py       # Gestión física de temas y carpetas
+│       ├── theme_defaults.py      # Datos canónicos por defecto (pack Maker, temas, mapeos)
 │       ├── theme_service.py       # Lógica de packs, herencia y anclaje
+│       ├── fusions_service.py     # Fusiones híbridas de overlays y estilado en lote
 │       ├── triggers_service.py    # Búsqueda de triggers, roles y payloads OBS
 │       ├── twitch_service.py      # Operaciones con la API Helix de Twitch
 │       └── widgets_service.py     # Configuración y presets de widgets
@@ -108,15 +112,10 @@ app/                           # Carpeta principal del proyecto
 │       ├── panel/             # Submódulos de Mini-App (01-04)
 │       ├── index.html, style.css, widget.js, panel.html
 │
-├── scenes/                    # Overlays completos para OBS Studio (1920×1080)
-│   ├── game/                  # Gameplay con HUD de cámara y estadísticas
-│   ├── maker/                 # Taller con cámara cenital y proyecto activo
-│   ├── podcast/               # Podcast / Charla con rótulos de invitados
-│   ├── coffee-break/          # Pausa relajada
-│   ├── starting-soon/         # Pantalla de inicio con cuenta atrás
-│   ├── be-right-back/         # Pausa técnica
-│   ├── ending/                # Despedida y créditos
-│   └── study_pomodoro/        # Sesión Pomodoro de estudio
+├── streamthemes/              # Packs de temas y overlays para OBS Studio (1920×1080)
+│   └── <Pack>/                # pack.json + styles/<tema>/ + overlays/<escena>/
+│       ├── overlays/          # Escenas del pack (p.ej. game/, chill/, screens/, maker/desk/)
+│       └── styles/            # Temas del pack (style.css + theme.json + .default.*)
 │
 ├── common/                    # Recursos compartidos y tokens del sistema de diseño
 │   ├── overlay/
@@ -211,14 +210,14 @@ El gestor en `alerts/` evolucionará hacia un explorador visual potente:
 
 ### D. Temas y Overlays con Live View en Tiempo Real
 - Cada overlay en `overlays/<pack>/` cuenta con soporte para `data-theme` y carga `common/themes.css`.
-- En el panel de control (`alerts/js/themes.js`), el streamer podrá:
+- En el panel de control (`alerts/js/themes/`, módulos 01–13), el streamer podrá:
   - Seleccionar cualquier tema predefinido (Maker, Print, Terminal, Chill, Cyberpunk, Synthwave). Los nombres de tema se mantienen por compatibilidad.
   - Entrar en un overlay específico para tener una previsualización en vivo (Live View) y editar en caliente colores, marcos y textos (nombre del canal, proyecto actual, frases rotativas de pausa).
   - Guardar y exportar presets personalizados de overlays y temas.
 
 ### E. Organización de Overlays y Escenas
 - La carpeta canónica de overlays de stream es `streamthemes/<pack>/overlays/`, estructurada por packs temáticos (`Cozy_LoFi_Pack`, `Gamer_Pro_Pack`, `Open_stream_Pack`, `Maker_Theme_Pack`) y sus carpetas de escena (`screens/`, `just_chatting/`, etc.).
-- El servidor mantiene en `server/routes/static_routes.py` redirecciones automáticas y transparentes desde las rutas históricas `/scenes/...` y `/overlays/...` hacia `/streamthemes/...` para que cualquier fuente previamente configurada en OBS Studio continúe funcionando sin interrupciones.
+- El servidor (`server/routes/static_routes.py`) mantiene: redirecciones 302 desde las claves históricas `/scenes/<clave>` (9 claves legacy) hacia sus `/overlays/...`; un montaje estático de `/overlays/` que sirve el pack Maker; y el árbol completo en `/streamthemes/`. Así cualquier fuente ya configurada en OBS sigue funcionando.
 
 ### F. Sistema de Fondos con Apertura y Recorte Automático (Backdrop Aperture Engine)
 Para permitir que cualquier escena incorpore fondos decorativos (texturas, degradados o imágenes personalizadas) **sin bloquear jamás las fuentes de vídeo o capturas de OBS** situadas detrás de la capa del navegador:
@@ -235,7 +234,7 @@ Para permitir que cualquier escena incorpore fondos decorativos (texturas, degra
 
 
 ### G. Temas Modulares, Restauración de Fábrica y Estilos por Overlay
-- Los temas residen en `themes/<pack_id>/<theme_id>/` con 4 archivos:
+- Los temas residen en `app/streamthemes/<pack_id>/styles/<theme_id>/` con 4 archivos:
   - `theme.json`: Metadatos y configuración activa.
   - `style.css`: Reglas CSS activas aplicadas a `body[data-theme="..."]`.
   - `theme.default.json`: Copia de respaldo original de fábrica.

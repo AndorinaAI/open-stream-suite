@@ -110,7 +110,7 @@ All broadcast scenes and widgets are local web pages added to OBS as **Browser S
    - ✅ *Refresh browser when scene becomes active*.
 
 > [!NOTE]
-> To preview all available interactive templates, open the local catalog at [http://localhost:8080/index.html](http://localhost:8080/index.html).
+> To preview all available interactive templates, open the Control Panel at [http://localhost:8080/alerts/panel.html](http://localhost:8080/alerts/panel.html) (Scenes view).
 
 ---
 

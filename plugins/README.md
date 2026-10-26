@@ -28,7 +28,7 @@ Esta carpeta contiene los plugins y perfiles preconfigurados para controlar **Op
 | **Ajazz AKP153 / AKP03 / AKP846** | [`ajazz/`](./ajazz/) | Perfil `akp_profile_15keys.json` + script puente `ajazz_live_bridge.py`. |
 | **Elgato Stream Deck** (Mini, Standard, XL, +) | [`stream_deck/`](./stream_deck/) | Copiar la carpeta `com.openstreamsuite.deck.sdPlugin` a la carpeta de plugins de Elgato. |
 | **Bitfocus Companion u OpenDeck** (cualquier consola) | [`opendeck_companion/`](./opendeck_companion/) | Importar `open_stream_suite_companion_page.json`. |
-| Iconos para las teclas | [`assets/`](./assets/) | SVG listos para LCD de 72×72 y 144×144 px. |
+| Iconos para las teclas | [`assets/`](./assets/) | SVG listos para LCD de 144×144 px. |
 
 Cada carpeta tiene su propio `README.md` con los pasos detallados.
 

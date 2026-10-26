@@ -22,7 +22,7 @@ Esta guía detalla el método de integración correcto, las URLs locales del ser
    - **Valores comunes de FPS**: `60`
 3. En la lista de **Fuentes** de tu escena, pulsa **`+`** → **Navegador** (*Browser*).
 4. **Desmarca** la casilla «Archivo local» si estuviese activa.
-5. Pega la **URL** correspondiente de la escena (ejemplo: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html`).
+5. Pega la **URL** correspondiente de la escena (ejemplo: `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html`).
    > [!TIP]
    > Desde el panel de control (`http://127.0.0.1:8080`), cada tarjeta de escena dispone del botón **«📋 Copiar URL OBS»**, que genera automáticamente la URL con el tema asignado y los parámetros de bloqueo necesarios (`?theme=...&lock=1`).
 6. Configura las propiedades de la fuente Navegador:
@@ -47,13 +47,13 @@ Esta guía detalla el método de integración correcto, las URLs locales del ser
 | Escena | URL en OBS | Coordenadas y Tamaño de Cámara / Captura |
 | :--- | :--- | :--- |
 | **1. Game** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/game/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Facecam**: 360×203 (x: 48, y: 767)<br>• **Juego**: 1920×1080 (x:0, y:0) |
-| **2. Maker Desk** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_desk/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Captura Aux**: 456×257 (x: 1432, y: 389)<br>• **Cámara Mesa**: 1376×774 (x: 32, y: 112) |
-| **3. Maker PC** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker_pc/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Cámara Aux**: 456×257 (x: 1432, y: 389)<br>• **Captura Pantalla**: 1376×774 (x: 32, y: 112) |
-| **4. Print Machine** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print_machine/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Cámara Detalle**: 456×257 (x: 1432, y: 389)<br>• **Cámara Máquina**: 1376×774 (x: 32, y: 112) |
-| **5. Print Design** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print_design/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Cámara Proceso**: 456×257 (x: 1432, y: 389)<br>• **Captura App CAD**: 1376×774 (x: 32, y: 112) |
+| **2. Maker Desk** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/desk/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Captura Aux**: 456×257 (x: 1432, y: 389)<br>• **Cámara Mesa**: 1376×774 (x: 32, y: 112) |
+| **3. Maker PC** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/maker/pc/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Cámara Aux**: 456×257 (x: 1432, y: 389)<br>• **Captura Pantalla**: 1376×774 (x: 32, y: 112) |
+| **4. Print Machine** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print/machine/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Cámara Detalle**: 456×257 (x: 1432, y: 389)<br>• **Cámara Máquina**: 1376×774 (x: 32, y: 112) |
+| **5. Print Design** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/print/design/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Rostro**: 456×257 (x: 1432, y: 112)<br>• **Cámara Proceso**: 456×257 (x: 1432, y: 389)<br>• **Captura App CAD**: 1376×774 (x: 32, y: 112) |
 | **6. Chill** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/chill/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Principal**: 1280×720 (x: 32, y: 112)<br>• **Chat Box**: 544×800 (x: 1344, y: 154) |
 | **7. Starting Soon** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/screens/starting-soon/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
-| **8. Coffee Break** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/screens/coffee-break/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
+| **8. Be Right Back** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/screens/be-right-back/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
 | **9. Ending** | `http://127.0.0.1:8080/streamthemes/Maker_Theme_Pack/overlays/screens/ending/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
 
 ---
@@ -66,7 +66,7 @@ Esta guía detalla el método de integración correcto, las URLs locales del ser
 | **2. Desktop Share** | `http://127.0.0.1:8080/streamthemes/Open_stream_Pack/overlays/desktop_share/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Captura Pantalla**: 1380×776 (x: 48, y: 140)<br>• **PiP Facecam**: 440×248 (x: 1432, y: 140) |
 | **3. Podcast Talk** | `http://127.0.0.1:8080/streamthemes/Open_stream_Pack/overlays/podcast_talk/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Presentador (Host)**: 880×495 (x: 54, y: 220)<br>• **Cámara Invitado (Guest)**: 880×495 (x: 986, y: 220) |
 | **4. Starting Soon** | `http://127.0.0.1:8080/streamthemes/Open_stream_Pack/overlays/screens/starting-soon/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
-| **5. Coffee Break** | `http://127.0.0.1:8080/streamthemes/Open_stream_Pack/overlays/screens/coffee-break/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
+| **5. Be Right Back** | `http://127.0.0.1:8080/streamthemes/Open_stream_Pack/overlays/screens/be-right-back/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
 | **6. Ending** | `http://127.0.0.1:8080/streamthemes/Open_stream_Pack/overlays/screens/ending/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
 
 ---
@@ -79,7 +79,7 @@ Esta guía detalla el método de integración correcto, las URLs locales del ser
 | **2. Speedrun Split** | `http://127.0.0.1:8080/streamthemes/Gamer_Pro_Pack/overlays/speedrun_split/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Captura Juego Speedrun**: 1360×765 (x: 48, y: 157)<br>• **Columna Splits & Deltas**: 440×820 (x: 1432, y: 130) |
 | **3. Victory Clutch** | `http://127.0.0.1:8080/streamthemes/Gamer_Pro_Pack/overlays/victory_clutch/index.html` | • **Overlay**: 1920×1080 (x:0, y:0)<br>• **Cámara Victoria Showcase**: 1280×720 (x: 320, y: 180) |
 | **4. Starting Soon** | `http://127.0.0.1:8080/streamthemes/Gamer_Pro_Pack/overlays/screens/starting-soon/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
-| **5. Coffee Break** | `http://127.0.0.1:8080/streamthemes/Gamer_Pro_Pack/overlays/screens/coffee-break/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
+| **5. Be Right Back** | `http://127.0.0.1:8080/streamthemes/Gamer_Pro_Pack/overlays/screens/be-right-back/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
 | **6. Ending** | `http://127.0.0.1:8080/streamthemes/Gamer_Pro_Pack/overlays/screens/ending/index.html` | • **Overlay Pantalla Completa**: 1920×1080 (x:0, y:0) |
 
 ---

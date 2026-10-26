@@ -859,7 +859,7 @@ El resultado esperado es un paquete de overlays funcional, coherente y personali
 ## 18. ARQUITECTURA MODULAR, RESPALDO DE FÁBRICA Y CONTROL HARDWARE
 
 ### A. Estructura Modular de Temas y Copias de Seguridad de Fábrica
-Los estilos visuales se organizan en carpetas modulares (`themes/<pack>/<tema>/`). Cada tema cuenta obligatoriamente con 4 archivos:
+Los estilos visuales se organizan en carpetas modulares (`app/streamthemes/<pack>/styles/<tema>/`). Cada tema cuenta obligatoriamente con 4 archivos:
 1. `theme.json`: metadatos activos del tema (colores, fuentes, resplandor, anclaje de chat).
 2. `style.css`: reglas CSS aplicadas dinámicamente sobre `body[data-theme="..."]`.
 3. `theme.default.json`: **copia de seguridad original de fábrica** para recuperación.

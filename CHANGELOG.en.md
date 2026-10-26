@@ -8,6 +8,79 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Changed — Dual licence (AGPL-3.0 + commercial) and mandatory CLA
+
+- **The public licence moves from CC BY-NC-SA 4.0 to GNU AGPL v3.0 or later**: the project is now **free software** (OSI/FSF recognised), so it can be distributed through repositories and distributions that require free licences, with no ambiguity about internal use, SaaS or embedding.
+- **New paid commercial licence** (`LICENSE-COMMERCIAL.en.md`, ES/EN): lets companies and agencies use, integrate or embed the software **without publishing their code** (white-labelling, hosted service, redistribution, support). Contact: **admin@andorina.dev**.
+- **Mandatory CLA for contributions** (`.github/CLA.en.md`, ES/EN): every contribution grants the Licensor enough rights to **relicense** the project (legal basis of the dual-licence model). Template added to the PR template; a PR without a signature is not merged.
+- **Trademark policy** (`TRADEMARK.en.md`): the name, logo and visual identity are covered by neither licence; white-labelling requires authorisation.
+- **Third-party notices** (`NOTICE.en.md`): the **15 OFL typeface families** with their copyright notices and reserved names (Comfortaa, Orbitron, Press Start 2P, Quicksand, Share Tech Mono), full licence texts in `app/common/fonts/LICENSES/`, and the Python dependency licences (including `pystray` and `python-xlib`, LGPL).
+- **Historical note:** versions published before **2026-10-26** were released under CC BY-NC-SA 4.0; copies already delivered to third parties keep those terms.
+
+### Fixed — WebApp Audit V3 (V3-01, V3-06)
+
+- **Real XSS in theme, pack and fusion metadata (V3-01)**: `name`, `badge`, `desc` and `icon` were stored unvalidated and rendered with `innerHTML`, allowing JavaScript execution on the same origin as `/api/local-token` (reproduced during the audit). New `sanitize_metadata_text()` sanitizer in `server/services/validation_utils.py` (rejects `<`/`>`, strips control characters, collapses whitespace and caps length) applied in `create_pack_service`, `create_theme_service`, `save_theme_service` and `create_or_update_fusion` **before** writing to disk; plus escaping of every panel sink (`esc`, `themeEscapeHtml`, `themeJsArg`, `escapeHtml`).
+- **Sanitized fusion ids (V3-06)**: the incoming `id` is validated by `_is_safe_fusion_id()` (rejects quotes, parentheses, `;`, `<`, `>` and spaces), new ids are generated as ASCII slugs (they could contain accents before) and are serialized in the panel with `themeJsArg`/`themeEscapeHtml` (five `onclick` handlers and one `id`).
+- **Regression**: new `tests/test_metadata_sanitization.py` suite (16 tests: sanitizer, factory catalog integrity, rejection in the three services and a static escaping contract). The 6 related suites (84 tests) are green and the hashes of `themes_state.json`, `fusions.json`, `config.js`, `overlay_texts_config.json` and `common/themes.css` are unchanged.
+
+### Fixed — Theme backlog M1–M13 / L1–L8 (phases 1–5)
+- **Phase 1:** dynamic per-pack shape catalog; validated fusion defaults; unknown members return `warnings`/`unknown*`; `apply-shape` is capability-aware and reports `skipped*`.
+- **Phase 2:** real 27-scene counter, full batch summary, cache only after API confirmation, i18n notices, and no API call when no theme/shape is selected.
+- **Phase 3:** atomic writes with locks, persistent orphan-state normalization, single source for `defaultOverlayThemes`, `activeShape: original`, and the complete fusion schema.
+- **Phase 4:** 14 structural tokens for `maker`, shape target in `gameplay_hud`, and readable labels for the 9 generic shapes.
+- **Phase 5:** `renderStudio()` alert-block test and a one-command E2E (`tests/e2e_theme_backlog.py` + `scripts/run_theme_e2e.sh`) with snapshot/restore.
+
+### Fixed — Theme audit H1–H10
+- Persistent, consistent global theme: `globalThemeActive` + `overlayThemeExplicit`; applied at boot to scenes/widgets/alerts without an explicit assignment.
+- Explicit scene assignments are no longer overridden by the global theme; reset releases it.
+- Global theme changes preserve widget shapes instead of clearing them.
+- `card`/`banner` alerts apply their own theme when shown (they previously shared the first one).
+- `original` on widgets/alerts normalizes to "no shape"; strict API for unknown scenes and global shapes.
+- New themes generate `theme.default.json`/`style.default.css`; create/save validate pack/theme paths.
+
+### Added — Alerts with physical shapes from every pack
+- `card`/`banner` alerts accept the **20 physical pack shapes** in addition to the 9 generic ones (29 options in the panel).
+- Applied natively by reusing scene CSS (`[data-oss-panel]` + `body[data-theme-shape]`), with panel rules added for `cozy_polaroid`, `cozy_canvas` and `cozy_soft`.
+- Also works from fusions (`apply-shape` applies the physical shape to alert members).
+
+### Fixed — Embedded scene chat
+- Scene chat now embeds the real widget (`?embed=1`) inside the panel and syncs its theme with the scene via `postMessage`.
+- The switch **only hides the messages**: the frame, its size and the camera stay; the space is free for the OBS widget.
+
+### Improved — Theme/shape options in Alerts and Fusions
+- **Alerts** tab: new "Alert themes" block (card and banner) with theme, shape, apply, reset and add-to-fusion, inside the real Alerts Studio layout.
+- **Widgets** tab: block renamed "Widget themes" (5 rows), split from alerts.
+- **Fusions**: modal with 21 styles, 22 shapes, 27 scenes, 5 widgets and 2 alerts; readable member names.
+
+### Fixed — Scene chat and texts saving
+- Chat frame switch extended to `cozy_cafe` and `oss_chatting` (it already existed for `chill`), with per-scene layout and live persistence.
+- **Critical bug**: saving texts replaced the file and wiped `cozy`, `oss`, `pomodoro`, `victory`, `art` and `speedrun`; now it deep-merges.
+
+### Added — Shapes for every widget/alert and themed banners
+- Native `common/oss-shape.js`: 9 shapes for any widget and `alert:card`/`alert:banner`, applied live and restored on reset.
+- Catalog and fusions: `widgets/*` and `alerts/*` declare all 9 shapes; batch `apply-shape` reaches scenes, widgets and alerts.
+- Banners: with a pack theme they are driven by tokens (gradient, border, shadow, text); without one the presets remain.
+
+### Fixed — Native theme integration for widgets and alerts
+- **Live shape**: `widget_theme_change` applies theme and shape without reload; reset clears `data-theme-shape`.
+- **Precedence**: a widget/alert explicit assignment is no longer overridden by the global theme.
+- **UI**: "Component themes" block (theme/shape/reset/add to fusion) and fusion members with removal.
+- **Single reset**: new `POST /api/themes/reset-assignment`.
+- **Conventions**: single boot in `common/widget-theme.js`; chat presets yield to pack themes; more text/background colours tokenised.
+
+### Added — Fusions with widgets and panel alerts (native end-to-end)
+- Fusions group **scenes + widgets + alerts**: `widgets[]` / `alerts[]` in `fusions.json`, validated against `GET /api/components/catalog`.
+- **Theme and shape** apply in batch to every member; shapes only reach shape-capable widgets (`chat`) and pack scenes.
+- **Resets**: `POST /api/fusions/{id}/reset` (whole fusion) and `reset_overlay_assignment_service` (single member).
+- **Native consumption**: `config.js` publishes `overlayThemes`/`overlayShapes`; widgets and alerts read them at boot and listen to targeted events (`widget_theme_change` / `alert_theme_change`).
+- **UI**: widget/alert pickers in the fusion modal, member counter and a "Reset fusion" button.
+
+### Added — Native pack-theme integration for widgets and alerts
+- **Widgets (6/6)**: accept `?theme=<id>` and WebSocket `theme_change`; set `data-theme` on `<body>` and consume `common/themes.css` tokens with fallbacks, leaving the default look untouched.
+- **Panel-based alerts**: the overlay applies `?theme=`/`theme_change`; banners and `.alert-box` natively inherit `--color-accent-cyan`, `--color-panel-bg`, `--color-text-light`.
+- **Conventions** documented (ES/EN) so new widgets and alerts integrate without knowing the existing ones.
+- **Native contract tests**: `tests/test_native_theming_contract.py` (12 tests; includes proof the base CSS/JS is unchanged).
+
 ### Fixed — Architectural Audit and Critical Fixes
 - **Server WebSocket (NameError)**: Resolved critical error caused by uninitialized `data` variable in `app/server/routes/ws_routes.py`. Incoming WebSocket text messages are now safely parsed without breaking the connection.
 - **Theme State & Scene Assignment Persistence**: `save_theme_state()` now safely merges the existing state in `themes_state.json`, preventing accidental wipeouts of scene assignments (`overlayThemes`, `overlayShapes`, and `backdrops`) when applying global packs or shapes.
