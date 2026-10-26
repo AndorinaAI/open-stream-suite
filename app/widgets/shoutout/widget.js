@@ -1,6 +1,8 @@
 // widgets/shoutout/widget.js — Coordinador y punto de entrada modular del widget Shoutout
 
 (function() {
+
+  window.OSSTheme.init('shoutout');
   function init() {
     if (window.ShoutoutNetwork) {
       window.ShoutoutNetwork.connectWS();

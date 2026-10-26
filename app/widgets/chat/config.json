@@ -76,12 +76,12 @@
     "themePreset": "maker_glass",
     "shape": "rounded",
     "bgType": "glass",
-    "bgColor": "#0F0F14",
+    "bgColor": "#191D21",
     "bgGradient": "#0B0D0F",
-    "borderColor": "#FFE600",
+    "borderColor": "#57D6C4",
     "borderStyle": "left_neon",
     "borderWidth": 3,
-    "glowIntensity": 85,
+    "glowIntensity": 60,
     "fontFamily": "outfit",
     "fontSize": 14,
     "bgOpacity": 88,
@@ -544,9 +544,9 @@
     }
   ],
   "spotlight": {
-    "active": false,
-    "user": "",
-    "message": "",
+    "active": true,
+    "user": "audit",
+    "message": "hola",
     "color": "#57D6C4"
   }
 }

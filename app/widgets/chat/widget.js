@@ -1,6 +1,16 @@
 // widgets/chat/widget.js — Coordinador y punto de entrada modular del chat
 
 (function() {
+
+  window.OSSTheme.init('chat');
+
+  // Modo embebido y sincronización de tema desde la escena (registro inmediato)
+  const embedParams = new URLSearchParams(window.location.search);
+  if (embedParams.get('embed') === '1') document.body.classList.add('embedded');
+  window.addEventListener('message', function (e) {
+    if (!e.data || e.data.type !== 'oss:theme') return;
+    if (window.OSSTheme) window.OSSTheme.apply(e.data.theme || null, e.data.shape || null, { global: true });
+  });
   async function init() {
     if (window.ParticleEngine && typeof window.ParticleEngine.init === 'function') {
       window.ParticleEngine.init('particle-canvas');

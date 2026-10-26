@@ -269,7 +269,7 @@ window.buildGoalPresetsTabHtml = function(g, tr, activeTab) {
       <div style="background: rgba(25, 29, 33, 0.4); border: 1px solid var(--color-border-dim); border-radius: 8px; padding: 14px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
           <span style="font-size: 11px; font-weight: 700; color: #57D6C4; text-transform: uppercase;">3. Documentación & Herramientas</span>
-          <button type="button" class="btn-stage-preset" style="font-size: 11px; padding: 4px 10px;" onclick="copyText('http://localhost:8080/widgets/goal/index.html')">📋 Copiar URL para OBS</button>
+          <button type="button" class="btn-stage-preset" style="font-size: 11px; padding: 4px 10px;" onclick="copyText(window.location.origin + '/widgets/goal/index.html')">📋 Copiar URL para OBS</button>
         </div>
 
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">

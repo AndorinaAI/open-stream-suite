@@ -1,6 +1,8 @@
 // widgets/ticker/widget.js - Coordinador y punto de entrada del widget Ticker
 
 (function() {
+
+  window.OSSTheme.init('ticker');
   function init() {
     if (window.TickerNetwork) {
       window.TickerNetwork.setupEventListeners();

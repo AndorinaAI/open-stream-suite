@@ -90,7 +90,8 @@ window.ChatNetwork = (function() {
   }
 
   function connectLocalWS() {
-    const wsUrl = `ws://${window.location.hostname || 'localhost'}:8080/ws`;
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
     let ws;
     try {
       ws = new WebSocket(wsUrl);
@@ -102,6 +103,13 @@ window.ChatNetwork = (function() {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+
+        // Tema nativo de packs
+        if ((data.type === 'theme_change' && data.theme) || (data.type === 'widget_theme_change' && (!data.id || data.id === window.OSS_WIDGET_ID))) {
+          window.OSSTheme.handleMessage(data);
+          return;
+        }
+
         const R = window.ChatRenderer;
         const P = window.ChatParser;
         const S = window.ChatStyles;

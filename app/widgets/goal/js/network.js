@@ -85,7 +85,8 @@ window.GoalNetwork = (function() {
     startRotationTimer();
   }
 
-  const wsUrl = `ws://${window.location.hostname || 'localhost'}:8080/ws`;
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
   let ws;
 
   function connectWS() {
@@ -94,6 +95,12 @@ window.GoalNetwork = (function() {
     ws.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data);
+
+        // Tema nativo de packs
+        if ((data.type === 'theme_change' && data.theme) || (data.type === 'widget_theme_change' && (!data.id || data.id === window.OSS_WIDGET_ID))) {
+          window.OSSTheme.handleMessage(data);
+          return;
+        }
 
         if (data.type === 'goal_update' || data.type === 'update_goal') {
           if (data.goalId && Array.isArray(goalState.goals)) {

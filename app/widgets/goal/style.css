@@ -141,7 +141,7 @@
     .goal-count-label {
       font-size: 13px;
       font-weight: 800;
-      color: #F2EEE5;
+      color: var(--color-text-light, #F2EEE5);
       display: flex;
       align-items: center;
       gap: 5px;
@@ -155,7 +155,7 @@
       padding: 2px 7px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 10px;
-      color: #F2EEE5;
+      color: var(--color-text-light, #F2EEE5);
       margin-left: 4px;
     }
 
@@ -483,7 +483,7 @@
       100% { transform: translate(-10px, 0); opacity: 0; }
     }
     @keyframes goalGlitchIn {
-      0% { transform: translate(8px, -2px); opacity: 0; filter: drop-shadow(-3px 0 #57D6C4) drop-shadow(3px 0 #EC4899); }
+      0% { transform: translate(8px, -2px); opacity: 0; filter: drop-shadow(-3px 0 var(--color-accent-cyan, #57D6C4)) drop-shadow(3px 0 #EC4899); }
       40% { transform: translate(-3px, 1px); opacity: 0.8; }
       80% { transform: translate(1px, -1px); opacity: 1; filter: none; }
       100% { transform: translate(0, 0); opacity: 1; filter: none; }
@@ -521,3 +521,11 @@
       0% { filter: blur(10px); opacity: 0; transform: scale(1.04); }
       100% { filter: blur(0px); opacity: 1; transform: scale(1); }
     }
+
+/* ===== Capa nativa de temas de pack (OSS) ===== */
+body[data-theme] {
+  --goal-accent: var(--color-accent-cyan, #57D6C4);
+  --goal-glow-color: var(--color-accent-cyan, rgba(87, 214, 196, 0.5));
+  --goal-bar-start: var(--color-accent-cyan, #57D6C4);
+  --goal-bar-end: var(--color-accent-orange, #38BDF8);
+}

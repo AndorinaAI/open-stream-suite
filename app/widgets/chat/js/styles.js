@@ -59,7 +59,9 @@ window.ChatStyles = (function() {
 
     const activeTheme = themeParam || chatConfig.themePreset || chatConfig.activePreset || 'maker_glass';
 
+    const keepEmbedded = document.body.classList.contains('embedded');
     document.body.className = '';
+    if (keepEmbedded) document.body.classList.add('embedded');
     if (isPreviewMode) {
       document.body.classList.add('is-preview');
     }
@@ -70,7 +72,7 @@ window.ChatStyles = (function() {
     }
     document.body.classList.add(`theme-${activeTheme}`);
 
-    const shapeParam = urlParams.get('shape');
+    const shapeParam = urlParams.get('shape') || window.OSS_WIDGET_SHAPE || null;
     const bgTypeParam = urlParams.get('bgtype') || urlParams.get('bg_type');
     const opacityParam = urlParams.get('opacity');
     const fontParam = urlParams.get('font');

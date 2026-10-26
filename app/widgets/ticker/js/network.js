@@ -66,7 +66,8 @@ window.TickerNetwork = (function() {
     S.state.rssTimer = setInterval(() => fetchRSSFeed(), 5 * 60 * 1000);
   }
 
-  const wsUrl = `ws://${window.location.hostname || 'localhost'}:8080/ws`;
+  const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
   let ws;
 
   function connectWS() {
@@ -75,6 +76,12 @@ window.TickerNetwork = (function() {
     ws.onmessage = (e) => {
       try {
         const d = JSON.parse(e.data);
+
+        // Tema nativo de packs: el servidor difunde theme_change a todos los clientes
+        if ((d.type === 'theme_change' && d.theme) || (d.type === 'widget_theme_change' && (!d.id || d.id === window.OSS_WIDGET_ID))) {
+          window.OSSTheme.handleMessage(d);
+          return;
+        }
 
         if (d.type === 'follow') {
           S.state.stream.lastFollower = d.user || d.name || 'Viewer';

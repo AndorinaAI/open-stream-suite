@@ -1,12 +1,12 @@
 :root {
-      --timer-accent: #57D6C4;
-      --timer-bg-primary: #191D21;
-      --timer-bg-secondary: #0B0D0F;
-      --timer-border-color: #57D6C4;
-      --timer-digits-color: #F2EEE5;
-      --timer-unit-color: #57D6C4;
-      --timer-prefix-color: #57D6C4;
-      --timer-sub-color: #8B969C;
+      --timer-accent: var(--color-accent-cyan, #57D6C4);
+      --timer-bg-primary: var(--color-panel-bg, #191D21);
+      --timer-bg-secondary: var(--color-bg-dark, #0B0D0F);
+      --timer-border-color: var(--color-accent-cyan, #57D6C4);
+      --timer-digits-color: var(--color-text-light, #F2EEE5);
+      --timer-unit-color: var(--color-accent-cyan, #57D6C4);
+      --timer-prefix-color: var(--color-accent-cyan, #57D6C4);
+      --timer-sub-color: var(--color-text-dim, #8B969C);
       --timer-glow-color: rgba(87, 214, 196, 0.4);
       --font-digits: 'Outfit', sans-serif;
       --font-ui: 'JetBrains Mono', monospace;
@@ -221,7 +221,7 @@
       font-family: var(--font-ui);
       font-size: 11px;
       font-weight: 700;
-      color: #FFFFFF;
+      color: var(--color-text-light, #FFFFFF);
       box-shadow: 0 0 20px var(--timer-glow-color), 0 8px 24px rgba(0,0,0,0.8);
       opacity: 0;
       transform: translateY(10px);
@@ -244,3 +244,14 @@
       from { border-color: #EF4444; box-shadow: 0 0 35px rgba(239, 68, 68, 0.9); }
       to   { border-color: #FFE600; box-shadow: 0 0 45px rgba(255, 230, 0, 0.9); }
     }
+
+/* ===== Capa nativa de temas de pack (OSS) ===== */
+body[data-theme] {
+  --timer-accent: var(--color-accent-cyan, #57D6C4);
+  --timer-bg-primary: var(--color-bg-dark, #191D21);
+  --timer-bg-secondary: var(--color-panel-bg, #0B0D0F);
+  --timer-border-color: var(--color-accent-cyan, #57D6C4);
+  --timer-digits-color: var(--color-text-light, #F2EEE5);
+  --timer-unit-color: var(--color-accent-cyan, #57D6C4);
+  --timer-prefix-color: var(--color-accent-cyan, #57D6C4);
+}
