@@ -22,6 +22,11 @@ CHAT_CONFIG_FILE = BASE_DIR / "widgets" / "chat" / "config.json"
 THEMES_STATE_FILE = BASE_DIR / "themes_state.json"
 RESERVED_PACK_DIRS = {"overlays", "common", "config.js", "__pycache__"}
 
+# V3-04: el bootstrap de streamthemes/ se ejecuta una sola vez por proceso.
+# Antes `init_themes_directory()` (y por tanto `GET /api/themes/packs`) reescribía
+# `common/themes.css` en cada petición.
+_THEMES_INITIALISED = False
+
 def _normalize_scene_state_map(raw_map):
     """Migra un mapa {claveEscena: valor} al espacio de claves canónicas.
 
@@ -359,8 +364,16 @@ def get_theme_dir(pack_id: str, theme_id: str) -> Path:
             return candidate
     return candidates[-1]
 
-def init_themes_directory():
-    """Inicializa la estructura modular de streamthemes/Open_stream_pack/ si no existe"""
+def init_themes_directory(force: bool = False) -> bool:
+    """Inicializa la estructura modular de streamthemes/ si no existe.
+
+    Idempotente y **de solo escritura cuando hace falta** (V3-04): se ejecuta una
+    vez por proceso y la recompilación de `common/themes.css` se decide por
+    frescura, no en cada invocación. Devuelve True si ha ejecutado el bootstrap.
+    """
+    global _THEMES_INITIALISED
+    if _THEMES_INITIALISED and not force:
+        return False
     STREAMTHEMES_DIR.mkdir(parents=True, exist_ok=True)
 
     # Pack Maker & Taller oficial
@@ -399,8 +412,10 @@ def init_themes_directory():
             with open(def_css, "w", encoding="utf-8") as f:
                 f.write(t["css"])
 
-    # Sincronizar common/themes.css
-    sync_common_themes_css()
+    # Recompilar common/themes.css solo si está desfasado (V3-04).
+    _sync_themes_css_if_stale()
+    _THEMES_INITIALISED = True
+    return True
 
 def sync_common_themes_css():
     """Compila y sincroniza todos los style.css de todos los packs en common/themes.css"""
@@ -435,6 +450,32 @@ def sync_common_themes_css():
     except Exception as e:
         logger.warning(f"Error sincronizando common/themes.css: {e}")
 
+def themes_css_is_stale() -> bool:
+    """True si `common/themes.css` falta o es más antiguo que algún `style.css`.
+
+    Permite recompilar solo cuando de verdad hace falta (así un tema añadido a
+    mano se sigue detectando) sin reescribir el fichero en cada lectura (V3-04).
+    """
+    try:
+        if not COMMON_THEMES_CSS.exists():
+            return True
+        css_mtime = COMMON_THEMES_CSS.stat().st_mtime
+        for style in STREAMTHEMES_DIR.glob("*/styles/*/style.css"):
+            if style.stat().st_mtime > css_mtime:
+                return True
+    except OSError:
+        return True
+    return False
+
+
+def _sync_themes_css_if_stale() -> bool:
+    """Recompila `common/themes.css` solo si está desfasado. True si sincronizó."""
+    if not themes_css_is_stale():
+        return False
+    sync_common_themes_css()
+    return True
+
+
 def infer_archetype(pack_id: str, theme_id: str = "") -> str:
     combined = f"{pack_id} {theme_id}".lower()
     if any(k in combined for k in ["cozy", "lofi", "chill", "latte", "matcha", "sakura", "lavender", "nordic", "kawaii"]):
@@ -448,6 +489,9 @@ def infer_archetype(pack_id: str, theme_id: str = "") -> str:
 def get_all_packs_and_themes():
     """Escanea el directorio streamthemes/ y devuelve los packs con sus temas, overlays y metadatos"""
     init_themes_directory()
+    # V3-04: lectura sin escritura. Solo se recompila si el CSS compartido está
+    # desfasado respecto a los style.css de los packs.
+    _sync_themes_css_if_stale()
     packs = []
     state = load_theme_state()
     active_theme = state.get("activeTheme", "maker")
