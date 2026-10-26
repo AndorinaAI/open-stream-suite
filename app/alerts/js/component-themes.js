@@ -66,19 +66,37 @@ window.ComponentThemes = (function () {
       : tr(`widgets.alert_${id}_name`, id);
     const shortName = String(fullName).replace(/^[^\p{L}\p{N}]+/u, '');
     const label = `${kind === 'widget' ? '🧩' : '🔔'} <span title="${esc(fullName)}" style="display:inline-block;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom;">${esc(shortName)}</span>`;
+    // V3-02: cada select lleva nombre accesible propio (incluye el componente),
+    // porque el placeholder ("sin asignar"/"sin forma") no dice de qué es cada uno.
+    const ariaTheme = esc(`${tr('widgets.col_theme', 'Tema')}: ${fullName}`);
+    const ariaShape = esc(`${tr('widgets.col_shape', 'Forma')}: ${fullName}`);
+    const ariaFusion = esc(`${tr('widgets.col_fusion', 'Fusión')}: ${fullName}`);
     const shapeCell = shapes && shapes.length
-      ? `<select data-role="shape" data-key="${key}" style="font-size:11px;padding:3px 6px;">${shapeOptions(shapes, shape)}</select>`
+      ? `<select data-role="shape" data-key="${key}" aria-label="${ariaShape}" style="font-size:11px;padding:3px 6px;">${shapeOptions(shapes, shape)}</select>`
       : `<span style="font-size:10px;color:var(--color-text-dim);" title="${tr('widgets.shape_unsupported', 'Este componente no admite formas')}">${tr('widgets.shape_unsupported_short', 'no aplica')}</span>`;
     return `<div style="display:grid;grid-template-columns:200px 1fr 130px auto auto auto;gap:8px;align-items:center;background:rgba(255,255,255,0.03);padding:7px 10px;border-radius:5px;">
       <span style="font-size:12px;font-weight:700;color:var(--color-text-light);">${label}</span>
-      <select data-role="theme" data-key="${key}" style="font-size:11px;padding:3px 6px;">${themeOptions(theme)}</select>
+      <select data-role="theme" data-key="${key}" aria-label="${ariaTheme}" style="font-size:11px;padding:3px 6px;">${themeOptions(theme)}</select>
       ${shapeCell}
-      <button type="button" class="btn-action-primary" style="font-size:10px;padding:3px 9px;" onclick="ComponentThemes.apply('${key}')">${tr('widgets.btn_apply_theme', 'Aplicar')}</button>
-      <button type="button" class="btn-action-test" style="font-size:10px;padding:3px 9px;" onclick="ComponentThemes.reset('${key}')">${tr('widgets.btn_reset_theme', '↺ Reset')}</button>
+      <button type="button" class="btn-action-primary" style="font-size:10px;padding:3px 9px;" aria-label="${esc(`${tr('widgets.btn_apply_theme', 'Aplicar')}: ${fullName}`)}" onclick="ComponentThemes.apply('${key}')">${tr('widgets.btn_apply_theme', 'Aplicar')}</button>
+      <button type="button" class="btn-action-test" style="font-size:10px;padding:3px 9px;" aria-label="${esc(`${tr('widgets.btn_reset_theme', '↺ Reset')}: ${fullName}`)}" onclick="ComponentThemes.reset('${key}')">${tr('widgets.btn_reset_theme', '↺ Reset')}</button>
       <span style="display:inline-flex;gap:4px;align-items:center;">
-        <select data-role="fusion" data-key="${key}" style="font-size:10px;padding:2px 4px;">${fusionOptions()}</select>
-        <button type="button" class="btn-action-test" style="font-size:10px;padding:3px 7px;" title="${tr('widgets.btn_add_to_fusion', 'Añadir a fusión')}" onclick="ComponentThemes.addToFusion('${key}')">➕</button>
+        <select data-role="fusion" data-key="${key}" aria-label="${ariaFusion}" style="font-size:10px;padding:2px 4px;">${fusionOptions()}</select>
+        <button type="button" class="btn-action-test" style="font-size:10px;padding:3px 7px;" title="${tr('widgets.btn_add_to_fusion', 'Añadir a fusión')}" aria-label="${ariaFusion}" onclick="ComponentThemes.addToFusion('${key}')">➕</button>
       </span>
+    </div>`;
+  }
+
+  // V3-02: cabecera de columnas para que se vea qué select es tema y cuál forma.
+  function headerRow() {
+    const cell = 'font-size:10px;font-weight:700;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:0.4px;';
+    return `<div style="display:grid;grid-template-columns:200px 1fr 130px auto auto auto;gap:8px;align-items:center;padding:0 10px 2px 10px;">
+      <span style="${cell}">${esc(tr('widgets.col_component', 'Componente'))}</span>
+      <span style="${cell}">${esc(tr('widgets.col_theme', 'Tema'))}</span>
+      <span style="${cell}">${esc(tr('widgets.col_shape', 'Forma'))}</span>
+      <span style="${cell}">${esc(tr('widgets.btn_apply_theme', 'Aplicar'))}</span>
+      <span style="${cell}">${esc(tr('widgets.btn_reset_theme', '↺ Reset'))}</span>
+      <span style="${cell}">${esc(tr('widgets.col_fusion', 'Fusión'))}</span>
     </div>`;
   }
 
@@ -108,7 +126,10 @@ window.ComponentThemes = (function () {
         const box = document.getElementById(MOUNTS[kind]);
         if (!box) return;
         const rows = items.map(x => row(kind, x.id, x.shapes));
-        box.innerHTML = rows.join('') || `<div style="font-size:11px;color:var(--color-text-dim);">${tr('widgets.no_components', 'Sin componentes disponibles')}</div>`;
+        // V3-02: con la cabecera de columnas se sabe qué select es tema y cuál forma.
+        box.innerHTML = rows.length
+          ? headerRow() + rows.join('')
+          : `<div style="font-size:11px;color:var(--color-text-dim);">${tr('widgets.no_components', 'Sin componentes disponibles')}</div>`;
       };
       render('widget', catalog.widgets || []);
       render('alert', catalog.alerts || []);

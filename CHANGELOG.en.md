@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) 
 
 ## [1.0.1-alpha] — 2026-10-23
 
+### Fixed — Component accessibility and read-only theme catalog (V3-02, V3-04)
+
+- **V3-02 (accessibility)**: each component's three `<select>`s (theme, shape and fusion) now carry an `aria-label` with the component name, so do the Apply/Reset/➕ buttons, and a visible **column header** row was added (Component · Theme · Shape · Apply · Reset · Fusion) with the new `widgets.col_*` i18n keys in ES and EN.
+- **V3-04 (reads must not write)**: `GET /api/themes/packs` **no longer rewrites** `common/themes.css`. The `streamthemes/` bootstrap is idempotent (once per process) and CSS recompilation is decided by freshness (`themes_css_is_stale()`), so manually added themes are still picked up without writing on every request. Measured: **3 GETs → 0 recompilations** and untouched `mtime` (previously 3 recompilations).
+- **Regression**: new `tests/test_component_a11y.py` (4 tests) and `tests/test_themes_read_only.py` (5 tests).
+
 ### Fixed — Real scene counters (V3-03)
 
 - Panel texts and batch confirmations no longer hardcode a scene count: the section subtitle **drops the "9"** ("each of your broadcast screens") and the confirmations (`confirm_apply_all`, `confirm_restore_all_scenes_texts`, `confirm_restore_all_scenes_themes`) use the **`{count}`** parameter in all four ES/EN dictionaries.

@@ -71,23 +71,35 @@
   confirmaciones con `{count}`, estáticos de `panel.html` limpios y los 3
   llamadores usando `OSS_SCENES.length`); `node --check` OK; los 4 JSON parsean.
 
-### T3.04 — Selects sin etiqueta ni `aria-label` (V3-02) [ ]
+### T3.04 — Selects sin etiqueta ni `aria-label` (V3-02) [HECHO]
 
-- **Archivos:** `alerts/js/component-themes.js`.
-- **Criterio:** cabecera de columnas o `label` por fila (`Tema`, `Forma`, `Fusión`)
-  y `aria-label`/`aria-labelledby`; el botón `➕` con texto visible o `aria-label`.
-- **Medición objetivo:** 15 selects de widgets y 6 de alertas con nombre accesible.
+- **Archivos:** `alerts/js/component-themes.js`, `languages/{es,en}.alerts.json`,
+  `tests/test_component_a11y.py` (nuevo).
+- **Problema:** tres `<select>` por fila (tema, forma, fusión) sin `<label>` ni
+  `aria-label`; el usuario no sabía cuál era cuál y un lector de pantalla no tenía
+  nombre que anunciar.
+- **Arreglo:** `aria-label` por select con el nombre del componente
+  (“Tema: Chat”), `aria-label` en los botones Aplicar/Reset/➕ y **cabecera de
+  columnas** visible (Componente · Tema · Forma · Aplicar · Reset · Fusión) con
+  claves i18n nuevas `widgets.col_*` en ES y EN.
+- **Verificación:** `test_component_a11y.py` 4/4 OK (todo `<select>` con
+  `aria-label`, botones con nombre accesible, cabecera cableada y claves ES/EN
+  presentes); `node --check` OK.
 
-## P1 — API
+### T3.05 — `GET /api/themes/packs` reescribe `common/themes.css` (V3-04) [HECHO]
 
-### T3.05 — `GET /api/themes/packs` reescribe `common/themes.css` (V3-04) [ ]
-
-- **Archivos:** `server/routes/themes_routes.py`, `server/services/theme_manager.py`.
-- **Problema:** un GET con efecto lateral (recompila el CSS compartido en cada
-  petición): coste innecesario y riesgo de escritura concurrente.
-- **Criterio:** el GET no escribe; la recompilación solo ocurre en `create`,
-  `save`, `restore` y cambios de pack/tema. Test: el hash de `common/themes.css`
-  no cambia tras N GET.
+- **Archivos:** `server/services/theme_manager.py`, `tests/test_themes_read_only.py` (nuevo).
+- **Problema:** `get_all_packs_and_themes()` → `init_themes_directory()` terminaba
+  en `sync_common_themes_css()` **en cada petición**: un GET reescribía el CSS
+  compartido aunque no hubiera cambios (medido: 3 GET = 3 recompilaciones).
+- **Arreglo:** el bootstrap es **idempotente** (flag `_THEMES_INITIALISED`, una vez
+  por proceso) y la recompilación se decide por **frescura** con
+  `themes_css_is_stale()` (el CSS falta o es más antiguo que algún `style.css`).
+  Así un tema añadido a mano se sigue detectando sin escribir en cada lectura.
+  `init_themes_directory(force=…)` sigue disponible para forzar el bootstrap.
+- **Verificación:** `test_themes_read_only.py` 5/5 OK + prueba empírica:
+  **3 GET → 0 recompilaciones**, hash y `mtime` de `common/themes.css` intactos
+  (antes: 3 recompilaciones); recompilar sigue siendo determinista.
 
 ### T3.06 — Fugas de error en respuestas 500 (V3-05) [ ]
 
