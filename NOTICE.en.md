@@ -4,6 +4,16 @@ This project bundles third-party assets and depends on third-party libraries.
 They are **not covered** by the project licence (AGPL-3.0-or-later) nor by its
 commercial licence: they keep their own terms, reproduced or referenced here.
 
+## 0. Project licence and copyright
+
+- **Copyright (C) 2026 Jorge García Formoso** — holder of the exploitation rights.
+- **Public licence:** **GNU AGPL v3.0 or later** — the `LICENSE` file contains the **complete, unmodified canonical text**, so that GitHub's licence detector and SPDX scanners recognise it (`SPDX-License-Identifier: AGPL-3.0-or-later`).
+- **Commercial licence (exception):** the Licensor may grant a separate commercial licence that waives the AGPL obligations (embedding or integrating it without publishing the derivative source, white-labelling, redistribution, support). It is **not granted automatically**: see `LICENSE-COMMERCIAL.en.md` and **admin@andorina.dev**.
+- **Historical note:** versions published **before 2026-10-26** were distributed under **CC BY-NC-SA 4.0**. Copies already delivered to third parties keep those terms; new versions are governed by AGPL-3.0-or-later.
+- This file is where the copyright notice and the additional terms live; `LICENSE` is reserved for the canonical licence text.
+
+---
+
 ## 1. Typefaces (SIL Open Font License 1.1)
 
 Fonts are bundled locally in `app/common/fonts/`, converted to **WOFF2** (per
