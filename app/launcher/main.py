@@ -18,6 +18,7 @@ from launcher.gui import LauncherGUI
 
 APP_DIR = Path(__file__).resolve().parent.parent
 LOCK_FILE = APP_DIR / ".launcher.lock"
+PANEL_URL = f"http://localhost:{os.environ.get('SERVER_PORT', '8080')}/alerts/panel.html"
 
 
 def acquire_instance_lock():
@@ -56,14 +57,14 @@ def main():
         print(_("launcher.already_open"))
         try:
             import webbrowser
-            webbrowser.open("http://localhost:8080/alerts/panel.html")
+            webbrowser.open(PANEL_URL)
         except Exception:
             if sys.platform == "darwin":
                 import subprocess
-                subprocess.Popen(["open", "http://localhost:8080/alerts/panel.html"])
+                subprocess.Popen(["open", PANEL_URL])
             elif sys.platform != "win32":
                 import subprocess
-                subprocess.Popen(["xdg-open", "http://localhost:8080/alerts/panel.html"])
+                subprocess.Popen(["xdg-open", PANEL_URL])
         return 0
 
     root = tk.Tk(className="openstreamsuite")

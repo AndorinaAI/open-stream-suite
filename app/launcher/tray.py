@@ -172,8 +172,14 @@ class TrayController:
                 "Open Stream Suite",
                 menu=self._build_menu()
             )
-            self._thread = threading.Thread(target=self.icon.run, daemon=True)
-            self._thread.start()
+            # macOS requires run_detached for proper operation
+            import sys
+            if sys.platform == "darwin":
+                # For macOS, use run_detached instead of run in a thread
+                self.icon.run_detached()
+            else:
+                self._thread = threading.Thread(target=self.icon.run, daemon=True)
+                self._thread.start()
             return True
         except Exception:
             self.icon = None
