@@ -100,7 +100,7 @@ app/                           # Core project root directory
 ├── common/                    # Shared design system tokens & runtime
 │   ├── overlay/               # Submodules: editor/ (01-05a), dom-injector.js, backdrop-aperture.js, icons.js
 │   ├── fonts/                 # Local offline webfonts (WOFF2)
-│   ├── catalog.css, catalog.js, components.css, fonts.css, i18n.js, overlay.js, styles.css, themes.css
+│   ├── components.css, fonts.css, i18n.js, overlay.js, styles.css, themes.css
 │
 ├── launcher/                  # Cross-platform desktop launcher (Tkinter)
 │   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py

@@ -218,7 +218,7 @@
 
     .shoutout-game {
       font-size: 13px;
-      color: var(--color-accent-orange, #FF783F);
+      color: var(--color-accent-orange-text, var(--color-accent-orange, #FF783F));
       font-weight: 600;
       word-break: break-word;
       display: flex;

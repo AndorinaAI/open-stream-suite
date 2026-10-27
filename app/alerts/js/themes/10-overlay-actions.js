@@ -189,13 +189,16 @@ async function restoreAllOverlaysToDefaultThemes() {
   const restoreTargets = (typeof getCanonicalSceneKeys === 'function')
     ? getCanonicalSceneKeys().map(k => [k, DEFAULT_OVERLAY_THEMES[k] || 'maker'])
     : Object.entries(DEFAULT_OVERLAY_THEMES);
+  // Restauración en lote: una petición para todas las escenas canónicas.
+  const entries = [];
   for (const [key, defaultThemeId] of restoreTargets) {
     cachedOverlayThemes[key] = defaultThemeId;
     delete window.cachedOverlayShapes[key];
-    try {
-      await API.setOverlayTheme(key, defaultThemeId, 'auto');
-    } catch (e) {}
+    entries.push({ overlayKey: key, themeId: defaultThemeId, shapeId: 'auto' });
   }
+  try {
+    await API.setOverlayThemeBulk(entries);
+  } catch (e) {}
   window.cachedOverlayThemes = cachedOverlayThemes;
   renderThemeScenes();
   if (typeof renderOverlayFolders === 'function') renderOverlayFolders();

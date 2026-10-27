@@ -175,15 +175,21 @@ window.TickerRenderer = (function() {
     root.style.setProperty('--tk-font-size', `${s.fontSize || 13}px`);
     root.style.setProperty('--tk-follow', s.followColor || '#F43F5E');
     root.style.setProperty('--tk-sub', s.subColor || '#A78BFA');
-    root.style.setProperty('--tk-resub', s.resubColor || '#818CF8');
-    root.style.setProperty('--tk-bits', s.bitsColor || '#FBBF24');
-    root.style.setProperty('--tk-top-bits', s.topBitsColor || '#F59E0B');
-    root.style.setProperty('--tk-raid', s.raidColor || '#38BDF8');
-    root.style.setProperty('--tk-tip', s.tipColor || '#10B981');
-    root.style.setProperty('--tk-kofi', s.kofiColor || '#29ABE2');
-    root.style.setProperty('--tk-paypal', s.paypalColor || '#0079C1');
-    root.style.setProperty('--tk-bmc', s.bmcColor || '#FFDD00');
-    root.style.setProperty('--tk-goal', s.goalColor || accent);
+    // Los colores son configurables: se aclaran lo justo para leerse sobre el
+    // panel oscuro (conservando el tono elegido). Ver common/oss-contrast.js.
+    const panelBg = (window.OSSContrast && OSSContrast.themeBackground()) || '#121518';
+    const safeColor = (value, fallback) => (window.OSSContrast
+      ? OSSContrast.ensureReadable(value || fallback, panelBg)
+      : (value || fallback));
+    root.style.setProperty('--tk-resub', safeColor(s.resubColor, '#818CF8'));
+    root.style.setProperty('--tk-bits', safeColor(s.bitsColor, '#FBBF24'));
+    root.style.setProperty('--tk-top-bits', safeColor(s.topBitsColor, '#F59E0B'));
+    root.style.setProperty('--tk-raid', safeColor(s.raidColor, '#38BDF8'));
+    root.style.setProperty('--tk-tip', safeColor(s.tipColor, '#10B981'));
+    root.style.setProperty('--tk-kofi', safeColor(s.kofiColor, '#29ABE2'));
+    root.style.setProperty('--tk-paypal', safeColor(s.paypalColor, '#268DCA'));
+    root.style.setProperty('--tk-bmc', safeColor(s.bmcColor, '#FFDD00'));
+    root.style.setProperty('--tk-goal', safeColor(s.goalColor, accent));
 
     const topBg = s.topTierBgColor || '#121518';
     const topOpacity = (s.topTierBgOpacity !== undefined ? s.topTierBgOpacity : 88) / 100;

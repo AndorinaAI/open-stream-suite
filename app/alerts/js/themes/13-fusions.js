@@ -928,15 +928,18 @@ async function applyBatchThemeToSelectedScenes() {
   if (window.selectedFusionScenes.size === 0) return;
 
   const count = window.selectedFusionScenes.size;
+  // Una sola petición para todo el lote (antes: una por escena seleccionada).
+  const entries = [];
   for (const sceneKey of window.selectedFusionScenes) {
     const canonical = (typeof window.normalizeSceneKey === 'function' && window.normalizeSceneKey(sceneKey)) || sceneKey;
     cachedOverlayThemes[canonical] = themeId;
     window.cachedOverlayThemes = cachedOverlayThemes;
-    try {
-      await API.setOverlayTheme(canonical, themeId);
-    } catch (e) {
-      console.warn('Error aplicando tema a ' + canonical, e);
-    }
+    entries.push({ overlayKey: canonical, themeId });
+  }
+  try {
+    await API.setOverlayThemeBulk(entries);
+  } catch (e) {
+    console.warn('Error aplicando tema al lote de overlays', e);
   }
 
   // Si estamos en la vista de carpeta, re-renderizar tarjetas

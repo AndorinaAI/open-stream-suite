@@ -30,6 +30,13 @@ body[data-theme="latte_caramel"],
   --header-radius: 20px;
   --header-clip-path: none;
 }
+body[data-theme="latte_caramel"],
+[data-theme="latte_caramel"] {
+  --color-accent-cyan-text: #C48243;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #E0C097;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Cozy_LoFi_Pack | Tema: lavender_dream */
 body[data-theme="lavender_dream"],
@@ -57,6 +64,13 @@ body[data-theme="lavender_dream"],
   --badge-clip-path: none;
   --header-radius: 20px;
   --header-clip-path: none;
+}
+body[data-theme="lavender_dream"],
+[data-theme="lavender_dream"] {
+  --color-accent-cyan-text: #A89AC0;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #E6B89C;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Cozy_LoFi_Pack | Tema: matcha_bamboo */
@@ -86,6 +100,13 @@ body[data-theme="matcha_bamboo"],
   --header-radius: 20px;
   --header-clip-path: none;
 }
+body[data-theme="matcha_bamboo"],
+[data-theme="matcha_bamboo"] {
+  --color-accent-cyan-text: #74917B;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #D4A373;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Cozy_LoFi_Pack | Tema: nordic_twilight */
 body[data-theme="nordic_twilight"],
@@ -113,6 +134,13 @@ body[data-theme="nordic_twilight"],
   --badge-clip-path: none;
   --header-radius: 20px;
   --header-clip-path: none;
+}
+body[data-theme="nordic_twilight"],
+[data-theme="nordic_twilight"] {
+  --color-accent-cyan-text: #8C9DA8;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #D6C7B2;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Cozy_LoFi_Pack | Tema: sakura_sunset */
@@ -142,6 +170,13 @@ body[data-theme="sakura_sunset"],
   --header-radius: 20px;
   --header-clip-path: none;
 }
+body[data-theme="sakura_sunset"],
+[data-theme="sakura_sunset"] {
+  --color-accent-cyan-text: #E5989B;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #C86D51;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Gamer_Pro_Pack | Tema: crimson_esport */
 body[data-theme="crimson_esport"],
@@ -169,6 +204,13 @@ body[data-theme="crimson_esport"],
   --badge-clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
   --header-radius: 0px;
   --header-clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+body[data-theme="crimson_esport"],
+[data-theme="crimson_esport"] {
+  --color-accent-cyan-text: #EF4444;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #EAB308;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Gamer_Pro_Pack | Tema: cyber_glitch */
@@ -198,6 +240,13 @@ body[data-theme="cyber_glitch"],
   --header-radius: 0px;
   --header-clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%, 0 14px);
 }
+body[data-theme="cyber_glitch"],
+[data-theme="cyber_glitch"] {
+  --color-accent-cyan-text: #06B6D4;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #EC4899;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Gamer_Pro_Pack | Tema: golden_glory */
 body[data-theme="golden_glory"],
@@ -225,6 +274,13 @@ body[data-theme="golden_glory"],
   --badge-clip-path: none;
   --header-radius: 6px;
   --header-clip-path: none;
+}
+body[data-theme="golden_glory"],
+[data-theme="golden_glory"] {
+  --color-accent-cyan-text: #F59E0B;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #D97706;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Gamer_Pro_Pack | Tema: stealth_mono */
@@ -254,6 +310,13 @@ body[data-theme="stealth_mono"],
   --header-radius: 0px;
   --header-clip-path: none;
 }
+body[data-theme="stealth_mono"],
+[data-theme="stealth_mono"] {
+  --color-accent-cyan-text: #E2E8F0;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #94A3B8;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Gamer_Pro_Pack | Tema: toxic_rad */
 body[data-theme="toxic_rad"],
@@ -282,6 +345,13 @@ body[data-theme="toxic_rad"],
   --header-radius: 0px;
   --header-clip-path: none;
 }
+body[data-theme="toxic_rad"],
+[data-theme="toxic_rad"] {
+  --color-accent-cyan-text: #22C55E;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #84CC16;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Maker_Theme_Pack | Tema: chill */
 body[data-theme="chill"] {
@@ -308,6 +378,13 @@ body[data-theme="chill"] {
   --badge-clip-path: none;
   --header-radius: 6px;
   --header-clip-path: none;
+}
+body[data-theme="chill"],
+[data-theme="chill"] {
+  --color-accent-cyan-text: #89B4FA;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #CBA6F7;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: cyberpunk */
@@ -336,6 +413,13 @@ body[data-theme="cyberpunk"] {
   --header-radius: 0px;
   --header-clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
 }
+body[data-theme="cyberpunk"],
+[data-theme="cyberpunk"] {
+  --color-accent-cyan-text: #FFE600;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #FF0055;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Maker_Theme_Pack | Tema: maker */
 body[data-theme="maker"] {
@@ -362,6 +446,13 @@ body[data-theme="maker"] {
   --badge-clip-path: none;
   --header-radius: 6px;
   --header-clip-path: none;
+}
+body[data-theme="maker"],
+[data-theme="maker"] {
+  --color-accent-cyan-text: #57D6C4;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #FF783F;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: print */
@@ -390,6 +481,13 @@ body[data-theme="print"] {
   --header-radius: 2px;
   --header-clip-path: none;
 }
+body[data-theme="print"],
+[data-theme="print"] {
+  --color-accent-cyan-text: #FF783F;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #FF9B42;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Maker_Theme_Pack | Tema: synthwave */
 body[data-theme="synthwave"] {
@@ -416,6 +514,13 @@ body[data-theme="synthwave"] {
   --badge-clip-path: none;
   --header-radius: 4px;
   --header-clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 12px 100%);
+}
+body[data-theme="synthwave"],
+[data-theme="synthwave"] {
+  --color-accent-cyan-text: #00F9FF;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #FF2A85;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Maker_Theme_Pack | Tema: terminal */
@@ -445,6 +550,13 @@ body[data-theme="terminal"] {
   --header-radius: 0px;
   --header-clip-path: none;
 }
+body[data-theme="terminal"],
+[data-theme="terminal"] {
+  --color-accent-cyan-text: #22C55E;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #EAB308;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Open_stream_Pack | Tema: clean_minimal */
 body[data-theme="clean_minimal"],
@@ -472,6 +584,13 @@ body[data-theme="clean_minimal"],
   --badge-clip-path: none;
   --header-radius: 6px;
   --header-clip-path: none;
+}
+body[data-theme="clean_minimal"],
+[data-theme="clean_minimal"] {
+  --color-accent-cyan-text: #38BDF8;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #F1F5F9;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Open_stream_Pack | Tema: crimson_pulse */
@@ -501,6 +620,13 @@ body[data-theme="crimson_pulse"],
   --header-radius: 8px;
   --header-clip-path: none;
 }
+body[data-theme="crimson_pulse"],
+[data-theme="crimson_pulse"] {
+  --color-accent-cyan-text: #F43F5E;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #FB7185;
+  --color-on-accent-orange: #0B0E14;
+}
 
 /* Pack: Open_stream_Pack | Tema: emerald_matrix */
 body[data-theme="emerald_matrix"],
@@ -528,6 +654,13 @@ body[data-theme="emerald_matrix"],
   --badge-clip-path: none;
   --header-radius: 4px;
   --header-clip-path: none;
+}
+body[data-theme="emerald_matrix"],
+[data-theme="emerald_matrix"] {
+  --color-accent-cyan-text: #10B981;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #A3E635;
+  --color-on-accent-orange: #0B0E14;
 }
 
 /* Pack: Open_stream_Pack | Tema: neon_streamer */
@@ -557,6 +690,13 @@ body[data-theme="neon_streamer"],
   --header-radius: 8px;
   --header-clip-path: none;
 }
+body[data-theme="neon_streamer"],
+[data-theme="neon_streamer"] {
+  --color-accent-cyan-text: #00DFD8;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #9A5ED7;
+  --color-on-accent-orange: #FFFFFF;
+}
 
 /* Pack: Open_stream_Pack | Tema: sunset_glow */
 body[data-theme="sunset_glow"],
@@ -584,4 +724,11 @@ body[data-theme="sunset_glow"],
   --badge-clip-path: none;
   --header-radius: 10px;
   --header-clip-path: none;
+}
+body[data-theme="sunset_glow"],
+[data-theme="sunset_glow"] {
+  --color-accent-cyan-text: #FF5E62;
+  --color-on-accent-cyan: #0B0E14;
+  --color-accent-orange-text: #FFD97D;
+  --color-on-accent-orange: #0B0E14;
 }

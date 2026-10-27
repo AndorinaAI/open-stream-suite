@@ -40,6 +40,19 @@ Esta guía detalla el método de integración correcto, las URLs locales del ser
 
 ---
 
+## 1.b WebSocket y origen: por qué importa el puerto
+
+Los overlays se actualizan en vivo por WebSocket, y el servidor **solo acepta
+conexiones del mismo origen** (protección exact-origin). Si abres una escena o un
+widget desde otro puerto o dominio (un previsualizador propio, otro
+`http.server`, un túnel sin configurar), el *handshake* se rechaza con **403** y
+no verás los cambios en vivo hasta recargar.
+
+- Abre siempre las fuentes de navegador con la dirección del panel:
+  `http://127.0.0.1:8080` (o el `SERVER_PORT` configurado).
+- Si necesitas previsualizar en otro sitio, cambia el **puerto de la app**, no el
+  de la página, y reinicia.
+
 ## 2. Catálogo de Escenas y Coordenadas por Pack (27 Escenas)
 
 ### Pack 1: Maker Theme Pack (Taller, CAD & Electrónica)

@@ -447,7 +447,7 @@
     }
 
     .media-type-badge.type-video { color: var(--color-accent-cyan); border-color: rgba(87, 214, 196, 0.4); }
-    .media-type-badge.type-sound { color: var(--color-accent-orange); border-color: rgba(255, 120, 63, 0.4); }
+    .media-type-badge.type-sound { color: var(--color-accent-orange-text, var(--color-accent-orange)); border-color: rgba(255, 120, 63, 0.4); }
     .media-type-badge.type-image { color: #A575FF; border-color: rgba(165, 117, 255, 0.4); }
 
     .media-card-info {

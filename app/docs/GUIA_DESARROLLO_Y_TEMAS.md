@@ -104,7 +104,7 @@ app/                           # Carpeta principal del proyecto
 ├── common/                    # Recursos compartidos y tokens del sistema de diseño
 │   ├── overlay/               # Submódulos: editor/ (01-05a), dom-injector.js, backdrop-aperture.js, icons.js
 │   ├── fonts/                 # Tipografías locales offline (WOFF2)
-│   ├── catalog.css, catalog.js, components.css, fonts.css, i18n.js, overlay.js, styles.css, themes.css
+│   ├── components.css, fonts.css, i18n.js, overlay.js, styles.css, themes.css
 │
 ├── launcher/                  # Lanzador de escritorio multiplataforma (Tkinter)
 │   ├── gui.py, server_ctl.py, twitch_ctl.py, updater.py, i18n.py

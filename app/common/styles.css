@@ -2226,20 +2226,25 @@ body[data-theme-shape="cozy_soft"] :is([data-oss-panel], .panel-card, .chat-pane
    de cada pack sigue presente en placas, bordes y acentos; aquí solo se fija
    el color del TEXTO para que sea legible con cualquier tema.
    ==================================================================== */
+/* Placas macizas del acento: la tinta la deriva el tema (--color-on-accent-*)
+   porque hay acentos claros (texto oscuro) y oscuros (texto blanco). */
 .ticker-tag {
-  color: #0B1220 !important; /* texto sobre placa maciza del acento */
+  color: var(--color-on-accent-cyan, #0B1220) !important;
+}
+.timeout-badge,
+.match-badge {
+  color: var(--color-on-accent-orange, #0B1220) !important;
 }
 .pomo-badge {
   color: var(--color-text-light, #F7EFE6) !important; /* placa TINTADA (oscura) */
 }
-.timeout-badge,
-.match-badge {
-  color: #0B1220 !important; /* placa MACIZA del acento: tinta oscura (>=5.1:1 en 21/21) */
-}
 .canvas-tag,
 .shoutout-game,
 .score-divider {
-  color: var(--color-accent-cyan, #57D6C4) !important;
+  color: var(--color-accent-cyan-text, var(--color-accent-cyan, #57D6C4)) !important;
+}
+.corner-reticle {
+  color: var(--color-accent-cyan-text, var(--color-accent-cyan, #57D6C4)) !important;
 }
 .victory-banner,
 .hero-tag,
@@ -2251,14 +2256,28 @@ body[data-theme-shape="cozy_soft"] :is([data-oss-panel], .panel-card, .chat-pane
 .brb-status-phrase,
 #timer-status {
   color: var(--color-text-light, #F7EFE6) !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55) !important;
+}
+.goal-item-title,
+.goal-pct,
+.metric-chip-icon,
+.metric-chip-value {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55) !important;
 }
 /* La leyenda del polaroid es tinta sobre papel marfil: solo cuando la forma
    activa NO pinta ese papel (ni es el look original de la escena) se cambia a
-   texto claro, para no quedar marrón sobre panel oscuro. La tagline conserva su
-   color por escena (medido 4.2:1 sobre el papel); su caso oscuro va en la lista
-   de ajuste fino, porque depende del fondo de cada escena. */
+   texto claro, para no quedar marrón sobre panel oscuro. */
 body:not([data-theme-shape="cozy_polaroid"]):not([data-theme-shape="original"]) .polaroid-handwritten {
   color: var(--color-text-light, #F7EFE6) !important;
+}
+/* La tagline va sobre fondo oscuro en casi todas las escenas: usa el token
+   atenuado del tema (>=4.5:1 medido). Sobre el papel marfil del polaroid manda
+   la tinta (regla siguiente, más específica). */
+[data-text-key="channel.tagline"] {
+  color: var(--color-accent-cyan-text, var(--color-text-dim, #9E9289)) !important;
+}
+.polaroid-footer [data-text-key="channel.tagline"] {
+  color: #8A7568 !important;
 }
 /* Sombra suave de seguridad: legible también sobre degradados y vídeo. */
 [data-text-key="channel.tagline"],

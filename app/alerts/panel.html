@@ -97,7 +97,7 @@
       <a id="link-doc-decks" href="../docs/GUIA_INTEGRACION_DECKS.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(87, 214, 196, 0.4); color: var(--color-accent-cyan);" data-i18n="nav.guide_decks">
         🎮 Guía Stream Deck, Ajazz & OpenDeck
       </a>
-      <a id="link-doc-plugins" href="/plugins/README.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(255, 158, 59, 0.4); color: var(--color-accent-orange);" data-i18n="nav.guide_plugins">
+      <a id="link-doc-plugins" href="/plugins/README.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(255, 158, 59, 0.4); color: var(--color-accent-orange-text, var(--color-accent-orange));" data-i18n="nav.guide_plugins">
         🔌 Plugins de Decks & Macros (Ajazz / Elgato)
       </a>
       <a id="link-doc-conventions" href="/CONVENTIONS.md" target="_blank" class="btn-action-test" style="justify-content: center; font-size: 11px; margin-top: 4px; text-decoration: none; border-color: rgba(63, 185, 80, 0.4); color: #3FB950;" data-i18n="nav.guide_conventions">
@@ -465,7 +465,7 @@
                 <button type="button" class="btn-stage-preset" onclick="setCustomPosition(18, 82)" data-i18n="triggers.presets_bl">↙️ Abajo Izq</button>
                 <button type="button" class="btn-stage-preset" onclick="setCustomPosition(82, 18)" data-i18n="triggers.presets_tr">↗️ Arriba Der</button>
                 <button type="button" class="btn-stage-preset" onclick="setCustomPosition(18, 18)" data-i18n="triggers.presets_tl">↖️ Arriba Izq</button>
-                <button type="button" class="btn-stage-preset" style="color: var(--color-accent-orange); border-color: rgba(249, 115, 22, 0.4);" onclick="setRandomPosition()" data-i18n="triggers.presets_random">🎲 Aleatorio</button>
+                <button type="button" class="btn-stage-preset" style="color: var(--color-accent-orange-text, var(--color-accent-orange)); border-color: rgba(249, 115, 22, 0.4);" onclick="setRandomPosition()" data-i18n="triggers.presets_random">🎲 Aleatorio</button>
               </div>
             </div>
           </div>
@@ -968,7 +968,7 @@
                   <button type="button" class="btn-stage-preset" onclick="setCustomPosition(18, 82)" data-i18n="triggers.presets_bl">↙️ Abajo Izq</button>
                   <button type="button" class="btn-stage-preset" onclick="setCustomPosition(82, 18)" data-i18n="triggers.presets_tr">↗️ Arriba Der</button>
                   <button type="button" class="btn-stage-preset" onclick="setCustomPosition(18, 18)" data-i18n="triggers.presets_tl">↖️ Arriba Izq</button>
-                  <button type="button" class="btn-stage-preset" style="color: var(--color-accent-orange); border-color: rgba(249, 115, 22, 0.4);" onclick="setRandomPosition()" data-i18n="triggers.presets_random">🎲 Aleatorio</button>
+                  <button type="button" class="btn-stage-preset" style="color: var(--color-accent-orange-text, var(--color-accent-orange)); border-color: rgba(249, 115, 22, 0.4);" onclick="setRandomPosition()" data-i18n="triggers.presets_random">🎲 Aleatorio</button>
                 </div>
               </div>
 
@@ -1486,7 +1486,7 @@
           </div>
           <div class="media-stat-item">
             <span data-i18n="media.stat_audios_label">🎵 Audios:</span>
-            <span id="media-stat-sounds" style="color: var(--color-accent-orange); font-weight: 700;">0</span>
+            <span id="media-stat-sounds" style="color: var(--color-accent-orange-text, var(--color-accent-orange)); font-weight: 700;">0</span>
           </div>
           <div class="media-stat-item">
             <span data-i18n="media.stat_images_label">🖼️ Imágenes:</span>
@@ -1668,7 +1668,7 @@
             <span id="media-status-info" data-i18n="media.files_in_folder">0 archivos en esta carpeta</span>
           </div>
           <div id="media-clipboard-indicator" style="display: none; align-items: center; gap: 8px;">
-            <span id="media-clipboard-text" style="color: var(--color-accent-orange);"></span>
+            <span id="media-clipboard-text" style="color: var(--color-accent-orange-text, var(--color-accent-orange));"></span>
             <button class="btn-action-test" style="padding: 2px 6px; font-size: 10px;" onclick="clearMediaClipboard()" data-i18n="common.cancel">Cancelar</button>
           </div>
         </footer>
@@ -1988,7 +1988,7 @@
                 </div>
                 <div id="pack-detail-desc" style="font-size: 12px; color: var(--color-text-dim); margin-top: 4px;" data-i18n="themes.pack_desc_label">Descripción</div>
                 <div style="font-family: var(--font-tech); font-size: 10px; color: var(--color-text-dim); margin-top: 2px;" data-i18n="themes.pack_path">
-                  Ruta física: <code id="pack-detail-path" style="color: var(--color-accent-orange);">streamthemes/...</code>
+                  Ruta física: <code id="pack-detail-path" style="color: var(--color-accent-orange-text, var(--color-accent-orange));">streamthemes/...</code>
                 </div>
               </div>
               <button class="btn-action-primary" style="padding: 6px 14px; font-size: 11px;" onclick="openNewThemeModal()" data-i18n="themes.btn_create_theme_pack">
@@ -2001,7 +2001,7 @@
           <div id="pack-shapes-section" style="margin-bottom: 24px;">
             <div class="card-header-bar">
               <span class="card-header-title">📐 FORMAS FÍSICAS Y VISUALIZACIONES DEL PACK</span>
-              <span id="shapes-count-in-pack-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-orange);">FORMAS</span>
+              <span id="shapes-count-in-pack-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-orange-text, var(--color-accent-orange));">FORMAS</span>
             </div>
             <div id="pack-shapes-cards-grid" class="widget-showcase-grid" style="margin-top: 14px;">
               <!-- Tarjetas de formas físicas cargadas dinámicamente -->
@@ -2134,7 +2134,7 @@
             <!-- 2. CONTROL Y ANCLAJE DE ESTILOS DE CHAT -->
             <div class="chat-anchor-box">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 800; color: var(--color-accent-orange);" data-i18n="themes.chat_anchor">
+                <div style="font-family: var(--font-tech); font-size: 11px; font-weight: 800; color: var(--color-accent-orange-text, var(--color-accent-orange));" data-i18n="themes.chat_anchor">
                   💬 ANCLAJE DE ESTILOS DE CHAT
                 </div>
                 <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 11px;">
@@ -2455,7 +2455,7 @@
           </div>
 
           <div>
-            <label style="font-size: 11px; color: var(--color-accent-orange); font-weight: 800; display: block; margin-bottom: 6px;" data-i18n="fusions.label_alerts">ALERTAS DE PANEL QUE PERTENECEN A LA FUSIÓN:</label>
+            <label style="font-size: 11px; color: var(--color-accent-orange-text, var(--color-accent-orange)); font-weight: 800; display: block; margin-bottom: 6px;" data-i18n="fusions.label_alerts">ALERTAS DE PANEL QUE PERTENECEN A LA FUSIÓN:</label>
             <div id="fusion-modal-alerts-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;"></div>
           </div>
 

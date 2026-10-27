@@ -40,6 +40,19 @@ This guide details the correct integration method, local server URLs, viewport d
 
 ---
 
+## 1.b WebSocket and origin: why the port matters
+
+Overlays update live over WebSocket, and the server **only accepts same-origin
+connections** (exact-origin protection). If you open a scene or widget from a
+different port or domain (your own preview tool, another `http.server`, an
+unconfigured tunnel), the handshake is rejected with **403** and you will not see
+live changes until you reload.
+
+- Always open browser sources with the panel address: `http://127.0.0.1:8080`
+  (or the configured `SERVER_PORT`).
+- If you need to preview elsewhere, change the **app port**, not the page's, and
+  restart.
+
 ## 2. Complete Scene Catalog & Viewport Coordinates (27 Scenes)
 
 ### Pack 1: Maker Theme Pack (Workshop, CAD & Electronics)

@@ -417,6 +417,82 @@ def init_themes_directory(force: bool = False) -> bool:
     _THEMES_INITIALISED = True
     return True
 
+def _color_to_rgb(value):
+    """Acepta #RRGGBB o rgb()/rgba() y devuelve (r, g, b)."""
+    text = str(value or "").strip()
+    m = re.fullmatch(r"#([0-9a-fA-F]{6})", text)
+    if m:
+        h = m.group(1)
+        return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+    m = re.fullmatch(r"rgba?\(([^)]+)\)", text)
+    if m:
+        parts = [p.strip() for p in m.group(1).replace("/", ",").split(",")]
+        try:
+            return tuple(int(float(p)) for p in parts[:3])
+        except ValueError:
+            return None
+    return None
+
+
+def _relative_luminance(rgb):
+    def channel(v):
+        v /= 255
+        return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+    r, g, b = rgb
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+
+
+def _contrast_ratio(a, b):
+    la, lb = _relative_luminance(a), _relative_luminance(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def _readable_text_variant(accent, background, minimum=4.5):
+    """Aclara el acento lo justo para que se lea como texto sobre el panel.
+
+    Algunos packs definen acentos oscuros (p. ej. `#7928CA`) que como *color de
+    texto* quedan en ~2:1 sobre el fondo oscuro del panel. Se publica una
+    variante aclarada (mezcla progresiva con blanco) que alcanza el mínimo de
+    contraste conservando el tono del pack.
+    """
+    rgb, bg = _color_to_rgb(accent), _color_to_rgb(background)
+    if not rgb or not bg or _contrast_ratio(rgb, bg) >= minimum:
+        return accent
+    for step in range(1, 21):
+        t = step / 20
+        mixed = tuple(round(c + (255 - c) * t) for c in rgb)
+        if _contrast_ratio(mixed, bg) >= minimum:
+            return "#%02X%02X%02X" % mixed
+    return "#FFFFFF"
+
+
+def _derived_theme_tokens(theme_css: str, theme_id: str) -> str:
+    """Bloque con los tokens derivados de legibilidad del tema (o vacío)."""
+    def token(name):
+        m = re.search(rf"{name}\s*:\s*([^;]+);", theme_css)
+        return m.group(1).strip() if m else ""
+
+    background = token("--color-bg-dark") or token("--color-panel-bg") or "#0B0E14"
+    lines = []
+    for source, derived, on_accent in (("--color-accent-cyan", "--color-accent-cyan-text", "--color-on-accent-cyan"),
+                                       ("--color-accent-orange", "--color-accent-orange-text", "--color-on-accent-orange")):
+        value = token(source)
+        if not value:
+            continue
+        lines.append(f"  {derived}: {_readable_text_variant(value, background)};")
+        # Tinta óptima sobre una placa MACIZA de ese acento (badges/etiquetas).
+        accent = _color_to_rgb(value)
+        if accent:
+            dark_ink, light_ink = _color_to_rgb("#0B0E14"), (255, 255, 255)
+            ink = "#0B0E14" if _contrast_ratio(accent, dark_ink) >= _contrast_ratio(accent, light_ink) else "#FFFFFF"
+            lines.append(f"  {on_accent}: {ink};")
+    if not lines:
+        return ""
+    return (f'body[data-theme="{theme_id}"],\n[data-theme="{theme_id}"] {{\n'
+            + "\n".join(lines) + "\n}")
+
+
 def sync_common_themes_css():
     """Compila y sincroniza todos los style.css de todos los packs en common/themes.css"""
     try:
@@ -442,6 +518,10 @@ def sync_common_themes_css():
                     clean_css = re.sub(r':root\s*,\s*', '', raw_css)
                     css_blocks.append(f"/* Pack: {pack_dir.name} | Tema: {theme_dir.name} */")
                     css_blocks.append(clean_css)
+                    # Tokens derivados de legibilidad (acentos que se usan como TEXTO).
+                    derived = _derived_theme_tokens(clean_css, theme_dir.name)
+                    if derived:
+                        css_blocks.append(derived)
                     css_blocks.append("")
 
         COMMON_THEMES_CSS.parent.mkdir(parents=True, exist_ok=True)

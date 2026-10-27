@@ -299,6 +299,25 @@ const API = {
     return res.json();
   },
 
+  // Asignación en lote: mismo trabajo que N llamadas a setOverlayTheme, pero en
+  // UNA petición (una fusión con varias escenas generaba decenas de POST).
+  async setOverlayThemeBulk(entries) {
+    const assignments = (entries || []).map(({ overlayKey, themeId, shapeId }) => {
+      const item = { overlayKey };
+      if (themeId) item.themeId = themeId;
+      if (shapeId !== undefined && shapeId !== null) item.shapeId = shapeId;
+      return item;
+    }).filter(a => a.overlayKey && (a.themeId || a.shapeId !== undefined));
+    if (!assignments.length) return { status: 'ok', applied: [], failed: [] };
+    const res = await fetch('/api/themes/overlay-assignment/bulk', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ assignments })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} al asignar estilos en lote`);
+    return res.json();
+  },
+
   async applyShapeGlobal(shape) {
     const res = await fetch('/api/themes/apply-shape', {
       method: 'POST',

@@ -185,7 +185,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      color: var(--color-accent-orange);
+      color: var(--color-accent-orange-text, var(--color-accent-orange));
       font-family: var(--font-tech);
       font-weight: 700;
       font-size: 13px;

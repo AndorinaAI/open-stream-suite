@@ -185,6 +185,66 @@ async def handle_set_overlay_theme(request):
         return web.json_response({"error": str(e)}, status=400)
 
 
+async def handle_set_overlay_theme_bulk(request):
+    """Asigna tema/forma a VARIOS componentes en una sola petición.
+
+    El panel aplicaba por miembro (una fusión con varias escenas = decenas de
+    peticiones HTTP). Aquí se hace el mismo trabajo en una llamada, reutilizando
+    `set_overlay_theme_service` (que ya difunde y persiste por clave), y se
+    devuelve el detalle de lo aplicado y lo fallido sin abortar al primer error.
+    """
+    try:
+        body = await request.json()
+    except Exception:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+
+    assignments = body.get("assignments")
+    if not isinstance(assignments, list) or not assignments:
+        return web.json_response({"error": "assignments debe ser una lista no vacía"}, status=400)
+    if len(assignments) > 200:
+        return web.json_response({"error": "Demasiadas asignaciones (máximo 200)"}, status=400)
+
+    applied, failed = [], []
+    for item in assignments:
+        if not isinstance(item, dict):
+            failed.append({"overlayKey": "", "error": "entrada inválida"})
+            continue
+        key = str(item.get("overlayKey", "")).strip()
+        theme_id = str(item.get("themeId", "")).strip() if item.get("themeId") else None
+        shape_raw = item.get("shapeId")
+        shape_id = str(shape_raw).strip() if shape_raw is not None else ("__clear__" if "shapeId" in item else None)
+        if not key:
+            failed.append({"overlayKey": "", "error": "overlayKey requerido"})
+            continue
+        if theme_id is None and shape_id is None:
+            failed.append({"overlayKey": key, "error": "themeId o shapeId requerido"})
+            continue
+        try:
+            await set_overlay_theme_service(key, theme_id=theme_id, shape_id=shape_id)
+            applied.append(key)
+        except ValueError as e:
+            failed.append({"overlayKey": key, "error": str(e)})
+        except Exception as e:  # defensivo: un miembro no debe tumbar el lote
+            from server.config import logger as _logger
+            _logger.warning(f"Error aplicando asignación en lote a '{key}': {e}")
+            failed.append({"overlayKey": key, "error": "error interno"})
+
+    if not applied:
+        # Ninguna entrada válida: es un error del cliente, no un lote parcial.
+        return web.json_response({
+            "error": "Ninguna asignación válida en el lote",
+            "status": "error",
+            "applied": [],
+            "failed": failed,
+        }, status=400)
+
+    return web.json_response({
+        "status": "ok" if not failed else "partial",
+        "applied": applied,
+        "failed": failed,
+    })
+
+
 async def handle_apply_shape(request):
     """Aplica una forma física globalmente a todas las escenas de OBS y el panel"""
     try:
@@ -232,6 +292,7 @@ def register_themes_routes(app):
     app.router.add_post("/api/themes/restore", handle_restore_theme)
     app.router.add_post("/api/themes/reset-assignment", handle_reset_assignment)
     app.router.add_post("/api/themes/overlay-assignment", handle_set_overlay_theme)
+    app.router.add_post("/api/themes/overlay-assignment/bulk", handle_set_overlay_theme_bulk)
     app.router.add_post("/api/themes/backdrop", handle_set_overlay_backdrop)
     app.router.add_post("/api/themes/apply", handle_apply_theme)
     app.router.add_post("/api/themes/apply-shape", handle_apply_shape)

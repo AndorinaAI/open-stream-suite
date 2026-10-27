@@ -103,7 +103,7 @@ Organized into decoupled modular components:
 ---
 
 ## 12. CATALOG & PREVIEW SYSTEM
-Standalone catalog dashboard (`alerts/panel.html` and `common/catalog.js`) allowing streamers to preview all overlays, test simulated events, and edit on-screen texts live.
+Scene catalog and control dashboard (`alerts/panel.html`, "Themes & Scenes" section) allowing streamers to preview all overlays, apply themes/shapes, test simulated events, and edit on-screen texts live.
 
 ---
 

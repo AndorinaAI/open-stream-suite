@@ -143,7 +143,11 @@ window.GoalRenderer = (function() {
       const suffix = g.suffix || '';
       const customSubtext = formatSubtext(g.subtextFormat || '{pct}% COMPLETADO', curr, targ, pct);
 
-      const gColor = g.color || accent;
+      // El color de cada meta es configurable: se aclara lo justo para leerse
+      // sobre el panel oscuro sin cambiar el tono elegido (oss-contrast.js).
+      const gColor = window.OSSContrast
+        ? OSSContrast.ensureReadable(g.color || accent, OSSContrast.themeBackground('#191D21'))
+        : (g.color || accent);
       const gBarStart = g.barColorStart || barStart;
       const gBarEnd = g.barColorEnd || barEnd;
 

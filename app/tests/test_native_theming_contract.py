@@ -17,12 +17,15 @@ APP = ROOT / "app"
 #   * BASELINE_JS: sha256 del JS base normalizado tras quitar el arranque de tema.
 #   * BASELINE_ALERTS: igual que BASELINE_CSS para las hojas de alertas.
 BASELINE_CSS = {
-    "ticker": (11220, "9d54feae1f5e948ef89244178167f0d9106fe63f11e0dc664b8483a5597a83c9"),
-    "promo": (8094, "df8bb4390bc72fb9efb11b512616fbc66eb13f8d4a82f7c2b83ee850c1077c3b"),
+    # ticker/promo/shoutout se refrescaron tras un cambio INTENCIONADO de la capa
+    # base (auditoría 1.0.2): el acento de texto usa `--color-accent-orange-text`
+    # y el azul de PayPal del ticker se aclaró a #268DCA para leerse sobre el panel.
+    "ticker": (11551, "de8f511532233b4ee1fddac2450d791ba93beb43cc4e5be6201c7aad3b62338e"),
+    "promo": (8290, "7de1200d38197a3ecdfb9d829da3f72475568620961e23abb6df6625cd8353ba"),
     "goal": (15346, "f19e6d26e4e11498b461f99bb219aa421d1d7a1a9ff4b710b1d7a7cec3b87311"),
     "chat": (10084, "543f1fcbea1db7cff4717d2fe02201d6f14387bc4cd335a793cdb4a27f2b48e0"),
     "timer": (7052, "97bee5b1d5232d5e4dde84fee334902932ea973886f9a46b2da5aa3c83585ccc"),
-    "shoutout": (8094, "df8bb4390bc72fb9efb11b512616fbc66eb13f8d4a82f7c2b83ee850c1077c3b"),
+    "shoutout": (8290, "7de1200d38197a3ecdfb9d829da3f72475568620961e23abb6df6625cd8353ba"),
 }
 BASELINE_JS = {
     "ticker": "3db1567dfe04a75acc56bfb4997dfc9912f9253966b118229a7bf414330f8049",
