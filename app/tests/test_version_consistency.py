@@ -63,5 +63,19 @@ class TestVersionConsistency(unittest.TestCase):
         self.assertIn(VERSION, tmpl, "la plantilla de bugs no refleja la versión actual")
 
 
+    def test_6_el_banner_y_las_guias_son_visibles_y_deben_estar_al_dia(self):
+        """El banner de marca y los mockups de las guías se ven: deben seguir version.py.
+
+        Regresión: el banner decía «v1.0.0-α» y las guías «v1.0.2-alpha» con el
+        proyecto ya en 1.0.3.
+        """
+        banner = (APP / "assets" / "imagencorp" / "banner_github_header.svg").read_text(encoding="utf-8")
+        self.assertIn(f"v{VERSION.replace('-alpha', '-α')}", banner,
+                      "el banner de marca muestra una versión distinta a version.py")
+        for name in ("INSTALACION_E_INICIO.md", "INSTALLATION_AND_STARTUP.md"):
+            txt = (APP / "docs" / name).read_text(encoding="utf-8")
+            self.assertIn(f"v{VERSION}", txt, f"{name}: el mockup del launcher muestra otra versión")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
