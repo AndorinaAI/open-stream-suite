@@ -93,5 +93,5 @@ Capturas de pantalla reales en alta resolución (1920 × 1080 px) del software e
 
 ### Badge de Versión e Icono:
 ```markdown
-<img src="logos/favicon-32.png" width="20" height="20" align="absmiddle"> **Open Stream Suite v1.0.2-alpha**
+<img src="logos/favicon-32.png" width="20" height="20" align="absmiddle"> **Open Stream Suite v1.0.3-alpha**
 ```

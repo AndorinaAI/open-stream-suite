@@ -6,6 +6,43 @@
 
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
+## [1.0.3-alpha] — 2026-10-27
+
+Segunda ronda de verificación, pulido y licencia (continúa la auditoría de 1.0.2).
+
+### Corregido — Formas físicas de pack en alertas y widgets (auditoría visual 1.0.2)
+- **Elegir una forma física en una alerta o en un widget ya se pinta**: `common/styles.css` definía las 20 formas de pack solo como conmutador de adornos de escena (`.washi-tape`, `.reticle-*`), elementos que no existen en el overlay de alertas ni en los widgets, y el CSS de alertas no consumía ningún token `--frame-*`/`--skin-*` → la forma se seleccionaba en el panel pero no cambiaba nada.
+- **Cobertura nueva**: cada forma de pack declara ya radio y/o `clip-path` para `#alert-card`, `#banner-alert-root` y `[data-oss-shape-target]` (diana exclusiva de widgets; las escenas no la usan, así que su motor de arquetipos queda intacto).
+- **Catálogo coherente con el render**: los widgets ofrecen las 29 formas (9 genéricas + 20 de pack) que realmente pintan; `chat` mantiene las 9 genéricas porque no expone diana de forma (aplica las suyas con `ChatStyles`).
+- **Test de regresión** (`tests/test_component_shapes_render.py`): fija que toda forma ofrecida por el catálogo tenga regla de render en escenas, alertas y widgets, y que las 9 genéricas existan en `oss-shape.js`.
+
+### Corregido — Contraste de etiquetas al cambiar de pack (auditoría visual 1.0.2, navegador real)
+- **Medición con navegador** (Chrome headless, 1920×1080, simulando OBS, 132 cargas = 27 escenas + 5 widgets + alertas × 4 packs): las 21 combinaciones de tema resuelven **todos** sus tokens, sin desbordes ni recortes de texto, sin peticiones fallidas ni errores de render.
+- **Tinta sobre placas de acento**: el texto blanco sobre `--color-accent-cyan` solo era legible en **1 de 21** temas (medido). Ahora las etiquetas sobre placa maciza (`.ticker-tag`, `.timeout-badge`, `.match-badge`) usan tinta oscura, legible en **21/21** (≥5.1:1).
+- **Acentos oscuros como color de texto**: algunos packs definen `--color-accent-orange` muy oscuro (p. ej. `#7928CA`) y las etiquetas que lo usaban como texto caían a ~2:1 al aplicar ese pack. Las etiquetas afectadas pasan a `--color-accent-cyan` (≥5.1:1 sobre panel oscuro en 21/21) o al token de texto claro.
+- **Leyenda del polaroid**: la tinta marrón sobre papel marfil (4.2:1, correcta) solo se mantiene cuando la escena conserva ese papel (forma `cozy_polaroid` u original); con otras formas pasa a texto claro para no quedar marrón sobre panel oscuro.
+- **Lista de ajuste fino pendiente** (documentada en `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectores entre 2.0:1 y 4.3:1 (tagline en algunas escenas y un par de etiquetas con estilo en línea) que dependen de decisiones de diseño por escena.
+
+### Corregido — Versión única y launcher al día
+- **El launcher ya no se queda atrás**: mostraba «v1.0.0-α» y declaraba `1.0.1-alpha` mientras el proyecto iba por `1.0.2-alpha`. Ahora `app/launcher/__init__.py` y la etiqueta de la GUI leen **`app/version.py`** (fuente única de verdad).
+- **12 diccionarios i18n** (ES/EN, panel, alertas, widgets, overlays y lanzador) actualizados de `v1.0.0-α` a la versión real.
+- **Test de regresión** (`tests/test_version_consistency.py`): recorre los diccionarios en profundidad, comprueba que el launcher siga `version.py` y que no vuelva a haber versiones literales en la interfaz ni en los assets.
+
+### Añadido — Asignación en lote (una petición en vez de decenas)
+- Nuevo endpoint `POST /api/themes/overlay-assignment/bulk` (máximo 200 entradas, informa de `applied`/`failed` y responde 400 si nada es válido). El panel lo usa al aplicar estilo a las escenas seleccionadas de una fusión y en la restauración masiva.
+- `tests/test_bulk_assignment.py` (3 pruebas) fija el contrato y **restaura el estado del usuario** al terminar.
+
+### Cambiado — Limpieza de repositorio y documentación
+- Retirada la **página de catálogo muerta** (`app/index.html` y `common/catalog.js/css`): era inalcanzable porque `/index.html` redirige al panel y el catálogo vive ya en «Temas y Escenas».
+- `backups/` deja de versionarse (117 ficheros duplicados de los packs) y se conserva en disco, como `donations_config.json`; el paquete descargable ya no los incluye.
+- `OBS_SETUP` (ES/EN) explica que el WebSocket valida el origen: hay que previsualizar en el puerto de la app (un 403 es esa protección funcionando).
+- La guía de donaciones (`DOMINIO_PROPIO_Y_WEBHOOKS`, ES/EN) añade el **Método 3**: URL pública fija **gratuita** sin comprar dominio (ngrok estático, Tailscale Funnel o DDNS + Caddy), y aclara que **Streamlabs no necesita URL** (socket + token).
+
+### Cambiado — Licencia y CLA listos para vender
+- **Licencia comercial completa**: umbral de **80.000 €** de facturación anual (por debajo, uso gratuito), precios **a consultar según caso y escala**, plazo de subsanación de **30 días naturales**, jurisdicción de **A Coruña (España)** e identificación del licenciante. El umbral aparece también en los README (ES/EN).
+- **`tests/test_legal_documents.py`** (5 pruebas): prohíbe que vuelvan los huecos entre corchetes, comprueba que la licencia es cobrable (umbral, precios, contacto, plazo), que la jurisdicción está en licencia y CLA, y que el bot acepta **exactamente la misma frase** que pide el CLA.
+- **`dev` protegida igual que `main`** (CI + check `cla` obligatorios en ambas ramas), **sin revisiones de PR obligatorias** para no bloquear el trabajo en solitario.
+
 ## [1.0.2-alpha] — 2026-10-26
 
 Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widgets y alertas, integración nativa de temas, licencia dual AGPL/comercial, arranque sin CDN de Google Fonts e i18n al día. Detalle de los hallazgos cerrados: `app/docs/AUDITORIA_WEBAPP_V3.md` y `app/docs/TAREAS_PRIORIZADAS_V3.md`.
@@ -110,24 +147,6 @@ Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widget
 - **Alertas de panel**: el overlay aplica `?theme=`/`theme_change`; banners y `.alert-box` heredan `--color-accent-cyan`, `--color-panel-bg`, `--color-text-light` de forma nativa.
 - **Convenciones** documentadas (ES/EN) para que nuevos widgets y alertas se integren sin conocer los existentes.
 - **Tests** de contrato nativo: `tests/test_native_theming_contract.py` (12 pruebas; incluye verificación de que el CSS/JS base no cambió).
-
-### Corregido — Formas físicas de pack en alertas y widgets (auditoría visual 1.0.2)
-- **Elegir una forma física en una alerta o en un widget ya se pinta**: `common/styles.css` definía las 20 formas de pack solo como conmutador de adornos de escena (`.washi-tape`, `.reticle-*`), elementos que no existen en el overlay de alertas ni en los widgets, y el CSS de alertas no consumía ningún token `--frame-*`/`--skin-*` → la forma se seleccionaba en el panel pero no cambiaba nada.
-- **Cobertura nueva**: cada forma de pack declara ya radio y/o `clip-path` para `#alert-card`, `#banner-alert-root` y `[data-oss-shape-target]` (diana exclusiva de widgets; las escenas no la usan, así que su motor de arquetipos queda intacto).
-- **Catálogo coherente con el render**: los widgets ofrecen las 29 formas (9 genéricas + 20 de pack) que realmente pintan; `chat` mantiene las 9 genéricas porque no expone diana de forma (aplica las suyas con `ChatStyles`).
-- **Test de regresión** (`tests/test_component_shapes_render.py`): fija que toda forma ofrecida por el catálogo tenga regla de render en escenas, alertas y widgets, y que las 9 genéricas existan en `oss-shape.js`.
-
-### Corregido — Contraste de etiquetas al cambiar de pack (auditoría visual 1.0.2, navegador real)
-- **Medición con navegador** (Chrome headless, 1920×1080, simulando OBS, 132 cargas = 27 escenas + 5 widgets + alertas × 4 packs): las 21 combinaciones de tema resuelven **todos** sus tokens, sin desbordes ni recortes de texto, sin peticiones fallidas ni errores de render.
-- **Tinta sobre placas de acento**: el texto blanco sobre `--color-accent-cyan` solo era legible en **1 de 21** temas (medido). Ahora las etiquetas sobre placa maciza (`.ticker-tag`, `.timeout-badge`, `.match-badge`) usan tinta oscura, legible en **21/21** (≥5.1:1).
-- **Acentos oscuros como color de texto**: algunos packs definen `--color-accent-orange` muy oscuro (p. ej. `#7928CA`) y las etiquetas que lo usaban como texto caían a ~2:1 al aplicar ese pack. Las etiquetas afectadas pasan a `--color-accent-cyan` (≥5.1:1 sobre panel oscuro en 21/21) o al token de texto claro.
-- **Leyenda del polaroid**: la tinta marrón sobre papel marfil (4.2:1, correcta) solo se mantiene cuando la escena conserva ese papel (forma `cozy_polaroid` u original); con otras formas pasa a texto claro para no quedar marrón sobre panel oscuro.
-- **Lista de ajuste fino pendiente** (documentada en `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectores entre 2.0:1 y 4.3:1 (tagline en algunas escenas y un par de etiquetas con estilo en línea) que dependen de decisiones de diseño por escena.
-
-### Corregido — Versión única y launcher al día
-- **El launcher ya no se queda atrás**: mostraba «v1.0.0-α» y declaraba `1.0.1-alpha` mientras el proyecto iba por `1.0.2-alpha`. Ahora `app/launcher/__init__.py` y la etiqueta de la GUI leen **`app/version.py`** (fuente única de verdad).
-- **12 diccionarios i18n** (ES/EN, panel, alertas, widgets, overlays y lanzador) actualizados de `v1.0.0-α` a la versión real.
-- **Test de regresión** (`tests/test_version_consistency.py`): recorre los diccionarios en profundidad, comprueba que el launcher siga `version.py` y que no vuelva a haber versiones literales en la interfaz ni en los assets.
 
 ## [1.0.1-alpha] — 2026-10-23
 

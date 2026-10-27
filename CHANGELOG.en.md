@@ -6,6 +6,43 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3-alpha] — 2026-10-27
+
+Second verification, polish and licensing round (continues the 1.0.2 audit).
+
+### Fixed — Pack shapes on alerts and widgets (1.0.2 visual audit)
+- **Picking a physical shape on an alert or a widget now actually renders**: `common/styles.css` only used the 20 pack shapes to toggle scene ornaments (`.washi-tape`, `.reticle-*`), elements that do not exist in the alerts overlay or in widgets, and the alerts CSS consumed no `--frame-*`/`--skin-*` token at all → the shape could be selected in the panel but nothing changed.
+- **New coverage**: every pack shape now declares a radius and/or `clip-path` for `#alert-card`, `#banner-alert-root` and `[data-oss-shape-target]` (a widget-only hook, so the scene archetype engine stays untouched).
+- **Catalogue matches rendering**: widgets now offer the 29 shapes (9 generic + 20 pack) they really draw; `chat` keeps the 9 generic ones because it exposes no shape target (it applies its own via `ChatStyles`).
+- **Regression test** (`tests/test_component_shapes_render.py`): every shape offered by the catalogue must have a render rule for scenes, alerts and widgets, and the 9 generic ones must exist in `oss-shape.js`.
+
+### Fixed — Label contrast when switching packs (1.0.2 visual audit, real browser)
+- **Browser measurement** (headless Chrome, 1920×1080, simulating OBS, 132 loads = 27 scenes + 5 widgets + alerts × 4 packs): all 21 theme combinations resolve **every** token, with no text overflow, no clipping, no failed requests and no rendering errors.
+- **Ink on accent plates**: white text on `--color-accent-cyan` was legible in only **1 of 21** themes (measured). Labels on solid accent plates (`.ticker-tag`, `.timeout-badge`, `.match-badge`) now use dark ink, legible in **21/21** (≥5.1:1).
+- **Dark accents used as text colour**: some packs define a very dark `--color-accent-orange` (e.g. `#7928CA`), so labels using it as text dropped to ~2:1 with that pack active. Those labels now use `--color-accent-cyan` (≥5.1:1 on the dark panel in 21/21) or the light text token.
+- **Polaroid caption**: the brown ink on ivory paper (4.2:1, correct) is kept only while the scene keeps that paper (`cozy_polaroid` or original shape); with other shapes it switches to light text so it never ends up brown on a dark panel.
+- **Remaining fine-tuning list** (recorded in `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectors between 2.0:1 and 4.3:1 (the tagline in some scenes and a couple of inline-styled labels) that depend on per-scene design decisions.
+
+### Fixed — Single version source and up-to-date launcher
+- **The launcher no longer lags behind**: it showed "v1.0.0-α" and declared `1.0.1-alpha` while the project was already at `1.0.2-alpha`. Both `app/launcher/__init__.py` and the GUI label now read **`app/version.py`** (single source of truth).
+- **12 i18n dictionaries** (ES/EN, panel, alerts, widgets, overlays and launcher) updated from `v1.0.0-α` to the real version.
+- **Regression test** (`tests/test_version_consistency.py`): walks the dictionaries in depth, checks the launcher follows `version.py` and that no literal version strings come back into the UI or the assets.
+
+### Added — Batch assignment (one request instead of dozens)
+- New `POST /api/themes/overlay-assignment/bulk` endpoint (up to 200 entries, reports `applied`/`failed`, returns 400 when nothing is valid). The panel uses it to style a fusion's selected scenes and for the bulk restore.
+- `tests/test_bulk_assignment.py` (3 tests) locks the contract and **restores the user state** on exit.
+
+### Changed — Repository and documentation clean-up
+- Removed the **dead catalog page** (`app/index.html` plus `common/catalog.js/css`): unreachable because `/index.html` redirects to the panel, where the catalog now lives.
+- `backups/` is no longer versioned (117 duplicated pack files) and is kept locally, like `donations_config.json`; the downloadable package no longer ships them.
+- `OBS_SETUP` (ES/EN) explains that the WebSocket validates the origin: previews must run on the app port (a 403 is that protection working).
+- The donations guide (`DOMINIO_PROPIO_Y_WEBHOOKS`, ES/EN) adds **METHOD 3**: free, stable public URLs without buying a domain (ngrok static domain, Tailscale Funnel or DDNS + Caddy), and clarifies that **Streamlabs needs no URL** (socket + token).
+
+### Changed — Licence and CLA ready to sell
+- **Commercial licence completed**: 80.000 € / €80,000 annual revenue threshold (below it, free use), pricing **upon request based on case and scale**, 30-day cure period, A Coruña jurisdiction and licensor identification. The threshold is also in both READMEs.
+- **`tests/test_legal_documents.py`** (5 tests): forbids placeholder brackets coming back, checks the licence is quotable (threshold, pricing, contact, cure period), that the jurisdiction is in licence and CLA, and that the bot accepts **exactly the same phrase** the CLA asks for.
+- **`dev` is protected like `main`** (required CI + `cla` check on both branches), with **no required PR reviews** so solo work is not blocked.
+
 ## [1.0.2-alpha] — 2026-10-26
 
 Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, native theme integration, dual AGPL/commercial licence, no Google Fonts CDN dependency and up-to-date i18n. Closed findings: `app/docs/AUDITORIA_WEBAPP_V3.md` and `app/docs/TAREAS_PRIORIZADAS_V3.md`.
@@ -110,24 +147,6 @@ Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, na
 - **Panel-based alerts**: the overlay applies `?theme=`/`theme_change`; banners and `.alert-box` natively inherit `--color-accent-cyan`, `--color-panel-bg`, `--color-text-light`.
 - **Conventions** documented (ES/EN) so new widgets and alerts integrate without knowing the existing ones.
 - **Native contract tests**: `tests/test_native_theming_contract.py` (12 tests; includes proof the base CSS/JS is unchanged).
-
-### Fixed — Pack shapes on alerts and widgets (1.0.2 visual audit)
-- **Picking a physical shape on an alert or a widget now actually renders**: `common/styles.css` only used the 20 pack shapes to toggle scene ornaments (`.washi-tape`, `.reticle-*`), elements that do not exist in the alerts overlay or in widgets, and the alerts CSS consumed no `--frame-*`/`--skin-*` token at all → the shape could be selected in the panel but nothing changed.
-- **New coverage**: every pack shape now declares a radius and/or `clip-path` for `#alert-card`, `#banner-alert-root` and `[data-oss-shape-target]` (a widget-only hook, so the scene archetype engine stays untouched).
-- **Catalogue matches rendering**: widgets now offer the 29 shapes (9 generic + 20 pack) they really draw; `chat` keeps the 9 generic ones because it exposes no shape target (it applies its own via `ChatStyles`).
-- **Regression test** (`tests/test_component_shapes_render.py`): every shape offered by the catalogue must have a render rule for scenes, alerts and widgets, and the 9 generic ones must exist in `oss-shape.js`.
-
-### Fixed — Label contrast when switching packs (1.0.2 visual audit, real browser)
-- **Browser measurement** (headless Chrome, 1920×1080, simulating OBS, 132 loads = 27 scenes + 5 widgets + alerts × 4 packs): all 21 theme combinations resolve **every** token, with no text overflow, no clipping, no failed requests and no rendering errors.
-- **Ink on accent plates**: white text on `--color-accent-cyan` was legible in only **1 of 21** themes (measured). Labels on solid accent plates (`.ticker-tag`, `.timeout-badge`, `.match-badge`) now use dark ink, legible in **21/21** (≥5.1:1).
-- **Dark accents used as text colour**: some packs define a very dark `--color-accent-orange` (e.g. `#7928CA`), so labels using it as text dropped to ~2:1 with that pack active. Those labels now use `--color-accent-cyan` (≥5.1:1 on the dark panel in 21/21) or the light text token.
-- **Polaroid caption**: the brown ink on ivory paper (4.2:1, correct) is kept only while the scene keeps that paper (`cozy_polaroid` or original shape); with other shapes it switches to light text so it never ends up brown on a dark panel.
-- **Remaining fine-tuning list** (recorded in `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectors between 2.0:1 and 4.3:1 (the tagline in some scenes and a couple of inline-styled labels) that depend on per-scene design decisions.
-
-### Fixed — Single version source and up-to-date launcher
-- **The launcher no longer lags behind**: it showed "v1.0.0-α" and declared `1.0.1-alpha` while the project was already at `1.0.2-alpha`. Both `app/launcher/__init__.py` and the GUI label now read **`app/version.py`** (single source of truth).
-- **12 i18n dictionaries** (ES/EN, panel, alerts, widgets, overlays and launcher) updated from `v1.0.0-α` to the real version.
-- **Regression test** (`tests/test_version_consistency.py`): walks the dictionaries in depth, checks the launcher follows `version.py` and that no literal version strings come back into the UI or the assets.
 
 ## [1.0.1-alpha] — 2026-10-23
 
