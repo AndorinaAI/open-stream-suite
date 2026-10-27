@@ -31,11 +31,11 @@ cargas = 27 escenas + 5 widgets + alertas × 4 packs (uno por pack). Resuelto en
 - Tagline (`[data-text-key="channel.tagline"]`): token atenuado del tema sobre fondo
   oscuro y tinta sobre el papel marfil del polaroid (4,2:1, correcto).
 
-**Único resto documentado** (no bloqueante): las etiquetas que caen sobre **placas
-anidadas tintadas** (p. ej. `// HASTA LA PRÓXIMA` en las escenas Gamer) quedan en
-**3,3:1**, por encima del umbral AA de texto grande y con sombra de seguridad añadida.
-Para subirlas a 4,5:1 habría que cambiar el diseño de esa placa concreta (decisión de
-diseño, no un fallo).
+**Estado**: todas las etiquetas medidas quedan por encima del umbral AA salvo
+`.goal-pct` (4,28:1), que es una décima por debajo y mantiene la sombra de seguridad
+(es un color de paleta propio del widget). La etiqueta de la tarjeta de despedida
+(`.ending-farewell-card`) pasó de 3,3:1 a **9,3–12,9:1** usando el token de texto claro,
+porque su tarjeta tiene un fondo propio más claro que el lienzo del tema.
 
 Reproducir: Chrome headless (o Playwright) sirviendo `app/` **en el puerto de la app**
 (el WebSocket valida el origen), con `window.obsstudio` simulado y `?theme=<id>&lock=1`,

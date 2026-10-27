@@ -15,7 +15,7 @@
 - **Licensor:** **Jorge García Formoso** ("the Licensor"), holder of the
   exploitation rights of **Open Stream Suite** ("the Software").
 - **Licensee:** the legal entity contracting this licence (company name, tax ID,
-  registered address): `[...]`.
+  **Jorge García Formoso** (tax ID and registered address are provided when signing the agreement) — contact: **admin@andorina.dev**.
 - **Contact:** admin@andorina.dev
 
 ## 2. Relationship with the public licence (dual licensing)

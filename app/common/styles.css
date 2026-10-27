@@ -2264,6 +2264,13 @@ body[data-theme-shape="cozy_soft"] :is([data-oss-panel], .panel-card, .chat-pane
 .metric-chip-value {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55) !important;
 }
+/* La tarjeta de despedida tiene fondo propio, más claro que el lienzo del tema:
+   el acento garantizado no llega a 4,5:1 ahí, así que su etiqueta y su mensaje
+   usan el texto claro del tema (medido 13,3:1 frente a los 3,3:1 anteriores). */
+.ending-farewell-card div,
+.ending-farewell-card p {
+  color: var(--color-text-light, #F7EFE6) !important;
+}
 /* La leyenda del polaroid es tinta sobre papel marfil: solo cuando la forma
    activa NO pinta ese papel (ni es el look original de la escena) se cambia a
    texto claro, para no quedar marrón sobre panel oscuro. */

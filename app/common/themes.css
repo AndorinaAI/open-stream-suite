@@ -102,7 +102,7 @@ body[data-theme="matcha_bamboo"],
 }
 body[data-theme="matcha_bamboo"],
 [data-theme="matcha_bamboo"] {
-  --color-accent-cyan-text: #74917B;
+  --color-accent-cyan-text: #839C89;
   --color-on-accent-cyan: #0B0E14;
   --color-accent-orange-text: #D4A373;
   --color-on-accent-orange: #0B0E14;
@@ -174,7 +174,7 @@ body[data-theme="sakura_sunset"],
 [data-theme="sakura_sunset"] {
   --color-accent-cyan-text: #E5989B;
   --color-on-accent-cyan: #0B0E14;
-  --color-accent-orange-text: #C86D51;
+  --color-accent-orange-text: #CE7C62;
   --color-on-accent-orange: #0B0E14;
 }
 
@@ -417,7 +417,7 @@ body[data-theme="cyberpunk"],
 [data-theme="cyberpunk"] {
   --color-accent-cyan-text: #FFE600;
   --color-on-accent-cyan: #0B0E14;
-  --color-accent-orange-text: #FF0055;
+  --color-accent-orange-text: #FF1A66;
   --color-on-accent-orange: #0B0E14;
 }
 
@@ -519,7 +519,7 @@ body[data-theme="synthwave"],
 [data-theme="synthwave"] {
   --color-accent-cyan-text: #00F9FF;
   --color-on-accent-cyan: #0B0E14;
-  --color-accent-orange-text: #FF2A85;
+  --color-accent-orange-text: #FF358B;
   --color-on-accent-orange: #0B0E14;
 }
 
@@ -694,7 +694,7 @@ body[data-theme="neon_streamer"],
 [data-theme="neon_streamer"] {
   --color-accent-cyan-text: #00DFD8;
   --color-on-accent-cyan: #0B0E14;
-  --color-accent-orange-text: #9A5ED7;
+  --color-accent-orange-text: #A168DA;
   --color-on-accent-orange: #FFFFFF;
 }
 

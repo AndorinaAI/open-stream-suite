@@ -473,7 +473,10 @@ def _derived_theme_tokens(theme_css: str, theme_id: str) -> str:
         m = re.search(rf"{name}\s*:\s*([^;]+);", theme_css)
         return m.group(1).strip() if m else ""
 
-    background = token("--color-bg-dark") or token("--color-panel-bg") or "#0B0E14"
+    # Se deriva contra el fondo MÁS CLARO posible (el panel, no el bg-dark): las
+    # etiquetas viven sobre tarjetas que pueden ser más claras que el lienzo (p. ej.
+    # `.ending-farewell-card` medía rgb(39,45,52) y dejaba el acento en 3,3:1).
+    background = token("--color-panel-bg") or token("--color-bg-dark") or "#0B0E14"
     lines = []
     for source, derived, on_accent in (("--color-accent-cyan", "--color-accent-cyan-text", "--color-on-accent-cyan"),
                                        ("--color-accent-orange", "--color-accent-orange-text", "--color-on-accent-orange")):

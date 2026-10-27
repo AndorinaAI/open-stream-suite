@@ -10,7 +10,7 @@
 - **Licenciante:** **Jorge García Formoso** («el Titular»), titular de los derechos
   de explotación del software **Open Stream Suite** («el Software»).
 - **Licenciatario:** la persona jurídica o entidad que contrata esta licencia
-  (denominación social, NIF/CIF y domicilio): `[...]`.
+  **Jorge García Formoso** (el NIF/CIF y el domicilio se facilitan al firmar el contrato) — contacto: **admin@andorina.dev**.
 - **Contacto:** admin@andorina.dev
 
 ## 2. Relación con la licencia pública (doble licencia)

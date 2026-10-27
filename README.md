@@ -211,7 +211,7 @@ Each widget can be loaded as an independent Browser Source in any scene:
 Open Stream Suite uses a **dual licence**:
 
 - **Public licence: [GNU AGPL v3.0 or later](LICENSE)** — free software: you may use, study, modify and redistribute the project for free **as long as you comply with the AGPL** (publish the source of your modifications and impose no further restrictions).
-- **Paid commercial licence:** if you are a **company** and want to use it without publishing your code (embedding it in a product, hosted service, white-labelling, redistribution), you need the [commercial licence](LICENSE-COMMERCIAL.en.md). Contact: **admin@andorina.dev**.
+- **Paid commercial licence:** if you are a **company** and want to use it without publishing your code (embedding it in a product, hosted service, white-labelling, redistribution), you need the [commercial licence](LICENSE-COMMERCIAL.en.md). **Below €80,000 in annual revenue the use is free**; above it, the commercial licence is **priced upon request based on case and scale**. Contact: **admin@andorina.dev**.
 - **Trademarks:** the name, logo and visual identity are covered by **neither** licence → [`TRADEMARK.en.md`](TRADEMARK.en.md).
 - **Third-party assets** (typefaces, icons, Python dependencies) are not covered by the project licence → [`NOTICE.en.md`](NOTICE.en.md).
 

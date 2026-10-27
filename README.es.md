@@ -208,7 +208,7 @@ Puedes añadir estos widgets independientes como fuentes de Navegador en cualqui
 Open Stream Suite usa **doble licencia**:
 
 - **Licencia pública: [GNU AGPL v3.0 o posterior](LICENSE)** — software libre: puedes usar, estudiar, modificar y redistribuir el proyecto gratis **siempre que cumplas la AGPL** (publicar el código de tus modificaciones y no imponer restricciones adicionales).
-- **Licencia comercial de pago:** si eres una **empresa** y quieres usarlo sin publicar tu código (integrarlo en un producto, servicio alojado, marca blanca, redistribución), necesitas la [licencia comercial](LICENSE-COMMERCIAL.md). Contacto: **admin@andorina.dev**.
+- **Licencia comercial de pago:** si eres una **empresa** y quieres usarlo sin publicar tu código (integrarlo en un producto, servicio alojado, marca blanca, redistribución), necesitas la [licencia comercial](LICENSE-COMMERCIAL.md). **Por debajo de 80.000 € de facturación anual el uso es gratuito**; por encima, licencia comercial **a consultar según caso y escala**. Contacto: **admin@andorina.dev**.
 - **Marcas:** el nombre, el logo y la identidad visual **no** están cubiertos por ninguna de las dos licencias → [`TRADEMARK.md`](TRADEMARK.md).
 - **Recursos de terceros** (tipografías, iconos, dependencias de Python): tampoco los cubre la licencia del proyecto → [`NOTICE.md`](NOTICE.md).
 
