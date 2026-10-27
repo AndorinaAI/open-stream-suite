@@ -93,3 +93,82 @@ ingress:
 cloudflared tunnel run my-stream
 ```
 Your local Open Stream Suite is now securely reachable from anywhere at `https://stream.yourdomain.com`!
+
+---
+
+## 🥉 METHOD 3 (Zero cost): a permanent public URL without buying a domain
+
+You do **not** need to buy a domain to receive webhooks: PayPal, Ko-fi and Buy Me a
+Coffee only require a **public, stable HTTPS URL**, and there are free ways to get one.
+
+> ⚠️ **What to avoid**: one-click tunnels with a temporary domain (`*.trycloudflare.com`,
+> random ngrok subdomains, `localtunnel`…). They change on every restart, so you would have
+> to paste the new URL into each platform **every time**. With the options below you paste
+> the URLs **once**.
+
+| Option | Own domain? | Cost | Stable URL | Open ports |
+|---|---|---|---|---|
+| METHOD 1: Cloudflare Tunnel + domain | Yes | domain (~€10-15/year) | ✅ | No |
+| **Option A: ngrok free static domain** | **No** | **€0** | ✅ | No |
+| **Option B: Tailscale Funnel** | **No** | **€0** | ✅ | No |
+| Option C: DDNS (DuckDNS) + Caddy | No (free hostname) | €0 | ✅ | Yes (80/443) |
+| Own VPS | Yes | ~€4-5/month | ✅ | No |
+| Quick tunnel (temporary) | No | €0 | ❌ | No |
+
+### 🅰️ Option A — ngrok free static domain (fastest)
+1. Create a free [ngrok](https://ngrok.com/) account and copy your **authtoken** and your
+   **free static domain** (something like `something.ngrok-free.app`).
+2. Install the client and authenticate:
+   ```bash
+   ngrok config add-authtoken YOUR_AUTHTOKEN
+   ```
+3. Publish the app port **always with that same domain**:
+   ```bash
+   ngrok http 8080 --url=https://something.ngrok-free.app
+   ```
+   *(Older ngrok versions use `--domain` instead of `--url`.)*
+4. Paste `https://something.ngrok-free.app` into the panel and use the URLs it generates.
+
+> **Pros**: ✅ €0 · ✅ stable URL without buying anything · ✅ no open ports · ✅ home IP hidden.
+> **Keep in mind**: the free plan has usage limits (far beyond donation webhooks) and the
+> tunnel must be running when you want to receive donations.
+
+### 🅱️ Option B — Tailscale Funnel (free, no domain, no open ports)
+1. Create a free [Tailscale](https://tailscale.com/) account and install the client.
+2. Sign in and publish the app port:
+   ```bash
+   tailscale up
+   tailscale funnel 8080
+   ```
+   *(The first time it asks you to enable **Funnel/HTTPS** for the machine: accept the link.)*
+3. You get a stable URL like `https://your-machine.your-tailnet.ts.net`. Paste it in the panel.
+
+> **Pros**: ✅ €0 · ✅ automatic HTTPS · ✅ permanent stable URL · ✅ router untouched.
+> **Keep in mind**: the address carries your tailnet name (less "pretty" than your own
+> domain, but perfectly valid for webhooks).
+
+### 🅲 Option C — Free DDNS hostname (DuckDNS) + Caddy
+1. Create a free hostname at [DuckDNS](https://www.duckdns.org/) (e.g. `mystream.duckdns.org`)
+   and keep its **updater** running so it always points at your public IP.
+2. Forward ports **80** and **443** on your router to your PC (as in METHOD 2).
+3. Install Caddy and use your hostname in the `Caddyfile`:
+   ```caddy
+   mystream.duckdns.org {
+       reverse_proxy localhost:8080
+   }
+   ```
+4. Paste `https://mystream.duckdns.org` into the panel.
+
+> **Pros**: ✅ €0 with your own hostname (DuckDNS-branded).
+> **Keep in mind**: it requires **open ports** and **exposes your public IP**, so it is the
+> last option if privacy matters to you.
+
+### 🔎 Notes that apply to every method
+- **Streamlabs needs none of this**: it connects through its *socket* with your token, so
+  its donations work with no domain, no tunnel and no URLs to paste.
+- Whichever tunnel you use, you paste **one base address** in the panel and it generates the
+  **three full URLs** (Ko-fi, PayPal and Buy Me a Coffee).
+- **Changing the URL is not enough in the panel**: you must update it in each platform too.
+  Pick a **stable** URL from the start.
+- Configure each webhook **secret** (Ko-fi, BMC, PayPal) so nobody can inject fake donations:
+  see [`WEBHOOKS_SEGURIDAD.md`](WEBHOOKS_SEGURIDAD.md).

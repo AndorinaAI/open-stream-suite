@@ -147,6 +147,90 @@ Caddy se conectará a Let's Encrypt, obtendrá el certificado SSL gratis y reenv
 
 ---
 
+## 🥉 MÉTODO 3 (Cero coste): URL pública fija SIN comprar dominio
+
+Si no quieres comprar un dominio **no estás obligado a renunciar a los webhooks**.
+PayPal, Ko-fi y Buy Me a Coffee no exigen un dominio: exigen una URL **pública, HTTPS
+y estable**. Hay varias formas gratuitas de conseguirla.
+
+> ⚠️ **Lo que sí debes evitar**: los túneles "de un clic" con dominio temporal
+> (`*.trycloudflare.com`, subdominios aleatorios de ngrok, `localtunnel`…). Cambian al
+> reiniciar, así que tendrías que volver a pegar la URL en cada plataforma **cada vez**.
+> Con las opciones de abajo pegas las URLs **una sola vez**.
+
+| Opción | ¿Dominio propio? | Coste | URL fija | Puertos abiertos |
+|---|---|---|---|---|
+| MÉTODO 1: Cloudflare Tunnel + dominio | Sí | dominio (~10-15 €/año) | ✅ | No |
+| **Opción A: ngrok con dominio estático gratuito** | **No** | **0 €** | ✅ | No |
+| **Opción B: Tailscale Funnel** | **No** | **0 €** | ✅ | No |
+| Opción C: DDNS (DuckDNS) + Caddy | No (hostname gratis) | 0 € | ✅ | Sí (80/443) |
+| VPS propio | Sí | ~4-5 €/mes | ✅ | No |
+| Túnel temporal (quick tunnel) | No | 0 € | ❌ | No |
+
+### 🅰️ Opción A — ngrok con dominio estático gratuito (la más rápida)
+1. Crea una cuenta gratuita en [ngrok](https://ngrok.com/). En el panel de ngrok copia
+   tu **authtoken** y tu **dominio estático gratuito** (te dan uno tipo `algo.ngrok-free.app`).
+2. Instala el cliente y autentícalo:
+   ```bash
+   ngrok config add-authtoken TU_AUTHTOKEN
+   ```
+3. Publica el puerto de la app **siempre con ese mismo dominio**:
+   ```bash
+   ngrok http 8080 --url=https://algo.ngrok-free.app
+   ```
+   *(En versiones antiguas de ngrok la opción se llama `--domain` en vez de `--url`.)*
+4. Pega `https://algo.ngrok-free.app` en el panel (ver *Configuración Final*) y usa las
+   URLs que te genera.
+
+> **Ventajas**: ✅ 0 € · ✅ URL estable sin comprar nada · ✅ no abres puertos · ✅ no
+> expones tu IP.
+> **A tener en cuenta**: el plan gratuito tiene límites de uso (de sobra para webhooks
+> de donaciones) y el túnel debe estar arrancado cuando quieras recibirlas.
+
+### 🅱️ Opción B — Tailscale Funnel (gratis, sin dominio y sin abrir puertos)
+1. Crea una cuenta gratuita en [Tailscale](https://tailscale.com/) e instala el cliente.
+2. Inicia sesión y publica el puerto de la app:
+   ```bash
+   tailscale up
+   tailscale funnel 8080
+   ```
+   *(La primera vez te pide activar **Funnel/HTTPS** para tu equipo: acepta el enlace
+   que te muestra.)*
+3. Te dará una URL fija del estilo `https://tu-equipo.tu-tailnet.ts.net`. Pégala en el panel.
+
+> **Ventajas**: ✅ 0 € · ✅ HTTPS automático · ✅ URL fija para siempre · ✅ no tocas el router.
+> **A tener en cuenta**: la dirección lleva el nombre de tu *tailnet* (menos "bonita"
+> que un dominio propio, pero perfectamente válida para webhooks).
+
+### 🅲 Opción C — Hostname gratuito con DDNS (DuckDNS) + Caddy
+1. Crea un hostname gratuito en [DuckDNS](https://www.duckdns.org/) (por ejemplo
+   `mistream.duckdns.org`) y deja funcionando su **actualizador** para que apunte
+   siempre a tu IP pública (la de casa cambia de vez en cuando).
+2. Redirige los puertos **80** y **443** de tu router a tu PC (igual que en el MÉTODO 2).
+3. Instala Caddy y usa tu hostname en el `Caddyfile`:
+   ```caddy
+   mistream.duckdns.org {
+       reverse_proxy localhost:8080
+   }
+   ```
+4. Pega `https://mistream.duckdns.org` en el panel.
+
+> **Ventajas**: ✅ 0 € con un hostname propio (aunque sea de DuckDNS).
+> **A tener en cuenta**: hay que **abrir puertos** y tu **IP pública queda expuesta**,
+> así que es la última opción si te importa la privacidad.
+
+### 🔎 Notas válidas para cualquier método
+- **Streamlabs no necesita nada de esto**: se conecta por su *socket* con tu token, de
+  modo que sus donaciones funcionan sin dominio, sin túnel y sin pegar URLs.
+- Da igual el túnel que uses: en el panel pegas **una sola dirección base** y él genera
+  las **tres URLs** completas (Ko-fi, PayPal y Buy Me a Coffee).
+- **Si cambias de URL no basta con el panel**: hay que actualizarla también en cada
+  plataforma. Por eso merece la pena elegir una URL **fija** desde el principio.
+- Configura los **secretos** de cada webhook (Ko-fi, BMC, PayPal) para que nadie pueda
+  inyectarte donaciones falsas: ver [`WEBHOOKS_SEGURIDAD.md`](WEBHOOKS_SEGURIDAD.md).
+
+---
+
 ## 📋 Configuración Final en el Panel de Open Stream Suite
 
 Una vez que tu dominio `https://stream.tudominio.com` responda correctamente en internet:
