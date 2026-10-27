@@ -58,16 +58,23 @@ function connectWS() {
       if (!data || data.type === 'system_status') return;
 
       if (data.type === 'theme_change' && data.theme) {
-        if (window.AlertShapes) AlertShapes.setGlobalTheme(data.theme);
+        if (window.AlertShapes) {
+          // `?lock=1` / `?lockTheme=1`: la URL congela el aspecto de esta Browser Source.
+          if (AlertShapes.isLocked()) return;
+          AlertShapes.setGlobalTheme(data.theme);
+        }
         // El tema global sólo aplica si el tipo visible no tiene tema explícito.
         var visible = window.AlertShapes ? AlertShapes.visibleType() : null;
         if (!window.AlertShapes || !visible || !AlertShapes.isExplicit(visible)) {
           document.body.setAttribute('data-theme', data.theme);
+          if (window.OSSSkin) window.OSSSkin.apply(data.theme);
         }
         return;
       }
 
       if (data.type === 'alert_theme_change') {
+        // La URL con lock manda sobre cualquier cambio en vivo.
+        if (window.AlertShapes && AlertShapes.isLocked()) return;
         var shapeType = data.id === 'banner' ? 'banner' : 'card';
         if (window.AlertShapes) {
           AlertShapes.setTheme(shapeType, data.theme, data.explicit);

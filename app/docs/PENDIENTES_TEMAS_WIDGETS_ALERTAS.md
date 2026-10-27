@@ -23,7 +23,10 @@
 | 3.4 | Fusión: miembros no visibles/quitables | ✅ Resuelto: chips + quitar; ➕ añadir a fusión desde el bloque de temas |
 | 3.5 | Formas: soporte no indicado | ✅ Resuelto: widgets (9) y alertas (29: 9 genéricas + 20 de pack) muestran su selector; no quedan componentes sin formas |
 | 3.6 | Fallo silencioso del catálogo | ✅ Resuelto: mensaje de error visible |
-| 4 | Tests/documentación | ✅ 8 suites (incluye `test_theme_contract_h1_h10.py`) + E2E; docs y CHANGELOG al día |
+| 2.10 | Solo llegaban los colores del pack, no su aspecto | ✅ Resuelto: `config.js` publica `themeArchetypes` (derivado de disco) y `common/oss-skin.js` pone `data-theme-archetype` en el body; `common/oss-skin.css` consume la familia `--skin-*` (+ marco, halo y textura) en los selectores universales |
+| 2.11 | La decoración del tema se perdía en varios widgets | ✅ Resuelto: la capa usa `!important` **solo** en marco y decoración (varios widgets aplican su look con CSS inyectado o estilos en línea); el radio nunca, para no bloquear las formas físicas |
+| 3.7 | Las alertas ignoraban `?theme=`/`?shape=` de la URL | ✅ Resuelto: `02b-alert-shapes.js` registra la URL como asignación explícita y respeta `?lock=1`/`?lockTheme=1`; `04-ws-client.js` no pisa una fuente bloqueada |
+| 4 | Tests/documentación | ✅ 30 suites (`test_component_skin_contract.py` nueva) + E2E; guías ES/EN con la convención de skin de componentes |
 
 ## 1. Límites intencionales (no son bugs)
 
@@ -33,8 +36,14 @@
   se conservan los presets.
 - **Colores de rol y sombras**: error/éxito/Twitch y sombras decorativas no se tokenizan; deben
   permanecer estables.
-- **`!important` heredado** en CSS de widgets: se mantiene donde protege layout; las capas de tema no
-  lo usan (hay test que lo verifica).
+- **`!important` heredado** en CSS de widgets: se mantiene donde protege layout; las capas de tema
+  no lo usan, con **una excepción documentada**: `common/oss-skin.css` lo usa solo en marco y
+  decoración, porque varios widgets aplican su aspecto con CSS inyectado o estilos en línea y sin
+  ello la apariencia asignada se perdía. El radio del arquetipo nunca lo lleva (las formas ganan) y
+  `tests/test_component_skin_contract.py` fija ambas reglas.
+- **Previsualización del panel**: el escenario de pruebas del panel (`#preview-stage`) simula la
+  alerta con sus propios colores en línea y no recibe `data-theme-archetype`, así que no muestra el
+  skin del pack como OBS. Es una decisión de diseño pendiente, no un fallo del overlay real.
 
 ## 2. Deuda técnica opcional (sin impacto funcional)
 

@@ -267,6 +267,29 @@ window.OSS_CONFIG = {
     "cozy_brb": "latte_caramel",
     "cozy_ending": "nordic_twilight"
   },
-  "backdrops": {}
+  "backdrops": {},
+  "themeArchetypes": {
+    "latte_caramel": "cozy",
+    "lavender_dream": "cozy",
+    "matcha_bamboo": "cozy",
+    "nordic_twilight": "cozy",
+    "sakura_sunset": "cozy",
+    "crimson_esport": "gamer",
+    "cyber_glitch": "gamer",
+    "golden_glory": "gamer",
+    "stealth_mono": "gamer",
+    "toxic_rad": "gamer",
+    "chill": "cozy",
+    "cyberpunk": "gamer",
+    "maker": "maker",
+    "print": "maker",
+    "synthwave": "maker",
+    "terminal": "maker",
+    "clean_minimal": "openstream",
+    "crimson_pulse": "openstream",
+    "emerald_matrix": "gamer",
+    "neon_streamer": "openstream",
+    "sunset_glow": "openstream"
+  }
 };
 window.TALLER_CONFIG = window.OSS_CONFIG;  // alias de compatibilidad hacia atrás

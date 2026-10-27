@@ -446,6 +446,17 @@ body[data-theme="maker"] {
   --badge-clip-path: none;
   --header-radius: 6px;
   --header-clip-path: none;
+
+  /* --- Skin de COMPONENTES (convención --skin-*): solo se declaran tokens.
+     Esta cuadrícula de blueprint llega sola a widgets y alertas a través de
+     common/oss-skin.css; el arquetipo `maker` ya aporta el marco técnico, las
+     marcas CAD de esquina, la barra de acentos y la tipografía monoespaciada. */
+  --skin-panel-pattern:
+    repeating-linear-gradient(0deg, rgba(87, 214, 196, 0.10) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(87, 214, 196, 0.10) 0 1px, transparent 1px 14px),
+    radial-gradient(circle at 100% 0%, rgba(255, 120, 63, 0.12), transparent 46%);
+  --skin-panel-pattern-position: 0 0;
+  --skin-panel-pattern-size: auto;
 }
 body[data-theme="maker"],
 [data-theme="maker"] {

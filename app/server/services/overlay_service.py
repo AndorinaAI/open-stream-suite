@@ -181,6 +181,15 @@ def build_config_payload(texts: dict) -> dict:
         payload["defaultOverlayThemes"] = dict(DEFAULT_OVERLAY_THEMES)
     except Exception:
         payload.setdefault("defaultOverlayThemes", {})
+    # Arquetipo de cada tema (derivado de disco): permite que widgets y alertas
+    # apliquen la familia de tokens `--skin-*` sin conocer ningún pack. Al salir
+    # del disco, todo tema nuevo se resuelve solo (nada que registrar a mano).
+    try:
+        from server.services.theme_manager import get_theme_archetype_map
+        payload["themeArchetypes"] = get_theme_archetype_map()
+    except Exception as e:
+        logger.warning(f"No se pudo publicar themeArchetypes en config.js: {e}")
+        payload.setdefault("themeArchetypes", {})
     return payload
 
 
@@ -250,7 +259,8 @@ def sync_config_js_state() -> None:
         current = CONFIG_JS_FILE.read_text(encoding="utf-8") if CONFIG_JS_FILE.exists() else ""
     except Exception:
         current = ""
-    needed = ("overlayThemes", "overlayShapes", "overlayThemeExplicit", "globalThemeActive", "defaultOverlayThemes")
+    needed = ("overlayThemes", "overlayShapes", "overlayThemeExplicit", "globalThemeActive",
+              "defaultOverlayThemes", "themeArchetypes")
     if all(k in current for k in needed):
         return
     write_config_js()

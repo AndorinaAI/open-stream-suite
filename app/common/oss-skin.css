@@ -1,0 +1,69 @@
+/* ====================================================================
+   OPEN STREAM SUITE — CAPA DE SKIN DE COMPONENTES (WIDGETS Y ALERTAS)
+   --------------------------------------------------------------------
+   UNA SOLA CONVENCIÓN: el pack/tema declara **tokens** y esta capa los
+   consume en los selectores universales. Por eso:
+
+     * Un componente se programa normal, con su aspecto base, y adopta el
+       skin que se le asigne sin escribir CSS por tema.
+     * Un tema nuevo no necesita saber qué widgets existen: aparece solo en
+       los menús (el catálogo sale de disco) y su apariencia llega a todos
+       los componentes a la vez.
+
+   Tokens consumidos (todos con fallback; ninguno obligatorio):
+     Geometría, por arquetipo (definidos en `common/styles.css`):
+       --skin-panel-radius, --skin-panel-clip
+     Marco y halo, por tema (`streamthemes/<Pack>/styles/<tema>/style.css`):
+       --frame-border-width, --frame-border-style, --color-border-cyan,
+       --panel-shadow, --theme-glow
+     Decoración, por arquetipo:
+       --skin-panel-decor, -position, -size, -repeat
+     Textura, por tema (ej. cuadrícula blueprint del pack Maker):
+       --skin-panel-pattern, -position, -size
+     Tipografía e insignias, por arquetipo:
+       --skin-font-display, --skin-badge-radius
+
+   REGLA DE ORO: sin `data-theme-archetype` (sin skin asignado o arquetipo
+   desconocido) NO se aplica ninguna regla, así que la apariencia por
+   defecto de cada componente queda intacta. Y como toda la decoración se
+   pinta con `background`, nunca se altera el layout ni se pisan los
+   pseudo-elementos que cada componente ya use.
+
+   Orden de prioridad frente al resto del sistema:
+     forma física (`body[data-theme-shape]`) > skin de arquetipo > base.
+   ==================================================================== */
+
+body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root,
+  .panel-card, .chat-card, .chat-column, .chat-box, .side-info-panel, .tasks-card) {
+  /* `!important` deliberado y documentado en GUIA_DESARROLLO_Y_TEMAS.md: la
+     apariencia ASIGNADA manda sobre el aspecto base del componente, que en
+     varios widgets se aplica con CSS inyectado o estilos en línea (y sin esto
+     la decoración se quedaba por el camino). Mientras no haya skin asignado
+     esta regla no existe, así que cada componente conserva su look original.
+     El radio y el recorte NO llevan `!important`: la forma física elegida
+     (`body[data-theme-shape]`) siempre gana. */
+  border-width: var(--frame-border-width, 1px) !important;
+  border-style: var(--frame-border-style, solid) !important;
+  border-color: var(--color-border-cyan, var(--color-accent-cyan, rgba(255, 255, 255, 0.16))) !important;
+  box-shadow: var(--panel-shadow, none), var(--theme-glow, none) !important;
+  /* Capas decorativas: textura del tema encima del adorno del arquetipo. */
+  background-image: var(--skin-panel-pattern, none), var(--skin-panel-decor, none) !important;
+  background-position: var(--skin-panel-pattern-position, 0 0), var(--skin-panel-decor-position, 0 0) !important;
+  background-size: var(--skin-panel-pattern-size, auto), var(--skin-panel-decor-size, auto) !important;
+  background-repeat: repeat, var(--skin-panel-decor-repeat, no-repeat) !important;
+}
+
+/* Radio y recorte del arquetipo SOLO si no hay forma física elegida: la forma
+   (`body[data-theme-shape]`, en `common/styles.css`) siempre manda. */
+body[data-theme-archetype]:not([data-theme-shape]) :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root) {
+  border-radius: var(--skin-panel-radius, 8px);
+  clip-path: var(--skin-panel-clip, none);
+}
+
+/* Insignias y títulos de panel: tipografía del arquetipo mediante hooks
+   universales (`data-oss-badge` / `data-oss-panel-title`), sin nombrar a
+   ningún componente concreto. */
+body[data-theme-archetype] :is([data-oss-badge], [data-oss-panel-title]) {
+  font-family: var(--skin-font-display, inherit);
+  border-radius: var(--skin-badge-radius, inherit);
+}

@@ -68,6 +68,14 @@ window.OSSTheme = (function () {
         else window.OSSShape.clear(shapeTarget());
       }
     }
+    // Skin de componentes: resuelve el arquetipo del tema activo (mapa
+    // `themeArchetypes` de config.js, derivado de disco) y activa la capa
+    // `common/oss-skin.css`. Sin esto los widgets solo recibían los colores.
+    if (window.OSSSkin) {
+      var active = document.body.getAttribute('data-theme');
+      if (active) window.OSSSkin.apply(active);
+      else window.OSSSkin.clear();
+    }
     return true;
   }
 

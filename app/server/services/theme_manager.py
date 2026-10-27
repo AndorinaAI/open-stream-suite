@@ -569,6 +569,55 @@ def infer_archetype(pack_id: str, theme_id: str = "") -> str:
         return "maker"
     return "openstream"
 
+def get_theme_archetype_map() -> dict:
+    """Mapa `{themeId: arquetipo}` derivado del DISCO (`streamthemes/*/styles/*`).
+
+    Es la pieza que permite que un widget o una alerta resuelva su arquetipo sin
+    conocer ningún pack: `config.js` publica este mapa y `common/oss-skin.js` lo
+    usa para poner `data-theme-archetype` en el body, con lo que la familia de
+    tokens `--skin-*` (geometría, adornos y fuentes por arquetipo) empieza a
+    aplicarse también a los componentes.
+
+    Al derivarse de disco, **cualquier pack o tema nuevo aparece automáticamente**
+    en los menús del panel y en la apariencia de todos los componentes, sin tocar
+    código ni listas.
+    """
+    out = {}
+    try:
+        for pack_dir in sorted(STREAMTHEMES_DIR.iterdir()):
+            if not pack_dir.is_dir():
+                continue
+            pack_archetype = ""
+            pack_json_file = pack_dir / "pack.json"
+            if pack_json_file.exists():
+                try:
+                    with open(pack_json_file, "r", encoding="utf-8") as f:
+                        pack_archetype = json.load(f).get("archetype") or ""
+                except Exception:
+                    pack_archetype = ""
+            if not pack_archetype:
+                pack_archetype = infer_archetype(pack_dir.name)
+
+            styles_dir = get_pack_styles_dir(pack_dir)
+            if not styles_dir.is_dir():
+                continue
+            for theme_dir in sorted(styles_dir.iterdir()):
+                if not theme_dir.is_dir() or theme_dir.name in RESERVED_PACK_DIRS:
+                    continue
+                archetype = ""
+                theme_json_file = theme_dir / "theme.json"
+                if theme_json_file.exists():
+                    try:
+                        with open(theme_json_file, "r", encoding="utf-8") as f:
+                            archetype = json.load(f).get("archetype") or ""
+                    except Exception:
+                        archetype = ""
+                out[theme_dir.name] = archetype or infer_archetype(pack_dir.name, theme_dir.name)
+    except Exception as e:
+        logger.warning(f"Error construyendo el mapa de arquetipos: {e}")
+    return out
+
+
 def get_all_packs_and_themes():
     """Escanea el directorio streamthemes/ y devuelve los packs con sus temas, overlays y metadatos"""
     init_themes_directory()

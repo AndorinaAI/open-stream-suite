@@ -149,6 +149,37 @@ Themes live inside `app/themes/<pack_id>/<theme_id>/`:
 
 ---
 
+### 4.1. Component skins: one convention, every component
+
+**Goal:** a widget or an alert is written **once**, with its base look, and then adopts **whatever appearance is assigned to it** with no extra CSS. A new theme **only declares tokens**: its style reaches scenes, widgets and alerts automatically, and it shows up on its own in the panel menus (the catalogue and the archetype map are derived from disk).
+
+`common/oss-skin.css` (shared layer) plus `common/oss-skin.js` (resolves the theme archetype from the `themeArchetypes` map the server publishes in `config.js`) make it possible.
+
+| Token | Declared in | What it controls in components |
+| :--- | :--- | :--- |
+| `--skin-panel-radius`, `--skin-panel-clip` | `common/styles.css` (per archetype) | Panel radius and clip while no physical shape is selected |
+| `--skin-panel-decor` (+ `-position`, `-size`, `-repeat`) | `common/styles.css` (per archetype) | Corner marks / technical decoration, painted with `background` |
+| `--skin-panel-pattern` (+ `-position`, `-size`) | `streamthemes/<Pack>/styles/<theme>/style.css` | Pack texture (e.g. the Maker blueprint grid) |
+| `--frame-border-width`, `--frame-border-style`, `--color-border-cyan`, `--panel-shadow`, `--theme-glow` | theme | Card frame, glow and shadow |
+| `--skin-font-display`, `--skin-badge-radius` | `common/styles.css` (per archetype) | Typography for badges and titles marked with `data-oss-badge` / `data-oss-panel-title` |
+
+**Component contract** (all a component author must do):
+1. Mark its root with `data-oss-shape-target` or `data-oss-panel="true"`.
+2. Link `common/oss-skin.css` and `common/oss-skin.js`.
+3. Nothing else: it never needs to know about any pack or theme.
+
+**Priority** (highest first): physical shape (`body[data-theme-shape]`) → archetype skin → component base look. **With no theme assigned not a single rule applies**, so every component keeps its original look.
+
+> **About `!important`**: `common/oss-skin.css` uses it only on frame and decoration, because several widgets apply their look through injected CSS or inline styles and, without it, the assigned appearance was lost. The radius (`--skin-panel-radius`) **never** uses it: the physical shape always wins. Covered by `tests/test_component_skin_contract.py`.
+
+**Adding a new appearance (checklist)**
+1. Create `streamthemes/<Pack>/styles/<theme>/theme.json` and `style.css` with its tokens.
+2. Declare the pack archetype (`pack.json → "archetype"`) or let it be inferred from the name.
+3. Nothing else: it appears in the menus (scenes, widgets and alerts) and its appearance applies to every component **at once**. There are no lists to edit.
+
+---
+
+
 ## 5. Real-time Communication: WebSocket & Event Dispatching
 
 Connect to `ws://localhost:8080/ws` from any client:

@@ -391,6 +391,37 @@ Permite que el panel detecte modificaciones con `(assignedThemeId !== defaultThe
 
 ---
 
+### 4.3. Skin de componentes: una convención, todos los componentes
+
+**Objetivo:** un widget o una alerta se programa **una sola vez**, con su aspecto base, y después adopta **la apariencia que se le asigne** sin escribir CSS nuevo. Un tema nuevo **solo declara tokens**, y su estilo llega automáticamente a escenas, widgets y alertas y aparece solo en los menús del panel (el catálogo y el mapa de arquetipos se derivan de disco).
+
+Lo hacen posible `common/oss-skin.css` (capa compartida) y `common/oss-skin.js` (resuelve el arquetipo del tema con el mapa `themeArchetypes` que el servidor publica en `config.js`).
+
+| Token | Se declara en | Qué controla en los componentes |
+| :--- | :--- | :--- |
+| `--skin-panel-radius`, `--skin-panel-clip` | `common/styles.css` (por arquetipo) | Radio y recorte del panel mientras no haya forma física elegida |
+| `--skin-panel-decor` (+ `-position`, `-size`, `-repeat`) | `common/styles.css` (por arquetipo) | Decoración de esquinas y marcas técnicas, pintada con `background` |
+| `--skin-panel-pattern` (+ `-position`, `-size`) | `streamthemes/<Pack>/styles/<tema>/style.css` | Textura del pack (ej. cuadrícula blueprint del pack Maker) |
+| `--frame-border-width`, `--frame-border-style`, `--color-border-cyan`, `--panel-shadow`, `--theme-glow` | tema | Marco, halo y sombra de la tarjeta |
+| `--skin-font-display`, `--skin-badge-radius` | `common/styles.css` (por arquetipo) | Tipografía de insignias y títulos marcados con `data-oss-badge` / `data-oss-panel-title` |
+
+**Contrato del componente** (lo único que debe cumplir quien lo programa):
+1. Marcar su raíz con `data-oss-shape-target` o `data-oss-panel="true"`.
+2. Enlazar `common/oss-skin.css` y `common/oss-skin.js`.
+3. Nada más: no necesita conocer ningún pack ni tema.
+
+**Prioridad** (de mayor a menor): forma física (`body[data-theme-shape]`) → skin de arquetipo → aspecto base del componente. **Sin tema asignado no se aplica ni una regla**, así que cada componente conserva su look original.
+
+> **Nota sobre `!important`**: `common/oss-skin.css` solo lo usa en marco y decoración, porque varios widgets aplican su aspecto con CSS inyectado o estilos en línea y, sin ello, la apariencia asignada se quedaba por el camino. El radio (`--skin-panel-radius`) **nunca** lo lleva: la forma física siempre manda. Hay test que lo verifica (`tests/test_component_skin_contract.py`).
+
+**Añadir una apariencia nueva (checklist)**
+1. Crea `streamthemes/<Pack>/styles/<tema>/theme.json` y `style.css` con sus tokens.
+2. Declara el arquetipo del pack (`pack.json → "archetype"`) o deja que se infiera del nombre.
+3. Nada más: aparece en los menús (escenas, widgets y alertas) y su apariencia se aplica a todos los componentes **a la vez**. No hay listas que editar.
+
+---
+
+
 ## 5. Comunicación en Tiempo Real
 
 El sistema utiliza un WebSocket bidireccional servido por `server.py` en el puerto `8080` en la ruta `/ws`.

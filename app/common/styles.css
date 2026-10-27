@@ -110,6 +110,11 @@ body[data-pack="cozy"]:not([data-theme-archetype]) {
   --skin-ornament-tape: block;
   --skin-ornament-reticle: none;
   --skin-ornament-brackets: none;
+  /* Decoración de COMPONENTES (widgets y alertas): la consume common/oss-skin.css */
+  --skin-panel-decor: none;
+  --skin-panel-decor-position: 0 0;
+  --skin-panel-decor-size: auto;
+  --skin-panel-decor-repeat: no-repeat;
 }
 
 /* 🎮 ARQUETIPO GAMER PRO */
@@ -129,6 +134,17 @@ body[data-pack="gamer"]:not([data-theme-archetype]) {
   --skin-ornament-tape: none;
   --skin-ornament-reticle: block;
   --skin-ornament-brackets: none;
+  /* Decoración de COMPONENTES: línea superior + marcas de esquina tácticas */
+  --skin-panel-decor:
+    linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)),
+    linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)),
+    linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)),
+    linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)),
+    linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF));
+  --skin-panel-decor-position:
+    0 0, 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px);
+  --skin-panel-decor-size: 100% 2px, 12px 2px, 12px 2px, 12px 2px, 12px 2px;
+  --skin-panel-decor-repeat: no-repeat;
 }
 
 /* 🛠️ ARQUETIPO MAKER / CAD */
@@ -148,6 +164,19 @@ body[data-pack="maker"]:not([data-theme-archetype]) {
   --skin-ornament-tape: none;
   --skin-ornament-reticle: none;
   --skin-ornament-brackets: block;
+  /* Decoración de COMPONENTES: barra de fases (acentos del tema) + marcas CAD
+     de calibración en las cuatro esquinas. Se pinta con background, sin
+     pseudo-elementos, para no alterar el layout de ningún componente. */
+  --skin-panel-decor:
+    linear-gradient(90deg, var(--color-accent-cyan, #57D6C4), var(--color-accent-orange, #FF783F)),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor),
+    linear-gradient(currentColor, currentColor);
+  --skin-panel-decor-position:
+    0 0, 7px 7px, calc(100% - 7px) 7px, 7px calc(100% - 7px), calc(100% - 7px) calc(100% - 7px);
+  --skin-panel-decor-size: 100% 3px, 12px 2px, 12px 2px, 12px 2px, 12px 2px;
+  --skin-panel-decor-repeat: no-repeat;
 }
 
 /* ⚡ ARQUETIPO OPEN STREAM (SWISS GLASS) */
@@ -167,6 +196,11 @@ body[data-pack="openstream"]:not([data-theme-archetype]) {
   --skin-ornament-tape: none;
   --skin-ornament-reticle: none;
   --skin-ornament-brackets: none;
+  /* Decoración de COMPONENTES: el arquetipo suizo no añade adornos */
+  --skin-panel-decor: none;
+  --skin-panel-decor-position: 0 0;
+  --skin-panel-decor-size: auto;
+  --skin-panel-decor-repeat: no-repeat;
 }
 
 /* --- ESTILO ADAPTABLE DEL CHAT INTEGRADO --- */

@@ -6,6 +6,25 @@
 
 El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
+## [No publicado]
+
+Ronda de arquitectura de apariencia: el pack/tema **solo declara tokens** y su aspecto llega a todos los componentes a la vez.
+
+### Añadido — Skin de componentes por tokens (una convención para todo)
+- **Un componente se programa una sola vez**: `common/oss-skin.css` (capa compartida) consume los tokens del pack y del arquetipo en los selectores universales (`[data-oss-panel]`, `[data-oss-shape-target]`, `#alert-card`, `#banner-alert-root` y el vocabulario de paneles del motor), así que **no hay CSS por componente ni listas de packs**.
+- **El arquetipo del tema viaja en `config.js`**: el servidor publica `themeArchetypes` (mapa tema→arquetipo derivado de `streamthemes/<Pack>/styles/<tema>`) y `common/oss-skin.js` lo aplica como `data-theme-archetype`. Antes los widgets y alertas solo recibían los colores (`--color-*`) y nunca la familia `--skin-*` que sí usaban las escenas.
+- **Decoración de componentes en los arquetipos** (`common/styles.css`): nuevas variables `--skin-panel-decor`, `-position`, `-size`, `-repeat` por arquetipo (el `maker` añade barra de acentos y marcas CAD de calibración). El pack Maker declara además `--skin-panel-pattern` con su cuadrícula de blueprint.
+- **Menús automáticos**: cualquier pack/tema nuevo en disco resuelve arquetipo, aparece en los desplegables y se aplica a escenas, widgets y alertas sin tocar código.
+- **Test** `tests/test_component_skin_contract.py` (11 casos): componentes con la capa enlazada y hook universal, la capa solo activa con skin asignado, consumo del contrato de tokens, formas físicas con prioridad, `!important` acotado, arquetipos completos, mapa derivado de disco publicado en `config.js` y alertas respetando la URL.
+
+### Corregido — Las alertas ignoraban `?theme=` y `?shape=` de la URL
+- Una Browser Source de OBS con `?theme=maker&shape=maker_blueprint` **no aplicaba nada**: el arranque de `AlertShapes` borraba los atributos que había puesto la URL. Ahora la URL cuenta como asignación explícita, se respeta `?lock=1`/`?lockTheme=1` (congela el aspecto de esa fuente) y el WebSocket no pisa una fuente bloqueada. Verificado en vivo: `data-theme` + `data-theme-archetype` + forma aplicados.
+- **El chat adopta el contrato**: su raíz declara `data-oss-panel="true"`, así que también hereda el skin sin código propio.
+
+### Verificado — En vivo con Chrome headless (1920×1080)
+- **9/9 casos**: los 6 widgets (`goal`, `ticker`, `timer`, `chat`, `promo`, `shoutout`) y las 2 alertas (`card`, `banner`) con el tema Maker aplican arquetipo, marco técnico (`2px` con `--color-border-cyan`), halo y **8 capas decorativas** (textura + adornos) sobre las suyas; y el caso de control **sin tema** conserva el aspecto base intacto (`1px`, radio original, sin capas).
+- **0 errores de consola y 0 peticiones fallidas** en todas las cargas, y 30 suites en verde con el E2E del backlog de temas en `TODO PASS`.
+
 ## [1.0.3-alpha] — 2026-10-27
 
 Segunda ronda de verificación, pulido y licencia (continúa la auditoría de 1.0.2).

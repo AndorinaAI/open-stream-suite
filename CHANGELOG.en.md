@@ -6,6 +6,25 @@
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+Appearance-architecture round: a pack/theme **only declares tokens**, and its look reaches every component at once.
+
+### Added — Token-driven component skins (one convention for everything)
+- **A component is written once**: `common/oss-skin.css` (shared layer) consumes pack and archetype tokens on the universal selectors (`[data-oss-panel]`, `[data-oss-shape-target]`, `#alert-card`, `#banner-alert-root` and the engine's panel vocabulary), so there is **no per-component CSS and no pack lists**.
+- **The theme archetype travels in `config.js`**: the server publishes `themeArchetypes` (a theme→archetype map derived from `streamthemes/<Pack>/styles/<theme>`) and `common/oss-skin.js` applies it as `data-theme-archetype`. Widgets and alerts used to receive colours only (`--color-*`) and never the `--skin-*` family that scenes already used.
+- **Component decoration in the archetypes** (`common/styles.css`): new `--skin-panel-decor`, `-position`, `-size`, `-repeat` variables per archetype (the `maker` one adds an accent bar and CAD calibration marks). The Maker pack also declares `--skin-panel-pattern` with its blueprint grid.
+- **Automatic menus**: any new pack/theme on disk resolves its archetype, shows up in the dropdowns and applies to scenes, widgets and alerts with no code changes.
+- **Test** `tests/test_component_skin_contract.py` (11 cases): components linking the layer and exposing a universal hook, the layer only active with a skin assigned, token-contract consumption, physical shapes taking priority, scoped `!important`, complete archetypes, disk-derived map published in `config.js`, and alerts honouring the URL.
+
+### Fixed — Alerts ignored `?theme=` and `?shape=` from the URL
+- An OBS Browser Source with `?theme=maker&shape=maker_blueprint` **applied nothing**: the `AlertShapes` boot wiped the attributes the URL had set. The URL now counts as an explicit assignment, `?lock=1`/`?lockTheme=1` is honoured (freezing that source's look) and the WebSocket never overrides a locked source. Verified live: `data-theme` + `data-theme-archetype` + shape applied.
+- **Chat adopts the contract**: its root declares `data-oss-panel="true"`, so it inherits the skin too with no component-specific code.
+
+### Verified — Live with headless Chrome (1920×1080)
+- **9/9 cases**: all six widgets (`goal`, `ticker`, `timer`, `chat`, `promo`, `shoutout`) and both alerts (`card`, `banner`) on the Maker theme apply their archetype, technical frame (`2px` with `--color-border-cyan`), glow and **8 decoration layers** (texture + ornaments) on top of their own; and the **no-theme** control case keeps the base look untouched (`1px`, original radius, no layers).
+- **0 console errors and 0 failed requests** on every load, and 30 suites green with the theme-backlog E2E at `TODO PASS`.
+
 ## [1.0.3-alpha] — 2026-10-27
 
 Second verification, polish and licensing round (continues the 1.0.2 audit).

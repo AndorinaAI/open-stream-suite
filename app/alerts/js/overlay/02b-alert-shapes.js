@@ -7,6 +7,7 @@ window.AlertShapes = (function () {
   var themes = { card: null, banner: null };
   var explicit = { card: false, banner: false };
   var globalTheme = null;
+  var locked = false;
 
   function node(type) {
     return document.getElementById(type === 'banner' ? 'banner-alert-root' : 'alert-card');
@@ -52,6 +53,33 @@ window.AlertShapes = (function () {
     explicit.card = !!oe['alert:card'];
     explicit.banner = !!oe['alert:banner'];
     globalTheme = cfg.globalThemeActive ? (cfg.activeTheme || null) : null;
+    applyUrlOverrides();
+  }
+
+  /**
+   * `?theme=` / `?shape=` / `?lock=1` en la URL de OBS cuentan como asignación
+   * explícita. Antes el arranque de config los borraba (`applyAll` con
+   * `themes`/`assigned` vacíos), así que una Browser Source con `?theme=maker`
+   * ignoraba el tema aunque 04-ws-client.js sí lo leyera. Escenas y widgets ya
+   * se comportaban así; las alertas no.
+   */
+  function applyUrlOverrides() {
+    try {
+      var p = new URLSearchParams(window.location.search);
+      var theme = p.get('theme');
+      var shape = p.get('shape');
+      if (theme) {
+        themes.card = theme;
+        themes.banner = theme;
+        explicit.card = true;
+        explicit.banner = true;
+      }
+      if (shape) {
+        assigned.card = shape;
+        assigned.banner = shape;
+      }
+      if (p.get('lock') === '1' || p.get('lockTheme') === '1') locked = true;
+    } catch (e) {}
   }
 
   function visibleType() {
@@ -77,6 +105,16 @@ window.AlertShapes = (function () {
     var theme = explicit[type] ? themes[type] : globalTheme;
     if (theme) document.body.setAttribute('data-theme', theme);
     else document.body.removeAttribute('data-theme');
+    applySkin();
+  }
+
+  /** Skin de componentes: arquetipo del tema activo -> `data-theme-archetype`. */
+  function applySkin() {
+    if (!window.OSSSkin) return null;
+    var active = document.body.getAttribute('data-theme');
+    if (active) return window.OSSSkin.apply(active);
+    window.OSSSkin.clear();
+    return null;
   }
 
   function applyAll(type) {
@@ -87,8 +125,9 @@ window.AlertShapes = (function () {
   return {
     set: set, apply: apply, applyAssigned: applyAssigned,
     configure: configure, setTheme: setTheme, setGlobalTheme: setGlobalTheme, applyThemeFor: applyThemeFor,
-    applyAll: applyAll, visibleType: visibleType,
+    applyAll: applyAll, visibleType: visibleType, applySkin: applySkin,
     isExplicit: function (type) { return !!explicit[type]; },
+    isLocked: function () { return !!locked; },
     assigned: assigned, themes: themes
   };
 })();
