@@ -124,6 +124,11 @@ Full audit round (**V2 + V3**), physical shape engine for widgets and alerts, na
 - **Polaroid caption**: the brown ink on ivory paper (4.2:1, correct) is kept only while the scene keeps that paper (`cozy_polaroid` or original shape); with other shapes it switches to light text so it never ends up brown on a dark panel.
 - **Remaining fine-tuning list** (recorded in `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectors between 2.0:1 and 4.3:1 (the tagline in some scenes and a couple of inline-styled labels) that depend on per-scene design decisions.
 
+### Fixed — Single version source and up-to-date launcher
+- **The launcher no longer lags behind**: it showed "v1.0.0-α" and declared `1.0.1-alpha` while the project was already at `1.0.2-alpha`. Both `app/launcher/__init__.py` and the GUI label now read **`app/version.py`** (single source of truth).
+- **12 i18n dictionaries** (ES/EN, panel, alerts, widgets, overlays and launcher) updated from `v1.0.0-α` to the real version.
+- **Regression test** (`tests/test_version_consistency.py`): walks the dictionaries in depth, checks the launcher follows `version.py` and that no literal version strings come back into the UI or the assets.
+
 ## [1.0.1-alpha] — 2026-10-23
 
 ### Fixed — Architectural Audit and Critical Fixes

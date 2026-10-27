@@ -124,6 +124,11 @@ Ronda completa de auditoría (**V2 + V3**), motor de formas físicas para widget
 - **Leyenda del polaroid**: la tinta marrón sobre papel marfil (4.2:1, correcta) solo se mantiene cuando la escena conserva ese papel (forma `cozy_polaroid` u original); con otras formas pasa a texto claro para no quedar marrón sobre panel oscuro.
 - **Lista de ajuste fino pendiente** (documentada en `PENDIENTES_NO_BLOQUEANTES.md`): 8 selectores entre 2.0:1 y 4.3:1 (tagline en algunas escenas y un par de etiquetas con estilo en línea) que dependen de decisiones de diseño por escena.
 
+### Corregido — Versión única y launcher al día
+- **El launcher ya no se queda atrás**: mostraba «v1.0.0-α» y declaraba `1.0.1-alpha` mientras el proyecto iba por `1.0.2-alpha`. Ahora `app/launcher/__init__.py` y la etiqueta de la GUI leen **`app/version.py`** (fuente única de verdad).
+- **12 diccionarios i18n** (ES/EN, panel, alertas, widgets, overlays y lanzador) actualizados de `v1.0.0-α` a la versión real.
+- **Test de regresión** (`tests/test_version_consistency.py`): recorre los diccionarios en profundidad, comprueba que el launcher siga `version.py` y que no vuelva a haber versiones literales en la interfaz ni en los assets.
+
 ## [1.0.1-alpha] — 2026-10-23
 
 ### Corregido — Auditoría Arquitectónica y Correcciones Críticas

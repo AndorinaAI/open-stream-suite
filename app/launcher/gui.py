@@ -125,7 +125,7 @@ class LauncherGUI:
         lbl_title = tk.Label(title_frame, text="OPEN STREAM SUITE", font=("Helvetica", 15, "bold"), fg=C_TEXT, bg=C_BG)
         lbl_title.pack(side="left")
 
-        lbl_sub = tk.Label(title_frame, text="v1.0.0-α", font=("Courier", 10, "bold"), fg=C_CORAL, bg=C_BG, padx=8)
+        lbl_sub = tk.Label(title_frame, text=f"v{VERSION}", font=("Courier", 10, "bold"), fg=C_CORAL, bg=C_BG, padx=8)
         lbl_sub.pack(side="left")
 
         # Selector de idioma en el header

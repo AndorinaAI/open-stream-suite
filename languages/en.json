@@ -5,7 +5,7 @@
   "app": {
     "title": "Open Stream Suite",
     "slogan": "Modular overlays, alerts, and control suite for Twitch & OBS Studio",
-    "version": "v1.0.0-α"
+    "version": "v1.0.2-alpha"
   },
   "nav": {
     "triggers": "Triggers & Memes",
