@@ -63,6 +63,12 @@ class TestVersionConsistency(unittest.TestCase):
         self.assertIn(VERSION, tmpl, "la plantilla de bugs no refleja la versión actual")
 
 
+    def test_5_el_cla_esta_enlazado_en_plantillas_y_guias(self):
+        for name in (".github/CONTRIBUTING.md", ".github/CONTRIBUTING.en.md",
+                     ".github/PULL_REQUEST_TEMPLATE.md"):
+            txt = (ROOT / name).read_text(encoding="utf-8")
+            self.assertIn("CLA", txt, f"{name}: no menciona el CLA")
+
     def test_6_el_banner_y_las_guias_son_visibles_y_deben_estar_al_dia(self):
         """El banner de marca y los mockups de las guías se ven: deben seguir version.py.
 
