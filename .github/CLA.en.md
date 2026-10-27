@@ -69,7 +69,7 @@ not oblige the Licensor to accept, merge, publish or maintain your Contribution.
 ## 7. Governing law
 
 This Agreement is governed by **Spanish law**. Jurisdiction: the courts of
-`[PAÍS/JURISDICCIÓN]`. In case of discrepancy between the Spanish version and any
+**A Coruña, Spain**. In case of discrepancy between the Spanish version and any
 translation, **the Spanish version prevails**.
 
 ## 8. How to sign

@@ -39,7 +39,7 @@ for third parties.
   support for clients); (d) integration or embedding into another product;
   (e) redistribution or white-labelling. Use by an individual for their own
   channel is **excluded** from Commercial Use while it does not exceed
-  `[UMBRAL €/AÑO]` in annual revenue (free tier, honorary).
+  **€80,000** in annual revenue (free tier, honorary).
 - **Authorised User:** each person in the Licensee's organisation who installs,
   configures or uses the Software.
 - **Authorised Channel:** each streaming channel/account using the Software.
@@ -79,7 +79,7 @@ this licence is purchased.
 ## 7. Pricing, orders and contact
 
 - Planned tiers: **Indie / Studio / Agency / Enterprise**, with optional support
-  and SLA. Pricing: `[PRECIOS]`.
+  and SLA. Pricing: **upon request based on case and scale (admin@andorina.dev)**.
 - Orders and enquiries: **admin@andorina.dev**.
 
 ## 8. Support
@@ -101,12 +101,12 @@ paid in the previous 12 months.
 The licence starts upon payment and lasts while its terms are met (a **perpetual**
 licence for the contracted Version, unless a subscription is agreed). The
 Licensor may terminate it for material breach, notified in writing, with a
-`[PLAZO DE SUBSANACIÓN]` cure period. Upon termination the Licensee shall stop
+**30 calendar days** cure period. Upon termination the Licensee shall stop
 using the Software and certify its uninstallation.
 
 ## 11. Governing law and jurisdiction
 
-Governing law: **Spain**. Jurisdiction: the courts of `[PAÍS/JURISDICCIÓN]`, with
+Governing law: **Spain**. Jurisdiction: the courts of **A Coruña, Spain**, with
 waiver of any other forum.
 
 ## 12. Acceptance

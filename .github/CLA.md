@@ -65,7 +65,7 @@ obliga al Titular a aceptar, fusionar, publicar ni mantener tu Contribución.
 ## 7. Ley aplicable
 
 Este Acuerdo se rige por la **ley española**. Jurisdicción: los juzgados y
-tribunales de `[PAÍS/JURISDICCIÓN]`. En caso de discrepancia entre la versión
+tribunales de **A Coruña (España)**. En caso de discrepancia entre la versión
 española y cualquier traducción, **prevalece la versión española**.
 
 ## 8. Cómo firmar

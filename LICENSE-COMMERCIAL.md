@@ -34,7 +34,7 @@ AGPL para terceros: quien no contrate esta licencia sigue rigiéndose por la AGP
   de producción para clientes); (d) la integración o embebido del Software en
   otro producto; (e) la redistribución o la marca blanca. El uso por una persona
   física para su propio canal queda **excluido** del Uso Comercial mientras no
-  supere `[UMBRAL €/AÑO]` de facturación anual (tramo gratuito, honorario).
+  supere **80.000 €** de facturación anual (tramo gratuito, honorario).
 - **Usuario Autorizado:** cada persona de la organización del Licenciatario que
   instala, configura o usa el Software.
 - **Canal Autorizado:** cada canal/cuenta de streaming que usa el Software.
@@ -73,7 +73,7 @@ se contrata esta licencia.
 ## 7. Precios, pedidos y contacto
 
 - Modalidades previstas: **Indie / Estudio / Agencia / Enterprise**, con soporte
-  y SLA opcionales. Precios: `[PRECIOS]`.
+  y SLA opcionales. Precios: **a consultar según caso y escala (admin@andorina.dev)**.
 - Pedidos y consultas: **admin@andorina.dev**.
 
 ## 8. Soporte
@@ -95,13 +95,13 @@ pagado por la licencia en los 12 meses anteriores.
 La licencia entra en vigor con el pago y dura mientras se cumplan sus términos
 (licencia **perpetua** para la Versión contratada, salvo que se pacte suscripción).
 El Titular podrá resolverla por incumplimiento grave, notificado por escrito, con
-plazo de subsanación de `[PLAZO DE SUBSANACIÓN]`. A la terminación, el
+plazo de subsanación de **30 días naturales**. A la terminación, el
 Licenciatario dejará de usar el Software y acreditará su desinstalación.
 
 ## 11. Ley aplicable y jurisdicción
 
 Ley aplicable: **España**. Jurisdicción: los juzgados y tribunales de
-`[PAÍS/JURISDICCIÓN]`, con renuncia a cualquier otro fuero que pudiera
+**A Coruña (España)**, con renuncia a cualquier otro fuero que pudiera
 corresponder.
 
 ## 12. Aceptación
