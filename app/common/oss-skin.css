@@ -186,10 +186,18 @@ body[data-theme-archetype][data-oss-widget] .chat-msg,
 body[data-theme-archetype][data-oss-widget] .prompter-item,
 body[data-theme-archetype][data-oss-widget] .goal-item,
 body[data-theme-archetype][data-oss-widget] .shoutout-card-body {
-  border-radius: var(--skin-panel-radius, var(--panel-radius, 6px)) !important;
+  /* SIN !important: si hay forma física, su `border-radius: 0` debe poder
+     ganar. Geometría y tema se SUMAN, no compiten. */
+  border-radius: var(--skin-panel-radius, var(--panel-radius, 6px));
   border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.16)) !important;
   background-color: var(--color-panel-bg, var(--color-bg-dark, #191D21)) !important;
   font-family: var(--skin-font-body, inherit) !important;
+}
+
+/* La forma física manda en la geometría: si el componente lleva recorte de
+   pack (PCB, polaroid…), las piezas internas tampoco pueden quedarse redondas. */
+body[data-theme-archetype][data-oss-widget][data-theme-shape] :is(.chat-msg, .prompter-item, .goal-item, .shoutout-card-body) {
+  border-radius: 0;
 }
 
 /* La cifra/usuario del chat y los titulos llevan la fuente de DISPLAY. */

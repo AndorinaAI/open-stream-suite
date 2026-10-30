@@ -27,10 +27,12 @@ html, body {
 
     /* Mensaje individual */
     .chat-msg {
-      background: rgba(25, 29, 33, 0.88);
-      border: 1px solid var(--color-border-dim, rgba(87, 214, 196, 0.2));
-      border-left: 3px solid var(--chat-accent, #57D6C4);
-      border-radius: 4px;
+      /* `background-color` y no el shorthand `background`: el shorthand resetea
+         el color y anula el que aplica el tema del pack. */
+      background-color: var(--color-panel-bg, rgba(25, 29, 33, 0.88));
+      border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.2));
+      border-left: 3px solid var(--widget-accent, var(--chat-accent, #57D6C4));
+      border-radius: var(--skin-panel-radius, var(--panel-radius, 4px));
       padding: 10px 14px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(8px);

@@ -25,7 +25,9 @@ BASELINE_CSS = {
     # goal: el `font-family` base pasa a `var(--font-primary, 'Outfit', …)`
     # para que la tipografia del pack llegue a sus letras.
     "goal": (15597, "f440771e3267bff3e54ad1fa9ab531ff8d0d05993227c98b08998f2968a03549"),
-    "chat": (10084, "543f1fcbea1db7cff4717d2fe02201d6f14387bc4cd335a793cdb4a27f2b48e0"),
+    # chat: `.chat-msg` pasa a `background-color` + radios/fuente del tema
+    # (el shorthand `background` anulaba el color del pack).
+    "chat": (10855, "0418e6c61ea359b3931ce606d7b5d4f6f6e5fc8320f947d62fc6c165e1f86a3c"),
     "timer": (7052, "97bee5b1d5232d5e4dde84fee334902932ea973886f9a46b2da5aa3c83585ccc"),
     "shoutout": (8290, "7de1200d38197a3ecdfb9d829da3f72475568620961e23abb6df6625cd8353ba"),
 }
