@@ -19,9 +19,38 @@ from server.state import system
 
 
 async def handle_get_alerts_config(request):
-    """Devuelve la configuración completa de alertas"""
+    """Configuración de alertas + los mapas de tema que consume el overlay.
+
+    Sin `overlayThemes` / `overlayThemeExplicit` el overlay arrancaba con el
+    mapa vacío: `AlertShapes.configure()` no encontraba `alert:card` ni
+    `alert:banner`, caía a `globalTheme` (null con `globalThemeActive:false`) y
+    BORRABA `data-theme`. El tema del pack nunca se aplicaba aunque el panel lo
+    mostrara asignado. Este endpoint solo devolvía `{alerts, config, status}`.
+    """
     cfg = load_alerts_config()
-    return web.json_response({"status": "ok", "config": {"alerts": cfg}, "alerts": cfg})
+    out = {"status": "ok", "config": {"alerts": cfg}, "alerts": cfg}
+    try:
+        from server.services.theme_manager import load_theme_state
+        state = load_theme_state() or {}
+    except Exception:
+        state = {}
+
+    for key in ("activePack", "activeTheme", "activeShape", "globalThemeActive"):
+        if state.get(key) is not None:
+            out[key] = state[key]
+    for key in ("overlayThemes", "overlayShapes", "overlayThemeExplicit", "defaultOverlayThemes"):
+        value = state.get(key)
+        # Se publican siempre (aunque estén vacíos): el contrato del overlay es
+        # que las claves existen.
+        out[key] = value if isinstance(value, dict) else {}
+    # Arquetipo de cada tema (derivado de disco): OSSSkin lo necesita para
+    # poner `data-theme-archetype` y activar la capa `--skin-*`.
+    try:
+        from server.services.theme_manager import get_theme_archetype_map
+        out["themeArchetypes"] = get_theme_archetype_map()
+    except Exception:
+        out["themeArchetypes"] = {}
+    return web.json_response(out)
 
 
 async def handle_save_alerts_config(request):

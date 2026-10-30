@@ -28,6 +28,8 @@ APP = Path(BASE_DIR)
 SHAPES_JS = APP / "alerts/js/overlay/02b-alert-shapes.js"
 QUEUE_JS = APP / 'alerts/js/overlay/03-alert-queue.js'
 ALERTS_CSS = APP / 'alerts/css/alerts-themes.css'
+ALERTS_ROUTES = APP / 'server/routes/alerts_routes.py'
+WS_CLIENT = APP / 'alerts/js/overlay/04-ws-client.js'
 PREVIEW_JS = APP / "alerts/js/alerts-studio/06-preview-test.js"
 THEMES_JS = APP / "alerts/js/component-themes.js"
 PANEL_HTML = APP / "alerts/panel.html"
@@ -154,6 +156,28 @@ class AlertPreviewThemeContract(unittest.TestCase):
         self.assertIn("03-alert-queue.js?v=", index,
                       "03-alert-queue.js se sirve sin versión: el navegador "
                       "puede quedarse con la regla antigua de banner-theme-*")
+
+
+class AlertsConfigPayloadContract(unittest.TestCase):
+    """El overlay debe recibir los mapas de tema, no solo {alerts, config, status}.
+
+    Regresion: `/api/alerts/config` devolvia solo `{alerts, config, status}`, y
+    `config.js` no publica las claves `alert:*`. Resultado: `AlertShapes`
+    arrancaba con el mapa vacio, no encontraba `alert:card` / `alert:banner` y
+    borraba `data-theme`, asi que el tema del pack nunca se aplicaba en OBS.
+    """
+
+    def test_endpoint_publishes_theme_maps(self):
+        src = _read(ALERTS_ROUTES)
+        for key in ("overlayThemes", "overlayShapes", "overlayThemeExplicit",
+                    "themeArchetypes"):
+            self.assertIn(key, src,
+                          f"/api/alerts/config debe publicar {key!r}")
+
+    def test_overlay_reads_its_own_endpoint(self):
+        js = _read(WS_CLIENT)
+        self.assertIn("/api/alerts/config", js,
+                      "el overlay no puede depender de config.js: no trae alert:*")
 
 
 if __name__ == "__main__":

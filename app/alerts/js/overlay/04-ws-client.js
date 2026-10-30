@@ -18,24 +18,38 @@ function jsonParse(str) {
   try { return JSON.parse(str); } catch (e) { return null; }
 }
 
-// Asignación de fábrica/fusión para las alertas de panel (themes_state.json -> config.js)
+// Asignación de tema/forma de las alertas de panel.
+//
+// `config.js` NO publica las claves `alert:card` / `alert:banner` (es el
+// config de escenas), así que leer solo `window.OSS_CONFIG` dejaba el mapa
+// vacío: `AlertShapes.configure()` no encontraba el tema, caía al global
+// (null con globalThemeActive:false) y borraba `data-theme`. Por eso asignar
+// un tema en el panel no cambiaba nada en OBS.
+//
+// Ahora la fuente de verdad es `/api/alerts/config`, que sí devuelve
+// `overlayThemes`, `overlayShapes`, `overlayThemeExplicit` y `themeArchetypes`.
 (function () {
-  try {
-    var cfg = window.OSS_CONFIG || {};
-    // Formas: genéricas (OSSShape) o físicas de pack (body[data-theme-shape])
+  function applyFromPayload(cfg) {
+    if (!window.AlertShapes || !cfg) return false;
+    cfg = cfg.config && cfg.config.alerts ? cfg : cfg;
     var shapes = cfg.overlayShapes || {};
-    if (window.AlertShapes) {
-      AlertShapes.configure(cfg);
-      AlertShapes.set('card', shapes['alert:card']);
-      AlertShapes.set('banner', shapes['alert:banner']);
-      // El tipo que se muestre aplicará su propio tema/forma en la cola.
-      AlertShapes.applyAll('card');
-    } else {
-      [['alert:card', 'alert-card'], ['alert:banner', 'banner-alert-root']].forEach(function (pair) {
-        var el = document.getElementById(pair[1]);
-        if (el && window.OSSShape) window.OSSShape.apply(el, shapes[pair[0]] || null);
-      });
-    }
+    AlertShapes.configure(cfg);
+    AlertShapes.set('card', shapes['alert:card']);
+    AlertShapes.set('banner', shapes['alert:banner']);
+    // El tipo que se muestre aplicará su propio tema/forma en la cola.
+    AlertShapes.applyAll('card');
+    return true;
+  }
+
+  // 1) Arranque inmediato con lo que haya en config.js (puede no traer alert:*).
+  try { applyFromPayload(window.OSS_CONFIG || {}); } catch (e) {}
+
+  // 2) Fuente de verdad, asíncrona. Idempotente: si ya coincidía no cambia nada.
+  try {
+    fetch('/api/alerts/config', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (cfg) { if (cfg) applyFromPayload(cfg); })
+      .catch(function () {});
   } catch (e) {}
 })();
 
