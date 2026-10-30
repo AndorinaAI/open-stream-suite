@@ -92,14 +92,18 @@ Object.assign(AlertsStudio, {
     const previewTheme = (window.ComponentThemes && ComponentThemes.themeStateFor)
       ? (ComponentThemes.themeStateFor(previewKey) || {})
       : {};
+    // Respaldo al tema global: si el miembro no tiene tema propio, el overlay
+    // recibe el global (globalThemeActive), asi que el simulador debe pintarlo
+    // igual. Si no hay ninguno, se queda en el estilo base de siempre.
+    const previewThemeId = previewTheme.theme || previewTheme.globalTheme || '';
     const packAttrs = [
       ' data-oss-panel="true"',
-      previewTheme.theme ? ` data-theme="${previewEscape(previewTheme.theme)}"` : '',
+      previewThemeId ? ` data-theme="${previewEscape(previewThemeId)}"` : '',
       previewTheme.shape ? ` data-theme-shape="${previewEscape(previewTheme.shape)}"` : ''
     ].join('');
     // Same rule as the overlay: with a pack theme assigned the legacy base
     // style class is skipped so it cannot cover the theme tokens.
-    const legacyClass = previewTheme.theme ? '' : ` banner-theme-${effectiveBannerStyle}`;
+    const legacyClass = previewThemeId ? '' : ` banner-theme-${effectiveBannerStyle}`;
 
     if (effectiveMediaMode === 'banner') {
       box.innerHTML = `

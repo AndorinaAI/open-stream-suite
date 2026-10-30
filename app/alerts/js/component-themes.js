@@ -74,11 +74,11 @@ window.ComponentThemes = (function () {
     const ariaShape = esc(`${tr('widgets.col_shape', 'Forma')}: ${fullName}`);
     const ariaFusion = esc(`${tr('widgets.col_fusion', 'Fusión')}: ${fullName}`);
     const shapeCell = shapes && shapes.length
-      ? `<select data-role="shape" data-key="${key}" aria-label="${ariaShape}" style="font-size:11px;padding:3px 6px;">${shapeOptions(shapes, shape)}</select>`
+      ? `<select data-role="shape" data-key="${key}" aria-label="${ariaShape}" onchange="ComponentThemes.apply('${key}')" style="font-size:11px;padding:3px 6px;">${shapeOptions(shapes, shape)}</select>`
       : `<span style="font-size:10px;color:var(--color-text-dim);" title="${tr('widgets.shape_unsupported', 'Este componente no admite formas')}">${tr('widgets.shape_unsupported_short', 'no aplica')}</span>`;
     return `<div data-ct-key="${key}" style="display:grid;grid-template-columns:200px 1fr 130px auto auto auto;gap:8px;align-items:center;background:rgba(255,255,255,0.03);padding:7px 10px;border-radius:5px;">
       <span style="font-size:12px;font-weight:700;color:var(--color-text-light);">${label}</span>
-      <select data-role="theme" data-key="${key}" aria-label="${ariaTheme}" style="font-size:11px;padding:3px 6px;">${themeOptions(theme)}</select>
+      <select data-role="theme" data-key="${key}" aria-label="${ariaTheme}" onchange="ComponentThemes.apply('${key}')" style="font-size:11px;padding:3px 6px;">${themeOptions(theme)}</select>
       ${shapeCell}
       <button type="button" class="btn-action-primary" style="font-size:10px;padding:3px 9px;" aria-label="${esc(`${tr('widgets.btn_apply_theme', 'Aplicar')}: ${fullName}`)}" onclick="ComponentThemes.apply('${key}')">${tr('widgets.btn_apply_theme', 'Aplicar')}</button>
       <button type="button" class="btn-action-test" style="font-size:10px;padding:3px 9px;" aria-label="${esc(`${tr('widgets.btn_reset_theme', '↺ Reset')}: ${fullName}`)}" onclick="ComponentThemes.reset('${key}')">${tr('widgets.btn_reset_theme', '↺ Reset')}</button>
@@ -141,6 +141,10 @@ window.ComponentThemes = (function () {
         fusions = (fusRes && fusRes.fusions) || [];
         state.overlayThemes = packsRes.overlayThemes || {};
         state.overlayShapes = packsRes.overlayShapes || {};
+        // Tema global: el simulador del panel lo necesita como respaldo cuando
+        // el miembro no tiene tema propio (antes solo se pintaba el asignado).
+        state.globalThemeActive = !!packsRes.globalThemeActive;
+        state.activeTheme = packsRes.activeTheme || '';
         catalog = catRes || { widgets: [], alerts: [] };
         const render = (kind, items) => {
           const box = document.getElementById(MOUNTS[kind]);
@@ -224,15 +228,27 @@ window.ComponentThemes = (function () {
       return;
     }
     try {
-      if (themeValue) {
+      let changed = false;
+      // Solo se envia lo que cambia de verdad: con la auto-aplicacion al
+      // elegir en el desplegable, reenviar el otro campo duplicaba peticiones.
+      if (themeValue && themeValue !== state.overlayThemes[key]) {
         await API.assignComponent(key, { themeId: themeValue });
         state.overlayThemes[key] = themeValue;
+        changed = true;
       }
-      if (shapeValue) {
+      if (shapeValue && shapeValue !== state.overlayShapes[key]) {
         await API.assignComponent(key, { shapeId: shapeValue });
         state.overlayShapes[key] = shapeValue;
+        changed = true;
       }
-      if (window.OverlayTexts && OverlayTexts.showToast) OverlayTexts.showToast(tr('widgets.toast_theme_saved', '✓ Tema aplicado'), 'success');
+      if (changed) {
+        paintStatusChips();
+        // Refrescar el simulador: el cambio se ve al instante, sin recargar.
+        if (window.AlertsStudio && typeof AlertsStudio.updatePreview === 'function') {
+          try { AlertsStudio.updatePreview(true); } catch (_) {}
+        }
+        if (window.OverlayTexts && OverlayTexts.showToast) OverlayTexts.showToast(tr('widgets.toast_theme_saved', '✓ Tema aplicado'), 'success');
+      }
     } catch (e) {
       alert(tr('widgets.theme_apply_error', 'No se pudo aplicar: ') + e.message);
     }
@@ -291,7 +307,14 @@ window.ComponentThemes = (function () {
       const shapeId = state.overlayShapes[key] || "";
       const theme = themeMeta[themeId];
       const shape = shapeMeta[shapeId];
-      return { theme: themeId, themeName: theme ? theme.name : "", shape: shapeId, shapeName: shape ? shape.name : "" };
+      return {
+        theme: themeId,
+        themeName: theme ? theme.name : "",
+        shape: shapeId,
+        shapeName: shape ? shape.name : "",
+        // Respaldo para el preview: sin tema propio manda el global.
+        globalTheme: state.globalThemeActive ? (state.activeTheme || "") : ""
+      };
     },
     _debug() { return { bindCount, inflight: !!inflight }; }
   };
