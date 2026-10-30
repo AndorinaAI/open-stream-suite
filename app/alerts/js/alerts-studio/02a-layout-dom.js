@@ -330,10 +330,11 @@ Object.assign(AlertsStudio, {
                 <div id="plat-banner-box" style="display: none; background: rgba(255,255,255,0.02); border: 1px dashed rgba(87,214,196,0.3); border-radius: 6px; padding: 10px;">
                   <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 10px;">Tema de Banner:</label>
-                      <select id="cfg-plat-banner-style" class="form-input" style="font-size: 11px;" onchange="AlertsStudio.onDonationPlatChange('bannerStyle', this.value)">
-                        ${this.BASE_STYLES.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}
-                      </select>
+                      <label style="font-size: 10px;">Tema del banner</label>
+                      <div style="font-size: 10px; color: var(--color-text-dim); line-height: 1.4; border: 1px dashed var(--color-border-dim); border-radius: 4px; padding: 6px;">
+                        Se elige en el acordeón <strong>🎨 Tema del pack</strong>, en el miembro
+                        <em>banner</em>. Aquí solo se personaliza el color.
+                      </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
                       <label style="font-size: 10px;">Color Borde / Acento:</label>

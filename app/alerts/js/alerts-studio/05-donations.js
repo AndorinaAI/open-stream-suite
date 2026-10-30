@@ -57,7 +57,6 @@ Object.assign(AlertsStudio, {
     const sInput = document.getElementById('cfg-plat-subtitle');
     const badgeInput = document.getElementById('cfg-plat-badge');
     const bColorInput = document.getElementById('cfg-plat-border-color');
-    const bStyleInput = document.getElementById('cfg-plat-banner-style');
     const mUrlInput = document.getElementById('cfg-plat-media-url');
     const sndModeInput = document.getElementById('cfg-plat-sound-mode');
     const pEmojiInput = document.getElementById('cfg-plat-particle-emoji');
@@ -66,7 +65,6 @@ Object.assign(AlertsStudio, {
     if (sInput) sInput.value = platData.subtitleTemplate || '';
     if (badgeInput) badgeInput.value = platData.badge || plat.toUpperCase();
     if (bColorInput) bColorInput.value = platData.bannerBorderColor || '#57D6C4';
-    if (bStyleInput) bStyleInput.value = platData.bannerStyle || 'cyberpunk';
     if (mUrlInput) mUrlInput.value = platData.mediaUrl || '';
     if (sndModeInput) sndModeInput.value = platData.soundMode || 'inherit';
     if (pEmojiInput) pEmojiInput.value = platData.particleEmoji || '💰';

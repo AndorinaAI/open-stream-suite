@@ -145,7 +145,7 @@ class AlertPreviewThemeContract(unittest.TestCase):
         """Sin bump, el navegador ejecuta el JS anterior y «no cambia nada»."""
         panel = _read(PANEL_HTML)
         self.assertIn("06-preview-test.js?v=54", panel)
-        self.assertIn("02a-layout-dom.js?v=53", panel)
+        self.assertIn("02a-layout-dom.js?v=54", panel)
         self.assertIn("02b-gallery-toast.js?v=51", panel)
         self.assertNotIn("02a-layout-dom.js?v=50", panel)
 
