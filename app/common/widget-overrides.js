@@ -195,6 +195,7 @@ window.ThemePicker = (function () {
         '</div>' +
         '<button type="button" class="btn-action-test" style="font-size:11px;padding:5px 10px;margin-top:10px;" ' +
           'onclick="WidgetOverrides.clear()">↺ Volver al tema del pack</button>' +
+        '<div id="cfg-theme-palette" style="margin-top:12px;"></div>' +
       '</div>';
   }
 
@@ -203,6 +204,54 @@ window.ThemePicker = (function () {
     loadShapes(widgetId).then(function (groups) {
       var sel = document.getElementById('cfg-widget-pack-shape');
       if (sel && sel.options.length <= 1) sel.innerHTML = shapeOptions(groups, currentShape);
+    });
+  }
+
+  // Paleta REAL del tema (tokens de su theme.json). Antes la personalizacion
+  // ofrecia colores fijos que no pertenecian a ningun pack: de ahi la sensacion
+  // de "todo mezclado". Ahora se ven los colores del tema elegido.
+  var paletteCache = null;
+
+  function loadPalette() {
+    if (paletteCache) return Promise.resolve(paletteCache);
+    return fetch('/api/themes/palette', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { paletteCache = (d && d.palette) || {}; return paletteCache; })
+      .catch(function () { paletteCache = {}; return paletteCache; });
+  }
+
+  var PALETTE_KEYS = [
+    '--color-accent-cyan', '--color-accent-orange', '--color-panel-bg',
+    '--color-bg-dark', '--color-text-light', '--color-border-cyan'
+  ];
+
+  /** Pinta las muestras del tema elegido en `#cfg-theme-palette`. */
+  function ensurePalette(themeId) {
+    var box = document.getElementById('cfg-theme-palette');
+    if (!box) return;
+    if (!themeId) {
+      box.innerHTML = '<div style="font-size:10px;color:var(--color-text-dim);">' +
+        'Elige un tema del pack para ver su paleta.</div>';
+      return;
+    }
+    loadPalette().then(function (pal) {
+      var t = pal[themeId];
+      if (!t) { box.innerHTML = ''; return; }
+      var chips = PALETTE_KEYS.map(function (k) {
+        var v = (t.tokens || {})[k];
+        if (!v) return '';
+        return '<span title="' + esc(k) + ' = ' + esc(v) + '" style="display:inline-block;' +
+          'width:22px;height:22px;border-radius:4px;background:' + esc(v) +
+          ';border:1px solid rgba(255,255,255,.25);"></span>';
+      }).join('');
+      var radii = ['--panel-radius', '--frame-radius', '--badge-radius']
+        .map(function (k) { return (t.tokens || {})[k] ? k.replace('--', '') + ': ' + esc(t.tokens[k]) : ''; })
+        .filter(Boolean).join(' · ');
+      box.innerHTML =
+        '<div style="font-size:10px;color:var(--color-text-dim);margin-bottom:4px;">' +
+          'Paleta de «' + esc(t.name) + '» · pack ' + esc(pretty(t.pack)) + '</div>' +
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">' + chips + '</div>' +
+        (radii ? '<div style="font-size:10px;color:var(--color-text-dim);margin-top:4px;">' + radii + '</div>' : '');
     });
   }
 
@@ -243,6 +292,7 @@ window.ThemePicker = (function () {
 
   return {
     render: render, onChange: onChange, catalog: catalog,
-    ensureShapes: ensureShapes, loadShapes: loadShapes
+    ensureShapes: ensureShapes, ensurePalette: ensurePalette,
+    loadShapes: loadShapes, loadPalette: loadPalette
   };
 })();

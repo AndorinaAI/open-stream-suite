@@ -169,6 +169,7 @@ function renderMiniAppTheme() {
   }
   container.innerHTML = ThemePicker.render(w, state.theme || '', state.shape || '', cfg.styleOverrides || {});
   if (ThemePicker.ensureShapes) ThemePicker.ensureShapes(w, state.shape || '');
+  if (ThemePicker.ensurePalette) ThemePicker.ensurePalette(state.theme || '');
 }
 
 function renderMiniAppControls() {

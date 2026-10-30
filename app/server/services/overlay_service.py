@@ -319,6 +319,50 @@ def reset_overlay_texts(section: str = "all", scene_key: str = None) -> dict:
     return current_texts
 
 
+def build_theme_palette() -> dict:
+    """Tokens de color/geometria de cada tema, leidos de disco.
+
+    El panel necesita la paleta REAL del pack para ofrecerla al personalizar:
+    antes enseñaba colores fijos (`#57D6C4`) que no pertenecen a ningun tema, y
+    de ahi la sensacion de "todo mezclado". Se derivan de `theme.json`, asi que
+    un tema nuevo aparece solo.
+
+    Devuelve `{theme_id: {pack, name, archetype, tokens}}`.
+    """
+    import json as _json
+    from pathlib import Path as _Path
+    from server.config import BASE_DIR as _BASE
+
+    # Tokens utiles para el panel: color y geometria. El resto (patrones de
+    # escena, glows complejos) no se ofrece porque no es una eleccion simple.
+    WANTED = (
+        "--color-accent-cyan", "--color-accent-orange", "--color-panel-bg",
+        "--color-bg-dark", "--color-text-light", "--color-text-dim",
+        "--color-border-cyan", "--panel-radius", "--frame-radius", "--badge-radius",
+    )
+    out = {}
+    root = _Path(_BASE) / "streamthemes"
+    try:
+        candidates = sorted(root.glob("*/styles/*/theme.json"))
+    except Exception:
+        candidates = []
+    for tj in candidates:
+        theme_id = tj.parent.name
+        pack_id = tj.parent.parent.parent.name
+        try:
+            data = _json.loads(tj.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        tokens = data.get("tokens") or {}
+        out[theme_id] = {
+            "pack": pack_id,
+            "name": data.get("name") or theme_id,
+            "archetype": data.get("archetype"),
+            "tokens": {k: tokens[k] for k in WANTED if k in tokens},
+        }
+    return out
+
+
 def build_theme_bootstrap() -> dict:
     """Payload unico de arranque de tema para los overlays.
 

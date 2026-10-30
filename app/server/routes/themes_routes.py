@@ -156,6 +156,16 @@ async def handle_restore_theme(request):
         return web.json_response({"error": str(e)}, status=404)
 
 
+async def handle_get_theme_palette(request):
+    """Paleta real de cada tema (tokens de color y geometria).
+
+    El panel la usa para ofrecer LOS COLORES DEL PACK al personalizar, en vez
+    de colores fijos que no pertenecen a ningun tema.
+    """
+    from server.services.overlay_service import build_theme_palette
+    return web.json_response({"status": "ok", "palette": build_theme_palette()})
+
+
 async def handle_set_overlay_theme(request):
     """Asigna un tema visual específico a una overlay o escena de OBS determinada"""
     body = await read_json_object(request)
@@ -300,6 +310,7 @@ def register_themes_routes(app):
     """Registra todas las rutas para la gestión modular de temas y packs"""
     init_themes_directory()
     app.router.add_get("/api/themes/packs", handle_get_theme_packs)
+    app.router.add_get("/api/themes/palette", handle_get_theme_palette)
     app.router.add_post("/api/themes/preview", handle_preview_theme)
     app.router.add_post("/api/themes/packs/create", handle_create_pack)
     app.router.add_post("/api/themes/create", handle_create_theme)
