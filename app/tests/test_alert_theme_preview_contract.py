@@ -30,6 +30,8 @@ QUEUE_JS = APP / 'alerts/js/overlay/03-alert-queue.js'
 ALERTS_CSS = APP / 'alerts/css/alerts-themes.css'
 ALERTS_ROUTES = APP / 'server/routes/alerts_routes.py'
 WS_CLIENT = APP / 'alerts/js/overlay/04-ws-client.js'
+THEMES_JS_04 = APP / 'alerts/js/alerts-studio/04-themes.js'
+CONTROLS_JS = APP / 'alerts/js/alerts-studio/03-controls.js'
 PREVIEW_JS = APP / "alerts/js/alerts-studio/06-preview-test.js"
 THEMES_JS = APP / "alerts/js/component-themes.js"
 PANEL_HTML = APP / "alerts/panel.html"
@@ -145,7 +147,7 @@ class AlertPreviewThemeContract(unittest.TestCase):
         """Sin bump, el navegador ejecuta el JS anterior y «no cambia nada»."""
         panel = _read(PANEL_HTML)
         self.assertIn("06-preview-test.js?v=54", panel)
-        self.assertIn("02a-layout-dom.js?v=54", panel)
+        self.assertIn("02a-layout-dom.js?v=55", panel)
         self.assertIn("02b-gallery-toast.js?v=51", panel)
         self.assertNotIn("02a-layout-dom.js?v=50", panel)
 
@@ -176,6 +178,29 @@ class AlertsConfigPayloadContract(unittest.TestCase):
         js = _read(WS_CLIENT)
         self.assertIn("/api/alerts/config", js,
                       "el overlay no puede depender de config.js: no trae alert:*")
+
+
+class LegacyThemeSystemRemovedContract(unittest.TestCase):
+    """El catalogo paralelo de 9 estilos de alerta ya no existe."""
+
+    def test_04_themes_is_empty(self):
+        js = _read(THEMES_JS_04)
+        self.assertNotIn("selectAndApplyTheme", js)
+        self.assertNotIn("saveThemeAsNew", js)
+        self.assertNotIn("deleteCurrentTheme", js)
+        self.assertNotIn("bannerStyle", js)
+        self.assertLess(len(js.splitlines()), 20,
+                        "04-themes.js debe quedar como stub documentado")
+
+    def test_animation_handler_lives_in_controls(self):
+        js = _read(CONTROLS_JS)
+        self.assertIn("onAnimationChange", js,
+                      "el select #cfg-banner-anim sigue llamandolo")
+
+    def test_no_selector_of_dead_styles(self):
+        panel = _read(PANEL_HTML)
+        self.assertNotIn("cfg-plat-banner-style", panel,
+                         "el select de 9 estilos muertos debe estar eliminado")
 
 
 if __name__ == "__main__":

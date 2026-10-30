@@ -145,7 +145,6 @@ Object.assign(AlertsStudio, {
     }
 
     this.setMediaMode(c.mediaMode || 'banner', false);
-    this.renderThemesGallery();
     this.setSoundMode(c.soundMode || (c.mediaMode === 'media' ? 'video' : 'synth'), false);
     this.updateChatLinkStatus();
     this.updatePreview(true);
@@ -271,4 +270,19 @@ Object.assign(AlertsStudio, {
   // ==========================================================================
   // DONACIONES POR PLATAFORMA: PERSONALIZACIÓN VISUAL, MULTIMEDIA Y TEXTOS
   // ==========================================================================
+
+  /**
+   * Cambio de animación de la alerta.
+   *
+   * Vivía en `04-themes.js` junto al sistema legacy de 9 estilos. Ese fichero
+   * se retiró (el tema es del pack) y esta función sigue siendo necesaria: el
+   * select `#cfg-banner-anim` la llama directamente.
+   */
+  onAnimationChange(anim) {
+    this.onFieldChange('bannerAnimation', anim);
+    const animObj = (this.ANIMATIONS_LIST || []).find(a => a.id === anim);
+    const animLbl = document.getElementById('lbl-preview-anim-name');
+    if (animLbl && animObj) animLbl.textContent = animObj.name;
+    if (typeof this.playPreviewAnimation === 'function') this.playPreviewAnimation();
+  }
 });

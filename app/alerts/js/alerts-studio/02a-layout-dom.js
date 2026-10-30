@@ -589,10 +589,6 @@ Object.assign(AlertsStudio, {
       </div>
     `;
 
-    if (typeof this.renderThemesGallery === 'function') {
-      this.renderThemesGallery();
-    }
-
     // El bloque de temas se recrea con la sección: refrescarlo aquí.
     if (window.ComponentThemes) setTimeout(() => ComponentThemes.load(), 0);
 
