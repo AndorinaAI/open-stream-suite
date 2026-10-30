@@ -58,6 +58,9 @@ jobs:
       - name: Los presets de widget no llevan aspecto
         working-directory: app
         run: python scripts/migrate_theme_unification.py --check
+      - name: Cada widget cumple el contrato (dianas, config, modulo)
+        working-directory: app
+        run: python scripts/check_widget_contract.py
 
   json-lint:
     runs-on: ubuntu-latest

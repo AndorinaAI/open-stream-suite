@@ -84,3 +84,8 @@ window.WidgetModules['promo'] = {
   updatePreview: typeof updatePromoPipPreview === 'function' ? updatePromoPipPreview : () => {}
 };
 
+// `widgets/promo` es un enlace a esta carpeta: el MISMO código sirve a los dos
+// ids. Antes solo se registraba 'promo', así que abrir el widget `shoutout`
+// dejaba la mini-app en «Cargando módulo…». Se registran los dos.
+window.WidgetModules['shoutout'] = window.WidgetModules['promo'];
+
