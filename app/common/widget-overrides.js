@@ -270,6 +270,25 @@ window.ThemePicker = (function () {
     });
   }
 
+  /**
+   * Avisa al iframe de previsualización para que aplique tema/forma al
+   * instante, sin recargar (y sin perder los mensajes simulados).
+   * El widget lo escucha en `widget-theme.js` (`oss-theme-preview`).
+   */
+  function notifyPreview(widgetId, payload) {
+    try {
+      var frame = document.getElementById('miniapp-live-iframe');
+      if (!frame || !frame.contentWindow) return false;
+      frame.contentWindow.postMessage({
+        type: 'oss-theme-preview',
+        widgetId: widgetId,
+        theme: (payload && 'themeId' in payload) ? (payload.themeId || null) : undefined,
+        shape: (payload && 'shapeId' in payload) ? (payload.shapeId || null) : undefined
+      }, '*');
+      return true;
+    } catch (e) { return false; }
+  }
+
   /** Guarda tema o forma del widget. `kind`: 'theme' | 'shape'. */
   async function onChange(widgetId, kind, value) {
     var api = (typeof API !== 'undefined' && API) || window.API || null;
@@ -305,6 +324,8 @@ window.ThemePicker = (function () {
 
     try {
       await api.assignComponent('widget:' + widgetId, payload);
+      // Live view: el iframe de la mini-app aplica el cambio al instante.
+      notifyPreview(widgetId, payload);
       if (window.UI && UI.showToast) {
         var msg;
         if (kind === 'shape') {

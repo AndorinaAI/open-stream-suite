@@ -174,6 +174,20 @@ window.OSSTheme = (function () {
     } catch (e) {}
   }
 
+  // Live view desde el panel: el iframe de previsualización recibe tema y
+  // forma por `postMessage` y los aplica sin recargar (no se pierden los
+  // mensajes simulados). Lo emite `ThemePicker.onChange` en `widget-overrides`.
+  try {
+    window.addEventListener('message', function (ev) {
+      var d = ev.data;
+      if (!d || d.type !== 'oss-theme-preview') return;
+      if (d.widgetId && d.widgetId !== id) return;
+      var t = ('theme' in d) ? (d.theme || null) : undefined;
+      var s = ('shape' in d) ? (d.shape || null) : undefined;
+      apply(t, s, {});
+    });
+  } catch (e) {}
+
   return {
     init: init,
     apply: apply,
