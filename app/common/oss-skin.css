@@ -60,7 +60,7 @@ body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert
 /* Radio y recorte del arquetipo SOLO si no hay forma física elegida: la forma
    (`body[data-theme-shape]`, en `common/styles.css`) siempre manda. */
 body[data-theme-archetype]:not([data-theme-shape]) :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root) {
-  border-radius: var(--skin-panel-radius, 8px);
+  border-radius: var(--skin-panel-radius, var(--panel-radius, 8px));
   clip-path: var(--skin-panel-clip, none);
 }
 
@@ -69,7 +69,7 @@ body[data-theme-archetype]:not([data-theme-shape]) :is([data-oss-panel], [data-o
    ningún componente concreto. */
 body[data-theme-archetype] :is([data-oss-badge], [data-oss-panel-title]) {
   font-family: var(--skin-font-display, inherit);
-  border-radius: var(--skin-badge-radius, inherit);
+  border-radius: var(--skin-badge-radius, var(--badge-radius, inherit));
 }
 
 /* --------------------------------------------------------------------
@@ -94,7 +94,7 @@ body[data-theme-archetype] :is([data-oss-pill], .daily-goal-pill, .now-playing-p
    token de badge y tampoco se estira. Antes heredaba el radio de píldora y
    medía 147x35 px en cozy. */
 body[data-theme-archetype] .mode-badge {
-  border-radius: var(--skin-badge-radius, inherit);
+  border-radius: var(--skin-badge-radius, var(--badge-radius, inherit));
   display: inline-flex;
   align-items: center;
   width: max-content;
@@ -154,7 +154,7 @@ body[data-theme-archetype][data-oss-widget] .chat-msg,
 body[data-theme-archetype][data-oss-widget] .prompter-item,
 body[data-theme-archetype][data-oss-widget] .goal-item,
 body[data-theme-archetype][data-oss-widget] .shoutout-card-body {
-  border-radius: var(--skin-panel-radius, 6px) !important;
+  border-radius: var(--skin-panel-radius, var(--panel-radius, 6px)) !important;
   border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.16)) !important;
   background-color: var(--color-panel-bg, transparent) !important;
   font-family: var(--skin-font-body, inherit) !important;

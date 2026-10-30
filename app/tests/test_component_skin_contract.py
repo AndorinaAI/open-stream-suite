@@ -102,6 +102,22 @@ class TestComponentSkinContract(unittest.TestCase):
             self.assertIn(":not([data-theme-shape])", selector,
                           "el radio del arquetipo debe ceder ante una forma física")
 
+    def test_8_el_tema_puede_afinar_la_geometria(self):
+        """`--skin-*` (arquetipo) primero, `--panel-radius` (tema) como respaldo.
+
+        Antes la cadena se cortaba en `--skin-panel-radius`: un tema no podía
+        afinar su propio radio porque solo el arquetipo lo declaraba. La
+        precedencia documentada (forma > arquetipo > tema > base) se mantiene:
+        el token del arquetipo sigue ganando cuando existe.
+        """
+        self.assertIn("var(--skin-panel-radius, var(--panel-radius,", self.css)
+        self.assertIn("var(--skin-badge-radius, var(--badge-radius,", self.css)
+        # La forma física sigue ganando: el radio va dentro de :not([data-theme-shape]).
+        for selector, _body in rules(self.css):
+            if "skin-panel-radius" in _body and "!important" not in _body:
+                self.assertIn(":not([data-theme-shape])", selector,
+                              "el radio del arquetipo debe ceder ante la forma física")
+
     def test_6_important_solo_en_marco_y_decoracion(self):
         for selector, body in rules(self.css):
             if any(sel in selector for sel in CONTENT_SELECTORS):
