@@ -14,7 +14,8 @@ from server.config import BASE_DIR
 
 APP = Path(BASE_DIR)
 UI = APP / "alerts/js/ui-feedback.js"
-SHORTCUTS = APP / "alerts/js/widgets-shortcuts.js"
+SHORTCUTS = APP / 'alerts/js/widgets-shortcuts.js'
+ACTIONS = APP / 'common/shortcut-actions.js'
 SHOUTOUT = APP / "widgets/shoutout/widget.js"
 
 
@@ -59,6 +60,39 @@ class ShortcutDialogContract(unittest.TestCase):
             js.count("{ name: 'action'"), 4,
             "cada widget debe ofrecer un selector de accion en el alta de atajos",
         )
+
+
+class ShortcutRegistryContract(unittest.TestCase):
+    """Un widget nuevo NO debe exigir editar una lista central."""
+
+    def test_registry_api(self):
+        js = _read(ACTIONS)
+        for fn in ("function register(", "function get(", "function has(",
+                   "function list(", "function commonFields("):
+            self.assertIn(fn, js, f"falta {fn} en el registro de atajos")
+
+    def test_builtin_widgets_are_registered(self):
+        js = _read(ACTIONS)
+        for w in ("timer", "promo", "shoutout", "goal", "ticker"):
+            self.assertIn(f"S.register('{w}'", js,
+                          f"{w} debe registrar su especificacion de atajos")
+
+    def test_panel_consults_registry_before_any_widget_list(self):
+        """La consulta al registro debe ir ANTES del primer `if (w === ...)`."""
+        js = _read(SHORTCUTS)
+        idx_registry = js.find("ShortcutActions.get(w)")
+        # Ancla con el salto y la indentación: `else if (w === 'chat')` de otras
+        # funciones no cuenta, solo la rama dentro de addCustomShortcutToWidget.
+        idx_hardcoded = js.find("\n  if (w === 'chat')")
+        self.assertGreater(idx_registry, -1, "el panel no consulta el registro")
+        self.assertGreater(idx_hardcoded, idx_registry,
+                           "la consulta al registro debe preceder a las ramas "
+                           "por widget: si no, un widget nuevo no llega")
+
+    def test_each_widget_declares_its_own_action_picker(self):
+        js = _read(ACTIONS)
+        self.assertGreaterEqual(js.count("{ name: 'action'"), 4,
+                                "cada especificacion debe ofrecer un selector de acción")
 
 
 class SharedWidgetIdContract(unittest.TestCase):

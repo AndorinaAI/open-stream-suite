@@ -78,6 +78,31 @@ async function addCustomShortcutToWidget(targetWidgetId) {
   if (!cachedWidgetsConfig || !w) return;
   currentMiniAppWidget = w;
 
+  // El widget declara sus propias acciones en `common/shortcut-actions.js`.
+  // AQUI NO HAY NINGUNA LISTA DE WIDGETS: uno nuevo solo tiene que llamar a
+  // ShortcutActions.register() desde su codigo.
+  var spec = (window.ShortcutActions && ShortcutActions.get(w)) || null;
+  if (spec) {
+    if (!window.UI || typeof UI.formDialog !== 'function') {
+      if (window.UI && UI.showToast) UI.showToast('No se pudo abrir el formulario de atajos', 'error');
+      return;
+    }
+    var vals = await UI.formDialog({
+      title: 'Nuevo atajo: ' + w,
+      detail: 'Se añade a la barra de atajos del widget.',
+      fields: spec.fields,
+      submitLabel: 'Añadir atajo'
+    });
+    if (!vals) return;
+    if (!cachedWidgetsConfig[w].shortcuts) cachedWidgetsConfig[w].shortcuts = [];
+    cachedWidgetsConfig[w].shortcuts.push(spec.build(vals));
+    await API.saveWidgetsConfig(cachedWidgetsConfig);
+    renderWidgetsGrid();
+    renderMiniAppShortcutsManager();
+    if (window.UI && UI.showToast) UI.showToast('✓ Atajo añadido', 'success');
+    return;
+  }
+
   if (w === 'chat') {
     openParticleEditorModal(null);
     return;
