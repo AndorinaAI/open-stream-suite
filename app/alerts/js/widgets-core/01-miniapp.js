@@ -159,12 +159,16 @@ function renderMiniAppTheme() {
   const container = document.getElementById('miniapp-theme-content');
   if (!container || !currentMiniAppWidget) return;
   const w = currentMiniAppWidget;
+  const cfg = (cachedWidgetsConfig && cachedWidgetsConfig[w]) || {};
   const state = (window.ComponentThemes && ComponentThemes.themeStateFor)
     ? ComponentThemes.themeStateFor('widget:' + w)
     : {};
-  container.innerHTML = (window.ThemePicker && ThemePicker.render)
-    ? ThemePicker.render(w, state.theme || '')
-    : '<div style="font-size:11px;color:var(--color-text-dim);">No se pudo cargar el selector de temas.</div>';
+  if (!(window.ThemePicker && ThemePicker.render)) {
+    container.innerHTML = '<div style="font-size:11px;color:var(--color-text-dim);">No se pudo cargar el selector de temas.</div>';
+    return;
+  }
+  container.innerHTML = ThemePicker.render(w, state.theme || '', state.shape || '', cfg.styleOverrides || {});
+  if (ThemePicker.ensureShapes) ThemePicker.ensureShapes(w, state.shape || '');
 }
 
 function renderMiniAppControls() {

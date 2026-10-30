@@ -87,8 +87,38 @@ window.ThemePicker = (function () {
     return String(id || '').replace(/_/g, ' ');
   }
 
-  /** HTML del selector: temas agrupados por pack + «heredar global». */
-  function render(widgetId, current) {
+  // Formas disponibles: se piden UNA vez y se cachean. Salen del catálogo de
+  // packs (el mismo que usa el acordeón), así que una forma nueva aparece sola.
+  var shapesCache = null;
+
+  function loadShapes() {
+    if (shapesCache) return Promise.resolve(shapesCache);
+    return fetch('/api/themes/packs', { headers: { 'Accept': 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        var seen = {}, out = [];
+        ((d && d.packs) || []).forEach(function (p) {
+          (p.shapes || []).forEach(function (s) {
+            if (s && s.id && !seen[s.id]) { seen[s.id] = 1; out.push({ id: s.id, name: s.name || s.id }); }
+          });
+        });
+        shapesCache = out;
+        return out;
+      })
+      .catch(function () { shapesCache = []; return shapesCache; });
+  }
+
+  function shapeOptions(shapes, current) {
+    var opts = '<option value="">— Sin forma (la del tema) —</option>';
+    (shapes || []).forEach(function (s) {
+      opts += '<option value="' + esc(s.id) + '"' +
+        (String(s.id) === String(current) ? ' selected' : '') + '>' + esc(pretty(s.name)) + '</option>';
+    });
+    return opts;
+  }
+
+  /** Panel completo: tema + forma + personalización, todo en el mismo sitio. */
+  function render(widgetId, current, currentShape, overrides) {
     var packs = catalog().packs || [];
     var opts = '<option value="">— Heredar tema global —</option>';
     packs.forEach(function (p) {
@@ -101,26 +131,63 @@ window.ThemePicker = (function () {
       });
       opts += '</optgroup>';
     });
+    var o = overrides || {};
     return '' +
       '<div class="miniapp-section-card">' +
         '<div class="miniapp-section-header"><div class="miniapp-section-title">' +
-          '<span>🎨</span><span>Tema del pack</span>' +
+          '<span>🎨</span><span>Tema y forma del pack</span>' +
         '</div></div>' +
-        '<div class="form-group" style="margin-bottom:10px;">' +
-          '<label for="cfg-widget-pack-theme" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">' +
-            'Tema aplicado a este widget' +
-          '</label>' +
-          '<select id="cfg-widget-pack-theme" class="form-select" ' +
-            'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', this.value)">' + opts + '</select>' +
-          '<div style="font-size:10px;color:var(--color-text-dim);margin-top:4px;">' +
-            'El tema del pack manda. Los ajustes de abajo se aplican encima.' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">' +
+          '<div class="form-group" style="margin-bottom:0;">' +
+            '<label for="cfg-widget-pack-theme" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">Tema</label>' +
+            '<select id="cfg-widget-pack-theme" class="form-select" ' +
+              'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', \'theme\', this.value)">' + opts + '</select>' +
+          '</div>' +
+          '<div class="form-group" style="margin-bottom:0;">' +
+            '<label for="cfg-widget-pack-shape" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">Forma</label>' +
+            '<select id="cfg-widget-pack-shape" class="form-select" ' +
+              'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', \'shape\', this.value)">' +
+              shapeOptions(shapesCache || [], currentShape) + '</select>' +
           '</div>' +
         '</div>' +
+        '<div style="font-size:10px;color:var(--color-text-dim);">' +
+          'El tema del pack manda y trae su forma (en «cozy», píldoras redondas). ' +
+          'La personalización de abajo se aplica encima.' +
+        '</div>' +
+      '</div>' +
+      '<div class="miniapp-section-card">' +
+        '<div class="miniapp-section-header"><div class="miniapp-section-title">' +
+          '<span>🎛️</span><span>Personalización (encima del tema)</span>' +
+        '</div></div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+          '<div class="form-group" style="margin-bottom:0;">' +
+            '<label for="cfg-ov-accent" style="font-size:11px;display:block;margin-bottom:4px;">Color de acento</label>' +
+            '<input type="color" id="cfg-ov-accent" value="' + esc(o.accentColor || '#57D6C4') + '" ' +
+              'style="height:32px;width:100%;border:1px solid var(--color-border-dim);background:transparent;border-radius:4px;" ' +
+              'oninput="WidgetOverrides.set(\'' + esc(widgetId) + '\', \'accentColor\', this.value)">' +
+          '</div>' +
+          '<div class="form-group" style="margin-bottom:0;">' +
+            '<label for="cfg-ov-border" style="font-size:11px;display:block;margin-bottom:4px;">Color de borde</label>' +
+            '<input type="color" id="cfg-ov-border" value="' + esc(o.borderColor || '#57D6C4') + '" ' +
+              'style="height:32px;width:100%;border:1px solid var(--color-border-dim);background:transparent;border-radius:4px;" ' +
+              'oninput="WidgetOverrides.set(\'' + esc(widgetId) + '\', \'borderColor\', this.value)">' +
+          '</div>' +
+        '</div>' +
+        '<button type="button" class="btn-action-test" style="font-size:11px;padding:5px 10px;margin-top:10px;" ' +
+          'onclick="WidgetOverrides.clear()">↺ Volver al tema del pack</button>' +
       '</div>';
   }
 
-  /** Guarda el tema asignado al widget y refresca el preview. */
-  async function onChange(widgetId, themeId) {
+  /** Carga las formas la primera vez y rellena el selector. */
+  function ensureShapes(widgetId, currentShape) {
+    loadShapes().then(function (shapes) {
+      var sel = document.getElementById('cfg-widget-pack-shape');
+      if (sel && sel.options.length <= 1) sel.innerHTML = shapeOptions(shapes, currentShape);
+    });
+  }
+
+  /** Guarda tema o forma del widget. `kind`: 'theme' | 'shape'. */
+  async function onChange(widgetId, kind, value) {
     var api = (typeof API !== 'undefined' && API) || window.API || null;
     if (!api || typeof api.assignComponent !== 'function') {
       if (window.UI && UI.showToast) {
@@ -128,22 +195,34 @@ window.ThemePicker = (function () {
       }
       return false;
     }
+    // El backend trata '' como «heredar» (lo convierte en __clear__ y borra la
+    // asignación), así que un valor vacío es una acción válida.
+    var payload = (kind === 'shape') ? { shapeId: value || '' } : { themeId: value || '' };
     try {
-      await api.assignComponent('widget:' + widgetId, { themeId: themeId || '' });
+      await api.assignComponent('widget:' + widgetId, payload);
       if (window.UI && UI.showToast) {
-        UI.showToast(themeId ? '✓ Tema aplicado: ' + pretty(themeId) : '↺ Heredando el tema global', 'success');
+        var msg;
+        if (kind === 'shape') {
+          msg = value ? '✓ Forma aplicada: ' + pretty(value) : '↺ Sin forma propia (la del tema)';
+        } else {
+          msg = value ? '✓ Tema aplicado: ' + pretty(value) : '↺ Heredando el tema global';
+        }
+        UI.showToast(msg, 'success');
       }
-      // Refresco del chip de estado sin reconstruir el DOM del panel: repintar
-      // la cuadricula cerraba el <select> que el usuario acababa de usar.
+      // Solo se repintan los chips: reconstruir la cuadrícula cerraba el
+      // <select> que el usuario acababa de usar.
       if (window.ComponentThemes && ComponentThemes.paintStatusChips) {
         try { ComponentThemes.paintStatusChips(); } catch (e2) {}
       }
       return true;
     } catch (e) {
-      if (window.UI && UI.showToast) UI.showToast('No se pudo aplicar el tema: ' + e.message, 'error');
+      if (window.UI && UI.showToast) UI.showToast('No se pudo aplicar: ' + e.message, 'error');
       return false;
     }
   }
 
-  return { render: render, onChange: onChange, catalog: catalog };
+  return {
+    render: render, onChange: onChange, catalog: catalog,
+    ensureShapes: ensureShapes, loadShapes: loadShapes
+  };
 })();

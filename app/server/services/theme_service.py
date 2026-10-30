@@ -580,7 +580,7 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
             # asignación sólo de forma devolvía 200 y se descartaba al guardar.
             raise ValueError(f"Escena desconocida: {overlay_key}")
 
-    if theme_id:
+    if theme_id and theme_id != "__clear__":
         if not is_valid_theme_id(None, theme_id):
             raise ValueError(f"Tema desconocido: {theme_id}")
     if shape_id is not None:
@@ -600,7 +600,12 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
         "overlayThemeExplicit", derive_explicit_theme_map(state)
     )
 
-    if theme_id:
+    if theme_id == "__clear__":
+        # «Heredar tema global»: se quita la asignación explícita para que el
+        # componente vuelva a caer en el tema global (o en su aspecto base).
+        overlay_themes.pop(overlay_key, None)
+        overlay_explicit.pop(overlay_key, None)
+    elif theme_id:
         overlay_themes[overlay_key] = theme_id
         overlay_explicit[overlay_key] = True
     if shape_id is not None:
@@ -618,7 +623,7 @@ async def set_overlay_theme_service(overlay_key: str, theme_id: str = None, shap
 
     save_theme_state(state)
 
-    assigned_theme = overlay_themes.get(overlay_key, theme_id)
+    assigned_theme = overlay_themes.get(overlay_key)
     assigned_shape = overlay_shapes.get(overlay_key)
 
     if assigned_shape and assigned_shape in SHAPE_TO_ARCHETYPE:

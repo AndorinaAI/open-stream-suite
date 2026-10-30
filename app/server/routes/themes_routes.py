@@ -163,7 +163,14 @@ async def handle_set_overlay_theme(request):
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     overlay_key = str(body.get("overlayKey", "")).strip()
-    theme_id = str(body.get("themeId", "")).strip() if body.get("themeId") else None
+    # `themeId: ""` significa «heredar el tema global», NO «campo ausente».
+    # Antes se convertia en None, el handler respondia 400 «themeId o shapeId
+    # requerido» y el desplegable «Heredar tema global» no hacia nada.
+    theme_raw = body.get("themeId")
+    if theme_raw in (None, ""):
+        theme_id = "__clear__" if "themeId" in body else None
+    else:
+        theme_id = str(theme_raw).strip()
     shape_raw = body.get("shapeId")
     shape_id = str(shape_raw).strip() if shape_raw is not None else ("__clear__" if "shapeId" in body else None)
 
