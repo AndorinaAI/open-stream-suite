@@ -85,7 +85,8 @@ window.ChatParser = (function() {
   }
 
   function formatEmotes(text, emotesTag) {
-    if (!emotesTag) return escapeHtml(text);
+    const safeText = (text === null || text === undefined) ? '' : String(text);
+    if (!emotesTag) return escapeHtml(safeText);
     const emoteList = [];
     emotesTag.split('/').forEach(emoteData => {
       if (!emoteData) return;
@@ -97,10 +98,21 @@ window.ChatParser = (function() {
     });
 
     emoteList.sort((a, b) => b.start - a.start);
-    let html = text;
+    // El texto de IRC de Twitch es contenido de usuario sin escapar: puede
+    // traer <script> o atributos onerror=. Se escapa ANTES de insertar las
+    // etiquetas <img> de los emotes, porque los índices del emotesTag se
+    // refieren a las posiciones del texto original (sin entidades HTML).
+    let html = escapeHtml(safeText);
     emoteList.forEach(e => {
-      const before = html.slice(0, e.start);
-      const after = html.slice(e.end + 1);
+      // escapeHtml sustituye carácter a carácter, así que la longitud del
+      // prefijo escapado da la posición equivalente dentro del HTML. Se
+      // calcula por separado el desplazamiento de inicio y el de fin.
+      const rawBefore = safeText.slice(0, e.start);
+      const rawEmote = safeText.slice(e.start, e.end + 1);
+      const startOffset = escapeHtml(rawBefore).length - rawBefore.length;
+      const endOffset = escapeHtml(rawBefore + rawEmote).length - (rawBefore + rawEmote).length;
+      const before = html.slice(0, e.start + startOffset);
+      const after = html.slice(e.end + 1 + endOffset);
       const imgTag = `<img class="twitch-emote" src="https://static-cdn.jtvnw.net/emoticons/v2/${e.id}/default/dark/2.0" alt="emote">`;
       html = before + imgTag + after;
     });

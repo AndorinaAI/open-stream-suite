@@ -3,6 +3,16 @@
 window.TickerRenderer = (function() {
   const S = window.TickerStateData;
 
+  // Escapa el texto antes de interpolarlo en HTML. Los títulos del RSS son
+  // contenido externo (feed configurado por el usuario) y antes se inyectaban
+  // sin escapar: un <img onerror=...> en un título se ejecutaba en OBS.
+  function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
   function buildPrompterGroupHTML(items) {
     const topicSep = S.state.config.topicSeparator || '///';
     let html = '<div class="prompter-group">';
@@ -11,15 +21,15 @@ window.TickerRenderer = (function() {
       html += `
         <div class="prompter-item">
           ${item.badge ? `
-            <span class="${item.badgeClass}">
-              <span>${item.icon || '📌'}</span>
-              <span>${item.badge}</span>
+            <span class="${escapeHtml(item.badgeClass)}">
+              <span>${escapeHtml(item.icon || '📌')}</span>
+              <span>${escapeHtml(item.badge)}</span>
             </span>
           ` : ''}
-          <span class="prompter-text">${item.text}</span>
+          <span class="prompter-text">${escapeHtml(item.text)}</span>
         </div>
       `;
-      html += `<span class="topic-separator">${topicSep}</span>`;
+      html += `<span class="topic-separator">${escapeHtml(topicSep)}</span>`;
     });
 
     html += '</div>';
@@ -74,14 +84,14 @@ window.TickerRenderer = (function() {
     const item = items[index];
 
     track.innerHTML = `
-      <div class="prompter-item anim-${anim}-in" style="justify-content: center;">
+      <div class="prompter-item anim-${escapeHtml(anim)}-in" style="justify-content: center;">
         ${item.badge ? `
-          <span class="${item.badgeClass}">
-            <span>${item.icon || '📌'}</span>
-            <span>${item.badge}</span>
+          <span class="${escapeHtml(item.badgeClass)}">
+            <span>${escapeHtml(item.icon || '📌')}</span>
+            <span>${escapeHtml(item.badge)}</span>
           </span>
         ` : ''}
-        <span class="prompter-text">${item.text}</span>
+        <span class="prompter-text">${escapeHtml(item.text)}</span>
       </div>
     `;
     adjustPreviewScale();

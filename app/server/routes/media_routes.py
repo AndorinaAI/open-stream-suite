@@ -2,6 +2,7 @@ import secrets
 from pathlib import Path
 from aiohttp import web
 from server.config import MEDIA_DIR, MAX_UPLOAD_BYTES, logger
+from server.routes.errors import read_json_object
 from server.security import is_local_request
 from server.services.media_service import (
     ALLOWED_MEDIA_EXTENSIONS,
@@ -123,9 +124,8 @@ async def handle_upload_media(request):
 
 async def handle_mkdir_media(request):
     """Crea un nuevo subdirectorio de forma segura."""
-    try:
-        data = await request.json()
-    except Exception:
+    data = await read_json_object(request)
+    if data is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     folder_name = data.get("name", "")
@@ -139,9 +139,8 @@ async def handle_mkdir_media(request):
 
 async def handle_rename_media(request):
     """Renombra un archivo o carpeta de forma segura."""
-    try:
-        data = await request.json()
-    except Exception:
+    data = await read_json_object(request)
+    if data is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     rel_path = data.get("path", "")
@@ -152,9 +151,8 @@ async def handle_rename_media(request):
 
 async def handle_move_media(request):
     """Mueve uno o varios archivos/carpetas a otra carpeta de destino."""
-    try:
-        data = await request.json()
-    except Exception:
+    data = await read_json_object(request)
+    if data is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     sources = data.get("sources", [])
@@ -167,9 +165,8 @@ async def handle_move_media(request):
 
 async def handle_copy_media(request):
     """Copia uno o varios archivos a otra carpeta o duplica en la misma carpeta."""
-    try:
-        data = await request.json()
-    except Exception:
+    data = await read_json_object(request)
+    if data is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     sources = data.get("sources", [])
@@ -182,9 +179,8 @@ async def handle_copy_media(request):
 
 async def handle_delete_media(request):
     """Elimina uno o varios archivos o carpetas de forma segura."""
-    try:
-        data = await request.json()
-    except Exception:
+    data = await read_json_object(request)
+    if data is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     paths_to_delete = data.get("paths", [])

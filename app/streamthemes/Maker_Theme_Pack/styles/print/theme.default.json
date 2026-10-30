@@ -15,5 +15,31 @@
   "borderStyle": "chamfer",
   "desc": "Naranja de taller sobre carbón. Inspirado en corte, sublimación e impresión.",
   "chatAnchored": true,
-  "chatDerivative": null
+  "chatDerivative": null,
+  "tokens": {
+    "--color-bg-dark": "#1E1B18",
+    "--color-text-light": "#F7EFE6",
+    "--color-accent-cyan": "#FF783F",
+    "--color-accent-orange": "#FF9B42",
+    "--color-panel-bg": "#332B25",
+    "--color-text-dim": "#9E9289",
+    "--color-border-cyan": "rgba(255, 120, 63, 0.4)",
+    "--color-border-cyan-bright": "#FF783F",
+    "--theme-glow": "0 0 16px rgba(255, 120, 63, 0.5)",
+    "--frame-radius": "0px",
+    "--frame-border-width": "2px",
+    "--frame-border-style": "solid",
+    "--frame-clip-path": "none",
+    "--frame-shadow": "0 0 0 1px rgba(255, 120, 63, 0.3), inset 0 0 16px rgba(255, 120, 63, 0.1)",
+    "--frame-corner-display": "block",
+    "--panel-radius": "2px",
+    "--panel-clip-path": "none",
+    "--panel-backdrop": "blur(8px)",
+    "--panel-shadow": "0 4px 18px rgba(0, 0, 0, 0.45)",
+    "--badge-radius": "2px",
+    "--badge-clip-path": "none",
+    "--header-radius": "2px",
+    "--header-clip-path": "none"
+  },
+  "archetype": "maker"
 }

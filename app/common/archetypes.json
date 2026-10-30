@@ -1,0 +1,127 @@
+{
+  "$comment": "Fuente de verdad de los arquetipos y su skin. Sustituye a los bloques hardcodeados de common/styles.css (ver app/server/services/theme_engine.py, que genera common/generated/archetypes.css). Para anadir un arquetipo nuevo: copia uno, cambia id/label/tokens y ya aparece solo.",
+  "archetypes": [
+    {
+      "id": "cozy",
+      "label": "Cozy / Lo-Fi Cálido",
+      "tokens": {
+        "--skin-font-display": "'Comfortaa', cursive, sans-serif",
+        "--skin-font-body": "'Outfit', -apple-system, sans-serif",
+        "--skin-frame-radius": "28px",
+        "--skin-frame-clip": "none",
+        "--skin-header-radius": "50px",
+        "--skin-header-clip": "none",
+        "--skin-panel-radius": "24px",
+        "--skin-panel-clip": "none",
+        "--skin-badge-radius": "50px",
+        "--skin-pill-radius": "50px",
+        "--skin-ornament-tape": "block",
+        "--skin-ornament-reticle": "none",
+        "--skin-ornament-brackets": "none",
+        "--skin-bar-radius": "6px"
+      },
+      "skin": {
+        "--skin-panel-decor": "none",
+        "--skin-panel-decor-position": "0 0",
+        "--skin-panel-decor-size": "auto",
+        "--skin-panel-decor-repeat": "no-repeat"
+      },
+      "atmosphere": {
+        "modeText": "COZY CHILL",
+        "subtitle": "Música Lo-Fi · Charla Relajada · Café",
+        "camLabel": "Cámara Principal"
+      }
+    },
+    {
+      "id": "gamer",
+      "label": "Gamer / Pro Competitivo",
+      "tokens": {
+        "--skin-font-display": "'Share Tech Mono', monospace",
+        "--skin-font-body": "'Rajdhani', -apple-system, sans-serif",
+        "--skin-frame-radius": "0px",
+        "--skin-frame-clip": "polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px))",
+        "--skin-header-radius": "0px",
+        "--skin-header-clip": "polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px))",
+        "--skin-panel-radius": "0px",
+        "--skin-panel-clip": "polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
+        "--skin-badge-radius": "0px",
+        "--skin-pill-radius": "0px",
+        "--skin-ornament-tape": "none",
+        "--skin-ornament-reticle": "block",
+        "--skin-ornament-brackets": "none",
+        "--skin-bar-radius": "0px"
+      },
+      "skin": {
+        "--skin-panel-decor": "linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)), linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)), linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)), linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF)), linear-gradient(var(--color-accent-cyan, #00F0FF), var(--color-accent-cyan, #00F0FF))",
+        "--skin-panel-decor-position": "0 0, 6px 6px, calc(100% - 6px) 6px, 6px calc(100% - 6px), calc(100% - 6px) calc(100% - 6px)",
+        "--skin-panel-decor-size": "100% 2px, 12px 2px, 12px 2px, 12px 2px, 12px 2px",
+        "--skin-panel-decor-repeat": "no-repeat"
+      },
+      "atmosphere": {
+        "modeText": "ESPORTS HUD",
+        "subtitle": "LIVE MATCH // COMPETITIVE TOURNAMENT",
+        "camLabel": "CAM 01 // OVERVIEW"
+      }
+    },
+    {
+      "id": "maker",
+      "label": "Maker / Taller Tecnológico",
+      "tokens": {
+        "--skin-font-display": "'JetBrains Mono', monospace",
+        "--skin-font-body": "'Inter', -apple-system, sans-serif",
+        "--skin-frame-radius": "4px",
+        "--skin-frame-clip": "none",
+        "--skin-header-radius": "2px",
+        "--skin-header-clip": "none",
+        "--skin-panel-radius": "4px",
+        "--skin-panel-clip": "none",
+        "--skin-badge-radius": "3px",
+        "--skin-pill-radius": "4px",
+        "--skin-ornament-tape": "none",
+        "--skin-ornament-reticle": "none",
+        "--skin-ornament-brackets": "block",
+        "--skin-bar-radius": "2px"
+      },
+      "skin": {
+        "--skin-panel-decor": "linear-gradient(90deg, var(--color-accent-cyan, #57D6C4), var(--color-accent-orange, #FF783F)), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor)",
+        "--skin-panel-decor-position": "0 0, 7px 7px, calc(100% - 7px) 7px, 7px calc(100% - 7px), calc(100% - 7px) calc(100% - 7px)",
+        "--skin-panel-decor-size": "100% 3px, 12px 2px, 12px 2px, 12px 2px, 12px 2px",
+        "--skin-panel-decor-repeat": "no-repeat"
+      },
+      "atmosphere": {
+        "modeText": "MAKER MODE",
+        "subtitle": "RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN",
+        "camLabel": "CÁMARA CENITAL · BANCO DE TRABAJO"
+      }
+    },
+    {
+      "id": "openstream",
+      "label": "Open Stream / Cristal Suizo",
+      "tokens": {
+        "--skin-font-display": "'Inter', -apple-system, sans-serif",
+        "--skin-font-body": "'Plus Jakarta Sans', -apple-system, sans-serif",
+        "--skin-frame-radius": "16px",
+        "--skin-frame-clip": "none",
+        "--skin-header-radius": "12px",
+        "--skin-header-clip": "none",
+        "--skin-panel-radius": "16px",
+        "--skin-panel-clip": "none",
+        "--skin-badge-radius": "8px",
+        "--skin-pill-radius": "16px",
+        "--skin-ornament-tape": "none",
+        "--skin-ornament-reticle": "none",
+        "--skin-ornament-brackets": "none",
+        "--skin-bar-radius": "6px"
+      },
+      "skin": {
+        "--skin-panel-decor": "none",
+        "--skin-panel-decor-position": "0 0",
+        "--skin-panel-decor-size": "auto",
+        "--skin-panel-decor-repeat": "no-repeat"
+      },
+      "atmosphere": {
+        "modeText": "BROADCAST"
+      }
+    }
+  ]
+}

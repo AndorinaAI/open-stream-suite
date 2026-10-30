@@ -1,4 +1,5 @@
-body[data-theme="chill"] {
+body[data-theme="chill"],
+[data-theme="chill"] {
   --color-bg-dark: #181825;
   --color-text-light: #CDD6F4;
   --color-accent-cyan: #89B4FA;

@@ -18,10 +18,12 @@
        --panel-shadow, --theme-glow
      Decoración, por arquetipo:
        --skin-panel-decor, -position, -size, -repeat
-     Textura, por tema (ej. cuadrícula blueprint del pack Maker):
-       --skin-panel-pattern, -position, -size
+     Textura, por ESCENA (`--skin-scene-pattern`, -position, -size):
+       las texturas (cuadrícula blueprint, papel, PCB) son **ornamento de
+       escena**: por defecto NO se pintan en widgets/chat/alertas. Un
+       componente que quiera textura la declara con opt-in explícito.
      Tipografía e insignias, por arquetipo:
-       --skin-font-display, --skin-badge-radius
+       --skin-font-display, --skin-badge-radius, --skin-pill-radius
 
    REGLA DE ORO: sin `data-theme-archetype` (sin skin asignado o arquetipo
    desconocido) NO se aplica ninguna regla, así que la apariencia por
@@ -46,11 +48,13 @@ body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert
   border-style: var(--frame-border-style, solid) !important;
   border-color: var(--color-border-cyan, var(--color-accent-cyan, rgba(255, 255, 255, 0.16))) !important;
   box-shadow: var(--panel-shadow, none), var(--theme-glow, none) !important;
-  /* Capas decorativas: textura del tema encima del adorno del arquetipo. */
-  background-image: var(--skin-panel-pattern, none), var(--skin-panel-decor, none) !important;
-  background-position: var(--skin-panel-pattern-position, 0 0), var(--skin-panel-decor-position, 0 0) !important;
-  background-size: var(--skin-panel-pattern-size, auto), var(--skin-panel-decor-size, auto) !important;
-  background-repeat: repeat, var(--skin-panel-decor-repeat, no-repeat) !important;
+  /* Capa decorativa: SOLO el adorno del arquetipo. La textura del tema
+     (`--skin-scene-pattern`) es de ESCENA y no se pinta aquí: por eso el
+     chat deja de salir "cuadriculado" al aplicar el tema maker. */
+  background-image: var(--skin-panel-decor, none) !important;
+  background-position: var(--skin-panel-decor-position, 0 0) !important;
+  background-size: var(--skin-panel-decor-size, auto) !important;
+  background-repeat: var(--skin-panel-decor-repeat, no-repeat) !important;
 }
 
 /* Radio y recorte del arquetipo SOLO si no hay forma física elegida: la forma
@@ -66,4 +70,71 @@ body[data-theme-archetype]:not([data-theme-shape]) :is([data-oss-panel], [data-o
 body[data-theme-archetype] :is([data-oss-badge], [data-oss-panel-title]) {
   font-family: var(--skin-font-display, inherit);
   border-radius: var(--skin-badge-radius, inherit);
+}
+
+/* --------------------------------------------------------------------
+   PÍLDORAS: `--skin-pill-radius` (el token que estaba muerto).
+   El vocabulario de píldoras es un `display:flex` dentro de un contenedor
+   flexible: sin `inline-flex` + `width:max-content` se estiran a todo el
+   ancho (`.daily-goal-pill` medía 500×43 px en cozy). Con esto abrazan su
+   contenido y el arquetipo decide su geometría.
+   -------------------------------------------------------------------- */
+body[data-theme-archetype] :is([data-oss-pill], .daily-goal-pill, .now-playing-pill,
+    .on-air-pill, .badge-pill, .live-time-pill) {
+  border-radius: var(--skin-pill-radius, 9999px);
+  /* Abrazar el contenido: sin esto la píldora se estira a todo el ancho del
+     contenedor (`.daily-goal-pill` medía 500x43 px en cozy). */
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+}
+
+/* Un BADGE (`.mode-badge` lleva `data-oss-badge`) es otro vocabulario: usa su
+   token de badge y tampoco se estira. Antes heredaba el radio de píldora y
+   medía 147x35 px en cozy. */
+body[data-theme-archetype] .mode-badge {
+  border-radius: var(--skin-badge-radius, inherit);
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+}
+
+/* --------------------------------------------------------------------
+   BARRAS: NO heredan el radio de badge/píldora.
+   Una barra de 8 px de alto con radio de 50 px se convierte en una píldora
+   achatada. El vocabulario de barras y el de píldoras son distintos.
+   -------------------------------------------------------------------- */
+body[data-theme-archetype] :is([data-oss-bar], .pomo-bar, .pomo-progress,
+    .cozy-progress-bar, .progress-bar, .lofi-player-bar, .header-bar) {
+  border-radius: var(--skin-bar-radius, 4px);
+}
+
+/* --------------------------------------------------------------------
+   MARCO DE CAMARA: `--skin-frame-radius` / `--skin-frame-clip`
+   Son los dos tokens del arquetipo que quedaban sin consumir: el marco
+   usaba solo `--frame-*` (del tema), asi que la forma del arquetipo no
+   llegaba a la camara. El token del tema queda como respaldo.
+   -------------------------------------------------------------------- */
+body[data-theme-archetype] :is([data-oss-cam], .camera-frame, .cam-frame,
+    .cam-box, .hud-cam-box, .stream-frame, .stream-cam-card,
+    .canvas-frame, .face-frame, .gameplay-box) {
+  border-radius: var(--skin-frame-radius, var(--frame-radius, 3px));
+  clip-path: var(--skin-frame-clip, var(--frame-clip-path, none));
+}
+
+/* --------------------------------------------------------------------
+   FONDO DE WIDGETS DESDE EL TEMA
+   Los widgets fijaban un gris oscuro propio en su CSS (`rgba(25,29,33,.94)`),
+   asi que un widget con tema cozy seguia teniendo el fondo del maker. Con el
+   tema asignado el fondo pasa a `--color-panel-bg` (que ya trae el alfa del
+   tema) y, si el usuario configuro una opacidad, se respeta con `color-mix`.
+
+   Solo afecta a widgets (`data-oss-widget`): las ESCENAS y las ALERTAS ya
+   pintan su fondo desde el tema o desde la forma fisica.
+   -------------------------------------------------------------------- */
+body[data-theme-archetype][data-oss-widget] :is([data-oss-panel], [data-oss-shape-target]) {
+  background-color: var(--color-panel-bg, transparent) !important;
+  background-color: color-mix(in srgb, var(--color-panel-bg, transparent) var(--oss-bg-opacity, 100%), transparent) !important;
 }

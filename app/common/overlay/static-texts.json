@@ -1,0 +1,26 @@
+{
+  "$comment": "Textos que NO deben ser editables: relojes, iconos, telemetria y valores tecnicos. Un elemento cuyo texto case con un patron, o que este dentro de uno de estos selectores (o sea ancestro suyo), se considera FIJO y la auto-etiqueta lo respeta. `data-oss-static` es ademas la marca explicita en el HTML.",
+  "selectors": [
+    ".live-time-pill",
+    ".live-time",
+    ".tel-val",
+    ".tel-highlight",
+    ".tel-label",
+    ".cam-footer-tag",
+    ".vinyl-icon",
+    ".info-icon",
+    ".chat-time",
+    ".msg-time",
+    ".stream-time",
+    ".timer-display",
+    ".pomo-time",
+    "[data-oss-static]"
+  ],
+  "textPatterns": [
+    "^\\d{1,2}:\\d{2}(:\\d{2})?$",
+    "^\\d+ms$",
+    "^\\d+p\\d+$",
+    "^\\d+\\s*(fps|FPS|ms|kbps|Mbps)$",
+    "^\\d{3,4}x\\d{3,4}$"
+  ]
+}

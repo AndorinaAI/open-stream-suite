@@ -159,7 +159,7 @@ Themes live inside `app/themes/<pack_id>/<theme_id>/`:
 | :--- | :--- | :--- |
 | `--skin-panel-radius`, `--skin-panel-clip` | `common/styles.css` (per archetype) | Panel radius and clip while no physical shape is selected |
 | `--skin-panel-decor` (+ `-position`, `-size`, `-repeat`) | `common/styles.css` (per archetype) | Corner marks / technical decoration, painted with `background` |
-| `--skin-panel-pattern` (+ `-position`, `-size`) | `streamthemes/<Pack>/styles/<theme>/style.css` | Pack texture (e.g. the Maker blueprint grid) |
+| `--skin-scene-pattern` (+ `-position`, `-size`) | `streamthemes/<Pack>/styles/<theme>/style.css` | Pack SCENE texture (e.g. the Maker blueprint grid): painted on the scene background, never on components |
 | `--frame-border-width`, `--frame-border-style`, `--color-border-cyan`, `--panel-shadow`, `--theme-glow` | theme | Card frame, glow and shadow |
 | `--skin-font-display`, `--skin-badge-radius` | `common/styles.css` (per archetype) | Typography for badges and titles marked with `data-oss-badge` / `data-oss-panel-title` |
 

@@ -4,7 +4,7 @@ Controladores que gestionan packs de temas, guardado, aplicación y anclaje de c
 """
 
 from aiohttp import web
-from server.routes.errors import internal_error_response
+from server.routes.errors import internal_error_response, read_json_object
 from server.services.theme_defaults import (
     DEFAULT_PACK_TALLER,
     DEFAULT_THEMES_DATA,
@@ -29,6 +29,7 @@ from server.services.theme_manager import (
     get_all_packs_and_themes,
     sync_chat_with_theme
 )
+from server.services import theme_render
 from server.services.theme_service import (
     create_pack_service,
     create_theme_service,
@@ -50,9 +51,8 @@ async def handle_get_theme_packs(request):
 
 async def handle_create_pack(request):
     """Crea una nueva carpeta de pack en streamthemes/<pack_id>/ con sus subcarpetas styles/ y overlays/"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     try:
@@ -72,9 +72,8 @@ async def handle_create_pack(request):
 
 async def handle_create_theme(request):
     """Crea un nuevo tema dentro de un pack específico"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     try:
@@ -90,9 +89,8 @@ async def handle_create_theme(request):
 
 async def handle_save_theme(request):
     """Guarda las configuraciones y el código CSS modificado de un tema en disco"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     try:
@@ -106,9 +104,8 @@ async def handle_save_theme(request):
 
 async def handle_apply_theme(request):
     """Aplica y activa un tema en vivo para todas las escenas de OBS y el panel"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     theme_id = str(body.get("theme", "")).strip()
@@ -123,9 +120,8 @@ async def handle_apply_theme(request):
 
 async def handle_chat_anchor_toggle(request):
     """Alterna el anclaje del chat al tema activo o activa un derivado personalizado"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     pack_id = str(body.get("packId", "Maker_Theme_Pack")).strip()
@@ -144,9 +140,8 @@ async def handle_chat_anchor_toggle(request):
 
 async def handle_restore_theme(request):
     """Restaura un tema modificado a su configuración y CSS original de fábrica"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     pack_id = str(body.get("packId", "Maker_Theme_Pack")).strip()
@@ -163,9 +158,8 @@ async def handle_restore_theme(request):
 
 async def handle_set_overlay_theme(request):
     """Asigna un tema visual específico a una overlay o escena de OBS determinada"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     overlay_key = str(body.get("overlayKey", "")).strip()
@@ -193,9 +187,8 @@ async def handle_set_overlay_theme_bulk(request):
     `set_overlay_theme_service` (que ya difunde y persiste por clave), y se
     devuelve el detalle de lo aplicado y lo fallido sin abortar al primer error.
     """
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     assignments = body.get("assignments")
@@ -247,11 +240,8 @@ async def handle_set_overlay_theme_bulk(request):
 
 async def handle_apply_shape(request):
     """Aplica una forma física globalmente a todas las escenas de OBS y el panel"""
-    try:
-        body = await request.json()
-    except Exception:
-        return web.json_response({"error": "Payload JSON inválido"}, status=400)
-    if not isinstance(body, dict):
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     shape_id = str(body.get("shape", "original")).strip()
@@ -264,9 +254,8 @@ async def handle_apply_shape(request):
 
 async def handle_set_overlay_backdrop(request):
     """Guarda y sincroniza el fondo/apertura decorativo para una escena de OBS"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     overlay_key = str(body.get("overlayKey", "")).strip()
@@ -282,10 +271,29 @@ async def handle_set_overlay_backdrop(request):
         return web.json_response({"error": str(e)}, status=400)
 
 
+async def handle_preview_theme(request):
+    """Devuelve el CSS que producirá un `theme.json`, SIN escribir en disco.
+
+    Es lo que usa el editor del panel para que la vista previa sea el CSS real
+    (con todos los tokens normalizados) y no un CSS inventado con literales.
+    """
+    body = await read_json_object(request)
+    if body is None:
+        return web.json_response({"error": "Payload JSON inválido"}, status=400)
+    try:
+        css = theme_render.preview_css(body)
+    except ValueError as exc:
+        return web.json_response({"error": str(exc)}, status=400)
+    except Exception as exc:  # noqa: BLE001 - se devuelve 500 controlado
+        return internal_error_response("previsualizando el tema", exc)
+    return web.json_response({"status": "ok", "css": css})
+
+
 def register_themes_routes(app):
     """Registra todas las rutas para la gestión modular de temas y packs"""
     init_themes_directory()
     app.router.add_get("/api/themes/packs", handle_get_theme_packs)
+    app.router.add_post("/api/themes/preview", handle_preview_theme)
     app.router.add_post("/api/themes/packs/create", handle_create_pack)
     app.router.add_post("/api/themes/create", handle_create_theme)
     app.router.add_post("/api/themes/save", handle_save_theme)
@@ -302,9 +310,8 @@ def register_themes_routes(app):
 
 async def handle_reset_assignment(request):
     """Restaura la asignación de fábrica de una escena, widget o alerta."""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
     key = str(body.get("overlayKey", "")).strip()
     if not key:

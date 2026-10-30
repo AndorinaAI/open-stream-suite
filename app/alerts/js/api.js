@@ -414,6 +414,32 @@ const API = {
     return data;
   },
 
+  // Vista previa del CSS REAL de un tema (lo genera el backend desde los
+  // tokens). El editor deja de inventarse el CSS con literales.
+  async previewTheme(meta) {
+    const res = await fetch('/api/themes/preview', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(meta || {})
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al previsualizar el tema`);
+    return data;
+  },
+
+  // Exporta la fusión como pack propio (tema + forma + escenas). El pack
+  // aparece solo en el catálogo y en los menús: no hay listas que tocar.
+  async exportFusionPack(id) {
+    const res = await fetch(`/api/fusions/${encodeURIComponent(id)}/export-pack`, {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({})
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `HTTP ${res.status} al exportar la fusión`);
+    return data;
+  },
+
   async applyFusionShape(id, shapeId) {
     const res = await fetch(`/api/fusions/${encodeURIComponent(id)}/apply-shape`, {
       method: 'POST',

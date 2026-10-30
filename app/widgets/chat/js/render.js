@@ -14,6 +14,15 @@ window.ChatRenderer = (function() {
     }
   }
 
+  // Escape de respaldo: si window.ChatParser no estuviera disponible, el
+  // nombre de usuario no debe inyectarse sin escapar dentro de innerHTML.
+  function escapeFallback(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  }
+
   function renderMessage(username, color, text, emotesTag, badgesStr = '') {
     if (!text || !chatBox) return;
     const S = window.ChatStyles;
@@ -65,13 +74,19 @@ window.ChatRenderer = (function() {
     header.className = 'msg-header';
     header.innerHTML = `
       ${badgesHtml}
-      <span class="username-text" style="color: ${finalColor};">${P ? P.escapeHtml(username) : username}</span>
+      <span class="username-text" style="color: ${finalColor};">${P ? P.escapeHtml(username) : escapeFallback(username)}</span>
     `;
     msgEl.appendChild(header);
 
     const body = document.createElement('div');
     body.className = 'msg-body';
-    body.innerHTML = P ? P.formatEmotes(text, emotesTag) : text;
+    // Si el parser no estuviera disponible se usa textContent (nunca innerHTML)
+    // para no inyectar texto de IRC sin escapar como HTML.
+    if (P) {
+      body.innerHTML = P.formatEmotes(text, emotesTag);
+    } else {
+      body.textContent = text;
+    }
     msgEl.appendChild(body);
 
     chatBox.appendChild(msgEl);

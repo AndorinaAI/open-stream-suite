@@ -178,7 +178,27 @@ function onVisualSettingChange() {
 }${animRules}`;
 
   const cssArea = document.getElementById('theme-code-css-textarea');
-  if (cssArea) cssArea.value = generatedCss;
+  if (cssArea) {
+    // Se pinta ya el borrador local (sin parpadeo) y se sustituye por el CSS
+    // REAL que va a guardar el backend (tokens normalizados) en cuanto responde.
+    // Asi la vista previa nunca ensena colores que no se van a aplicar.
+    cssArea.value = generatedCss;
+    if (window.API && typeof API.previewTheme === 'function') {
+      const previewMeta = Object.assign({}, currentEditingTheme || {}, {
+        id: themeId,
+        accentCyan: cyan,
+        accentOrange: orange,
+        bgDark: bg,
+        textLight: text,
+        glowIntensity: parseInt(glow, 10),
+        borderStyle: borderStyle,
+        animationEffect: animEffect
+      });
+      API.previewTheme(previewMeta).then(function (res) {
+        if (res && res.css) cssArea.value = res.css;
+      }).catch(function () { /* se mantiene el borrador local */ });
+    }
+  }
 
   currentEditingTheme.borderStyle = borderStyle;
   currentEditingTheme.animationEffect = animEffect;

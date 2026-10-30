@@ -128,6 +128,77 @@ class TestUpdaterLogic(unittest.TestCase):
                 fusion_ids = [item["id"] for item in fusions_data]
                 self.assertIn("user_fusion_1", fusion_ids)
 
+    def test_apply_update_rescata_el_trabajo_local_en_un_stash(self):
+        """`reset --hard` no puede llevarse por delante trabajo sin versionar.
+
+        Antes de tocar el árbol se guarda TODO (modificados y ficheros nuevos
+        sin seguimiento) en un stash con nombre, recuperable con
+        `git stash list` / `git stash apply`. Es la red de seguridad que faltaba:
+        una actualización podía borrar código a medias sin avisar.
+        """
+        with tempfile.TemporaryDirectory() as td:
+            remote_root = Path(td) / "remote_repo"
+            local_root = Path(td) / "local_repo"
+            remote_root.mkdir()
+
+            subprocess.run(["git", "init", "-b", "main"], cwd=str(remote_root),
+                           check=True, stdout=subprocess.DEVNULL)
+            subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=str(remote_root), check=True)
+            subprocess.run(["git", "config", "user.name", "T"], cwd=str(remote_root), check=True)
+
+            remote_app = remote_root / "app"
+            remote_app.mkdir()
+            (remote_app / "version.py").write_text(
+                'VERSION = "1.0.0-alpha"\nDEFAULT_GITHUB_REPO = "test/repo"\n', encoding="utf-8")
+            (remote_app / "code.py").write_text("print('v1')\n", encoding="utf-8")
+            subprocess.run(["git", "add", "."], cwd=str(remote_root), check=True)
+            subprocess.run(["git", "commit", "-m", "v1"], cwd=str(remote_root),
+                           check=True, stdout=subprocess.DEVNULL)
+
+            subprocess.run(["git", "clone", str(remote_root), str(local_root)],
+                           cwd=td, check=True, stdout=subprocess.DEVNULL)
+            subprocess.run(["git", "config", "user.email", "t@t.com"], cwd=str(local_root), check=True)
+            subprocess.run(["git", "config", "user.name", "T"], cwd=str(local_root), check=True)
+            local_app = local_root / "app"
+
+            # Commit nuevo en remoto para que la actualización avance.
+            (remote_app / "version.py").write_text(
+                'VERSION = "1.0.1-alpha"\nDEFAULT_GITHUB_REPO = "test/repo"\n', encoding="utf-8")
+            (remote_app / "code.py").write_text("print('v2')\n", encoding="utf-8")
+            subprocess.run(["git", "add", "."], cwd=str(remote_root), check=True)
+            subprocess.run(["git", "commit", "-m", "v2"], cwd=str(remote_root),
+                           check=True, stdout=subprocess.DEVNULL)
+
+            # Trabajo local sin versionar: un tracked modificado + un fichero nuevo.
+            (local_app / "code.py").write_text("MI_TRABAJO_LOCAL = True\n", encoding="utf-8")
+            (local_app / "nota_local.txt").write_text("no me borres\n", encoding="utf-8")
+
+            updater = UpdateManager(app_dir=local_app, root_dir=local_root)
+            res = updater.apply_update(branch="main")
+
+            self.assertEqual("ok", res["status"], res.get("message"))
+            stash = (res.get("saved") or {}).get("stash")
+            self.assertIsNotNone(stash, "la actualización no dejó stash de rescate")
+
+            listed = subprocess.check_output(
+                ["git", "stash", "list"], cwd=str(local_root), text=True)
+            self.assertIn(stash, listed)
+
+            # El tracked modificado está en el stash.
+            diff = subprocess.check_output(
+                ["git", "stash", "show", "-p", "stash@{0}"],
+                cwd=str(local_root), text=True)
+            self.assertIn("MI_TRABAJO_LOCAL", diff)
+
+            # El fichero sin seguimiento viaja en el tercer padre del stash.
+            untracked = subprocess.check_output(
+                ["git", "ls-tree", "-r", "--name-only", "stash@{0}^3"],
+                cwd=str(local_root), text=True)
+            self.assertIn("nota_local.txt", untracked)
+
+            # El árbol de trabajo sí quedó en la versión nueva.
+            self.assertIn("v2", (local_app / "code.py").read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()

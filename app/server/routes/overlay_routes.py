@@ -5,6 +5,7 @@ server/routes/overlay_routes.py — Rutas HTTP para gestión de textos de overla
 from aiohttp import web
 from server.config import logger
 from server.state import system
+from server.routes.errors import read_json_object
 from server.services.overlay_service import (
     OVERLAY_TEXTS_FILE,
     CONFIG_JS_FILE,
@@ -27,9 +28,8 @@ async def handle_get_overlay_texts(request):
 
 async def handle_save_overlay_texts(request):
     """Guarda los textos modificados y emite evento WebSocket a todas las escenas conectadas en OBS"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     texts = body.get("texts", body)
@@ -53,11 +53,8 @@ async def handle_reset_overlay_texts(request):
     section = "all"
     scene_key = None
     if request.can_read_body:
-        try:
-            body = await request.json()
-        except Exception:
-            return web.json_response({"error": "Payload JSON inválido"}, status=400)
-        if not isinstance(body, dict):
+        body = await read_json_object(request)
+        if body is None:
             return web.json_response({"error": "Payload JSON inválido"}, status=400)
         section = body.get("section", "all")
         scene_key = body.get("sceneKey")

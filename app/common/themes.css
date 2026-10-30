@@ -354,7 +354,8 @@ body[data-theme="toxic_rad"],
 }
 
 /* Pack: Maker_Theme_Pack | Tema: chill */
-body[data-theme="chill"] {
+body[data-theme="chill"],
+[data-theme="chill"] {
   --color-bg-dark: #181825;
   --color-text-light: #CDD6F4;
   --color-accent-cyan: #89B4FA;
@@ -388,7 +389,8 @@ body[data-theme="chill"],
 }
 
 /* Pack: Maker_Theme_Pack | Tema: cyberpunk */
-body[data-theme="cyberpunk"] {
+body[data-theme="cyberpunk"],
+[data-theme="cyberpunk"] {
   --color-bg-dark: #0F0F14;
   --color-text-light: #F8F9FA;
   --color-accent-cyan: #FFE600;
@@ -422,7 +424,8 @@ body[data-theme="cyberpunk"],
 }
 
 /* Pack: Maker_Theme_Pack | Tema: maker */
-body[data-theme="maker"] {
+body[data-theme="maker"],
+[data-theme="maker"] {
   --color-bg-dark: #191D21;
   --color-text-light: #F2EEE5;
   --color-accent-cyan: #57D6C4;
@@ -446,17 +449,11 @@ body[data-theme="maker"] {
   --badge-clip-path: none;
   --header-radius: 6px;
   --header-clip-path: none;
-
-  /* --- Skin de COMPONENTES (convención --skin-*): solo se declaran tokens.
-     Esta cuadrícula de blueprint llega sola a widgets y alertas a través de
-     common/oss-skin.css; el arquetipo `maker` ya aporta el marco técnico, las
-     marcas CAD de esquina, la barra de acentos y la tipografía monoespaciada. */
-  --skin-panel-pattern:
-    repeating-linear-gradient(0deg, rgba(87, 214, 196, 0.10) 0 1px, transparent 1px 14px),
+  --skin-scene-pattern: repeating-linear-gradient(0deg, rgba(87, 214, 196, 0.10) 0 1px, transparent 1px 14px),
     repeating-linear-gradient(90deg, rgba(87, 214, 196, 0.10) 0 1px, transparent 1px 14px),
     radial-gradient(circle at 100% 0%, rgba(255, 120, 63, 0.12), transparent 46%);
-  --skin-panel-pattern-position: 0 0;
-  --skin-panel-pattern-size: auto;
+  --skin-scene-pattern-position: 0 0;
+  --skin-scene-pattern-size: auto;
 }
 body[data-theme="maker"],
 [data-theme="maker"] {
@@ -467,7 +464,8 @@ body[data-theme="maker"],
 }
 
 /* Pack: Maker_Theme_Pack | Tema: print */
-body[data-theme="print"] {
+body[data-theme="print"],
+[data-theme="print"] {
   --color-bg-dark: #1E1B18;
   --color-text-light: #F7EFE6;
   --color-accent-cyan: #FF783F;
@@ -501,7 +499,8 @@ body[data-theme="print"],
 }
 
 /* Pack: Maker_Theme_Pack | Tema: synthwave */
-body[data-theme="synthwave"] {
+body[data-theme="synthwave"],
+[data-theme="synthwave"] {
   --color-bg-dark: #1A1028;
   --color-text-light: #FCE7F3;
   --color-accent-cyan: #00F9FF;
@@ -535,7 +534,8 @@ body[data-theme="synthwave"],
 }
 
 /* Pack: Maker_Theme_Pack | Tema: terminal */
-body[data-theme="terminal"] {
+body[data-theme="terminal"],
+[data-theme="terminal"] {
   --color-bg-dark: #0A0C0E;
   --color-text-light: #4ADE80;
   --color-accent-cyan: #22C55E;
@@ -544,7 +544,6 @@ body[data-theme="terminal"] {
   --color-text-dim: #166534;
   --color-border-cyan: rgba(34, 197, 94, 0.4);
   --color-border-cyan-bright: #22C55E;
-  --font-primary: var(--font-tech);
   --theme-glow: 0 0 18px rgba(34, 197, 94, 0.6);
   --frame-radius: 0px;
   --frame-border-width: 1px;
@@ -560,6 +559,7 @@ body[data-theme="terminal"] {
   --badge-clip-path: none;
   --header-radius: 0px;
   --header-clip-path: none;
+  --font-primary: var(--font-tech);
 }
 body[data-theme="terminal"],
 [data-theme="terminal"] {

@@ -1,0 +1,496 @@
+{
+  "archetypeAtmosphere": {
+    "cozy": {
+      "camLabel": "Cámara Principal",
+      "modeText": "COZY CHILL",
+      "subtitle": "Música Lo-Fi · Charla Relajada · Café"
+    },
+    "gamer": {
+      "camLabel": "CAM 01 // OVERVIEW",
+      "modeText": "ESPORTS HUD",
+      "subtitle": "LIVE MATCH // COMPETITIVE TOURNAMENT"
+    },
+    "maker": {
+      "camLabel": "CÁMARA CENITAL · BANCO DE TRABAJO",
+      "modeText": "MAKER MODE",
+      "subtitle": "RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN"
+    },
+    "openstream": {
+      "modeText": "BROADCAST"
+    }
+  },
+  "archetypes": [
+    {
+      "id": "cozy",
+      "label": "Cozy / Lo-Fi Cálido"
+    },
+    {
+      "id": "gamer",
+      "label": "Gamer / Pro Competitivo"
+    },
+    {
+      "id": "maker",
+      "label": "Maker / Taller Tecnológico"
+    },
+    {
+      "id": "openstream",
+      "label": "Open Stream / Cristal Suizo"
+    }
+  ],
+  "componentTargets": [
+    "#alert-card",
+    "#banner-alert-root",
+    "[data-oss-shape-target]"
+  ],
+  "packDefaults": {
+    "Cozy_LoFi_Pack": {
+      "shape": "cozy_polaroid",
+      "theme": "latte_caramel"
+    },
+    "Gamer_Pro_Pack": {
+      "shape": "gamer_mecha",
+      "theme": "cyber_glitch"
+    },
+    "Maker_Theme_Pack": {
+      "shape": "maker_blueprint",
+      "theme": "maker"
+    },
+    "Open_stream_Pack": {
+      "shape": "openstream_glass",
+      "theme": "neon_streamer"
+    }
+  },
+  "shapeArchetypes": {
+    "comic_manga_action": "openstream",
+    "cozy_canvas": "cozy",
+    "cozy_polaroid": "cozy",
+    "cozy_soft": "cozy",
+    "fantasy_parchment": "cozy",
+    "fantasy_runic_stone": "gamer",
+    "gamer_arcade_retro": "gamer",
+    "gamer_cyber_glitch": "gamer",
+    "gamer_hex_shield": "gamer",
+    "gamer_mecha": "gamer",
+    "gamer_stealth": "gamer",
+    "gamer_tactical_hud": "gamer",
+    "gothic_vampire": "gamer",
+    "maker_blueprint": "maker",
+    "maker_circuit_pcb": "maker",
+    "maker_workbench": "maker",
+    "openstream_glass": "openstream",
+    "openstream_studio": "openstream",
+    "pop_synth_neon": "openstream",
+    "vintage_crt_monitor": "cozy"
+  },
+  "shapes": [
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "openstream",
+      "description": "Trazos de tinta negra gruesa (5px), viñetas de cómic y badges de impacto 💥 GO!!.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(0 0, 100% 0, 100% 100%, 94% 90%, 86% 100%, 78% 90%, 70% 100%, 62% 90%, 54% 100%, 46% 90%, 38% 100%, 30% 90%, 22% 100%, 14% 90%, 6% 100%, 0 90%)",
+        "panelRadius": "0"
+      },
+      "icon": "💥",
+      "id": "comic_manga_action",
+      "name": "Manga / Shonen Comic",
+      "packDefault": false,
+      "packId": "Open_stream_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "cozy",
+      "description": "Bordes suaves de lienzo con chinchetas y paleta flotante de acuarelas.",
+      "geometry": {
+        "panelRadius": "18px"
+      },
+      "icon": "🎨",
+      "id": "cozy_canvas",
+      "name": "Lienzo de Arte con Chinchetas",
+      "packDefault": false,
+      "packId": "Cozy_LoFi_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "cozy",
+      "description": "Marco de papel marfil con textura, cinta washi tape y pie de foto manuscrito.",
+      "geometry": {
+        "panelRadius": "2px"
+      },
+      "icon": "☕",
+      "id": "cozy_polaroid",
+      "name": "Polaroid Vintage con Cinta",
+      "packDefault": true,
+      "packId": "Cozy_LoFi_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "cozy",
+      "description": "Esquinas redondeadas de 28px y cabeceras en píldora sin texturas de papel.",
+      "geometry": {
+        "panelRadius": "28px"
+      },
+      "icon": "☁️",
+      "id": "cozy_soft",
+      "name": "Píldora Soft Minimal",
+      "packDefault": false,
+      "packId": "Cozy_LoFi_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "cozy",
+      "description": "Bordes orgánicos de pergamino antiguo, sello carmesí ⚜ y tipografía clásica.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%)"
+      },
+      "icon": "📜",
+      "id": "fantasy_parchment",
+      "name": "Pergamino Rol & Sello Cera",
+      "packDefault": false,
+      "packId": "Cozy_LoFi_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Obsidiana con runas nórdicas ancestrales luminosas y bisel tallado.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
+        "panelRadius": "6px"
+      },
+      "icon": "🗿",
+      "id": "fantasy_runic_stone",
+      "name": "Piedra Rúnica Mística",
+      "packDefault": false,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Esquinas en pixel cabinet, marquesina 1UP y contador de monedas insert coin.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0"
+      },
+      "icon": "👾",
+      "id": "gamer_arcade_retro",
+      "name": "Arcade 8-Bit Pixel",
+      "packDefault": false,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Corte asimétrico con aberración cromática cian/magenta y telemetría glitch.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
+        "panelRadius": "0"
+      },
+      "icon": "⚡",
+      "id": "gamer_cyber_glitch",
+      "name": "Cyber Glitch Neón",
+      "packDefault": false,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Escudo hexagonal Sci-Fi con indicadores de energía y blindaje perimetral.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px))",
+        "panelRadius": "0"
+      },
+      "icon": "🛡️",
+      "id": "gamer_hex_shield",
+      "name": "Hex Shield Blindaje",
+      "packDefault": false,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Cortes poligonales a 45°, retículas tácticas en esquinas y brillo láser neón.",
+      "geometry": {
+        "panelClipPath": "polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))",
+        "panelRadius": "0"
+      },
+      "icon": "🎮",
+      "id": "gamer_mecha",
+      "name": "Mecha Tournament 45°",
+      "packDefault": true,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Geometría angular pura sin retículas con acentos minimalistas oscuros.",
+      "geometry": {
+        "panelRadius": "2px"
+      },
+      "icon": "🕶️",
+      "id": "gamer_stealth",
+      "name": "Stealth Dark Cyber",
+      "packDefault": false,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Telemetría militar, barras de datos, marcadores de ping y etiquetas LIVE.",
+      "geometry": {
+        "panelClipPath": "polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%)",
+        "panelRadius": "0"
+      },
+      "icon": "🎯",
+      "id": "gamer_tactical_hud",
+      "name": "Tactical FPS HUD",
+      "packDefault": false,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "gamer",
+      "description": "Arcos ojivales victorianos, borde sangriento carmesí y emblema de murciélago.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 16px), 82% 100%, 18% 100%, 0 calc(100% - 16px))",
+        "panelRadius": "0"
+      },
+      "icon": "🦇",
+      "id": "gothic_vampire",
+      "name": "Gótico Victoriano Dark",
+      "packDefault": false,
+      "packId": "Gamer_Pro_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "maker",
+      "description": "Esquinas escuadra de precisión, marcas de calibración ⌖ y cuadrícula milimétrica.",
+      "geometry": {
+        "panelRadius": "2px"
+      },
+      "icon": "🛠️",
+      "id": "maker_blueprint",
+      "name": "Blueprint Técnico CAD",
+      "packDefault": true,
+      "packId": "Maker_Theme_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "maker",
+      "description": "Pistas de cobre dorado, vías de tierra GND, componentes SMD y serigrafía técnica.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%)",
+        "panelRadius": "0"
+      },
+      "icon": "📟",
+      "id": "maker_circuit_pcb",
+      "name": "Placa de Circuito PCB",
+      "packDefault": false,
+      "packId": "Maker_Theme_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "maker",
+      "description": "Cabecera de taller con fases de proyecto y paneles técnicos de herramientas.",
+      "geometry": {
+        "panelRadius": "4px"
+      },
+      "icon": "📐",
+      "id": "maker_workbench",
+      "name": "Banco de Trabajo Studio",
+      "packDefault": false,
+      "packId": "Maker_Theme_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "openstream",
+      "description": "Cristal glaseado suizo de 16px con desenfoque de 24px y bordes sutiles.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "16px"
+      },
+      "icon": "⚡",
+      "id": "openstream_glass",
+      "name": "Swiss Frosted Glass",
+      "packDefault": true,
+      "packId": "Open_stream_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "openstream",
+      "description": "Líneas de retransmisión con vúmetros de audio estéreo en vivo y lower-third ticker.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "20px"
+      },
+      "icon": "🎙️",
+      "id": "openstream_studio",
+      "name": "Broadcast Pro Studio",
+      "packDefault": false,
+      "packId": "Open_stream_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "openstream",
+      "description": "Bisel flúor neón magenta/cian, horizonte en alambre y sol retro ☀.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
+        "panelRadius": "0"
+      },
+      "icon": "🌆",
+      "id": "pop_synth_neon",
+      "name": "Synthwave 80s Grid",
+      "packDefault": false,
+      "packId": "Open_stream_Pack",
+      "tokens": {}
+    },
+    {
+      "appliesTo": [
+        "scene",
+        "component"
+      ],
+      "archetype": "cozy",
+      "description": "Pantalla curvada bulbosa analógica, bisel de carcasa noventera y LED POWER.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "12px"
+      },
+      "icon": "📺",
+      "id": "vintage_crt_monitor",
+      "name": "Monitor CRT Retro 90s",
+      "packDefault": false,
+      "packId": "Cozy_LoFi_Pack",
+      "tokens": {}
+    }
+  ]
+}

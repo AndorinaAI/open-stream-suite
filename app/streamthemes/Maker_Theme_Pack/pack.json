@@ -13,21 +13,38 @@
       "name": "Blueprint Técnico CAD",
       "icon": "🛠️",
       "archetype": "maker",
-      "description": "Esquinas escuadra de precisión, marcas de calibración ⌖ y cuadrícula milimétrica."
+      "description": "Esquinas escuadra de precisión, marcas de calibración ⌖ y cuadrícula milimétrica.",
+      "geometry": {
+        "panelRadius": "2px"
+      }
     },
     {
       "id": "maker_workbench",
       "name": "Banco de Trabajo Studio",
       "icon": "📐",
       "archetype": "maker",
-      "description": "Cabecera de taller con fases de proyecto y paneles técnicos de herramientas."
+      "description": "Cabecera de taller con fases de proyecto y paneles técnicos de herramientas.",
+      "geometry": {
+        "panelRadius": "4px"
+      }
     },
     {
       "id": "maker_circuit_pcb",
       "name": "Placa de Circuito PCB",
       "icon": "📟",
       "archetype": "maker",
-      "description": "Pistas de cobre dorado, vías de tierra GND, componentes SMD y serigrafía técnica."
+      "description": "Pistas de cobre dorado, vías de tierra GND, componentes SMD y serigrafía técnica.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0",
+        "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%)"
+      }
     }
-  ]
+  ],
+  "defaultTheme": "maker",
+  "defaultShape": "maker_blueprint"
 }

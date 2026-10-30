@@ -1,4 +1,5 @@
-body[data-theme="print"] {
+body[data-theme="print"],
+[data-theme="print"] {
   --color-bg-dark: #1E1B18;
   --color-text-light: #F7EFE6;
   --color-accent-cyan: #FF783F;

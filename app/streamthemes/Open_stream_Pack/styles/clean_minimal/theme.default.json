@@ -15,5 +15,31 @@
   "borderStyle": "rounded",
   "desc": "Azul celeste puro sobre gris pizarra cristalino. Nitidez impecable.",
   "chatAnchored": true,
-  "chatDerivative": null
+  "chatDerivative": null,
+  "tokens": {
+    "--color-bg-dark": "#0B1120",
+    "--color-text-light": "#F8FAFC",
+    "--color-accent-cyan": "#38BDF8",
+    "--color-accent-orange": "#F1F5F9",
+    "--color-panel-bg": "#1E293B",
+    "--color-text-dim": "#94A3B8",
+    "--color-border-cyan": "rgba(56, 189, 248, 0.35)",
+    "--color-border-cyan-bright": "#38BDF8",
+    "--theme-glow": "none",
+    "--frame-radius": "6px",
+    "--frame-border-width": "1px",
+    "--frame-border-style": "solid",
+    "--frame-clip-path": "none",
+    "--frame-shadow": "0 4px 12px rgba(0, 0, 0, 0.25)",
+    "--frame-corner-display": "none",
+    "--panel-radius": "6px",
+    "--panel-clip-path": "none",
+    "--panel-backdrop": "blur(8px)",
+    "--panel-shadow": "0 2px 8px rgba(0, 0, 0, 0.2)",
+    "--badge-radius": "4px",
+    "--badge-clip-path": "none",
+    "--header-radius": "6px",
+    "--header-clip-path": "none"
+  },
+  "archetype": "openstream"
 }

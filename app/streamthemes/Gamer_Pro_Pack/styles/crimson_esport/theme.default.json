@@ -15,5 +15,31 @@
   "borderStyle": "chamfer",
   "desc": "Rojo agresivo de competición con destellos dorados de victoria.",
   "chatAnchored": true,
-  "chatDerivative": null
+  "chatDerivative": null,
+  "tokens": {
+    "--color-bg-dark": "#0B0C10",
+    "--color-text-light": "#F8FAFC",
+    "--color-accent-cyan": "#EF4444",
+    "--color-accent-orange": "#EAB308",
+    "--color-panel-bg": "#1A171E",
+    "--color-text-dim": "#94A3B8",
+    "--color-border-cyan": "rgba(239, 68, 68, 0.45)",
+    "--color-border-cyan-bright": "#EF4444",
+    "--theme-glow": "0 0 20px rgba(239, 68, 68, 0.7)",
+    "--frame-radius": "0px",
+    "--frame-border-width": "2.5px",
+    "--frame-border-style": "solid",
+    "--frame-clip-path": "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))",
+    "--frame-shadow": "0 0 24px rgba(239, 68, 68, 0.7), inset 0 0 14px rgba(239, 68, 68, 0.2)",
+    "--frame-corner-display": "none",
+    "--panel-radius": "0px",
+    "--panel-clip-path": "polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
+    "--panel-backdrop": "blur(10px)",
+    "--panel-shadow": "0 6px 24px rgba(239, 68, 68, 0.3)",
+    "--badge-radius": "0px",
+    "--badge-clip-path": "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)",
+    "--header-radius": "0px",
+    "--header-clip-path": "polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%)"
+  },
+  "archetype": "gamer"
 }

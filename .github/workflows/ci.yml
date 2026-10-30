@@ -31,6 +31,31 @@ jobs:
         working-directory: app
         run: python -m unittest discover tests -v
 
+  generated-up-to-date:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Regenerar el motor de apariencia
+        working-directory: app
+        run: python scripts/build_theme_engine.py
+      - name: Los generados deben coincidir con el manifiesto
+        run: |
+          if [ -n "$(git status --porcelain -- app/common/generated)" ]; then
+            echo "::error::app/common/generated esta desactualizado respecto al manifiesto."
+            echo "Ejecuta: cd app && python scripts/build_theme_engine.py"
+            git --no-pager diff -- app/common/generated
+            exit 1
+          fi
+      - name: El CSS de los temas debe salir de theme.json
+        working-directory: app
+        run: python scripts/regenerate_themes.py --check
+      - name: Todas las vistas cargan el mismo bloque de CSS
+        working-directory: app
+        run: python scripts/normalize_view_links.py --check
+
   json-lint:
     runs-on: ubuntu-latest
     steps:

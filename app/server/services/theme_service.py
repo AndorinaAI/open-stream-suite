@@ -28,6 +28,7 @@ from server.services.theme_defaults import (
     DEFAULT_THEMES_DATA,
     DEFAULT_OVERLAY_THEMES
 )
+from server.services import theme_render
 from server.services.theme_manager import (
     STREAMTHEMES_DIR,
     derive_explicit_theme_map,
@@ -39,6 +40,20 @@ from server.services.theme_manager import (
     sync_chat_with_theme,
     infer_archetype
 )
+
+def _archetype_of_pack(pack_id: str) -> str:
+    """Arquetipo declarado por el pack.
+
+    Fuente de verdad cuando el `theme.json` (o su copia de fabrica) no lo trae:
+    restaurar un tema no puede dejarlo sin arquetipo, porque entonces deja de
+    recibir la familia `--skin-*`.
+    """
+    pack_json = STREAMTHEMES_DIR / str(pack_id or "") / "pack.json"
+    try:
+        return str(json.loads(pack_json.read_text(encoding="utf-8")).get("archetype") or "")
+    except (OSError, ValueError):
+        return ""
+
 
 def _with_structural_tokens(css: str, theme_id: str) -> str:
     """Garantiza el contrato visual mínimo también en CSS enviado por la UI."""
@@ -247,17 +262,22 @@ def create_theme_service(body: dict) -> dict:
     }
     _normalize_theme_colors(theme_meta)
 
-    css_content = _with_structural_tokens(_validate_theme_css(body.get("css", f"""body[data-theme="{theme_id}"] {{
-  --color-bg-dark: {bg_dark};
-  --color-text-light: {text_light};
-  --color-accent-cyan: {accent_cyan};
-  --color-accent-orange: {accent_orange};
-  --color-panel-bg: {panel_bg};
-  --color-text-dim: {text_dim};
-  --color-border-cyan: {accent_cyan}66;
-  --color-border-cyan-bright: {accent_cyan};
-  --theme-glow: 0 0 16px {accent_cyan}88;
-{STRUCTURAL_THEME_TOKENS}}}""")), theme_id)
+    # El tema se define con datos: `theme_render` deriva la geometria desde
+    # `borderStyle`/`glowIntensity` y emite el CSS. Un `css` explicito se
+    # descompone en tokens + `cssExtra` (misma unica fuente).
+    if body.get("css"):
+        incoming = _validate_theme_css(body["css"])
+        tokens, extra = theme_render.tokens_from_css(incoming, theme_id)
+        theme_meta["tokens"] = tokens
+        if extra.strip():
+            theme_meta["cssExtra"] = extra.strip()
+    theme_meta["tokens"] = dict(theme_meta.get("tokens") or {})
+    theme_meta["tokens"].setdefault("--theme-glow", f"0 0 16px {accent_cyan}88")
+    theme_meta["tokens"].setdefault("--color-border-cyan", f"{accent_cyan}66")
+    theme_meta["tokens"].setdefault("--color-border-cyan-bright", accent_cyan)
+    theme_render.apply_color_fields(theme_meta)
+    spec = theme_render.spec_from_meta(theme_meta, pack_id=pack_id, theme_id=theme_id)
+    css_content = theme_render.render_theme_css(spec)
 
     styles_dir = get_pack_styles_dir(pack_dir)
     styles_dir.mkdir(parents=True, exist_ok=True)
@@ -349,10 +369,31 @@ async def save_theme_service(body: dict) -> dict:
     current_meta.update(updates)
     _normalize_theme_colors(current_meta)
 
+    # El CSS deja de ser un segundo estado: se descompone en tokens y se
+    # fusiona en `theme.json` (la unica fuente). Lo que no sea un token va a
+    # `cssExtra`, que el generador concatena al final.
+    if "css" in body:
+        incoming = _validate_theme_css(body["css"])
+        tokens, extra = theme_render.tokens_from_css(incoming, theme_id)
+        if tokens:
+            current_meta["tokens"] = tokens
+        if extra.strip():
+            current_meta["cssExtra"] = extra.strip()
+        else:
+            current_meta.pop("cssExtra", None)
+
+    # Los campos de color del formulario mandan sobre los tokens del JSON.
+    theme_render.apply_color_fields(current_meta)
+    # Un tema sin arquetipo deja de recibir `--skin-*`: se rellena desde el pack.
+    if not current_meta.get("archetype"):
+        current_meta["archetype"] = _archetype_of_pack(pack_id)
+
     atomic_write_json(t_json_file, current_meta)
 
-    if "css" in body:
-        atomic_write_text(theme_dir / "style.css", _with_structural_tokens(_validate_theme_css(body["css"]), theme_id))
+    # `style.css` es SIEMPRE derivado: nunca se escribe a mano.
+    spec = theme_render.spec_from_meta(
+        current_meta, pack_id=pack_id, theme_id=theme_id)
+    theme_render.atomic_write(theme_dir / "style.css", theme_render.render_theme_css(spec))
 
     sync_common_themes_css()
 
@@ -489,9 +530,17 @@ async def restore_theme_service(pack_id: str, theme_id: str) -> dict:
 
     if not default_meta:
         raise ValueError("No se encontraron valores originales para este tema")
+    if not default_meta.get("archetype"):
+        default_meta["archetype"] = _archetype_of_pack(pack_id)
 
+    # Restaurar = regenerar desde la configuracion de fabrica. El CSS nunca se
+    # copia a mano: `theme.default.json` es la fuente y `theme_render` lo emite.
     atomic_write_json(theme_dir / "theme.json", default_meta)
-    atomic_write_text(theme_dir / "style.css", default_css or "")
+    restored_spec = theme_render.spec_from_meta(
+        default_meta, pack_id=pack_id, theme_id=theme_id)
+    restored_css = theme_render.render_theme_css(restored_spec)
+    theme_render.atomic_write(theme_dir / "style.css", restored_css)
+    default_css = restored_css
 
     sync_common_themes_css()
 

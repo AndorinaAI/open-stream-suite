@@ -558,3 +558,140 @@ async def reset_fusion_batch(fusion_id: str) -> dict:
         resetScenes=reset_scenes, resetWidgets=reset_widgets, resetAlerts=reset_alerts,
         failed=failed,
     )
+
+
+# =============================================================================
+# Exportar una fusion como pack propio (paso 19b)
+# =============================================================================
+
+STREAMTHEMES_DIR = BASE_DIR / "streamthemes"
+
+
+def _theme_dir_of(theme_id: str):
+    """Directorio de un tema en cualquier pack, o None."""
+    theme_id = str(theme_id or "").strip()
+    if not theme_id:
+        return None
+    for path in sorted(STREAMTHEMES_DIR.glob(f"*/styles/{theme_id}")):
+        if path.is_dir():
+            return path
+    return None
+
+
+def _pack_of_theme(theme_id: str):
+    theme_dir = _theme_dir_of(theme_id)
+    return theme_dir.parent.parent if theme_dir else None
+
+
+def export_fusion_as_pack(fusion_id: str) -> dict:
+    """Guarda una fusion como pack propio en `streamthemes/`.
+
+    Genera un pack real (no una vista): `pack.json` con su tema y su forma por
+    defecto, `styles/<tema>/` copiado del tema de origen y `overlays/` con las
+    escenas de la fusion. Al aparecer en disco, entra solo en el catalogo, en
+    los menus del panel y en `config.js` (nada que registrar a mano).
+    """
+    fusion = get_fusion_by_id(fusion_id)
+    if not fusion:
+        raise FileNotFoundError("Fusion no encontrada")
+
+    theme_id = str(fusion.get("defaultTheme") or "").strip()
+    shape_id = str(fusion.get("defaultShape") or "").strip()
+    theme_dir = _theme_dir_of(theme_id)
+    if not theme_dir:
+        raise ValueError(f"El tema '{theme_id}' no existe en ningun pack")
+    source_pack = theme_dir.parent.parent
+
+    slug = _slugify_ascii(str(fusion.get("name") or fusion.get("id") or "fusion"), 24)
+    pack_id = f"{slug}_Pack"
+    pack_dir = STREAMTHEMES_DIR / pack_id
+    if pack_dir.exists():
+        raise FileExistsError(f"Ya existe un pack con ese nombre: {pack_id}")
+
+    # Arquetipo y formas: los del pack de origen del tema por defecto.
+    source_pack_json = {}
+    try:
+        source_pack_json = json.loads((source_pack / "pack.json").read_text(encoding="utf-8"))
+    except Exception:
+        source_pack_json = {}
+    archetype = str(source_pack_json.get("archetype") or "")
+
+    shapes = []
+    source_shapes = source_pack_json.get("shapes") or []
+    if any(shape.get("id") == shape_id for shape in source_shapes):
+        shapes = source_shapes
+
+    pack_meta = {
+        "id": pack_id,
+        "name": str(fusion.get("name") or pack_id),
+        "icon": str(fusion.get("icon") or "⚡"),
+        "description": str(fusion.get("description") or "Pack creado a partir de una fusion."),
+        "version": "1.0.0",
+        "author": "Open Stream Suite",
+        "archetype": archetype,
+        "defaultTheme": theme_id,
+        "defaultShape": shape_id,
+        "shapes": shapes,
+    }
+
+    pack_dir.mkdir(parents=True)
+    (pack_dir / "styles").mkdir()
+    atomic_write_json(pack_dir / "pack.json", pack_meta)
+
+    # Tema: copia de los 4 ficheros (los .default se regeneran si faltan).
+    target_theme = pack_dir / "styles" / theme_id
+    target_theme.mkdir(parents=True)
+    for name in ("theme.json", "theme.default.json", "style.css", "style.default.css"):
+        source = theme_dir / name
+        if source.is_file():
+            (target_theme / name).write_text(
+                source.read_text(encoding="utf-8"), encoding="utf-8")
+    try:
+        from server.services.theme_render import regenerate_factory_copy
+        regenerate_factory_copy(target_theme)
+    except Exception:
+        pass
+
+    # Escenas de la fusion: enlace (o copia) del overlay de origen.
+    overlays_dir = pack_dir / "overlays"
+    overlays_dir.mkdir()
+    exported = []
+    for raw_scene in fusion.get("scenes") or []:
+        try:
+            scene_key = scenes_catalog.normalize_scene_key(raw_scene)
+            rel = scenes_catalog.scene_path(scene_key) if scene_key else None
+        except Exception:
+            rel = None
+        if not rel:
+            continue
+        # `scene_path` devuelve una ruta de servidor (`/streamthemes/...`): la
+        # barra inicial descartaria `BASE_DIR` al unir, hay que quitarla.
+        source_html = (BASE_DIR / str(rel).lstrip("/")).resolve()
+        if not source_html.is_file():
+            continue
+        folder = str(scene_key).replace("_", "-")
+        target = overlays_dir / folder
+        try:
+            target.symlink_to(source_html.parent, target_is_directory=True)
+        except Exception:
+            import shutil
+            shutil.copytree(source_html.parent, target)
+        exported.append(folder)
+
+    # Al ser un pack de disco, el catalogo y config.js se refrescan solos.
+    try:
+        from server.services.theme_manager import sync_common_themes_css
+        sync_common_themes_css()
+    except Exception as exc:
+        logger.warning(f"No se pudo sincronizar themes.css tras exportar: {exc}")
+
+    logger.info(f"📦 Fusion exportada como pack: {pack_id} ({len(exported)} escenas)")
+    return {
+        "status": "ok",
+        "packId": pack_id,
+        "theme": theme_id,
+        "shape": shape_id,
+        "archetype": archetype,
+        "scenes": exported,
+        "path": str(pack_dir.relative_to(BASE_DIR)),
+    }

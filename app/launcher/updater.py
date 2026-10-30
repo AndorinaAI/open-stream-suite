@@ -7,6 +7,7 @@ import os
 import sys
 import re
 import json
+import time
 import urllib.request
 import subprocess
 from pathlib import Path
@@ -165,6 +166,98 @@ class UpdateManager:
 
         return result
 
+    def _rescue_local_changes(self, git_root, stamp):
+        """Guarda el trabajo local en un stash recuperable antes de tocar nada.
+
+        `git checkout -f` + `git reset --hard` descartan SIN AVISO cualquier
+        cambio local: codigo a medias, ficheros nuevos sin seguimiento, notas.
+        Eso es justo lo que hacia que una actualizacion se llevara por delante
+        trabajo sin versionar.
+
+        Antes de nada se guarda todo en un stash con nombre, que el usuario
+        puede recuperar con `git stash list` y `git stash apply <ref>`.
+
+        Devuelve el nombre del stash, o None si no habia nada que guardar (o
+        si el repo no permite stash: la actualizacion no depende de esto).
+        """
+        try:
+            status = subprocess.check_output(
+                ["git", "status", "--porcelain"],
+                cwd=str(git_root),
+                stderr=subprocess.DEVNULL,
+                text=True,
+                timeout=20.0,
+            )
+        except Exception:
+            return None
+        if not status.strip():
+            return None
+
+        stash_ref = f"oss-pre-update-{stamp}"
+        try:
+            subprocess.run(
+                ["git", "stash", "push", "--include-untracked", "-m", stash_ref],
+                cwd=str(git_root),
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=60.0,
+            )
+        except Exception:
+            return None
+
+        # El stash solo crea entrada si de verdad habia algo que guardar.
+        try:
+            listed = subprocess.check_output(
+                ["git", "stash", "list", "-1", "--format=%gs"],
+                cwd=str(git_root),
+                stderr=subprocess.DEVNULL,
+                text=True,
+                timeout=20.0,
+            )
+        except Exception:
+            return None
+        return stash_ref if stash_ref in listed else None
+
+    def _restore_stash(self, git_root):
+        """Devuelve el stash al arbol de trabajo (si la actualizacion falla)."""
+        try:
+            subprocess.run(
+                ["git", "stash", "pop"],
+                cwd=str(git_root),
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=60.0,
+            )
+            return True
+        except Exception:
+            return False
+
+    def _backup_user_configs(self, saved_user_data, stamp):
+        """Copia en disco las configs de usuario antes de reescribirlas.
+
+        La copia en memoria se pierde si el proceso cae a mitad de la
+        actualizacion (o si el usuario cierra el launcher); la copia en
+        `app/.backups/` sobrevive. Devuelve la carpeta o None.
+        """
+        if not saved_user_data:
+            return None
+        target = self.app_dir / ".backups" / f"pre_update_{stamp}"
+        try:
+            target.mkdir(parents=True, exist_ok=True)
+            for rel_path, data in saved_user_data.items():
+                dest = target / Path(rel_path).name
+                dest.write_text(
+                    json.dumps(data, indent=2, ensure_ascii=False),
+                    encoding="utf-8",
+                )
+        except OSError:
+            return None
+        return target
+
     def apply_update(self, branch="main"):
         """
         Aplica la actualización mediante Git y pip install.
@@ -178,9 +271,15 @@ class UpdateManager:
             }
 
         git_root = self.get_git_root()
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        stash_ref = None
+        backup_dir = None
 
         try:
-            # 1. Respaldar configuración de usuario para no perderla en la actualización
+            # 1. Respaldar configuración de usuario para no perderla en la
+            #    actualización. Se lee ANTES del stash: si no, el árbol ya
+            #    estaría en el estado del repo y se guardarían los valores por
+            #    defecto en vez de los del usuario.
             user_configs_to_backup = [
                 "themes_state.json",
                 "fusions.json",
@@ -200,7 +299,15 @@ class UpdateManager:
                     except Exception:
                         pass
 
-            # 2. Descargar los últimos cambios del repositorio
+            # Copia en disco: la de memoria se pierde si el proceso cae.
+            backup_dir = self._backup_user_configs(saved_user_data, stamp)
+
+            # 2. Rescatar el resto del trabajo local. `checkout -f` + `reset
+            #    --hard` descartan sin aviso cualquier cambio sin versionar; el
+            #    stash deja una copia recuperable (`git stash list`).
+            stash_ref = self._rescue_local_changes(git_root, stamp)
+
+            # 3. Descargar los últimos cambios del repositorio
             subprocess.run(
                 ["git", "fetch", "origin", branch],
                 cwd=str(git_root),
@@ -330,16 +437,38 @@ class UpdateManager:
             return {
                 "status": "ok",
                 "message": _("launcher.update_success_msg", branch=branch),
-                "details": reset_res.stdout
+                "details": reset_res.stdout,
+                "saved": {
+                    "stash": stash_ref,
+                    "backupDir": str(backup_dir) if backup_dir else None,
+                },
             }
         except subprocess.CalledProcessError as e:
             err = e.stderr or str(e)
+            # Si la actualización falla, devolver el tree al usuario: el stash
+            # solo queda como red de seguridad si el pop no se puede aplicar.
+            restored = self._restore_stash(git_root) if stash_ref else False
+            message = _("launcher.update_git_error", err=err)
+            if stash_ref and not restored:
+                message += f" Tus cambios locales siguen guardados en '{stash_ref}' (git stash list)."
             return {
                 "status": "error",
-                "message": _("launcher.update_git_error", err=err)
+                "message": message,
+                "saved": {
+                    "stash": stash_ref,
+                    "backupDir": str(backup_dir) if backup_dir else None,
+                },
             }
         except Exception as e:
+            restored = self._restore_stash(git_root) if stash_ref else False
+            message = _("launcher.update_unexpected_error", e=e)
+            if stash_ref and not restored:
+                message += f" Tus cambios locales siguen guardados en '{stash_ref}' (git stash list)."
             return {
                 "status": "error",
-                "message": _("launcher.update_unexpected_error", e=e)
+                "message": message,
+                "saved": {
+                    "stash": stash_ref,
+                    "backupDir": str(backup_dir) if backup_dir else None,
+                },
             }

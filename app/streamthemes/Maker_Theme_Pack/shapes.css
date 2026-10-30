@@ -1,0 +1,268 @@
+/* Decoracion de escena de las formas del pack Maker_Theme_Pack.
+   CSS del pack: lo consume el motor desde common/generated/shapes.css.
+   Aqui si puede haber color literal propio del pack (no del tema).
+*/
+
+/* Maker Blueprint: Marco técnico milimétrico */
+body[data-theme-shape="maker_blueprint"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+border-radius: 4px !important;
+  clip-path: none !important;
+  background: rgba(19, 23, 29, 0.94) !important;
+  border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.45)) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+}
+
+/* Maker Workbench: Acento de taller y fases de proyecto */
+body[data-theme-shape="maker_workbench"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+border-radius: 4px !important;
+  clip-path: none !important;
+  background: rgba(22, 27, 34, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-left: 5px solid var(--color-accent-orange, #FF783F) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.55) !important;
+}
+
+/* 19. Maker Circuit PCB: Barra de circuito con pistas de cobre y máscara de soldadura */
+body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+border-radius: 4px !important;
+  clip-path: none !important;
+  background: #092B1A !important;
+  border: 2px solid #D4AF37 !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.65), inset 0 0 12px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* Maker Blueprint: Caja técnica de laboratorio */
+body[data-theme-shape="maker_blueprint"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+border-radius: 4px !important;
+  clip-path: none !important;
+  background: rgba(19, 23, 29, 0.94) !important;
+  border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.35)) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+}
+
+/* Maker Workbench: Banco de trabajo con acento superior */
+body[data-theme-shape="maker_workbench"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+border-radius: 4px !important;
+  clip-path: none !important;
+  background: rgba(22, 27, 34, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-top: 3px solid var(--color-accent-cyan, #57D6C4) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.55) !important;
+}
+
+/* 19. Maker Circuit PCB: Panel de placa electrónica PCB */
+body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+border-radius: 4px !important;
+  clip-path: none !important;
+  background: #072214 !important;
+  border: 2px solid #D4AF37 !important;
+  border-top: 4px solid #10B981 !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 15px rgba(16, 185, 129, 0.15) !important;
+}
+
+/* --- FORMA 7: maker_blueprint (Blueprint Técnico CAD & Escuadras) --- */
+body[data-theme-shape="maker_blueprint"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
+box-sizing: border-box !important;
+  border: 1.5px solid var(--color-border-cyan, #57D6C4) !important;
+  border-radius: 2px !important;
+  clip-path: none !important;
+  box-shadow: inset 0 0 14px rgba(87, 214, 196, 0.08), 0 8px 24px rgba(0,0,0,0.55) !important;
+  background: rgba(16, 20, 26, 0.65) !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+}
+
+/* Escuadra angular CAD de precisión en esquina */
+body[data-theme-shape="maker_blueprint"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
+content: "" !important;
+  position: absolute !important;
+  bottom: -4px !important;
+  right: -4px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-right: 3px solid var(--color-accent-cyan, #57D6C4) !important;
+  border-bottom: 3px solid var(--color-accent-cyan, #57D6C4) !important;
+  background: transparent !important;
+  display: block !important;
+  pointer-events: none !important;
+  z-index: 10 !important;
+}
+
+/* Marca de calibración ⌖ en esquina superior */
+body[data-theme-shape="maker_blueprint"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::before {
+content: "⌖ CALIB: 1:1" !important;
+  position: absolute !important;
+  top: 10px !important;
+  right: 14px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  color: var(--color-accent-cyan, #57D6C4) !important;
+  background: rgba(19, 23, 29, 0.9) !important;
+  padding: 2px 7px !important;
+  border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.4)) !important;
+  z-index: 12 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="maker_blueprint"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
+position: absolute !important;
+  top: 10px !important;
+  left: 14px !important;
+  bottom: auto !important;
+  right: auto !important;
+  background: rgba(19, 23, 29, 0.92) !important;
+  border: 1px solid var(--color-border-cyan, #57D6C4) !important;
+  color: var(--color-accent-cyan, #57D6C4) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  padding: 3px 8px !important;
+  border-radius: 2px !important;
+  z-index: 15 !important;
+}
+
+/* --- FORMA 8: maker_workbench (Banco de Trabajo Studio & Remaches) --- */
+body[data-theme-shape="maker_workbench"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
+box-sizing: border-box !important;
+  border: 2px solid rgba(255, 255, 255, 0.22) !important;
+  border-left: 5px solid var(--color-accent-orange, #FF783F) !important;
+  border-radius: 4px !important;
+  clip-path: none !important;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.6) !important;
+  background: rgba(18, 22, 28, 0.7) !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+}
+
+/* Remaches en esquinas */
+body[data-theme-shape="maker_workbench"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::before {
+content: "⨁" !important;
+  position: absolute !important;
+  top: 4px !important;
+  left: 6px !important;
+  font-size: 10px !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  z-index: 10 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="maker_workbench"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
+content: "⨁" !important;
+  position: absolute !important;
+  bottom: 4px !important;
+  right: 6px !important;
+  font-size: 10px !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  z-index: 10 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="maker_workbench"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
+position: absolute !important;
+  top: 10px !important;
+  left: 14px !important;
+  bottom: auto !important;
+  right: auto !important;
+  background: rgba(24, 29, 36, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: var(--color-accent-orange, #FF783F) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  padding: 3px 8px !important;
+  border-radius: 2px !important;
+  z-index: 15 !important;
+}
+
+/* --- FORMA 19: maker_circuit_pcb (Placa de Circuito PCB) --- */
+body[data-theme-shape="maker_circuit_pcb"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
+box-sizing: border-box !important;
+  border-radius: 4px !important;
+  clip-path: none !important;
+  border: 3px solid #D4AF37 !important;
+  background: #061A10 !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), inset 0 0 20px rgba(212, 175, 55, 0.15) !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+}
+
+body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::before {
+content: "◉ GND  +5V ◉" !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 14px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  color: #D4AF37 !important;
+  letter-spacing: 1.5px !important;
+  z-index: 12 !important;
+  background: rgba(9, 43, 26, 0.9) !important;
+  padding: 2px 6px !important;
+  border: 1px solid #D4AF37 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
+content: "REV 2.4 PCB" !important;
+  position: absolute !important;
+  bottom: 8px !important;
+  right: 14px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  color: #10B981 !important;
+  letter-spacing: 1px !important;
+  z-index: 12 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
+position: absolute !important;
+  top: 10px !important;
+  left: 14px !important;
+  background: rgba(9, 43, 26, 0.95) !important;
+  border: 1.5px solid #D4AF37 !important;
+  color: #D4AF37 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 2px !important;
+  letter-spacing: 1px !important;
+  z-index: 15 !important;
+}
+
+body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window) {
+border-radius: 2px !important;
+  clip-path: none !important;
+}
+
+body[data-theme-shape="maker_blueprint"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window),
+body[data-theme-shape="maker_workbench"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window) {
+border-radius: 0 !important;
+  clip-path: none !important;
+}
+
+/* Si la forma activa NO es maker_blueprint ni original, oculta esquinas CAD nativas */
+body:not([data-theme-shape="maker_blueprint"]):not([data-theme-shape="original"]) :is(.frame-corner-tr, .frame-corner-bl, .reg-mark) {
+display: none !important;
+}
+
+/* Decoracion de COMPONENTE por arquetipo (fondo, borde y blur).
+   El radio y el recorte NO se fijan aqui: los pone el motor desde
+   `--skin-bar-radius` / `--skin-panel-radius`. */
+body[data-theme-shape="maker_blueprint"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar),
+body[data-theme-archetype="maker"]:not([data-theme-shape]):not([data-theme-shape="original"]) :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+background: rgba(19, 23, 29, 0.94) !important;
+  border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.45)) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+}
+
+body[data-theme-shape="maker_blueprint"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box),
+body[data-theme-archetype="maker"]:not([data-theme-shape]):not([data-theme-shape="original"]) :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+background: rgba(19, 23, 29, 0.94) !important;
+  border: 1px solid var(--color-border-cyan, rgba(87, 214, 196, 0.35)) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+}
+

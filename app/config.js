@@ -279,17 +279,134 @@ window.OSS_CONFIG = {
     "golden_glory": "gamer",
     "stealth_mono": "gamer",
     "toxic_rad": "gamer",
-    "chill": "cozy",
-    "cyberpunk": "gamer",
+    "chill": "maker",
+    "cyberpunk": "maker",
     "maker": "maker",
     "print": "maker",
     "synthwave": "maker",
     "terminal": "maker",
     "clean_minimal": "openstream",
     "crimson_pulse": "openstream",
-    "emerald_matrix": "gamer",
+    "emerald_matrix": "openstream",
     "neon_streamer": "openstream",
     "sunset_glow": "openstream"
+  },
+  "themeCatalog": {
+    "packs": [
+      {
+        "id": "Cozy_LoFi_Pack",
+        "archetype": "cozy",
+        "defaultTheme": "latte_caramel",
+        "defaultShape": "cozy_polaroid",
+        "themes": [
+          "latte_caramel",
+          "lavender_dream",
+          "matcha_bamboo",
+          "nordic_twilight",
+          "sakura_sunset"
+        ]
+      },
+      {
+        "id": "Gamer_Pro_Pack",
+        "archetype": "gamer",
+        "defaultTheme": "cyber_glitch",
+        "defaultShape": "gamer_mecha",
+        "themes": [
+          "crimson_esport",
+          "cyber_glitch",
+          "golden_glory",
+          "stealth_mono",
+          "toxic_rad"
+        ]
+      },
+      {
+        "id": "Maker_Theme_Pack",
+        "archetype": "maker",
+        "defaultTheme": "maker",
+        "defaultShape": "maker_blueprint",
+        "themes": [
+          "chill",
+          "cyberpunk",
+          "maker",
+          "print",
+          "synthwave",
+          "terminal"
+        ]
+      },
+      {
+        "id": "Open_stream_Pack",
+        "archetype": "openstream",
+        "defaultTheme": "neon_streamer",
+        "defaultShape": "openstream_glass",
+        "themes": [
+          "clean_minimal",
+          "crimson_pulse",
+          "emerald_matrix",
+          "neon_streamer",
+          "sunset_glow"
+        ]
+      }
+    ],
+    "packDefaults": {
+      "Cozy_LoFi_Pack": {
+        "theme": "latte_caramel",
+        "shape": "cozy_polaroid"
+      },
+      "Gamer_Pro_Pack": {
+        "theme": "cyber_glitch",
+        "shape": "gamer_mecha"
+      },
+      "Maker_Theme_Pack": {
+        "theme": "maker",
+        "shape": "maker_blueprint"
+      },
+      "Open_stream_Pack": {
+        "theme": "neon_streamer",
+        "shape": "openstream_glass"
+      }
+    },
+    "shapeArchetypes": {
+      "cozy_polaroid": "cozy",
+      "cozy_canvas": "cozy",
+      "cozy_soft": "cozy",
+      "fantasy_parchment": "cozy",
+      "vintage_crt_monitor": "cozy",
+      "gamer_mecha": "gamer",
+      "gamer_tactical_hud": "gamer",
+      "gamer_stealth": "gamer",
+      "gamer_hex_shield": "gamer",
+      "gamer_cyber_glitch": "gamer",
+      "gamer_arcade_retro": "gamer",
+      "fantasy_runic_stone": "gamer",
+      "gothic_vampire": "gamer",
+      "maker_blueprint": "maker",
+      "maker_workbench": "maker",
+      "maker_circuit_pcb": "maker",
+      "openstream_glass": "openstream",
+      "openstream_studio": "openstream",
+      "comic_manga_action": "openstream",
+      "pop_synth_neon": "openstream"
+    },
+    "archetypeAtmosphere": {
+      "cozy": {
+        "modeText": "COZY CHILL",
+        "subtitle": "Música Lo-Fi · Charla Relajada · Café",
+        "camLabel": "Cámara Principal"
+      },
+      "gamer": {
+        "modeText": "ESPORTS HUD",
+        "subtitle": "LIVE MATCH // COMPETITIVE TOURNAMENT",
+        "camLabel": "CAM 01 // OVERVIEW"
+      },
+      "maker": {
+        "modeText": "MAKER MODE",
+        "subtitle": "RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN",
+        "camLabel": "CÁMARA CENITAL · BANCO DE TRABAJO"
+      },
+      "openstream": {
+        "modeText": "BROADCAST"
+      }
+    }
   }
 };
 window.TALLER_CONFIG = window.OSS_CONFIG;  // alias de compatibilidad hacia atrás

@@ -3,6 +3,7 @@ from aiohttp import web
 from server.config import logger
 from server.state import system
 from server.routes.widgets_routes import handle_widget_action
+from server.routes.errors import read_json_object
 from server.services.theme_manager import (
     save_theme_state,
     load_theme_state,
@@ -27,11 +28,9 @@ async def handle_deck_trigger(request):
     """
     ident = request.query.get("id") or request.query.get("name") or request.query.get("command")
     if not ident and request.can_read_body:
-        try:
-            data = await request.json()
+        data = await read_json_object(request)
+        if data:
             ident = data.get("id") or data.get("name") or data.get("command")
-        except Exception:
-            pass
 
     if not ident:
         return web.json_response({
@@ -64,13 +63,11 @@ async def handle_deck_theme(request):
     theme_id = request.query.get("id") or request.query.get("theme")
     explicit_pack = request.query.get("pack")
     if not theme_id and request.can_read_body:
-        try:
-            data = await request.json()
+        data = await read_json_object(request)
+        if data:
             theme_id = data.get("id") or data.get("theme")
             if data.get("pack"):
                 explicit_pack = data.get("pack")
-        except Exception:
-            pass
 
     theme_id = str(theme_id or "").strip()
     if not theme_id:
@@ -156,11 +153,9 @@ async def handle_deck_knob(request):
     """Endpoint para mandos giratorios (Knobs / Encoders) y zonas táctiles."""
     params = dict(request.query)
     if request.can_read_body and request.method == "POST":
-        try:
-            body = await request.json()
+        body = await read_json_object(request)
+        if body:
             params.update(body)
-        except Exception:
-            pass
 
     knob_raw = str(params.get("knob", "timer")).lower()
     knob_map = {"1": "timer", "2": "theme", "3": "goal", "4": "fx"}

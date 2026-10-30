@@ -131,6 +131,9 @@ function renderFusionsList() {
               ✨
             </button>
           </div>
+          <button type="button" class="btn-action-test" onclick="exportFusionAsPack(${themeJsArg(fusion.id)})" title="Guardar esta fusión como pack propio" style="font-size: 11px; padding: 5px 10px;">
+            📦
+          </button>
         </div>
       </div>
     `;
@@ -1072,3 +1075,27 @@ window.applyBatchShapeToCurrentFusion = applyBatchShapeToCurrentFusion;
 window.assignShapeToScene = assignShapeToScene;
 window.buildShapeOptionsHtml = buildShapeOptionsHtml;
 
+
+/* Exporta la fusión como pack propio (paso 19b). El pack aparece solo en el
+   catálogo y en los menús del panel: no hay listas que mantener. */
+async function exportFusionAsPack(fusionId) {
+  const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
+  try {
+    const res = await API.exportFusionPack(fusionId);
+    const packId = res.packId || '';
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(
+        tr('fusions.toast_export_ok', 'Fusión exportada como pack') + (packId ? `: ${packId}` : ''),
+        'success');
+    }
+    if (typeof loadFusions === 'function') loadFusions();
+  } catch (err) {
+    console.error('No se pudo exportar la fusión:', err);
+    if (window.OverlayTexts && OverlayTexts.showToast) {
+      OverlayTexts.showToast(
+        tr('fusions.toast_export_error', 'No se pudo exportar la fusión') + ` — ${err.message}`,
+        'error');
+    }
+  }
+}
+window.exportFusionAsPack = exportFusionAsPack;

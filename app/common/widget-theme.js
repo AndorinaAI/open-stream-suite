@@ -109,6 +109,9 @@ window.OSSTheme = (function () {
   function init(widgetId) {
     id = widgetId;
     window.OSS_WIDGET_ID = widgetId;
+    // Marca el widget en el body: permite que `oss-skin.css` aplique el fondo
+    // del TEMA solo a widgets (nunca a las escenas).
+    try { document.body.setAttribute('data-oss-widget', widgetId); } catch (e) {}
     try {
       var p = new URLSearchParams(window.location.search);
       var queryTheme = p.get('theme');

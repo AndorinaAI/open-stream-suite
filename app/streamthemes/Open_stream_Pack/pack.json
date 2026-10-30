@@ -13,28 +13,64 @@
       "name": "Swiss Frosted Glass",
       "icon": "⚡",
       "archetype": "openstream",
-      "description": "Cristal glaseado suizo de 16px con desenfoque de 24px y bordes sutiles."
+      "description": "Cristal glaseado suizo de 16px con desenfoque de 24px y bordes sutiles.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "16px"
+      }
     },
     {
       "id": "openstream_studio",
       "name": "Broadcast Pro Studio",
       "icon": "🎙️",
       "archetype": "openstream",
-      "description": "Líneas de retransmisión con vúmetros de audio estéreo en vivo y lower-third ticker."
+      "description": "Líneas de retransmisión con vúmetros de audio estéreo en vivo y lower-third ticker.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "20px"
+      }
     },
     {
       "id": "comic_manga_action",
       "name": "Manga / Shonen Comic",
       "icon": "💥",
       "archetype": "openstream",
-      "description": "Trazos de tinta negra gruesa (5px), viñetas de cómic y badges de impacto 💥 GO!!."
+      "description": "Trazos de tinta negra gruesa (5px), viñetas de cómic y badges de impacto 💥 GO!!.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0",
+        "panelClipPath": "polygon(0 0, 100% 0, 100% 100%, 94% 90%, 86% 100%, 78% 90%, 70% 100%, 62% 90%, 54% 100%, 46% 90%, 38% 100%, 30% 90%, 22% 100%, 14% 90%, 6% 100%, 0 90%)"
+      }
     },
     {
       "id": "pop_synth_neon",
       "name": "Synthwave 80s Grid",
       "icon": "🌆",
       "archetype": "openstream",
-      "description": "Bisel flúor neón magenta/cian, horizonte en alambre y sol retro ☀."
+      "description": "Bisel flúor neón magenta/cian, horizonte en alambre y sol retro ☀.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0",
+        "panelClipPath": "polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)"
+      }
     }
-  ]
+  ],
+  "defaultTheme": "neon_streamer",
+  "defaultShape": "openstream_glass"
 }

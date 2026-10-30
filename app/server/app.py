@@ -67,18 +67,34 @@ PUBLIC_WEBHOOK_PATHS = {
     "/api/webhooks/paypal",
 }
 
+# Prefijos que exponen la biblioteca de medios (`MEDIA_DIR`). `/media` es el
+# montaje dedicado; `/alerts/media` es el alias que nace del montaje estático
+# de `MEDIA_DIR` bajo `/alerts/`. Ambos deben aplicar las MISMAS reglas.
+MEDIA_LIBRARY_PREFIXES = ("/media", "/alerts/media")
+
+# Extensiones que el navegador ejecutaría en el contexto de la aplicación
+# (mismo origen → puede leer /api/local-token). Se sirven como 404.
+ACTIVE_MEDIA_EXTENSIONS = (".svg", ".html", ".htm", ".xhtml", ".xml", ".js")
+
 
 @web.middleware
 async def cors_and_auth_middleware(request, handler):
     # La biblioteca de medios no puede servir documentos activos. Aunque un SVG
     # antiguo siga en disco, /media/...svg responde 404; la subida ya lo rechaza.
+    # `MEDIA_DIR` está montado estáticamente bajo /alerts/, así que el alias
+    # /alerts/media/... eludía las dos guardas (local-only y active-document).
+    # Por eso ambas reglas se aplican a AMBOS prefijos.
     media_path = request.path.lower()
-    if (request.path == "/media" or media_path.startswith("/media/")):
+    is_media_library = any(
+        media_path == prefix or media_path.startswith(prefix + "/")
+        for prefix in MEDIA_LIBRARY_PREFIXES
+    )
+    if is_media_library:
         # La biblioteca solo se sirve a OBS/panel locales. El túnel se reserva
         # para webhooks externos, no para listar ni descargar medios.
         if not is_local_request(request):
             return web.Response(status=404, text="Not Found")
-        if media_path.rstrip("/").endswith(".svg"):
+        if media_path.rstrip("/").endswith(ACTIVE_MEDIA_EXTENSIONS):
             return web.Response(status=404, text="Not Found")
 
     origin = request.headers.get("Origin", "")
@@ -253,6 +269,19 @@ def create_app():
     # Tareas en segundo plano (EventSub e IRC)
     app.on_startup.append(start_background_tasks)
     app.on_cleanup.append(cleanup_background_tasks)
+
+    # Motor de apariencia: regenera `common/generated/*` si el manifiesto ha
+    # cambiado (arquetipos, packs, formas o decoracion). Es idempotente y
+    # determinista: si nada cambio, no toca nada.
+    try:
+        from server.services import theme_engine
+        if theme_engine.sync_if_stale():
+            logger.info("Motor de apariencia regenerado desde el manifiesto.")
+        problems = theme_engine.validate_manifest()
+        if problems:
+            logger.warning("Manifiesto de apariencia con problemas: %s", "; ".join(problems))
+    except Exception as e:  # nunca debe impedir el arranque del servidor
+        logger.warning(f"No se pudo sincronizar el motor de apariencia al arrancar: {e}")
 
     # Sincronización escena↔tema (T4): `config.js` debe llevar el estado de temas
     # por escena para que la escena lo aplique en el primer pintado. Se regenera

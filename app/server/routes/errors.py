@@ -28,6 +28,24 @@ def invalid_json_text():
     return web.Response(text=INVALID_JSON_MESSAGE, status=400)
 
 
+async def read_json_object(request):
+    """Lee el cuerpo JSON y garantiza un objeto (`dict`) o `None`.
+
+    Un cuerpo JSON válido pero no-dict (lista, string, número, booleano o
+    `null`) es un error del cliente: `await request.json()` lo aceptaba y el
+    `.get()` posterior reventaba con `AttributeError` → 500 con HTML de
+    traza. Aquí se devuelve `None` para que cada ruta responda 400 controlado.
+
+    `None` también cubre el caso "no hay cuerpo" y el JSON malformado, de
+    modo que una sola llamada cubre los tres casos problemáticos.
+    """
+    try:
+        data = await request.json()
+    except Exception:
+        return None
+    return data if isinstance(data, dict) else None
+
+
 def internal_error_response(context: str, error: Exception, *, with_status_key: bool = False):
     """500 genérico: el error real solo se registra en el log interno."""
     logger.exception(f"Error interno en {context}: {error}")

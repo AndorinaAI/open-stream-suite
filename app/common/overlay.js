@@ -34,6 +34,12 @@
   }
 
   function applyConfigToDOM(config) {
+    // Auto-etiqueta: garantiza `data-text-key` en los textos que aun no lo
+    // tienen ANTES de aplicar la configuracion. Sin esto, los ~180 textos que
+    // no traian el atributo no eran editables desde el panel.
+    if (window.OSSSkin && typeof window.OSSSkin.autoTagTexts === 'function') {
+      try { window.OSSSkin.autoTagTexts(document.body); } catch (e) { /* noop */ }
+    }
     if (window.OSSDomInjector && typeof window.OSSDomInjector.applyConfigToDOM === 'function') {
       window.OSSDomInjector.applyConfigToDOM(config);
     } else {
@@ -145,8 +151,48 @@
 
     window.__THEME_ARCHETYPES = window.__THEME_ARCHETYPES || {};
 
+    /* Catalogo publicado por el servidor (`config.themeCatalog`): packs con su
+       tema y forma por defecto, arquetipo de cada forma y textos de atmosfera.
+       Con esto el cliente no necesita listas propias: un pack o un tema nuevo
+       aparecen solos. Si el config es antiguo se usan los mapas de respaldo. */
+    function themeCatalog() {
+      try {
+        return (window.OSS_CONFIG || {}).themeCatalog || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function catalogPackForArchetype(arch) {
+      var packs = themeCatalog().packs || [];
+      for (var i = 0; i < packs.length; i++) {
+        if (packs[i] && packs[i].archetype === arch) return packs[i];
+      }
+      return null;
+    }
+
+    function defaultThemeForArchetype(arch) {
+      var pack = catalogPackForArchetype(arch);
+      return (pack && pack.defaultTheme) || null;
+    }
+
+    function defaultShapeForArchetype(arch) {
+      var pack = catalogPackForArchetype(arch);
+      if (pack && pack.defaultShape) return pack.defaultShape;
+      return ARCHETYPE_DEFAULT_SHAPE_MAP[arch] || 'openstream_glass';
+    }
+
+    function archetypeOfShape(shape) {
+      var map = themeCatalog().shapeArchetypes || {};
+      return map[shape] || SHAPE_ARCHETYPE_MAP[shape] || null;
+    }
+
     function getThemeArchetype(themeName) {
       if (!themeName) return null;
+      var packs = themeCatalog().packs || [];
+      for (var i = 0; i < packs.length; i++) {
+        if ((packs[i].themes || []).indexOf(themeName) !== -1) return packs[i].archetype;
+      }
       if (window.__THEME_ARCHETYPES && window.__THEME_ARCHETYPES[themeName]) {
         return window.__THEME_ARCHETYPES[themeName];
       }
@@ -294,7 +340,7 @@
         };
       }
       if (shape && shape !== 'auto' && shape !== '__auto__' && shape !== 'none' && shape !== 'null') {
-        const arch = SHAPE_ARCHETYPE_MAP[shape] || getThemeArchetype(theme) || normPack;
+        const arch = archetypeOfShape(shape) || getThemeArchetype(theme) || normPack;
         return {
           archetype: arch,
           shape: shape,
@@ -313,7 +359,7 @@
         };
       }
       // Si el tema es de un pack diferente (fusión / crossover), aplicar la forma del arquetipo
-      const effectiveShape = ARCHETYPE_DEFAULT_SHAPE_MAP[themeArch] || 'openstream_glass';
+      const effectiveShape = defaultShapeForArchetype(themeArch);
       return {
         archetype: themeArch,
         shape: 'auto',
@@ -343,48 +389,29 @@
       return true;
     }
 
+    /* Los textos de "atmosfera" salen del catalogo (`archetypeAtmosphere`), no
+       de un `if` por arquetipo. Se respeta un texto propio de la escena: solo
+       se sustituye cuando el actual es generico del producto. */
+    function isGenericLabel(el, keys) {
+      if (!el) return false;
+      var text = (el.textContent || '').toUpperCase();
+      return keys.some(function (k) { return text.indexOf(k) !== -1; });
+    }
+
     function adaptAtmosphereForArchetype(arch, effectiveShape) {
       if (!arch) return;
       tagSemanticElements();
-      const modeBadge = document.querySelector('.mode-badge span:last-child, .live-match-chip, .live-badge');
-      const headerSub = document.querySelector('.header-subtitle, .track-author, .episode-tag');
-      const mainCamLabel = document.querySelector('.camera-main .frame-label span:last-child, .cam-label');
-
-      if (arch === 'cozy') {
-        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('GAMER') || modeBadge.textContent.includes('MODE') || modeBadge.textContent.includes('LIVE'))) {
-          setFittedText(modeBadge, 'COZY CHILL');
-        }
-        if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('ELECTRÓNICA') || headerSub.textContent.includes('MATCH') || headerSub.textContent.includes('COMPETITIVE'))) {
-          setFittedText(headerSub, 'Música Lo-Fi · Charla Relajada · Café');
-        }
-        if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('OVERVIEW') || mainCamLabel.textContent.includes('RUNNER'))) {
-          setFittedText(mainCamLabel, 'Cámara Principal');
-        }
-      } else if (arch === 'gamer') {
-        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL'))) {
-          setFittedText(modeBadge, 'ESPORTS HUD');
-        }
-        if (headerSub && (headerSub.textContent.includes('RASPBERRY') || headerSub.textContent.includes('Música') || headerSub.textContent.includes('Café'))) {
-          setFittedText(headerSub, 'LIVE MATCH // COMPETITIVE TOURNAMENT');
-        }
-        if (mainCamLabel && (mainCamLabel.textContent.includes('CENITAL') || mainCamLabel.textContent.includes('Principal'))) {
-          setFittedText(mainCamLabel, 'CAM 01 // OVERVIEW');
-        }
-      } else if (arch === 'maker') {
-        if (modeBadge && (modeBadge.textContent.includes('ESPORTS') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('CHILL') || modeBadge.textContent.includes('HUD'))) {
-          setFittedText(modeBadge, 'MAKER MODE');
-        }
-        if (headerSub && (headerSub.textContent.includes('LIVE MATCH') || headerSub.textContent.includes('Música') || headerSub.textContent.includes('Café'))) {
-          setFittedText(headerSub, 'RASPBERRY PI / ELECTRÓNICA / PROGRAMACIÓN');
-        }
-        if (mainCamLabel && (mainCamLabel.textContent.includes('OVERVIEW') || mainCamLabel.textContent.includes('Principal'))) {
-          setFittedText(mainCamLabel, 'CÁMARA CENITAL · BANCO DE TRABAJO');
-        }
-      } else if (arch === 'openstream') {
-        if (modeBadge && (modeBadge.textContent.includes('MAKER') || modeBadge.textContent.includes('COZY') || modeBadge.textContent.includes('ESPORTS'))) {
-          setFittedText(modeBadge, 'BROADCAST');
-        }
-      }
+      var atmo = (themeCatalog().archetypeAtmosphere || {})[arch];
+      if (!atmo) return;
+      var modeBadge = document.querySelector('.mode-badge span:last-child, .live-match-chip, .live-badge');
+      var headerSub = document.querySelector('.header-subtitle, .track-author, .episode-tag');
+      var mainCamLabel = document.querySelector('.camera-main .frame-label span:last-child, .cam-label');
+      var MODE_KEYS = ['MAKER', 'GAMER', 'COZY', 'CHILL', 'ESPORTS', 'HUD', 'LIVE', 'MODE', 'BROADCAST'];
+      var SUB_KEYS = ['RASPBERRY', 'MÚSICA', 'MUSICA', 'CAFÉ', 'CAFE', 'MATCH', 'LIVE', 'COMPETITIVE', 'ELECTRÓNICA', 'ELECTRONICA'];
+      var CAM_KEYS = ['CENITAL', 'OVERVIEW', 'PRINCIPAL', 'RUNNER', 'CAM '];
+      if (atmo.modeText && isGenericLabel(modeBadge, MODE_KEYS)) setFittedText(modeBadge, atmo.modeText);
+      if (atmo.subtitle && isGenericLabel(headerSub, SUB_KEYS)) setFittedText(headerSub, atmo.subtitle);
+      if (atmo.camLabel && isGenericLabel(mainCamLabel, CAM_KEYS)) setFittedText(mainCamLabel, atmo.camLabel);
     }
     window.setFittedText = setFittedText;
 
@@ -439,10 +466,13 @@
       }
     }
     if (!activeTheme) {
-      if (currentPack === 'cozy') activeTheme = 'latte_caramel';
-      else if (currentPack === 'gamer') activeTheme = 'cyber_glitch';
-      else if (currentPack === 'openstream') activeTheme = 'neon_streamer';
-      else activeTheme = config.activeTheme || config.themeName || 'maker';
+      // Tema por defecto del pack segun el catalogo del servidor; si el config
+      // es antiguo, se conserva el valor historico.
+      activeTheme = defaultThemeForArchetype(currentPack)
+        || (currentPack === 'cozy' ? 'latte_caramel'
+          : currentPack === 'gamer' ? 'cyber_glitch'
+          : currentPack === 'openstream' ? 'neon_streamer'
+          : (config.activeTheme || config.themeName || 'maker'));
     }
 
     let activeShape = rawUrlShape;

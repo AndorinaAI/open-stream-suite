@@ -17,8 +17,8 @@
   backdrop-filter: var(--panel-backdrop, blur(8px));
   border: 1px solid var(--color-border-dim);
   border-left: 3px solid var(--color-accent-cyan);
-  border-radius: var(--header-radius, var(--radius-sm));
-  clip-path: var(--header-clip-path, none);
+  border-radius: var(--skin-header-radius, var(--header-radius, var(--radius-sm)));
+  clip-path: var(--skin-header-clip, var(--header-clip-path, none));
   box-shadow: var(--panel-shadow, none);
   z-index: 100;
   transition: var(--transition-smooth);
@@ -162,8 +162,8 @@
   background: transparent;
   pointer-events: none;
   border: var(--frame-border-width, 1px) var(--frame-border-style, solid) var(--color-border-cyan);
-  border-radius: var(--frame-radius, var(--radius-sm));
-  clip-path: var(--frame-clip-path, none);
+  border-radius: var(--skin-frame-radius, var(--frame-radius, var(--radius-sm)));
+  clip-path: var(--skin-frame-clip, var(--frame-clip-path, none));
   box-shadow: var(--frame-shadow, inset 0 0 12px rgba(87, 214, 196, 0.04));
   transition: var(--transition-smooth);
 }

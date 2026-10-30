@@ -190,7 +190,38 @@ def build_config_payload(texts: dict) -> dict:
     except Exception as e:
         logger.warning(f"No se pudo publicar themeArchetypes en config.js: {e}")
         payload.setdefault("themeArchetypes", {})
+    # Catalogo del motor: tema y forma por defecto de cada pack, arquetipo de
+    # cada forma y textos de "atmosfera" por arquetipo. Es lo que permite que
+    # `overlay.js` no tenga ninguna lista propia: un pack nuevo aparece solo.
+    try:
+        payload["themeCatalog"] = build_theme_catalog()
+    except Exception as e:
+        logger.warning(f"No se pudo publicar themeCatalog en config.js: {e}")
+        payload.setdefault("themeCatalog", {})
     return payload
+
+
+def build_theme_catalog() -> dict:
+    """Catalogo derivado del manifiesto (packs -> defaults, formas, atmosfera)."""
+    from server.services import theme_engine
+
+    packs = theme_engine.load_packs()
+    catalog = theme_engine.build_shape_catalog()
+    return {
+        "packs": [
+            {
+                "id": pack.id,
+                "archetype": pack.archetype,
+                "defaultTheme": pack.default_theme,
+                "defaultShape": pack.default_shape,
+                "themes": [theme.id for theme in pack.themes],
+            }
+            for pack in packs
+        ],
+        "packDefaults": catalog.get("packDefaults", {}),
+        "shapeArchetypes": catalog.get("shapeArchetypes", {}),
+        "archetypeAtmosphere": catalog.get("archetypeAtmosphere", {}),
+    }
 
 
 def write_config_js(texts: "dict | None" = None) -> None:

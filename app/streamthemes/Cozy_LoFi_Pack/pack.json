@@ -13,35 +13,62 @@
       "name": "Polaroid Vintage con Cinta",
       "icon": "☕",
       "archetype": "cozy",
-      "description": "Marco de papel marfil con textura, cinta washi tape y pie de foto manuscrito."
+      "description": "Marco de papel marfil con textura, cinta washi tape y pie de foto manuscrito.",
+      "geometry": {
+        "panelRadius": "2px"
+      }
     },
     {
       "id": "cozy_canvas",
       "name": "Lienzo de Arte con Chinchetas",
       "icon": "🎨",
       "archetype": "cozy",
-      "description": "Bordes suaves de lienzo con chinchetas y paleta flotante de acuarelas."
+      "description": "Bordes suaves de lienzo con chinchetas y paleta flotante de acuarelas.",
+      "geometry": {
+        "panelRadius": "18px"
+      }
     },
     {
       "id": "cozy_soft",
       "name": "Píldora Soft Minimal",
       "icon": "☁️",
       "archetype": "cozy",
-      "description": "Esquinas redondeadas de 28px y cabeceras en píldora sin texturas de papel."
+      "description": "Esquinas redondeadas de 28px y cabeceras en píldora sin texturas de papel.",
+      "geometry": {
+        "panelRadius": "28px"
+      }
     },
     {
       "id": "fantasy_parchment",
       "name": "Pergamino Rol & Sello Cera",
       "icon": "📜",
       "archetype": "cozy",
-      "description": "Bordes orgánicos de pergamino antiguo, sello carmesí ⚜ y tipografía clásica."
+      "description": "Bordes orgánicos de pergamino antiguo, sello carmesí ⚜ y tipografía clásica.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelClipPath": "polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%)"
+      }
     },
     {
       "id": "vintage_crt_monitor",
       "name": "Monitor CRT Retro 90s",
       "icon": "📺",
       "archetype": "cozy",
-      "description": "Pantalla curvada bulbosa analógica, bisel de carcasa noventera y LED POWER."
+      "description": "Pantalla curvada bulbosa analógica, bisel de carcasa noventera y LED POWER.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "12px"
+      }
     }
-  ]
+  ],
+  "defaultTheme": "latte_caramel",
+  "defaultShape": "cozy_polaroid"
 }

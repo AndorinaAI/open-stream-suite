@@ -1,4 +1,5 @@
-body[data-theme="maker"] {
+body[data-theme="maker"],
+[data-theme="maker"] {
   --color-bg-dark: #191D21;
   --color-text-light: #F2EEE5;
   --color-accent-cyan: #57D6C4;
@@ -22,4 +23,9 @@ body[data-theme="maker"] {
   --badge-clip-path: none;
   --header-radius: 6px;
   --header-clip-path: none;
+  --skin-scene-pattern: repeating-linear-gradient(0deg, rgba(87, 214, 196, 0.10) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(90deg, rgba(87, 214, 196, 0.10) 0 1px, transparent 1px 14px),
+    radial-gradient(circle at 100% 0%, rgba(255, 120, 63, 0.12), transparent 46%);
+  --skin-scene-pattern-position: 0 0;
+  --skin-scene-pattern-size: auto;
 }

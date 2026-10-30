@@ -1,4 +1,5 @@
-body[data-theme="synthwave"] {
+body[data-theme="synthwave"],
+[data-theme="synthwave"] {
   --color-bg-dark: #1A1028;
   --color-text-light: #FCE7F3;
   --color-accent-cyan: #00F9FF;

@@ -210,9 +210,44 @@ async def handle_get_rss_feed(request):
         "items": items_list[:25]
     })
 
+async def handle_widget_customization(request):
+    """Esquema comun de personalizacion y config efectiva de un widget.
+
+    `GET /api/widgets/customization`          -> esquemas de todos los widgets
+    `GET /api/widgets/{widget}/customization` -> esquema + config efectiva
+    La precedencia la resuelve `widget_customization.effective`:
+    tema como base, override del usuario encima.
+    """
+    from server.services import widget_customization as WC
+    from server.services.theme_manager import load_theme_state
+
+    widget = str(request.match_info.get("widget") or "").strip()
+    if not widget:
+        return web.json_response({"widgets": WC.all_schemas()})
+
+    cfg = load_widgets_config()
+    if widget not in cfg and widget not in WC.DEFAULT_WIDGETS:
+        return web.json_response({"error": "widget desconocido"}, status=404)
+
+    styles = (cfg.get(widget) or {}).get("styles") or {}
+    state = load_theme_state()
+    theme_id = state.get("activeTheme") or ""
+    tokens = WC.active_theme_tokens(theme_id)
+    schema = WC.customization_for(widget)
+    return web.json_response({
+        "widget": widget,
+        "theme": theme_id,
+        "schema": schema.schema(),
+        "styles": styles,
+        "overrides": schema.overrides(styles),
+        "effective": schema.effective(styles, tokens),
+    })
+
+
 def register_widgets_routes(app):
     """Registra las rutas de la API de widgets"""
     app.router.add_get("/api/components/catalog", handle_components_catalog)
+    app.router.add_get("/api/widgets/customization", handle_widget_customization)
     app.router.add_get("/api/widgets/config", handle_get_widgets_config)
     app.router.add_post("/api/widgets/config", handle_save_widgets_config)
     app.router.add_get("/api/widgets/{widget}/config", handle_get_single_widget_config)

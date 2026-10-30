@@ -70,6 +70,8 @@ async def handle_kofi_webhook(request):
 
         if not data_json:
             return web.Response(text="No data received", status=400)
+        if not isinstance(data_json, dict):
+            return web.Response(text=INVALID_JSON_MESSAGE, status=400)
         if not _public_webhook_authorized(request, "kofi", str(data_json.get("verification_token", ""))):
             return web.Response(text="Forbidden", status=403)
 
@@ -162,10 +164,21 @@ async def handle_paypal_webhook(request):
                 data = await request.json()
             except Exception:
                 return web.Response(text=INVALID_JSON_MESSAGE, status=400)
+            if not isinstance(data, dict):
+                return web.Response(text=INVALID_JSON_MESSAGE, status=400)
             resource = data.get("resource", {})
-            user = (resource.get("payer", {}).get("name", {}).get("given_name") or 
-                    resource.get("payer", {}).get("email_address") or "Donante PayPal")
+            if not isinstance(resource, dict):
+                resource = {}
+            payer = resource.get("payer", {})
+            if not isinstance(payer, dict):
+                payer = {}
+            payer_name = payer.get("name", {})
+            if not isinstance(payer_name, dict):
+                payer_name = {}
             amount_obj = resource.get("amount", {})
+            if not isinstance(amount_obj, dict):
+                amount_obj = {}
+            user = (payer_name.get("given_name") or payer.get("email_address") or "Donante PayPal")
             amount = str(amount_obj.get("value") or "0")
             currency = amount_obj.get("currency_code") or "EUR"
             msg = resource.get("note_to_payer") or resource.get("custom_id") or ""

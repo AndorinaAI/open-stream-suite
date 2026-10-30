@@ -4,7 +4,7 @@ Controladores REST para crear, listar, modificar, eliminar y aplicar estilos en 
 """
 
 from aiohttp import web
-from server.routes.errors import internal_error_response
+from server.routes.errors import internal_error_response, read_json_object
 from server.services.fusions_service import (
     reset_fusion_batch,
     load_fusions,
@@ -12,7 +12,8 @@ from server.services.fusions_service import (
     create_or_update_fusion,
     delete_fusion,
     apply_fusion_theme_batch,
-    apply_fusion_shape_batch
+    apply_fusion_shape_batch,
+    export_fusion_as_pack,
 )
 
 
@@ -33,9 +34,8 @@ async def handle_get_single_fusion(request):
 
 async def handle_save_fusion(request):
     """Crea o actualiza una fusión de overlays"""
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     try:
@@ -75,9 +75,8 @@ def _value_error_status(error: Exception, fusion_id: str) -> int:
 async def handle_apply_fusion_theme(request):
     """Aplica un tema visual a todos los overlays pertenecientes a una fusión"""
     fusion_id = request.match_info.get("id", "").strip()
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     theme_id = str(body.get("themeId", "")).strip()
@@ -96,9 +95,8 @@ async def handle_apply_fusion_theme(request):
 async def handle_apply_fusion_shape(request):
     """Aplica una forma física a todos los overlays pertenecientes a una fusión"""
     fusion_id = request.match_info.get("id", "").strip()
-    try:
-        body = await request.json()
-    except Exception:
+    body = await read_json_object(request)
+    if body is None:
         return web.json_response({"error": "Payload JSON inválido"}, status=400)
 
     shape_id = str(body.get("shapeId", "original")).strip()
@@ -112,6 +110,26 @@ async def handle_apply_fusion_shape(request):
         return internal_error_response("aplicando forma a la fusión", e)
 
 
+async def handle_export_fusion_pack(request):
+    """Exporta una fusión como pack propio en `streamthemes/`.
+
+    El pack resultante es un pack real (tema + forma + escenas), así que
+    aparece solo en el catálogo y en los menús del panel.
+    """
+    fusion_id = request.match_info.get("id", "").strip()
+    try:
+        res = export_fusion_as_pack(fusion_id)
+        return web.json_response(res)
+    except FileNotFoundError as e:
+        return web.json_response({"error": str(e)}, status=404)
+    except FileExistsError as e:
+        return web.json_response({"error": str(e)}, status=409)
+    except ValueError as e:
+        return web.json_response({"error": str(e)}, status=400)
+    except Exception as e:
+        return internal_error_response("exportando la fusión como pack", e)
+
+
 def register_fusions_routes(app):
     """Registra los endpoints HTTP para la gestión de Fusiones de overlays"""
     app.router.add_get("/api/fusions", handle_get_fusions)
@@ -121,6 +139,7 @@ def register_fusions_routes(app):
     app.router.add_post("/api/fusions/{id}/apply-theme", handle_apply_fusion_theme)
     app.router.add_post("/api/fusions/{id}/apply-shape", handle_apply_fusion_shape)
     app.router.add_post("/api/fusions/{id}/reset", handle_reset_fusion)
+    app.router.add_post("/api/fusions/{id}/export-pack", handle_export_fusion_pack)
 
 
 async def handle_reset_fusion(request):

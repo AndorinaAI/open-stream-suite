@@ -1,4 +1,5 @@
-body[data-theme="cyberpunk"] {
+body[data-theme="cyberpunk"],
+[data-theme="cyberpunk"] {
   --color-bg-dark: #0F0F14;
   --color-text-light: #F8F9FA;
   --color-accent-cyan: #FFE600;

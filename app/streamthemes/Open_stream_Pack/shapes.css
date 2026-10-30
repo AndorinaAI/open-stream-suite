@@ -1,0 +1,348 @@
+/* Decoracion de escena de las formas del pack Open_stream_Pack.
+   CSS del pack: lo consume el motor desde common/generated/shapes.css.
+   Aqui si puede haber color literal propio del pack (no del tema).
+*/
+
+body[data-theme-shape="comic_manga_action"]:not([data-theme-shape="original"]) *:not(code):not(pre) {
+font-family: 'Impact', 'Arial Black', sans-serif !important;
+}
+
+body[data-theme-shape="pop_synth_neon"]:not([data-theme-shape="original"]) {
+font-family: 'Orbitron', 'Rajdhani', sans-serif !important;
+}
+
+body[data-theme-shape="pop_synth_neon"]:not([data-theme-shape="original"]) *:not(code):not(pre) {
+font-family: 'Orbitron', 'Rajdhani', sans-serif !important;
+}
+
+/* Open Stream Glass: Cristal suizo flotante */
+body[data-theme-shape="openstream_glass"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+border-radius: 14px !important;
+  clip-path: none !important;
+  background: rgba(15, 23, 42, 0.78) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Open Stream Studio: Línea broadcast con borde inferior de acento */
+body[data-theme-shape="openstream_studio"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+border-radius: 8px !important;
+  clip-path: none !important;
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-bottom: 3px solid var(--color-accent-cyan, #38BDF8) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 17. Comic Manga Action: Barra de cómic shonen con tinta gruesa y sombras duras */
+body[data-theme-shape="comic_manga_action"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+border-radius: 0 !important;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 10px 100%) !important;
+  background: #FFF !important;
+  color: #000 !important;
+  border: 3.5px solid #000 !important;
+  box-shadow: 5px 5px 0 #000 !important;
+}
+
+/* 18. Pop Synth Neon: Barra synthwave con degradado flúor y horizonte */
+body[data-theme-shape="pop_synth_neon"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+border-radius: 4px !important;
+  clip-path: none !important;
+  background: linear-gradient(90deg, rgba(20, 10, 40, 0.95), rgba(40, 10, 50, 0.95)) !important;
+  border: 2px solid #FF007F !important;
+  border-bottom: 3px solid #00F0FF !important;
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.4), inset 0 0 15px rgba(0, 240, 255, 0.2) !important;
+}
+
+/* Open Stream Glass: Cristal glaseado suizo */
+body[data-theme-shape="openstream_glass"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+border-radius: 16px !important;
+  clip-path: none !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Open Stream Studio: Tarjeta de broadcast */
+body[data-theme-shape="openstream_studio"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+border-radius: 8px !important;
+  clip-path: none !important;
+  background: rgba(15, 23, 42, 0.88) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  border-left: 4px solid var(--color-accent-cyan, #38BDF8) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 17. Comic Manga Action: Panel de viñeta de cómic */
+body[data-theme-shape="comic_manga_action"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+border-radius: 0 !important;
+  clip-path: none !important;
+  background: #FFF !important;
+  color: #000 !important;
+  border: 3.5px solid #000 !important;
+  box-shadow: 5px 5px 0 #000 !important;
+}
+
+/* 18. Pop Synth Neon: Panel synthwave con resplandor neón */
+body[data-theme-shape="pop_synth_neon"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+border-radius: 8px !important;
+  clip-path: none !important;
+  background: linear-gradient(180deg, rgba(18, 8, 36, 0.96) 0%, rgba(35, 10, 45, 0.96) 100%) !important;
+  border: 2px solid #FF007F !important;
+  border-left: 4px solid #00F0FF !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 0, 127, 0.25) !important;
+}
+
+/* --- FORMA 9: openstream_glass (Swiss Frosted Glass) --- */
+body[data-theme-shape="openstream_glass"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
+box-sizing: border-box !important;
+  border-radius: 16px !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+  clip-path: none !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+}
+
+body[data-theme-shape="openstream_glass"] [data-oss-cam]::before,
+body[data-theme-shape="openstream_glass"] [data-oss-cam]::after {
+display: none !important;
+}
+
+body[data-theme-shape="openstream_glass"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
+position: absolute !important;
+  top: 12px !important;
+  left: 14px !important;
+  background: rgba(15, 23, 42, 0.78) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 6px !important;
+  padding: 3px 10px !important;
+  font-size: 11px !important;
+  color: #FFF !important;
+}
+
+/* --- FORMA 10: openstream_studio (Broadcast Pro Studio & Indicador ON-AIR) --- */
+body[data-theme-shape="openstream_studio"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
+box-sizing: border-box !important;
+  border-radius: 8px !important;
+  border: 2px solid rgba(255, 255, 255, 0.28) !important;
+  border-top: 3px solid #EF4444 !important;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.55) !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+  clip-path: none !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+}
+
+/* Tally ON-AIR parpadeante */
+body[data-theme-shape="openstream_studio"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::before {
+content: "● ON AIR" !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: #FFF !important;
+  background: #EF4444 !important;
+  padding: 2px 8px !important;
+  border-radius: 4px !important;
+  letter-spacing: 0.5px !important;
+  z-index: 15 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="openstream_studio"] [data-oss-cam]::after {
+display: none !important;
+}
+
+body[data-theme-shape="openstream_studio"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
+position: absolute !important;
+  top: 10px !important;
+  left: 12px !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  font-size: 10px !important;
+  color: #FFF !important;
+}
+
+/* --- FORMA 17: comic_manga_action (Manga / Shonen Action Comic) --- */
+body[data-theme-shape="comic_manga_action"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
+box-sizing: border-box !important;
+  border-radius: 0 !important;
+  clip-path: none !important;
+  border: 5px solid #000 !important;
+  background: #000 !important;
+  box-shadow: 8px 8px 0 #000 !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+}
+
+body[data-theme-shape="comic_manga_action"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::before {
+content: "💥 GO!!" !important;
+  position: absolute !important;
+  top: -14px !important;
+  right: 18px !important;
+  font-family: 'Impact', 'Arial Black', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: #FFF !important;
+  background: #EF4444 !important;
+  border: 3px solid #000 !important;
+  padding: 2px 8px !important;
+  transform: rotate(4deg) !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  z-index: 15 !important;
+  letter-spacing: 1px !important;
+  display: block !important;
+}
+
+body[data-theme-shape="comic_manga_action"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
+content: "ドドドド" !important;
+  position: absolute !important;
+  bottom: 8px !important;
+  right: 14px !important;
+  font-family: sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  color: #000 !important;
+  background: #FEF08A !important;
+  border: 2px solid #000 !important;
+  padding: 1px 6px !important;
+  transform: rotate(-3deg) !important;
+  box-shadow: 2px 2px 0 #000 !important;
+  z-index: 12 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="comic_manga_action"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
+position: absolute !important;
+  top: 10px !important;
+  left: 14px !important;
+  background: #FFF !important;
+  border: 3px solid #000 !important;
+  color: #000 !important;
+  font-family: 'Impact', 'Arial Black', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  padding: 2px 10px !important;
+  box-shadow: 3px 3px 0 #000 !important;
+  transform: rotate(-2deg) !important;
+  letter-spacing: 1px !important;
+  z-index: 15 !important;
+}
+
+/* --- FORMA 18: pop_synth_neon (Synthwave 80s Grid Horizon) --- */
+body[data-theme-shape="pop_synth_neon"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .camera-face, .camera-aux, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
+box-sizing: border-box !important;
+  border-radius: 10px !important;
+  clip-path: none !important;
+  border: 2.5px solid #FF007F !important;
+  border-bottom: 4px solid #00F0FF !important;
+  background: rgba(16, 8, 32, 0.7) !important;
+  box-shadow: 0 0 35px rgba(255, 0, 127, 0.45), inset 0 0 25px rgba(0, 240, 255, 0.18) !important;
+  padding: 0 !important;
+  outline: none !important;
+  overflow: visible !important;
+}
+
+body[data-theme-shape="pop_synth_neon"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::before {
+content: "☀ RETRO 1984" !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 14px !important;
+  font-family: 'Orbitron', 'Rajdhani', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  color: #FFE600 !important;
+  text-shadow: 0 0 8px #FF007F !important;
+  letter-spacing: 1.5px !important;
+  z-index: 12 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="pop_synth_neon"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-frame, .canvas-frame, .gameplay-box, .game-viewport-box, .stream-cam-card)::after {
+content: "/// SYNTH ///" !important;
+  position: absolute !important;
+  bottom: 8px !important;
+  right: 14px !important;
+  font-family: 'Orbitron', monospace !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  color: #00F0FF !important;
+  letter-spacing: 1.5px !important;
+  text-shadow: 0 0 6px #00F0FF !important;
+  z-index: 12 !important;
+  display: block !important;
+}
+
+body[data-theme-shape="pop_synth_neon"] :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .hud-cam-box, .stream-cam-card, .canvas-frame) :is([data-oss-cam-label]:not(.pip-label-bar):not(.nameplate):not([data-oss-cam-label="bar"]):not([data-oss-cam-label="bottom"]), .frame-label, .canvas-tag, .cam-label:not(.pip-label-bar):not(.nameplate), .cam-header-tag) {
+position: absolute !important;
+  top: 10px !important;
+  left: 14px !important;
+  background: rgba(25, 10, 45, 0.92) !important;
+  border: 1.5px solid #00F0FF !important;
+  color: #FFF !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  padding: 3px 12px !important;
+  border-radius: 4px !important;
+  text-shadow: 0 0 8px #FF007F !important;
+  letter-spacing: 1.5px !important;
+  z-index: 15 !important;
+}
+
+body[data-theme-shape="pop_synth_neon"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window) {
+border-radius: 8px !important;
+  clip-path: none !important;
+}
+
+body[data-theme-shape="comic_manga_action"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window) {
+border-radius: 0 !important;
+  clip-path: none !important;
+}
+
+body[data-theme-shape="openstream_glass"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window) {
+border-radius: 12px !important;
+  clip-path: none !important;
+}
+
+body[data-theme-shape="openstream_studio"] :is([data-oss-viewport], .cam-inner-viewport, .cam-viewport, .cam-inner-box, .face-viewport, .desk-viewport, .cam-screen-area, .viewport-window) {
+border-radius: 6px !important;
+  clip-path: none !important;
+}
+
+/* Decoracion de COMPONENTE por arquetipo (fondo, borde y blur).
+   El radio y el recorte NO se fijan aqui: los pone el motor desde
+   `--skin-bar-radius` / `--skin-panel-radius`. */
+body[data-theme-shape="openstream_glass"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar),
+body[data-theme-archetype="openstream"]:not([data-theme-shape]):not([data-theme-shape="original"]) :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
+background: rgba(15, 23, 42, 0.78) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
+}
+
+body[data-theme-shape="openstream_glass"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box),
+body[data-theme-archetype="openstream"]:not([data-theme-shape]):not([data-theme-shape="original"]) :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
+background: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+}
+

@@ -28,8 +28,8 @@ ARCHETYPES = ("cozy", "gamer", "maker", "openstream")
 # apariencia asignada manda sobre el aspecto base, que varios widgets aplican
 # con CSS inyectado o estilos en línea.
 IMPORTANT_ALLOWED = ("border-width", "border-style", "border-color", "box-shadow",
-                     "background-image", "background-position", "background-size",
-                     "background-repeat")
+                     "background-color", "background-image", "background-position",
+                     "background-size", "background-repeat")
 # El radio y el recorte NO pueden llevarlo: la forma física debe seguir ganando.
 IMPORTANT_FORBIDDEN = ("border-radius", "clip-path")
 
@@ -72,9 +72,12 @@ class TestComponentSkinContract(unittest.TestCase):
                           f"regla sin skin asignado (aplicaría siempre): {selector.strip()[:60]}")
 
     def test_4_la_capa_consume_el_contrato_de_tokens(self):
+        # `--skin-panel-pattern` ya no forma parte del contrato: la textura se
+        # separo en `--skin-scene-pattern` (escena) y la capa de componentes no
+        # debe pintarla (ver `test_scene_texture_is_not_applied_to_components`).
         for token in ("--skin-panel-radius", "--skin-panel-clip", "--skin-panel-decor",
                       "--skin-panel-decor-position", "--skin-panel-decor-size", "--skin-panel-decor-repeat",
-                      "--skin-panel-pattern", "--frame-border-width", "--frame-border-style",
+                      "--frame-border-width", "--frame-border-style",
                       "--color-border-cyan", "--panel-shadow", "--theme-glow",
                       "--skin-font-display", "--skin-badge-radius"):
             self.assertIn(token, self.css, f"la capa no consume {token}")
@@ -95,12 +98,28 @@ class TestComponentSkinContract(unittest.TestCase):
                               f"{prop} con !important no está justificado en la capa")
 
     def test_7_el_arquetipo_declara_decoracion_de_componente(self):
+        """Los tokens de decoración viven en el manifiesto, no en `styles.css`.
+
+        Antes estaban en los dos sitios y el bloque de `styles.css` pisaba al
+        generado: editar `archetypes.json` no cambiaba nada.
+        """
+        from server.services import theme_engine
+
+        archetypes = theme_engine.load_archetypes()
+        generated = (APP / "common" / "generated" / "archetypes.css").read_text(encoding="utf-8")
         for arch in ARCHETYPES:
-            body = archetype_block(self.styles, arch)
-            self.assertTrue(body, f"styles.css: falta el bloque de arquetipo {arch}")
+            self.assertIn(arch, archetypes, f"archetypes.json: falta el arquetipo {arch}")
+            # La decoración vive en `skin` (lo que aporta el arquetipo como
+            # skin), no en `tokens` (la geometría base). El generador emite las
+            # dos familias en el mismo bloque.
+            tokens = {**archetypes[arch].tokens, **archetypes[arch].skin}
             for token in ("--skin-panel-decor", "--skin-panel-decor-position",
                           "--skin-panel-decor-size", "--skin-panel-decor-repeat"):
-                self.assertIn(token, body, f"arquetipo {arch}: falta {token}")
+                self.assertIn(token, tokens, f"arquetipo {arch}: falta {token} en el manifiesto")
+                self.assertIn(token, generated, f"arquetipo {arch}: el generado no publica {token}")
+        # Una sola fuente de verdad: `styles.css` no vuelve a declararlos.
+        self.assertNotIn("--skin-panel-decor:", self.styles,
+                         "los tokens --skin-* han vuelto a duplicarse en styles.css")
 
     def test_8_el_mapa_de_arquetipos_sale_de_disco(self):
         on_disk = {d.name for d in (APP / "streamthemes").glob("*/styles/*") if d.is_dir()}
@@ -115,6 +134,40 @@ class TestComponentSkinContract(unittest.TestCase):
         payload = build_config_payload({})
         self.assertIn("themeArchetypes", payload, "config.js no publica el mapa de arquetipos")
         self.assertEqual(payload["themeArchetypes"], get_theme_archetype_map())
+
+    def test_12_los_acentos_inline_siguen_al_tema_si_no_hay_override(self):
+        """Un widget con tema cozy no puede seguir pintando el verde del maker.
+
+        Varios widgets ponen su acento con `style.setProperty('--goal-accent')`,
+        y el inline gana al CSS. `OSSSkin.adoptThemeColors()` lo reescribe al
+        token del tema SOLO cuando el valor sigue siendo el de fábrica; si el
+        usuario lo cambió, se respeta.
+        """
+        self.assertIn("adoptThemeColors", self.skin_js)
+        self.assertIn("'--goal-accent'", self.skin_js)
+        self.assertIn("'--color-accent-cyan'", self.skin_js)
+        self.assertIn("THEME_COLOR_AXES", self.skin_js)
+        self.assertIn("FACTORY_COLORS", self.skin_js)
+        # Se invoca al aplicar un tema (si no, el render del widget llega tarde).
+        start = self.skin_js.index("function apply(")
+        end = self.skin_js.index("function clear(", start)
+        self.assertIn("adoptThemeColors", self.skin_js[start:end],
+                      "apply() no adopta los colores del tema")
+
+    def test_13_los_widgets_pintan_el_fondo_del_tema(self):
+        """Un widget con tema cozy no puede conservar el gris del maker.
+
+        Los widgets fijaban su fondo en su propio `style.css`; con el tema
+        asignado manda `--color-panel-bg`. Se acota con `data-oss-widget` para
+        no tocar escenas ni alertas.
+        """
+        css = (APP / "common" / "oss-skin.css").read_text(encoding="utf-8")
+        self.assertIn("[data-oss-widget]", css)
+        self.assertIn("--color-panel-bg", css)
+        self.assertIn("color-mix", css, "se pierde la opacidad configurada")
+        widget_theme = (APP / "common" / "widget-theme.js").read_text(encoding="utf-8")
+        self.assertIn("data-oss-widget", widget_theme,
+                      "widget-theme.js no marca el widget en el body")
 
     def test_10_los_aplicadores_conectan_el_skin(self):
         self.assertIn("window.OSSSkin", self.skin_js)

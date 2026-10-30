@@ -15,5 +15,31 @@
   "borderStyle": "rounded",
   "desc": "Té matcha zen orgánico con toques de bambú verde suave.",
   "chatAnchored": true,
-  "chatDerivative": null
+  "chatDerivative": null,
+  "tokens": {
+    "--color-bg-dark": "#19221B",
+    "--color-text-light": "#F4F7F2",
+    "--color-accent-cyan": "#6D8B74",
+    "--color-accent-orange": "#D4A373",
+    "--color-panel-bg": "rgba(38, 50, 42, 0.88)",
+    "--color-text-dim": "#9FAEA2",
+    "--color-border-cyan": "rgba(109, 139, 116, 0.28)",
+    "--color-border-cyan-bright": "#6D8B74",
+    "--theme-glow": "none",
+    "--frame-radius": "28px",
+    "--frame-border-width": "2.5px",
+    "--frame-border-style": "solid",
+    "--frame-clip-path": "none",
+    "--frame-shadow": "0 16px 36px rgba(20, 30, 22, 0.16), 0 3px 10px rgba(20, 30, 22, 0.08)",
+    "--frame-corner-display": "none",
+    "--panel-radius": "24px",
+    "--panel-clip-path": "none",
+    "--panel-backdrop": "blur(16px)",
+    "--panel-shadow": "0 12px 30px rgba(20, 30, 22, 0.12)",
+    "--badge-radius": "50px",
+    "--badge-clip-path": "none",
+    "--header-radius": "20px",
+    "--header-clip-path": "none"
+  },
+  "archetype": "cozy"
 }

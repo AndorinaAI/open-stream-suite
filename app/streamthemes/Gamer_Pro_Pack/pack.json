@@ -13,56 +13,113 @@
       "name": "Mecha Tournament 45°",
       "icon": "🎮",
       "archetype": "gamer",
-      "description": "Cortes poligonales a 45°, retículas tácticas en esquinas y brillo láser neón."
+      "description": "Cortes poligonales a 45°, retículas tácticas en esquinas y brillo láser neón.",
+      "geometry": {
+        "panelRadius": "0",
+        "panelClipPath": "polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px))"
+      }
     },
     {
       "id": "gamer_tactical_hud",
       "name": "Tactical FPS HUD",
       "icon": "🎯",
       "archetype": "gamer",
-      "description": "Telemetría militar, barras de datos, marcadores de ping y etiquetas LIVE."
+      "description": "Telemetría militar, barras de datos, marcadores de ping y etiquetas LIVE.",
+      "geometry": {
+        "panelRadius": "0",
+        "panelClipPath": "polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%)"
+      }
     },
     {
       "id": "gamer_stealth",
       "name": "Stealth Dark Cyber",
       "icon": "🕶️",
       "archetype": "gamer",
-      "description": "Geometría angular pura sin retículas con acentos minimalistas oscuros."
+      "description": "Geometría angular pura sin retículas con acentos minimalistas oscuros.",
+      "geometry": {
+        "panelRadius": "2px"
+      }
     },
     {
       "id": "gamer_hex_shield",
       "name": "Hex Shield Blindaje",
       "icon": "🛡️",
       "archetype": "gamer",
-      "description": "Escudo hexagonal Sci-Fi con indicadores de energía y blindaje perimetral."
+      "description": "Escudo hexagonal Sci-Fi con indicadores de energía y blindaje perimetral.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0",
+        "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px))"
+      }
     },
     {
       "id": "gamer_cyber_glitch",
       "name": "Cyber Glitch Neón",
       "icon": "⚡",
       "archetype": "gamer",
-      "description": "Corte asimétrico con aberración cromática cian/magenta y telemetría glitch."
+      "description": "Corte asimétrico con aberración cromática cian/magenta y telemetría glitch.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0",
+        "panelClipPath": "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))"
+      }
     },
     {
       "id": "gamer_arcade_retro",
       "name": "Arcade 8-Bit Pixel",
       "icon": "👾",
       "archetype": "gamer",
-      "description": "Esquinas en pixel cabinet, marquesina 1UP y contador de monedas insert coin."
+      "description": "Esquinas en pixel cabinet, marquesina 1UP y contador de monedas insert coin.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0"
+      }
     },
     {
       "id": "fantasy_runic_stone",
       "name": "Piedra Rúnica Mística",
       "icon": "🗿",
       "archetype": "gamer",
-      "description": "Obsidiana con runas nórdicas ancestrales luminosas y bisel tallado."
+      "description": "Obsidiana con runas nórdicas ancestrales luminosas y bisel tallado.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "6px",
+        "panelClipPath": "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)"
+      }
     },
     {
       "id": "gothic_vampire",
       "name": "Gótico Victoriano Dark",
       "icon": "🦇",
       "archetype": "gamer",
-      "description": "Arcos ojivales victorianos, borde sangriento carmesí y emblema de murciélago."
+      "description": "Arcos ojivales victorianos, borde sangriento carmesí y emblema de murciélago.",
+      "geometry": {
+        "ornaments": [
+          "tape",
+          "brackets",
+          "reticle"
+        ],
+        "panelRadius": "0",
+        "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 16px), 82% 100%, 18% 100%, 0 calc(100% - 16px))"
+      }
     }
-  ]
+  ],
+  "defaultTheme": "cyber_glitch",
+  "defaultShape": "gamer_mecha"
 }

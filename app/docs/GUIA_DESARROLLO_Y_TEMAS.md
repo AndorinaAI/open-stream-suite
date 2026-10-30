@@ -401,7 +401,7 @@ Lo hacen posible `common/oss-skin.css` (capa compartida) y `common/oss-skin.js` 
 | :--- | :--- | :--- |
 | `--skin-panel-radius`, `--skin-panel-clip` | `common/styles.css` (por arquetipo) | Radio y recorte del panel mientras no haya forma física elegida |
 | `--skin-panel-decor` (+ `-position`, `-size`, `-repeat`) | `common/styles.css` (por arquetipo) | Decoración de esquinas y marcas técnicas, pintada con `background` |
-| `--skin-panel-pattern` (+ `-position`, `-size`) | `streamthemes/<Pack>/styles/<tema>/style.css` | Textura del pack (ej. cuadrícula blueprint del pack Maker) |
+| `--skin-scene-pattern` (+ `-position`, `-size`) | `streamthemes/<Pack>/styles/<tema>/style.css` | Textura de ESCENA del pack (ej. cuadrícula blueprint del pack Maker): se pinta en el fondo de la escena, nunca en los componentes |
 | `--frame-border-width`, `--frame-border-style`, `--color-border-cyan`, `--panel-shadow`, `--theme-glow` | tema | Marco, halo y sombra de la tarjeta |
 | `--skin-font-display`, `--skin-badge-radius` | `common/styles.css` (por arquetipo) | Tipografía de insignias y títulos marcados con `data-oss-badge` / `data-oss-panel-title` |
 

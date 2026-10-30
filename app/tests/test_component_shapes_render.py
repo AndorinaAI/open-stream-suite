@@ -14,6 +14,22 @@ from server.services import components_catalog as C
 
 APP = Path(BASE_DIR)
 STYLES = APP / "common" / "styles.css"
+SHAPES_CSS = APP / "common" / "generated" / "shapes.css"
+
+
+def effective_css() -> str:
+    """CSS de formas que se sirve de verdad: base + generado.
+
+    Desde el motor declarativo, las reglas fisicas de pack ya no viven en
+    `styles.css`: se generan en `common/generated/shapes.css` a partir del
+    manifiesto. El contrato se sigue midiendo sobre el CSS efectivo, asi que
+    el test no depende de donde este el fichero, solo de que exista.
+    """
+    base = STYLES.read_text(encoding="utf-8")
+    if SHAPES_CSS.is_file():
+        return base + "\n" + SHAPES_CSS.read_text(encoding="utf-8")
+    from server.services import theme_engine
+    return base + "\n" + theme_engine.build_shapes_css()
 
 
 def pack_shape_ids() -> set:
@@ -31,7 +47,7 @@ def pack_shape_ids() -> set:
 
 class TestComponentShapesRender(unittest.TestCase):
     def setUp(self):
-        self.css = STYLES.read_text(encoding="utf-8")
+        self.css = effective_css()
         self.physical = pack_shape_ids()
 
     def test_1_catalogo_coincide_con_los_packs(self):

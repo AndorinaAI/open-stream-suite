@@ -1,4 +1,5 @@
-body[data-theme="terminal"] {
+body[data-theme="terminal"],
+[data-theme="terminal"] {
   --color-bg-dark: #0A0C0E;
   --color-text-light: #4ADE80;
   --color-accent-cyan: #22C55E;
@@ -7,7 +8,6 @@ body[data-theme="terminal"] {
   --color-text-dim: #166534;
   --color-border-cyan: rgba(34, 197, 94, 0.4);
   --color-border-cyan-bright: #22C55E;
-  --font-primary: var(--font-tech);
   --theme-glow: 0 0 18px rgba(34, 197, 94, 0.6);
   --frame-radius: 0px;
   --frame-border-width: 1px;
@@ -23,4 +23,5 @@ body[data-theme="terminal"] {
   --badge-clip-path: none;
   --header-radius: 0px;
   --header-clip-path: none;
+  --font-primary: var(--font-tech);
 }

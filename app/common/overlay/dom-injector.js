@@ -337,7 +337,7 @@ window.OSSDomInjector = (function() {
         || document.querySelector('.box h1');
       if (mainTitle) {
         if (s.highlight) {
-          mainTitle.innerHTML = `${s.title || 'ENSEGUIDA'}<br><span class="title-cyan-accent">${s.highlight}</span>`;
+          mainTitle.innerHTML = `${escapeHtml(s.title || 'ENSEGUIDA')}<br><span class="title-cyan-accent">${escapeHtml(s.highlight)}</span>`;
         } else if (s.title) {
           mainTitle.textContent = s.title;
         }
