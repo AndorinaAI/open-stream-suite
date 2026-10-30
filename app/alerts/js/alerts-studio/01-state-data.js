@@ -66,7 +66,7 @@ const AlertsStudio = {
     { id: 'cyberpunk', name: 'Cyberpunk HUD' },
     { id: 'glassmorphism', name: 'Glassmorphism Frosted' },
     { id: 'neon', name: 'Neon Glow Pulsar' },
-    { id: 'stream', name: 'Stream Industrial' },
+    { id: 'taller', name: 'Stream Industrial' },
     { id: 'retro', name: 'Retro Arcade 8-Bit' },
     { id: 'minimal', name: 'Minimal Clean' },
     { id: 'synthwave', name: 'Synthwave 80s Sunset' },

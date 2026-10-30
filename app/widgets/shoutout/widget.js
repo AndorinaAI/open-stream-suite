@@ -1,8 +1,16 @@
-// widgets/shoutout/widget.js — Coordinador y punto de entrada modular del widget Shoutout
+// widgets/shoutout/widget.js — Coordinador y punto de entrada de Shoutout y Promo
+//
+// `widgets/promo` es un enlace simbolico a esta carpeta: el MISMO codigo sirve
+// a los dos widgets. La clave del tema debe salir de la URL
+// (`/widgets/promo/...` vs `/widgets/shoutout/...`) y no estar fija. Con
+// `init('shoutout')` el tema asignado a Promo (overlayThemes['widget:promo'])
+// no se leia nunca y ademas `data-oss-widget` quedaba como "shoutout".
 
 (function() {
 
-  window.OSSTheme.init('shoutout');
+  var _wid = /\/widgets\/([a-z]+)\//.exec(window.location.pathname);
+  _wid = _wid ? _wid[1] : 'shoutout';
+  window.OSSTheme.init(_wid === 'promo' ? 'promo' : 'shoutout');
   function init() {
     if (window.ShoutoutNetwork) {
       window.ShoutoutNetwork.connectWS();

@@ -83,50 +83,135 @@ async function addCustomShortcutToWidget(targetWidgetId) {
     return;
   }
 
+  // Un solo modal con los campos del widget, incluida la ACCION. Antes eran
+  // hasta 6 prompt() nativos y no habia forma de elegir "play"/"pause"/"reset".
+  var baseFields = [
+    { name: 'label', label: 'Nombre del botón', type: 'text', value: '',
+      placeholder: '▶️ Iniciar 60s', help: 'Lo que se ve en la barra de atajos.' },
+    { name: 'color', label: 'Color del botón', type: 'color', value: '#57D6C4' }
+  ];
+  var fields = [];
+  var toShortcut = null;
+
   if (w === 'timer') {
-    const label = prompt('Nombre del acceso rápido (ej. "🔥 Curado Vinilo"):');
-    if (!label) return;
-    const seconds = parseInt(prompt('Duración en segundos (ej. 45):', '45'), 10) || 60;
-    const color = prompt('Color de botón en HEX (ej. #FF783F):', '#FF783F') || '#57D6C4';
-
-    const newSc = {
-      id: 't_' + Date.now(),
-      label,
-      seconds,
-      title: label,
-      color,
-      pinned: true
+    fields = [
+      { name: 'action', label: 'Acción', type: 'select', value: 'set', options: [
+        { value: 'set', label: '⏱️ Fijar tiempo y arrancar' },
+        { value: 'pause', label: '⏸️ Pausar' },
+        { value: 'resume', label: '▶️ Reanudar' },
+        { value: 'reset', label: '↺ Reiniciar' }
+      ], help: 'Qué hace el temporizador al pulsar el atajo.' },
+      { name: 'seconds', label: 'Segundos', type: 'number', value: 60, min: 1,
+        help: 'Solo se usa con «Fijar tiempo».' },
+      { name: 'title', label: 'Título en pantalla', type: 'text', value: '',
+        placeholder: 'Curado Sublimación (60s)' }
+    ].concat(baseFields);
+    toShortcut = function (v) {
+      return {
+        id: 't_' + Date.now(),
+        label: v.label || 'Atajo',
+        action: v.action,
+        mode: v.action === 'set' ? 'down' : v.action,
+        seconds: v.seconds || 60,
+        title: v.title || v.label || '',
+        color: v.color || '#57D6C4',
+        pinned: true
+      };
     };
-    if (!cachedWidgetsConfig.timer.shortcuts) cachedWidgetsConfig.timer.shortcuts = [];
-    cachedWidgetsConfig.timer.shortcuts.push(newSc);
-
-  } else if (w === 'promo') {
-    const label = prompt('Nombre del botón de promo (ej. "🛒 Tienda Pegatinas"):');
-    if (!label) return;
-    const type = prompt('Tipo de promo: "product", "social" o "shoutout":', 'product') || 'product';
-    const title = prompt('Título destacado:', label) || label;
-    const subtitle = prompt('Subtítulo o descripción breve:', 'Disponible en directo') || '';
-    const link = prompt('Enlace URL (para generar QR):', 'https://twitch.tv/andorina') || '';
-    const color = prompt('Color de acento en HEX:', '#FF783F') || '#FF783F';
-
-    const newSc = {
-      id: 'p_' + Date.now(),
-      label,
-      type,
-      title,
-      subtitle,
-      link,
-      showQR: true,
-      color,
-      pinned: true
+  } else if (w === 'promo' || w === 'shoutout') {
+    fields = [
+      { name: 'action', label: 'Tipo de promo', type: 'select', value: 'product', options: [
+        { value: 'product', label: '🛒 Producto / tienda' },
+        { value: 'social', label: '💬 Red social o comunidad' },
+        { value: 'shoutout', label: '📢 Shoutout a un creador' }
+      ] },
+      { name: 'title', label: 'Título destacado', type: 'text', value: '' },
+      { name: 'subtitle', label: 'Subtítulo', type: 'text', value: '' },
+      { name: 'link', label: 'Enlace (genera QR)', type: 'text', value: '', placeholder: 'https://' },
+      { name: 'streamer', label: 'Creador (solo shoutout)', type: 'text', value: '',
+        help: 'Canal de Twitch sin @.' }
+    ].concat(baseFields);
+    toShortcut = function (v) {
+      return {
+        id: 'p_' + Date.now(),
+        label: v.label || 'Atajo',
+        type: v.action,
+        title: v.title || v.label || '',
+        subtitle: v.subtitle || '',
+        link: v.link || '',
+        streamer: v.streamer || '',
+        showQR: !!v.link,
+        color: v.color || '#57D6C4',
+        pinned: true
+      };
     };
-    if (!cachedWidgetsConfig.promo.shortcuts) cachedWidgetsConfig.promo.shortcuts = [];
-    cachedWidgetsConfig.promo.shortcuts.push(newSc);
+  } else if (w === 'goal') {
+    fields = [
+      { name: 'action', label: 'Acción', type: 'select', value: 'increment', options: [
+        { value: 'increment', label: '➕ Sumar / restar progreso' },
+        { value: 'set', label: '🎯 Fijar progreso exacto' },
+        { value: 'reset', label: '↺ Reiniciar a cero' }
+      ] },
+      { name: 'amount', label: 'Cantidad', type: 'number', value: 1,
+        help: 'Negativo para restar. Solo con «Sumar».' }
+    ].concat(baseFields);
+    toShortcut = function (v) {
+      return {
+        id: 'sc_' + Date.now(),
+        label: v.label || 'Atajo',
+        action: v.action,
+        type: v.action === 'increment' ? 'increment' : v.action,
+        amount: v.amount == null ? 1 : v.amount,
+        color: v.color || '#57D6C4',
+        pinned: true
+      };
+    };
+  } else if (w === 'ticker') {
+    fields = [
+      { name: 'action', label: 'Acción', type: 'select', value: 'message', options: [
+        { value: 'message', label: '💬 Publicar mensaje' },
+        { value: 'flash', label: '🚨 Flash de última hora' },
+        { value: 'pause', label: '⏸️ Pausar el ticker' },
+        { value: 'resume', label: '▶️ Reanudar el ticker' }
+      ] },
+      { name: 'message', label: 'Mensaje', type: 'textarea', value: '',
+        help: 'Solo para «Publicar» y «Flash».' }
+    ].concat(baseFields);
+    toShortcut = function (v) {
+      return {
+        id: 'sc_' + Date.now(),
+        label: v.label || 'Atajo',
+        action: v.action,
+        params: { message: v.message || '' },
+        color: v.color || '#57D6C4',
+        pinned: true
+      };
+    };
+  } else {
+    return;
   }
+
+  // Sin el modal propio, no se cae a prompt(): se avisa y se sale.
+  if (!window.UI || typeof UI.formDialog !== 'function') {
+    if (window.UI && UI.showToast) UI.showToast('No se pudo abrir el formulario de atajos', 'error');
+    return;
+  }
+
+  var values = await UI.formDialog({
+    title: 'Nuevo atajo: ' + w,
+    detail: 'Se añade a la barra de atajos del widget.',
+    fields: fields,
+    submitLabel: 'Añadir atajo'
+  });
+  if (!values) return;
+
+  if (!cachedWidgetsConfig[w].shortcuts) cachedWidgetsConfig[w].shortcuts = [];
+  cachedWidgetsConfig[w].shortcuts.push(toShortcut(values));
 
   await API.saveWidgetsConfig(cachedWidgetsConfig);
   renderWidgetsGrid();
   renderMiniAppShortcutsManager();
+  if (window.UI && UI.showToast) UI.showToast('✓ Atajo añadido', 'success');
 }
 
 

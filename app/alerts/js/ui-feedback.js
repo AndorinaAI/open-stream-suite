@@ -224,9 +224,105 @@ window.UI = (function () {
     el.setAttribute('aria-pressed', pressed ? 'true' : 'false');
   }
 
+  // ------------------------------------------------- formulario (modal propio)
+  // Sustituye a prompt(). prompt() solo admite un campo de texto por vez, sin
+  // tipo, sin opciones y sin validacion: para un atajo obligaba a encadenar
+  // hasta 6 dialogos del navegador y era imposible elegir una accion.
+  // Aqui los campos se declaran (text, number, color, select, textarea) y se
+  // devuelve { campo: valor } o null si se cancela.
+  var formDlg = null;
+
+  function escForm(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+
+  function ensureFormDialog() {
+    if (formDlg && document.body.contains(formDlg)) return formDlg;
+    formDlg = document.createElement('dialog');
+    formDlg.id = 'ui-form-dialog';
+    formDlg.style.cssText =
+      'border:1px solid rgba(87,214,196,.4);border-radius:10px;background:#12161A;' +
+      'color:#F2EEE5;padding:0;max-width:min(520px,92vw);width:100%;';
+    document.body.appendChild(formDlg);
+    return formDlg;
+  }
+
+  function fieldHtml(f, i) {
+    var id = 'uif-' + i;
+    var label = '<label for="' + id + '" style="display:block;font-size:11px;font-weight:700;' +
+      'color:#8B969C;margin-bottom:4px;">' + escForm(f.label) + '</label>';
+    var common = 'id="' + id + '" name="' + escForm(f.name) + '" class="form-input" ' +
+      'style="width:100%;font-size:12px;padding:7px 9px;box-sizing:border-box;"';
+    var input;
+    if (f.type === 'select') {
+      input = '<select ' + common + '>' + (f.options || []).map(function (o) {
+        var sel = String(o.value) === String(f.value == null ? '' : f.value) ? ' selected' : '';
+        return '<option value="' + escForm(o.value) + '"' + sel + '>' + escForm(o.label) + '</option>';
+      }).join('') + '</select>';
+    } else if (f.type === 'textarea') {
+      input = '<textarea ' + common + ' rows="3">' + escForm(f.value) + '</textarea>';
+    } else {
+      input = '<input type="' + (f.type || 'text') + '" ' + common +
+        ' value="' + escForm(f.value) + '"' +
+        (f.placeholder ? ' placeholder="' + escForm(f.placeholder) + '"' : '') +
+        (f.min != null ? ' min="' + f.min + '"' : '') +
+        (f.max != null ? ' max="' + f.max + '"' : '') + '>';
+    }
+    return '<div style="margin-bottom:12px;">' + label + input +
+      (f.help ? '<div style="font-size:10px;color:#6B7A80;margin-top:3px;">' + escForm(f.help) + '</div>' : '') +
+      '</div>';
+  }
+
+  function formDialog(opts) {
+    opts = opts || {};
+    if (state.open) return Promise.resolve(null);
+    var d = ensureFormDialog();
+    var fields = opts.fields || [];
+    d.innerHTML =
+      '<form style="padding:20px;margin:0;">' +
+        '<h2 style="margin:0 0 4px;font-size:15px;">' + escForm(opts.title || 'Nuevo') + '</h2>' +
+        (opts.detail ? '<p style="margin:0 0 14px;font-size:11px;color:#8B969C;">' + escForm(opts.detail) + '</p>' : '') +
+        fields.map(fieldHtml).join('') +
+        '<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px;">' +
+          '<button type="button" id="ui-form-cancel" class="btn-stage-preset" ' +
+            'style="font-size:12px;padding:7px 14px;">Cancelar</button>' +
+          '<button type="submit" id="ui-form-ok" class="btn-action-primary" ' +
+            'style="font-size:12px;padding:7px 16px;">' + escForm(opts.submitLabel || 'Añadir') + '</button>' +
+        '</div>' +
+      '</form>';
+    state.open = true;
+    var form = d.querySelector('form');
+    return new Promise(function (resolve) {
+      function done(val) {
+        state.open = false;
+        try { d.close(); } catch (_) {}
+        resolve(val);
+      }
+      d.querySelector('#ui-form-cancel').addEventListener('click', function () { done(null); });
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var out = {};
+        fields.forEach(function (f) {
+          var el = form.querySelector('[name="' + f.name + '"]');
+          if (!el) return;
+          out[f.name] = f.type === 'number'
+            ? (el.value === '' ? null : Number(el.value))
+            : el.value;
+        });
+        done(out);
+      });
+      d.showModal();
+      var first = form.querySelector('input, select, textarea');
+      if (first) first.focus();
+    });
+  }
+
   return {
     showToast: showToast,
     confirmAction: confirmAction,
+    formDialog: formDialog,
     markDirty: markDirty,
     clearDirty: clearDirty,
     clearDirtyScope: clearDirtyScope,
