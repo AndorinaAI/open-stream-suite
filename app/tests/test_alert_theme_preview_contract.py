@@ -26,6 +26,7 @@ from server.config import BASE_DIR
 
 APP = Path(BASE_DIR)
 SHAPES_JS = APP / "alerts/js/overlay/02b-alert-shapes.js"
+QUEUE_JS = APP / "alerts/js/overlay/03-alert-queue.js"
 PREVIEW_JS = APP / "alerts/js/alerts-studio/06-preview-test.js"
 PANEL_HTML = APP / "alerts/panel.html"
 INDEX_HTML = APP / "alerts/index.html"
@@ -36,30 +37,62 @@ def _read(path):
 
 
 class AlertThemeApplyContract(unittest.TestCase):
-    def test_overlay_prefers_assigned_theme_over_global(self):
+    def test_effective_theme_prefers_assigned_over_global(self):
         """El tema asignado a la alerta gana al global, siempre."""
         js = _read(SHAPES_JS)
-        body = re.search(r"function applyThemeFor\(type\)\s*\{(.*?)\n  \}", js, re.S)
-        self.assertIsNotNone(body, "applyThemeFor() no encontrada")
+        body = re.search(r"function effectiveTheme\(type\)\s*\{(.*?)\n  \}", js, re.S)
+        self.assertIsNotNone(body, "effectiveTheme() no encontrada")
         code = body.group(1)
 
         self.assertIn(
             "themes[type] || globalTheme", code,
-            "applyThemeFor debe usar el tema del miembro y caer al global solo "
+            "effectiveTheme debe usar el tema del miembro y caer al global solo "
             "si no hay ninguno asignado (themes[type] || globalTheme)",
         )
         # El patrón antiguo solo miraba el tema propio si el mapa explícito
         # lo marcaba; con ese mapa incompleto el tema se perdía.
         self.assertNotIn(
-            "explicit[type] ? themes[type]", code,
-            "applyThemeFor no debe condicionar el tema asignado a "
-            "overlayThemeExplicit: ese mapa puede venir incompleto",
+            "explicit[type] ? themes[type]", js,
+            "no se debe condicionar el tema asignado a overlayThemeExplicit: "
+            "ese mapa puede venir incompleto",
         )
+
+    def test_apply_theme_for_uses_effective_theme(self):
+        js = _read(SHAPES_JS)
+        body = re.search(r"function applyThemeFor\(type\)\s*\{(.*?)\n  \}", js, re.S)
+        self.assertIsNotNone(body)
+        self.assertIn("effectiveTheme(type)", body.group(1))
 
     def test_overlay_sets_data_theme_on_body(self):
         js = _read(SHAPES_JS)
         self.assertIn("document.body.setAttribute('data-theme', theme)", js)
         self.assertIn("document.body.removeAttribute('data-theme')", js)
+
+
+class PackThemeWinsContract(unittest.TestCase):
+    """Con tema de pack asignado, el estilo base no puede taparlo."""
+
+    def test_overlay_skips_legacy_class_with_pack_theme(self):
+        js = _read(QUEUE_JS)
+        self.assertIn("effectiveTheme('banner')", js)
+        self.assertIn("(packTheme ? '' : ` banner-theme-${theme}`)", js)
+
+    def test_preview_skips_legacy_class_with_pack_theme(self):
+        js = _read(PREVIEW_JS)
+        self.assertIn("const legacyClass = previewTheme.theme ? ''", js)
+        self.assertIn("banner-alert-root${legacyClass}", js)
+
+    def test_user_customisation_survives_pack_theme(self):
+        """Los colores propios se aplican siempre: el usuario puede mezclar."""
+        js = _read(QUEUE_JS)
+        body = re.search(r"const theme = item\.bannerStyle.*?applyAll\('banner'\)", js, re.S)
+        self.assertIsNotNone(body)
+        code = body.group(0)
+        # Antes, con pack theme se borraban --banner-border/--banner-accent/
+        # --banner-text y el color del usuario. Ahora se aplican siempre.
+        self.assertNotIn("removeProperty('--banner-text')", code)
+        self.assertIn("setProperty('--banner-border', item.bannerBorderColor)", code)
+        self.assertIn("setProperty('--banner-text', item.bannerTextColor)", code)
 
 
 class AlertPreviewThemeContract(unittest.TestCase):
@@ -79,7 +112,7 @@ class AlertPreviewThemeContract(unittest.TestCase):
     def test_cache_busting_bumped(self):
         """Sin bump, el navegador ejecuta el JS anterior y «no cambia nada»."""
         panel = _read(PANEL_HTML)
-        self.assertIn("06-preview-test.js?v=51", panel)
+        self.assertIn("06-preview-test.js?v=52", panel)
         self.assertIn("02a-layout-dom.js?v=51", panel)
         self.assertIn("02b-gallery-toast.js?v=51", panel)
         self.assertNotIn("02a-layout-dom.js?v=50", panel)
@@ -88,6 +121,9 @@ class AlertPreviewThemeContract(unittest.TestCase):
         self.assertIn("02b-alert-shapes.js?v=", index,
                       "02b-alert-shapes.js se sirve sin versión: el navegador "
                       "puede quedarse con el applyThemeFor antiguo")
+        self.assertIn("03-alert-queue.js?v=", index,
+                      "03-alert-queue.js se sirve sin versión: el navegador "
+                      "puede quedarse con la regla antigua de banner-theme-*")
 
 
 if __name__ == "__main__":

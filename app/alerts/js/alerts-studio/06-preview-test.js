@@ -97,10 +97,13 @@ Object.assign(AlertsStudio, {
       previewTheme.theme ? ` data-theme="${previewEscape(previewTheme.theme)}"` : '',
       previewTheme.shape ? ` data-theme-shape="${previewEscape(previewTheme.shape)}"` : ''
     ].join('');
+    // Same rule as the overlay: with a pack theme assigned the legacy base
+    // style class is skipped so it cannot cover the theme tokens.
+    const legacyClass = previewTheme.theme ? '' : ` banner-theme-${effectiveBannerStyle}`;
 
     if (effectiveMediaMode === 'banner') {
       box.innerHTML = `
-        <div id="preview-alert-element" class="banner-alert-root banner-theme-${effectiveBannerStyle} anim-${anim}"${packAttrs} style="--banner-border: ${effectiveBorderColor}; --banner-accent: ${effectiveBorderColor}; --banner-text: ${effectiveTextColor}; font-family: ${font};">
+        <div id="preview-alert-element" class="banner-alert-root${legacyClass} anim-${anim}"${packAttrs} style="--banner-border: ${effectiveBorderColor}; --banner-accent: ${effectiveBorderColor}; --banner-text: ${effectiveTextColor}; font-family: ${font};">
           <div class="banner-icon-box" style="width: 52px; height: 52px; font-size: 24px; display: flex; align-items: center; justify-content: center; border-color: ${effectiveBorderColor}66; color: ${effectiveBorderColor};">
             ${this.getAlertIconSvg(this.currentType, chosenPlat)}
           </div>

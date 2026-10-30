@@ -112,8 +112,13 @@ window.AlertShapes = (function () {
    * resultado era `body` sin `data-theme`: la alerta se pintaba sin tema
    * aunque el panel mostrara uno seleccionado.
    */
+  /** Tema efectivo del miembro: el asignado manda sobre el global. */
+  function effectiveTheme(type) {
+    return themes[type] || globalTheme || null;
+  }
+
   function applyThemeFor(type) {
-    var theme = themes[type] || globalTheme;
+    var theme = effectiveTheme(type);
     if (theme) document.body.setAttribute('data-theme', theme);
     else document.body.removeAttribute('data-theme');
     applySkin();
@@ -136,7 +141,7 @@ window.AlertShapes = (function () {
   return {
     set: set, apply: apply, applyAssigned: applyAssigned,
     configure: configure, setTheme: setTheme, setGlobalTheme: setGlobalTheme, applyThemeFor: applyThemeFor,
-    applyAll: applyAll, visibleType: visibleType, applySkin: applySkin,
+    applyAll: applyAll, visibleType: visibleType, applySkin: applySkin, effectiveTheme: effectiveTheme,
     isExplicit: function (type) { return !!explicit[type]; },
     isLocked: function () { return !!locked; },
     assigned: assigned, themes: themes

@@ -112,38 +112,35 @@ window.AlertQueue = {
       msg.style.display = item.message ? 'block' : 'none';
     }
 
-    // Aplicar estilos del tema seleccionado
+    // The pack theme wins over the legacy "base style": with a pack theme
+    // assigned the banner-theme-* class is skipped, because it carries its own
+    // borders and backgrounds that would cover the theme tokens.
+    // The user can still mix: colour, font and animation are inline values and
+    // win over the tokens, so customising keeps working on top of the pack.
     const theme = item.bannerStyle || 'cyberpunk';
-    root.className = `banner-alert-root banner-theme-${theme} anim-${item.bannerAnimation || 'pop'}`;
-    if (window.AlertShapes) window.AlertShapes.applyAll('banner');
+    const packTheme = !!(window.AlertShapes && AlertShapes.effectiveTheme && AlertShapes.effectiveTheme('banner'));
+    root.className = `banner-alert-root anim-${item.bannerAnimation || 'pop'}`
+      + (packTheme ? '' : ` banner-theme-${theme}`);
 
-    // Con un tema de pack activo, los colores (incluido el degradado) vienen del tema.
-    const packThemeActive = document.body.hasAttribute('data-theme');
-    if (packThemeActive) {
-      root.style.background = '';
+    if (item.bannerBgColor) root.style.background = item.bannerBgColor;
+    else root.style.background = '';
+
+    if (item.bannerBorderColor) {
+      root.style.setProperty('--banner-border', item.bannerBorderColor);
+      root.style.setProperty('--banner-accent', item.bannerAccentColor || item.bannerBorderColor);
+    } else {
       root.style.removeProperty('--banner-border');
       root.style.removeProperty('--banner-accent');
-      root.style.removeProperty('--banner-text');
-      if (user) user.style.color = '';
-    } else {
-      if (item.bannerBgColor) root.style.background = item.bannerBgColor;
-      else root.style.background = '';
-
-      if (item.bannerBorderColor) {
-        root.style.setProperty('--banner-border', item.bannerBorderColor);
-        root.style.setProperty('--banner-accent', item.bannerAccentColor || item.bannerBorderColor);
-      } else {
-        root.style.removeProperty('--banner-border');
-        root.style.removeProperty('--banner-accent');
-      }
-
-      if (item.bannerTextColor) {
-        root.style.setProperty('--banner-text', item.bannerTextColor);
-        if (user) user.style.color = item.bannerTextColor;
-      } else {
-        if (user) user.style.color = '';
-      }
     }
+
+    if (item.bannerTextColor) {
+      root.style.setProperty('--banner-text', item.bannerTextColor);
+      if (user) user.style.color = item.bannerTextColor;
+    } else {
+      if (user) user.style.color = '';
+    }
+
+    if (window.AlertShapes) window.AlertShapes.applyAll('banner');
 
     if (item.bannerFontFamily) {
       root.style.fontFamily = item.bannerFontFamily;
