@@ -8,6 +8,7 @@ window.ComponentThemes = (function () {
   let state = { overlayThemes: {}, overlayShapes: {} };
   let fusions = [];
   let shapeMeta = {};
+  let themeMeta = {};  // id -> {name} para el chip de estado
   const MOUNTS = { widget: 'component-themes-panel', alert: 'alert-themes-panel' };
 
   const tr = (k, fb) => (window.i18n && window.i18n.tr(k)) || fb;
@@ -59,6 +60,7 @@ window.ComponentThemes = (function () {
 
   function row(kind, id, shapes) {
     const key = `${kind}:${id}`;
+    // ancla para expandFor()/resaltado desde el boton de la tarjeta
     const theme = state.overlayThemes[key] || '';
     const shape = state.overlayShapes[key] || '';
     const fullName = kind === 'widget'
@@ -74,7 +76,7 @@ window.ComponentThemes = (function () {
     const shapeCell = shapes && shapes.length
       ? `<select data-role="shape" data-key="${key}" aria-label="${ariaShape}" style="font-size:11px;padding:3px 6px;">${shapeOptions(shapes, shape)}</select>`
       : `<span style="font-size:10px;color:var(--color-text-dim);" title="${tr('widgets.shape_unsupported', 'Este componente no admite formas')}">${tr('widgets.shape_unsupported_short', 'no aplica')}</span>`;
-    return `<div style="display:grid;grid-template-columns:200px 1fr 130px auto auto auto;gap:8px;align-items:center;background:rgba(255,255,255,0.03);padding:7px 10px;border-radius:5px;">
+    return `<div data-ct-key="${key}" style="display:grid;grid-template-columns:200px 1fr 130px auto auto auto;gap:8px;align-items:center;background:rgba(255,255,255,0.03);padding:7px 10px;border-radius:5px;">
       <span style="font-size:12px;font-weight:700;color:var(--color-text-light);">${label}</span>
       <select data-role="theme" data-key="${key}" aria-label="${ariaTheme}" style="font-size:11px;padding:3px 6px;">${themeOptions(theme)}</select>
       ${shapeCell}
@@ -105,39 +107,108 @@ window.ComponentThemes = (function () {
     return document.getElementById(MOUNTS[kind] || MOUNTS.widget) || document.getElementById('component-themes-panel');
   }
 
-  async function load() {
+  // ------------------------------------------------------------- carga perezosa
+  // Single-flight: si ya hay una carga en vuelo se reutiliza la MISMA promesa.
+  // Antes, dos load() en paralelo pintaban dos veces y ganaba la respuesta
+  // que llegara ultima (parpadeo + estado incoherente).
+  let inflight = null;
+  let bindCount = 0;
+
+  async function load(opts) {
+    opts = opts || {};
+    const acc = document.getElementById('widget-themes-accordion');
+    const alertAcc = document.getElementById('alert-themes-accordion');
+    const closed = [acc, alertAcc].filter(Boolean).every(d => !d.open);
+    // Perezoso: con los acordeones cerrados no se repinta (ni se hace fetch).
+    if (closed && !opts.force) return null;
+    if (inflight) return inflight;
+
     const boxes = Object.values(MOUNTS).map(id => document.getElementById(id)).filter(Boolean);
-    if (!boxes.length) return;
-    boxes.forEach(box => { box.innerHTML = `<div style="font-size:11px;color:var(--color-text-dim);">${tr('common.loading', 'Cargando…')}</div>`; });
-    try {
-      const [packsRes, catRes, fusRes] = await Promise.all([
-        fetch('/api/themes/packs').then(r => r.json()),
-        API.getComponentsCatalog(),
-        API.getFusions().catch(() => ({ fusions: [] }))
-      ]);
-      packs = packsRes.packs || [];
-      shapeMeta = {};
-      packs.forEach(p => (p.shapes || []).forEach(sh => { if (sh && sh.id) shapeMeta[sh.id] = sh; }));
-      fusions = (fusRes && fusRes.fusions) || [];
-      state.overlayThemes = packsRes.overlayThemes || {};
-      state.overlayShapes = packsRes.overlayShapes || {};
-      catalog = catRes || { widgets: [], alerts: [] };
-      const render = (kind, items) => {
-        const box = document.getElementById(MOUNTS[kind]);
-        if (!box) return;
-        const rows = items.map(x => row(kind, x.id, x.shapes));
-        // V3-02: con la cabecera de columnas se sabe qué select es tema y cuál forma.
-        box.innerHTML = rows.length
-          ? headerRow() + rows.join('')
-          : `<div style="font-size:11px;color:var(--color-text-dim);">${tr('widgets.no_components', 'Sin componentes disponibles')}</div>`;
-      };
-      render('widget', catalog.widgets || []);
-      render('alert', catalog.alerts || []);
-    } catch (e) {
-      boxes.forEach(box => {
-        box.innerHTML = `<div style="font-size:11px;color:#F87171;">${tr('widgets.components_load_error', 'No se pudo cargar el catálogo de componentes:')} ${esc(e && e.message)}</div>`;
-      });
-    }
+    if (!boxes.length) return null;
+    inflight = (async () => {
+      boxes.forEach(box => { box.innerHTML = `<div style="font-size:11px;color:var(--color-text-dim);">${tr('common.loading', 'Cargando…')}</div>`; });
+      try {
+        const [packsRes, catRes, fusRes] = await Promise.all([
+          fetch('/api/themes/packs').then(r => r.json()),
+          API.getComponentsCatalog(),
+          API.getFusions().catch(() => ({ fusions: [] }))
+        ]);
+        packs = packsRes.packs || [];
+        shapeMeta = {};
+        packs.forEach(p => (p.shapes || []).forEach(sh => { if (sh && sh.id) shapeMeta[sh.id] = sh; }));
+        themeMeta = {};
+        packs.forEach(p => (p.themes || []).forEach(th => { if (th && th.id) themeMeta[th.id] = th; }));
+        fusions = (fusRes && fusRes.fusions) || [];
+        state.overlayThemes = packsRes.overlayThemes || {};
+        state.overlayShapes = packsRes.overlayShapes || {};
+        catalog = catRes || { widgets: [], alerts: [] };
+        const render = (kind, items) => {
+          const box = document.getElementById(MOUNTS[kind]);
+          if (!box) return;
+          const rows = items.map(x => row(kind, x.id, x.shapes));
+          box.innerHTML = rows.length
+            ? headerRow() + rows.join('')
+            : `<div style="font-size:11px;color:var(--color-text-dim);">${tr('widgets.no_components', 'Sin componentes disponibles')}</div>`;
+        };
+        render('widget', catalog.widgets || []);
+        render('alert', catalog.alerts || []);
+        paintStatusChips();
+      } catch (e) {
+        boxes.forEach(box => {
+          box.innerHTML = `<div style="font-size:11px;color:#F87171;">${tr('widgets.components_load_error', 'No se pudo cargar el catálogo de componentes:')} ${esc(e && e.message)}</div>`;
+        });
+      } finally {
+        inflight = null;
+      }
+      return true;
+    })();
+    return inflight;
+  }
+
+  /** Chip de estado en cada tarjeta: "Tema: X · Forma: Y" sin abrir nada. */
+  function paintStatusChips() {
+    document.querySelectorAll('[data-status-chip]').forEach(el => {
+      const kind = el.getAttribute('data-status-chip');
+      const id = el.getAttribute('data-status-id') || '';
+      const key = `${kind}:${id}`;
+      const themeId = state.overlayThemes[key] || '';
+      const shapeId = state.overlayShapes[key] || '';
+      const meta = themeMeta[themeId];
+      if (window.UI && UI.renderStatusChip) {
+        el.innerHTML = UI.renderStatusChip({
+          theme: themeId, themeName: meta ? meta.name : '',
+          shape: shapeId, shapeName: shapeMeta[shapeId] ? shapeMeta[shapeId].name : ''
+        });
+      }
+    });
+  }
+
+  /** Abre el acordeón, hace scroll a la fila y la resalta 2 s. */
+  function expandFor(kind, id) {
+    const acc = document.getElementById('widget-themes-accordion');
+    if (!acc) return;
+    acc.open = true;
+    bindAccordionOnce();
+    load({ force: true }).then(() => {
+      const rowEl = acc.querySelector(`[data-ct-key="${kind}:${id}"]`);
+      if (!rowEl) return;
+      rowEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      rowEl.classList.add('ct-row-highlight');
+      setTimeout(() => rowEl.classList.remove('ct-row-highlight'), 2000);
+    });
+  }
+
+  /** Registra los listeners UNA sola vez (abrir/cerrar N veces no acumula). */
+  function bindAccordionOnce() {
+    if (bindCount > 0) return bindCount;
+    const acc = document.getElementById('widget-themes-accordion');
+    const alertAcc = document.getElementById('alert-themes-accordion');
+    [acc, alertAcc].forEach(d => {
+      if (!d) return;
+      d.addEventListener('toggle', () => { if (d.open) load(); });
+    });
+    bindCount = 1;
+    return bindCount;
   }
 
   async function apply(key) {
@@ -207,9 +278,21 @@ window.ComponentThemes = (function () {
     }
   }
 
-  document.addEventListener('DOMContentLoaded', load);
+  // Una carga inicial para pintar los chips de estado; despues es perezosa.
+  document.addEventListener('DOMContentLoaded', () => { bindAccordionOnce(); load({ force: true }); });
   // Repintar cuando el diccionario i18n esté listo o cambie el idioma
   if (window.i18n && window.i18n.onLoad) window.i18n.onLoad(load);
   window.addEventListener('oss-lang-change', load);
-  return { load, apply, reset, addToFusion };
+  return {
+    load, apply, reset, addToFusion,
+    expandFor, bindAccordionOnce, paintStatusChips,
+    themeStateFor(key) {
+      const themeId = state.overlayThemes[key] || "";
+      const shapeId = state.overlayShapes[key] || "";
+      const theme = themeMeta[themeId];
+      const shape = shapeMeta[shapeId];
+      return { theme: themeId, themeName: theme ? theme.name : "", shape: shapeId, shapeName: shape ? shape.name : "" };
+    },
+    _debug() { return { bindCount, inflight: !!inflight }; }
+  };
 })();

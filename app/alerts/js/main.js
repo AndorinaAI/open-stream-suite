@@ -88,9 +88,13 @@ async function checkStatus() {
 }
 
 // Copiar texto al portapapeles
-function copyText(str) {
+function copyText(str, label) {
+  const name = label || 'URL';
   navigator.clipboard.writeText(str).then(() => {
-    alert('Copiado al portapapeles:\n' + str + '\n\nPégala en OBS Studio como fuente de tipo Navegador.');
+    // Antes: alert() bloqueante. Ahora un toast; nunca interrumpe el directo.
+    if (window.UI && UI.showToast) UI.showToast(`✓ ${name} copiada. Pégala en OBS como fuente de tipo Navegador.`, 'success');
+  }).catch(() => {
+    if (window.UI && UI.showToast) UI.showToast(`No se pudo copiar ${name}. Cópiala a mano: ${str}`, 'error');
   });
 }
 

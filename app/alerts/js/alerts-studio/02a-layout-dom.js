@@ -52,17 +52,22 @@ Object.assign(AlertsStudio, {
         `}).join('')}
       </div>
 
-      <!-- TEMAS DE ALERTAS (card y banner) -->
-      <div class="dash-card" style="margin-bottom: 18px; padding: 16px 20px; background: rgba(14,18,24,0.95); border: 1.5px solid rgba(255,120,63,0.35); border-radius: var(--radius-sm);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-          <div>
-            <div style="font-family:var(--font-tech); font-size:13px; font-weight:800; color:var(--color-accent-orange); letter-spacing:.5px;" data-i18n="widgets.alert_themes_title">🎨 TEMAS DE ALERTAS</div>
-            <div style="font-size:11px; color:var(--color-text-dim); margin-top:2px;" data-i18n="widgets.alert_themes_hint">Aplica un tema de pack y una forma a la tarjeta y al banner, o añádelos a una fusión. El cambio se ve en vivo.</div>
+      <!-- TEMA DEL PACK (card y banner) — acordeon: una linea cerrada -->
+      <details class="component-themes-accordion" id="alert-themes-accordion" style="margin-bottom: 18px;">
+        <summary>
+          🎨 TEMA DEL PACK — tarjeta y banner
+        </summary>
+        <div class="component-themes-accordion__body">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+            <div style="font-size:11px; color:var(--color-text-dim); line-height:1.5;">
+              Asigna un <strong>tema de pack</strong> y una <strong>forma</strong> a la tarjeta y al banner.
+              Manda sobre «Estilo de la alerta» cuando está asignado.
+            </div>
+            <button type="button" class="btn-action-test" style="font-size:10px; padding:3px 8px;" onclick="ComponentThemes.load({ force: true })" data-i18n="common.refresh">↻ Actualizar</button>
           </div>
-          <button type="button" class="btn-action-test" style="font-size:10px; padding:3px 8px;" onclick="ComponentThemes.load()" data-i18n="common.refresh">↻ Actualizar</button>
+          <div id="alert-themes-panel" style="display:flex; flex-direction:column; gap:8px;"></div>
         </div>
-        <div id="alert-themes-panel" style="display:flex; flex-direction:column; gap:8px;"></div>
-      </div>
+      </details>
 
       <!-- Grid Principal: Configuración a la izquierda, Vista Previa Interactiva y Simulador a la derecha -->
       <div class="grid-2col" style="grid-template-columns: 1.25fr 0.95fr; gap: 20px;">
@@ -84,9 +89,15 @@ Object.assign(AlertsStudio, {
               </div>
             </div>
             
-            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: rgba(0,0,0,0.3); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--color-border-dim);">
-              <input type="checkbox" id="cfg-enabled" onchange="AlertsStudio.onFieldChange('enabled', this.checked)">
-              <span style="font-family: var(--font-tech); font-size: 11px; font-weight: 700; color: #10B981;" data-i18n="alerts.label_enabled">HABILITADA</span>
+            <label class="alert-enabled-card is-on" id="cfg-enabled-card" for="cfg-enabled">
+              <input type="checkbox" id="cfg-enabled" aria-describedby="cfg-enabled-help"
+                     onchange="AlertsStudio.onFieldChange('enabled', this.checked); AlertsStudio.updateEnabledCard(this.checked)">
+              <span>
+                <span class="alert-enabled-card__title" id="cfg-enabled-title">Alerta activa</span>
+                <span class="alert-enabled-card__help" id="cfg-enabled-help" data-i18n="alerts.enabled_help">
+                  Si la desactivas, esta alerta deja de dispararse en OBS y en el panel. No borra su configuracion.
+                </span>
+              </span>
             </label>
           </div>
 
@@ -114,10 +125,11 @@ Object.assign(AlertsStudio, {
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
               <div>
                 <span style="font-family: var(--font-tech); font-size: 12px; font-weight: 800; color: #57D6C4;" data-i18n="alerts.themes_title">
-                  🎭 SISTEMA Y BIBLIOTECA DE TEMAS
+                  🎭 ESTILO DE LA ALERTA (sin tema del pack)
                 </span>
                 <div style="font-size: 10px; color: var(--color-text-dim); margin-top: 2px;">
-                  Elige un tema, edita sus valores o guárdalo sustituyendo el actual o como uno nuevo.
+                  Aspecto propio de esta alerta. Se usa cuando <strong>no</strong> hay un tema del pack asignado (arriba).
+                  Elige uno, edita sus valores, o guárdalo como nuevo.
                 </div>
               </div>
               

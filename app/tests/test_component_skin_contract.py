@@ -27,6 +27,8 @@ ARCHETYPES = ("cozy", "gamer", "maker", "openstream")
 # Propiedades donde el `!important` es intencionado (marco y decoración): la
 # apariencia asignada manda sobre el aspecto base, que varios widgets aplican
 # con CSS inyectado o estilos en línea.
+# Selectores de CONTENIDO de widget (no compiten con la forma fisica).
+CONTENT_SELECTORS = (".chat-msg", ".prompter-item", ".goal-item", ".shoutout-card-body")
 IMPORTANT_ALLOWED = ("border-width", "border-style", "border-color", "box-shadow",
                      "background-color", "background-image", "background-position",
                      "background-size", "background-repeat")
@@ -83,7 +85,14 @@ class TestComponentSkinContract(unittest.TestCase):
             self.assertIn(token, self.css, f"la capa no consume {token}")
 
     def test_5_las_formas_fisicas_siguen_mandando(self):
-        panel_rules = [s for s, b in rules(self.css) if "var(--skin-panel-radius" in b]
+        # El contrato aplica al PANEL. El CONTENIDO de un widget (mensajes, filas,
+        # tarjetas) no compite con la forma fisica: esa se aplica al contenedor
+        # (`.chat-container`), asi que su radio puede salir del arquetipo.
+        panel_rules = [
+            s for s, b in rules(self.css)
+            if "var(--skin-panel-radius" in b
+            and not any(sel in s for sel in CONTENT_SELECTORS)
+        ]
         self.assertTrue(panel_rules, "la capa debe declarar radio de arquetipo")
         for selector in panel_rules:
             self.assertIn(":not([data-theme-shape])", selector,
@@ -91,6 +100,10 @@ class TestComponentSkinContract(unittest.TestCase):
 
     def test_6_important_solo_en_marco_y_decoracion(self):
         for selector, body in rules(self.css):
+            if any(sel in selector for sel in CONTENT_SELECTORS):
+                # El widget inyecta su estilo base con !important en
+                # `#custom-user-css`; para que el tema gane hace falta !important.
+                continue
             for prop in re.findall(r"([a-z-]+)\s*:[^;]*!important", body):
                 self.assertNotIn(prop, IMPORTANT_FORBIDDEN,
                                  f"{prop} con !important bloquearía la forma física")

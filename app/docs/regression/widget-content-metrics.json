@@ -1,0 +1,125 @@
+{
+  "generatedAt": "2026-10-30",
+  "widgets": {
+    "chat": {
+      "none": {
+        "radius": "6px",
+        "bg": "rgba(25, 29, 33, 0.88)",
+        "borderWidth": "1px",
+        "font": "Outfit"
+      },
+      "maker": {
+        "radius": "4px",
+        "bg": "rgb(46, 54, 59)",
+        "borderWidth": "1px",
+        "font": "Inter"
+      },
+      "cozy": {
+        "radius": "24px",
+        "bg": "rgba(48, 38, 30, 0.88)",
+        "borderWidth": "1px",
+        "font": "Outfit"
+      }
+    },
+    "goal": {
+      "none": {
+        "radius": "0px",
+        "bg": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "font": "Outfit"
+      },
+      "maker": {
+        "radius": "4px",
+        "bg": "rgb(46, 54, 59)",
+        "borderWidth": "1px",
+        "font": "Inter"
+      },
+      "cozy": {
+        "radius": "24px",
+        "bg": "rgba(48, 38, 30, 0.88)",
+        "borderWidth": "1px",
+        "font": "Outfit"
+      }
+    },
+    "ticker": {
+      "none": {
+        "radius": "0px",
+        "bg": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "font": "Rajdhani"
+      },
+      "maker": {
+        "radius": "4px",
+        "bg": "rgb(46, 54, 59)",
+        "borderWidth": "1px",
+        "font": "Inter"
+      },
+      "cozy": {
+        "radius": "24px",
+        "bg": "rgba(48, 38, 30, 0.88)",
+        "borderWidth": "1px",
+        "font": "Outfit"
+      }
+    },
+    "shoutout": {
+      "none": {
+        "radius": "0px",
+        "bg": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "font": "Outfit"
+      },
+      "maker": {
+        "radius": "4px",
+        "bg": "rgb(46, 54, 59)",
+        "borderWidth": "1px",
+        "font": "Inter"
+      },
+      "cozy": {
+        "radius": "24px",
+        "bg": "rgba(48, 38, 30, 0.88)",
+        "borderWidth": "1px",
+        "font": "Outfit"
+      }
+    },
+    "promo": {
+      "none": {
+        "radius": "0px",
+        "bg": "rgba(0, 0, 0, 0)",
+        "borderWidth": "0px",
+        "font": "Outfit"
+      },
+      "maker": {
+        "radius": "4px",
+        "bg": "rgb(46, 54, 59)",
+        "borderWidth": "1px",
+        "font": "Inter"
+      },
+      "cozy": {
+        "radius": "24px",
+        "bg": "rgba(48, 38, 30, 0.88)",
+        "borderWidth": "1px",
+        "font": "Outfit"
+      }
+    },
+    "timer": {
+      "none": {
+        "radius": "12px",
+        "bg": "rgba(25, 29, 33, 0.88)",
+        "borderWidth": "1px",
+        "font": "Outfit"
+      },
+      "maker": {
+        "radius": "4px",
+        "bg": "color(srgb 0.180392 0.211765 0.231373)",
+        "borderWidth": "2px",
+        "font": "Inter"
+      },
+      "cozy": {
+        "radius": "24px",
+        "bg": "color(srgb 0.188235 0.14902 0.117647 / 0.878431)",
+        "borderWidth": "2px",
+        "font": "Outfit"
+      }
+    }
+  }
+}

@@ -21,7 +21,7 @@ from aiohttp.test_utils import AioHTTPTestCase, unittest_run_loop
 from server.app import create_app, LOCAL_AUTH_TOKEN
 from server.config import BASE_DIR
 from server.routes.static_routes import resolve_legacy_scene
-from server.services import scenes_catalog
+from server.services import components_catalog, scenes_catalog
 from server.services.fusions_service import FUSIONS_FILE, load_fusions, save_fusions
 from server.services.theme_manager import THEMES_STATE_FILE, load_theme_state, save_theme_state, migrate_theme_state
 from server.services.theme_defaults import DEFAULT_OVERLAY_THEMES
@@ -241,8 +241,18 @@ class ScenesThemesAPITestCase(AioHTTPTestCase):
         self.assertEqual(resp.status, 200)
         on_disk = json.loads(THEMES_STATE_FILE.read_text(encoding="utf-8"))
         canonical = set(scenes_catalog.canonical_scene_keys())
-        self.assertEqual(set(on_disk["overlayThemes"]) - canonical, set())
-        self.assertEqual(set(on_disk.get("overlayShapes", {})) - canonical, set())
+
+        def _valid(key):
+            """Escena canonica O componente (widget/alert) con formato kind:id.
+
+            Desde que existe la asignacion por componente (`overlay-assignment`
+            acepta `widget:chat`/`alert:card`), el estado guarda claves que no
+            son escenas y NO son huerfanas.
+            """
+            return key in canonical or bool(components_catalog.parse_key(key))
+
+        self.assertEqual({k for k in on_disk["overlayThemes"] if not _valid(k)}, set())
+        self.assertEqual({k for k in on_disk.get("overlayShapes", {}) if not _valid(k)}, set())
 
     # --- 5. fusiones ---
     @unittest_run_loop

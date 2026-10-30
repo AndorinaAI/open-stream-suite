@@ -8,6 +8,7 @@
  *   - 05-triggers.css: Pestañas de configuración de triggers y roles
  *   - 06-media-explorer.css: Explorador multimedia, árbol, dropzone y modales
  *   - 07-themes-scenes.css: Packs de estilos, editor de temas, textos y responsive
+ *   - 08-ui-states.css: Chips de estado, aviso de cambios sin guardar y acordeones
  */
 @import url("panel/01-layout.css");
 @import url("panel/02-forms-buttons.css");
@@ -16,3 +17,4 @@
 @import url("panel/05-triggers.css");
 @import url("panel/06-media-explorer.css");
 @import url("panel/07-themes-scenes.css");
+@import url("panel/08-ui-states.css");

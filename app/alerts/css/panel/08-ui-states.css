@@ -1,0 +1,120 @@
+/* ====================================================================
+   ESTADOS DE UI COMPARTIDOS
+   Chip de estado de un componente, punto de "cambios sin guardar",
+   texto de ayuda y tarjeta de activacion de una alerta.
+   ==================================================================== */
+
+.ui-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-tech);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border-dim);
+  color: var(--color-text-dim);
+  background: rgba(0, 0, 0, .25);
+  white-space: nowrap;
+}
+.ui-status-chip[data-theme-chip="set"] {
+  border-color: var(--color-border-cyan);
+  color: var(--color-accent-cyan);
+  background: rgba(87, 214, 196, .10);
+}
+
+/* Punto de cambios sin guardar (cualquier elemento con data-dirty-key). */
+[data-dirty-key] { position: relative; }
+[data-dirty-key].is-dirty::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #F59E0B;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, .25);
+}
+
+/* Texto de ayuda bajo un control (aria-describedby). */
+.ui-help-text {
+  font-size: 10px;
+  line-height: 1.45;
+  color: var(--color-text-dim);
+  margin: 4px 0 0;
+}
+
+/* Tarjeta de activacion de una alerta: sustituye al checkbox "HABILITADA". */
+.alert-enabled-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border-dim);
+  background: rgba(0, 0, 0, .28);
+}
+.alert-enabled-card.is-on {
+  border-color: rgba(16, 185, 129, .45);
+  background: rgba(16, 185, 129, .08);
+}
+.alert-enabled-card.is-off {
+  border-color: rgba(148, 163, 184, .35);
+  background: rgba(148, 163, 184, .06);
+}
+.alert-enabled-card__title {
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin: 0 0 3px;
+}
+.alert-enabled-card.is-on .alert-enabled-card__title { color: #10B981; }
+.alert-enabled-card.is-off .alert-enabled-card__title { color: #94A3B8; }
+.alert-enabled-card__help {
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--color-text-dim);
+  margin: 0;
+}
+.alert-enabled-card input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  accent-color: #10B981;
+  cursor: pointer;
+}
+
+/* Acordeon de temas (una linea cuando esta cerrado). */
+.component-themes-accordion > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-tech);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  color: var(--color-accent-cyan);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-dim);
+  background: rgba(14, 18, 24, .95);
+}
+.component-themes-accordion > summary::-webkit-details-marker { display: none; }
+.component-themes-accordion > summary::before { content: "▸"; }
+.component-themes-accordion[open] > summary::before { content: "▾"; }
+.component-themes-accordion > summary:hover { border-color: var(--color-border-cyan); }
+.component-themes-accordion__body { padding: 12px 4px 4px; }
+
+/* Fila resaltada al abrir el acordeon desde el boton de una tarjeta. */
+.ct-row-highlight {
+  outline: 2px solid var(--color-accent-cyan);
+  outline-offset: 2px;
+  border-radius: 6px;
+  transition: outline-color .2s ease;
+}

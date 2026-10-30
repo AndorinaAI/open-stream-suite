@@ -115,7 +115,7 @@
 
       <!-- Badge de actualización disponible -->
       <div id="panel-update-badge" style="display: none; margin-top: 8px; background: rgba(87, 214, 196, 0.12); border: 1px solid var(--color-accent-cyan); border-radius: 6px; padding: 6px 8px; text-align: center; position: relative;">
-        <button type="button" id="panel-update-dismiss" onclick="dismissUpdateBadge()" data-i18n-title="updates.dismiss" title="Descartar" style="position: absolute; top: 2px; right: 4px; background: none; border: none; color: var(--color-accent-cyan); cursor: pointer; font-size: 12px; line-height: 1;">✕</button>
+        <button type="button" id="panel-update-dismiss" onclick="dismissUpdateBadge()" data-i18n-title="updates.dismiss" title="Descartar" style="position: absolute; top: 2px; right: 4px; background: none; border: none; color: var(--color-accent-cyan); cursor: pointer; font-size: 12px; line-height: 1;" aria-label="updates.dismiss">✕</button>
         <div style="font-family: var(--font-tech); font-size: 10px; font-weight: 800; color: var(--color-accent-cyan);" id="panel-update-title">
           🚀 NUEVA VERSIÓN
         </div>
@@ -209,18 +209,18 @@
               <input type="hidden" id="tw-reward-id" value="">
 
               <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-size: 11px;" data-i18n="triggers.label_title">Título visible en Twitch (lo que leen los espectadores):</label>
+                <label style="font-size: 11px;" data-i18n="triggers.label_title" for="tw-reward-title">Título visible en Twitch (lo que leen los espectadores):</label>
                 <input type="text" id="tw-reward-title" class="form-input" placeholder="ej. ¡Susto con Meme del Gato!" data-i18n-placeholder="triggers.placeholder_reward_title" required oninput="updateTwitchRewardPreview()">
               </div>
 
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_cost">Coste en Puntos de Canal:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_cost" for="tw-reward-cost">Coste en Puntos de Canal:</label>
                   <input type="number" id="tw-reward-cost" class="form-input" placeholder="250" value="250" min="1" max="10000000" required oninput="updateTwitchRewardPreview()" data-i18n-placeholder="themes.placeholder_cost">
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="rewards.icon_color">Color del Icono en Twitch:</label>
+                  <label style="font-size: 11px;" data-i18n="rewards.icon_color" for="tw-reward-color">Color del Icono en Twitch:</label>
                   <div style="display: flex; gap: 6px; align-items: center;">
                     <input type="color" id="tw-reward-color" value="#57D6C4" style="height: 34px; width: 40px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncTwitchRewardColor(this.value)">
                     <input type="text" id="tw-reward-color-hex" class="form-input" style="width: 80px; font-family: monospace; text-transform: uppercase;" value="#57D6C4" oninput="syncTwitchRewardColor(this.value)">
@@ -241,7 +241,7 @@
               </div>
 
               <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-size: 11px;" data-i18n="triggers.label_prompt">Descripción / Mensaje para el espectador (opcional):</label>
+                <label style="font-size: 11px;" data-i18n="triggers.label_prompt" for="tw-reward-prompt">Descripción / Mensaje para el espectador (opcional):</label>
                 <input type="text" id="tw-reward-prompt" class="form-input" placeholder="ej. ¡Haz saltar este susto en pantalla y asusta a Andorina en directo!" data-i18n-placeholder="triggers.placeholder_reward_prompt" oninput="updateTwitchRewardPreview()">
               </div>
 
@@ -332,13 +332,13 @@
             <input type="hidden" id="role-edit-id" value="">
 
             <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-size: 11px;" data-i18n="triggers.label_role_name">Nombre de la Función / Rol:</label>
+              <label style="font-size: 11px;" data-i18n="triggers.label_role_name" for="role-edit-name">Nombre de la Función / Rol:</label>
               <input type="text" id="role-edit-name" class="form-input" placeholder="ej. Artista, Moderador principal, etc." required data-i18n-placeholder="themes.placeholder_role_name">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
               <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-size: 11px;" data-i18n="triggers.label_badge">Insignia / Emoji:</label>
+                <label style="font-size: 11px;" data-i18n="triggers.label_badge" for="role-edit-badge">Insignia / Emoji:</label>
                 <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
                   <input type="text" id="role-edit-badge" class="form-input" style="width: 44px; text-align: center; padding: 2px;" value="⭐" required>
                   <button type="button" class="btn-stage-preset" onclick="document.getElementById('role-edit-badge').value='🎨'">🎨</button>
@@ -351,7 +351,7 @@
               </div>
 
               <div class="form-group" style="margin-bottom: 0;">
-                <label style="font-size: 11px;" data-i18n="triggers.label_color">Color identificativo:</label>
+                <label style="font-size: 11px;" data-i18n="triggers.label_color" for="role-edit-color">Color identificativo:</label>
                 <div style="display: flex; gap: 6px; align-items: center;">
                   <input type="color" id="role-edit-color" value="#8B5CF6" style="height: 34px; width: 40px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="document.getElementById('role-edit-color-hex').value = this.value.toUpperCase()">
                   <input type="text" id="role-edit-color-hex" class="form-input" style="width: 80px; font-family: monospace;" value="#8B5CF6" oninput="document.getElementById('role-edit-color').value = this.value">
@@ -360,7 +360,7 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 0;">
-              <label style="font-size: 11px;" data-i18n="triggers.label_members">Espectadores asignados (Nombres de usuario en Twitch separados por comas):</label>
+              <label style="font-size: 11px;" data-i18n="triggers.label_members" for="role-edit-members">Espectadores asignados (Nombres de usuario en Twitch separados por comas):</label>
               <textarea id="role-edit-members" class="form-input" rows="2" placeholder="ej. andorina, pepito, streamer_amigo" data-i18n-placeholder="themes.placeholder_role_members"></textarea>
             </div>
 
@@ -544,7 +544,7 @@
 
                 <div class="form-group" style="margin-bottom: 0;">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_internal_name">Nombre interno del Trigger:</label>
+                    <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_internal_name" for="trig-title">Nombre interno del Trigger:</label>
                     <button type="button" class="btn-stage-preset" style="font-size: 10px; padding: 2px 8px;" onclick="syncTriggerTitleWithReward()" data-i18n="triggers.btn_copy_reward_name">
                       📋 Copiar nombre de Recompensa
                     </button>
@@ -583,7 +583,7 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_select_reward">Selecciona la Recompensa de Twitch asociada:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_select_reward" for="twitch-rewards-select">Selecciona la Recompensa de Twitch asociada:</label>
                   <select id="twitch-rewards-select" class="form-select" onchange="onSelectTwitchReward(this.value)">
                     <option value="" data-i18n="triggers.placeholder_select">-- Cargando recompensas de Twitch... --</option>
                   </select>
@@ -612,13 +612,13 @@
                 <div id="command-fields-wrapper" style="display: flex; flex-direction: column; gap: 10px;">
                   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 11px;" data-i18n="triggers.label_command">Comando en el chat:</label>
+                      <label style="font-size: 11px;" data-i18n="triggers.label_command" for="trig-command">Comando en el chat:</label>
                       <input type="text" id="trig-command" class="form-input" placeholder="ej. !susto" data-i18n-placeholder="themes.placeholder_command">
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
                       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_permission">¿Quién puede usarlo?:</label>
+                        <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_permission" for="trig-permission">¿Quién puede usarlo?:</label>
                         <button type="button" class="btn-stage-preset" style="font-size: 9px; padding: 2px 5px; color: #C4B5FD;" onclick="toggleRolesDrawer()" data-i18n="triggers.btn_roles_func">
                           🎭 Funciones
                         </button>
@@ -639,7 +639,7 @@
 
                   <div class="form-group" style="margin-bottom: 0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                      <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_cooldown">Tiempo de espera anti-spam (Cooldown):</label>
+                      <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_cooldown" for="trig-cooldown">Tiempo de espera anti-spam (Cooldown):</label>
                       <span id="cooldown-val-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);">15s</span>
                     </div>
                     <input type="range" id="trig-cooldown" min="0" max="120" step="5" value="15" class="form-input" style="padding: 2px;" oninput="document.getElementById('cooldown-val-badge').textContent = this.value + 's'">
@@ -647,7 +647,7 @@
 
                   <!-- Color Personalizable (solo visible en modo "Solo Comando") -->
                   <div class="form-group" id="trigger-color-custom-picker-group" style="display: none; margin-bottom: 0;">
-                    <label style="font-size: 11px;" data-i18n="triggers.label_custom_color">Color distintivo para este comando:</label>
+                    <label style="font-size: 11px;" data-i18n="triggers.label_custom_color" for="trig-accent-color">Color distintivo para este comando:</label>
                     <div style="display: flex; gap: 6px; align-items: center;">
                       <input type="color" id="trig-accent-color" value="#57D6C4" style="height: 32px; width: 38px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncTriggerAccentColor(this.value)">
                       <input type="text" id="trig-accent-color-hex" class="form-input" style="width: 80px; font-family: monospace; text-transform: uppercase;" value="#57D6C4" oninput="syncTriggerAccentColor(this.value)">
@@ -694,7 +694,7 @@
                 </div>
 
                 <div id="visual-file-group" class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_media_file">Archivo gráfico (desde tu biblioteca alerts/media o URL):</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_media_file" for="trig-media-file">Archivo gráfico (desde tu biblioteca alerts/media o URL):</label>
                   <select id="trig-media-file" class="form-select" onchange="onVisualFileChange(this.value)">
                     <option value="" data-i18n="triggers.placeholder_media">-- Seleccionar archivo subido --</option>
                   </select>
@@ -702,7 +702,7 @@
                 </div>
 
                 <div id="visual-size-group" class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_size">Escala / Tamaño en pantalla:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_size" for="trig-size">Escala / Tamaño en pantalla:</label>
                   <select id="trig-size" class="form-select" onchange="updateLivePreviewSize(this.value)">
                     <option value="medium" selected data-i18n="triggers.size_normal">Normal / Estándar (520px)</option>
                     <option value="small" data-i18n="triggers.size_small">Pequeño (340px)</option>
@@ -720,7 +720,7 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_audio_source">Fuente de sonido:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_audio_source" for="trig-audio-source">Fuente de sonido:</label>
                   <select id="trig-audio-source" class="form-select" onchange="onAudioSourceChange(this.value)">
                     <option value="video" id="opt-audio-video" data-i18n="triggers.audio_video">🔊 Audio nativo del vídeo</option>
                     <option value="custom" selected data-i18n="triggers.audio_custom">🎵 Sonido personalizado (MP3 / WAV)</option>
@@ -731,7 +731,7 @@
 
                 <!-- Sonido custom selector -->
                 <div id="audio-custom-file-group" class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_sound_file">Archivo de sonido:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_sound_file" for="trig-sound-file">Archivo de sonido:</label>
                   <div style="display: flex; gap: 6px;">
                     <select id="trig-sound-file" class="form-select" style="flex: 1;">
                       <option value="" data-i18n="triggers.placeholder_sound">-- Seleccionar archivo de sonido subido --</option>
@@ -745,7 +745,7 @@
 
                 <!-- Sonido sintetizado selector -->
                 <div id="audio-chime-group" class="form-group" style="display: none; margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_chime">Tono sintetizado Web Audio API:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_chime" for="trig-chime-type">Tono sintetizado Web Audio API:</label>
                   <div style="display: flex; gap: 6px;">
                     <select id="trig-chime-type" class="form-select" style="flex: 1;">
                       <option value="susto" data-i18n="triggers.chime_susto">😱 Susto (Grave + Slide disonante)</option>
@@ -764,7 +764,7 @@
                 <!-- Volumen Slider -->
                 <div class="form-group" style="margin-bottom: 0;">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                    <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_volume">Volumen de reproducción:</label>
+                    <label style="margin-bottom: 0; font-size: 11px;" data-i18n="triggers.label_volume" for="trig-volume">Volumen de reproducción:</label>
                     <span id="volume-val-badge" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-accent-cyan);" data-i18n="widgets.zoom_85">85%</span>
                   </div>
                   <input type="range" id="trig-volume" min="0" max="100" value="85" class="form-input" style="padding: 2px;" oninput="document.getElementById('volume-val-badge').textContent = this.value + '%'">
@@ -777,7 +777,7 @@
                   <div class="trig-subcard-title" style="color: #F59E0B;" data-i18n="triggers.subcard_duration">⏱️ DURACIÓN EN PANTALLA</div>
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_duration">Segundos que permanece activo antes de ocultarse:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_duration" for="trig-duration">Segundos que permanece activo antes de ocultarse:</label>
                   <div style="display: flex; gap: 8px; align-items: center;">
                     <input type="number" id="trig-duration" class="form-input" value="5" min="1" max="60" style="width: 80px;" onchange="updateLivePreviewDuration()">
                     <div style="display: flex; gap: 4px;">
@@ -836,7 +836,7 @@
                   <!-- Colores -->
                   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 11px;" data-i18n="triggers.label_text_color">Color del Texto:</label>
+                      <label style="font-size: 11px;" data-i18n="triggers.label_text_color" for="trig-banner-text-color">Color del Texto:</label>
                       <div style="display: flex; gap: 6px; align-items: center;">
                         <input type="color" id="trig-banner-text-color" value="#FFFFFF" style="height: 32px; width: 36px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncBannerTextColor(this.value)">
                         <input type="text" id="trig-banner-text-color-hex" class="form-input" style="width: 78px; padding: 4px 6px; font-size: 11px; font-family: monospace;" value="#FFFFFF" oninput="syncBannerTextColor(this.value)">
@@ -846,7 +846,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 11px;" data-i18n="triggers.label_border_color">Color de Borde / Neón:</label>
+                      <label style="font-size: 11px;" data-i18n="triggers.label_border_color" for="trig-banner-border-color">Color de Borde / Neón:</label>
                       <div style="display: flex; gap: 6px; align-items: center;">
                         <input type="color" id="trig-banner-border-color" value="#57D6C4" style="height: 32px; width: 36px; border: 1px solid var(--color-border-dim); background: transparent; cursor: pointer; border-radius: 4px;" oninput="syncBannerBorderColor(this.value)">
                         <input type="text" id="trig-banner-border-color-hex" class="form-input" style="width: 78px; padding: 4px 6px; font-size: 11px; font-family: monospace;" value="#57D6C4" oninput="syncBannerBorderColor(this.value)">
@@ -859,7 +859,7 @@
                   <!-- Estilos de Caja y Fuente -->
                   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 11px;" data-i18n="triggers.label_bg_style">Estilo de Fondo / Caja:</label>
+                      <label style="font-size: 11px;" data-i18n="triggers.label_bg_style" for="trig-banner-bg-style">Estilo de Fondo / Caja:</label>
                       <select id="trig-banner-bg-style" class="form-select" onchange="updateLivePreviewCaption()">
                         <option value="dark_glass" data-i18n="triggers.bg_dark_glass">🧊 Cristal Translúcido</option>
                         <option value="solid_black" data-i18n="triggers.bg_solid_black">⬛ Negro Sólido</option>
@@ -869,7 +869,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 11px;" data-i18n="triggers.label_font">Tipografía:</label>
+                      <label style="font-size: 11px;" data-i18n="triggers.label_font" for="trig-banner-font-family">Tipografía:</label>
                       <select id="trig-banner-font-family" class="form-select" onchange="updateLivePreviewCaption()">
                         <option value="tech" data-i18n="triggers.font_tech">⚡ Cyberpunk / Tech</option>
                         <option value="sans" data-i18n="triggers.font_sans">💎 Outfit Moderna Sans</option>
@@ -882,7 +882,7 @@
                   <!-- Disposición, Bordes y Animación -->
                   <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 10px;" data-i18n="triggers.label_font_size">Tamaño Texto:</label>
+                      <label style="font-size: 10px;" data-i18n="triggers.label_font_size" for="trig-banner-font-size">Tamaño Texto:</label>
                       <select id="trig-banner-font-size" class="form-select" style="font-size: 11px;" onchange="updateLivePreviewCaption()">
                         <option value="small" data-i18n="triggers.size_small">Pequeño (14px)</option>
                         <option value="medium" selected data-i18n="triggers.size_medium">Medio (18px)</option>
@@ -892,7 +892,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 10px;" data-i18n="triggers.label_position">Posición Rótulo:</label>
+                      <label style="font-size: 10px;" data-i18n="triggers.label_position" for="trig-banner-position">Posición Rótulo:</label>
                       <select id="trig-banner-position" class="form-select" style="font-size: 11px;" onchange="updateLivePreviewCaption()">
                         <option value="below" selected data-i18n="triggers.pos_below">⬇️ Debajo</option>
                         <option value="above" data-i18n="triggers.pos_above">⬆️ Encima</option>
@@ -902,7 +902,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 10px;" data-i18n="triggers.label_border_style">Borde Rótulo:</label>
+                      <label style="font-size: 10px;" data-i18n="triggers.label_border_style" for="trig-banner-border">Borde Rótulo:</label>
                       <select id="trig-banner-border" class="form-select" style="font-size: 11px;" onchange="updateLivePreviewCaption()">
                         <option value="rounded" selected data-i18n="triggers.border_rounded">🟢 Redondeado Neón</option>
                         <option value="chamfer" data-i18n="triggers.border_chamfer">📐 Biselado Tech</option>
@@ -914,7 +914,7 @@
                     </div>
 
                     <div class="form-group" style="margin-bottom: 0;">
-                      <label style="font-size: 10px;" data-i18n="triggers.label_animation">Animación:</label>
+                      <label style="font-size: 10px;" data-i18n="triggers.label_animation" for="trig-banner-animation">Animación:</label>
                       <select id="trig-banner-animation" class="form-select" style="font-size: 11px;" onchange="updateLivePreviewCaption()">
                         <option value="pop" selected data-i18n="triggers.anim_pop">💥 Pop Elástico</option>
                         <option value="slide" data-i18n="triggers.anim_slide">🚀 Deslizamiento</option>
@@ -986,7 +986,7 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 0;">
-                  <label style="font-size: 11px;" data-i18n="triggers.label_special_action">Acción interactiva simultánea al canjear:</label>
+                  <label style="font-size: 11px;" data-i18n="triggers.label_special_action" for="trig-special-action">Acción interactiva simultánea al canjear:</label>
                   <select id="trig-special-action" class="form-select" onchange="onSpecialActionChange(this.value)">
                     <option value="none" data-i18n="triggers.special_none">🚫 Ninguna (Solo reproducir meme / audio multimedia)</option>
                     <optgroup label="💬 Control del Chat de Twitch (Helix API)">
@@ -1005,7 +1005,7 @@
                 <!-- Parámetros específicos condicionales -->
                 <div id="action-param-container" style="display: none; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-dim); border-radius: 6px; padding: 10px; margin-top: 4px;">
                   <div id="param-group-twitch-duration" class="form-group" style="display: none; margin-bottom: 0;">
-                    <label style="font-size: 10px;" data-i18n="triggers.label_duration_mode">Duración del modo antes de volver al estado normal (segundos):</label>
+                    <label style="font-size: 10px;" data-i18n="triggers.label_duration_mode" for="trig-action-duration">Duración del modo antes de volver al estado normal (segundos):</label>
                     <div style="display: flex; gap: 8px; align-items: center;">
                       <input type="number" id="trig-action-duration" class="form-input" value="60" min="5" max="1800" style="width: 80px;">
                       <button type="button" class="btn-stage-preset" onclick="document.getElementById('trig-action-duration').value=30">30s</button>
@@ -1015,7 +1015,7 @@
                   </div>
 
                   <div id="param-group-emotes" class="form-group" style="display: none; margin-bottom: 0;">
-                    <label style="font-size: 10px;" data-i18n="triggers.label_emotes">Emojis para la explosión en pantalla:</label>
+                    <label style="font-size: 10px;" data-i18n="triggers.label_emotes" for="trig-action-emotes">Emojis para la explosión en pantalla:</label>
                     <input type="text" id="trig-action-emotes" class="form-input" value="🎉,🔥,✨,❤️,⭐,🚀,💥" placeholder="ej. 🎉,🔥,😂" data-i18n-placeholder="themes.placeholder_emotes">
                     <div style="display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap;">
                       <button type="button" class="btn-stage-preset" onclick="document.getElementById('trig-action-emotes').value='🎉,🎊,🥳,✨,⭐'" data-i18n="triggers.btn_party">🎉 Fiesta</button>
@@ -1025,7 +1025,7 @@
                   </div>
 
                   <div id="param-group-timer" class="form-group" style="display: none; margin-bottom: 0;">
-                    <label style="font-size: 10px;" data-i18n="triggers.label_timer_sec">Segundos a sumar al Temporizador de Stream en OBS:</label>
+                    <label style="font-size: 10px;" data-i18n="triggers.label_timer_sec" for="trig-action-timer-sec">Segundos a sumar al Temporizador de Stream en OBS:</label>
                     <div style="display: flex; gap: 8px; align-items: center;">
                       <input type="number" id="trig-action-timer-sec" class="form-input" value="60" min="5" max="3600" style="width: 80px;">
                       <button type="button" class="btn-stage-preset" onclick="document.getElementById('trig-action-timer-sec').value=30">+30s</button>
@@ -1078,7 +1078,10 @@
         </div>
       </div>
 
-      <!-- GUÍA CLARA DE 3 PASOS: CÓMO SE PONEN EN OBS -->
+      <!-- GUÍA DE 3 PASOS: acordeon cerrado (no empuja la cuadricula hacia abajo) -->
+      <details class="component-themes-accordion" id="widgets-guide-accordion">
+        <summary>🚀 ¿CÓMO SE PONEN LOS WIDGETS EN OBS? (3 pasos)</summary>
+        <div class="component-themes-accordion__body">
       <div class="guide-banner">
         <span class="guide-banner-icon">🚀</span>
         <div>
@@ -1090,18 +1093,9 @@
           </p>
         </div>
       </div>
-
-      <!-- TEMAS DE COMPONENTES (widgets y alertas de panel) -->
-      <div class="dash-card" style="margin: 16px 0; padding: 16px 20px; background: rgba(14,18,24,0.95); border: 1.5px solid rgba(87,214,196,0.35); border-radius: var(--radius-sm);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-          <div>
-            <div style="font-family:var(--font-tech); font-size:13px; font-weight:800; color:var(--color-accent-cyan); letter-spacing:.5px;" data-i18n="widgets.widget_themes_title">🎨 TEMAS DE WIDGETS</div>
-            <div style="font-size:11px; color:var(--color-text-dim); margin-top:2px;" data-i18n="widgets.widget_themes_hint">Aplica un tema de pack y una forma a cada widget sin pasar por una fusión. El cambio se ve en vivo.</div>
-          </div>
-          <button type="button" class="btn-action-test" style="font-size:10px; padding:3px 8px;" onclick="ComponentThemes.load()" data-i18n="common.refresh">↻ Actualizar</button>
         </div>
-        <div id="component-themes-panel" style="display:flex; flex-direction:column; gap:8px;"></div>
-      </div>
+      </details>
+
 
       <!-- ============================================================== -->
       <!-- DRAWER MINI-APP (EXPANDIBLE CON CONTROLES, ATAJOS Y PIP)       -->
@@ -1223,7 +1217,11 @@
             </div>
           </div>
 
-          <div class="widget-url-box">
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <span data-status-chip="widget" data-status-id="chat"></span>
+            <button type="button" class="btn-stage-preset" style="font-size:11px;padding:4px 10px;" onclick="ComponentThemes.expandFor('widget','chat')" title="Asignar un tema del pack a este widget">🎨 Tema</button>
+          </div>
+<div class="widget-url-box">
             <span id="widget-url-chat" class="widget-url-string">http://localhost:8080/widgets/chat/index.html</span>
             <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-chat').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
@@ -1259,7 +1257,11 @@
             </div>
           </div>
 
-          <div class="widget-url-box">
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <span data-status-chip="widget" data-status-id="timer"></span>
+            <button type="button" class="btn-stage-preset" style="font-size:11px;padding:4px 10px;" onclick="ComponentThemes.expandFor('widget','timer')" title="Asignar un tema del pack a este widget">🎨 Tema</button>
+          </div>
+<div class="widget-url-box">
             <span id="widget-url-timer" class="widget-url-string">http://localhost:8080/widgets/timer/index.html</span>
             <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-timer').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
@@ -1299,7 +1301,11 @@
             </div>
           </div>
 
-          <div class="widget-url-box">
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <span data-status-chip="widget" data-status-id="shoutout"></span>
+            <button type="button" class="btn-stage-preset" style="font-size:11px;padding:4px 10px;" onclick="ComponentThemes.expandFor('widget','shoutout')" title="Asignar un tema del pack a este widget">🎨 Tema</button>
+          </div>
+<div class="widget-url-box">
             <span id="widget-url-so" class="widget-url-string">http://localhost:8080/widgets/shoutout/index.html</span>
             <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-so').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
@@ -1337,7 +1343,11 @@
             </div>
           </div>
 
-          <div class="widget-url-box">
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <span data-status-chip="widget" data-status-id="goal"></span>
+            <button type="button" class="btn-stage-preset" style="font-size:11px;padding:4px 10px;" onclick="ComponentThemes.expandFor('widget','goal')" title="Asignar un tema del pack a este widget">🎨 Tema</button>
+          </div>
+<div class="widget-url-box">
             <span id="widget-url-goal" class="widget-url-string">http://localhost:8080/widgets/goal/index.html</span>
             <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-goal').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
@@ -1372,7 +1382,11 @@
             </div>
           </div>
 
-          <div class="widget-url-box">
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <span data-status-chip="widget" data-status-id="ticker"></span>
+            <button type="button" class="btn-stage-preset" style="font-size:11px;padding:4px 10px;" onclick="ComponentThemes.expandFor('widget','ticker')" title="Asignar un tema del pack a este widget">🎨 Tema</button>
+          </div>
+<div class="widget-url-box">
             <span id="widget-url-ticker" class="widget-url-string">http://localhost:8080/widgets/ticker/index.html</span>
             <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-ticker').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
@@ -1390,77 +1404,38 @@
             </div>
           </div>
 
-          <div class="widget-url-box">
+                    <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+            <span data-status-chip="widget" data-status-id="alerts"></span>
+            <button type="button" class="btn-stage-preset" style="font-size:11px;padding:4px 10px;" onclick="ComponentThemes.expandFor('widget','alerts')" title="Asignar un tema del pack a este widget">🎨 Tema</button>
+          </div>
+<div class="widget-url-box">
             <span id="widget-url-alerts" class="widget-url-string">http://localhost:8080/alerts/index.html</span>
             <button class="btn-action-copy" onclick="copyText(document.getElementById('widget-url-alerts').textContent)" data-i18n="widgets.btn_copy_url">📋 Copiar URL</button>
           </div>
         </div>
 
+      <!-- TEMA DEL PACK (widgets) — acordeon cerrado: una sola linea -->
+      <details class="component-themes-accordion" id="widget-themes-accordion" style="margin-top: 18px;">
+        <summary>🎨 TEMA DEL PACK — widgets</summary>
+        <div class="component-themes-accordion__body">
+          <div style="font-size:11px; color:var(--color-text-dim); line-height:1.5; margin-bottom:10px;">
+            Asigna un <strong>tema del pack</strong> y una <strong>forma</strong> a cada widget. Manda sobre el «Estilo base» del widget cuando esta asignado.
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
+            <button type="button" class="btn-action-test" style="font-size:10px; padding:3px 8px;" onclick="ComponentThemes.load({ force: true })" data-i18n="common.refresh">↻ Actualizar</button>
+          </div>
+          <div id="component-themes-panel" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+      </details>
       </div>
     </div>
 
     <!-- ============================================================== -->
     <!-- SECCIÓN 3: ALERTAS DE DIRECTO (SIMULADOR Y PRUEBAS)            -->
     <!-- ============================================================== -->
-    <div id="sec-alerts" class="section-view">
-      <div class="section-header">
-        <h1 class="section-title" data-i18n="alerts.sim_title">
-          🚨 SIMULADOR DE ALERTAS DE DIRECTO
-        </h1>
-        <div class="section-subtitle" data-i18n="alerts.sim_subtitle">
-          Prueba el diseño, animación y sintetizador de audio de tus alertas antes o durante el directo con un solo clic.
-        </div>
-      </div>
-
-      <div class="grid-2col">
-        <div class="dash-card">
-          <div class="card-header-bar">
-            <span class="card-header-title" data-i18n="alerts.sim_instant_title">🧪 BOTONES DE PRUEBA INSTANTÁNEA</span>
-          </div>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-            <button class="btn-action-test" style="padding: 14px;" onclick="sendAlertTest('follow')" data-i18n="alerts.sim_btn_follow">
-              ❤️ Probar Follow
-            </button>
-            <button class="btn-action-test" style="padding: 14px; border-color: rgba(255,120,63,0.4);" onclick="sendAlertTest('sub')" data-i18n="alerts.sim_btn_sub">
-              ⭐ Probar Suscripción (N1)
-            </button>
-            <button class="btn-action-test" style="padding: 14px; border-color: rgba(245,158,11,0.4);" onclick="sendAlertTest('bits')" data-i18n="alerts.sim_btn_bits">
-              💎 Probar 100 Bits
-            </button>
-            <button class="btn-action-test" style="padding: 14px; border-color: rgba(236,72,153,0.4);" onclick="sendAlertTest('raid')" data-i18n="alerts.sim_btn_raid">
-              🚀 Probar Raid (25 p.)
-            </button>
-          </div>
-
-          <div style="margin-top: 14px; border-top: 1px solid var(--color-border-dim); padding-top: 16px;">
-            <div style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim); margin-bottom: 8px;" data-i18n="alerts.sim_custom_title">
-              PROBAR CON TEXTO Y NOMBRE PERSONALIZADO:
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <input type="text" id="sim-user-input" class="form-input" placeholder="Nombre" value="AndorinaDev" data-i18n-placeholder="themes.placeholder_sim_user">
-              <input type="text" id="sim-msg-input" class="form-input" placeholder="Mensaje" value="¡Un saludo!" data-i18n-placeholder="themes.placeholder_sim_msg" data-i18n-value="alerts.sim_default_msg">
-              <button class="btn-action-primary" onclick="sendCustomAlertTest()" data-i18n="alerts.sim_btn_fire">Disparar</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="dash-card">
-          <div class="card-header-bar">
-            <span class="card-header-title" data-i18n="alerts.sim_obs_title">📋 CÓMO CONFIGURAR LA ALERTA EN OBS</span>
-          </div>
-          <p style="font-size: 13px; color: var(--color-text-light); line-height: 1.6; margin: 0;" data-i18n="alerts.sim_obs_steps">
-            1. Añade una fuente de tipo <strong>Navegador</strong> en OBS.<br>
-            2. Pega la URL: <code id="alerts-source-code">http://localhost:8080/alerts/index.html</code><br>
-            3. Pon Ancho: <code>1920</code>, Alto: <code>1080</code>.<br>
-            4. <strong>Muy importante:</strong> Coloca esta fuente en la <strong>capa superior</strong> (arriba del todo) de tu lista de fuentes para que las alertas y memes aparezcan por encima de tus cámaras.
-          </p>
-          <button class="btn-action-copy" style="align-self: flex-start;" onclick="copyText(document.getElementById('alerts-source-code').textContent)" data-i18n="alerts.sim_btn_copy_alerts">
-            📋 Copiar URL de Alertas
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- El Estudio de Alertas se monta aqui por JS (AlertsStudio.renderStudio).
+         El HTML interior anterior era codigo muerto: se sobrescribia al arrancar. -->
+    <div id="sec-alerts" class="section-view"></div>
 
     <!-- ============================================================== -->
     <!-- SECCIÓN 4: GESTOR DE MEDIOS (DRAG & DROP)                       -->
@@ -1552,7 +1527,7 @@
           <div class="media-toolbar-group">
             <div style="position: relative;">
               <input type="text" id="media-search-input" class="form-input" placeholder="🔍 Buscar archivos..." style="padding: 5px 28px 5px 10px; font-size: 11px; width: 150px;" oninput="onMediaSearch(this.value)" data-i18n-placeholder="themes.placeholder_search">
-              <button type="button" onclick="clearMediaSearch()" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-dim); cursor: pointer; font-size: 11px;" data-i18n="media.modal_close">✕</button>
+              <button type="button" onclick="clearMediaSearch()" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-dim); cursor: pointer; font-size: 11px;" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
             </div>
 
             <select id="media-filter-type" class="form-select" style="padding: 5px 8px; font-size: 11px; width: 110px;" onchange="onMediaFilterChange(this.value)">
@@ -1571,10 +1546,10 @@
 
             <div class="media-tool-sep"></div>
 
-            <button id="media-btn-view-grid" class="media-btn-tool active" onclick="setMediaViewMode('grid')" title="Vista en Cuadrícula" data-i18n="media.view_grid">
+            <button id="media-btn-view-grid" class="media-btn-tool active" onclick="setMediaViewMode('grid')" title="Vista en Cuadrícula" data-i18n="media.view_grid" aria-label="Vista en Cuadrícula">
               🔲
             </button>
-            <button id="media-btn-view-list" class="media-btn-tool" onclick="setMediaViewMode('list')" title="Vista en Lista detallada" data-i18n="media.view_list">
+            <button id="media-btn-view-list" class="media-btn-tool" onclick="setMediaViewMode('list')" title="Vista en Lista detallada" data-i18n="media.view_list" aria-label="Vista en Lista detallada">
               ☰
             </button>
           </div>
@@ -1586,7 +1561,7 @@
           <aside class="media-tree-pane">
             <div class="media-tree-header">
               <span data-i18n="media.tree_title">ÁRBOL DE CARPETAS</span>
-              <button class="btn-action-test" style="padding: 2px 6px; font-size: 10px;" onclick="openCreateFolderModal()" title="Nueva Carpeta">+</button>
+              <button class="btn-action-test" style="padding: 2px 6px; font-size: 10px;" onclick="openCreateFolderModal()" title="Nueva Carpeta" aria-label="Nueva Carpeta">+</button>
             </div>
 
             <div id="media-folder-tree" class="media-tree-list">
@@ -1692,7 +1667,7 @@
               <div id="media-preview-sub" style="font-family: var(--font-tech); font-size: 11px; color: var(--color-text-dim);">/media/...</div>
             </div>
           </div>
-          <button class="btn-action-test" style="padding: 4px 10px; font-size: 14px;" onclick="closeMediaPreview()" data-i18n="media.modal_close">✕</button>
+          <button class="btn-action-test" style="padding: 4px 10px; font-size: 14px;" onclick="closeMediaPreview()" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
         </div>
 
         <div class="media-preview-stage" id="media-preview-stage">
@@ -1720,10 +1695,10 @@
       <div class="media-preview-dialog" style="max-width: 420px;">
         <div class="media-preview-header">
           <div style="font-weight: 700; font-size: 13px;" data-i18n="media.modal_mkdir_title">📁 CREAR NUEVA CARPETA</div>
-          <button class="btn-action-test" onclick="closeCreateFolderModal()" data-i18n="media.modal_close">✕</button>
+          <button class="btn-action-test" onclick="closeCreateFolderModal()" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
         </div>
         <div style="padding: 18px 20px;">
-          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="media.label_parent">
+          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="media.label_parent" for="mkdir-folder-name">
             Crear dentro de: <b id="lbl-mkdir-parent" style="color: var(--color-accent-cyan);">raíz</b>
           </label>
           <input type="text" id="mkdir-folder-name" class="form-input" placeholder="Nombre de la carpeta (ej. memes_subs)" onkeydown="if(event.key === 'Enter') submitCreateFolder()" data-i18n-placeholder="themes.placeholder_folder_name">
@@ -1740,11 +1715,11 @@
       <div class="media-preview-dialog" style="max-width: 440px;">
         <div class="media-preview-header">
           <div style="font-weight: 700; font-size: 13px;" data-i18n="media.modal_rename_title">✏️ RENOMBRAR ELEMENTO</div>
-          <button class="btn-action-test" onclick="closeRenameModal()" data-i18n="media.modal_close">✕</button>
+          <button class="btn-action-test" onclick="closeRenameModal()" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
         </div>
         <div style="padding: 18px 20px;">
           <input type="hidden" id="rename-target-path">
-          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="media.label_new_name">Nuevo nombre:</label>
+          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="media.label_new_name" for="rename-new-name">Nuevo nombre:</label>
           <input type="text" id="rename-new-name" class="form-input" placeholder="nuevo_nombre.ext" onkeydown="if(event.key === 'Enter') submitRename()" data-i18n-placeholder="themes.placeholder_rename">
           <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
             <button class="btn-action-test" onclick="closeRenameModal()" data-i18n="common.cancel">Cancelar</button>
@@ -2044,7 +2019,7 @@
             <button type="button" class="btn-action-primary" style="padding: 5px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" onclick="openFullscreenPreview()" title="Abrir overlay con este tema a resolución nativa 1920x1080 en nueva pestaña" data-i18n="themes.btn_fullscreen">
               🖥️ Ver a Pantalla Completa ↗
             </button>
-            <button class="btn-action-test" style="padding: 4px 10px; font-size: 14px;" onclick="closeThemeEditor()" data-i18n="media.modal_close">✕</button>
+            <button class="btn-action-test" style="padding: 4px 10px; font-size: 14px;" onclick="closeThemeEditor()" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
           </div>
         </div>
 
@@ -2059,11 +2034,11 @@
             <!-- Nombre y Badge -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_theme_name">Nombre del Tema:</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_theme_name" for="edit-theme-name">Nombre del Tema:</label>
                 <input type="text" id="edit-theme-name" class="form-input" style="font-size: 12px; padding: 6px 8px;" oninput="onVisualSettingChange()">
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.badge_label">Etiqueta / Badge:</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.badge_label" for="edit-theme-badge">Etiqueta / Badge:</label>
                 <input type="text" id="edit-theme-badge" class="form-input" style="font-size: 12px; padding: 6px 8px;" oninput="onVisualSettingChange()">
               </div>
             </div>
@@ -2071,14 +2046,14 @@
             <!-- Colores Principales -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_cyan">Acento Primario (Cyan/Acento 1):</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_cyan" for="edit-theme-cyan-color">Acento Primario (Cyan/Acento 1):</label>
                 <div style="display: flex; gap: 6px; align-items: center;">
                   <input type="color" id="edit-theme-cyan-color" style="width: 32px; height: 32px; border: none; border-radius: 4px; cursor: pointer; background: transparent;" oninput="updateHexFromPicker('cyan'); onVisualSettingChange();">
                   <input type="text" id="edit-theme-cyan-hex" class="form-input" style="font-size: 11px; padding: 4px 6px;" oninput="updatePickerFromHex('cyan'); onVisualSettingChange();">
                 </div>
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_orange">Acento Secundario (Naranja/Acento 2):</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_orange" for="edit-theme-orange-color">Acento Secundario (Naranja/Acento 2):</label>
                 <div style="display: flex; gap: 6px; align-items: center;">
                   <input type="color" id="edit-theme-orange-color" style="width: 32px; height: 32px; border: none; border-radius: 4px; cursor: pointer; background: transparent;" oninput="updateHexFromPicker('orange'); onVisualSettingChange();">
                   <input type="text" id="edit-theme-orange-hex" class="form-input" style="font-size: 11px; padding: 4px 6px;" oninput="updatePickerFromHex('orange'); onVisualSettingChange();">
@@ -2089,14 +2064,14 @@
             <!-- Fondo Oscuro y Texto -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_bg">Fondo Oscuro:</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_bg" for="edit-theme-bg-color">Fondo Oscuro:</label>
                 <div style="display: flex; gap: 6px; align-items: center;">
                   <input type="color" id="edit-theme-bg-color" style="width: 32px; height: 32px; border: none; border-radius: 4px; cursor: pointer; background: transparent;" oninput="updateHexFromPicker('bg'); onVisualSettingChange();">
                   <input type="text" id="edit-theme-bg-hex" class="form-input" style="font-size: 11px; padding: 4px 6px;" oninput="updatePickerFromHex('bg'); onVisualSettingChange();">
                 </div>
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_text">Color de Texto:</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_text" for="edit-theme-text-color">Color de Texto:</label>
                 <div style="display: flex; gap: 6px; align-items: center;">
                   <input type="color" id="edit-theme-text-color" style="width: 32px; height: 32px; border: none; border-radius: 4px; cursor: pointer; background: transparent;" oninput="updateHexFromPicker('text'); onVisualSettingChange();">
                   <input type="text" id="edit-theme-text-hex" class="form-input" style="font-size: 11px; padding: 4px 6px;" oninput="updatePickerFromHex('text'); onVisualSettingChange();">
@@ -2107,7 +2082,7 @@
             <!-- Tipografía, Bordes y Animación -->
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_border_style">Bordes del Tema:</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_border_style" for="edit-theme-border-style">Bordes del Tema:</label>
                 <select id="edit-theme-border-style" class="form-select" style="font-size: 11px; padding: 6px;" onchange="onVisualSettingChange()">
                   <option value="rounded" data-i18n="themes.border_rounded">Redondeado Moderno (6px)</option>
                   <option value="pill" data-i18n="themes.border_pill">Orgánico Curvado (14px)</option>
@@ -2120,7 +2095,7 @@
                 </select>
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_animation">Animación / Efecto:</label>
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_animation" for="edit-theme-animation-effect">Animación / Efecto:</label>
                 <select id="edit-theme-animation-effect" class="form-select" style="font-size: 11px; padding: 6px;" onchange="onVisualSettingChange()">
                   <option value="none" data-i18n="themes.anim_none">Estático (Sin animación)</option>
                   <option value="pulse" data-i18n="themes.anim_pulse">Respiración Neón Pulse</option>
@@ -2130,7 +2105,7 @@
                 </select>
               </div>
               <div>
-                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_glow">
+                <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="themes.label_glow" for="edit-theme-glow">
                   Glow / Resplandor Neón: <b id="lbl-theme-glow">60%</b>
                 </label>
                 <input type="range" id="edit-theme-glow" min="0" max="100" value="60" style="width: 100%; accent-color: var(--color-accent-cyan);" oninput="document.getElementById('lbl-theme-glow').textContent = this.value + '%'; onVisualSettingChange();">
@@ -2160,7 +2135,7 @@
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                   <div>
-                    <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_shape">Forma de Burbuja:</label>
+                    <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_shape" for="edit-chat-shape">Forma de Burbuja:</label>
                     <select id="edit-chat-shape" class="form-select" style="font-size: 11px; padding: 4px;" onchange="onDerivativeChange()">
                       <option value="rounded" data-i18n="themes.border_rounded">Redondeada</option>
                       <option value="arcade" data-i18n="themes.border_arcade">8-Bit Arcade</option>
@@ -2171,7 +2146,7 @@
                     </select>
                   </div>
                   <div>
-                    <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_opacity">Opacidad Fondo (%):</label>
+                    <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_opacity" for="edit-chat-opacity">Opacidad Fondo (%):</label>
                     <input type="range" id="edit-chat-opacity" min="0" max="100" value="90" style="width: 100%; accent-color: var(--color-accent-orange);" oninput="onDerivativeChange()">
                   </div>
                 <button type="button" class="btn-action-test" style="width: 100%; margin-top: 8px; font-size: 10px; padding: 4px;" onclick="reAnchorChat()" data-i18n="themes.btn_reanchor">
@@ -2369,16 +2344,16 @@
       <div class="media-preview-dialog" style="max-width: 440px;">
         <div class="media-preview-header">
           <div style="font-weight: 700; font-size: 13px;" data-i18n="themes.modal_new_pack_title">📁 CREAR NUEVA CARPETA / PACK DE TEMAS</div>
-          <button class="btn-action-test" onclick="closeNewPackModal()" data-i18n="media.modal_close">✕</button>
+          <button class="btn-action-test" onclick="closeNewPackModal()" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
         </div>
         <div style="padding: 18px 20px;">
-          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_name">Nombre del Pack:</label>
+          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_name" for="new-pack-name">Nombre del Pack:</label>
           <input type="text" id="new-pack-name" class="form-input" placeholder="ej. Pack Synthwave Neon" style="margin-bottom: 12px;" data-i18n-placeholder="themes.placeholder_pack_name">
 
-          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_icon">Icono representativo:</label>
+          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_icon" for="new-pack-icon">Icono representativo:</label>
           <input type="text" id="new-pack-icon" class="form-input" value="🎨" style="margin-bottom: 12px; width: 60px;">
 
-          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_desc">Descripción corta:</label>
+          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_pack_desc" for="new-pack-desc">Descripción corta:</label>
           <textarea id="new-pack-desc" class="form-input" style="height: 60px;" placeholder="Temas oscuros inspirados en..." data-i18n-placeholder="themes.placeholder_pack_desc"></textarea>
 
           <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
@@ -2394,13 +2369,13 @@
       <div class="media-preview-dialog" style="max-width: 440px;">
         <div class="media-preview-header">
           <div style="font-weight: 700; font-size: 13px;" data-i18n="themes.modal_new_theme_title">➕ CREAR NUEVO TEMA EN ESTE PACK</div>
-          <button class="btn-action-test" onclick="closeNewThemeModal()" data-i18n="media.modal_close">✕</button>
+          <button class="btn-action-test" onclick="closeNewThemeModal()" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
         </div>
         <div style="padding: 18px 20px;">
-          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_theme_name">Nombre del Tema:</label>
+          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_theme_name" for="new-theme-name">Nombre del Tema:</label>
           <input type="text" id="new-theme-name" class="form-input" placeholder="ej. Matrix Glitch" style="margin-bottom: 12px;" data-i18n-placeholder="themes.placeholder_theme_name">
 
-          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_accent">Color de Acento Principal:</label>
+          <label style="font-size: 12px; color: var(--color-text-dim); display: block; margin-bottom: 6px;" data-i18n="themes.label_accent" for="new-theme-accent">Color de Acento Principal:</label>
           <input type="color" id="new-theme-accent" value="#57D6C4" style="width: 100%; height: 36px; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 14px;">
 
           <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px;">
@@ -2416,34 +2391,34 @@
       <div class="media-preview-dialog" style="max-width: 680px; width: 92%; max-height: 90vh; display: flex; flex-direction: column; background: #12161C; border: 1.5px solid var(--color-accent-cyan); border-radius: 8px; box-shadow: 0 12px 40px rgba(0,0,0,0.7); overflow: hidden;">
         <div class="media-preview-header" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: rgba(14, 18, 24, 0.95); border-bottom: 1px solid rgba(87, 214, 196, 0.25);">
           <div id="fusion-modal-title" style="font-weight: 800; font-size: 14px; color: #FFFFFF;" data-i18n="fusions.modal_title">⚡ GESTIONAR FUSIÓN DE OVERLAYS</div>
-          <button type="button" class="btn-action-test" onclick="closeFusionModal()" style="padding: 4px 10px;">✕</button>
+          <button type="button" class="btn-action-test" onclick="closeFusionModal()" style="padding: 4px 10px;" aria-label="Cerrar">✕</button>
         </div>
         <form id="form-fusion-editor" onsubmit="saveFusionFromModal(event)" style="display: flex; flex-direction: column; overflow-y: auto; padding: 18px 22px; gap: 14px;">
           <input type="hidden" id="fusion-modal-id" value="">
           
           <div style="display: grid; grid-template-columns: 80px 1fr; gap: 12px;">
             <div>
-              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_icon">Icono:</label>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_icon" for="fusion-modal-icon">Icono:</label>
               <input type="text" id="fusion-modal-icon" class="form-input" value="⚡" style="text-align: center; font-size: 20px; padding: 6px;" required>
             </div>
             <div>
-              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_name">Nombre de la Fusión:</label>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_name" for="fusion-modal-name">Nombre de la Fusión:</label>
               <input type="text" id="fusion-modal-name" class="form-input" placeholder="ej. Mi Stream Híbrido Gaming + Maker" required data-i18n-placeholder="fusions.placeholder_name">
             </div>
           </div>
 
           <div>
-            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_desc">Descripción (Opcional):</label>
+            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_desc" for="fusion-modal-desc">Descripción (Opcional):</label>
             <input type="text" id="fusion-modal-desc" class="form-input" placeholder="ej. Setups para fin de semana y directos especiales" data-i18n-placeholder="fusions.placeholder_desc">
           </div>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
-              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_theme">Estilo Predeterminado:</label>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_theme" for="fusion-modal-theme">Estilo Predeterminado:</label>
               <select id="fusion-modal-theme" class="monitor-select" style="width: 100%; padding: 6px 10px; font-size: 12px;"></select>
             </div>
             <div>
-              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_shape">Forma Predeterminada:</label>
+              <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" data-i18n="fusions.label_default_shape" for="fusion-modal-shape">Forma Predeterminada:</label>
               <select id="fusion-modal-shape" class="monitor-select" style="width: 100%; padding: 6px 10px; font-size: 12px;"></select>
             </div>
           </div>
@@ -2478,14 +2453,14 @@
       <div class="media-preview-dialog" style="max-width: 480px; width: 92%; background: #12161C; border: 1.5px solid var(--color-accent-cyan); border-radius: 8px; box-shadow: 0 12px 40px rgba(0,0,0,0.7); overflow: hidden;">
         <div class="media-preview-header" style="display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: rgba(14, 18, 24, 0.95); border-bottom: 1px solid rgba(87, 214, 196, 0.25);">
           <div style="font-weight: 800; font-size: 13px; color: #FFFFFF;" data-i18n="fusions.modal_add_title">📥 AÑADIR ESCENAS A FUSIÓN EXISTENTE</div>
-          <button type="button" class="btn-action-test" onclick="closeAddToExistingFusionModal()" style="padding: 4px 10px;">✕</button>
+          <button type="button" class="btn-action-test" onclick="closeAddToExistingFusionModal()" style="padding: 4px 10px;" aria-label="Cerrar">✕</button>
         </div>
         <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
           <div id="modal-add-fusion-hint" style="font-size: 12px; color: var(--color-text-dim);" data-i18n="fusions.label_choose_fusion">
             Elige la Fusión donde añadir las escenas seleccionadas:
           </div>
           <div>
-            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;">Fusión Destino:</label>
+            <label style="font-size: 11px; color: var(--color-text-dim); display: block; margin-bottom: 4px;" for="select-target-fusion">Fusión Destino:</label>
             <select id="select-target-fusion" class="form-select" style="width: 100%; padding: 8px; font-size: 12px; background: #0E1216; color: #FFFFFF; border: 1px solid rgba(87, 214, 196, 0.4); border-radius: 4px;">
               <!-- Opciones de fusiones -->
             </select>
@@ -2526,7 +2501,7 @@
             <button class="btn-action-test" id="btn-scene-modal-copy-url" style="padding: 5px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" onclick="copyCurrentSceneUrl()" title="Copiar URL para pegar como Fuente Navegador en OBS" data-i18n="media.btn_copy_url">
               📋 Copiar URL para OBS
             </button>
-            <button class="btn-action-test" style="padding: 4px 10px; font-size: 14px;" onclick="closeSceneEditor()" data-i18n="media.modal_close">✕</button>
+            <button class="btn-action-test" style="padding: 4px 10px; font-size: 14px;" onclick="closeSceneEditor()" data-i18n="media.modal_close" aria-label="Cerrar">✕</button>
           </div>
         </div>
 
@@ -2681,11 +2656,11 @@
                     <span class="text-card-title" data-i18n="themes.tab_texts_title">Etiquetas de la Escena Game</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_badge">Texto de la Insignia de Webcam</label>
+                    <label class="text-field-label" data-i18n="themes.label_badge" for="txt-game-badge">Texto de la Insignia de Webcam</label>
                     <input type="text" id="txt-game-badge" class="form-input" placeholder="GAME MODE" data-i18n-placeholder="themes.placeholder_badge">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_tagline">Subtítulo / Modo</label>
+                    <label class="text-field-label" data-i18n="themes.label_tagline" for="txt-game-tagline">Subtítulo / Modo</label>
                     <input type="text" id="txt-game-tagline" class="form-input" placeholder="MODO JUEGO / GAMEPLAY" data-i18n-placeholder="themes.placeholder_tagline">
                   </div>
                 </div>
@@ -2701,23 +2676,23 @@
                     <span class="text-card-title" data-i18n="themes.card_maker_info">Información del Proyecto Maker</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_project">Nombre del Proyecto</label>
+                    <label class="text-field-label" data-i18n="themes.label_project" for="txt-maker-project">Nombre del Proyecto</label>
                     <input type="text" id="txt-maker-project" class="form-input" placeholder="ej. NAS CON RASPBERRY PI" data-i18n-placeholder="themes.placeholder_project">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_phase">Fase Actual Activa <span class="text-field-help">(debe coincidir con la lista de fases)</span></label>
+                    <label class="text-field-label" data-i18n="themes.label_phase" for="txt-maker-phase">Fase Actual Activa <span class="text-field-help">(debe coincidir con la lista de fases)</span></label>
                     <input type="text" id="txt-maker-phase" class="form-input" placeholder="ej. 02 MONTAJE" data-i18n-placeholder="themes.placeholder_phase">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_panel_title">Título del Panel Lateral</label>
+                    <label class="text-field-label" data-i18n="themes.label_panel_title" for="txt-maker-panel-title">Título del Panel Lateral</label>
                     <input type="text" id="txt-maker-panel-title" class="form-input" placeholder="ESTADO DEL PROYECTO" data-i18n-placeholder="themes.placeholder_panel">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_prefix">Prefijo de Proyecto (Barra Inferior)</label>
+                    <label class="text-field-label" data-i18n="themes.label_prefix" for="txt-maker-prefix">Prefijo de Proyecto (Barra Inferior)</label>
                     <input type="text" id="txt-maker-prefix" class="form-input" placeholder="PROYECTO:" data-i18n-placeholder="themes.placeholder_prefix">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_detail">Detalles / Componentes / Entorno</label>
+                    <label class="text-field-label" data-i18n="themes.label_detail" for="txt-maker-detail">Detalles / Componentes / Entorno</label>
                     <input type="text" id="txt-maker-detail" class="form-input" placeholder="ej. Armbian OS · PCB v1.2 · Caja a medida" data-i18n-placeholder="themes.placeholder_detail">
                   </div>
                   <!-- Rótulos de Cámaras -->
@@ -2727,15 +2702,15 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_main">Cámara Principal (Banco / Mesa):</label>
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_main" for="txt-maker-frame-main">Cámara Principal (Banco / Mesa):</label>
                         <input type="text" id="txt-maker-frame-main" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="CÁMARA PRINCIPAL · ESCENA" data-i18n-placeholder="themes.placeholder_cam_main">
                       </div>
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_face">Cámara Streamer / Rostro:</label>
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_face" for="txt-maker-frame-face">Cámara Streamer / Rostro:</label>
                         <input type="text" id="txt-maker-frame-face" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="STREAMER" data-i18n-placeholder="themes.placeholder_cam_face">
                       </div>
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_aux">Cámara Auxiliar / PC Terminal:</label>
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_aux" for="txt-maker-frame-aux">Cámara Auxiliar / PC Terminal:</label>
                         <input type="text" id="txt-maker-frame-aux" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="PC / TERMINAL" data-i18n-placeholder="themes.placeholder_cam_aux">
                       </div>
                     </div>
@@ -2772,23 +2747,23 @@
                     <span class="text-card-title" data-i18n="themes.card_print_info">Información del Proyecto Print</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_print_project">Nombre del Trabajo / Pieza</label>
+                    <label class="text-field-label" data-i18n="themes.label_print_project" for="txt-print-project">Nombre del Trabajo / Pieza</label>
                     <input type="text" id="txt-print-project" class="form-input" placeholder="ej. PEGATINAS PERSONALIZADAS" data-i18n-placeholder="themes.placeholder_print">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_print_material">Material / Filamento / Soporte</label>
+                    <label class="text-field-label" data-i18n="themes.label_print_material" for="txt-print-material">Material / Filamento / Soporte</label>
                     <input type="text" id="txt-print-material" class="form-input" placeholder="ej. Vinilo Holográfico Adhesivo" data-i18n-placeholder="triggers.placeholder_print_material">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_phase">Fase Actual Activa</label>
+                    <label class="text-field-label" data-i18n="themes.label_phase" for="txt-print-phase">Fase Actual Activa</label>
                     <input type="text" id="txt-print-phase" class="form-input" placeholder="ej. CORTE DE VINILO" data-i18n-placeholder="themes.placeholder_print_phase">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_panel_title">Título del Panel Lateral</label>
+                    <label class="text-field-label" data-i18n="themes.label_panel_title" for="txt-print-panel-title">Título del Panel Lateral</label>
                     <input type="text" id="txt-print-panel-title" class="form-input" placeholder="TRABAJO DE CORTE / IMPRESIÓN" data-i18n-placeholder="themes.placeholder_print_panel">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_prefix">Prefijo de Proyecto (Barra Inferior)</label>
+                    <label class="text-field-label" data-i18n="themes.label_prefix" for="txt-print-prefix">Prefijo de Proyecto (Barra Inferior)</label>
                     <input type="text" id="txt-print-prefix" class="form-input" placeholder="TRABAJO:" data-i18n-placeholder="themes.placeholder_print_prefix">
                   </div>
                   <!-- Rótulos de las Cámaras de Impresión / Corte -->
@@ -2798,15 +2773,15 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 6px;">
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.cam_main_label">Cámara Principal (Máquina / Cama):</label>
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.cam_main_label" for="txt-print-frame-main">Cámara Principal (Máquina / Cama):</label>
                         <input type="text" id="txt-print-frame-main" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="CÁMARA SECUNDARIA · PROCESO" data-i18n-placeholder="themes.placeholder_print_cam_main">
                       </div>
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_face">Cámara Streamer / Rostro:</label>
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.label_cam_face" for="txt-print-frame-face">Cámara Streamer / Rostro:</label>
                         <input type="text" id="txt-print-frame-face" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="STREAMER" data-i18n-placeholder="themes.placeholder_print_cam_face">
                       </div>
                       <div>
-                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.cam_aux_label">Cámara Auxiliar / Software CAD:</label>
+                        <label style="font-size: 10px; color: var(--color-text-dim);" data-i18n="themes.cam_aux_label" for="txt-print-frame-aux">Cámara Auxiliar / Software CAD:</label>
                         <input type="text" id="txt-print-frame-aux" class="form-input" style="font-size: 11px; padding: 4px 8px;" placeholder="SOFTWARE & CORTE" data-i18n-placeholder="themes.placeholder_print_cam_aux">
                       </div>
                     </div>
@@ -2843,19 +2818,19 @@
                     <span class="text-card-title" data-i18n="themes.card_chill_texts">Textos de la Escena Chill</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_chill_subtitle">Subtítulo Superior</label>
+                    <label class="text-field-label" data-i18n="themes.label_chill_subtitle" for="txt-chill-subtitle">Subtítulo Superior</label>
                     <input type="text" id="txt-chill-subtitle" class="form-input" placeholder="CHARLA / DUDAS / IDEAS / COMUNIDAD" data-i18n-placeholder="themes.placeholder_chill_sub">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_chill_chat">Título del Marco de Chat</label>
+                    <label class="text-field-label" data-i18n="themes.label_chill_chat" for="txt-chill-chat-title">Título del Marco de Chat</label>
                     <input type="text" id="txt-chill-chat-title" class="form-input" placeholder="CHAT EN DIRECTO" data-i18n-placeholder="themes.placeholder_chill_chat">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_chill_topic">Tema de Charla (Banda Inferior)</label>
+                    <label class="text-field-label" data-i18n="themes.label_chill_topic" for="txt-chill-topic">Tema de Charla (Banda Inferior)</label>
                     <input type="text" id="txt-chill-topic" class="form-input" placeholder="Tema de hoy, proyectos y preguntas del chat" data-i18n-placeholder="themes.placeholder_chill_topic">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_chill_prompt">Llamada a la Acción (Prompt)</label>
+                    <label class="text-field-label" data-i18n="themes.label_chill_prompt" for="txt-chill-chat-prompt">Llamada a la Acción (Prompt)</label>
                     <input type="text" id="txt-chill-chat-prompt" class="form-input" placeholder="¡Escribe en el chat para participar!" data-i18n-placeholder="triggers.placeholder_chat_prompt">
                   </div>
                   <div class="text-field-group">
@@ -2889,19 +2864,19 @@
                     <span class="text-card-title" data-i18n="themes.card_headline_sub">Titular Principal y Subtítulo</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_tag">Etiqueta Superior // Tag</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_tag" for="txt-ss-hero-tag">Etiqueta Superior // Tag</label>
                     <input type="text" id="txt-ss-hero-tag" class="form-input" placeholder="// STREAM EN DIRECTO" data-i18n-placeholder="themes.placeholder_ss_tag">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_title">Título Principal (Línea 1)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_title" for="txt-ss-title">Título Principal (Línea 1)</label>
                     <input type="text" id="txt-ss-title" class="form-input" placeholder="ENSEGUIDA" data-i18n-placeholder="themes.placeholder_ss_title">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_highlight">Texto Destacado en Color Cian (Línea 2)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_highlight" for="txt-ss-highlight">Texto Destacado en Color Cian (Línea 2)</label>
                     <input type="text" id="txt-ss-highlight" class="form-input" placeholder="ESTAMOS EN DIRECTO" data-i18n-placeholder="themes.placeholder_ss_highlight">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_subtitle">Subtítulo Informativo</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_subtitle" for="txt-ss-subtitle">Subtítulo Informativo</label>
                     <input type="text" id="txt-ss-subtitle" class="form-input" placeholder="PREPARANDO EL DIRECTO..." data-i18n-placeholder="themes.placeholder_ss_sub">
                   </div>
                 </div>
@@ -2912,15 +2887,15 @@
                     <span class="text-card-title" data-i18n="themes.card_countdown_status">Cuenta Atrás y Estado</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_countdown">Minutos de Cuenta Atrás <span class="text-field-help" data-i18n="themes.hint_countdown">(0 para modo barra sin reloj)</span></label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_countdown" for="txt-ss-countdown">Minutos de Cuenta Atrás <span class="text-field-help" data-i18n="themes.hint_countdown">(0 para modo barra sin reloj)</span></label>
                     <input type="number" id="txt-ss-countdown" class="form-input" min="0" max="60" value="5">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_status">Estado de Transmisión (Cabecera)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_status" for="txt-ss-live-status">Estado de Transmisión (Cabecera)</label>
                     <input type="text" id="txt-ss-live-status" class="form-input" placeholder="TRANSMISIÓN INICIANDO" data-i18n-placeholder="themes.placeholder_ss_status">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_footer">Pie de Pantalla</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_footer" for="txt-ss-footer">Pie de Pantalla</label>
                     <input type="text" id="txt-ss-footer" class="form-input" placeholder="ESTACIÓN DE TRABAJO · LINUX / OBS STUDIO / RASPBERRY PI" data-i18n-placeholder="themes.placeholder_ss_footer">
                   </div>
                 </div>
@@ -2934,19 +2909,19 @@
                     Etiquetas de las tarjetas de modo que aparecen a la derecha en la pantalla de inicio.
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_mode_1">Modo 1 (ej. 01 // GAME)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_mode_1" for="txt-ss-mode-0">Modo 1 (ej. 01 // GAME)</label>
                     <input type="text" id="txt-ss-mode-0" class="form-input" placeholder="01 // GAME" data-i18n-placeholder="themes.placeholder_ss_mode_1">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_mode_2">Modo 2 (ej. 02 // MAKER)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_mode_2" for="txt-ss-mode-1">Modo 2 (ej. 02 // MAKER)</label>
                     <input type="text" id="txt-ss-mode-1" class="form-input" placeholder="02 // MAKER" data-i18n-placeholder="themes.placeholder_ss_mode_2">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_mode_3">Modo 3 (ej. 03 // PRINT)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_mode_3" for="txt-ss-mode-2">Modo 3 (ej. 03 // PRINT)</label>
                     <input type="text" id="txt-ss-mode-2" class="form-input" placeholder="03 // PRINT" data-i18n-placeholder="themes.placeholder_ss_mode_3">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_mode_4">Modo 4 (ej. 04 // CHILL)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_mode_4" for="txt-ss-mode-3">Modo 4 (ej. 04 // CHILL)</label>
                     <input type="text" id="txt-ss-mode-3" class="form-input" placeholder="04 // CHILL" data-i18n-placeholder="themes.placeholder_ss_mode_4">
                   </div>
                 </div>
@@ -2962,23 +2937,23 @@
                     <span class="text-card-title" data-i18n="themes.card_brb_texts">Textos de Pantalla de Pausa</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_brb_title">Título Principal</label>
+                    <label class="text-field-label" data-i18n="themes.label_brb_title" for="txt-brb-title">Título Principal</label>
                     <input type="text" id="txt-brb-title" class="form-input" placeholder="AHORA VUELVO" data-i18n-placeholder="themes.placeholder_brb_title">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_brb_subtitle">Subtítulo</label>
+                    <label class="text-field-label" data-i18n="themes.label_brb_subtitle" for="txt-brb-subtitle">Subtítulo</label>
                     <input type="text" id="txt-brb-subtitle" class="form-input" placeholder="UN MOMENTO..." data-i18n-placeholder="themes.placeholder_brb_sub">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_status">Estado de Transmisión (Cabecera)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_status" for="txt-brb-live-status">Estado de Transmisión (Cabecera)</label>
                     <input type="text" id="txt-brb-live-status" class="form-input" placeholder="PAUSA TÉCNICA" data-i18n-placeholder="themes.placeholder_brb_status">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_footer">Pie de Pantalla</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_footer" for="txt-brb-footer">Pie de Pantalla</label>
                     <input type="text" id="txt-brb-footer" class="form-input" placeholder="EL DIRECTO CONTINÚA EN BREVES INSTANTES" data-i18n-placeholder="themes.placeholder_brb_footer">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_brb_interval">Intervalo de Rotación de Frases (Segundos)</label>
+                    <label class="text-field-label" data-i18n="themes.label_brb_interval" for="txt-brb-interval">Intervalo de Rotación de Frases (Segundos)</label>
                     <input type="number" id="txt-brb-interval" class="form-input" min="2" max="60" value="6">
                   </div>
                 </div>
@@ -3007,27 +2982,27 @@
                     <span class="text-card-title" data-i18n="themes.card_ending_texts">Textos de Fin de Stream</span>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_brb_title">Título Principal</label>
+                    <label class="text-field-label" data-i18n="themes.label_brb_title" for="txt-end-title">Título Principal</label>
                     <input type="text" id="txt-end-title" class="form-input" placeholder="GRACIAS POR PASARTE" data-i18n-placeholder="themes.placeholder_end_title">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_brb_subtitle">Subtítulo</label>
+                    <label class="text-field-label" data-i18n="themes.label_brb_subtitle" for="txt-end-subtitle">Subtítulo</label>
                     <input type="text" id="txt-end-subtitle" class="form-input" placeholder="NOS VEMOS EN EL PRÓXIMO DIRECTO" data-i18n-placeholder="themes.placeholder_end_sub">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_end_farewell">Mensaje de la Tarjeta de Despedida</label>
+                    <label class="text-field-label" data-i18n="themes.label_end_farewell" for="txt-end-farewell">Mensaje de la Tarjeta de Despedida</label>
                     <textarea id="txt-end-farewell" class="form-input" rows="3" placeholder="¡Gracias por acompañar el stream! Nos vemos en el próximo directo." data-i18n-placeholder="triggers.placeholder_end_farewell"></textarea>
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_end_tag">Etiqueta Inferior de la Tarjeta</label>
+                    <label class="text-field-label" data-i18n="themes.label_end_tag" for="txt-end-farewell-tag">Etiqueta Inferior de la Tarjeta</label>
                     <input type="text" id="txt-end-farewell-tag" class="form-input" placeholder="// SIGUE TRASTEANDO Y CREANDO" data-i18n-placeholder="themes.placeholder_end_tag">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_status">Estado de Transmisión (Cabecera)</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_status" for="txt-end-live-status">Estado de Transmisión (Cabecera)</label>
                     <input type="text" id="txt-end-live-status" class="form-input" placeholder="FIN DE TRANSMISIÓN" data-i18n-placeholder="themes.placeholder_end_status">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_ss_footer">Pie de Pantalla</label>
+                    <label class="text-field-label" data-i18n="themes.label_ss_footer" for="txt-end-footer">Pie de Pantalla</label>
                     <input type="text" id="txt-end-footer" class="form-input" placeholder="ANDORINA · OPEN STREAM SUITE · TRANSMISIÓN FINALIZADA" data-i18n-placeholder="themes.placeholder_end_footer">
                   </div>
                 </div>
@@ -3044,11 +3019,11 @@
                   <span class="text-card-title" data-i18n="themes.card_brand_identity">Marca e Identidad del Canal</span>
                 </div>
                 <div class="text-field-group">
-                  <label class="text-field-label" data-i18n="themes.label_channel_name">Nombre del Canal / Streamer</label>
+                  <label class="text-field-label" data-i18n="themes.label_channel_name" for="txt-channel-name">Nombre del Canal / Streamer</label>
                   <input type="text" id="txt-channel-name" class="form-input" placeholder="ej. ANDORINA" data-i18n-placeholder="themes.placeholder_channel_name">
                 </div>
                 <div class="text-field-group">
-                  <label class="text-field-label" data-i18n="themes.label_channel_tagline">Lema / Subtítulo Oficial</label>
+                  <label class="text-field-label" data-i18n="themes.label_channel_tagline" for="txt-channel-tagline">Lema / Subtítulo Oficial</label>
                   <input type="text" id="txt-channel-tagline" class="form-input" placeholder="ej. JUGAR · CREAR · COMPARTIR" data-i18n-placeholder="themes.placeholder_channel_tagline">
                 </div>
                 <div class="text-field-group">
@@ -3065,7 +3040,7 @@
                   <span class="text-card-title" data-i18n="themes.card_live_indicator">Indicador de Directo</span>
                 </div>
                 <div class="text-field-group">
-                  <label class="text-field-label" data-i18n="themes.label_live_text">Texto del Indicador "En Directo"</label>
+                  <label class="text-field-label" data-i18n="themes.label_live_text" for="txt-channel-live-text">Texto del Indicador "En Directo"</label>
                   <input type="text" id="txt-channel-live-text" class="form-input" placeholder="ej. EN DIRECTO" data-i18n-placeholder="themes.placeholder_live_text">
                 </div>
                 <div class="text-field-group">
@@ -3089,23 +3064,23 @@
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 8px;">
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_social_twitch">Twitch</label>
+                    <label class="text-field-label" data-i18n="themes.label_social_twitch" for="txt-soc-twitch">Twitch</label>
                     <input type="text" id="txt-soc-twitch" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_social_youtube">YouTube</label>
+                    <label class="text-field-label" data-i18n="themes.label_social_youtube" for="txt-soc-youtube">YouTube</label>
                     <input type="text" id="txt-soc-youtube" class="form-input" placeholder="canal" data-i18n-placeholder="themes.placeholder_soc_channel">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_social_twitter">Twitter / X</label>
+                    <label class="text-field-label" data-i18n="themes.label_social_twitter" for="txt-soc-twitter">Twitter / X</label>
                     <input type="text" id="txt-soc-twitter" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_social_instagram">Instagram</label>
+                    <label class="text-field-label" data-i18n="themes.label_social_instagram" for="txt-soc-instagram">Instagram</label>
                     <input type="text" id="txt-soc-instagram" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                   <div class="text-field-group">
-                    <label class="text-field-label" data-i18n="themes.label_social_github">GitHub</label>
+                    <label class="text-field-label" data-i18n="themes.label_social_github" for="txt-soc-github">GitHub</label>
                     <input type="text" id="txt-soc-github" class="form-input" placeholder="usuario" data-i18n-placeholder="themes.placeholder_soc_user">
                   </div>
                 </div>
@@ -3308,6 +3283,7 @@
   <script src="js/overlay-texts/02-render.js?v=50"></script>
   <script src="js/overlay-texts/03-api.js?v=50"></script>
   <script src="js/component-themes.js?v=1"></script>
+  <script src="js/ui-feedback.js?v=1"></script>
   <script src="js/main.js?v=43"></script>
 </body>
 </html>

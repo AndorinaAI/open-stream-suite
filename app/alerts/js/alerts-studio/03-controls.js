@@ -65,6 +65,8 @@ Object.assign(AlertsStudio, {
     const setCheck = (id, val) => { const el = document.getElementById(id); if (el) el.checked = !!val; };
 
     setCheck('cfg-enabled', c.enabled);
+    // La casilla ya no dice solo "HABILITADA": nombra el tipo y su efecto.
+    this.updateEnabledCard(!!c.enabled);
     setVal('cfg-title-template', c.titleTemplate || c.templateTitle);
     setVal('cfg-subtitle-template', c.subtitleTemplate || c.templateMessage);
     setVal('cfg-banner-border-color', c.bannerBorderColor || c.borderColor || '#57D6C4');
@@ -201,9 +203,26 @@ Object.assign(AlertsStudio, {
     if (synthRow) synthRow.style.display = mode === 'synth' ? 'block' : 'none';
   },
 
+  /** Pinta la tarjeta de activación con el nombre REAL del tipo de alerta. */
+  updateEnabledCard(enabled) {
+    const card = document.getElementById('cfg-enabled-card');
+    const title = document.getElementById('cfg-enabled-title');
+    if (!card || !title) return;
+    const type = (this.ALERT_TYPES || []).find(t => t.id === this.currentType);
+    let name = (type && type.name) || this.currentType || '';
+    if (type && window.i18n && window.i18n.tr) {
+      name = window.i18n.tr('alerts.type_' + type.id) || name;
+    }
+    title.textContent = `Alerta de «${name}» ${enabled ? 'activa' : 'desactivada'}`;
+    card.classList.toggle('is-on', enabled);
+    card.classList.toggle('is-off', !enabled);
+  },
+
   onFieldChange(field, val) {
     if (!this.config || !this.config.alerts[this.currentType]) return;
     this.config.alerts[this.currentType][field] = val;
+    // Aviso de "cambios sin guardar" (el mapa vive en UI, sobrevive a re-render).
+    if (window.UI && UI.markDirty) UI.markDirty('alert:' + this.currentType, 'alert');
 
     if (['bannerBorderColor', 'bannerTextColor', 'bannerFontFamily'].includes(field)) {
       if (this.config.alerts[this.currentType].chatStyleLinked) {

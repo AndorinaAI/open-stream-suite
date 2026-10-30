@@ -36,7 +36,10 @@ window.OSSSkin = (function () {
     // aparte), así que se reintenta sin bloquear; la operación es idempotente.
     if (theme && arch) {
       [0, 250, 900].forEach(function (delay) {
-        setTimeout(function () { adoptThemeColors(document); }, delay);
+        setTimeout(function () {
+          adoptThemeColors(document);
+          adoptWidgetContentStyles(document);
+        }, delay);
       });
     }
     return arch;
@@ -196,6 +199,41 @@ window.OSSSkin = (function () {
     return changed;
   }
 
+  /* ------------------------------------------------------------------
+     CONTENIDO DE WIDGETS
+     Que elemento de cada widget es "contenido" (mensajes, filas, tarjetas).
+     El CSS de `oss-skin.css` ya los viste cuando hay tema; aqui se marca el
+     elemento para que (a) sea inspeccionable y (b) un widget nuevo solo tenga
+     que anadir su entrada. Sin tema no se marca nada.
+     ------------------------------------------------------------------ */
+  var CONTENT_THEME_SCOPES = {
+    chat: '.chat-msg',
+    ticker: '.prompter-item',
+    goal: '.goal-item',
+    shoutout: '.shoutout-card-body',
+    promo: '.shoutout-card-body',
+    timer: '.timer-card'
+  };
+
+  function adoptWidgetContentStyles(root) {
+    root = root || document;
+    var body = document.body;
+    if (!body) return 0;
+    var widget = body.getAttribute('data-oss-widget');
+    if (!widget) return 0;
+    if (!body.getAttribute('data-theme') || !body.getAttribute('data-theme-archetype')) return 0;
+    var selector = CONTENT_THEME_SCOPES[widget];
+    if (!selector) return 0;
+    var marked = 0;
+    root.querySelectorAll(selector).forEach(function (el) {
+      if (!el.hasAttribute('data-oss-content-theme')) {
+        el.setAttribute('data-oss-content-theme', widget);
+        marked++;
+      }
+    });
+    return marked;
+  }
+
   return {
     apply: apply,
     clear: clear,
@@ -203,6 +241,8 @@ window.OSSSkin = (function () {
     isKnown: isKnown,
     autoTagTexts: autoTagTexts,
     adoptThemeColors: adoptThemeColors,
+    adoptWidgetContentStyles: adoptWidgetContentStyles,
+    contentScopes: CONTENT_THEME_SCOPES,
     loadStaticRules: loadStaticRules,
     get current() { return document.body ? document.body.getAttribute('data-theme-archetype') : null; },
     get map() { return cfg().themeArchetypes || {}; }

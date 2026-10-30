@@ -181,12 +181,15 @@ Object.assign(AlertsStudio, {
       });
       const data = await res.json();
       if (data.status === 'ok') {
+        // Se envia el bloque de alertas COMPLETO: se limpian todas las claves
+        // 'alert:*' (no solo la activa), sin tocar las de los widgets.
+        if (window.UI && UI.clearDirtyScope) UI.clearDirtyScope('alert');
         this.showToast('✓ Configuración de alertas guardada con éxito.');
       } else {
-        alert('Error al guardar: ' + (data.error || 'Respuesta inesperada'));
+        if (window.UI && UI.showToast) UI.showToast('No se pudo guardar: ' + (data.error || 'Respuesta inesperada'), 'error');
       }
     } catch (e) {
-      alert('Error de conexión al guardar configuración de alertas: ' + e);
+      if (window.UI && UI.showToast) UI.showToast('Error de conexión al guardar: ' + e, 'error');
     }
   },
 
