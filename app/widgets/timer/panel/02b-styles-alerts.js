@@ -33,8 +33,18 @@ function buildTimerStylesPresetsHtml(t, s, presets, activePresetId) {
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        <!-- Gestor de Presets del Temporizador -->
-        <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-dim); border-radius: 6px; padding: 14px;">
+        <!-- AVISO: los presets visuales del temporizador ya no se ofrecen -->
+        <div style="background: rgba(87,214,196,0.08); border: 1px solid rgba(87,214,196,0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+          <div style="font-size: 12px; font-weight: 700; color: #57D6C4;">🎨 El aspecto lo define el tema del pack</div>
+          <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.5; margin-top: 4px;">
+            Los 13 presets visuales del temporizador (<em>maker_glass, cyberpunk, kawaii, matrix…</em>)
+            ya no se ofrecen: no correspondían a ningún tema de los packs. Elige el tema en la
+            pestaña <strong>🎨 Tema</strong>. Los tiempos y textos se configuran en su pestaña.
+          </div>
+        </div>
+
+        <!-- Gestor de Presets del Temporizador (oculto: eran visuales) -->
+        <div style="display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
             <strong style="font-size: 13px; color: #fff;">💾 Gestor de Presets del Temporizador</strong>
             <span style="font-size: 10px; font-family: var(--font-tech); color: var(--color-text-dim);">Carga, edita o crea temas</span>

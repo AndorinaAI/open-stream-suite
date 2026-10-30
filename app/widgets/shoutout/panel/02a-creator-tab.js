@@ -5,11 +5,21 @@
 window.buildPromoCreatorTabHtml = function(activeTab, presetsOptionsHtml, isStreamerMode, activePreset, p, tr) {
   return `
     <div id="promo-tab-creator" style="display: ${activeTab === 'creator' ? 'block' : 'none'};">
-      <!-- BARRA DE PRESETS COMPACTA -->
+      <!-- AVISO: el aspecto lo define el tema del pack -->
+      <div style="background: rgba(87,214,196,0.08); border: 1px solid rgba(87,214,196,0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+        <div style="font-size: 12px; font-weight: 700; color: #57D6C4;">🎨 El aspecto lo define el tema del pack</div>
+        <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.5; margin-top: 4px;">
+          Elige el tema en la pestaña <strong>🎨 Tema</strong>. Las plantillas de abajo
+          aportan el <strong>contenido</strong> (qué se anuncia: producto, Discord, YouTube,
+          sorteo…) y los ajustes visuales se aplican encima del tema.
+        </div>
+      </div>
+
+      <!-- BARRA DE PLANTILLAS DE CONTENIDO -->
       <div style="background: rgba(0,0,0,0.35); border: 1px solid var(--color-border-dim); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
         <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 240px;">
-          <label style="font-size: 11px; font-weight: 700; color: #57D6C4; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">
-            ⭐ Preset:
+          <label for="cfg-promo-preset-select" style="font-size: 11px; font-weight: 700; color: #57D6C4; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">
+            📋 Contenido:
           </label>
           <select id="cfg-promo-preset-select" class="form-select" style="flex: 1; font-weight: 600; font-size: 12px; padding: 4px 8px;" onchange="onPromoPresetChange(this.value)">
             ${presetsOptionsHtml}
