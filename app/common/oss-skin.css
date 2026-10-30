@@ -58,8 +58,11 @@ body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert
 }
 
 /* Radio y recorte del arquetipo SOLO si no hay forma física elegida: la forma
-   (`body[data-theme-shape]`, en `common/styles.css`) siempre manda. */
-body[data-theme-archetype]:not([data-theme-shape]) :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root) {
+   (`body[data-theme-shape]`, en `common/styles.css`) siempre manda.
+   EXCLUYE widgets (`data-oss-widget`): en un widget la geometría la decide la
+   FORMA elegida, no el arquetipo del tema. Así «tema = color/fuente/adorno» y
+   «forma = geometría» son ejes de verdad independientes. */
+body[data-theme-archetype]:not([data-oss-widget]):not([data-theme-shape]) :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root) {
   border-radius: var(--skin-panel-radius, var(--panel-radius, 8px));
   clip-path: var(--skin-panel-clip, none);
 }
@@ -186,9 +189,8 @@ body[data-theme-archetype][data-oss-widget] .chat-msg,
 body[data-theme-archetype][data-oss-widget] .prompter-item,
 body[data-theme-archetype][data-oss-widget] .goal-item,
 body[data-theme-archetype][data-oss-widget] .shoutout-card-body {
-  /* SIN !important: si hay forma física, su `border-radius: 0` debe poder
-     ganar. Geometría y tema se SUMAN, no compiten. */
-  border-radius: var(--skin-panel-radius, var(--panel-radius, 6px));
+  /* SIN radio: en widgets la geometría la decide la FORMA, no el tema. Aquí el
+     componente conserva el suyo mientras no eliges forma. */
   border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.16)) !important;
   background-color: var(--color-panel-bg, var(--color-bg-dark, #191D21)) !important;
   font-family: var(--skin-font-body, inherit) !important;
@@ -209,7 +211,34 @@ body[data-theme-archetype][data-oss-widget] .shoutout-eyebrow {
 }
 
 /* ====================================================================
-   OVERRIDES DEL USUARIO — el tema manda, esto se aplica ENCIMA
+   ORNAMENTO DEL ARQUETIPO EN WIDGETS
+   --------------------------------------------------------------------
+   Cozy trae cinta adhesiva (`--skin-ornament-tape: block`), gamer retícula,
+   maker esquinas tecnicas. Hasta ahora solo se pintaban en las ESCENAS,
+   porque esperaban un `<span class="washi-tape">` en su markup; los widgets
+   no lo tienen, asi que el token decia "visible" y no habia nada que mostrar.
+
+   Aqui se dibuja con un pseudo-elemento: los 6 widgets lo reciben sin tocar
+   su HTML y sin depender de clases concretas. Sin tema no existe la regla.
+
+   NO se toca `position`: los contenedores de los widgets ya estan
+   posicionados (absolute/relative) y forzar `relative` romperia el chat.
+   ==================================================================== */
+body[data-theme-archetype][data-oss-widget] :is([data-oss-panel], [data-oss-shape-target])::after {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 26px;
+  width: 84px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--color-accent-cyan, #57D6C4);
+  opacity: 0.45;
+  transform: rotate(-3deg);
+  pointer-events: none;
+  display: var(--skin-ornament-tape, none);
+}
+
    --------------------------------------------------------------------
    `common/widget-overrides.js` escribe `--widget-*` a partir de
    `styleOverrides` (config del widget). Mientras el usuario no toque nada la

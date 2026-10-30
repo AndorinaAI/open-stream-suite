@@ -276,17 +276,36 @@ window.ThemePicker = (function () {
    * El widget lo escucha en `widget-theme.js` (`oss-theme-preview`).
    */
   function notifyPreview(widgetId, payload) {
+    var frame = document.getElementById('miniapp-live-iframe');
+    if (!frame) return false;
+    var theme = (payload && 'themeId' in payload) ? (payload.themeId || null) : undefined;
+    var shape = (payload && 'shapeId' in payload) ? (payload.shapeId || null) : undefined;
+
+    // 1) Camino rapido: el iframe aplica sin recargar (conserva los mensajes
+    //    simulados). Ver `widget-theme.js` -> `oss-theme-preview`.
     try {
-      var frame = document.getElementById('miniapp-live-iframe');
-      if (!frame || !frame.contentWindow) return false;
-      frame.contentWindow.postMessage({
-        type: 'oss-theme-preview',
-        widgetId: widgetId,
-        theme: (payload && 'themeId' in payload) ? (payload.themeId || null) : undefined,
-        shape: (payload && 'shapeId' in payload) ? (payload.shapeId || null) : undefined
-      }, '*');
-      return true;
-    } catch (e) { return false; }
+      if (frame.contentWindow) {
+        frame.contentWindow.postMessage({
+          type: 'oss-theme-preview', widgetId: widgetId, theme: theme, shape: shape
+        }, '*');
+      }
+    } catch (e) {}
+
+    // 2) Garantia: si el iframe aun no ha cargado su listener (o viene de una
+    //    version cacheada), el postMessage se pierde en silencio. A los 350 ms
+    //    se recarga con `?theme=&shape=`, que el widget lee en `init()`.
+    try {
+      setTimeout(function () {
+        var base = String(frame.src || '').split('?')[0];
+        if (!base) return;
+        var q = ['preview=true', 't=' + Date.now()];
+        if (theme) q.push('theme=' + encodeURIComponent(theme));
+        if (shape) q.push('shape=' + encodeURIComponent(shape));
+        frame.src = base + '?' + q.join('&');
+      }, 350);
+    } catch (e) {}
+
+    return true;
   }
 
   /** Guarda tema o forma del widget. `kind`: 'theme' | 'shape'. */

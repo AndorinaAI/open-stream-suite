@@ -50,7 +50,9 @@ class TestWidgetContentTheme(unittest.TestCase):
     def test_2_usa_tokens_y_no_colores_literales(self):
         block = self.css[self.css.index("CONTENIDO DE WIDGETS"):]
         block = block[:block.index("*/", block.index("============ */"))] if False else block
-        for token in ("--skin-panel-radius", "--color-panel-bg", "--color-border-cyan", "--skin-font-body"):
+        # Geometria: en widgets la decide la FORMA, no el tema. Por eso el
+        # radio NO se consume aqui a proposito (opcion A: ejes separados).
+        for token in ("--color-panel-bg", "--color-border-cyan", "--skin-font-body"):
             self.assertIn(token, block, f"el contenido no consume {token}")
         # Ningun hex suelto en las reglas de contenido. Un hex DENTRO de un
         # `var(--token, #fallback)` no cuenta: es el ultimo recurso cuando el
