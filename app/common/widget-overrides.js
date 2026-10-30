@@ -282,12 +282,34 @@ window.ThemePicker = (function () {
     // El backend trata '' como «heredar» (lo convierte en __clear__ y borra la
     // asignación), así que un valor vacío es una acción válida.
     var payload = (kind === 'shape') ? { shapeId: value || '' } : { themeId: value || '' };
+
+    // Una forma física pertenece a un pack, y ese pack tiene una paleta. Si el
+    // widget no tiene tema propio, aplicar la forma trae tambien su tema: es
+    // lo que el usuario espera al elegir "PCB" (verde con recorte diagonal).
+    var appliedTheme = '';
+    if (kind === 'shape' && value) {
+      var groups = shapesCache[widgetId] || [];
+      var group = groups.filter(function (g) {
+        return (g.shapes || []).some(function (s) { return String(s.id) === String(value); });
+      })[0];
+      if (group && group.defaultTheme) {
+        var st = (window.ComponentThemes && ComponentThemes.themeStateFor)
+          ? ComponentThemes.themeStateFor('widget:' + widgetId)
+          : {};
+        if (!st || !st.theme) {
+          payload.themeId = group.defaultTheme;
+          appliedTheme = group.defaultTheme;
+        }
+      }
+    }
+
     try {
       await api.assignComponent('widget:' + widgetId, payload);
       if (window.UI && UI.showToast) {
         var msg;
         if (kind === 'shape') {
           msg = value ? '✓ Forma aplicada: ' + pretty(value) : '↺ Sin forma propia (la del tema)';
+          if (appliedTheme) msg += ' + tema ' + pretty(appliedTheme) + ' del pack';
         } else {
           msg = value ? '✓ Tema aplicado: ' + pretty(value) : '↺ Heredando el tema global';
         }
