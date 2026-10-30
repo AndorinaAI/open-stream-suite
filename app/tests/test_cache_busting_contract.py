@@ -23,7 +23,7 @@ INDEX = APP / "alerts/index.html"
 # servido con una de estas, el navegador está ejecutando la versión anterior.
 STALE = {
     "01-miniapp.js": 50,          # faltaba renderMiniAppTheme (pestaña Tema)
-    "widget-overrides.js": 6,     # faltaba el ThemePicker completo
+    "widget-overrides.js": 7,     # faltaba el ThemePicker completo
     "component-themes.js": 3,     # sin auto-aplicar al cambiar de tema
     "02a-layout-dom.js": 52,      # sin la galería legacy oculta
     "06-preview-test.js": 53,     # generaba banner-theme-*

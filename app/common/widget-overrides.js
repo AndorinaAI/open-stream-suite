@@ -153,31 +153,47 @@ window.ThemePicker = (function () {
     });
     var o = overrides || {};
     return '' +
+      // ---------------- TEMA (paleta) ----------------
       '<div class="miniapp-section-card">' +
         '<div class="miniapp-section-header"><div class="miniapp-section-title">' +
-          '<span>🎨</span><span>Tema y forma del pack</span>' +
+          '<span>🎨</span><span>TEMA — colores y tipografía</span>' +
         '</div></div>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">' +
-          '<div class="form-group" style="margin-bottom:0;">' +
-            '<label for="cfg-widget-pack-theme" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">Tema</label>' +
-            '<select id="cfg-widget-pack-theme" class="form-select" ' +
-              'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', \'theme\', this.value)">' + opts + '</select>' +
-          '</div>' +
-          '<div class="form-group" style="margin-bottom:0;">' +
-            '<label for="cfg-widget-pack-shape" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">Forma</label>' +
-            '<select id="cfg-widget-pack-shape" class="form-select" ' +
-              'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', \'shape\', this.value)">' +
-              shapeOptions(shapesCache[widgetId] || [], currentShape) + '</select>' +
-          '</div>' +
+        '<div class="form-group" style="margin-bottom:8px;">' +
+          '<label for="cfg-widget-pack-theme" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">' +
+            'Tema del pack' +
+          '</label>' +
+          '<select id="cfg-widget-pack-theme" class="form-select" ' +
+            'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', \'theme\', this.value)">' + opts + '</select>' +
         '</div>' +
-        '<div style="font-size:10px;color:var(--color-text-dim);">' +
-          'El tema del pack manda y trae su forma (en «cozy», píldoras redondas). ' +
-          'La personalización de abajo se aplica encima.' +
+        '<div style="font-size:10px;color:var(--color-text-dim);line-height:1.5;">' +
+          'De aquí salen los <strong>colores</strong>: acento, fondo, bordes y tipografía.' +
+        '</div>' +
+        '<div id="cfg-theme-palette" style="margin-top:10px;"></div>' +
+      '</div>' +
+
+      // ---------------- FORMA (geometría) ----------------
+      '<div class="miniapp-section-card">' +
+        '<div class="miniapp-section-header"><div class="miniapp-section-title">' +
+          '<span>🧩</span><span>FORMA — geometría</span>' +
+        '</div></div>' +
+        '<div class="form-group" style="margin-bottom:8px;">' +
+          '<label for="cfg-widget-pack-shape" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">' +
+            'Silueta del componente' +
+          '</label>' +
+          '<select id="cfg-widget-pack-shape" class="form-select" ' +
+            'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', \'shape\', this.value)">' +
+            shapeOptions(shapesCache[widgetId] || [], currentShape) + '</select>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--color-text-dim);line-height:1.5;">' +
+          'De aquí salen los <strong>radios, recortes y decoración</strong>. ' +
+          'Se combina con cualquier tema: forma <em>PCB</em> con paleta <em>caramelo</em> es válido.' +
         '</div>' +
       '</div>' +
+
+      // ---------------- PERSONALIZACIÓN ----------------
       '<div class="miniapp-section-card">' +
         '<div class="miniapp-section-header"><div class="miniapp-section-title">' +
-          '<span>🎛️</span><span>Personalización (encima del tema)</span>' +
+          '<span>🎛️</span><span>Personalización (encima de todo)</span>' +
         '</div></div>' +
         '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
           '<div class="form-group" style="margin-bottom:0;">' +
@@ -195,7 +211,6 @@ window.ThemePicker = (function () {
         '</div>' +
         '<button type="button" class="btn-action-test" style="font-size:11px;padding:5px 10px;margin-top:10px;" ' +
           'onclick="WidgetOverrides.clear()">↺ Volver al tema del pack</button>' +
-        '<div id="cfg-theme-palette" style="margin-top:12px;"></div>' +
       '</div>';
   }
 
