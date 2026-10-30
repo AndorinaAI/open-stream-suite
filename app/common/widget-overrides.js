@@ -87,32 +87,52 @@ window.ThemePicker = (function () {
     return String(id || '').replace(/_/g, ' ');
   }
 
-  // Formas disponibles: se piden UNA vez y se cachean. Salen del catálogo de
-  // packs (el mismo que usa el acordeón), así que una forma nueva aparece sola.
-  var shapesCache = null;
+  // Formas disponibles POR COMPONENTE, agrupadas por pack.
+  //
+  // No vale ofrecer las 29 formas del catálogo: `chat` solo admite 9 y el
+  // backend rechaza el resto («Forma no soportada por widget:chat»). La lista
+  // válida la publica `/api/components/catalog`; el nombre y el pack, el
+  // catálogo de packs. Un componente nuevo aparece solo.
+  var shapesCache = {};
 
-  function loadShapes() {
-    if (shapesCache) return Promise.resolve(shapesCache);
-    return fetch('/api/themes/packs', { headers: { 'Accept': 'application/json' } })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (d) {
-        var seen = {}, out = [];
-        ((d && d.packs) || []).forEach(function (p) {
-          (p.shapes || []).forEach(function (s) {
-            if (s && s.id && !seen[s.id]) { seen[s.id] = 1; out.push({ id: s.id, name: s.name || s.id }); }
-          });
+  function loadShapes(widgetId) {
+    if (shapesCache[widgetId]) return Promise.resolve(shapesCache[widgetId]);
+    var j = function (url) {
+      return fetch(url, { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .catch(function () { return null; });
+    };
+    return Promise.all([j('/api/themes/packs'), j('/api/components/catalog')])
+      .then(function (res) {
+        var packs = (res[0] && res[0].packs) || [];
+        var allowed = {};
+        ((res[1] && res[1].widgets) || []).forEach(function (w) {
+          if (w && w.id === widgetId) {
+            (w.shapes || []).forEach(function (s) { allowed[s] = 1; });
+          }
         });
-        shapesCache = out;
-        return out;
-      })
-      .catch(function () { shapesCache = []; return shapesCache; });
+        var groups = [];
+        packs.forEach(function (p) {
+          var list = (p.shapes || []).filter(function (s) {
+            return s && s.id && allowed[s.id];
+          });
+          if (list.length) groups.push({ pack: p.id, shapes: list });
+        });
+        shapesCache[widgetId] = groups;
+        return groups;
+      });
   }
 
-  function shapeOptions(shapes, current) {
-    var opts = '<option value="">— Sin forma (la del tema) —</option>';
-    (shapes || []).forEach(function (s) {
-      opts += '<option value="' + esc(s.id) + '"' +
-        (String(s.id) === String(current) ? ' selected' : '') + '>' + esc(pretty(s.name)) + '</option>';
+  function shapeOptions(groups, current) {
+    var opts = '<option value="">— Sin forma propia (la del tema) —</option>';
+    (groups || []).forEach(function (g) {
+      opts += '<optgroup label="' + esc(pretty(g.pack)) + '">';
+      g.shapes.forEach(function (s) {
+        opts += '<option value="' + esc(s.id) + '"' +
+          (String(s.id) === String(current) ? ' selected' : '') + '>' +
+          esc(pretty(s.name || s.id)) + '</option>';
+      });
+      opts += '</optgroup>';
     });
     return opts;
   }
@@ -147,7 +167,7 @@ window.ThemePicker = (function () {
             '<label for="cfg-widget-pack-shape" style="font-size:12px;font-weight:600;color:#fff;display:block;margin-bottom:6px;">Forma</label>' +
             '<select id="cfg-widget-pack-shape" class="form-select" ' +
               'onchange="ThemePicker.onChange(\'' + esc(widgetId) + '\', \'shape\', this.value)">' +
-              shapeOptions(shapesCache || [], currentShape) + '</select>' +
+              shapeOptions(shapesCache[widgetId] || [], currentShape) + '</select>' +
           '</div>' +
         '</div>' +
         '<div style="font-size:10px;color:var(--color-text-dim);">' +
@@ -178,11 +198,11 @@ window.ThemePicker = (function () {
       '</div>';
   }
 
-  /** Carga las formas la primera vez y rellena el selector. */
+  /** Carga las formas del componente la primera vez y rellena el selector. */
   function ensureShapes(widgetId, currentShape) {
-    loadShapes().then(function (shapes) {
+    loadShapes(widgetId).then(function (groups) {
       var sel = document.getElementById('cfg-widget-pack-shape');
-      if (sel && sel.options.length <= 1) sel.innerHTML = shapeOptions(shapes, currentShape);
+      if (sel && sel.options.length <= 1) sel.innerHTML = shapeOptions(groups, currentShape);
     });
   }
 

@@ -104,7 +104,7 @@ async function saveCurrentChatPreset() {
   const preset = presets.find(p => p.id === activePresetId);
   if (!preset) return;
 
-  preset.shape = document.getElementById('cfg-chat-shape')?.value || 'rounded';
+  preset.shape = document.getElementById('cfg-chat-shape')?.value || (cachedWidgetsConfig && cachedWidgetsConfig.chat && cachedWidgetsConfig.chat.styles && cachedWidgetsConfig.chat.styles.shape) || 'rounded';
   preset.bgType = document.getElementById('cfg-chat-bgtype')?.value || 'glass';
   preset.bgColor = document.getElementById('cfg-chat-bgcolor')?.value || '#191D21';
   preset.bgGradient = document.getElementById('cfg-chat-bggrad')?.value || '#0B0D0F';
@@ -162,7 +162,7 @@ async function createNewChatPreset() {
 
   const newId = 'preset_' + Date.now();
   const themePreset = document.getElementById('cfg-chat-preset-select')?.value || 'maker_glass';
-  const shape = document.getElementById('cfg-chat-shape')?.value || 'rounded';
+  const shape = document.getElementById('cfg-chat-shape')?.value || (cachedWidgetsConfig && cachedWidgetsConfig.chat && cachedWidgetsConfig.chat.styles && cachedWidgetsConfig.chat.styles.shape) || 'rounded';
   const bgType = document.getElementById('cfg-chat-bgtype')?.value || 'glass';
   const bgColor = document.getElementById('cfg-chat-bgcolor')?.value || '#191D21';
   const bgGradient = document.getElementById('cfg-chat-bggrad')?.value || '#0B0D0F';

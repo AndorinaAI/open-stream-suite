@@ -32,22 +32,17 @@ function buildChatStylesPresetsHtml(c, presets, activePresetId) {
 
       <!-- CONTROLES VISUALES AVANZADOS DEL PRESET -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px;">
-        <!-- 1. Forma / Silueta -->
+        <!-- 1. Forma / Silueta: se elige en la pestaña 🎨 Tema (un solo sitio) -->
         <div class="form-group" style="margin-bottom: 0;">
           <label style="font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 6px; display: block;">
-            🟦 Forma Visual / Silueta del Mensaje:
+            🟦 Forma Visual / Silueta del Mensaje
           </label>
-          <select id="cfg-chat-shape" class="form-select" onchange="updateChatPipPreview()">
-            <option value="rounded" ${c.shape === 'rounded' || !c.shape ? 'selected' : ''}>🟦 Esquinas Suaves (Glassmorphism)</option>
-            <option value="box" ${c.shape === 'box' ? 'selected' : ''}>🔲 Cuadrado Técnico (Minimal)</option>
-            <option value="bubble" ${c.shape === 'bubble' ? 'selected' : ''}>💬 Bocadillo Cómic (Pico Asimétrico)</option>
-            <option value="scifi" ${c.shape === 'scifi' ? 'selected' : ''}>⚡ Sci-Fi Biselado (Hexagonal CRT)</option>
-            <option value="pill" ${c.shape === 'pill' ? 'selected' : ''}>💊 Píldora (Ultra Redondeada 9999px)</option>
-            <option value="arcade" ${c.shape === 'arcade' ? 'selected' : ''}>👾 Arcade Retro (8-Bit Cabinet)</option>
-            <option value="tag" ${c.shape === 'tag' ? 'selected' : ''}>🏷️ Etiqueta Maker (Corte Diagonal)</option>
-            <option value="slant" ${c.shape === 'slant' ? 'selected' : ''}>🎮 Slant Inclinado (Esports Arena)</option>
-            <option value="soft_card" ${c.shape === 'soft_card' ? 'selected' : ''}>🌸 Tarjeta Curva (Nube Kawaii)</option>
-          </select>
+          <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.5;
+                      background: rgba(87,214,196,0.08); border: 1px solid rgba(87,214,196,0.3);
+                      border-radius: 6px; padding: 8px 10px;">
+            Se elige en la pestaña <strong>🎨 Tema</strong>, junto al tema del pack.
+            Así no hay dos selectores de la misma cosa.
+          </div>
         </div>
 
         <!-- 2. Tipo de Fondo -->

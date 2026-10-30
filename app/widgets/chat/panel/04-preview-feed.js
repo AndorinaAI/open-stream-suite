@@ -4,7 +4,7 @@ function updateChatPipPreview() {
   if (!iframe || currentMiniAppWidget !== 'chat') return;
 
   const presetId = document.getElementById('cfg-chat-preset-select')?.value || 'maker_glass';
-  const shape = document.getElementById('cfg-chat-shape')?.value || 'rounded';
+  const shape = document.getElementById('cfg-chat-shape')?.value || (cachedWidgetsConfig && cachedWidgetsConfig.chat && cachedWidgetsConfig.chat.styles && cachedWidgetsConfig.chat.styles.shape) || 'rounded';
   const bgType = document.getElementById('cfg-chat-bgtype')?.value || 'glass';
   const bgColor = document.getElementById('cfg-chat-bgcolor')?.value || '#191D21';
   const bgGradient = document.getElementById('cfg-chat-bggrad')?.value || '#0B0D0F';

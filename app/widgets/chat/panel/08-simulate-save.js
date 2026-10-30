@@ -28,7 +28,7 @@ async function saveChatControls() {
     cachedWidgetsConfig.chat.activePreset = presetId;
     s.themePreset = presetId;
     s.activePreset = presetId;
-    s.shape = document.getElementById('cfg-chat-shape')?.value || 'rounded';
+    s.shape = document.getElementById('cfg-chat-shape')?.value || (cachedWidgetsConfig && cachedWidgetsConfig.chat && cachedWidgetsConfig.chat.styles && cachedWidgetsConfig.chat.styles.shape) || 'rounded';
     s.bgType = document.getElementById('cfg-chat-bgtype')?.value || 'glass';
     s.bgColor = document.getElementById('cfg-chat-bgcolor')?.value || '#191D21';
     s.bgGradient = document.getElementById('cfg-chat-bggrad')?.value || '#0B0D0F';
