@@ -145,17 +145,6 @@
       "current": 145,
       "target": 200,
       "color": "#57D6C4",
-      "barColorStart": "#57D6C4",
-      "barColorEnd": "#38BDF8",
-      "shape": "rounded",
-      "bgType": "glass",
-      "borderStyle": "left_neon",
-      "borderWidth": 3,
-      "borderColor": "#57D6C4",
-      "glowIntensity": 40,
-      "barPattern": "striped",
-      "barHeight": "medium",
-      "fontFamily": "outfit",
       "subtextFormat": "{pct}% COMPLETADO · ¡FALTAN {remaining}!"
     },
     {
@@ -170,17 +159,6 @@
       "current": 42,
       "target": 50,
       "color": "#A855F7",
-      "barColorStart": "#A855F7",
-      "barColorEnd": "#EC4899",
-      "shape": "rounded",
-      "bgType": "glass",
-      "borderStyle": "all_neon",
-      "borderWidth": 2,
-      "borderColor": "#A855F7",
-      "glowIntensity": 50,
-      "barPattern": "smooth",
-      "barHeight": "medium",
-      "fontFamily": "outfit",
       "subtextFormat": "{pct}% COMPLETADO · ¡NUEVOS EMOTES A LOS 50!"
     },
     {
@@ -195,17 +173,6 @@
       "current": 3200,
       "target": 5000,
       "color": "#F59E0B",
-      "barColorStart": "#F59E0B",
-      "barColorEnd": "#EF4444",
-      "shape": "arcade",
-      "bgType": "glass",
-      "borderStyle": "all_neon",
-      "borderWidth": 2,
-      "borderColor": "#F59E0B",
-      "glowIntensity": 45,
-      "barPattern": "tech_segments",
-      "barHeight": "thick",
-      "fontFamily": "rajdhani",
       "subtextFormat": "{pct}% RECAUDADO · ¡GRACIAS POR LOS BITS!"
     },
     {
@@ -220,17 +187,6 @@
       "current": 35,
       "target": 60,
       "color": "#10B981",
-      "barColorStart": "#10B981",
-      "barColorEnd": "#57D6C4",
-      "shape": "scifi",
-      "bgType": "glass",
-      "borderStyle": "left_neon",
-      "borderWidth": 4,
-      "borderColor": "#10B981",
-      "glowIntensity": 40,
-      "barPattern": "tech_segments",
-      "barHeight": "thick",
-      "fontFamily": "orbitron",
       "subtextFormat": "{current}€ de {target}€ ({pct}%) · Próximo proyecto: Brazo robótico"
     },
     {
@@ -245,17 +201,6 @@
       "current": 18,
       "target": 24,
       "color": "#38BDF8",
-      "barColorStart": "#38BDF8",
-      "barColorEnd": "#6366F1",
-      "shape": "soft_card",
-      "bgType": "glass",
-      "borderStyle": "all_neon",
-      "borderWidth": 1,
-      "borderColor": "#38BDF8",
-      "glowIntensity": 35,
-      "barPattern": "striped",
-      "barHeight": "medium",
-      "fontFamily": "inter",
       "subtextFormat": "{pct}% LISTO · ¡Faltan sólo {remaining} piezas para ensamblar!"
     },
     {
@@ -270,17 +215,6 @@
       "current": 3,
       "target": 5,
       "color": "#EC4899",
-      "barColorStart": "#EC4899",
-      "barColorEnd": "#F59E0B",
-      "shape": "arcade",
-      "bgType": "solid",
-      "borderStyle": "all_neon",
-      "borderWidth": 3,
-      "borderColor": "#EC4899",
-      "glowIntensity": 50,
-      "barPattern": "tech_segments",
-      "barHeight": "thick",
-      "fontFamily": "orbitron",
       "subtextFormat": "{current}/{target} Victorias conseguidas · ¡Quedan {remaining}!"
     }
   ],
@@ -309,5 +243,17 @@
       "amount": 0,
       "type": "reset"
     }
-  ]
+  ],
+  "styleOverrides": {
+    "accentColor": "#57D6C4",
+    "bgColor": "#191D21",
+    "bgOpacity": 88,
+    "borderColor": "#57D6C4",
+    "borderWidth": 3,
+    "borderStyle": "left_neon",
+    "glowIntensity": 40,
+    "fontFamily": "outfit",
+    "barPattern": "striped",
+    "barHeight": "medium"
+  }
 }

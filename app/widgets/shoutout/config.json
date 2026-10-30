@@ -28,17 +28,6 @@
       "isBuiltin": true,
       "type": "shoutout",
       "color": "#57D6C4",
-      "shape": "rounded",
-      "bgType": "glass",
-      "bgColor": "#191D21",
-      "bgGradient": "#0B0D0F",
-      "bgOpacity": 94,
-      "borderStyle": "left_neon",
-      "borderWidth": 4,
-      "borderColor": "#57D6C4",
-      "glowIntensity": 45,
-      "fontFamily": "outfit",
-      "animation": "slide_up",
       "showQR": true
     },
     {
@@ -47,17 +36,6 @@
       "isBuiltin": true,
       "type": "shoutout",
       "color": "#A855F7",
-      "shape": "scifi",
-      "bgType": "gradient",
-      "bgColor": "#130924",
-      "bgGradient": "#2E1065",
-      "bgOpacity": 96,
-      "borderStyle": "full_neon",
-      "borderWidth": 2,
-      "borderColor": "#A855F7",
-      "glowIntensity": 55,
-      "fontFamily": "rajdhani",
-      "animation": "pop_scale",
       "showQR": true,
       "playClip": true
     },
@@ -72,17 +50,6 @@
       "price": "3.50€",
       "link": "https://twitch.tv/andorina",
       "color": "#FF783F",
-      "shape": "rounded",
-      "bgType": "glass",
-      "bgColor": "#211612",
-      "bgGradient": "#3B1B10",
-      "bgOpacity": 94,
-      "borderStyle": "left_neon",
-      "borderWidth": 4,
-      "borderColor": "#FF783F",
-      "glowIntensity": 45,
-      "fontFamily": "outfit",
-      "animation": "slide_up",
       "showQR": true
     },
     {
@@ -95,17 +62,6 @@
       "subtitle": "Charla, proyectos y comunidad del stream",
       "link": "https://discord.gg/andorina",
       "color": "#5865F2",
-      "shape": "pill",
-      "bgType": "gradient",
-      "bgColor": "#10132E",
-      "bgGradient": "#21255C",
-      "bgOpacity": 95,
-      "borderStyle": "full_neon",
-      "borderWidth": 2,
-      "borderColor": "#5865F2",
-      "glowIntensity": 50,
-      "fontFamily": "outfit",
-      "animation": "slide_up",
       "showQR": true
     },
     {
@@ -118,17 +74,6 @@
       "subtitle": "Guías paso a paso de soldadura y código",
       "link": "https://youtube.com/@andorina",
       "color": "#EF4444",
-      "shape": "rounded",
-      "bgType": "glass",
-      "bgColor": "#241010",
-      "bgGradient": "#3B1212",
-      "bgOpacity": 94,
-      "borderStyle": "left_neon",
-      "borderWidth": 4,
-      "borderColor": "#EF4444",
-      "glowIntensity": 40,
-      "fontFamily": "inter",
-      "animation": "slide_up",
       "showQR": true
     },
     {
@@ -142,17 +87,6 @@
       "price": "¡GRATIS!",
       "link": "https://twitch.tv/andorina",
       "color": "#F59E0B",
-      "shape": "arcade",
-      "bgType": "gradient",
-      "bgColor": "#2B1A04",
-      "bgGradient": "#52330A",
-      "bgOpacity": 96,
-      "borderStyle": "full_neon",
-      "borderWidth": 3,
-      "borderColor": "#FBBF24",
-      "glowIntensity": 60,
-      "fontFamily": "orbitron",
-      "animation": "neon_flash",
       "showQR": true
     },
     {
@@ -165,17 +99,6 @@
       "subtitle": "Historias entre bambalinas de los proyectos",
       "link": "https://instagram.com/andorina",
       "color": "#EC4899",
-      "shape": "slant",
-      "bgType": "glass",
-      "bgColor": "#240E1B",
-      "bgGradient": "#421330",
-      "bgOpacity": 94,
-      "borderStyle": "left_neon",
-      "borderWidth": 4,
-      "borderColor": "#F43F5E",
-      "glowIntensity": 45,
-      "fontFamily": "outfit",
-      "animation": "flip_in",
       "showQR": true
     }
   ],
@@ -223,5 +146,15 @@
       "color": "#EF4444",
       "pinned": false
     }
-  ]
+  ],
+  "styleOverrides": {
+    "accentColor": "#57D6C4",
+    "bgColor": "#191D21",
+    "bgOpacity": 94,
+    "borderColor": "#57D6C4",
+    "borderWidth": 3,
+    "borderStyle": "left_neon",
+    "glowIntensity": 40,
+    "fontFamily": "outfit"
+  }
 }

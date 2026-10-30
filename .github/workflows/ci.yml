@@ -55,6 +55,9 @@ jobs:
       - name: Todas las vistas cargan el mismo bloque de CSS
         working-directory: app
         run: python scripts/normalize_view_links.py --check
+      - name: Los presets de widget no llevan aspecto
+        working-directory: app
+        run: python scripts/migrate_theme_unification.py --check
 
   json-lint:
     runs-on: ubuntu-latest

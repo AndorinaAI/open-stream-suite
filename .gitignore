@@ -52,3 +52,6 @@ app/widgets_config.json
 # Planes y notas de desarrollo asistido por IA: local, no se publican.
 # La documentacion tecnica que SI se versiona vive en app/docs/.
 implementation_plan*.md
+
+# Copias de la migracion de presets (locales)
+*.json.bak

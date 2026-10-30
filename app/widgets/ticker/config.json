@@ -386,5 +386,16 @@
       "color": "#FFDD00",
       "pinned": true
     }
-  ]
+  ],
+  "styleOverrides": {
+    "accentColor": "#57D6C4",
+    "bgColor": "#191D21",
+    "bgOpacity": 92,
+    "borderColor": "#57D6C4",
+    "borderWidth": 2,
+    "borderStyle": "left_neon",
+    "glowIntensity": 35,
+    "fontFamily": "rajdhani",
+    "fontSize": 13
+  }
 }
