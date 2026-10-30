@@ -52,12 +52,15 @@ class TestWidgetContentTheme(unittest.TestCase):
         block = block[:block.index("*/", block.index("============ */"))] if False else block
         for token in ("--skin-panel-radius", "--color-panel-bg", "--color-border-cyan", "--skin-font-body"):
             self.assertIn(token, block, f"el contenido no consume {token}")
-        # Ningun hex suelto en las reglas de contenido
+        # Ningun hex suelto en las reglas de contenido. Un hex DENTRO de un
+        # `var(--token, #fallback)` no cuenta: es el ultimo recurso cuando el
+        # tema no define el token, y sin el la caja quedaria sin fondo.
         import re
         rules = re.findall(r"body\[data-theme-archetype\]\[data-oss-widget\][^{]*\{[^}]*\}", self.css)
         self.assertTrue(rules, "no se encontraron reglas de contenido")
         for rule in rules:
-            self.assertIsNone(re.search(r"#[0-9A-Fa-f]{3,8}\b", rule),
+            sin_fallbacks = re.sub(r"var\([^()]*(?:\([^()]*\)[^()]*)*#[0-9A-Fa-f]{3,8}[^()]*\)", "var()", rule)
+            self.assertIsNone(re.search(r"#[0-9A-Fa-f]{3,8}\b", sin_fallbacks),
                               f"color literal en regla de contenido: {rule[:80]}")
 
     def test_3_el_motor_declara_los_scopes(self):

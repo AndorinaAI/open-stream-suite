@@ -317,3 +317,42 @@ def reset_overlay_texts(section: str = "all", scene_key: str = None) -> dict:
 
     save_overlay_texts_to_disk(current_texts, replace=True)
     return current_texts
+
+
+def build_theme_bootstrap() -> dict:
+    """Payload unico de arranque de tema para los overlays.
+
+    `config.js` es el config de ESCENAS y no publica las claves `widget:*` ni
+    `alert:*`. Por eso cada overlay tiene que pedir su propio arranque: sin
+    esto, `overlayThemes` llegaba vacio y el tema asignado en el panel se
+    ignoraba (el overlay caia al tema global, que suele estar desactivado,
+    y acababa borrando `data-theme`).
+
+    Nunca lanza: si `themes_state.json` falta o esta corrupto devuelve los
+    mapas vacios y `globalThemeActive=False`, para que el overlay se quede con
+    su aspecto base en vez de romperse.
+
+    Las claves son SIEMPRE las mismas 6, presentes o vacias: el contrato del
+    cliente es que existen.
+    """
+    try:
+        from server.services.theme_manager import load_theme_state, get_theme_archetype_map
+        state = load_theme_state() or {}
+    except Exception as exc:  # pragma: no cover - defensivo
+        logger.warning(f"No se pudo leer themes_state.json para el arranque de tema: {exc}")
+        state = {}
+
+    out = {
+        "globalThemeActive": bool(state.get("globalThemeActive")),
+        "activeTheme": state.get("activeTheme"),
+        "activePack": state.get("activePack"),
+        "activeShape": state.get("activeShape"),
+    }
+    for key in ("overlayThemes", "overlayShapes", "overlayThemeExplicit", "defaultOverlayThemes"):
+        value = state.get(key)
+        out[key] = value if isinstance(value, dict) else {}
+    try:
+        out["themeArchetypes"] = get_theme_archetype_map()
+    except Exception:
+        out["themeArchetypes"] = {}
+    return out

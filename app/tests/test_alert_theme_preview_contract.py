@@ -145,7 +145,7 @@ class AlertPreviewThemeContract(unittest.TestCase):
         """Sin bump, el navegador ejecuta el JS anterior y «no cambia nada»."""
         panel = _read(PANEL_HTML)
         self.assertIn("06-preview-test.js?v=54", panel)
-        self.assertIn("02a-layout-dom.js?v=52", panel)
+        self.assertIn("02a-layout-dom.js?v=53", panel)
         self.assertIn("02b-gallery-toast.js?v=51", panel)
         self.assertNotIn("02a-layout-dom.js?v=50", panel)
 
@@ -169,10 +169,8 @@ class AlertsConfigPayloadContract(unittest.TestCase):
 
     def test_endpoint_publishes_theme_maps(self):
         src = _read(ALERTS_ROUTES)
-        for key in ("overlayThemes", "overlayShapes", "overlayThemeExplicit",
-                    "themeArchetypes"):
-            self.assertIn(key, src,
-                          f"/api/alerts/config debe publicar {key!r}")
+        self.assertIn("build_theme_bootstrap", src,
+                      "/api/alerts/config debe publicar el arranque de tema")
 
     def test_overlay_reads_its_own_endpoint(self):
         js = _read(WS_CLIENT)

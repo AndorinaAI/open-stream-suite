@@ -29,27 +29,13 @@ async def handle_get_alerts_config(request):
     """
     cfg = load_alerts_config()
     out = {"status": "ok", "config": {"alerts": cfg}, "alerts": cfg}
+    # Un solo payload de arranque para todos los overlays: sin esto el mapa de
+    # temas llegaba vacío y `AlertShapes` borraba `data-theme`.
     try:
-        from server.services.theme_manager import load_theme_state
-        state = load_theme_state() or {}
+        from server.services.overlay_service import build_theme_bootstrap
+        out.update(build_theme_bootstrap())
     except Exception:
-        state = {}
-
-    for key in ("activePack", "activeTheme", "activeShape", "globalThemeActive"):
-        if state.get(key) is not None:
-            out[key] = state[key]
-    for key in ("overlayThemes", "overlayShapes", "overlayThemeExplicit", "defaultOverlayThemes"):
-        value = state.get(key)
-        # Se publican siempre (aunque estén vacíos): el contrato del overlay es
-        # que las claves existen.
-        out[key] = value if isinstance(value, dict) else {}
-    # Arquetipo de cada tema (derivado de disco): OSSSkin lo necesita para
-    # poner `data-theme-archetype` y activar la capa `--skin-*`.
-    try:
-        from server.services.theme_manager import get_theme_archetype_map
-        out["themeArchetypes"] = get_theme_archetype_map()
-    except Exception:
-        out["themeArchetypes"] = {}
+        pass
     return web.json_response(out)
 
 

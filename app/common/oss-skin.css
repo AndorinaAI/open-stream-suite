@@ -135,8 +135,8 @@ body[data-theme-archetype] :is([data-oss-cam], .camera-frame, .cam-frame,
    pintan su fondo desde el tema o desde la forma fisica.
    -------------------------------------------------------------------- */
 body[data-theme-archetype][data-oss-widget] :is([data-oss-panel], [data-oss-shape-target]) {
-  background-color: var(--color-panel-bg, transparent) !important;
-  background-color: color-mix(in srgb, var(--color-panel-bg, transparent) var(--oss-bg-opacity, 100%), transparent) !important;
+  background-color: var(--color-panel-bg, var(--color-bg-dark, #191D21)) !important;
+  background-color: color-mix(in srgb, var(--color-panel-bg, var(--color-bg-dark, #191D21)) var(--oss-bg-opacity, 100%), transparent) !important;
 }
 
 /* ====================================================================
@@ -156,7 +156,7 @@ body[data-theme-archetype][data-oss-widget] .goal-item,
 body[data-theme-archetype][data-oss-widget] .shoutout-card-body {
   border-radius: var(--skin-panel-radius, var(--panel-radius, 6px)) !important;
   border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.16)) !important;
-  background-color: var(--color-panel-bg, transparent) !important;
+  background-color: var(--color-panel-bg, var(--color-bg-dark, #191D21)) !important;
   font-family: var(--skin-font-body, inherit) !important;
 }
 
@@ -181,7 +181,7 @@ body[data-theme-archetype][data-oss-widget] .shoutout-eyebrow {
 body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root) {
   border-color: var(--widget-border, var(--color-border-cyan, rgba(255, 255, 255, 0.16))) !important;
   border-width: var(--widget-border-width, var(--frame-border-width, 1px)) !important;
-  background-color: var(--widget-bg, var(--color-panel-bg, transparent)) !important;
+  background-color: var(--widget-bg, var(--color-panel-bg, var(--color-bg-dark, #191D21))) !important;
   font-family: var(--widget-font, var(--skin-font-body, inherit)) !important;
 }
 
@@ -189,7 +189,7 @@ body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert
    notarse dentro del mensaje y no solo en el marco. */
 body[data-theme-archetype][data-oss-widget] :is(.chat-msg, .prompter-item, .goal-item, .shoutout-card-body) {
   border-color: var(--widget-border, var(--color-border-cyan, rgba(255, 255, 255, 0.16))) !important;
-  background-color: var(--widget-bg, var(--color-panel-bg, transparent)) !important;
+  background-color: var(--widget-bg, var(--color-panel-bg, var(--color-bg-dark, #191D21))) !important;
   font-family: var(--widget-font, var(--skin-font-body, inherit)) !important;
   font-size: var(--widget-font-size, inherit) !important;
 }

@@ -42,10 +42,19 @@ async def _read_rss_body(resp) -> bytes:
 
 
 async def handle_get_widgets_config(request):
-    """Devuelve la configuración completa de widgets y sus accesos directos"""
+    """Configuración completa de widgets + su arranque de tema.
+
+    Sin `overlayThemes` (y `themeArchetypes`) el widget arrancaba a ciegas:
+    `widget-theme.js` no encontraba `widget:<id>` y se quedaba sin tema aunque
+    el panel lo mostrara asignado. `config.js` no publica esas claves porque es
+    el config de escenas.
+    """
+    from server.services.overlay_service import build_theme_bootstrap
     # La sincronización con Twitch es explícita (/api/twitch/channel):
     # un GET de configuración no debe hacer red ni modificar metas.
-    return web.json_response({"status": "ok", "config": load_widgets_config()})
+    out = {"status": "ok", "config": load_widgets_config()}
+    out.update(build_theme_bootstrap())
+    return web.json_response(out)
 
 async def handle_save_widgets_config(request):
     """Actualiza la configuración de widgets y notifica por WebSocket a OBS."""

@@ -30,26 +30,18 @@ function jsonParse(str) {
 // `overlayThemes`, `overlayShapes`, `overlayThemeExplicit` y `themeArchetypes`.
 (function () {
   function applyFromPayload(cfg) {
-    if (!window.AlertShapes || !cfg) return false;
-    cfg = cfg.config && cfg.config.alerts ? cfg : cfg;
-    var shapes = cfg.overlayShapes || {};
-    AlertShapes.configure(cfg);
-    AlertShapes.set('card', shapes['alert:card']);
-    AlertShapes.set('banner', shapes['alert:banner']);
-    // El tipo que se muestre aplicará su propio tema/forma en la cola.
-    AlertShapes.applyAll('card');
-    return true;
+    if (!cfg || !window.ThemeBootstrap) return false;
+    return ThemeBootstrap.apply(cfg, 'alert');
   }
 
-  // 1) Arranque inmediato con lo que haya en config.js (puede no traer alert:*).
+  // Mismo arranque que los widgets: un solo camino (common/theme-bootstrap.js).
   try { applyFromPayload(window.OSS_CONFIG || {}); } catch (e) {}
-
-  // 2) Fuente de verdad, asíncrona. Idempotente: si ya coincidía no cambia nada.
   try {
-    fetch('/api/alerts/config', { headers: { 'Accept': 'application/json' } })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (cfg) { if (cfg) applyFromPayload(cfg); })
-      .catch(function () {});
+    if (window.ThemeBootstrap) {
+      ThemeBootstrap.load('/api/alerts/config').then(function (cfg) {
+        if (cfg) applyFromPayload(cfg);
+      });
+    }
   } catch (e) {}
 })();
 

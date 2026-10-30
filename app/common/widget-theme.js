@@ -21,7 +21,11 @@ window.OSSTheme = (function () {
     return !!(cfg().overlayThemeExplicit || {})[key()];
   }
   function assignedTheme() {
-    return isExplicitTheme() ? ((cfg().overlayThemes || {})[key()] || null) : null;
+    // La presencia en `overlayThemes` YA es una asignación explícita. Antes se
+    // condicionaba a `overlayThemeExplicit`, un mapa derivado que se
+    // desincroniza y que no trae claves `widget:*`: el tema asignado en el
+    // panel se ignoraba y `assignedTheme()` devolvía null siempre.
+    return (cfg().overlayThemes || {})[key()] || null;
   }
   function globalTheme() { return liveGlobalTheme || (cfg().globalThemeActive ? (cfg().activeTheme || null) : null); }
   function assignedShape() { return (cfg().overlayShapes || {})[key()] || null; }
@@ -118,6 +122,19 @@ window.OSSTheme = (function () {
       var theme = queryTheme || assignedTheme() || globalTheme();
       var shape = p.get('shape') || assignedShape();
       apply(theme, shape, queryTheme ? { explicit: true } : {});
+    } catch (e) {}
+    // Arranque de tema real. `config.js` no publica `widget:*`, así que sin
+    // esta carga `assignedTheme()` siempre devolvía null. La URL sigue ganando:
+    // `apply()` con `explicit` ignora el cambio global, y aquí respetamos el
+    // `?theme=` de OBS antes de pisarlo.
+    try {
+      if (window.ThemeBootstrap) {
+        var pinned = null;
+        try { pinned = new URLSearchParams(window.location.search).get('theme'); } catch (e2) {}
+        ThemeBootstrap.load('/api/widgets/config').then(function (cfg) {
+          if (cfg && !pinned) ThemeBootstrap.apply(cfg, 'widget');
+        });
+      }
     } catch (e) {}
   }
 
