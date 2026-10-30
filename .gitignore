@@ -44,3 +44,11 @@ app/donations_config.json
 
 # Copias de seguridad locales de los packs (se conservan en disco, no se versionan)
 backups/
+
+# Configuracion personal de widgets (enlaces del canal, textos propios).
+# La app arranca con los defaults de app/widgets/<widget>/config.json.
+app/widgets_config.json
+
+# Planes y notas de desarrollo asistido por IA: local, no se publican.
+# La documentacion tecnica que SI se versiona vive en app/docs/.
+implementation_plan*.md
