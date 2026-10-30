@@ -144,7 +144,11 @@ Object.assign(AlertsStudio, {
             </div>
 
             <!-- Galería de Temas con Previews Visuales -->
-            <div id="themes-preset-gallery" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; max-height: 200px; overflow-y: auto; padding-right: 4px;">
+            <!-- OCULTA: los temas vienen del pack (acordeón de arriba). El
+                 sistema de 9 estilos predefinidos se retira en el paso 9 del
+                 plan; aquí solo se deja de mostrar para no ofrecer dos
+                 catálogos que se contradicen. -->
+            <div id="themes-preset-gallery" style="display: none;" aria-hidden="true">
               <!-- Inyectado por renderThemesGallery() -->
             </div>
 

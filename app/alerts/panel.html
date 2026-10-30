@@ -1114,9 +1114,15 @@
           <div>
             <div class="miniapp-tab-nav">
               <button type="button" class="miniapp-tab-btn active" data-tab="controls" onclick="switchMiniAppTab('controls')" data-i18n="widgets.tab_controls">🎛️ Controles Visuales</button>
+              <button type="button" class="miniapp-tab-btn" data-tab="theme" onclick="switchMiniAppTab('theme')" title="Elige el tema del pack para este widget">🎨 Tema</button>
               <button type="button" id="tab-btn-chat-profiles" class="miniapp-tab-btn" data-tab="chat-profiles" onclick="switchMiniAppTab('chat-profiles')" style="display: none;" data-i18n="widgets.tab_chat_profiles">🔗 Enlaces OBS por Estilo</button>
               <button type="button" class="miniapp-tab-btn" data-tab="shortcuts" onclick="switchMiniAppTab('shortcuts')" data-i18n="widgets.tab_shortcuts">⚡ Acciones Rápidas (Atajos)</button>
               <button type="button" class="miniapp-tab-btn" data-tab="code" onclick="switchMiniAppTab('code')" data-i18n="widgets.tab_code">💻 Código / JSON & Estilos</button>
+            </div>
+
+            <!-- 0. Vista Tema del pack (siempre disponible) -->
+            <div id="miniapp-view-theme" style="display: none;">
+              <div id="miniapp-theme-content"></div>
             </div>
 
             <!-- 1. Vista Controles Visuales -->
@@ -3201,7 +3207,7 @@
   <script src="js/media/05-preview-assign.js?v=50"></script>
   <script src="js/media/06-filters-select-init.js?v=50"></script>
   <script src="js/alerts-studio/01-state-data.js?v=51"></script>
-  <script src="js/alerts-studio/02a-layout-dom.js?v=51"></script>
+  <script src="js/alerts-studio/02a-layout-dom.js?v=52"></script>
   <script src="js/alerts-studio/02b-gallery-toast.js?v=51"></script>
   <script src="js/alerts-studio/02-layout.js?v=51"></script>
   <script src="js/alerts-studio/03-controls.js?v=51"></script>
@@ -3282,6 +3288,7 @@
   <script src="js/overlay-texts/01-core.js?v=50"></script>
   <script src="js/overlay-texts/02-render.js?v=50"></script>
   <script src="js/overlay-texts/03-api.js?v=50"></script>
+  <script src="../common/widget-overrides.js?v=1"></script>
   <script src="js/component-themes.js?v=3"></script>
   <script src="js/ui-feedback.js?v=2"></script>
   <script src="js/main.js?v=43"></script>

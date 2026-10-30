@@ -130,13 +130,16 @@ function switchMiniAppTab(tabName) {
   const chatProfilesView = document.getElementById('miniapp-view-chat-profiles');
   const shortcutsView = document.getElementById('miniapp-view-shortcuts');
   const codeView = document.getElementById('miniapp-view-code');
+  const themeView = document.getElementById('miniapp-view-theme');
 
   if (controlsView) controlsView.style.display = (tabName === 'controls') ? 'block' : 'none';
   if (chatProfilesView) chatProfilesView.style.display = (tabName === 'chat-profiles') ? 'block' : 'none';
   if (shortcutsView) shortcutsView.style.display = (tabName === 'shortcuts') ? 'block' : 'none';
   if (codeView) codeView.style.display = (tabName === 'code') ? 'block' : 'none';
+  if (themeView) themeView.style.display = (tabName === 'theme') ? 'block' : 'none';
 
   if (tabName === 'controls') renderMiniAppControls();
+  if (tabName === 'theme') renderMiniAppTheme();
   if (tabName === 'chat-profiles') {
     if (typeof renderChatProfilesManager === 'function') renderChatProfilesManager();
   }
@@ -152,6 +155,18 @@ function switchMiniAppTab(tabName) {
 }
 
 // 1. Pestaña de Controles Sencillos (Delegación al módulo del widget activo)
+function renderMiniAppTheme() {
+  const container = document.getElementById('miniapp-theme-content');
+  if (!container || !currentMiniAppWidget) return;
+  const w = currentMiniAppWidget;
+  const state = (window.ComponentThemes && ComponentThemes.themeStateFor)
+    ? ComponentThemes.themeStateFor('widget:' + w)
+    : {};
+  container.innerHTML = (window.ThemePicker && ThemePicker.render)
+    ? ThemePicker.render(w, state.theme || '')
+    : '<div style="font-size:11px;color:var(--color-text-dim);">No se pudo cargar el selector de temas.</div>';
+}
+
 function renderMiniAppControls() {
   const container = document.getElementById('miniapp-controls-content');
   if (!container || !cachedWidgetsConfig || !currentMiniAppWidget) return;
