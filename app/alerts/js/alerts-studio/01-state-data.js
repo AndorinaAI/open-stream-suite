@@ -62,17 +62,12 @@ const AlertsStudio = {
     { id: 'fade', name: 'Aparición Suave (Fade)', desc: 'Desvanecimiento cinematográfico sobrio' }
   ],
 
-  BASE_STYLES: [
-    { id: 'cyberpunk', name: 'Cyberpunk HUD' },
-    { id: 'glassmorphism', name: 'Glassmorphism Frosted' },
-    { id: 'neon', name: 'Neon Glow Pulsar' },
-    { id: 'taller', name: 'Stream Industrial' },
-    { id: 'retro', name: 'Retro Arcade 8-Bit' },
-    { id: 'minimal', name: 'Minimal Clean' },
-    { id: 'synthwave', name: 'Synthwave 80s Sunset' },
-    { id: 'matrix', name: 'Matrix Terminal CRT' },
-    { id: 'luxury', name: 'Gold Crown Luxury' }
-  ],
+    // RETIRADO: aquí vivían los 9 "estilos base" de alerta (cyberpunk, neon…).
+  // Su CSS `.banner-theme-*` se eliminó y el aspecto lo define el tema del
+  // pack. Se deja vacío para que ningún `.map(BASE_STYLES)` rompa; el selector
+  // que lo usaba dentro de `#panel-banner-options` está oculto y se retira en
+  // la limpieza final.
+  BASE_STYLES: [],
 
   async init() {
     await Promise.all([

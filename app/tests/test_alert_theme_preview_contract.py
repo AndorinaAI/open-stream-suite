@@ -148,7 +148,7 @@ class AlertPreviewThemeContract(unittest.TestCase):
         panel = _read(PANEL_HTML)
         self.assertIn("06-preview-test.js?v=54", panel)
         self.assertIn("02a-layout-dom.js?v=55", panel)
-        self.assertIn("02b-gallery-toast.js?v=51", panel)
+        self.assertIn("02b-gallery-toast.js?v=52", panel)
         self.assertNotIn("02a-layout-dom.js?v=50", panel)
 
         index = _read(INDEX_HTML)
