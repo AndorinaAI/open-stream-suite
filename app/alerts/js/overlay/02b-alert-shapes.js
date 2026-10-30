@@ -101,8 +101,19 @@ window.AlertShapes = (function () {
     globalTheme = theme || null;
   }
 
+  /**
+   * Tema efectivo de la tarjeta o del banner.
+   *
+   * Un tema presente en `overlayThemes['alert:card'|'alert:banner']` es una
+   * asignación manual del usuario: manda siempre. Antes solo se usaba si
+   * `overlayThemeExplicit` lo marcaba, y ese mapa puede no traer la clave
+   * (estados antiguos o guardados por otra ruta), así que el tema se ignoraba
+   * y se caía al global. Con `globalThemeActive:false` el global es null y el
+   * resultado era `body` sin `data-theme`: la alerta se pintaba sin tema
+   * aunque el panel mostrara uno seleccionado.
+   */
   function applyThemeFor(type) {
-    var theme = explicit[type] ? themes[type] : globalTheme;
+    var theme = themes[type] || globalTheme;
     if (theme) document.body.setAttribute('data-theme', theme);
     else document.body.removeAttribute('data-theme');
     applySkin();

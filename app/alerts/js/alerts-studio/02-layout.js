@@ -22,7 +22,7 @@ window.AlertsStudio = window.AlertsStudio || {};
     function loadScript(file) {
       return new Promise((resolve, reject) => {
         const s = document.createElement('script');
-        s.src = basePath + file + '?v=50';
+        s.src = basePath + file + '?v=51';
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);

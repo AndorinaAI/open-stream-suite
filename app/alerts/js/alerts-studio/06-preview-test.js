@@ -83,9 +83,24 @@ Object.assign(AlertsStudio, {
     const anim = previewClass(c.bannerAnimation || 'pop', 'pop');
     const font = previewFont(c.bannerFontFamily || 'var(--font-tech), monospace');
 
+    // Tema de pack asignado al miembro que se previsualiza. Sin esto el
+    // simulador solo pintaba el sistema antiguo (banner-theme-*), así que
+    // asignar un tema de pack parecía no hacer nada: el cambio solo se veía al
+    // abrir la fuente en OBS. themes.css declara los tokens con selector
+    // genérico [data-theme="x"], así que basta el atributo en el nodo.
+    const previewKey = effectiveMediaMode === 'banner' ? 'alert:banner' : 'alert:card';
+    const previewTheme = (window.ComponentThemes && ComponentThemes.themeStateFor)
+      ? (ComponentThemes.themeStateFor(previewKey) || {})
+      : {};
+    const packAttrs = [
+      ' data-oss-panel="true"',
+      previewTheme.theme ? ` data-theme="${previewEscape(previewTheme.theme)}"` : '',
+      previewTheme.shape ? ` data-theme-shape="${previewEscape(previewTheme.shape)}"` : ''
+    ].join('');
+
     if (effectiveMediaMode === 'banner') {
       box.innerHTML = `
-        <div id="preview-alert-element" class="banner-alert-root banner-theme-${effectiveBannerStyle} anim-${anim}" style="--banner-border: ${effectiveBorderColor}; --banner-accent: ${effectiveBorderColor}; --banner-text: ${effectiveTextColor}; font-family: ${font};">
+        <div id="preview-alert-element" class="banner-alert-root banner-theme-${effectiveBannerStyle} anim-${anim}"${packAttrs} style="--banner-border: ${effectiveBorderColor}; --banner-accent: ${effectiveBorderColor}; --banner-text: ${effectiveTextColor}; font-family: ${font};">
           <div class="banner-icon-box" style="width: 52px; height: 52px; font-size: 24px; display: flex; align-items: center; justify-content: center; border-color: ${effectiveBorderColor}66; color: ${effectiveBorderColor};">
             ${this.getAlertIconSvg(this.currentType, chosenPlat)}
           </div>
@@ -107,7 +122,7 @@ Object.assign(AlertsStudio, {
       // Modo Multimedia
       const isVideo = effectiveMediaUrl && (effectiveMediaUrl.endsWith('.webm') || effectiveMediaUrl.endsWith('.mp4'));
       box.innerHTML = `
-        <div id="preview-alert-element" class="preview-media-container anim-${anim}" style="position: relative; width: 340px; text-align: center;">
+        <div id="preview-alert-element" class="preview-media-container anim-${anim}"${packAttrs} style="position: relative; width: 340px; text-align: center;">
           ${effectiveMediaUrl ? (isVideo ? `
             <video src="${previewEscape(effectiveMediaUrl)}" autoplay loop muted playsinline style="max-width: 100%; max-height: 180px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.6);"></video>
           ` : `
