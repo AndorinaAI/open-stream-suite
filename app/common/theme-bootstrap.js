@@ -19,7 +19,8 @@ window.ThemeBootstrap = (function () {
   'use strict';
 
   var inflight = null;   // single-flight: dos llamadas = una petición
-  var last = null;
+  var last = null;       // último payload aplicado
+  var lastType = null;   // 'widget' | 'alert'
 
   /** @param {string} url '/api/widgets/config' | '/api/alerts/config' */
   function load(url) {
@@ -40,6 +41,7 @@ window.ThemeBootstrap = (function () {
   function apply(cfg, type) {
     if (!cfg) return false;
     last = cfg;
+    lastType = type || lastType;
 
     if (type === 'alert' && window.AlertShapes) {
       var shapes = cfg.overlayShapes || {};
@@ -65,5 +67,12 @@ window.ThemeBootstrap = (function () {
   /** Último payload aplicado (para depurar desde la consola). */
   function current() { return last; }
 
-  return { load: load, apply: apply, current: current };
+  /**
+   * Vuelve a aplicar el último payload. Se usa al recibir un `theme_change`
+   * global: el overlay recalcula con los arquetipos frescos que llegaron por su
+   * endpoint, en lugar de con `config.js`, que puede estar desactualizado.
+   */
+  function refresh() { return last ? apply(last, lastType) : false; }
+
+  return { load: load, apply: apply, current: current, refresh: refresh };
 })();

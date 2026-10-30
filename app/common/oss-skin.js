@@ -18,14 +18,14 @@
 window.OSSSkin = (function () {
   function cfg() { return window.OSS_CONFIG || {}; }
 
-  function archetype(theme) {
+  function archetype(theme, map) {
     if (!theme) return null;
-    var map = cfg().themeArchetypes || {};
-    return map[theme] || null;
+    var m = map || cfg().themeArchetypes || {};
+    return m[theme] || null;
   }
 
-  function apply(theme, archetypeOverride) {
-    var arch = archetypeOverride || archetype(theme);
+  function apply(theme, archetypeOverride, archetypeMap) {
+    var arch = archetypeOverride || archetype(theme, archetypeMap);
     var body = document.body;
     if (!body) return null;
     if (theme) body.setAttribute('data-theme', theme);

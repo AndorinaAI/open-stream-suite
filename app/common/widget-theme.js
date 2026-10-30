@@ -101,7 +101,11 @@ window.OSSTheme = (function () {
     // `common/oss-skin.css`. Sin esto los widgets solo recibían los colores.
     if (window.OSSSkin) {
       var active = document.body.getAttribute('data-theme');
-      if (active) window.OSSSkin.apply(active);
+      // El mapa de arquetipos del payload del servidor es mas fresco que
+      // `config.js`; si no hay payload, OSSSkin usa el suyo.
+      var archMap = (window.ThemeBootstrap && ThemeBootstrap.current())
+        ? (ThemeBootstrap.current().themeArchetypes || null) : null;
+      if (active) window.OSSSkin.apply(active, null, archMap);
       else window.OSSSkin.clear();
     }
     return true;
@@ -112,7 +116,15 @@ window.OSSTheme = (function () {
     var type = data.type;
     if (type === 'theme_change') {
       liveGlobalTheme = data.theme || null;
-      apply(data.theme, undefined, { global: true });
+      // Un tema propio asignado manda sobre el global: no se pisa.
+      if (assignedTheme()) return;
+      // Si ya tenemos el payload del servidor, se re-aplica (arquetipos
+      // frescos). Si no, se cae al mensaje del WS.
+      if (window.ThemeBootstrap && ThemeBootstrap.current()) {
+        ThemeBootstrap.refresh();
+      } else {
+        apply(data.theme, undefined, {});
+      }
       return;
     }
     if (type !== 'widget_theme_change') return;
