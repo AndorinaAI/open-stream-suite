@@ -22,7 +22,9 @@ BASELINE_CSS = {
     # y el azul de PayPal del ticker se aclaró a #268DCA para leerse sobre el panel.
     "ticker": (11551, "de8f511532233b4ee1fddac2450d791ba93beb43cc4e5be6201c7aad3b62338e"),
     "promo": (8290, "7de1200d38197a3ecdfb9d829da3f72475568620961e23abb6df6625cd8353ba"),
-    "goal": (15346, "f19e6d26e4e11498b461f99bb219aa421d1d7a1a9ff4b710b1d7a7cec3b87311"),
+    # goal: el `font-family` base pasa a `var(--font-primary, 'Outfit', …)`
+    # para que la tipografia del pack llegue a sus letras.
+    "goal": (15597, "f440771e3267bff3e54ad1fa9ab531ff8d0d05993227c98b08998f2968a03549"),
     "chat": (10084, "543f1fcbea1db7cff4717d2fe02201d6f14387bc4cd335a793cdb4a27f2b48e0"),
     "timer": (7052, "97bee5b1d5232d5e4dde84fee334902932ea973886f9a46b2da5aa3c83585ccc"),
     "shoutout": (8290, "7de1200d38197a3ecdfb9d829da3f72475568620961e23abb6df6625cd8353ba"),

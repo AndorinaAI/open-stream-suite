@@ -140,7 +140,39 @@ body[data-theme-archetype][data-oss-widget] :is([data-oss-panel], [data-oss-shap
 }
 
 /* ====================================================================
+   TIPOGRAFÍA DEL TEMA DENTRO DE LOS WIDGETS
+   --------------------------------------------------------------------
+   Cada widget declara su propia variable de fuente y su CSS la consume:
+     chat    -> --font-primary, --font-tech
+     goal    -> 'Outfit' (hardcodeado, se corrige en su style.css)
+     promo   -> --promo-font
+     ticker  -> --tk-font
+     timer   -> --font-digits, --font-ui
+   En lugar de tocar seis ficheros y arriesgar seis regresiones, aquí se
+   REASIGNAN esas variables cuando hay un tema asignado. Una sola regla y la
+   tipografía del pack llega a todas las letras.
+
+   `--widget-font` (override del usuario) sigue ganando a todo, y sin tema esta
+   regla no existe: la apariencia por defecto queda intacta.
+   ==================================================================== */
+body[data-theme-archetype][data-oss-widget] {
+  --font-primary: var(--widget-font, var(--skin-font-body, inherit));
+  --font-tech: var(--widget-font, var(--skin-font-display, var(--skin-font-body, inherit)));
+  --promo-font: var(--widget-font, var(--skin-font-body, inherit));
+  --tk-font: var(--widget-font, var(--skin-font-body, inherit));
+  --font-digits: var(--widget-font, var(--skin-font-display, var(--skin-font-body, inherit)));
+  --font-ui: var(--widget-font, var(--skin-font-body, inherit));
+}
+
+/* El ticker deja elegir fuente con clases `.font-*` que llevan !important.
+   Con un tema asignado, manda la tipografía del pack (o el override del
+   usuario); sin tema, esas clases siguen funcionando como siempre. */
+body[data-theme-archetype][data-oss-widget] [class*="font-"] {
+  font-family: var(--tk-font, inherit) !important;
+}
+
    CONTENIDO DE WIDGETS — el tema llega DENTRO, no solo al contenedor
+
    Antes solo se pintaba el contenedor (`.chat-container`, `.timer-card`): los
    mensajes del chat, las filas del ticker y las tarjetas del goal seguian con
    el estilo base del widget, asi que "aplicar un tema" no se notaba.

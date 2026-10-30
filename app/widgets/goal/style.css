@@ -11,7 +11,7 @@
       padding: 0;
       background: transparent !important;
       overflow: hidden;
-      font-family: 'Outfit', sans-serif;
+      font-family: var(--font-primary, 'Outfit', sans-serif);
       display: flex;
       align-items: center;
       justify-content: center;
