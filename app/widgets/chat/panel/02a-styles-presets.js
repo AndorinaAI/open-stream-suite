@@ -18,30 +18,16 @@ function buildChatStylesPresetsHtml(c, presets, activePresetId) {
         </div>
       </div>
 
-      <div style="display: flex; gap: 8px; align-items: flex-end; margin-bottom: 14px; flex-wrap: wrap;">
-        <div class="form-group" style="margin-bottom: 0; min-width: 260px; flex: 1;">
-          <label style="font-size: 12px; font-weight: 600; color: #fff; margin-bottom: 6px; display: block;">
-            Tema / Preset Visual Activo:
-          </label>
-          <select id="cfg-chat-preset-select" class="form-select" onchange="onChatPresetChange(this.value)">
-            ${presetsOptionsHtml}
-          </select>
+      <div style="background: rgba(87,214,196,0.08); border: 1px solid rgba(87,214,196,0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+        <div style="font-size: 12px; font-weight: 700; color: #57D6C4; margin-bottom: 4px;">
+          🎨 El aspecto lo define el tema del pack
         </div>
-        <button type="button" class="btn-stage-preset" onclick="onChatPresetChange(document.getElementById('cfg-chat-preset-select').value)" title="Recargar valores originales de este preset">
-          📥 Cargar
-        </button>
-        <button type="button" class="btn-stage-preset" onclick="saveCurrentChatPreset()" title="Guardar ajustes actuales sobre este preset">
-          💾 Guardar en este Preset
-        </button>
-        <button type="button" class="btn-stage-preset" onclick="renameCurrentChatPreset()" title="Renombrar este preset">
-          ✏️ Renombrar
-        </button>
-        <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 6px 12px;" onclick="createNewChatPreset()">
-          ➕ Guardar Como Nuevo Preset...
-        </button>
-        <button type="button" class="btn-stage-preset" style="color: #EF4444;" onclick="deleteCurrentChatPreset()" title="Eliminar preset si es personalizado">
-          🗑️
-        </button>
+        <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.5;">
+          Los 15 presets visuales de chat ya no se ofrecen: no correspondían a ningún
+          tema de los packs. Elige el tema en la pestaña <strong>🎨 Tema</strong> de
+          esta mini-app y usa los ajustes de abajo solo para personalizar por encima
+          (color, fondo, fuente, forma).
+        </div>
       </div>
 
       <!-- CONTROLES VISUALES AVANZADOS DEL PRESET -->

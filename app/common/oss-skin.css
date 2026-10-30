@@ -167,3 +167,36 @@ body[data-theme-archetype][data-oss-widget] .shoutout-eyebrow {
   font-family: var(--skin-font-display, var(--skin-font-body, inherit)) !important;
   color: var(--color-accent-cyan, inherit) !important;
 }
+
+/* ====================================================================
+   OVERRIDES DEL USUARIO — el tema manda, esto se aplica ENCIMA
+   --------------------------------------------------------------------
+   `common/widget-overrides.js` escribe `--widget-*` a partir de
+   `styleOverrides` (config del widget). Mientras el usuario no toque nada la
+   variable no existe y la cadena cae al tema y luego al aspecto base: sin
+   overrides no cambia NADA, así que no hay regresión.
+
+   Orden real: override del usuario > tema del pack > arquetipo > base.
+   ==================================================================== */
+body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root) {
+  border-color: var(--widget-border, var(--color-border-cyan, rgba(255, 255, 255, 0.16))) !important;
+  border-width: var(--widget-border-width, var(--frame-border-width, 1px)) !important;
+  background-color: var(--widget-bg, var(--color-panel-bg, transparent)) !important;
+  font-family: var(--widget-font, var(--skin-font-body, inherit)) !important;
+}
+
+/* El contenido hereda los mismos overrides: cambiar el borde o la fuente debe
+   notarse dentro del mensaje y no solo en el marco. */
+body[data-theme-archetype][data-oss-widget] :is(.chat-msg, .prompter-item, .goal-item, .shoutout-card-body) {
+  border-color: var(--widget-border, var(--color-border-cyan, rgba(255, 255, 255, 0.16))) !important;
+  background-color: var(--widget-bg, var(--color-panel-bg, transparent)) !important;
+  font-family: var(--widget-font, var(--skin-font-body, inherit)) !important;
+  font-size: var(--widget-font-size, inherit) !important;
+}
+
+/* El acento del usuario tiñe los textos que el tema marca como acento. */
+body[data-theme-archetype][data-oss-widget] :is(.username-text, .goal-item-title, .shoutout-eyebrow) {
+  color: var(--widget-accent, var(--color-accent-cyan, inherit)) !important;
+}
+
+

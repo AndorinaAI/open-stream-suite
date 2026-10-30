@@ -31,7 +31,11 @@ ARCHETYPES = ("cozy", "gamer", "maker", "openstream")
 CONTENT_SELECTORS = (".chat-msg", ".prompter-item", ".goal-item", ".shoutout-card-body")
 IMPORTANT_ALLOWED = ("border-width", "border-style", "border-color", "box-shadow",
                      "background-color", "background-image", "background-position",
-                     "background-size", "background-repeat")
+                     "background-size", "background-repeat",
+                     # Overrides del usuario (--widget-*): igual que el tema,
+                     # deben ganar al CSS base que el widget inyecta en
+                     # `#custom-user-css` y a sus estilos en línea.
+                     "font-family", "font-size", "color")
 # El radio y el recorte NO pueden llevarlo: la forma física debe seguir ganando.
 IMPORTANT_FORBIDDEN = ("border-radius", "clip-path")
 
