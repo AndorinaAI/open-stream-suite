@@ -33,12 +33,45 @@ window.OSSTheme = (function () {
   function shapeTarget() { return document.querySelector('[data-oss-shape-target]'); }
 
   function applyChatShape(shape) {
-    // Chat genera su CSS de forma en `applyChatConfig`; se reutiliza sin duplicar lógica.
+    // El chat refleja la forma en su propio config porque su CSS base la lee.
+    // Ya NO es la única vía de aplicar una forma: eso lo hace `applyShape`.
     if (!window.ChatStyles || !window.ChatStyles.config) return;
     try {
       window.ChatStyles.config.shape = shape || null;
       if (typeof window.ChatStyles.applyChatConfig === 'function') window.ChatStyles.applyChatConfig();
     } catch (e) {}
+  }
+
+  /**
+   * Aplica una forma a CUALQUIER widget, genérica o física.
+   *
+   *   - genérica (rounded, bubble…): la pinta `OSSShape` en línea.
+   *   - física (maker_circuit_pcb…): la pinta `styles.css` vía
+   *     `body[data-theme-shape]`.
+   *
+   * Antes había una rama `if (id === 'chat') …` que dejaba al chat sin acceso a
+   * las formas de pack. Ahora todos pasan por aquí; el chat solo añade la
+   * sincronización con `ChatStyles`.
+   */
+  function applyShape(shape) {
+    window.OSS_WIDGET_SHAPE = shape || null;
+    var target = shapeTarget();
+    var generic = !!(shape && window.OSSShape && OSSShape.shapes &&
+                     OSSShape.shapes.indexOf(shape) !== -1);
+
+    if (shape) document.body.setAttribute('data-theme-shape', shape);
+    else document.body.removeAttribute('data-theme-shape');
+
+    if (generic) {
+      if (window.OSSShape) OSSShape.apply(target, shape);
+      // Una forma genérica no usa el CSS de las físicas.
+      document.body.removeAttribute('data-theme-shape');
+    } else if (window.OSSShape && target) {
+      OSSShape.clear(target);
+    }
+
+    if (id === 'chat') applyChatShape(shape);
+    return shape || null;
   }
 
   function apply(theme, shape, opts) {
@@ -61,16 +94,7 @@ window.OSSTheme = (function () {
       else document.body.removeAttribute('data-theme');
     }
     if (shape !== undefined) {
-      window.OSS_WIDGET_SHAPE = shape || null;
-      if (shape) document.body.setAttribute('data-theme-shape', shape);
-      else document.body.removeAttribute('data-theme-shape');
-
-      if (id === 'chat') {
-        applyChatShape(shape);
-      } else if (window.OSSShape) {
-        if (shape) window.OSSShape.apply(shapeTarget(), shape);
-        else window.OSSShape.clear(shapeTarget());
-      }
+      applyShape(shape);
     }
     // Skin de componentes: resuelve el arquetipo del tema activo (mapa
     // `themeArchetypes` de config.js, derivado de disco) y activa la capa

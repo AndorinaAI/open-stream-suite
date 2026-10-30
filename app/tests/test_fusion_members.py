@@ -12,7 +12,11 @@ class TestComponentsCatalog(unittest.TestCase):
         ids = C.widget_ids()
         self.assertIn("chat", ids)
         self.assertIn("shoutout", ids)
-        self.assertNotIn("promo", ids, "promo es un symlink; debe listarse el real")
+        # `promo` es un symlink a `shoutout`, pero es un widget con identidad
+        # propia en el panel (config, atajos y tarjeta). Excluirlo hacia que el
+        # backend rechazara `widget:promo` con «Componente desconocido».
+        self.assertIn("promo", ids, "promo debe estar: el panel lo ofrece")
+        self.assertEqual(len(ids), len(set(ids)), "sin duplicados")
 
     def test_alerts_panel(self):
         self.assertEqual(C.alert_ids(), ["card", "banner"])

@@ -81,10 +81,9 @@ class TestComponentShapesRender(unittest.TestCase):
     def test_6_catalogo_ofrece_lo_que_se_pinta(self):
         for wid in C.widget_ids():
             shapes = C.shape_ids_for("widget", wid)
-            if wid == "chat":
-                self.assertEqual(shapes, set(C.WIDGET_SHAPE_SET), "chat solo admite las genéricas")
-            else:
-                self.assertTrue(self.physical <= shapes, f"{wid} no ofrece las formas físicas")
+            # TODOS los widgets, chat incluido, ofrecen las 20 fisicas: su vista
+            # carga shapes.css y su contenedor tiene [data-oss-shape-target].
+            self.assertTrue(self.physical <= shapes, f"{wid} no ofrece las formas físicas")
             for sid in sorted(shapes):
                 if sid in C.WIDGET_SHAPE_SET:
                     continue  # genéricas: inline vía oss-shape.js
@@ -107,7 +106,9 @@ class TestComponentShapesRender(unittest.TestCase):
     def test_7_formas_invalidas_siguen_rechazandose(self):
         self.assertFalse(C.supports_shape("widget", "goal", "no-existe"))
         self.assertFalse(C.supports_shape("alert", "card", "no-existe"))
-        self.assertFalse(C.supports_shape("widget", "chat", "cozy_polaroid"))
+        # Una forma de pack SI es valida en chat (antes se rechazaba).
+        self.assertTrue(C.supports_shape("widget", "chat", "cozy_polaroid"))
+        self.assertFalse(C.supports_shape("widget", "chat", "no-existe"))
         self.assertTrue(C.supports_shape("widget", "goal", "auto"))
 
 
