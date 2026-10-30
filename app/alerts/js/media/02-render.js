@@ -312,11 +312,22 @@ function createMediaTableRowHTML(f) {
       <td>${sizeText}</td>
       <td style="color: var(--color-text-dim); font-size: 11px;">${mdate}</td>
       <td style="text-align: right; white-space: nowrap;">
-        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openMediaPreview(${inlineArg(f.rel_path)})">▶️</button>
-        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="copyText(${inlineArg(f.url)})">📋</button>
-        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openRenameModal(${inlineArg(f.rel_path)}, ${inlineArg(f.name)})">✏️</button>
-        <button class="btn-action-danger" style="padding: 3px 6px; font-size: 10px;" onclick="deleteMediaSingle(${inlineArg(f.rel_path)})">🗑️</button>
+        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openMediaPreview(${inlineArg(f.rel_path)})" title="Ver" aria-label="Ver">▶️</button>
+        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="copyText(${inlineArg(f.url)})" title="Copiar URL" aria-label="Copiar URL">📋</button>
+        <button class="btn-action-test" style="padding: 3px 6px; font-size: 10px;" onclick="openRenameModal(${inlineArg(f.rel_path)}, ${inlineArg(f.name)})" title="Renombrar" aria-label="Renombrar">✏️</button>
+        <button class="btn-action-danger" style="padding: 3px 6px; font-size: 10px;" onclick="confirmDeleteMediaSingle(${inlineArg(f.rel_path)})" title="Eliminar archivo" aria-label="Eliminar archivo">🗑️</button>
       </td>
     </tr>
   `;
 }
+
+/* Confirmacion antes de borrar un archivo del disco. */
+window.confirmDeleteMediaSingle = function (relPath) {
+  if (!window.UI || !window.UI.confirmAction) { return deleteMediaSingle(relPath); }
+  window.UI.confirmAction({
+    title: 'Eliminar archivo',
+    detail: 'Se borrara del disco: ' + relPath,
+    confirmLabel: 'Eliminar',
+    danger: true
+  }).then(function (ok) { if (ok) { deleteMediaSingle(relPath); } });
+};

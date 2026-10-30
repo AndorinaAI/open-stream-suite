@@ -42,7 +42,7 @@ function renderMiniAppShortcutsManager() {
         </button>
         <button type="button" class="btn-stage-preset" onclick="testMiniAppShortcut('${w}', '${s.id}')">▶️ Probar</button>
         ${w === 'chat' ? `<button type="button" class="btn-stage-preset" onclick="openParticleEditorModal('${s.id}')">✏️ Editar</button>` : ''}
-        <button type="button" class="btn-stage-preset" style="color: #EF4444;" onclick="deleteMiniAppShortcut('${w}', '${s.id}')">🗑️</button>
+        <button type="button" class="btn-stage-preset" style="color: #EF4444;" onclick="confirmDeleteMiniAppShortcut('${w}', '${s.id}')" title="Quitar este atajo" aria-label="Quitar este atajo">🗑️</button>
       </div>
     `;
     container.appendChild(row);
@@ -138,3 +138,13 @@ window.testMiniAppShortcut = testMiniAppShortcut;
 window.deleteMiniAppShortcut = deleteMiniAppShortcut;
 window.addCustomShortcutToWidget = addCustomShortcutToWidget;
 
+/* Confirmacion antes de quitar un atajo (UI.confirmAction nunca abre dos dialogos). */
+window.confirmDeleteMiniAppShortcut = function (w, id) {
+  if (!window.UI || !window.UI.confirmAction) { return deleteMiniAppShortcut(w, id); }
+  window.UI.confirmAction({
+    title: 'Quitar atajo',
+    detail: 'El atajo dejara de aparecer en la barra del escenario. No borra el widget.',
+    confirmLabel: 'Quitar',
+    danger: true
+  }).then(function (ok) { if (ok) { deleteMiniAppShortcut(w, id); } });
+};
