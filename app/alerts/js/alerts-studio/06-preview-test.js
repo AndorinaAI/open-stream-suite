@@ -101,9 +101,9 @@ Object.assign(AlertsStudio, {
       previewThemeId ? ` data-theme="${previewEscape(previewThemeId)}"` : '',
       previewTheme.shape ? ` data-theme-shape="${previewEscape(previewTheme.shape)}"` : ''
     ].join('');
-    // Same rule as the overlay: with a pack theme assigned the legacy base
-    // style class is skipped so it cannot cover the theme tokens.
-    const legacyClass = previewThemeId ? '' : ` banner-theme-${effectiveBannerStyle}`;
+    // El estilo base legacy ya no existe: el aspecto viene del tema del pack
+    // (data-theme) o del aspecto neutro del componente.
+    const legacyClass = '';
 
     if (effectiveMediaMode === 'banner') {
       box.innerHTML = `

@@ -112,15 +112,11 @@ window.AlertQueue = {
       msg.style.display = item.message ? 'block' : 'none';
     }
 
-    // The pack theme wins over the legacy "base style": with a pack theme
-    // assigned the banner-theme-* class is skipped, because it carries its own
-    // borders and backgrounds that would cover the theme tokens.
-    // The user can still mix: colour, font and animation are inline values and
-    // win over the tokens, so customising keeps working on top of the pack.
-    const theme = item.bannerStyle || 'cyberpunk';
-    const packTheme = !!(window.AlertShapes && AlertShapes.effectiveTheme && AlertShapes.effectiveTheme('banner'));
-    root.className = `banner-alert-root anim-${item.bannerAnimation || 'pop'}`
-      + (packTheme ? '' : ` banner-theme-${theme}`);
+    // Ya no hay "estilo base" legacy: el aspecto de la alerta lo define el
+    // tema del pack (data-theme / data-theme-shape) o, si no hay ninguno, el
+    // aspecto neutro del componente. Los colores, la fuente y la animación que
+    // configure el usuario se aplican en línea, encima del tema.
+    root.className = `banner-alert-root anim-${item.bannerAnimation || 'pop'}`;
 
     if (item.bannerBgColor) root.style.background = item.bannerBgColor;
     else root.style.background = '';

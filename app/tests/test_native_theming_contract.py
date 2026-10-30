@@ -36,7 +36,9 @@ BASELINE_JS = {
     "shoutout": "d79c0708d77f8f67befe3c131ba974226d59690cab3b4fc4d099639499e1c387",
 }
 BASELINE_ALERTS = {
-    "alerts-themes.css": (16309, "32c310c86157bf919093f6097671bfeec8dd65a9f5a2e0543136d9372370cfd0"),
+    # Recortado a proposito: se elimino el catalogo legacy de 9 temas
+    # (.banner-theme-*). El resto del fichero (maquetacion del banner) no cambia.
+    "alerts-themes.css": (13739, "627c060fa7e5ff83ed0f0585ffaf52b1a5ad96e0de8019c9524f7021b36a8de9"),
     "alerts-widget.css": (9893, "ccae115dd60c8e79af188d8b86eb817fdaddc023a071f95ea797620602406aec"),
 }
 

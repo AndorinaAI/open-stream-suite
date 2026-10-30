@@ -26,7 +26,8 @@ from server.config import BASE_DIR
 
 APP = Path(BASE_DIR)
 SHAPES_JS = APP / "alerts/js/overlay/02b-alert-shapes.js"
-QUEUE_JS = APP / "alerts/js/overlay/03-alert-queue.js"
+QUEUE_JS = APP / 'alerts/js/overlay/03-alert-queue.js'
+ALERTS_CSS = APP / 'alerts/css/alerts-themes.css'
 PREVIEW_JS = APP / "alerts/js/alerts-studio/06-preview-test.js"
 THEMES_JS = APP / "alerts/js/component-themes.js"
 PANEL_HTML = APP / "alerts/panel.html"
@@ -71,17 +72,25 @@ class AlertThemeApplyContract(unittest.TestCase):
 
 
 class PackThemeWinsContract(unittest.TestCase):
-    """Con tema de pack asignado, el estilo base no puede taparlo."""
+    """El estilo base legacy ya no existe: solo manda el tema del pack."""
 
-    def test_overlay_skips_legacy_class_with_pack_theme(self):
+    def test_overlay_has_no_legacy_class(self):
         js = _read(QUEUE_JS)
-        self.assertIn("effectiveTheme('banner')", js)
-        self.assertIn("(packTheme ? '' : ` banner-theme-${theme}`)", js)
+        self.assertNotIn("banner-theme-", js,
+                         "el overlay no debe generar clases banner-theme-*")
+        self.assertIn("banner-alert-root anim-", js)
 
-    def test_preview_skips_legacy_class_with_pack_theme(self):
+    def test_preview_has_no_legacy_class(self):
         js = _read(PREVIEW_JS)
-        self.assertIn("const legacyClass = previewThemeId ? ''", js)
+        # Busca la CONSTRUCCIÓN de la clase, no una mención en un comentario.
+        self.assertNotIn("banner-theme-${", js,
+                         "el preview no debe generar clases banner-theme-*")
         self.assertIn("banner-alert-root${legacyClass}", js)
+
+    def test_css_catalogue_is_gone(self):
+        css = _read(ALERTS_CSS)
+        self.assertNotIn(".banner-theme-", css,
+                         "el catalogo de 9 temas legacy debe estar borrado del CSS")
 
     def test_preview_falls_back_to_global_theme(self):
         """Sin tema propio, el simulador pinta el tema global (como el overlay)."""
@@ -108,14 +117,12 @@ class PackThemeWinsContract(unittest.TestCase):
     def test_user_customisation_survives_pack_theme(self):
         """Los colores propios se aplican siempre: el usuario puede mezclar."""
         js = _read(QUEUE_JS)
-        body = re.search(r"const theme = item\.bannerStyle.*?applyAll\('banner'\)", js, re.S)
-        self.assertIsNotNone(body)
-        code = body.group(0)
         # Antes, con pack theme se borraban --banner-border/--banner-accent/
         # --banner-text y el color del usuario. Ahora se aplican siempre.
-        self.assertNotIn("removeProperty('--banner-text')", code)
-        self.assertIn("setProperty('--banner-border', item.bannerBorderColor)", code)
-        self.assertIn("setProperty('--banner-text', item.bannerTextColor)", code)
+        self.assertNotIn("removeProperty('--banner-text')", js,
+                         "borrar el color de texto del usuario rompe la mezcla")
+        self.assertIn("setProperty('--banner-border', item.bannerBorderColor)", js)
+        self.assertIn("setProperty('--banner-text', item.bannerTextColor)", js)
 
 
 class AlertPreviewThemeContract(unittest.TestCase):
@@ -135,7 +142,7 @@ class AlertPreviewThemeContract(unittest.TestCase):
     def test_cache_busting_bumped(self):
         """Sin bump, el navegador ejecuta el JS anterior y «no cambia nada»."""
         panel = _read(PANEL_HTML)
-        self.assertIn("06-preview-test.js?v=53", panel)
+        self.assertIn("06-preview-test.js?v=54", panel)
         self.assertIn("02a-layout-dom.js?v=52", panel)
         self.assertIn("02b-gallery-toast.js?v=51", panel)
         self.assertNotIn("02a-layout-dom.js?v=50", panel)
