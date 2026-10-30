@@ -63,8 +63,20 @@ async def handle_save_alerts_config(request):
 
 
 async def handle_get_alert_themes(request):
-    """Devuelve los temas de alertas (predefinidos y personalizados)"""
-    return web.json_response({"status": "ok", "themesConfig": load_alert_themes_config()})
+    """Overrides de estilo por tipo de alerta.
+
+    Antes devolvia el catalogo de 9 temas legacy (`themesConfig`). Ese sistema
+    se retiro: el aspecto base lo pone el tema del pack y aqui solo viajan las
+    personalizaciones del usuario. Se mantiene la ruta por compatibilidad.
+    """
+    from server.services.alerts_service import load_alert_style_overrides
+    return web.json_response({
+        "status": "ok",
+        "styleOverrides": load_alert_style_overrides(),
+        # Clave vacia: `01-state-data.js` la lee con `||`, asi que ningun panel
+        # antiguo rompe al no encontrarla.
+        "themesConfig": {"activeTheme": None, "themes": {}},
+    })
 
 
 async def handle_save_alert_themes(request):

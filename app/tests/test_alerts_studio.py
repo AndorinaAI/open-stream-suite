@@ -111,10 +111,12 @@ class TestAlertsStudio(AioHTTPTestCase):
         self.assertEqual(resp.status, 200)
         data = await resp.json()
         self.assertEqual(data["status"], "ok")
-        self.assertIn("themes", data["themesConfig"])
-        self.assertIn("cyberpunk", data["themesConfig"]["themes"])
-        self.assertIn("glassmorphism", data["themesConfig"]["themes"])
-        self.assertIn("neon", data["themesConfig"]["themes"])
+        # El catalogo de 9 temas legacy se retiro: la ruta devuelve overrides
+        # por tipo y deja `themesConfig` vacio por compatibilidad con paneles
+        # antiguos (que lo leen con `||`).
+        self.assertIn("styleOverrides", data)
+        self.assertIsInstance(data["styleOverrides"], dict)
+        self.assertEqual(data["themesConfig"]["themes"], {})
 
     async def test_apply_alert_theme(self):
         resp = await self.client.post(

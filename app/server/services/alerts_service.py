@@ -260,3 +260,39 @@ async def test_alert_service(alert_type: str, event_data: dict) -> dict:
         logger.info(f"📢 Alerta de prueba enviada a OBS: {alert_type} ({payload.get('user')})")
         return payload
     return None
+
+
+# ---------------------------------------------------------------------------
+# Overrides de estilo por tipo de alerta
+# ---------------------------------------------------------------------------
+# Sustituyen al catalogo de 9 "temas de alerta" (`alerts_themes_config.json`).
+# El aspecto base lo define el tema del pack; esto solo lo personaliza:
+#   { "follow": {"borderColor": "#57D6C4", "textColor": "#FFFFFF", "animation": "pop"} }
+# Ya no existe `bannerStyle`: no habia CSS que lo pintara.
+STYLE_OVERRIDES_FILE = BASE_DIR / "alerts_style_overrides.json"
+
+
+def load_alert_style_overrides() -> dict:
+    """Devuelve `{tipo: overrides}`. Nunca lanza: si falta o esta corrupto, `{}`."""
+    if not STYLE_OVERRIDES_FILE.exists():
+        return {}
+    try:
+        with open(STYLE_OVERRIDES_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception as exc:
+        logger.warning(f"No se pudo leer {STYLE_OVERRIDES_FILE.name}: {exc}")
+        return {}
+
+
+def save_alert_style_overrides(overrides: dict) -> bool:
+    """Persiste los overrides. Devuelve False si el payload no es un objeto."""
+    if not isinstance(overrides, dict):
+        return False
+    try:
+        with lock_for(STYLE_OVERRIDES_FILE):
+            atomic_write_json(STYLE_OVERRIDES_FILE, overrides)
+        return True
+    except Exception as exc:
+        logger.error(f"No se pudo guardar {STYLE_OVERRIDES_FILE.name}: {exc}")
+        return False
