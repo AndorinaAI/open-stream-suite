@@ -514,3 +514,9 @@ window.syncGoalWithTwitch = async function() {
     }
   }
 };
+
+// `const API` NO crea `window.API`: el binding global léxico es accesible como
+// `API` desde otros scripts, pero `window.API` era `undefined`. Todo el código
+// que comprobaba `window.API && ...` se saltaba la llamada en silencio (y aun
+// así mostraba el toast de éxito). Se publica explícitamente.
+if (typeof window !== 'undefined') window.API = API;

@@ -16,6 +16,8 @@ APP = Path(BASE_DIR)
 UI = APP / "alerts/js/ui-feedback.js"
 SHORTCUTS = APP / 'alerts/js/widgets-shortcuts.js'
 ACTIONS = APP / 'common/shortcut-actions.js'
+API_JS = APP / 'alerts/js/api.js'
+OVERRIDES_JS = APP / 'common/widget-overrides.js'
 SHOUTOUT = APP / "widgets/shoutout/widget.js"
 
 
@@ -93,6 +95,26 @@ class ShortcutRegistryContract(unittest.TestCase):
         js = _read(ACTIONS)
         self.assertGreaterEqual(js.count("{ name: 'action'"), 4,
                                 "cada especificacion debe ofrecer un selector de acción")
+
+
+class ApiGlobalContract(unittest.TestCase):
+    """`const API` no crea `window.API`: hay que publicarlo explícitamente.
+
+    Regresion: `ThemePicker.onChange` comprobaba `window.API && ...`, que era
+    `undefined`, asi que se saltaba el POST **y aun mostraba «✓ Tema
+    aplicado»**. El usuario veia el mensaje de guardado y nada se guardaba.
+    """
+
+    def test_api_is_published_on_window(self):
+        js = _read(API_JS)
+        self.assertIn("window.API = API", js,
+                      "api.js debe publicar la API en window")
+
+    def test_theme_picker_does_not_silently_skip_saving(self):
+        js = _read(OVERRIDES_JS)
+        self.assertNotIn("if (window.API && API.assignComponent)", js)
+        self.assertIn("UI.showToast('No se pudo guardar", js,
+                      "si la API no esta disponible debe avisarse, no fingir exito")
 
 
 class SharedWidgetIdContract(unittest.TestCase):

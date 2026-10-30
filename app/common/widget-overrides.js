@@ -121,19 +121,27 @@ window.ThemePicker = (function () {
 
   /** Guarda el tema asignado al widget y refresca el preview. */
   async function onChange(widgetId, themeId) {
-    try {
-      if (window.API && API.assignComponent) {
-        await API.assignComponent('widget:' + widgetId, { themeId: themeId || '' });
+    var api = (typeof API !== 'undefined' && API) || window.API || null;
+    if (!api || typeof api.assignComponent !== 'function') {
+      if (window.UI && UI.showToast) {
+        UI.showToast('No se pudo guardar: la API del panel no está disponible', 'error');
       }
+      return false;
+    }
+    try {
+      await api.assignComponent('widget:' + widgetId, { themeId: themeId || '' });
       if (window.UI && UI.showToast) {
         UI.showToast(themeId ? '✓ Tema aplicado: ' + pretty(themeId) : '↺ Heredando el tema global', 'success');
       }
-      if (typeof updateChatPipPreview === 'function') updateChatPipPreview();
-      if (typeof updateGoalPipPreview === 'function') updateGoalPipPreview();
-      if (typeof updatePromoPipPreview === 'function') updatePromoPipPreview();
-      if (typeof updateTimerPipPreview === 'function') updateTimerPipPreview();
+      // Refresco del chip de estado sin reconstruir el DOM del panel: repintar
+      // la cuadricula cerraba el <select> que el usuario acababa de usar.
+      if (window.ComponentThemes && ComponentThemes.paintStatusChips) {
+        try { ComponentThemes.paintStatusChips(); } catch (e2) {}
+      }
+      return true;
     } catch (e) {
       if (window.UI && UI.showToast) UI.showToast('No se pudo aplicar el tema: ' + e.message, 'error');
+      return false;
     }
   }
 
