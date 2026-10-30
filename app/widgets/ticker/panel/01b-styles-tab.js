@@ -238,14 +238,24 @@ window.buildTickerPresetsCodeTabHtml = function(tk, presets, activePresetId, cur
         <div class="miniapp-section-header">
           <div class="miniapp-section-title">
             <span>🎛️</span>
-            <span>Catálogo de Presets Visuales Completos</span>
+            <span>Aspecto del ticker</span>
           </div>
-          <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px;" onclick="saveTickerAsNewPreset()">
+          <button type="button" class="btn-action-primary" style="font-size: 11px; padding: 4px 10px; display: none;" onclick="saveTickerAsNewPreset()">
             ➕ Guardar Actual como Nuevo Preset
           </button>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;">
+        <div style="background: rgba(87,214,196,0.08); border: 1px solid rgba(87,214,196,0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+          <div style="font-size: 12px; font-weight: 700; color: #57D6C4;">🎨 El aspecto lo define el tema del pack</div>
+          <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.5; margin-top: 4px;">
+            Los presets visuales del ticker (<em>cyber_stream, twitch_streamer, arcade_retro…</em>)
+            ya no se ofrecen: no correspondían a ningún tema de los packs. Elige el tema en la
+            pestaña <strong>🎨 Tema</strong>. El contenido (frases, RSS, chips y separadores)
+            sigue configurándose en su pestaña.
+          </div>
+        </div>
+
+        <div style="display: none;">
           ${presets.map(p => `
             <div class="miniapp-preset-card ${p.id === activePresetId ? 'active' : ''}" onclick="applyTickerPreset('${p.id}')" style="cursor: pointer; background: rgba(0,0,0,0.3); border: 2px solid ${p.id === activePresetId ? '#57D6C4' : 'var(--color-border-dim)'}; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 6px; transition: border-color 0.15s;">
               <div style="display: flex; align-items: center; justify-content: space-between;">

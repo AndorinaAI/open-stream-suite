@@ -5,7 +5,17 @@
 window.buildGoalStylesTabHtml = function(g, gs, sameAsChat, tr, activeTab) {
   return `
     <div id="goal-tab-styles" style="display: ${activeTab === 'styles' ? 'block' : 'none'};">
-      
+
+      <!-- AVISO: el aspecto lo define el tema del pack -->
+      <div style="background: rgba(87,214,196,0.08); border: 1px solid rgba(87,214,196,0.35); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+        <div style="font-size: 12px; font-weight: 700; color: #57D6C4;">🎨 El aspecto lo define el tema del pack</div>
+        <div style="font-size: 11px; color: var(--color-text-dim); line-height: 1.5; margin-top: 4px;">
+          Elige el tema en la pestaña <strong>🎨 Tema</strong>. Los ajustes de aquí
+          (silueta, borde, fondo, tipografía) se aplican <strong>encima</strong> del tema
+          como personalización. El catálogo de metas es contenido y sigue en «Presets».
+        </div>
+      </div>
+
       <!-- BARRA DE ACCIÓN: IMPORTAR SILUETA Y FONDO DEL CHAT -->
       <div style="background: rgba(25, 29, 33, 0.5); border: 1px solid var(--color-border-dim); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
         <div style="font-size: 12px; color: #CBD5E1; display: flex; align-items: center; gap: 8px;">
