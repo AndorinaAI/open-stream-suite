@@ -15,7 +15,7 @@ html, body {
 
 html.preview-mode,
 body.preview-mode {
-  background-color: #121518 !important;
+  background-color: var(--color-panel-bg, #121518) !important;
 }
 
 .alerts-stage {
@@ -32,7 +32,7 @@ body.preview-mode {
   left: 50%;
   transform: translateX(-50%) translateY(-30px) scale(0.95);
   min-width: 540px;
-  background: rgba(25, 29, 33, 0.94);
+  background: var(--color-panel-bg, rgba(25, 29, 33, 0.94));
   border: 1px solid var(--color-border-cyan);
   border-top: 3px solid var(--color-accent-cyan);
   border-radius: var(--radius-sm);
@@ -221,7 +221,7 @@ body.preview-mode {
   right: 10px;
   font-family: var(--font-tech);
   font-size: 10px;
-  color: #10B981;
+  color: var(--color-accent-cyan, #10B981);
   opacity: 0;
   transition: opacity 1s ease;
 }

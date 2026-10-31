@@ -43,7 +43,9 @@ BASELINE_ALERTS = {
     # Recortado a proposito: se elimino el catalogo legacy de 9 temas
     # (.banner-theme-*). El resto del fichero (maquetacion del banner) no cambia.
     "alerts-themes.css": (13739, "627c060fa7e5ff83ed0f0585ffaf52b1a5ad96e0de8019c9524f7021b36a8de9"),
-    "alerts-widget.css": (9893, "ccae115dd60c8e79af188d8b86eb817fdaddc023a071f95ea797620602406aec"),
+    # alerts-widget.css: la tarjeta y el preview leen el fondo del tema
+    # (`var(--color-panel-bg, <literal>)`) en vez de fijarlo a mano.
+    "alerts-widget.css": (10184, "079f6ccc4120db92b12071164eef14a429413fe6820b2bb101c0ecbf2e0d35bb"),
 }
 
 
