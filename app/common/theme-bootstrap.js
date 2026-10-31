@@ -55,7 +55,15 @@ window.ThemeBootstrap = (function () {
     if (type === 'widget' && window.OSSTheme && typeof OSSTheme.apply === 'function') {
       var ot = cfg.overlayThemes || {};
       var os = cfg.overlayShapes || {};
-      var id = (window.OSSTheme.current && OSSTheme.current()) || null;
+      // `OSSTheme.current()` devuelve un OBJETO ({theme, shape, assigned}); la
+      // clave del payload necesita el ID en texto. Con el objeto se construía
+      // "widget:[object Object]", esa clave no existía y `apply(null, null)`
+      // BORRABA el tema y la forma que el servidor sí había enviado: todos los
+      // widgets arrancaban desnudos y solo se vestían si después llegaba un
+      // mensaje por WebSocket (de ahí "unos van y otros no").
+      var id = (window.OSSTheme.id)
+        || (document.body && document.body.getAttribute('data-oss-widget'))
+        || null;
       if (!id) return false;
       OSSTheme.apply(ot['widget:' + id] || null, os['widget:' + id] || null);
       return true;

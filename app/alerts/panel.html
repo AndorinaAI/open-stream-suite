@@ -16,15 +16,21 @@
   <link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/imagencorp/logos/favicon-32.png">
   <link rel="apple-touch-icon" href="/assets/imagencorp/logos/favicon-256.png">
+  <!-- BLOQUE CSS DEL PANEL.
+       `alerts-widget.css` es el ÚNICO fichero que declara el `background` de
+       `.alert-box` y `.banner-alert-root`. Sin él, el simulador de alertas del
+       panel (y cualquier preview) pintaba una caja SIN FONDO: transparente.
+       La fuente de OBS sí lo cargaba, por eso allí se veía bien y aquí no.
+       `themes.css` va UNA sola vez (antes estaba duplicado con ?v=42). -->
   <link rel="stylesheet" href="../common/fonts.css">
   <link rel="stylesheet" href="../common/styles.css">
   <link rel="stylesheet" href="../common/generated/archetypes.css">
   <link rel="stylesheet" href="../common/generated/shapes.css">
   <link rel="stylesheet" href="../common/themes.css">
   <link rel="stylesheet" href="../common/components.css">
-  <link rel="stylesheet" href="../common/themes.css?v=42">
   <link rel="stylesheet" href="css/panel.css">
   <link rel="stylesheet" href="css/alerts-themes.css?v=3">
+  <link rel="stylesheet" href="css/alerts-widget.css?v=2">
   <link rel="stylesheet" href="../common/oss-skin.css">
   <script src="/common/i18n.js"></script>
 </head>

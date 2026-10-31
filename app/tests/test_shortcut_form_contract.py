@@ -118,15 +118,21 @@ class ApiGlobalContract(unittest.TestCase):
 
 
 class SharedWidgetIdContract(unittest.TestCase):
-    def test_promo_and_shoutout_resolve_id_from_url(self):
-        """`widgets/promo` es un symlink: el id debe salir de la ruta."""
+    def test_promo_y_shoutout_comparten_id_canonico(self):
+        """`widgets/promo` es un symlink de `widgets/shoutout`.
+
+        La clave del tema es `widget:promo` para las DOS rutas: es la única que
+        existe en `widgets_config.json` y la única que escribe el panel. Antes
+        el id se derivaba de la URL, así que `/widgets/shoutout/` leía
+        `overlayThemes['widget:shoutout']` — que no existe — y el widget
+        expuesto en el panel nunca recibía su tema ni su forma.
+        """
         js = _read(SHOUTOUT)
-        self.assertIn("window.location.pathname", js)
-        self.assertIn("'promo'", js)
-        self.assertNotIn(
-            "window.OSSTheme.init('shoutout');", js,
-            "el id no puede estar fijo: Promo es la misma carpeta que Shoutout",
-        )
+        self.assertIn("window.OSSTheme.init('promo');", js)
+        self.assertNotIn("window.OSSTheme.init('shoutout');", js,
+                         "el id no puede ser el de la carpeta symlink")
+        self.assertNotIn("window.location.pathname", js,
+                         "las dos rutas son el mismo widget: el id no depende de la ruta")
 
 
 if __name__ == "__main__":

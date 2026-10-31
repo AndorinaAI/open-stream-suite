@@ -98,6 +98,9 @@ Object.assign(AlertsStudio, {
     const previewThemeId = previewTheme.theme || previewTheme.globalTheme || '';
     const packAttrs = [
       ' data-oss-panel="true"',
+      // Hook de forma: sin él, el preview nunca podía recibir la geometría del
+      // pack (las reglas de forma buscan `[data-oss-shape-target]`).
+      ' data-oss-shape-target="true"',
       previewThemeId ? ` data-theme="${previewEscape(previewThemeId)}"` : '',
       previewTheme.shape ? ` data-theme-shape="${previewEscape(previewTheme.shape)}"` : ''
     ].join('');

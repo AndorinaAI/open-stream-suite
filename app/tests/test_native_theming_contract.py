@@ -33,11 +33,15 @@ BASELINE_CSS = {
 }
 BASELINE_JS = {
     "ticker": "3db1567dfe04a75acc56bfb4997dfc9912f9253966b118229a7bf414330f8049",
-    "promo": "d79c0708d77f8f67befe3c131ba974226d59690cab3b4fc4d099639499e1c387",
+    # promo/shoutout: el id del tema deja de derivarse de la URL y pasa a ser
+    # `promo` SIEMPRE (única clave existente en widgets_config.json). Con el id
+    # por URL, /widgets/shoutout/ leía overlayThemes['widget:shoutout'] — que no
+    # existe — y el widget expuesto en el panel nunca recibía tema ni forma.
+    "promo": "97d812e6d3d6ea2b7e8c781f8b0213b7fa2de31331441b80a4a93fb047c87908",
     "goal": "464010b90af5dfd93ec41f53611ced86fb4762dcf711a23532e6a1527d836890",
     "chat": "d2d55dbc4588c1d5802bcf442deb9e34123fe5056a82c6c2c01807a37290dc62",
     "timer": "317eb2bb348ba40a5700d40aa2792a21757cc3014434c333fe38a0f9d50489eb",
-    "shoutout": "d79c0708d77f8f67befe3c131ba974226d59690cab3b4fc4d099639499e1c387",
+    "shoutout": "97d812e6d3d6ea2b7e8c781f8b0213b7fa2de31331441b80a4a93fb047c87908",
 }
 BASELINE_ALERTS = {
     # Recortado a proposito: se elimino el catalogo legacy de 9 temas
