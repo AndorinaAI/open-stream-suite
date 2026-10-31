@@ -44,8 +44,9 @@ BASELINE_ALERTS = {
     # (.banner-theme-*). El resto del fichero (maquetacion del banner) no cambia.
     "alerts-themes.css": (13739, "627c060fa7e5ff83ed0f0585ffaf52b1a5ad96e0de8019c9524f7021b36a8de9"),
     # alerts-widget.css: la tarjeta y el preview leen el fondo del tema
-    # (`var(--color-panel-bg, <literal>)`) en vez de fijarlo a mano.
-    "alerts-widget.css": (10184, "079f6ccc4120db92b12071164eef14a429413fe6820b2bb101c0ecbf2e0d35bb"),
+    # (`var(--color-panel-bg, <literal>)`) en vez de fijarlo a mano, y el
+    # banner recupera un `background` real (antes era transparente).
+    "alerts-widget.css": (11069, "e29014678b1897971995b406a4d40098cf90f09f6928e23a60eefc75eae9a413"),
 }
 
 
