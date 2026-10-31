@@ -61,6 +61,9 @@ jobs:
       - name: Cada widget cumple el contrato (dianas, config, modulo)
         working-directory: app
         run: python scripts/check_widget_contract.py
+      - name: Las formas no imponen su paleta
+        working-directory: app
+        run: python scripts/wrap_shape_colors.py --check
 
   json-lint:
     runs-on: ubuntu-latest

@@ -30,8 +30,8 @@ font-family: 'Cinzel', 'Georgia', serif !important;
 body[data-theme-shape="fantasy_parchment"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 border-radius: 6px 16px 8px 18px / 14px 6px 16px 8px !important;
   clip-path: none !important;
-  background: linear-gradient(135deg, rgba(46, 34, 22, 0.95), rgba(30, 22, 14, 0.98)) !important;
-  border: 2px solid #C4A47C !important;
+  background: var(--color-panel-bg, linear-gradient(135deg, rgba(46, 34, 22, 0.95), rgba(30, 22, 14, 0.98))) !important;
+  border: 2px solid var(--color-border-cyan, #C4A47C) !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 0, 0, 0.5) !important;
 }
 
@@ -39,8 +39,8 @@ border-radius: 6px 16px 8px 18px / 14px 6px 16px 8px !important;
 body[data-theme-shape="vintage_crt_monitor"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 border-radius: 14px !important;
   clip-path: none !important;
-  background: #2D3139 !important;
-  border: 3.5px solid #1F2228 !important;
+  background: var(--color-panel-bg, #2D3139) !important;
+  border: 3.5px solid var(--color-border-cyan, #1F2228) !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 2px 4px rgba(255,255,255,0.2) !important;
 }
 
@@ -48,8 +48,8 @@ border-radius: 14px !important;
 body[data-theme-shape="fantasy_parchment"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 border-radius: 8px 18px 10px 20px / 18px 10px 20px 8px !important;
   clip-path: none !important;
-  background: linear-gradient(145deg, rgba(42, 30, 18, 0.95), rgba(26, 18, 12, 0.98)) !important;
-  border: 2px solid #A88756 !important;
+  background: var(--color-panel-bg, linear-gradient(145deg, rgba(42, 30, 18, 0.95), rgba(26, 18, 12, 0.98))) !important;
+  border: 2px solid var(--color-border-cyan, #A88756) !important;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(0, 0, 0, 0.6) !important;
 }
 
@@ -57,17 +57,17 @@ border-radius: 8px 18px 10px 20px / 18px 10px 20px 8px !important;
 body[data-theme-shape="vintage_crt_monitor"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 border-radius: 20px !important;
   clip-path: none !important;
-  background: #2A2E36 !important;
-  border: 4px solid #1C1E24 !important;
+  background: var(--color-panel-bg, #2A2E36) !important;
+  border: 4px solid var(--color-border-cyan, #1C1E24) !important;
   box-shadow: 0 14px 40px rgba(0,0,0,0.8), inset 0 2px 6px rgba(255,255,255,0.15) !important;
 }
 
 /* --- FORMA 1: cozy_polaroid (Polaroid Vintage con Cinta Washi) --- */
 body[data-theme-shape="cozy_polaroid"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .stream-cam-card, [data-cutout="true"]) {
 box-sizing: border-box !important;
-  background: #181412 !important;
-  border: 12px solid #FDFBF7 !important;
-  border-bottom: 44px solid #FDFBF7 !important;
+  background: var(--color-panel-bg, #181412) !important;
+  border: 12px solid var(--color-border-cyan, #FDFBF7) !important;
+  border-bottom: 44px solid var(--color-border-cyan, #FDFBF7) !important;
   border-radius: 24px !important;
   clip-path: none !important;
   box-shadow: 0 18px 45px rgba(35, 25, 20, 0.26), 0 3px 12px rgba(35, 25, 20, 0.1), inset 0 0 0 1px rgba(210, 190, 175, 0.4) !important;
@@ -78,9 +78,9 @@ box-sizing: border-box !important;
 
 body[data-theme-shape="cozy_polaroid"]:not([data-theme-shape="original"]) :is(.camera-face, .camera-aux, .floating-cam, .pip-cam-box, .runner-cam-box, .host-cam-frame, .guest-cam-frame) {
 box-sizing: border-box !important;
-  background: #181412 !important;
-  border: 10px solid #FDFBF7 !important;
-  border-bottom: 36px solid #FDFBF7 !important;
+  background: var(--color-panel-bg, #181412) !important;
+  border: 10px solid var(--color-border-cyan, #FDFBF7) !important;
+  border-bottom: 36px solid var(--color-border-cyan, #FDFBF7) !important;
   border-radius: 20px !important;
   clip-path: none !important;
   box-shadow: 0 14px 35px rgba(35, 25, 20, 0.22) !important;
@@ -97,7 +97,7 @@ content: "" !important;
   transform: translateX(-50%) rotate(-1deg) !important;
   width: 140px !important;
   height: 30px !important;
-  background: rgba(230, 215, 195, 0.88) !important;
+  background: var(--color-panel-bg, rgba(230, 215, 195, 0.88)) !important;
   border-left: 2px dashed rgba(180, 150, 120, 0.45) !important;
   border-right: 2px dashed rgba(180, 150, 120, 0.45) !important;
   box-shadow: 0 3px 8px rgba(0,0,0,0.12) !important;
@@ -116,7 +116,7 @@ position: absolute !important;
   font-family: 'Comfortaa', cursive, sans-serif !important;
   font-size: 14px !important;
   font-weight: 700 !important;
-  color: #4A3B32 !important;
+  color: var(--color-text-light, #4A3B32) !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -136,8 +136,8 @@ bottom: -30px !important;
 /* --- FORMA 2: cozy_canvas (Lienzo de Arte con Chinchetas Metálicas) --- */
 body[data-theme-shape="cozy_canvas"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
 box-sizing: border-box !important;
-  background: #181412 !important;
-  border: 6px solid #D6C2A8 !important;
+  background: var(--color-panel-bg, #181412) !important;
+  border: 6px solid var(--color-border-cyan, #D6C2A8) !important;
   border-radius: 18px !important;
   outline: 1.5px solid rgba(138, 98, 62, 0.45) !important;
   box-shadow: 0 14px 38px rgba(35, 25, 20, 0.28) !important;
@@ -155,7 +155,7 @@ content: "" !important;
   width: 12px !important;
   height: 12px !important;
   border-radius: 50% !important;
-  background: radial-gradient(circle, #E8C8A0 30%, #8A5A36 100%) !important;
+  background: var(--color-panel-bg, radial-gradient(circle, #E8C8A0 30%, #8A5A36 100%)) !important;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 2px #FFF !important;
   z-index: 15 !important;
   pointer-events: none !important;
@@ -170,7 +170,7 @@ content: "" !important;
   width: 12px !important;
   height: 12px !important;
   border-radius: 50% !important;
-  background: radial-gradient(circle, #E8C8A0 30%, #8A5A36 100%) !important;
+  background: var(--color-panel-bg, radial-gradient(circle, #E8C8A0 30%, #8A5A36 100%)) !important;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 1px 2px #FFF !important;
   z-index: 15 !important;
   pointer-events: none !important;
@@ -181,12 +181,12 @@ body[data-theme-shape="cozy_canvas"] :is([data-oss-cam], .camera-frame, .cam-fra
 position: absolute !important;
   bottom: 12px !important;
   left: 14px !important;
-  background: rgba(35, 28, 22, 0.85) !important;
-  border: 1px solid rgba(214, 194, 168, 0.5) !important;
+  background: var(--color-panel-bg, rgba(35, 28, 22, 0.85)) !important;
+  border: 1px solid var(--color-border-cyan, rgba(214, 194, 168, 0.5)) !important;
   border-radius: 50px !important;
   padding: 3px 12px !important;
   font-size: 11px !important;
-  color: #FDFBF7 !important;
+  color: var(--color-text-light, #FDFBF7) !important;
   display: flex !important;
   gap: 6px !important;
 }
@@ -194,7 +194,7 @@ position: absolute !important;
 /* --- FORMA 3: cozy_soft (Píldora Soft Minimal) --- */
 body[data-theme-shape="cozy_soft"]:not([data-theme-shape="original"]) :is([data-oss-cam], .camera-frame, .cam-frame, .camera-main, .cam-box, .hud-cam-box, .stream-frame, .polaroid-frame, .canvas-frame, .face-frame, .desktop-main-viewport, .gameplay-box, .game-box, .game-viewport-box, .runner-cam-box, .stream-cam-card, .pip-cam-box, [data-cutout="true"]) {
 box-sizing: border-box !important;
-  background: #181412 !important;
+  background: var(--color-panel-bg, #181412) !important;
   border: 2px solid var(--color-border-cyan, rgba(255,255,255,0.25)) !important;
   border-radius: 28px !important;
   box-shadow: 0 12px 36px rgba(0,0,0,0.3) !important;
@@ -213,12 +213,12 @@ body[data-theme-shape="cozy_soft"] :is([data-oss-cam], .camera-frame, .cam-frame
 position: absolute !important;
   top: 14px !important;
   left: 16px !important;
-  background: rgba(28, 25, 23, 0.75) !important;
+  background: var(--color-panel-bg, rgba(28, 25, 23, 0.75)) !important;
   backdrop-filter: blur(10px) !important;
   border-radius: 50px !important;
   padding: 3px 12px !important;
   font-size: 11px !important;
-  border: 1px solid rgba(255,255,255,0.15) !important;
+  border: 1px solid var(--color-border-cyan, rgba(255,255,255,0.15)) !important;
 }
 
 /* --- FORMA 14: fantasy_parchment (Pergamino Rol & Sello Cera) --- */
@@ -226,8 +226,8 @@ body[data-theme-shape="fantasy_parchment"]:not([data-theme-shape="original"]) :i
 box-sizing: border-box !important;
   border-radius: 12px 24px 10px 22px / 20px 10px 24px 12px !important;
   clip-path: none !important;
-  border: 5px solid #C4A47C !important;
-  background: #181109 !important;
+  border: 5px solid var(--color-border-cyan, #C4A47C) !important;
+  background: var(--color-panel-bg, #181109) !important;
   box-shadow: 0 16px 45px rgba(0, 0, 0, 0.85), inset 0 0 24px rgba(0, 0, 0, 0.7) !important;
   outline: 1.5px solid rgba(80, 50, 25, 0.6) !important;
   outline-offset: -3px !important;
@@ -243,8 +243,8 @@ content: "⚜" !important;
   width: 30px !important;
   height: 30px !important;
   border-radius: 50% !important;
-  background: radial-gradient(circle, #B91C1C 40%, #7F1D1D 100%) !important;
-  color: #FDE047 !important;
+  background: var(--color-panel-bg, radial-gradient(circle, #B91C1C 40%, #7F1D1D 100%)) !important;
+  color: var(--color-text-light, #FDE047) !important;
   font-size: 16px !important;
   display: flex !important;
   align-items: center !important;
@@ -261,9 +261,9 @@ content: "᛭ CHAPTER I ᛭" !important;
   font-family: 'Cinzel', 'Georgia', serif !important;
   font-size: 10px !important;
   font-weight: 700 !important;
-  color: #D4AF37 !important;
-  background: #1E140C !important;
-  border: 1px solid #A88756 !important;
+  color: var(--color-text-light, #D4AF37) !important;
+  background: var(--color-panel-bg, #1E140C) !important;
+  border: 1px solid var(--color-border-cyan, #A88756) !important;
   padding: 2px 10px !important;
   border-radius: 4px !important;
   z-index: 12 !important;
@@ -277,9 +277,9 @@ position: absolute !important;
   left: 18px !important;
   top: auto !important;
   right: auto !important;
-  background: rgba(30, 20, 12, 0.9) !important;
-  border: 1px solid #C4A47C !important;
-  color: #F5E6D3 !important;
+  background: var(--color-panel-bg, rgba(30, 20, 12, 0.9)) !important;
+  border: 1px solid var(--color-border-cyan, #C4A47C) !important;
+  color: var(--color-text-light, #F5E6D3) !important;
   font-family: 'Cinzel', 'Georgia', serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
@@ -294,9 +294,9 @@ body[data-theme-shape="vintage_crt_monitor"]:not([data-theme-shape="original"]) 
 box-sizing: border-box !important;
   border-radius: 28px !important;
   clip-path: none !important;
-  border: 14px solid #2A2E36 !important;
-  border-bottom: 26px solid #242830 !important;
-  background: #080C0E !important;
+  border: 14px solid var(--color-border-cyan, #2A2E36) !important;
+  border-bottom: 26px solid var(--color-border-cyan, #242830) !important;
+  background: var(--color-panel-bg, #080C0E) !important;
   box-shadow: 0 18px 45px rgba(0,0,0,0.9), inset 0 0 35px rgba(0, 240, 255, 0.12) !important;
   outline: 2px solid #16181D !important;
   outline-offset: -2px !important;
@@ -312,7 +312,7 @@ content: "● POWER" !important;
   font-family: 'Share Tech Mono', monospace !important;
   font-size: 9px !important;
   font-weight: 800 !important;
-  color: #10B981 !important;
+  color: var(--color-text-light, #10B981) !important;
   letter-spacing: 1px !important;
   z-index: 15 !important;
   text-shadow: 0 0 6px #10B981 !important;
@@ -326,7 +326,7 @@ content: "AV-1 60Hz" !important;
   right: 18px !important;
   font-family: 'Share Tech Mono', monospace !important;
   font-size: 10px !important;
-  color: #00F0FF !important;
+  color: var(--color-text-light, #00F0FF) !important;
   letter-spacing: 1px !important;
   z-index: 12 !important;
   text-shadow: 0 0 4px #00F0FF !important;
@@ -342,7 +342,7 @@ position: absolute !important;
   font-family: 'Share Tech Mono', monospace !important;
   font-size: 11px !important;
   font-weight: 700 !important;
-  color: #9CA3AF !important;
+  color: var(--color-text-light, #9CA3AF) !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
@@ -390,9 +390,9 @@ display: none !important;
    ==================================================================== */
 body[data-theme-shape="cozy_polaroid"] :is([data-oss-panel], .panel-card, .chat-panel-frame, .cozy-chat-card, .chat-column) {
 box-sizing: border-box !important;
-  background: #181412 !important;
-  border: 10px solid #FDFBF7 !important;
-  border-bottom: 34px solid #FDFBF7 !important;
+  background: var(--color-panel-bg, #181412) !important;
+  border: 10px solid var(--color-border-cyan, #FDFBF7) !important;
+  border-bottom: 34px solid var(--color-border-cyan, #FDFBF7) !important;
   border-radius: 22px !important;
   clip-path: none !important;
   box-shadow: 0 16px 38px rgba(35, 25, 20, 0.28), inset 0 0 0 1px rgba(210, 190, 175, 0.35) !important;
@@ -400,17 +400,17 @@ box-sizing: border-box !important;
 
 body[data-theme-shape="cozy_canvas"] :is([data-oss-panel], .panel-card, .chat-panel-frame, .cozy-chat-card, .chat-column) {
 box-sizing: border-box !important;
-  background: #F4EDE1 !important;
-  border: 3px solid #D6C2A8 !important;
+  background: var(--color-panel-bg, #F4EDE1) !important;
+  border: 3px solid var(--color-border-cyan, #D6C2A8) !important;
   border-radius: 10px !important;
   clip-path: none !important;
   box-shadow: 0 14px 32px rgba(35, 25, 20, 0.25), inset 0 0 24px rgba(180, 150, 120, 0.18) !important;
-  color: #3A2E24 !important;
+  color: var(--color-text-light, #3A2E24) !important;
 }
 
 body[data-theme-shape="cozy_soft"] :is([data-oss-panel], .panel-card, .chat-panel-frame, .cozy-chat-card, .chat-column) {
 box-sizing: border-box !important;
-  background: rgba(28, 25, 23, 0.92) !important;
+  background: var(--color-panel-bg, rgba(28, 25, 23, 0.92)) !important;
   border: 2px solid var(--color-border-cyan, rgba(255, 255, 255, 0.22)) !important;
   border-radius: 28px !important;
   clip-path: none !important;

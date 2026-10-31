@@ -32,7 +32,7 @@ font-family: 'Courier New', 'Share Tech Mono', monospace !important;
 body[data-theme-shape="gamer_mecha"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px)) !important;
   border-radius: 0px !important;
-  background: rgba(14, 16, 20, 0.94) !important;
+  background: var(--color-panel-bg, rgba(14, 16, 20, 0.94)) !important;
   border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), inset 0 0 16px rgba(0, 240, 255, 0.12) !important;
 }
@@ -41,7 +41,7 @@ clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 
 body[data-theme-shape="gamer_tactical_hud"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 clip-path: none !important;
   border-radius: 0px !important;
-  background: rgba(10, 14, 20, 0.95) !important;
+  background: var(--color-panel-bg, rgba(10, 14, 20, 0.95)) !important;
   border: 1.5px solid var(--color-accent-cyan, #FF2A55) !important;
   border-left: 5px solid var(--color-accent-cyan, #FF2A55) !important;
   box-shadow: 0 8px 24px rgba(0,0,0,0.8) !important;
@@ -51,8 +51,8 @@ clip-path: none !important;
 body[data-theme-shape="gamer_stealth"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
   border-radius: 0px !important;
-  background: #0B0E13 !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background: var(--color-panel-bg, #0B0E13) !important;
+  border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.16)) !important;
   box-shadow: 0 6px 20px rgba(0,0,0,0.6) !important;
 }
 
@@ -60,7 +60,7 @@ clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 cal
 body[data-theme-shape="gamer_hex_shield"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 clip-path: polygon(16px 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 100%, 16px 100%, 0% 50%) !important;
   border-radius: 0px !important;
-  background: rgba(13, 20, 32, 0.95) !important;
+  background: var(--color-panel-bg, rgba(13, 20, 32, 0.95)) !important;
   border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 8px 30px rgba(0, 240, 255, 0.25), inset 0 0 18px rgba(0, 240, 255, 0.1) !important;
 }
@@ -69,8 +69,8 @@ clip-path: polygon(16px 0%, calc(100% - 16px) 0%, 100% 50%, calc(100% - 16px) 10
 body[data-theme-shape="gamer_cyber_glitch"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 12px, calc(100% - 8px) 100%, 18px 100%, 0 calc(100% - 10px)) !important;
   border-radius: 0px !important;
-  background: rgba(13, 10, 25, 0.95) !important;
-  border: 1.5px solid #00F0FF !important;
+  background: var(--color-panel-bg, rgba(13, 10, 25, 0.95)) !important;
+  border: 1.5px solid var(--color-border-cyan, #00F0FF) !important;
   box-shadow: -3px 0 0 #FF0055, 3px 0 0 #00F0FF, 0 8px 30px rgba(255, 0, 85, 0.3) !important;
 }
 
@@ -78,8 +78,8 @@ clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 12px, calc(100% - 8px) 100%, 1
 body[data-theme-shape="gamer_arcade_retro"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 border-radius: 0 !important;
   clip-path: none !important;
-  background: #000 !important;
-  border: 3px solid #FFE600 !important;
+  background: var(--color-panel-bg, #000) !important;
+  border: 3px solid var(--color-border-cyan, #FFE600) !important;
   box-shadow: inset -3px -3px 0 #D97706, inset 3px 3px 0 #FFF, 0 8px 24px rgba(0,0,0,0.8) !important;
 }
 
@@ -87,8 +87,8 @@ border-radius: 0 !important;
 body[data-theme-shape="fantasy_runic_stone"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 clip-path: polygon(0 6px, 12px 0, calc(100% - 14px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 10px) 100%, 8px 100%, 0 calc(100% - 6px)) !important;
   border-radius: 0px !important;
-  background: rgba(18, 20, 26, 0.96) !important;
-  border: 2px solid #6366F1 !important;
+  background: var(--color-panel-bg, rgba(18, 20, 26, 0.96)) !important;
+  border: 2px solid var(--color-border-cyan, #6366F1) !important;
   box-shadow: 0 8px 30px rgba(99, 102, 241, 0.25), inset 0 0 15px rgba(99, 102, 241, 0.12) !important;
 }
 
@@ -96,9 +96,9 @@ clip-path: polygon(0 6px, 12px 0, calc(100% - 14px) 0, 100% 8px, 100% calc(100% 
 body[data-theme-shape="gothic_vampire"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
 clip-path: polygon(0 0, 50% 6px, 100% 0, 100% 100%, 50% calc(100% - 6px), 0 100%) !important;
   border-radius: 0px !important;
-  background: rgba(18, 6, 12, 0.96) !important;
-  border: 2px solid #E11D48 !important;
-  border-top: 3px solid #BE123C !important;
+  background: var(--color-panel-bg, rgba(18, 6, 12, 0.96)) !important;
+  border: 2px solid var(--color-border-cyan, #E11D48) !important;
+  border-top: 3px solid var(--color-border-cyan, #BE123C) !important;
   box-shadow: 0 8px 30px rgba(225, 29, 72, 0.35), inset 0 0 18px rgba(0,0,0,0.8) !important;
 }
 
@@ -106,7 +106,7 @@ clip-path: polygon(0 0, 50% 6px, 100% 0, 100% 100%, 50% calc(100% - 6px), 0 100%
 body[data-theme-shape="gamer_mecha"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
   border-radius: 0px !important;
-  background: rgba(14, 18, 24, 0.95) !important;
+  background: var(--color-panel-bg, rgba(14, 18, 24, 0.95)) !important;
   border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 14px 34px rgba(0,0,0,0.6) !important;
 }
@@ -115,7 +115,7 @@ clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%) !important;
 body[data-theme-shape="gamer_tactical_hud"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 clip-path: none !important;
   border-radius: 0px !important;
-  background: rgba(10, 14, 20, 0.96) !important;
+  background: var(--color-panel-bg, rgba(10, 14, 20, 0.96)) !important;
   border: 1.5px solid var(--color-accent-cyan, #FF2A55) !important;
   border-left: 4px solid var(--color-accent-cyan, #FF2A55) !important;
   box-shadow: 0 12px 30px rgba(0,0,0,0.7) !important;
@@ -125,8 +125,8 @@ clip-path: none !important;
 body[data-theme-shape="gamer_stealth"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%) !important;
   border-radius: 0px !important;
-  background: rgba(11, 14, 19, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: var(--color-panel-bg, rgba(11, 14, 19, 0.95)) !important;
+  border: 1px solid var(--color-border-cyan, rgba(255, 255, 255, 0.14)) !important;
   box-shadow: 0 10px 28px rgba(0,0,0,0.5) !important;
 }
 
@@ -134,7 +134,7 @@ clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%) !important;
 body[data-theme-shape="gamer_hex_shield"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 clip-path: polygon(0 16px, 16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px)) !important;
   border-radius: 0px !important;
-  background: rgba(10, 16, 26, 0.95) !important;
+  background: var(--color-panel-bg, rgba(10, 16, 26, 0.95)) !important;
   border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 14px 35px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(0, 240, 255, 0.08) !important;
 }
@@ -143,8 +143,8 @@ clip-path: polygon(0 16px, 16px 0, calc(100% - 16px) 0, 100% 16px, 100% calc(100
 body[data-theme-shape="gamer_cyber_glitch"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 20px), calc(100% - 16px) 100%, 0 100%) !important;
   border-radius: 0px !important;
-  background: rgba(14, 11, 24, 0.94) !important;
-  border: 1.5px solid #FF0055 !important;
+  background: var(--color-panel-bg, rgba(14, 11, 24, 0.94)) !important;
+  border: 1.5px solid var(--color-border-cyan, #FF0055) !important;
   box-shadow: -3px 0 0 #00F0FF, 3px 0 0 #FF0055, 0 12px 36px rgba(0, 0, 0, 0.8) !important;
 }
 
@@ -152,8 +152,8 @@ clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 20px), 
 body[data-theme-shape="gamer_arcade_retro"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 border-radius: 0 !important;
   clip-path: none !important;
-  background: #080810 !important;
-  border: 3.5px solid #3B82F6 !important;
+  background: var(--color-panel-bg, #080810) !important;
+  border: 3.5px solid var(--color-border-cyan, #3B82F6) !important;
   box-shadow: inset -3px -3px 0 #1D4ED8, inset 3px 3px 0 #93C5FD, 0 10px 30px rgba(0,0,0,0.9) !important;
 }
 
@@ -161,8 +161,8 @@ border-radius: 0 !important;
 body[data-theme-shape="fantasy_runic_stone"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 clip-path: polygon(10px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 10px), calc(100% - 14px) 100%, 0 100%) !important;
   border-radius: 0px !important;
-  background: rgba(15, 17, 24, 0.95) !important;
-  border: 1.5px solid #818CF8 !important;
+  background: var(--color-panel-bg, rgba(15, 17, 24, 0.95)) !important;
+  border: 1.5px solid var(--color-border-cyan, #818CF8) !important;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(99, 102, 241, 0.08) !important;
 }
 
@@ -170,9 +170,9 @@ clip-path: polygon(10px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 10px
 body[data-theme-shape="gothic_vampire"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
 clip-path: polygon(0 12px, 12px 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%) !important;
   border-radius: 0px !important;
-  background: rgba(16, 5, 10, 0.95) !important;
-  border: 1.5px solid #9F1239 !important;
-  border-top: 3px solid #E11D48 !important;
+  background: var(--color-panel-bg, rgba(16, 5, 10, 0.95)) !important;
+  border: 1.5px solid var(--color-border-cyan, #9F1239) !important;
+  border-top: 3px solid var(--color-border-cyan, #E11D48) !important;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), inset 0 0 20px rgba(225, 29, 72, 0.08) !important;
 }
 
@@ -183,7 +183,7 @@ box-sizing: border-box !important;
   border-radius: 0px !important;
   border: 2px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 0 24px var(--color-accent-cyan, #00F0FF), inset 0 0 16px rgba(0, 240, 255, 0.15) !important;
-  background: rgba(10, 14, 18, 0.6) !important;
+  background: var(--color-panel-bg, rgba(10, 14, 18, 0.6)) !important;
   padding: 0 !important;
   outline: none !important;
   overflow: visible !important;
@@ -196,8 +196,8 @@ content: "" !important;
   left: 6px !important;
   width: 14px !important;
   height: 14px !important;
-  border-top: 2px solid #FFF !important;
-  border-left: 2px solid #FFF !important;
+  border-top: 2px solid var(--color-border-cyan, #FFF) !important;
+  border-left: 2px solid var(--color-border-cyan, #FFF) !important;
   background: transparent !important;
   display: block !important;
   z-index: 10 !important;
@@ -211,8 +211,8 @@ content: "" !important;
   right: 6px !important;
   width: 14px !important;
   height: 14px !important;
-  border-bottom: 2px solid #FFF !important;
-  border-right: 2px solid #FFF !important;
+  border-bottom: 2px solid var(--color-border-cyan, #FFF) !important;
+  border-right: 2px solid var(--color-border-cyan, #FFF) !important;
   background: transparent !important;
   display: block !important;
   z-index: 10 !important;
@@ -225,7 +225,7 @@ position: absolute !important;
   left: 14px !important;
   bottom: auto !important;
   right: auto !important;
-  background: rgba(14, 18, 22, 0.92) !important;
+  background: var(--color-panel-bg, rgba(14, 18, 22, 0.92)) !important;
   backdrop-filter: blur(8px) !important;
   border: 1px solid var(--color-accent-cyan, #00F0FF) !important;
   color: var(--color-accent-cyan, #00F0FF) !important;
@@ -246,7 +246,7 @@ box-sizing: border-box !important;
   outline: 1.5px dashed rgba(255, 255, 255, 0.25) !important;
   outline-offset: -6px !important;
   box-shadow: 0 12px 36px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5) !important;
-  background: rgba(10, 14, 20, 0.6) !important;
+  background: var(--color-panel-bg, rgba(10, 14, 20, 0.6)) !important;
   padding: 0 !important;
   overflow: visible !important;
 }
@@ -259,7 +259,7 @@ content: "● LIVE REC" !important;
   font-family: 'Share Tech Mono', monospace !important;
   font-size: 10px !important;
   font-weight: 800 !important;
-  color: #FF2A55 !important;
+  color: var(--color-text-light, #FF2A55) !important;
   letter-spacing: 1px !important;
   z-index: 12 !important;
   pointer-events: none !important;
@@ -273,8 +273,8 @@ content: "" !important;
   left: 8px !important;
   width: 10px !important;
   height: 10px !important;
-  border-bottom: 2px solid #FFF !important;
-  border-left: 2px solid #FFF !important;
+  border-bottom: 2px solid var(--color-border-cyan, #FFF) !important;
+  border-left: 2px solid var(--color-border-cyan, #FFF) !important;
   z-index: 10 !important;
   display: block !important;
 }
@@ -285,7 +285,7 @@ position: absolute !important;
   left: 14px !important;
   bottom: auto !important;
   right: auto !important;
-  background: #0E1216 !important;
+  background: var(--color-panel-bg, #0E1216) !important;
   border: 1px solid var(--color-accent-cyan, #FF2A55) !important;
   color: var(--color-accent-cyan, #FF2A55) !important;
   font-size: 11px !important;
@@ -300,9 +300,9 @@ body[data-theme-shape="gamer_stealth"]:not([data-theme-shape="original"]) :is([d
 box-sizing: border-box !important;
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px)) !important;
   border-radius: 0px !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+  border: 1.5px solid var(--color-border-cyan, rgba(255, 255, 255, 0.18)) !important;
   box-shadow: 0 10px 28px rgba(0,0,0,0.65) !important;
-  background: rgba(11, 14, 18, 0.85) !important;
+  background: var(--color-panel-bg, rgba(11, 14, 18, 0.85)) !important;
   padding: 0 !important;
   outline: none !important;
   overflow: visible !important;
@@ -317,11 +317,11 @@ body[data-theme-shape="gamer_stealth"] :is([data-oss-cam], .camera-frame, .cam-f
 position: absolute !important;
   top: 10px !important;
   left: 14px !important;
-  background: rgba(0,0,0,0.7) !important;
-  border: 1px solid rgba(255,255,255,0.15) !important;
+  background: var(--color-panel-bg, rgba(0,0,0,0.7)) !important;
+  border: 1px solid var(--color-border-cyan, rgba(255,255,255,0.15)) !important;
   padding: 2px 8px !important;
   font-size: 10px !important;
-  color: #8B949E !important;
+  color: var(--color-text-light, #8B949E) !important;
 }
 
 /* --- FORMA 11: gamer_hex_shield (Escudo Hexagonal Sci-Fi & Blindaje) --- */
@@ -331,7 +331,7 @@ box-sizing: border-box !important;
   border-radius: 0px !important;
   border: 2px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 0 25px rgba(0, 240, 255, 0.4), inset 0 0 20px rgba(0, 240, 255, 0.15) !important;
-  background: rgba(10, 16, 24, 0.7) !important;
+  background: var(--color-panel-bg, rgba(10, 16, 24, 0.7)) !important;
   padding: 0 !important;
   outline: none !important;
   overflow: visible !important;
@@ -348,7 +348,7 @@ content: "⬡ SHIELD: ACTIVE" !important;
   color: var(--color-accent-cyan, #00F0FF) !important;
   letter-spacing: 1px !important;
   z-index: 12 !important;
-  background: rgba(8, 12, 20, 0.85) !important;
+  background: var(--color-panel-bg, rgba(8, 12, 20, 0.85)) !important;
   padding: 2px 8px !important;
   border: 1px solid var(--color-accent-cyan, #00F0FF) !important;
   display: block !important;
@@ -370,7 +370,7 @@ body[data-theme-shape="gamer_hex_shield"] :is([data-oss-cam], .camera-frame, .ca
 position: absolute !important;
   top: 10px !important;
   left: 16px !important;
-  background: rgba(8, 14, 22, 0.9) !important;
+  background: var(--color-panel-bg, rgba(8, 14, 22, 0.9)) !important;
   border: 1px solid var(--color-accent-cyan, #00F0FF) !important;
   color: var(--color-accent-cyan, #00F0FF) !important;
   font-size: 11px !important;
@@ -386,8 +386,8 @@ body[data-theme-shape="gamer_cyber_glitch"]:not([data-theme-shape="original"]) :
 box-sizing: border-box !important;
   clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 16px, 100% calc(100% - 14px), calc(100% - 24px) 100%, 14px 100%, 0 calc(100% - 16px)) !important;
   border-radius: 0px !important;
-  border: 2px solid #00F0FF !important;
-  background: rgba(12, 10, 22, 0.75) !important;
+  border: 2px solid var(--color-border-cyan, #00F0FF) !important;
+  background: var(--color-panel-bg, rgba(12, 10, 22, 0.75)) !important;
   box-shadow: -4px 0 0 #FF0055, 4px 0 0 #00F0FF, 0 0 25px rgba(0, 240, 255, 0.35) !important;
   padding: 0 !important;
   outline: none !important;
@@ -402,7 +402,7 @@ content: "// GLITCH_SYS_ERR" !important;
   font-family: 'Share Tech Mono', monospace !important;
   font-size: 10px !important;
   font-weight: 800 !important;
-  color: #FF0055 !important;
+  color: var(--color-text-light, #FF0055) !important;
   letter-spacing: 1.5px !important;
   z-index: 12 !important;
   text-shadow: 2px 0 #00F0FF !important;
@@ -416,7 +416,7 @@ content: "SYNC_404" !important;
   left: 16px !important;
   font-family: 'Share Tech Mono', monospace !important;
   font-size: 9px !important;
-  color: #00F0FF !important;
+  color: var(--color-text-light, #00F0FF) !important;
   letter-spacing: 1px !important;
   z-index: 12 !important;
   text-shadow: -1px 0 #FF0055 !important;
@@ -427,9 +427,9 @@ body[data-theme-shape="gamer_cyber_glitch"] :is([data-oss-cam], .camera-frame, .
 position: absolute !important;
   top: 10px !important;
   left: 14px !important;
-  background: rgba(20, 10, 30, 0.95) !important;
-  border: 1.5px solid #00F0FF !important;
-  color: #FFF !important;
+  background: var(--color-panel-bg, rgba(20, 10, 30, 0.95)) !important;
+  border: 1.5px solid var(--color-border-cyan, #00F0FF) !important;
+  color: var(--color-text-light, #FFF) !important;
   font-size: 11px !important;
   font-weight: 800 !important;
   padding: 2px 10px !important;
@@ -443,8 +443,8 @@ body[data-theme-shape="gamer_arcade_retro"]:not([data-theme-shape="original"]) :
 box-sizing: border-box !important;
   border-radius: 0 !important;
   clip-path: none !important;
-  border: 6px solid #FFE600 !important;
-  background: #05050A !important;
+  border: 6px solid var(--color-border-cyan, #FFE600) !important;
+  background: var(--color-panel-bg, #05050A) !important;
   box-shadow: inset -6px -6px 0 #D97706, inset 6px 6px 0 #FFF, 0 12px 36px rgba(0,0,0,0.9) !important;
   padding: 0 !important;
   outline: none !important;
@@ -459,10 +459,10 @@ content: "1UP  009980" !important;
   font-family: 'Courier New', monospace !important;
   font-size: 11px !important;
   font-weight: 900 !important;
-  color: #EF4444 !important;
-  background: #000 !important;
+  color: var(--color-text-light, #EF4444) !important;
+  background: var(--color-panel-bg, #000) !important;
   padding: 2px 8px !important;
-  border: 2px solid #FFE600 !important;
+  border: 2px solid var(--color-border-cyan, #FFE600) !important;
   z-index: 15 !important;
   letter-spacing: 2px !important;
   display: block !important;
@@ -476,10 +476,10 @@ content: "INSERT COIN [02]" !important;
   font-family: 'Courier New', monospace !important;
   font-size: 10px !important;
   font-weight: 900 !important;
-  color: #10B981 !important;
-  background: #000 !important;
+  color: var(--color-text-light, #10B981) !important;
+  background: var(--color-panel-bg, #000) !important;
   padding: 2px 6px !important;
-  border: 1px solid #10B981 !important;
+  border: 1px solid var(--color-border-cyan, #10B981) !important;
   z-index: 12 !important;
   letter-spacing: 1px !important;
   display: block !important;
@@ -489,9 +489,9 @@ body[data-theme-shape="gamer_arcade_retro"] :is([data-oss-cam], .camera-frame, .
 position: absolute !important;
   top: 10px !important;
   left: 14px !important;
-  background: #000 !important;
-  border: 2px solid #FFE600 !important;
-  color: #FFE600 !important;
+  background: var(--color-panel-bg, #000) !important;
+  border: 2px solid var(--color-border-cyan, #FFE600) !important;
+  color: var(--color-text-light, #FFE600) !important;
   font-family: 'Courier New', monospace !important;
   font-size: 11px !important;
   font-weight: 900 !important;
@@ -505,8 +505,8 @@ body[data-theme-shape="fantasy_runic_stone"]:not([data-theme-shape="original"]) 
 box-sizing: border-box !important;
   clip-path: polygon(14px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 14px), calc(100% - 14px) 100%, 14px 100%, 0 calc(100% - 14px), 0 14px) !important;
   border-radius: 0px !important;
-  border: 2.5px solid #818CF8 !important;
-  background: rgba(12, 14, 20, 0.7) !important;
+  border: 2.5px solid var(--color-border-cyan, #818CF8) !important;
+  background: var(--color-panel-bg, rgba(12, 14, 20, 0.7)) !important;
   box-shadow: 0 0 30px rgba(99, 102, 241, 0.35), inset 0 0 25px rgba(129, 140, 248, 0.15) !important;
   padding: 0 !important;
   outline: none !important;
@@ -521,7 +521,7 @@ content: "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ" !important;
   font-family: 'Cinzel', serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
-  color: #A5B4FC !important;
+  color: var(--color-text-light, #A5B4FC) !important;
   letter-spacing: 3px !important;
   z-index: 12 !important;
   text-shadow: 0 0 8px #6366F1 !important;
@@ -536,7 +536,7 @@ content: "ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ" !important;
   font-family: 'Cinzel', serif !important;
   font-size: 10px !important;
   font-weight: 700 !important;
-  color: #A5B4FC !important;
+  color: var(--color-text-light, #A5B4FC) !important;
   letter-spacing: 3px !important;
   z-index: 12 !important;
   text-shadow: 0 0 8px #6366F1 !important;
@@ -547,9 +547,9 @@ body[data-theme-shape="fantasy_runic_stone"] :is([data-oss-cam], .camera-frame, 
 position: absolute !important;
   top: 10px !important;
   left: 14px !important;
-  background: rgba(15, 17, 26, 0.95) !important;
-  border: 1.5px solid #818CF8 !important;
-  color: #E0E7FF !important;
+  background: var(--color-panel-bg, rgba(15, 17, 26, 0.95)) !important;
+  border: 1.5px solid var(--color-border-cyan, #818CF8) !important;
+  color: var(--color-text-light, #E0E7FF) !important;
   font-family: 'Cinzel', serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
@@ -565,9 +565,9 @@ body[data-theme-shape="gothic_vampire"]:not([data-theme-shape="original"]) :is([
 box-sizing: border-box !important;
   clip-path: polygon(0 18px, 18px 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%) !important;
   border-radius: 0px !important;
-  border: 2.5px solid #E11D48 !important;
-  border-top: 4px solid #BE123C !important;
-  background: rgba(15, 4, 9, 0.75) !important;
+  border: 2.5px solid var(--color-border-cyan, #E11D48) !important;
+  border-top: 4px solid var(--color-border-cyan, #BE123C) !important;
+  background: var(--color-panel-bg, rgba(15, 4, 9, 0.75)) !important;
   box-shadow: 0 0 35px rgba(225, 29, 72, 0.4), inset 0 0 25px rgba(0, 0, 0, 0.8) !important;
   padding: 0 !important;
   outline: none !important;
@@ -582,7 +582,7 @@ content: "🦇 NOCTURNE" !important;
   font-family: 'Cinzel', serif !important;
   font-size: 10px !important;
   font-weight: 800 !important;
-  color: #FDA4AF !important;
+  color: var(--color-text-light, #FDA4AF) !important;
   letter-spacing: 2px !important;
   z-index: 12 !important;
   text-shadow: 0 0 8px #E11D48 !important;
@@ -595,7 +595,7 @@ content: "†" !important;
   bottom: 8px !important;
   right: 16px !important;
   font-size: 14px !important;
-  color: #E11D48 !important;
+  color: var(--color-text-light, #E11D48) !important;
   z-index: 12 !important;
   font-weight: 900 !important;
   display: block !important;
@@ -605,9 +605,9 @@ body[data-theme-shape="gothic_vampire"] :is([data-oss-cam], .camera-frame, .cam-
 position: absolute !important;
   top: 10px !important;
   left: 14px !important;
-  background: rgba(20, 5, 12, 0.95) !important;
-  border: 1.5px solid #E11D48 !important;
-  color: #FFE4E6 !important;
+  background: var(--color-panel-bg, rgba(20, 5, 12, 0.95)) !important;
+  border: 1.5px solid var(--color-border-cyan, #E11D48) !important;
+  color: var(--color-text-light, #FFE4E6) !important;
   font-family: 'Cinzel', serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
@@ -660,14 +660,14 @@ border-radius: 0 !important;
    `--skin-bar-radius` / `--skin-panel-radius`. */
 body[data-theme-shape="gamer_mecha"] :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar),
 body[data-theme-archetype="gamer"]:not([data-theme-shape]):not([data-theme-shape="original"]) :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .daily-goal-pill, .now-playing-pill, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
-background: rgba(14, 16, 20, 0.94) !important;
+background: var(--color-panel-bg, rgba(14, 16, 20, 0.94)) !important;
   border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7), inset 0 0 16px rgba(0, 240, 255, 0.12) !important;
 }
 
 body[data-theme-shape="gamer_mecha"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box),
 body[data-theme-archetype="gamer"]:not([data-theme-shape]):not([data-theme-shape="original"]) :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
-background: rgba(14, 18, 24, 0.95) !important;
+background: var(--color-panel-bg, rgba(14, 18, 24, 0.95)) !important;
   border: 1.5px solid var(--color-accent-cyan, #00F0FF) !important;
   box-shadow: 0 14px 34px rgba(0,0,0,0.6) !important;
 }
