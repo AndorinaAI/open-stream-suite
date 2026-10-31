@@ -50,6 +50,11 @@ def check_widget(path: Path) -> list:
             problems.append("index.html sin data-oss-panel (el tema no pinta el contenedor)")
         if "data-oss-shape-target" not in html:
             problems.append("index.html sin data-oss-shape-target (las formas no se ven)")
+        if "oss-ornament" not in html:
+            problems.append(
+                "index.html sin <span class=\"oss-ornament\"> (la forma no puede "
+                "pintar su adorno: cinta, esquinas, reticula)"
+            )
 
     if not (path / "config.json").exists():
         problems.append("falta config.json")
