@@ -35,7 +35,7 @@
      forma física (`body[data-theme-shape]`) > skin de arquetipo > base.
    ==================================================================== */
 
-body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert-card, #banner-alert-root,
+body[data-theme-archetype] :is([data-oss-panel]:not([data-oss-bar]), [data-oss-shape-target]:not([data-oss-bar]), #alert-card, #banner-alert-root,
   .panel-card, .chat-card, .chat-column, .chat-box, .side-info-panel, .tasks-card) {
   /* `!important` deliberado y documentado en GUIA_DESARROLLO_Y_TEMAS.md: la
      apariencia ASIGNADA manda sobre el aspecto base del componente, que en
