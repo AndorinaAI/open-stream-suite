@@ -273,7 +273,7 @@ Cada paso termina en verde y verificado.
 ## 10. Punto de partida
 
 - Rama `dev`, commit `6f3b14d`, **426 tests verdes**, árbol limpio.
-- Servidor: `python app/main.py` → `localhost:8080`.
+- Servidor: `cd app && ./venv/bin/python server.py` (entrypoint real) o `python launcher.py`. **No existe `app/main.py`** ni `python -m server.main`.
 - Hoy, con PCB asignado, los widgets muestran **solo la esquina cortada** y borde dorado. No hay placa. La textura de líneas y puntos que apareció en las barras de estado **ya se retiró**.
 - El usuario quiere el sistema rehecho con este modelo, no otro parche.
 
