@@ -52,8 +52,12 @@ border-radius: 4px !important;
 
 /* 19. Maker Circuit PCB: Panel de placa electrónica PCB */
 body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
-border-radius: 4px !important;
-  clip-path: none !important;
+  /* La GEOMETRÍA no se declara aquí: es del manifiesto (`geometry` en
+     pack.json) y la emite `common/generated/shapes.css`. Aquí vivía
+     `border-radius: 4px !important; clip-path: none !important`, que
+     contradecía al propio manifiesto (`panelRadius: 0`,
+     `panelClipPath: polygon(...)`) y ganaba por `!important`: la forma nunca
+     se veía. Esta capa solo PINTA. */
   background: var(--color-panel-bg, #072214) !important;
   border: 2px solid var(--color-border-cyan, #D4AF37) !important;
   border-top: 4px solid var(--color-border-cyan, #10B981) !important;
