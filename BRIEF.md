@@ -39,9 +39,13 @@ PACK  =  { temas[], formas[] }
 | Un overlay de un pack | se le asigna un **tema** y/o una **forma**, que pueden ser de **ese pack o de otro** |
 | Un widget | igual: `(tema, forma)` |
 | Una alerta | igual, por renderer: `alert:card`, `alert:banner` |
-| Una **fusión** | varios miembros de packs distintos que comparten **una misma apariencia** (un tema + una forma) |
+| Una **fusión** | es **un pack nuevo hecho con overlays de otros packs**. Se le aplican tema y forma exactamente como a cualquier pack |
 
-Es decir: **la fusión es un "aplicar esta apariencia a todos estos"**. Y un overlay suelto puede coger la apariencia de otro pack sin pertenecer a él.
+**Una fusión no es un mecanismo de apariencia.** Es un **contenedor**: coges overlays de aquí y de allá, los juntas y eso pasa a ser un pack más. A partir de ahí, las reglas son las mismas que para cualquier pack: se le asigna un tema, una forma, o las dos, y se aplican de forma normal. No hay operaciones especiales de "aplicar a los miembros de la fusión": es aplicar a un pack.
+
+Si hace falta materializarla, `export_fusion_as_pack` la convierte en una carpeta real de `streamthemes/` con su `pack.json` y sus overlays.
+
+Un overlay suelto puede coger la apariencia de otro pack sin pertenecer a él: eso sí es una asignación normal, sin contenedor de por medio.
 
 ### Qué implica técnicamente
 
@@ -176,7 +180,7 @@ Ya existen y sirven: `app/scripts/visual_baseline.py` (arnés de 34 superficies)
 - `app/alerts/js/alerts-studio/06-preview-test.js`: construir el preview con `OSSkin.previewAttrs(kind)`, para que el simulador sea el mismo que el real.
 - Los **27** `app/streamthemes/*/overlays/**/index.html`: los 4 `<script>` de tema → el único `skin.js`. Los `<link>` los pone `app/scripts/normalize_view_links.py`.
 - `app/server/services/theme_service.py` (y `theme_manager`, `components_catalog`, `overlay_service`, `fusions_service`): leer el modelo nuevo. `save_theme` debe escribir **colores**, no `tokens`/`archetype`.
-- `app/server/services/fusions_service.py`: `apply_fusion_theme_batch` (solo tema), `apply_fusion_shape_batch` (solo forma), `reset_fusion_batch`; `export_fusion_as_pack` debe escribir un `pack.json` con formas y un `theme.json` **solo de color**.
+- `app/server/services/fusions_service.py`: una fusión **es un pack** cuyos overlays vienen de otros packs. No necesita operaciones de apariencia propias: aplicar tema o forma a una fusión es aplicar a un pack. `export_fusion_as_pack` debe materializarla como carpeta real de `streamthemes/` con su `pack.json` (sus `shapes[]` y su `defaultTheme`/`defaultShape`) y los overlays enlazados o copiados.
 
 ### Borrar (cuando lo nuevo esté verde)
 
@@ -229,7 +233,7 @@ Cada paso termina en verde y verificado.
 5. **`skin.js`** (runtime único) y quitar la geometría del CSS inyectado de los 6 widgets y del `applyChatShape` del chat.
 6. **Alertas y panel**: contrato CSS único, editor zombi fuera, preview por `previewAttrs`.
 7. **Escenas**: scripts → `skin.js`.
-8. **Fusions**: aplicar tema / forma / ambas por separado; `export_fusion_as_pack` con el modelo nuevo.
+8. **Fusions**: tratarlas como packs de overlays ajenos. Aplicar tema/forma es la operación normal de pack; `export_fusion_as_pack` materializa la carpeta. Quitar las operaciones especiales por capas (`apply_fusion_theme_batch`, `apply_fusion_shape_batch`, `defaultPack`) si solo duplican lo que ya hace un pack.
 
 ---
 
