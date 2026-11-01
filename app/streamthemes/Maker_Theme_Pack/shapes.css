@@ -58,7 +58,9 @@ body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-panel], .side-info-pane
      contradecía al propio manifiesto (`panelRadius: 0`,
      `panelClipPath: polygon(...)`) y ganaba por `!important`: la forma nunca
      se veía. Esta capa solo PINTA. */
-  background: var(--color-panel-bg, #072214) !important;
+  /* El COLOR ya no se fija aquí: es del tema. El shorthand `background`
+     reseteaba además `background-image`, que es justo donde va la pintura de la
+     forma (`--shape-paint`). Esta capa solo añade borde y sombra. */
   border: 2px solid var(--color-border-cyan, #D4AF37) !important;
   border-top: 4px solid var(--color-border-cyan, #10B981) !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 15px rgba(16, 185, 129, 0.15) !important;

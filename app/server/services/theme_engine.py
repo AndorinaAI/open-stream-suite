@@ -131,6 +131,8 @@ class ShapeDefinition:
     description: str
     geometry: dict = field(default_factory=dict)
     tokens: dict = field(default_factory=dict)
+    paint: dict = field(default_factory=dict)
+    ornaments: dict = field(default_factory=dict)
     applies_to: tuple = ("scene", "component")
     pack_id: str = ""
     pack_default: bool = False
@@ -223,17 +225,26 @@ def _shape_from_raw(raw: Any, pack_id: str, pack_archetype: str) -> Optional[Sha
         return None
     geometry = raw.get("geometry")
     tokens = raw.get("tokens")
+    paint = raw.get("paint")
+    ornaments = raw.get("ornaments")
     applies = raw.get("appliesTo") or raw.get("applies_to")
     if not isinstance(applies, list) or not applies:
         applies = ["scene", "component"]
+    geometry = dict(geometry) if isinstance(geometry, dict) else {}
+    if not isinstance(ornaments, dict):
+        vetoed = geometry.pop("ornaments", None)
+        ornaments = ({name: "none" for name in vetoed}
+                     if isinstance(vetoed, list) else {})
     return ShapeDefinition(
         id=shape_id,
         name=str(raw.get("name") or shape_id),
         icon=str(raw.get("icon") or ""),
         archetype=str(raw.get("archetype") or pack_archetype or ""),
         description=str(raw.get("description") or ""),
-        geometry=dict(geometry) if isinstance(geometry, dict) else {},
+        geometry=geometry,
         tokens=dict(tokens) if isinstance(tokens, dict) else {},
+        paint=dict(paint) if isinstance(paint, dict) else {},
+        ornaments={str(k): str(v) for k, v in ornaments.items()},
         applies_to=tuple(str(a) for a in applies),
         pack_id=pack_id,
     )
@@ -411,18 +422,32 @@ def _shape_token_rule(shape: ShapeDefinition) -> str:
     forma mande sobre el arquetipo.
     """
     tokens = shape.tokens
-    ornaments = [str(o) for o in (shape.geometry.get("ornaments") or [])]
-    if not tokens and not ornaments:
-        return ""
-    lines = [f'body[data-theme-shape="{shape.id}"] {{\n']
+    lines = []
+    if shape.panel_radius is not None:
+        lines.append(f"  --shape-radius: {shape.panel_radius};\n")
+    if shape.panel_clip_path is not None:
+        lines.append(f"  --shape-clip: {shape.panel_clip_path};\n")
+    PAINT_TOKENS = {
+        "background": "--shape-paint",
+        "backgroundSize": "--shape-paint-size",
+        "backgroundPosition": "--shape-paint-position",
+        "backgroundRepeat": "--shape-paint-repeat",
+        "boxShadow": "--shape-shadow",
+        "borderColor": "--shape-border",
+    }
+    for name, value in (shape.paint or {}).items():
+        token = PAINT_TOKENS.get(name)
+        if token and value:
+            lines.append(f"  {token}: {value};\n")
+    for name, display in (shape.ornaments or {}).items():
+        lines.append(f"  --shape-ornament-{_kebab(name)}: {display};\n")
     for name, value in tokens.items():
         lines.append(f"  --shape-{_kebab(name)}: {value};\n")
-    for ornament in ornaments:
-        token = ORNAMENT_TOKENS.get(ornament)
-        if token:
-            lines.append(f"  {token}: none !important;\n")
-    lines.append("}\n\n")
-    return "".join(lines)
+    if not lines:
+        return ""
+    body = "".join(lines)
+    return (f'body[data-theme-shape="{shape.id}"],\n'
+            f'[data-theme-shape="{shape.id}"] {{\n{body}}}\n\n')
 
 
 def build_shapes_css() -> str:
@@ -475,6 +500,8 @@ def build_shape_catalog() -> dict:
                 "packId": pack.id,
                 "appliesTo": list(shape.applies_to),
                 "geometry": dict(shape.geometry),
+                "paint": dict(shape.paint),
+                "ornaments": dict(shape.ornaments),
                 "tokens": dict(shape.tokens),
                 "packDefault": shape.pack_default,
             })

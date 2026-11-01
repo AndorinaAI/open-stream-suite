@@ -81,7 +81,11 @@ class TestThemeCatalogAuto(unittest.TestCase):
         entry = next(s for s in catalog["shapes"] if s["id"] == "demo_sticker")
         self.assertEqual("Demo_New_Pack", entry["packId"])
         self.assertEqual("13px", entry["geometry"]["panelRadius"])
-        self.assertEqual(["tape"], entry["geometry"]["ornaments"])
+        # Los ornamentos dejan de vivir dentro de `geometry`: son su propio eje
+        # (mapa `{nombre: display}`), porque una forma puede ENCENDER un adorno
+        # que el pack apaga, no solo vetarlo.
+        self.assertNotIn("ornaments", entry["geometry"])
+        self.assertEqual({"tape": "none"}, entry.get("ornaments"))
 
     def test_pack_sin_codigo_genera_su_css(self):
         css = theme_engine.build_shapes_css()
@@ -90,7 +94,7 @@ class TestThemeCatalogAuto(unittest.TestCase):
             self.assertIn(f'body[data-theme-shape="demo_sticker"] {target}', css,
                           f"falta el destino {target}")
         self.assertIn("border-radius: 13px;", css)
-        self.assertIn("--skin-ornament-tape: none !important;", css)
+        self.assertIn("--shape-ornament-tape: none;", css)
         # Capa 2: la decoracion de escena del pack se concatena tal cual.
         self.assertIn("Pack: Demo_New_Pack", css)
         self.assertIn("outline: 1px solid red;", css)

@@ -5,10 +5,20 @@
    ==================================================================== */
 /* --- Capa 1: componentes (datos -> CSS) --- */
 
+body[data-theme-shape="cozy_polaroid"],
+[data-theme-shape="cozy_polaroid"] {
+  --shape-radius: 2px;
+}
+
 body[data-theme-shape="cozy_polaroid"] #alert-card,
 body[data-theme-shape="cozy_polaroid"] #banner-alert-root,
 body[data-theme-shape="cozy_polaroid"] [data-oss-shape-target] {
   border-radius: 2px;
+}
+
+body[data-theme-shape="cozy_canvas"],
+[data-theme-shape="cozy_canvas"] {
+  --shape-radius: 18px;
 }
 
 body[data-theme-shape="cozy_canvas"] #alert-card,
@@ -17,16 +27,23 @@ body[data-theme-shape="cozy_canvas"] [data-oss-shape-target] {
   border-radius: 18px;
 }
 
+body[data-theme-shape="cozy_soft"],
+[data-theme-shape="cozy_soft"] {
+  --shape-radius: 28px;
+}
+
 body[data-theme-shape="cozy_soft"] #alert-card,
 body[data-theme-shape="cozy_soft"] #banner-alert-root,
 body[data-theme-shape="cozy_soft"] [data-oss-shape-target] {
   border-radius: 28px;
 }
 
-body[data-theme-shape="fantasy_parchment"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="fantasy_parchment"],
+[data-theme-shape="fantasy_parchment"] {
+  --shape-clip: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="fantasy_parchment"] #alert-card,
@@ -35,16 +52,24 @@ body[data-theme-shape="fantasy_parchment"] [data-oss-shape-target] {
   clip-path: polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%);
 }
 
-body[data-theme-shape="vintage_crt_monitor"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="vintage_crt_monitor"],
+[data-theme-shape="vintage_crt_monitor"] {
+  --shape-radius: 12px;
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="vintage_crt_monitor"] #alert-card,
 body[data-theme-shape="vintage_crt_monitor"] #banner-alert-root,
 body[data-theme-shape="vintage_crt_monitor"] [data-oss-shape-target] {
   border-radius: 12px;
+}
+
+body[data-theme-shape="gamer_mecha"],
+[data-theme-shape="gamer_mecha"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
 }
 
 body[data-theme-shape="gamer_mecha"] #alert-card,
@@ -54,11 +79,22 @@ body[data-theme-shape="gamer_mecha"] [data-oss-shape-target] {
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
 }
 
+body[data-theme-shape="gamer_tactical_hud"],
+[data-theme-shape="gamer_tactical_hud"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+
 body[data-theme-shape="gamer_tactical_hud"] #alert-card,
 body[data-theme-shape="gamer_tactical_hud"] #banner-alert-root,
 body[data-theme-shape="gamer_tactical_hud"] [data-oss-shape-target] {
   border-radius: 0;
   clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+
+body[data-theme-shape="gamer_stealth"],
+[data-theme-shape="gamer_stealth"] {
+  --shape-radius: 2px;
 }
 
 body[data-theme-shape="gamer_stealth"] #alert-card,
@@ -67,10 +103,13 @@ body[data-theme-shape="gamer_stealth"] [data-oss-shape-target] {
   border-radius: 2px;
 }
 
-body[data-theme-shape="gamer_hex_shield"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="gamer_hex_shield"],
+[data-theme-shape="gamer_hex_shield"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(0 0, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px));
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="gamer_hex_shield"] #alert-card,
@@ -80,10 +119,13 @@ body[data-theme-shape="gamer_hex_shield"] [data-oss-shape-target] {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px));
 }
 
-body[data-theme-shape="gamer_cyber_glitch"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="gamer_cyber_glitch"],
+[data-theme-shape="gamer_cyber_glitch"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="gamer_cyber_glitch"] #alert-card,
@@ -93,10 +135,12 @@ body[data-theme-shape="gamer_cyber_glitch"] [data-oss-shape-target] {
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
 }
 
-body[data-theme-shape="gamer_arcade_retro"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="gamer_arcade_retro"],
+[data-theme-shape="gamer_arcade_retro"] {
+  --shape-radius: 0;
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="gamer_arcade_retro"] #alert-card,
@@ -105,10 +149,13 @@ body[data-theme-shape="gamer_arcade_retro"] [data-oss-shape-target] {
   border-radius: 0;
 }
 
-body[data-theme-shape="fantasy_runic_stone"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="fantasy_runic_stone"],
+[data-theme-shape="fantasy_runic_stone"] {
+  --shape-radius: 6px;
+  --shape-clip: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="fantasy_runic_stone"] #alert-card,
@@ -118,10 +165,13 @@ body[data-theme-shape="fantasy_runic_stone"] [data-oss-shape-target] {
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
-body[data-theme-shape="gothic_vampire"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="gothic_vampire"],
+[data-theme-shape="gothic_vampire"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(0 0, 100% 0, 100% calc(100% - 16px), 82% 100%, 18% 100%, 0 calc(100% - 16px));
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="gothic_vampire"] #alert-card,
@@ -131,10 +181,20 @@ body[data-theme-shape="gothic_vampire"] [data-oss-shape-target] {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), 82% 100%, 18% 100%, 0 calc(100% - 16px));
 }
 
+body[data-theme-shape="maker_blueprint"],
+[data-theme-shape="maker_blueprint"] {
+  --shape-radius: 2px;
+}
+
 body[data-theme-shape="maker_blueprint"] #alert-card,
 body[data-theme-shape="maker_blueprint"] #banner-alert-root,
 body[data-theme-shape="maker_blueprint"] [data-oss-shape-target] {
   border-radius: 2px;
+}
+
+body[data-theme-shape="maker_workbench"],
+[data-theme-shape="maker_workbench"] {
+  --shape-radius: 4px;
 }
 
 body[data-theme-shape="maker_workbench"] #alert-card,
@@ -143,10 +203,17 @@ body[data-theme-shape="maker_workbench"] [data-oss-shape-target] {
   border-radius: 4px;
 }
 
-body[data-theme-shape="maker_circuit_pcb"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="maker_circuit_pcb"],
+[data-theme-shape="maker_circuit_pcb"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+  --shape-paint: repeating-linear-gradient(45deg, rgba(201, 162, 39, 0.45) 0 2px, transparent 2px 26px), repeating-linear-gradient(-45deg, rgba(201, 162, 39, 0.25) 0 2px, transparent 2px 34px), radial-gradient(circle at 18px 18px, rgba(201, 162, 39, 0.9) 0 3px, transparent 3px);
+  --shape-paint-size: auto, auto, 46px 46px;
+  --shape-paint-repeat: repeat;
+  --shape-shadow: inset 0 0 0 1px rgba(201, 162, 39, 0.45), inset 0 0 40px rgba(0, 0, 0, 0.55);
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="maker_circuit_pcb"] #alert-card,
@@ -156,10 +223,12 @@ body[data-theme-shape="maker_circuit_pcb"] [data-oss-shape-target] {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
 }
 
-body[data-theme-shape="openstream_glass"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="openstream_glass"],
+[data-theme-shape="openstream_glass"] {
+  --shape-radius: 16px;
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="openstream_glass"] #alert-card,
@@ -168,10 +237,12 @@ body[data-theme-shape="openstream_glass"] [data-oss-shape-target] {
   border-radius: 16px;
 }
 
-body[data-theme-shape="openstream_studio"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="openstream_studio"],
+[data-theme-shape="openstream_studio"] {
+  --shape-radius: 20px;
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="openstream_studio"] #alert-card,
@@ -180,10 +251,13 @@ body[data-theme-shape="openstream_studio"] [data-oss-shape-target] {
   border-radius: 20px;
 }
 
-body[data-theme-shape="comic_manga_action"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="comic_manga_action"],
+[data-theme-shape="comic_manga_action"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(0 0, 100% 0, 100% 100%, 94% 90%, 86% 100%, 78% 90%, 70% 100%, 62% 90%, 54% 100%, 46% 90%, 38% 100%, 30% 90%, 22% 100%, 14% 90%, 6% 100%, 0 90%);
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="comic_manga_action"] #alert-card,
@@ -193,10 +267,13 @@ body[data-theme-shape="comic_manga_action"] [data-oss-shape-target] {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 94% 90%, 86% 100%, 78% 90%, 70% 100%, 62% 90%, 54% 100%, 46% 90%, 38% 100%, 30% 90%, 22% 100%, 14% 90%, 6% 100%, 0 90%);
 }
 
-body[data-theme-shape="pop_synth_neon"] {
-  --skin-ornament-tape: none !important;
-  --skin-ornament-brackets: none !important;
-  --skin-ornament-reticle: none !important;
+body[data-theme-shape="pop_synth_neon"],
+[data-theme-shape="pop_synth_neon"] {
+  --shape-radius: 0;
+  --shape-clip: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+  --shape-ornament-tape: none;
+  --shape-ornament-brackets: none;
+  --shape-ornament-reticle: none;
 }
 
 body[data-theme-shape="pop_synth_neon"] #alert-card,
@@ -1371,7 +1448,9 @@ body[data-theme-shape="maker_circuit_pcb"] :is([data-oss-panel], .side-info-pane
      contradecía al propio manifiesto (`panelRadius: 0`,
      `panelClipPath: polygon(...)`) y ganaba por `!important`: la forma nunca
      se veía. Esta capa solo PINTA. */
-  background: var(--color-panel-bg, #072214) !important;
+  /* El COLOR ya no se fija aquí: es del tema. El shorthand `background`
+     reseteaba además `background-image`, que es justo donde va la pintura de la
+     forma (`--shape-paint`). Esta capa solo añade borde y sombra. */
   border: 2px solid var(--color-border-cyan, #D4AF37) !important;
   border-top: 4px solid var(--color-border-cyan, #10B981) !important;
   box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 15px rgba(16, 185, 129, 0.15) !important;

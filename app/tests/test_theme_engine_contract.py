@@ -100,13 +100,18 @@ class TestThemeEngineContract(unittest.TestCase):
     def test_component_layer_has_no_literal_colors(self):
         """La capa de componentes se apoya en tokens, no en colores sueltos.
 
-        Solo se miran las reglas generadas desde `geometry` (las que llevan
-        `body[data-theme-shape=...]`): la decoracion de ESCENA de cada pack
-        si puede traer color propio del pack (no del tema).
+        Se excluye la PINTURA de la forma (`--shape-paint*`, `--shape-shadow`,
+        `--shape-border`): el color de una textura es identidad del PACK, no del
+        tema. El oro del PCB no puede venir de `--color-*` porque un PCB no es
+        dorado por el color del tema. Lo que se prohíbe es que la geometría o el
+        color de panel lleven literales: eso sí es del tema.
         """
         css = theme_engine.build_shapes_css()
         capa_componente = css.split("/* --- Capa 2:")[0]
-        offenders = re.findall(r"#[0-9A-Fa-f]{3,8}\b|rgba?\(", capa_componente)
+        sin_pintura = "\n".join(
+            line for line in capa_componente.splitlines()
+            if not re.match(r"\s*--shape-(paint|shadow|border)", line))
+        offenders = re.findall(r"#[0-9A-Fa-f]{3,8}\b|rgba?\(", sin_pintura)
         self.assertEqual(
             [], offenders,
             f"Hay {len(offenders)} colores literales en la capa de componentes: {offenders[:5]}")

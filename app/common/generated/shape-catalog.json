@@ -91,19 +91,20 @@
       "archetype": "openstream",
       "description": "Trazos de tinta negra gruesa (5px), viñetas de cómic y badges de impacto 💥 GO!!.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(0 0, 100% 0, 100% 100%, 94% 90%, 86% 100%, 78% 90%, 70% 100%, 62% 90%, 54% 100%, 46% 90%, 38% 100%, 30% 90%, 22% 100%, 14% 90%, 6% 100%, 0 90%)",
         "panelRadius": "0"
       },
       "icon": "💥",
       "id": "comic_manga_action",
       "name": "Manga / Shonen Comic",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Open_stream_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -119,8 +120,10 @@
       "icon": "🎨",
       "id": "cozy_canvas",
       "name": "Lienzo de Arte con Chinchetas",
+      "ornaments": {},
       "packDefault": false,
       "packId": "Cozy_LoFi_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -136,8 +139,10 @@
       "icon": "☕",
       "id": "cozy_polaroid",
       "name": "Polaroid Vintage con Cinta",
+      "ornaments": {},
       "packDefault": true,
       "packId": "Cozy_LoFi_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -153,8 +158,10 @@
       "icon": "☁️",
       "id": "cozy_soft",
       "name": "Píldora Soft Minimal",
+      "ornaments": {},
       "packDefault": false,
       "packId": "Cozy_LoFi_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -165,18 +172,19 @@
       "archetype": "cozy",
       "description": "Bordes orgánicos de pergamino antiguo, sello carmesí ⚜ y tipografía clásica.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(0 8px, 8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%)"
       },
       "icon": "📜",
       "id": "fantasy_parchment",
       "name": "Pergamino Rol & Sello Cera",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Cozy_LoFi_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -187,19 +195,20 @@
       "archetype": "gamer",
       "description": "Obsidiana con runas nórdicas ancestrales luminosas y bisel tallado.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
         "panelRadius": "6px"
       },
       "icon": "🗿",
       "id": "fantasy_runic_stone",
       "name": "Piedra Rúnica Mística",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -210,18 +219,19 @@
       "archetype": "gamer",
       "description": "Esquinas en pixel cabinet, marquesina 1UP y contador de monedas insert coin.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelRadius": "0"
       },
       "icon": "👾",
       "id": "gamer_arcade_retro",
       "name": "Arcade 8-Bit Pixel",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -232,19 +242,20 @@
       "archetype": "gamer",
       "description": "Corte asimétrico con aberración cromática cian/magenta y telemetría glitch.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))",
         "panelRadius": "0"
       },
       "icon": "⚡",
       "id": "gamer_cyber_glitch",
       "name": "Cyber Glitch Neón",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -255,19 +266,20 @@
       "archetype": "gamer",
       "description": "Escudo hexagonal Sci-Fi con indicadores de energía y blindaje perimetral.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px))",
         "panelRadius": "0"
       },
       "icon": "🛡️",
       "id": "gamer_hex_shield",
       "name": "Hex Shield Blindaje",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -284,8 +296,10 @@
       "icon": "🎮",
       "id": "gamer_mecha",
       "name": "Mecha Tournament 45°",
+      "ornaments": {},
       "packDefault": true,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -301,8 +315,10 @@
       "icon": "🕶️",
       "id": "gamer_stealth",
       "name": "Stealth Dark Cyber",
+      "ornaments": {},
       "packDefault": false,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -319,8 +335,10 @@
       "icon": "🎯",
       "id": "gamer_tactical_hud",
       "name": "Tactical FPS HUD",
+      "ornaments": {},
       "packDefault": false,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -331,19 +349,20 @@
       "archetype": "gamer",
       "description": "Arcos ojivales victorianos, borde sangriento carmesí y emblema de murciélago.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 16px), 82% 100%, 18% 100%, 0 calc(100% - 16px))",
         "panelRadius": "0"
       },
       "icon": "🦇",
       "id": "gothic_vampire",
       "name": "Gótico Victoriano Dark",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Gamer_Pro_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -359,8 +378,10 @@
       "icon": "🛠️",
       "id": "maker_blueprint",
       "name": "Blueprint Técnico CAD",
+      "ornaments": {},
       "packDefault": true,
       "packId": "Maker_Theme_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -371,19 +392,25 @@
       "archetype": "maker",
       "description": "Pistas de cobre dorado, vías de tierra GND, componentes SMD y serigrafía técnica.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%)",
         "panelRadius": "0"
       },
       "icon": "📟",
       "id": "maker_circuit_pcb",
       "name": "Placa de Circuito PCB",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Maker_Theme_Pack",
+      "paint": {
+        "background": "repeating-linear-gradient(45deg, rgba(201, 162, 39, 0.45) 0 2px, transparent 2px 26px), repeating-linear-gradient(-45deg, rgba(201, 162, 39, 0.25) 0 2px, transparent 2px 34px), radial-gradient(circle at 18px 18px, rgba(201, 162, 39, 0.9) 0 3px, transparent 3px)",
+        "backgroundRepeat": "repeat",
+        "backgroundSize": "auto, auto, 46px 46px",
+        "boxShadow": "inset 0 0 0 1px rgba(201, 162, 39, 0.45), inset 0 0 40px rgba(0, 0, 0, 0.55)"
+      },
       "tokens": {}
     },
     {
@@ -399,8 +426,10 @@
       "icon": "📐",
       "id": "maker_workbench",
       "name": "Banco de Trabajo Studio",
+      "ornaments": {},
       "packDefault": false,
       "packId": "Maker_Theme_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -411,18 +440,19 @@
       "archetype": "openstream",
       "description": "Cristal glaseado suizo de 16px con desenfoque de 24px y bordes sutiles.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelRadius": "16px"
       },
       "icon": "⚡",
       "id": "openstream_glass",
       "name": "Swiss Frosted Glass",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": true,
       "packId": "Open_stream_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -433,18 +463,19 @@
       "archetype": "openstream",
       "description": "Líneas de retransmisión con vúmetros de audio estéreo en vivo y lower-third ticker.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelRadius": "20px"
       },
       "icon": "🎙️",
       "id": "openstream_studio",
       "name": "Broadcast Pro Studio",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Open_stream_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -455,19 +486,20 @@
       "archetype": "openstream",
       "description": "Bisel flúor neón magenta/cian, horizonte en alambre y sol retro ☀.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelClipPath": "polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%)",
         "panelRadius": "0"
       },
       "icon": "🌆",
       "id": "pop_synth_neon",
       "name": "Synthwave 80s Grid",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Open_stream_Pack",
+      "paint": {},
       "tokens": {}
     },
     {
@@ -478,18 +510,19 @@
       "archetype": "cozy",
       "description": "Pantalla curvada bulbosa analógica, bisel de carcasa noventera y LED POWER.",
       "geometry": {
-        "ornaments": [
-          "tape",
-          "brackets",
-          "reticle"
-        ],
         "panelRadius": "12px"
       },
       "icon": "📺",
       "id": "vintage_crt_monitor",
       "name": "Monitor CRT Retro 90s",
+      "ornaments": {
+        "brackets": "none",
+        "reticle": "none",
+        "tape": "none"
+      },
       "packDefault": false,
       "packId": "Cozy_LoFi_Pack",
+      "paint": {},
       "tokens": {}
     }
   ]

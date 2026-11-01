@@ -48,13 +48,13 @@ body[data-theme-archetype] :is([data-oss-panel], [data-oss-shape-target], #alert
   border-style: var(--frame-border-style, solid) !important;
   border-color: var(--color-border-cyan, var(--color-accent-cyan, rgba(255, 255, 255, 0.16))) !important;
   box-shadow: var(--panel-shadow, none), var(--theme-glow, none) !important;
-  /* Capa decorativa: SOLO el adorno del arquetipo. La textura del tema
-     (`--skin-scene-pattern`) es de ESCENA y no se pinta aquí: por eso el
-     chat deja de salir "cuadriculado" al aplicar el tema maker. */
-  background-image: var(--skin-panel-decor, none) !important;
-  background-position: var(--skin-panel-decor-position, 0 0) !important;
-  background-size: var(--skin-panel-decor-size, auto) !important;
-  background-repeat: var(--skin-panel-decor-repeat, no-repeat) !important;
+  /* Capa decorativa: PRIMERO la pintura de la FORMA (placa, pistas, vías) y,
+     si no hay forma, el adorno del pack. La textura del tema
+     (`--skin-scene-pattern`) es de ESCENA y no se pinta aquí. */
+  background-image: var(--shape-paint, var(--skin-panel-decor, none)) !important;
+  background-position: var(--shape-paint-position, var(--skin-panel-decor-position, 0 0)) !important;
+  background-size: var(--shape-paint-size, var(--skin-panel-decor-size, auto)) !important;
+  background-repeat: var(--shape-paint-repeat, var(--skin-panel-decor-repeat, no-repeat)) !important;
 }
 
 /* Radio y recorte del arquetipo SOLO si no hay forma física elegida: la forma
