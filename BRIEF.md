@@ -47,6 +47,25 @@ Si hace falta materializarla, `export_fusion_as_pack` la convierte en una carpet
 
 Un overlay suelto puede coger la apariencia de otro pack sin pertenecer a él: eso sí es una asignación normal, sin contenedor de por medio.
 
+### Requisito duro: un pack nuevo tiene que ser autónomo
+
+> «Cuando se programe uno nuevo no se tengan que tener en cuenta los demás: que todo se adapte según quiera el usuario.»
+
+Esto es un requisito de arquitectura, y hoy **no se cumple**. Un pack nuevo con su propio estilo no recibiría nada, porque el sistema obliga a encajar en uno de cuatro arquetipos fijos:
+
+| Acoplamiento | Dónde |
+|---|---|
+| Lista cerrada de arquetipos | `app/common/archetypes.json` — exactamente `cozy`, `gamer`, `maker`, `openstream` |
+| Fallback con los cuatro nombres a mano | `app/common/oss-skin.js:66` |
+| Mapa forma→arquetipo escrito a mano | `app/common/overlay.js:312` (`maker_circuit_pcb: 'maker'`) y `app/config.js:413` |
+| 14 reglas CSS por arquetipo | `app/common/styles.css` (`body[data-theme-archetype="..."]`) |
+
+**Consecuencia que hay que conseguir:** crear un pack = crear una carpeta en `app/streamthemes/<Pack>/` con su `pack.json`, sus `styles/<tema>/theme.json` (colores) y sus formas en el `pack.json`. Nada más. Sin tocar `archetypes.json`, sin tocar CSS compartido, sin añadir mapas en JS, sin registro en ningún sitio.
+
+**Prueba de aceptación:** copiar `Maker_Theme_Pack` a `Test_Pack`, cambiarle los colores, reiniciar, y que aparezca en el panel y se pueda aplicar a cualquier overlay — **sin haber editado un solo fichero fuera de esa carpeta**. Si hace falta tocar algo más, el modelo está mal.
+
+Esto es lo que justifica eliminar la capa de arquetipos: es la que obliga a conocer los demás packs.
+
 ### Qué implica técnicamente
 
 - Dos familias de tokens: `--color-*` (tema) y `--shape-*` (forma). Más `--widget-*` para el ajuste manual del usuario.
@@ -90,6 +109,8 @@ Si un pack necesita una geometría por defecto, se expresa con su **forma por de
 | 6 | **Fusión** de miembros de 3 packs | todos con la **misma** apariencia, y se puede cambiar en un solo sitio |
 | 7 | **Previsualización** en el panel | idéntica a lo que sale en OBS |
 | 8 | Alerta (card y banner) | reacciona a tema y forma igual que un widget |
+| 9 | **Pack nuevo** (solo una carpeta en `streamthemes/`) | aparece en el panel y se aplica a cualquier overlay **sin tocar código ni otros packs** |
+| 10 | Overlay del pack 2 con los estilos del pack 1 | funciona: se le asigna el tema/forma del pack 1 y nada más se mueve |
 
 ---
 
@@ -219,6 +240,7 @@ El arnés tiene 34 superficies y umbral del 2 %. El `ticker` y dos escenas se mu
 4. Elegir forma → el tema del selector **no cambia**.
 5. Escena de `Cozy` + tema de `Gamer` → color cambia, geometría igual.
 6. El simulador del panel mide **lo mismo** que la página real.
+7. **Copiar un pack a otra carpeta y cambiarle los colores** → aparece en el panel y funciona, sin editar nada fuera de esa carpeta. Si falla, sigue habiendo acoplamiento.
 
 ---
 
@@ -226,7 +248,7 @@ El arnés tiene 34 superficies y umbral del 2 %. El `ticker` y dos escenas se mu
 
 Cada paso termina en verde y verificado.
 
-1. **Quitar la tercera capa**: borrar arquetipos (`archetypes.json`, `archetypes.css`, `--skin-*`, `data-theme-archetype`) y los 4 bloques de `styles.css`. Arnés: ~0 %.
+1. **Quitar la tercera capa**: borrar arquetipos (`archetypes.json`, `archetypes.css`, `--skin-*`, `data-theme-archetype`) y los 4 bloques de `styles.css`. Incluye los mapas a mano de `overlay.js:312` y `config.js:413`: la forma ya dice a qué pack pertenece porque vive en su `pack.json`. Arnés: ~0 %.
 2. **Quitar la geometría de los 21 `style.css`** y regenerar `themes.css`. Arnés: escenas ~0 %.
 3. **`skin.css`** con la cadena de prioridad de dos familias. Arnés: ~0 %.
 4. **Dar contenido a las formas**: `paint` en `pack.json` + emisión de `--shape-paint*`. Empezar por PCB, `cozy_polaroid`, `gamer_mecha`, `openstream_glass`.
