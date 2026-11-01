@@ -124,30 +124,30 @@ body.hide-scene-chat .chat-box {
 
 body[data-theme-archetype="gamer"] .chat-message,
 body[data-theme-archetype="gamer"] .msg-bubble {
-  border-radius: 0px !important;
-  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%) !important;
+  border-radius: 0px;
+  clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
   border-left: 2px solid var(--color-accent-cyan, #00F0FF) !important;
 }
 
 body[data-theme-archetype="cozy"] .chat-message,
 body[data-theme-archetype="cozy"] .msg-bubble {
-  border-radius: 18px !important;
-  clip-path: none !important;
-  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 18px;
+  clip-path: none;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 body[data-theme-archetype="maker"] .chat-message,
 body[data-theme-archetype="maker"] .msg-bubble {
-  border-radius: 4px !important;
-  clip-path: none !important;
-  font-family: var(--skin-font-display, monospace) !important;
+  border-radius: 4px;
+  clip-path: none;
+  font-family: var(--skin-font-display, monospace);
 }
 
 body[data-theme-archetype="openstream"] .chat-message,
 body[data-theme-archetype="openstream"] .msg-bubble {
-  border-radius: 8px !important;
-  clip-path: none !important;
-  background: rgba(255, 255, 255, 0.06) !important;
+  border-radius: 8px;
+  clip-path: none;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* --- CONTROL UNIVERSAL DE ORNAMENTOS FÍSICOS SEGÚN FORMA Y ARQUETIPO --- */
@@ -181,17 +181,17 @@ body[data-theme-shape="original"] {
    escena cuando se elige la forma "original". */
 body[data-theme-archetype]:not([data-theme-shape="original"]),
 body[data-pack]:not([data-theme-archetype]):not([data-theme-shape="original"]) {
-  font-family: var(--skin-font-body, var(--skin-font-display, inherit)) !important;
+  font-family: var(--skin-font-body, var(--skin-font-display, inherit));
 }
 body[data-theme-archetype]:not([data-theme-shape="original"]) *:not(code):not(pre) {
-  font-family: var(--skin-font-body, var(--skin-font-display, inherit)) !important;
+  font-family: var(--skin-font-body, var(--skin-font-display, inherit));
 }
 /* Títulos e insignias: la familia de DISPLAY del arquetipo. */
 body[data-theme-archetype]:not([data-theme-shape="original"]) :is(
     [data-oss-badge], [data-oss-panel-title], [data-oss-pill],
     .brand-badge, .mode-badge, .scene-title, .panel-title,
     h1, h2, h3, h4) {
-  font-family: var(--skin-font-display, var(--skin-font-body, inherit)) !important;
+  font-family: var(--skin-font-display, var(--skin-font-body, inherit));
 }
 
 /* ====================================================================
@@ -199,11 +199,11 @@ body[data-theme-archetype]:not([data-theme-shape="original"]) :is(
    ==================================================================== */
 /* Cozy: Píldoras ultra-suaves flotantes */
 body[data-theme-archetype="cozy"]:not([data-theme-shape="original"]) :is([data-oss-bar], .scene-header, .tactical-telemetry-bar, .broadcast-header, .header-bar, .lofi-player-bar, .arena-top-bar, .top-bar, .hud-top-bar, .game-tag-bar, .starting-top-bar, .bottom-project-bar, .tools-palette-bar, .bottom-hud-bar, .broadcast-footer, .footer-bar, .ticker-bar) {
-  background: var(--color-panel-bg, rgba(28, 25, 23, 0.88)) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+  background: var(--color-panel-bg, rgba(28, 25, 23, 0.88));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 /* ====================================================================
@@ -211,11 +211,11 @@ body[data-theme-archetype="cozy"]:not([data-theme-shape="original"]) :is([data-o
    ==================================================================== */
 /* Cozy: Tarjetas redondeadas de 24px con cristal cálido */
 body[data-theme-archetype="cozy"]:not([data-theme-shape="original"]) :is([data-oss-panel], .side-info-panel, .side-panel-box, .panel-card, .pomodoro-card, .tasks-card, .cozy-chat-card, .hud-chat-box, .stream-chat-card, .stream-info-card, .splits-board, .tactical-panel, .victory-podium, .chat-panel-frame, .warm-card, .starting-side-modes, .match-hero-card, .agenda-card, .project-card, .canvas-card, .art-palette-card, .ending-farewell-card, .chat-column, .chat-card, .chat-box) {
-  background: var(--color-panel-bg, rgba(28, 25, 23, 0.88)) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35) !important;
+  background: var(--color-panel-bg, rgba(28, 25, 23, 0.88));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
 }
 
 /* --- FORMAS NUEVAS (11 a 20) EN PANELES Y WIDGETS --- */
